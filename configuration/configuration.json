@@ -1,9 +1,13 @@
 {
   "QUEEN_URL": "${QUEEN_URL}",
+  "_QUEEN_URL_COMMENT_": "Final URL of the Queen application",
+
   "PEARL_API_URL": "${PEARL_API_URL}",
   "_PEARL_API_URL_COMMENT_": "url of Pearl API",
+
   "PEARL_AUTHENTICATION_MODE": "${PEARL_AUTHENTICATION_MODE}",
   "_PEARL_AUTHENTICATION_MODE_COMMENT": "The mode of authentication. Currently, App is supporting 'anonymous'",
+
   "CHAT_URL": "${CHAT_URL}",
   "_CHAT_URL_COMMENT_": "url of Pearl Chat"
 }
