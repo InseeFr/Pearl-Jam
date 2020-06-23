@@ -1,5 +1,6 @@
 const ONLINE = 'online';
 const OFFLINE = 'offline';
+const observers = [];
 
 const online = e => {
   observers.forEach(o => {
@@ -25,7 +26,6 @@ export const clean = () => {
 };
 
 let isInit = false;
-const observers = [];
 export default o => {
   if (!isInit) {
     isInit = true;

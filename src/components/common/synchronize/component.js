@@ -21,7 +21,7 @@ const Synchronize = ({ disabled = false }) => {
   const [init, setInit] = useState(false);
   const [status, setStatus] = useState(navigator.onLine);
 
-  const { dispatch, authInitialized } = useContext(store);
+  const { dispatch, authenticated } = useContext(store);
 
   const handleQueenEvent = event => {
     const { type, command, state } = event.detail;
@@ -83,7 +83,7 @@ const Synchronize = ({ disabled = false }) => {
       }
     };
     launchSynchronize();
-    if (!authInitialized) {
+    if (!authenticated) {
       dispatch({ type: 'initAuth' });
     }
   };
