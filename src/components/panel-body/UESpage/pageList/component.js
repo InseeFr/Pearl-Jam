@@ -79,7 +79,7 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
                   {!isDisabled && (
                     <input
                       type="checkbox"
-                      checked={su.selected}
+                      checked={su.selected || false}
                       onChange={e => toggleOne(su.id, e.target.checked)}
                       onClick={e => e.stopPropagation()}
                     />
