@@ -1,21 +1,20 @@
 import React, { createContext, useReducer } from 'react';
-import { InitAuth } from './auth/initAuth';
+import { useAuth } from './auth/initAuth';
 
 const initialState = {
-  authenticated: InitAuth(),
+  authenticated: false,
 };
 const store = createContext(initialState);
 const { Provider } = store;
 
 const StateProvider = ({ children }) => {
+  const auth = useAuth().authenticated;
   const [state, dispatch] = useReducer((state, action) => {
-    let authResult = null;
     switch (action.type) {
       case 'initAuth':
-        authResult = useAuth();
         return {
           ...state,
-          authenticated: authResult.authenticated,
+          authenticated: auth,
         };
 
       /* TODO gerer les retours d'event ici */

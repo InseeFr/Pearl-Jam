@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'common-tools/constants';
 import { keycloakAuthentication, getTokenInfo } from 'common-tools/keycloak';
 
-export const InitAuth = () => {
+export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
   const interviewerRoles = [
