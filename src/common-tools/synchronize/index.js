@@ -102,8 +102,8 @@ const synchronizePearl = async () => {
 };
 
 export const synchronize = async () => {
-  synchronizeQueen();
-  synchronizePearl();
+  await synchronizeQueen();
+  await synchronizePearl();
 
   // TODO : pearl synch
 };

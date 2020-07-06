@@ -7,7 +7,6 @@
 
   "PEARL_AUTHENTICATION_MODE": "keycloak",
   "_PEARL_AUTHENTICATION_MODE_COMMENT": "The mode of authentication. Currently, App is supporting 'anonymous'",
-
-  "CHAT_URL": "https://rocket-chat.stable.innovation.insee.eu/channel/pearl",
+  "CHAT_URL": "",
   "_CHAT_URL_COMMENT_": "url of Pearl Chat"
 }
