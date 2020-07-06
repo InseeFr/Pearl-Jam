@@ -44,7 +44,6 @@ export const useAuth = () => {
             break;
 
           case 'keycloak':
-            console.log('KC!!!');
             if (!authenticated) {
               keycloakAuthentication({
                 onLoad: 'login-required',
