@@ -15,7 +15,7 @@ const Navigation = ({ location }) => {
 
   const getName = () => {
     const interviewerFromLocalStorage = window.localStorage.getItem(PEARL_USER_KEY);
-    return interviewerFromLocalStorage ? JSON.parse(interviewerFromLocalStorage).name : '';
+    return interviewerFromLocalStorage ? JSON.parse(interviewerFromLocalStorage).firstName : '';
   };
 
   return (
