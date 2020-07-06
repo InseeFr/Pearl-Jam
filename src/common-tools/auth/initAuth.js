@@ -44,31 +44,34 @@ export const useAuth = () => {
             break;
 
           case 'keycloak':
-            keycloakAuthentication({
-              onLoad: 'login-required',
-              checkLoginIframe: false,
-            })
-              .then(auth => {
-                if (auth) {
-                  const interviewerInfos = getTokenInfo();
-                  const { roles } = interviewerInfos;
-                  if (isAuthorized(roles)) {
-                    window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(interviewerInfos));
+            console.log('KC!!!');
+            if (!authenticated) {
+              keycloakAuthentication({
+                onLoad: 'login-required',
+                checkLoginIframe: false,
+              })
+                .then(auth => {
+                  if (auth) {
+                    const interviewerInfos = getTokenInfo();
+                    const { roles } = interviewerInfos;
+                    if (isAuthorized(roles)) {
+                      window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(interviewerInfos));
+                      accessAuthorized();
+                    } else {
+                      // Authentifié mais n'a pas les bons droits
+                      accessDenied();
+                    }
+                    // offline mode
+                  } else if (isLocalStorageTokenValid()) {
                     accessAuthorized();
                   } else {
-                    // Authentifié mais n'a pas les bons droits
                     accessDenied();
                   }
-                  // offline mode
-                } else if (isLocalStorageTokenValid()) {
-                  accessAuthorized();
-                } else {
-                  accessDenied();
-                }
-              })
-              .catch(() => {
-                return isLocalStorageTokenValid() ? accessAuthorized() : accessDenied();
-              });
+                })
+                .catch(() => {
+                  return isLocalStorageTokenValid() ? accessAuthorized() : accessDenied();
+                });
+            }
             break;
           default:
         }
