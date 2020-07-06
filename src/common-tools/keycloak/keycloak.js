@@ -2,7 +2,6 @@ import Keycloak from 'keycloak-js';
 import { PEARL_URL } from 'common-tools/constants';
 
 export const kc = Keycloak(`${PEARL_URL}/keycloak.json`);
-
 export const keycloakAuthentication = params =>
   new Promise((resolve, reject) => {
     if (navigator.onLine) {
@@ -10,7 +9,9 @@ export const keycloakAuthentication = params =>
         .then(authenticated => {
           resolve(authenticated);
         })
-        .catch(e => reject(e));
+        .catch(e => {
+          reject(e);
+        });
     } else {
       resolve();
     }

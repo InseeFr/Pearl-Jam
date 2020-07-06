@@ -9,6 +9,7 @@ const { Provider } = store;
 
 const StateProvider = ({ children }) => {
   const auth = useAuth().authenticated;
+  console.log(auth);
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case 'initAuth':

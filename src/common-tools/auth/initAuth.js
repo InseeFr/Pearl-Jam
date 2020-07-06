@@ -44,7 +44,10 @@ export const useAuth = () => {
             break;
 
           case 'keycloak':
-            keycloakAuthentication({ onLoad: 'login-required', checkLoginIframe: false })
+            keycloakAuthentication({
+              onLoad: 'login-required',
+              checkLoginIframe: false,
+            })
               .then(auth => {
                 if (auth) {
                   const interviewerInfos = getTokenInfo();
@@ -63,7 +66,9 @@ export const useAuth = () => {
                   accessDenied();
                 }
               })
-              .catch(() => (isLocalStorageTokenValid() ? accessAuthorized() : accessDenied()));
+              .catch(() => {
+                return isLocalStorageTokenValid() ? accessAuthorized() : accessDenied();
+              });
             break;
           default:
         }

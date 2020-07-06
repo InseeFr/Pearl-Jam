@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect /* useContext */ } from 'react';
 import { useHistory } from 'react-router-dom';
 import Modal from 'react-modal';
 import imgSync from 'img/sync.png';
 import { addOnlineStatusObserver } from 'common-tools/';
 import { synchronize } from 'common-tools/synchronize';
 import D from 'i18n';
-import { store } from 'common-tools/store';
+// import { store } from 'common-tools/store';
 import Loader from '../loader';
 import './result.scss';
 
@@ -21,7 +21,7 @@ const Synchronize = ({ disabled = false }) => {
   const [init, setInit] = useState(false);
   const [status, setStatus] = useState(navigator.onLine);
 
-  const { dispatch, authenticated } = useContext(store);
+  // const { dispatch, authenticated } = useContext(store);
 
   const handleQueenEvent = event => {
     const { type, command, state } = event.detail;
@@ -83,9 +83,9 @@ const Synchronize = ({ disabled = false }) => {
       }
     };
     launchSynchronize();
-    if (!authenticated) {
+    /* if (!authenticated) {
       dispatch({ type: 'initAuth' });
-    }
+    } */
   };
 
   const syncOnClick = () => {
