@@ -85,7 +85,6 @@ const synchronizePearl = async () => {
 
   // (3) : clean
   await clean();
-  console.log('clean done');
   // (4) : Get the data
   const surveyUnitsResponse = await api.getSurveyUnits(PEARL_API_URL, token);
   const surveyUnits = await surveyUnitsResponse.data;
@@ -102,8 +101,8 @@ const synchronizePearl = async () => {
 };
 
 export const synchronize = async () => {
-  await synchronizeQueen();
-  await synchronizePearl();
+  synchronizeQueen();
+  synchronizePearl();
 
   // TODO : pearl synch
 };
