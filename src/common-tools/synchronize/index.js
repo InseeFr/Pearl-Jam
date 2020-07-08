@@ -1,6 +1,7 @@
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import { getLastState } from 'common-tools/functions';
+import { PEARL_USER_KEY } from 'common-tools/constants';
 import * as api from 'common-tools/api';
 
 const synchronizeQueen = () => {
@@ -77,7 +78,7 @@ const synchronizePearl = async () => {
 
   // (1) : authentication
   if (PEARL_AUTHENTICATION_MODE === 'keycloak') {
-    token = undefined; // TODO get new keycloak token;
+    token = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY)).token;
   }
 
   // (2) : send the local data to server

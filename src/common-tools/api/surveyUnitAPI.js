@@ -1,8 +1,11 @@
 import Axios from 'axios';
 import { getSecureHeader } from './utils';
 
-export const getSurveyUnits = (urlPearApi, token) =>
-  new Promise((resolve, reject) => {
+export const getSurveyUnits = (urlPearApi, token) => {
+  console.log('url API : ', urlPearApi);
+  console.log('token : ', token);
+
+  return new Promise((resolve, reject) => {
     Axios.get(`${urlPearApi}/api/survey-units/`, {
       headers: {
         ...getSecureHeader(token),
@@ -12,6 +15,7 @@ export const getSurveyUnits = (urlPearApi, token) =>
       .then(res => resolve(res))
       .catch(e => reject(new Error(`Failed to fetch survey-units : ${e.message}`)));
   });
+};
 
 export const getSurveyUnitById = (urlPearApi, token) => id =>
   new Promise((resolve, reject) => {
