@@ -5,7 +5,6 @@ import imgSync from 'img/sync.png';
 import { addOnlineStatusObserver } from 'common-tools/';
 import { synchronize } from 'common-tools/synchronize';
 import D from 'i18n';
-// import { store } from 'common-tools/store';
 import Loader from '../loader';
 import './result.scss';
 
@@ -20,8 +19,6 @@ const Synchronize = ({ disabled = false }) => {
 
   const [init, setInit] = useState(false);
   const [status, setStatus] = useState(navigator.onLine);
-
-  // const { dispatch, authenticated } = useContext(store);
 
   const handleQueenEvent = event => {
     const { type, command, state } = event.detail;
@@ -75,17 +72,15 @@ const Synchronize = ({ disabled = false }) => {
         await synchronize();
 
         setPearlSync('SUCCESS');
+        console.log('pearl synch succes');
       } catch (e) {
-        console.log(e.message);
         setPearlSync('FAILURE');
+        console.log('pearl synch failure');
       } finally {
         console.log('Pearl synchronization : ENDED !');
       }
     };
     launchSynchronize();
-    /* if (!authenticated) {
-      dispatch({ type: 'initAuth' });
-    } */
   };
 
   const syncOnClick = () => {

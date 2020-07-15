@@ -1,7 +1,6 @@
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import { getLastState } from 'common-tools/functions';
-import { PEARL_USER_KEY } from 'common-tools/constants';
 import * as api from 'common-tools/api';
 
 const synchronizeQueen = () => {
@@ -17,7 +16,7 @@ const getConfiguration = async () => {
   return configuration;
 };
 
-const sendData = async (urlPearlApi, token) => {
+const sendData = async (urlPearlApi, authenticationMode) => {
   const surveyUnits = await surveyUnitDBService.getAll();
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
@@ -28,7 +27,7 @@ const sendData = async (urlPearlApi, token) => {
         return ca;
       });
       const { id } = surveyUnit;
-      await api.putDataSurveyUnitById(urlPearlApi, token)(id, {
+      await api.putDataSurveyUnitById(urlPearlApi, authenticationMode)(id, {
         ...surveyUnit,
         lastState,
         contactAttempts,
@@ -71,28 +70,16 @@ const validateSU = async su => {
   return su;
 };
 
-const synchronizePearl = async () => {
-  // (0) : get configuration
-  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = await getConfiguration();
-  let token = null;
-
-  // (1) : authentication
-  if (PEARL_AUTHENTICATION_MODE === 'keycloak') {
-    token = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY)).token;
-  }
-
-  // (2) : send the local data to server
-  await sendData(PEARL_API_URL, token);
-
-  // (3) : clean
-  await clean();
-  // (4) : Get the data
-  const surveyUnitsResponse = await api.getSurveyUnits(PEARL_API_URL, token);
+const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
+  const surveyUnitsResponse = await api.getSurveyUnits(pearlApiUrl, pearlAuthenticationMode);
   const surveyUnits = await surveyUnitsResponse.data;
 
   await Promise.all(
     surveyUnits.map(async su => {
-      const surveyUnitResponse = await api.getSurveyUnitById(PEARL_API_URL, token)(su.id);
+      const surveyUnitResponse = await api.getSurveyUnitById(
+        pearlApiUrl,
+        pearlAuthenticationMode
+      )(su.id);
       const surveyUnit = await surveyUnitResponse.data;
       const mergedSurveyUnit = { ...surveyUnit, ...su };
       const validSurveynit = await validateSU(mergedSurveyUnit);
@@ -101,9 +88,17 @@ const synchronizePearl = async () => {
   );
 };
 
+const synchronizePearl = async () => {
+  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = await getConfiguration();
+
+  await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+
+  await clean();
+
+  await getData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+};
+
 export const synchronize = async () => {
   synchronizeQueen();
   synchronizePearl();
-
-  // TODO : pearl synch
 };

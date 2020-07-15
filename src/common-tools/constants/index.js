@@ -10,3 +10,4 @@ export const GUEST_PEARL_USER = {
   id: 'Guest',
   roles: ['Guest'],
 };
+export const JSON_UTF8_HEADER = 'application/json;charset=utf-8';

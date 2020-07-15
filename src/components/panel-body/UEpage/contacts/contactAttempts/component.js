@@ -12,7 +12,7 @@ const ContactAttempts = ({ saveUE }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const lines = () => {
-    // const {contactAttempts }= ue;
+    // TODO use real indexedDB data -> const {contactAttempts }= ue;
     const contactAttempts = [
       {
         date: 1589986800000,

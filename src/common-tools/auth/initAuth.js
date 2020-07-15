@@ -1,16 +1,11 @@
 import { useState, useEffect } from 'react';
 import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'common-tools/constants';
-import { keycloakAuthentication, getTokenInfo, kc } from 'common-tools/keycloak';
+import { keycloakAuthentication, getTokenInfo } from 'common-tools/keycloak';
 
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
-  const interviewerRoles = [
-    'pearl-interviewer',
-    'Testeur_agent-insee-interne-test_Keycloak',
-    'Guest',
-    'gestionnairemoog_Capi3G',
-  ];
+  const interviewerRoles = ['pearl-interviewer', 'uma_authorization', 'Guest'];
 
   const accessAuthorized = () => {
     setAuthenticated(true);
@@ -55,16 +50,9 @@ export const useAuth = () => {
                     const interviewerInfos = getTokenInfo();
                     const { roles } = interviewerInfos;
                     if (isAuthorized(roles)) {
-                      window.localStorage.setItem(
-                        PEARL_USER_KEY,
-                        JSON.stringify({
-                          ...interviewerInfos,
-                          token: kc.token,
-                        })
-                      );
+                      window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(interviewerInfos));
                       accessAuthorized();
                     } else {
-                      // Authentifié mais n'a pas les bons droits
                       accessDenied();
                     }
                     // offline mode

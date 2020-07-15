@@ -34,15 +34,11 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
     let { id } = contactAttempt;
     const newSu = surveyUnit;
 
-    // TODO : decouper en deux cas pour récuperer l'id
     if (id === undefined) {
       id = await contactAttemptDBService.insert(contactAttempt);
     } else {
       await contactAttemptDBService.update(contactAttempt);
     }
-
-    console.log('returned id = ', id);
-    // a partir d'ici on a nécessarement un id à évaluer
 
     if (!contactAttempts.includes(id)) {
       contactAttempts.push(id);
