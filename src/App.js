@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from 'components/panel-body/home';
 import ChatPage from 'components/panel-body/chat';
@@ -14,15 +14,30 @@ import Notification from 'components/common/Notification';
 function App() {
   useQueenFromConfig(`${window.location.origin}/configuration.json`);
   const { authenticated } = useAuth();
+  const [queenSwState, setQueenSwState] = useState(false);
+
+  const changeQueenSwState = e => {
+    console.log('set to', e);
+    setQueenSwState(e);
+  };
+
   return (
     <>
-      <Notification />
+      <div>
+        <p>{`queen sw available : ${queenSwState}`}</p>
+      </div>
+      <Notification setQueenSwState={changeQueenSwState} queenSwState={queenSwState} />
       <div className="pearl-container">
         {!authenticated && <Preloader message={D.pleaseWait} />}
         {authenticated && (
           <Router>
             <Switch>
-              <Route path="/queen" component={routeProps => <QueenContainer {...routeProps} />} />
+              <Route
+                path="/queen"
+                component={routeProps => (
+                  <QueenContainer {...routeProps} queenSwState={queenSwState} />
+                )}
+              />
               <Route path="/notifications" component={NotificationsPage} />
               <Route path="/chat" component={ChatPage} />
               <Route path="/training" component={TrainingPage} />

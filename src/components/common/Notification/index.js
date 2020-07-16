@@ -3,8 +3,8 @@ import D from 'i18n';
 import * as serviceWorker from 'serviceWorker';
 import './notification.scss';
 
-const Notification = () => {
-  const [init, setInit] = useState(false);
+const Notification = ({ setQueenSwState, queenSwState }) => {
+  const [init, setInit] = useState(queenSwState);
   const [open, setOpen] = useState(false);
   const [installingServiceWorker, setInstallingServiceWorker] = useState(false);
   const [waitingServiceWorker, setWaitingServiceWorker] = useState(null);
@@ -12,6 +12,7 @@ const Notification = () => {
   const [isServiceWorkerInstalled, setServiceWorkerInstalled] = useState(false);
 
   useEffect(() => {
+    console.log('init value : ', init);
     if (!init) {
       const install = async () => {
         const configuration = await fetch(`${window.location.origin}/configuration.json`);
@@ -38,11 +39,12 @@ const Notification = () => {
             setOpen(true);
           },
         });
+        setQueenSwState(true);
         setInit(true);
       };
       install();
     }
-  }, [init]);
+  }, [init, setQueenSwState]);
 
   const updateAssets = () => {
     if (waitingServiceWorker) {
