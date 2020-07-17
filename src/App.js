@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from 'components/panel-body/home';
 import ChatPage from 'components/panel-body/chat';
@@ -6,6 +6,7 @@ import NotificationsPage from 'components/panel-body/notifications';
 import TrainingPage from 'components/panel-body/training';
 import QueenContainer from 'components/panel-body/queen-container';
 import { useQueenFromConfig } from 'common-tools/hooks/useQueenFromConfig';
+import useServiceWorker from 'common-tools/hooks/useServiceWorker';
 import { useAuth } from 'common-tools/auth/initAuth';
 import Preloader from 'components/common/loader';
 import D from 'i18n';
@@ -13,31 +14,20 @@ import Notification from 'components/common/Notification';
 
 function App() {
   useQueenFromConfig(`${window.location.origin}/configuration.json`);
-  const { authenticated } = useAuth();
-  const [queenSwState, setQueenSwState] = useState(false);
 
-  const changeQueenSwState = e => {
-    console.log('set to', e);
-    setQueenSwState(e);
-  };
+  const { serviceWorkerInfo } = useServiceWorker();
+
+  const { authenticated } = useAuth();
 
   return (
     <>
-      <div>
-        <p>{`queen sw available : ${queenSwState}`}</p>
-      </div>
-      <Notification setQueenSwState={changeQueenSwState} queenSwState={queenSwState} />
+      <Notification serviceWorkerInfo={serviceWorkerInfo} />
       <div className="pearl-container">
         {!authenticated && <Preloader message={D.pleaseWait} />}
         {authenticated && (
           <Router>
             <Switch>
-              <Route
-                path="/queen"
-                component={routeProps => (
-                  <QueenContainer {...routeProps} queenSwState={queenSwState} />
-                )}
-              />
+              <Route path="/queen" component={routeProps => <QueenContainer {...routeProps} />} />
               <Route path="/notifications" component={NotificationsPage} />
               <Route path="/chat" component={ChatPage} />
               <Route path="/training" component={TrainingPage} />
