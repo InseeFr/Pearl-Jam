@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import D from 'i18n';
 import './notification.scss';
 
 const Notification = ({ serviceWorkerInfo }) => {
-  const [open, setOpen] = useState(true);
-
   const {
     installingServiceWorker,
     waitingServiceWorker,
     isUpdateAvailable,
     isServiceWorkerInstalled,
+    openNotification,
   } = serviceWorkerInfo;
+
+  const [open, setOpen] = useState(openNotification);
 
   const updateAssets = () => {
     if (waitingServiceWorker) {
