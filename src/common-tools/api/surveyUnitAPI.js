@@ -9,9 +9,13 @@ export const getSurveyUnits = (urlPearApi, authenticationMode) => {
           headers: getHeader(authenticationMode),
         })
           .then(res => resolve(res))
-          .catch(e => reject(new Error(`Failed to fetch survey-units : ${e.message}`)));
+          .catch(e => {
+            reject(new Error(`Failed to fetch survey-units : ${e.response.data.error.message}`));
+          });
       })
-      .catch(e => reject(new Error(`Error during refreshToken : ${e.message}`)));
+      .catch(e => {
+        reject(new Error(`Error during refreshToken : ${e.response.data.error.message}`));
+      });
   });
 };
 
