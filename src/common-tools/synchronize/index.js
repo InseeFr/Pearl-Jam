@@ -3,10 +3,34 @@ import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-servi
 import { getLastState } from 'common-tools/functions';
 import * as api from 'common-tools/api';
 
-const synchronizeQueen = () => {
-  const data = { type: 'PEARL', command: 'SYNCHRONIZE' };
+const handleQueenEvent = async event => {
+  const { type, command, state } = event.detail;
+  if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
+    if (state === 'READY') {
+      console.log('healthcheck successful : now sending sync event');
+      const data = { type: 'PEARL', command: 'SYNCHRONIZE' };
+      const syncEvent = new CustomEvent('PEARL', { detail: data });
+
+      window.dispatchEvent(syncEvent);
+    } else {
+      console.log('error with queen SW');
+      throw new Error('Queen service worker not responding');
+    }
+  }
+};
+
+const synchronizeQueen = async () => {
+  console.log('synchro queen : event listener added');
+  window.addEventListener('QUEEN', handleQueenEvent);
+
+  const data = { type: 'PEARL', command: 'HEALTH_CHECK' };
   const event = new CustomEvent('PEARL', { detail: data });
+
+  console.log('synchro queen : healthcheckEvent sent');
   window.dispatchEvent(event);
+
+  console.log('synchro queen : event listener removed');
+  setTimeout(() => window.removeEventListener('QUEEN', handleQueenEvent), 2000);
 };
 
 const getConfiguration = async () => {
@@ -99,6 +123,6 @@ const synchronizePearl = async () => {
 };
 
 export const synchronize = async () => {
-  synchronizeQueen();
+  await synchronizeQueen();
   synchronizePearl();
 };
