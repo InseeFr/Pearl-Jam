@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Modal from 'react-modal';
 import imgSync from 'img/sync.png';
 import { addOnlineStatusObserver } from 'common-tools/';
-import { synchronize } from 'common-tools/synchronize';
+import { synchronizePearl, synchronizeQueen } from 'common-tools/synchronize';
 import D from 'i18n';
 import Loader from '../loader';
 import './result.scss';
@@ -24,8 +24,10 @@ const Synchronize = ({ disabled = false }) => {
     const { type, command, state } = event.detail;
     if (type === 'QUEEN' && command === 'UPDATE_SYNCHRONIZE') {
       if (state === 'FAILURE') {
+        console.log('queen event : synchro failed');
         setQueenSync('FAILURE');
       } else if (state === 'SUCCESS') {
+        console.log('queen event : synchro succeeded');
         setQueenSync('SUCCESS');
       }
 
@@ -69,14 +71,29 @@ const Synchronize = ({ disabled = false }) => {
         setQueenSync(undefined);
         setLoading(true);
 
-        await synchronize().then(setPearlSync('SUCCESS'));
+        await synchronizeQueen().catch(e => {
+          console.log('error in QUEEN synchro');
+          console.log(e);
+          setQueenSync('FAILURE');
+          throw e;
+        });
 
-        console.log('pearl synch succes');
+        await synchronizePearl()
+          .then(() => {
+            console.log('synchronize success');
+            setPearlSync('SUCCESS');
+          })
+          .catch(e => {
+            console.log('error in PEARL synchro');
+            console.log(e);
+            setPearlSync('FAILURE');
+            throw e;
+          })
+          .then(() => console.log('Pearl synchronization : ENDED !'));
       } catch (e) {
-        setPearlSync('FAILURE');
-        console.log('pearl synch failure');
+        console.log('synch failure');
       } finally {
-        console.log('Pearl synchronization : ENDED !');
+        console.log('------Pearl synchronization : ENDED !--------');
       }
     };
     launchSynchronize();

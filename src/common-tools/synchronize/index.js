@@ -3,29 +3,38 @@ import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-servi
 import { getLastState } from 'common-tools/functions';
 import * as api from 'common-tools/api';
 
-const handleQueenEvent = async event => {
+const handleQueenEvent = timer => async event => {
   const { type, command, state } = event.detail;
   if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
     if (state === 'READY') {
+      // stop errorThrower
+      clearTimeout(timer);
       const data = { type: 'PEARL', command: 'SYNCHRONIZE' };
       const syncEvent = new CustomEvent('PEARL', { detail: data });
 
       window.dispatchEvent(syncEvent);
-    } else {
-      console.log('Queen service worker not responding');
-      throw new Error('Queen service worker not responding');
     }
   }
 };
 
-const synchronizeQueen = async () => {
-  window.addEventListener('QUEEN', handleQueenEvent);
+export const synchronizeQueen = async () => {
+  const removeQueenEventListener = () => {
+    window.removeEventListener('QUEEN', handleQueenEvent);
+  };
+
+  // 5 seconds limit before throwing error
+  const tooLateErrorThrower = setTimeout(() => {
+    removeQueenEventListener();
+    throw new Error('Queen service worker not responding');
+  }, 5000);
+
+  window.addEventListener('QUEEN', e => handleQueenEvent(tooLateErrorThrower)(e));
 
   const data = { type: 'PEARL', command: 'HEALTH_CHECK' };
   const event = new CustomEvent('PEARL', { detail: data });
   window.dispatchEvent(event);
 
-  setTimeout(() => window.removeEventListener('QUEEN', handleQueenEvent), 2000);
+  setTimeout(() => removeQueenEventListener(), 2000);
 };
 
 const getConfiguration = async () => {
@@ -107,7 +116,7 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
   );
 };
 
-const synchronizePearl = async () => {
+export const synchronizePearl = async () => {
   const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = await getConfiguration();
 
   await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
@@ -119,5 +128,5 @@ const synchronizePearl = async () => {
 
 export const synchronize = async () => {
   await synchronizeQueen();
-  synchronizePearl();
+  await synchronizePearl();
 };
