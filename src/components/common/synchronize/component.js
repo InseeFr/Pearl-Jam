@@ -69,9 +69,8 @@ const Synchronize = ({ disabled = false }) => {
         setQueenSync(undefined);
         setLoading(true);
 
-        await synchronize();
+        await synchronize().then(setPearlSync('SUCCESS'));
 
-        setPearlSync('SUCCESS');
         console.log('pearl synch succes');
       } catch (e) {
         setPearlSync('FAILURE');
