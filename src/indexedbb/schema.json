@@ -1,5 +1,6 @@
 {
   "surveyUnit": "id,sampleIdentifiers,lastName,firstName,address,phoneNumbers,state,comments,questionnaireState,campaign,campaignLabel,collectionStartDate,collectionEndDate,geographicalLocation,lastState,states,contactAttempts,contactOutcome",
   "notification": "++id,date,time,title,message",
-  "contactAttempt": "++id,date,status"
+  "contactAttempt": "++id,date,status",
+  "synchroSummary": "++id,pearlSynchStatus,queenSynchStatus"
 }

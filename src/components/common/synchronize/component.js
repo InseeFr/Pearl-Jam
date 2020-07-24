@@ -89,7 +89,10 @@ const Synchronize = ({ disabled = false }) => {
             setPearlSync('FAILURE');
             throw e;
           })
-          .then(() => console.log('Pearl synchronization : ENDED !'));
+          .then(async () => {
+            console.log('Pearl synchronization : ENDED !');
+            await synchronizePearl();
+          });
       } catch (e) {
         console.log('synch failure');
       } finally {

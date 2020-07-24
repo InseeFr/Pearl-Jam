@@ -5,13 +5,6 @@ class SurveyUnitIdbService extends AbstractIdbService {
     super('surveyUnit');
   }
 
-  findByLastName(lastName) {
-    return this.store
-      .where('lastName')
-      .startsWith(lastName)
-      .toArray();
-  }
-
   async addOrUpdateSU(item) {
     const { id, ...other } = item;
     const surveyUnit = await this.get(id);

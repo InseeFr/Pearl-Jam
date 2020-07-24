@@ -3,32 +3,31 @@ import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-servi
 import { getLastState } from 'common-tools/functions';
 import * as api from 'common-tools/api';
 
-const handleQueenEvent = timer => async event => {
-  const { type, command, state } = event.detail;
-  if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
-    if (state === 'READY') {
-      // stop errorThrower
-      clearTimeout(timer);
-      const data = { type: 'PEARL', command: 'SYNCHRONIZE' };
-      const syncEvent = new CustomEvent('PEARL', { detail: data });
-
-      window.dispatchEvent(syncEvent);
-    }
-  }
-};
-
 export const synchronizeQueen = async () => {
-  const removeQueenEventListener = () => {
-    window.removeEventListener('QUEEN', handleQueenEvent);
-  };
-
   // 5 seconds limit before throwing error
   const tooLateErrorThrower = setTimeout(() => {
     removeQueenEventListener();
     throw new Error('Queen service worker not responding');
   }, 5000);
 
-  window.addEventListener('QUEEN', e => handleQueenEvent(tooLateErrorThrower)(e));
+  const handleQueenEvent = async event => {
+    const { type, command, state } = event.detail;
+    if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
+      if (state === 'READY') {
+        // stop errorThrower
+        clearTimeout(tooLateErrorThrower);
+        const data = { type: 'PEARL', command: 'SYNCHRONIZE' };
+        const syncEvent = new CustomEvent('PEARL', { detail: data });
+
+        window.dispatchEvent(syncEvent);
+      }
+    }
+  };
+  const removeQueenEventListener = () => {
+    window.removeEventListener('QUEEN', handleQueenEvent);
+  };
+
+  window.addEventListener('QUEEN', handleQueenEvent);
 
   const data = { type: 'PEARL', command: 'HEALTH_CHECK' };
   const event = new CustomEvent('PEARL', { detail: data });
