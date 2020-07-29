@@ -41,10 +41,16 @@ const ContactAttempts = ({ saveUE }) => {
         const hour = format(new Date(contAtt.date), 'H');
 
         return (
-          <div className="line" key={contAtt.id}>
-            <div>{`${date} - ${hour}H - Téléphone - ${contAtt.status}`}</div>
-            <button type="button" className="smallButton">{` 🗑 `}</button>
-          </div>
+          <tr className="line" key={contAtt.id}>
+            <td>
+              <div>{`${date} - ${hour}H - Téléphone - ${contAtt.status}`}</div>
+            </td>
+            <td>
+              <button type="button" className="smallButton">
+                <i class="fa fa-trash-o" />
+              </button>
+            </td>
+          </tr>
         );
       });
     return <div>No data to process</div>;
@@ -68,11 +74,13 @@ const ContactAttempts = ({ saveUE }) => {
       <div className="row">
         <h2>{D.contactAttempts}</h2>
         <button type="button" className="bottom-right" onClick={openModal}>
-          {` + ${D.addButton}`}
+          <i className="fa fa-plus" aria-hidden="true" />
+          &nbsp;
+          {D.addButton}
         </button>
       </div>
 
-      {lines()}
+      <table id="contactTable">{lines()}</table>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form
           closeModal={closeModal}

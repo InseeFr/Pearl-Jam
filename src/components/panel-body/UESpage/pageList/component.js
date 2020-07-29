@@ -59,7 +59,9 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
       <table className="ue-table">
         <thead>
           <tr>
-            <th> </th>
+            <th>
+              <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
+            </th>
             <th>{D.surveyHeader}</th>
             <th>{D.sampleHeader}</th>
             <th>{D.surveyUnitHeader}</th>
@@ -100,14 +102,14 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
                 <td className="align-center">
                   {su.priority && (
                     <span role="img" aria-label="priority">
-                      🚩
+                      <i className="fa fa-flag" aria-hidden="true" />
                     </span>
                   )}
                 </td>
                 <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
                   <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
                     <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
-                      📅
+                      <i className="fa fa-file-text-o" aria-hidden="true" />
                     </span>
                   </Link>
                 </td>
@@ -133,15 +135,7 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
     const tableSize = uesByPage || 10;
     const chunkSize = tableSize;
     if (sortedUes.length <= tableSize) {
-      return (
-        <>
-          {renderSimpleTable(sortedUes)}
-          <div>
-            <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
-            <span>Tout cocher / décocher</span>
-          </div>
-        </>
-      );
+      return renderSimpleTable(sortedUes);
     }
     const ueSplit = [];
     for (i = 0, j = ues.length; i < j; i += chunkSize) {

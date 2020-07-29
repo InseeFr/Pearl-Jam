@@ -42,10 +42,14 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
       </label>
       <div className="buttonsGroup">
         <button type="button" onClick={closeModal}>
-          {`✗ ${D.cancelButton}`}
+          <i className="fa fa-times" aria-hidden="true" />
+          &nbsp;
+          {D.cancelButton}
         </button>
         <button type="button" onClick={save}>
-          {`✔ ${D.saveButton}`}
+          <i className="fa fa-check" aria-hidden="true" />
+          &nbsp;
+          {D.saveButton}
         </button>
       </div>
     </div>

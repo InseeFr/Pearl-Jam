@@ -29,9 +29,7 @@ const Search = ({ setFilter }) => {
         onKeyUp={handleKeyUp}
       />
       <button className="rechercher" type="button" onClick={updateFilter}>
-        <span role="img" aria-label="search">
-          🔍
-        </span>
+        <i className="fa fa-search" />
       </button>
     </>
   );

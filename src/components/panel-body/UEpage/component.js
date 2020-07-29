@@ -40,7 +40,7 @@ const UEPage = ({ match }) => {
       {!surveyUnit && (
         <>
           <button type="button" className="button-back-home" onClick={() => history.push('/')}>
-            {'<<'}
+            <i className="fa fa-arrow-left" aria-hidden="true" />
           </button>
           <h2>{`${D.surveyUnitNotFound} ${match.params.id}.`}</h2>
         </>

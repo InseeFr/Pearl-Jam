@@ -29,7 +29,9 @@ const Comment = ({ saveUE, editable }) => {
 
         {editable === true && (
           <button type="button" onClick={openModal}>
-            {` ✎ ${D.editButton}`}
+            <i className="fa fa-pencil" aria-hidden="true" />
+            &nbsp;
+            {D.editButton}
           </button>
         )}
       </div>

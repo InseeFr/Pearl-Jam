@@ -41,9 +41,13 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
       </form>
 
       <button type="button" onClick={saveTempUE}>
+        <i className="fa fa-check" aria-hidden="true" />
+        &nbsp;
         {D.validateButton}
       </button>
       <button type="button" onClick={closeModal}>
+        <i className="fa fa-times" aria-hidden="true" />
+        &nbsp;
         {D.cancelButton}
       </button>
     </>

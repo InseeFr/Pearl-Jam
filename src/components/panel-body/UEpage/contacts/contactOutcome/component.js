@@ -17,7 +17,11 @@ const ContactOutcome = (/* { saveUE } */) => {
     <div className="ContactOutcome">
       <div className="row">
         <h2>{D.contactOutcome}</h2>
-        <button type="button" className="bottom-right">{` ✎ ${D.editButton}`}</button>
+        <button type="button" className="bottom-right">
+          <i className="fa fa-pencil" aria-hidden="true" />
+          &nbsp;
+          {D.editButton}
+        </button>
       </div>
       <div className="line">{`${outcomeValue} (${outcome.totalNumberOfContactAttempts} essais)`}</div>
     </div>

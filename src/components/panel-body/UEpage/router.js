@@ -41,10 +41,10 @@ const Router = ({ match, saveUE }) => {
     <div className="panel-body ue">
       <div className="ue-info">
         <button type="button" className="button-back-home" onClick={() => history.push('/')}>
-          {'<<'}
+          <i className="fa fa-arrow-left" aria-hidden="true" />
         </button>
         <div className="infos">
-          <div className="row">
+          <div id="surveyUnitRef" className="row">
             <span>{ue.campaign ? ue.campaign : D.loading}</span>
             <span>
               {ue.sampleIdentifiers && ue.sampleIdentifiers.ssech
@@ -57,23 +57,28 @@ const Router = ({ match, saveUE }) => {
                 : D.loading}
             </span>
           </div>
-          <div className="row">
-            <span>{ue.lastName ? `${ue.lastName}` : D.loading}</span>
-            <span>{ue.firstName ? `${ue.firstName}` : D.loading}</span>
+          <div id="surveyUnitNameAddress" className="row">
+          <span>{`${ue.lastName ? ue.lastName : D.loading} ${ue.firstName ? ue.firstName : D.loading}`}</span>
             <span>{ue.geographicalLocation ? ue.geographicalLocation.label : D.loading}</span>
           </div>
           <div className="row">
             <span className="ue-state">
               {ue.states ? convertSUStateInToDo(lastState.type) : D.loading}
+              &nbsp;
+              <i class="fa fa-user-circle" aria-hidden="true" />
             </span>
           </div>
         </div>
 
         <div className="button-ue">
           <button type="button" onClick={openQueen}>
+            <i className="fa fa-file-text-o" aria-hidden="true" />
+            &nbsp;
             {D.questionnaireButton}
           </button>
           <button type="button" onClick={transmit}>
+            <i class="fa fa-paper-plane" aria-hidden="true" />
+            &nbsp;
             {D.sendButton}
           </button>
         </div>
