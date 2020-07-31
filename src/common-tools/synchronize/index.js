@@ -4,7 +4,7 @@ import synchroSummaryDBService from 'indexedbb/services/synchroSummary-idb-servi
 import { getLastState } from 'common-tools/functions';
 import * as api from 'common-tools/api';
 
-export const synchronizeQueen = async (history, id) => {
+export const synchronizeQueen = async history => {
   // 5 seconds limit before throwing error
   const tooLateErrorThrower = setTimeout(() => {
     throw new Error('Queen service worker not responding');
@@ -15,7 +15,7 @@ export const synchronizeQueen = async (history, id) => {
     if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
       if (state === 'READY') {
         clearTimeout(tooLateErrorThrower);
-        history.push(`/queen/synchronize?id=${id}`);
+        history.push(`/queen/synchronize`);
       }
     }
   };
