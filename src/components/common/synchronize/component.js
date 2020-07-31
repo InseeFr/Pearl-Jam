@@ -50,6 +50,9 @@ const Synchronize = ({ disabled = false }) => {
   }, [pearlSync, history]);
 
   const syncFunction = () => {
+    window.localStorage.removeItem('pearl-sync-result');
+    window.localStorage.removeItem('queen-sync-result');
+
     const launchSynchronize = async () => {
       try {
         setPearlSync(undefined);
