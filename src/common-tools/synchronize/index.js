@@ -1,12 +1,12 @@
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
+import synchroSummaryDBService from 'indexedbb/services/synchroSummary-idb-service';
 import { getLastState } from 'common-tools/functions';
 import * as api from 'common-tools/api';
 
-export const synchronizeQueen = async () => {
+export const synchronizeQueen = async (history, id) => {
   // 5 seconds limit before throwing error
   const tooLateErrorThrower = setTimeout(() => {
-    removeQueenEventListener();
     throw new Error('Queen service worker not responding');
   }, 5000);
 
@@ -14,12 +14,8 @@ export const synchronizeQueen = async () => {
     const { type, command, state } = event.detail;
     if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
       if (state === 'READY') {
-        // stop errorThrower
         clearTimeout(tooLateErrorThrower);
-        const data = { type: 'PEARL', command: 'SYNCHRONIZE' };
-        const syncEvent = new CustomEvent('PEARL', { detail: data });
-
-        window.dispatchEvent(syncEvent);
+        history.push(`/queen/synchronize?id=${id}`);
       }
     }
   };
@@ -44,6 +40,7 @@ const getConfiguration = async () => {
 };
 
 const sendData = async (urlPearlApi, authenticationMode) => {
+  console.log('SEND DATA');
   const surveyUnits = await surveyUnitDBService.getAll();
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
@@ -68,7 +65,10 @@ const putSurveyUnitsInDataBase = async su => {
 };
 
 const clean = async () => {
+  console.log('CLEAN DATA');
   await surveyUnitDBService.deleteAll();
+  await contactAttemptDBService.deleteAll();
+  await synchroSummaryDBService.deleteAll();
 };
 
 const validateSU = async su => {
@@ -98,9 +98,10 @@ const validateSU = async su => {
 };
 
 const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
+  console.log('GET DATA');
   const surveyUnitsResponse = await api.getSurveyUnits(pearlApiUrl, pearlAuthenticationMode);
   const surveyUnits = await surveyUnitsResponse.data;
-
+  console.log('nb of SU :', surveyUnits.length);
   await Promise.all(
     surveyUnits.map(async su => {
       const surveyUnitResponse = await api.getSurveyUnitById(
@@ -123,9 +124,4 @@ export const synchronizePearl = async () => {
   await clean();
 
   await getData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
-};
-
-export const synchronize = async () => {
-  await synchronizeQueen();
-  await synchronizePearl();
 };

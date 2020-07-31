@@ -14,89 +14,74 @@ const Synchronize = ({ disabled = false }) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [syncResult, setSyncResult] = useState(undefined);
-  const [queenSync, setQueenSync] = useState(undefined);
   const [pearlSync, setPearlSync] = useState(undefined);
 
-  const [init, setInit] = useState(false);
   const [status, setStatus] = useState(navigator.onLine);
 
-  const handleQueenEvent = event => {
-    const { type, command, state } = event.detail;
-    if (type === 'QUEEN' && command === 'UPDATE_SYNCHRONIZE') {
-      if (state === 'FAILURE') {
-        console.log('queen event : synchro failed');
-        setQueenSync('FAILURE');
-      } else if (state === 'SUCCESS') {
-        console.log('queen event : synchro succeeded');
-        setQueenSync('SUCCESS');
-      }
-
-      setTimeout(() => setLoading(false), 3000);
-    }
-  };
+  useEffect(() => {
+    addOnlineStatusObserver(s => {
+      setStatus(s);
+    });
+  }, []);
 
   useEffect(() => {
-    if (!init) {
-      addOnlineStatusObserver(s => {
-        setStatus(s);
-      });
-      setInit(true);
-    }
-  }, [init]);
+    const pearlSynchResult = window.localStorage.getItem('pearl-sync-result');
+    const queenSynchResult = window.localStorage.getItem('queen-sync-result');
+    console.log('pearlSynchResult ', pearlSynchResult);
+    console.log(pearlSynchResult);
+    console.log('queenSynchResult ', queenSynchResult);
 
-  useEffect(() => {
-    window.addEventListener('QUEEN', handleQueenEvent);
-    return () => {
-      window.removeEventListener('QUEEN', handleQueenEvent);
-    };
-  });
-
-  useEffect(() => {
-    if (pearlSync && queenSync) {
-      console.log(`pearlSync && queenSync :  ${pearlSync} -   ${queenSync}`);
-      if (queenSync === 'SUCCESS' && pearlSync === 'SUCCESS') {
-        setSyncResult({ state: true, message: D.syncSuccess });
-      } else {
+    if (pearlSync) {
+      if (pearlSync === 'FAILURE') {
+        console.log('pealSync FAILURE');
+        setLoading(false);
         setSyncResult({ state: false, message: D.syncFailure });
       }
-      setLoading(false);
-      history.push('/');
+    } else if (pearlSynchResult !== null && queenSynchResult !== null) {
+      console.log('localStorage synch not undefined');
+      if (pearlSynchResult === 'SUCCESS' && queenSynchResult === 'SUCCESS') {
+        console.log('and successful :)');
+        setSyncResult({ state: true, message: D.syncSuccess });
+      } else {
+        console.log('and unsuccessful :(');
+        setSyncResult({ state: false, message: D.syncFailure });
+      }
     }
-  }, [pearlSync, queenSync, history]);
+  }, [pearlSync, history]);
 
   const syncFunction = () => {
     const launchSynchronize = async () => {
       try {
         setPearlSync(undefined);
-        setQueenSync(undefined);
         setLoading(true);
 
-        await synchronizeQueen().catch(e => {
-          console.log('error in QUEEN synchro');
-          console.log(e);
-          setQueenSync('FAILURE');
-          throw e;
-        });
-
         await synchronizePearl()
+          .catch(e => {
+            console.log('error in synchronizePearl()');
+            throw e;
+          })
           .then(() => {
             console.log('synchronize success');
             setPearlSync('SUCCESS');
+            window.localStorage.setItem('pearl-sync-result', 'SUCCESS');
           })
           .catch(e => {
-            console.log('error in PEARL synchro');
+            console.log('error during pearl Synchro');
             console.log(e);
             setPearlSync('FAILURE');
             throw e;
           })
           .then(async () => {
             console.log('Pearl synchronization : ENDED !');
-            await synchronizePearl();
+            await synchronizeQueen(history);
+          })
+          .catch(e => {
+            console.log('Error in Queen Synchro');
+            console.log(e);
           });
       } catch (e) {
         console.log('synch failure');
-      } finally {
-        console.log('------Pearl synchronization : ENDED !--------');
+        console.log(e);
       }
     };
     launchSynchronize();
@@ -110,7 +95,10 @@ const Synchronize = ({ disabled = false }) => {
     }
   };
 
-  const close = () => setSyncResult(undefined);
+  const close = async () => {
+    setSyncResult(undefined);
+    window.localStorage.removeItem('pearl-sync-result');
+  };
 
   return (
     <>
