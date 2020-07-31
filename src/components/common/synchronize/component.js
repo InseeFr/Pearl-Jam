@@ -39,7 +39,7 @@ const Synchronize = ({ disabled = false }) => {
       }
     } else if (pearlSynchResult !== null && queenSynchResult !== null) {
       console.log('localStorage synch not undefined');
-      if (pearlSynchResult === 'SUCCESS' && queenSynchResult === 'SUCCESS') {
+      if (pearlSynchResult === 'success' && queenSynchResult === 'success') {
         console.log('and successful :)');
         setSyncResult({ state: true, message: D.syncSuccess });
       } else {
@@ -66,7 +66,7 @@ const Synchronize = ({ disabled = false }) => {
           .then(() => {
             console.log('synchronize success');
             setPearlSync('SUCCESS');
-            window.localStorage.setItem('pearl-sync-result', 'SUCCESS');
+            window.localStorage.setItem('pearl-sync-result', 'success');
           })
           .catch(e => {
             console.log('error during pearl Synchro');
