@@ -18,14 +18,14 @@ export default ({ width = 18, height = 18 }) => {
     <>
       {status && (
         <div id="connexionOK" className="connexion">
-          <i class="fa fa-check" aria-hidden="true" />
+          <i className="fa fa-check" aria-hidden="true" />
           &nbsp;
           <span className="online">{D.connexionOK}</span>
         </div>
       )}
       {!status && (
         <div id="connexionKO" className="connexion">
-          <i class="fa fa-times" aria-hidden="true" />
+          <i className="fa fa-times" aria-hidden="true" />
           &nbsp;
           <span className="offline">{D.connexionKO}</span>
         </div>

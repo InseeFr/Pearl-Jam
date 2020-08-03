@@ -59,8 +59,9 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
       <table className="ue-table">
         <thead>
           <tr>
-            <th>
+            <th className="HeaderTooltip">
               <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
+              <span className="tooltiptext">Tout cocher / Tout décocher</span>
             </th>
             <th>{D.surveyHeader}</th>
             <th>{D.sampleHeader}</th>

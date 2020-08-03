@@ -128,7 +128,7 @@ button[disabled]{
     align-items: center;
     border: none !important;
 
-    border-radius: 0 4px 4px 0 !important;
+    border-radius: 4px !important;
 
 
     g > rect, g > path{
@@ -438,14 +438,15 @@ div.Contacts div.ContactOutcome .row > button, div.Contacts div.ContactAttempts 
 
 
 #top-info > div{
-  margin: 1px 0;
+  margin: 5px;
   text-align: center;
+  display:inline;
 }
 .connexion{
     padding: 0 5px;
     border-radius: 10px;
     border: 2px solid;
-    display: flex;
+    display: inline;
     justify-content: center;
     align-items: center;
 }
@@ -477,4 +478,50 @@ div.Contacts div.ContactOutcome .row > button, div.Contacts div.ContactAttempts 
   margin: 0 0 15px 0;
 }
 
+/* Tooltip container */
+.HeaderTooltip {
+  position: relative;
+  // display: inline-block;
+  // border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.HeaderTooltip .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: #c4e1ff;
+  color: black;
+  text-align: center;
+  border: 1px solid #dddddd;
+  padding: 3px 0;
+  border-radius: 3px;
+  font-weight: normal !important;
+  font-size: 11px;
+
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.HeaderTooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+#top-info{
+  background: white;
+  border-radius: 3px;
+  border: 1px solid #dddd;
+  padding: 5px;
+  margin:0;
+
+  position:absolute;
+  right: 0;
+}
+
+#top-info-container{
+  height:34px;
+  position: relative;
+}
 
