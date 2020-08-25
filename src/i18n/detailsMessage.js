@@ -1,7 +1,19 @@
 const detailsMessage = {
-  surveyUnitChange: {
-    fr: "Modification de l'unité enquêtée",
-    en: 'Modification of the survey unit',
+  surveyUnitNameChange: {
+    fr: 'Modification du Nom Prénom',
+    en: 'Last name / First name modification',
+  },
+  surveyUnitPhoneChange: {
+    fr: 'Modification du téléphone',
+    en: 'Phone number modification',
+  },
+  surveyUnitEmailChange: {
+    fr: 'Modification du mail',
+    en: 'Email modification',
+  },
+  surveyUnitAddressChange: {
+    fr: "Modification de l'adresse",
+    en: 'Address modification',
   },
   surveyUnitEmail: { fr: 'Email', en: 'Email' },
   surveyUnitPhone: { fr: 'Téléphone', en: 'Phone' },

@@ -117,9 +117,12 @@ const Synchronize = ({ disabled = false }) => {
       )}
 
       <div className="sync" disabled={disabled}>
-        <img alt="sync-logo" className={loading ? 'rotate' : ''} height="30px" src={imgSync} />
         <button type="button" disabled={disabled} onClick={() => syncOnClick()}>
-          {D.synchronizeButton}
+          {/* <img alt="sync-logo" className={loading ? 'rotate' : ''} height="60px" src={imgSync} /> */}
+          <i
+            alt="sync-logo"
+            className={loading ? 'fa fa-refresh fa-2x rotate' : 'fa fa-refresh fa-2x'}
+          />
         </button>
       </div>
     </>

@@ -6,8 +6,8 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
     const [phone, setPhone] = useState([...defaultValue]);
 
     const onChange = event => {
-      let key = event.target.name;
-      let index = parseInt(key.replace('phone-', ''));
+      const key = event.target.name;
+      const index = parseInt(key.replace('phone-', ''), 10);
       phone[index] = event.target.value;
       setPhone(phone.slice());
     };
@@ -32,12 +32,11 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
 
   return (
     <>
-      <h3>{D.surveyUnitChange}</h3>
+      <h3>{D.surveyUnitPhoneChange}</h3>
       <form onSubmit={save}>
         {phoneField.phone &&
           phoneField.phone.map((phoneNumber, index) => (
             <label key={index}>
-              {`${D.surveyUnitPhone} :`}
               <input
                 autoFocus={index === 0}
                 type="tel"
@@ -51,12 +50,18 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
       </form>
 
       <button type="button" onClick={phoneField.addPhone}>
+        <i className="fa fa-plus" aria-hidden="true" />
+        &nbsp;
         {D.addPhoneNumberButton}
       </button>
       <button type="button" onClick={save}>
+        <i className="fa fa-check" aria-hidden="true" />
+        &nbsp;
         {D.validateButton}
       </button>
       <button type="button" onClick={closeModal}>
+        <i className="fa fa-times" aria-hidden="true" />
+        &nbsp;
         {D.cancelButton}
       </button>
     </>

@@ -7,8 +7,11 @@
   .button-ue {
     width: 100%;
     margin-bottom: 0;
-    button {
-      padding: 0.8em 2em 0.8em 2em;
+
+    button.rechercher {
+      margin-left: 0;
+      border-radius: 0;
+      padding: 1em;
     }
 
     .searchedString {
@@ -19,6 +22,15 @@
       margin-right: auto;
       height: auto;
     }
+  }
+}
+button {
+  padding: 0.8em 2em 0.8em 2em;
+  border-radius: 0.5em;
+  color: white;
+  &.transmit {
+    margin-top: 1em;
+    margin-left: 2em;
   }
 }
 .column {

@@ -124,12 +124,16 @@ const UESPage = () => {
     setShowTransmitSummary(false);
   };
 
+  const anySuSelected = surveyUnits.filter(su => su.selected).length > 0 ? '' : '"disabled"';
+
   return (
     <div className="panel-body ues">
       <div className="column">
         <div className="filters">
           <div className="button-ue">
-            <button type="button" onClick={() => setFilter('')}>
+            <button id="ShowAll" type="button" onClick={() => setFilter('')}>
+              <i className="fa fa-bars" aria-hidden="true" />
+              &nbsp;
               {D.showAll}
             </button>
             {filter && <div className="searchedString">{`${D.activeFilter} : ${filter}`}</div>}
@@ -143,8 +147,9 @@ const UESPage = () => {
         toggleAllSUSelection={toggleAllSUSelection}
         toggleOneSUSelection={toggleOneSUSelection}
       />
-      <button type="button" onClick={transmit}>
-        Transmettre
+      <button type="button" className="transmit" disabled={anySuSelected} onClick={transmit}>
+        <i className="fa fa-paper-plane" aria-hidden="true" />
+        &nbsp;Transmettre
       </button>
       <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">
         <Form closeModal={closeModal} summary={transmitSummary} />

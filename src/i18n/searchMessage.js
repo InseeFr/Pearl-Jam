@@ -1,6 +1,6 @@
 const searchMessage = {
   search: { fr: 'Rechercher', en: 'Search' },
-  activeFilter: { fr: 'Filtre appliqué', en: 'Applied filter' },
+  activeFilter: { fr: 'Recherche sur', en: 'Search characters' },
   showAll: { fr: 'Afficher tout', en: 'Show all' },
 };
 

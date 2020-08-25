@@ -17,6 +17,7 @@ div.Contacts {
     border-radius: 30px;
     margin: 0.5em;
     padding: 1em;
+    background-color: #c4e1ff;
 
     div.line {
       display: flex;
@@ -25,34 +26,49 @@ div.Contacts {
       margin-top: 0.5em;
       align-items: center;
     }
+
+    .row {
+      display: flex;
+      > * {
+        margin-right: 2em;
+        margin-bottom: 1em;
+      }
+    }
   }
 
   button {
     justify-content: space-between;
     align-self: center;
     font-size: 15px;
-    height: 30px;
+    min-height: 30px;
     width: 120px;
-    border-radius: 5px;
-    background-color: #2072b8;
     color: white;
-    border: hidden;
+    border-radius: 5px;
 
+    &.bottom-right {
+      margin: 0;
+    }
     &:hover {
       background-color: #649cce;
-      color: black;
+      //color: black;
     }
 
     &.smallButton {
+      color: #0f417a;
+      background-color: white;
       height: 30px;
       width: 30px;
       font-size: 1.5em;
       margin: 0;
       padding: 0;
+      &:hover {
+        border: none;
+      }
     }
   }
 
   h2 {
     margin: 0;
+    color: #0f417a;
   }
 }

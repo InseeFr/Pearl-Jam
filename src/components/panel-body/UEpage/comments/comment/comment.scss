@@ -21,6 +21,11 @@ div.Comment {
       border-style: solid;
       border-width: thin;
       border-color: black;
+
+      &:empty:before {
+        content: attr(data-placeholder);
+        color: #b0aeae;
+      }
     }
   }
 
@@ -31,7 +36,7 @@ div.Comment {
     height: 30px;
     width: 120px;
     border-radius: 5px;
-    background-color: #2072b8;
+    // background-color: #2072b8;
     color: white;
     border: hidden;
   }

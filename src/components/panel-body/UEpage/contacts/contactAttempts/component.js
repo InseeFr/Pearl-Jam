@@ -15,14 +15,9 @@ const ContactAttempts = ({ saveUE }) => {
     // TODO use real indexedDB data -> const {contactAttempts }= ue;
     const contactAttempts = [
       {
-        date: 1589986800000,
-        status: 'BUL',
-        id: 125,
-      },
-      {
-        date: 1589986800000,
-        status: 'BUL',
-        id: 126,
+        date: 1590055200000,
+        status: 'COM',
+        id: 128,
       },
       {
         date: 1589994000000,
@@ -30,9 +25,14 @@ const ContactAttempts = ({ saveUE }) => {
         id: 127,
       },
       {
-        date: 1590055200000,
-        status: 'COM',
-        id: 128,
+        date: 1589986800000,
+        status: 'BUL',
+        id: 126,
+      },
+      {
+        date: 1589986800000,
+        status: 'BUL',
+        id: 125,
       },
     ];
     if (Array.isArray(contactAttempts) && contactAttempts.length > 0)
@@ -41,11 +41,16 @@ const ContactAttempts = ({ saveUE }) => {
         const hour = format(new Date(contAtt.date), 'H');
 
         return (
-          <div className="line" key={contAtt.id}>
-            <button type="button" className="smallButton">{` 🗑 `}</button>
-            <div>{`${date} - ${hour}H - Téléphone - ${contAtt.status}`}</div>
-            <button type="button" className="smallButton">{` ✎ `}</button>
-          </div>
+          <tr className="line" key={contAtt.id}>
+            <td>
+              <div>{`${date} - ${hour}H - Téléphone - ${contAtt.status}`}</div>
+            </td>
+            <td>
+              <button type="button" className="smallButton">
+                <i class="fa fa-trash-o" />
+              </button>
+            </td>
+          </tr>
         );
       });
     return <div>No data to process</div>;
@@ -66,12 +71,16 @@ const ContactAttempts = ({ saveUE }) => {
 
   return (
     <div className="ContactAttempts">
-      <h2>{D.contactAttempts}</h2>
-      {lines()}
+      <div className="row">
+        <h2>{D.contactAttempts}</h2>
+        <button type="button" className="bottom-right" onClick={openModal}>
+          <i className="fa fa-plus" aria-hidden="true" />
+          &nbsp;
+          {D.addButton}
+        </button>
+      </div>
 
-      <button type="button" className="bottom-right" onClick={openModal}>
-        {` + ${D.addButton}`}
-      </button>
+      <table id="contactTable">{lines()}</table>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form
           closeModal={closeModal}

@@ -22,9 +22,14 @@ const Search = ({ setFilter }) => {
 
   return (
     <>
-      <input type="inputtext" onChange={handleChange} onKeyUp={handleKeyUp} />
+      <input
+        type="inputtext"
+        placeholder={`${D.search}`}
+        onChange={handleChange}
+        onKeyUp={handleKeyUp}
+      />
       <button className="rechercher" type="button" onClick={updateFilter}>
-        {D.search}
+        <i className="fa fa-search" />
       </button>
     </>
   );

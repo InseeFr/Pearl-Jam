@@ -3,7 +3,7 @@ const buttonMessage = {
   sendButton: { fr: 'Transmettre', en: 'Send' },
   cancelButton: { fr: 'Annuler', en: 'Cancel' },
   saveButton: { fr: 'Enregistrer', en: 'Save' },
-  editButton: { fr: 'Modifier', en: 'Edit' },
+  editButton: { fr: 'Editer', en: 'Edit' },
   validateButton: { fr: 'Valider', en: 'Validate' },
   addPhoneNumberButton: { fr: 'Ajouter un numéro', en: 'Add a phone number' },
   addButton: { fr: 'Ajouter', en: 'Add' },

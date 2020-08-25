@@ -10,20 +10,29 @@ const Navigation = ({ match }) => {
           <NavLink activeClassName="active" className="item" exact to={`${match.url}/details`}>
             {D.goToContactDetailsPage}
           </NavLink>
-          <NavLink activeClassName="active" className="item" exact to={`${match.url}/spotting`}>
+          <span
+            // activeClassName="active"
+            disabled="disabled"
+            className="item"
+            // exact
+            to={`${match.url}/spotting`}
+          >
             {D.goToSpottingPage}
-          </NavLink>
-          <NavLink activeClassName="active" className="item" exact to={`${match.url}/mails`}>
+          </span>
+          <span
+            // activeClassName="active"
+            disabled="disabled"
+            className="item"
+            // exact
+            to={`${match.url}/mails`}
+          >
             {D.goToMailsPage}
-          </NavLink>
+          </span>
           <NavLink activeClassName="active" className="item" exact to={`${match.url}/contacts`}>
             {D.goToContactPage}
           </NavLink>
           <NavLink activeClassName="active" className="item" exact to={`${match.url}/comments`}>
             {D.goToCommentsPage}
-          </NavLink>
-          <NavLink activeClassName="active" className="item" exact to={`${match.url}/other`}>
-            {D.goToOtherPage}
           </NavLink>
         </nav>
       </div>

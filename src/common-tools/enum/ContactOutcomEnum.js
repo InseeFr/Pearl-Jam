@@ -9,3 +9,10 @@ const contactOutcome = {
 };
 
 export default contactOutcome;
+
+export const findContactOutcomeValueByType = type => {
+  const retour = Object.keys(contactOutcome)
+    .map(key => contactOutcome[key])
+    .filter(value => value.type === type);
+  return retour[0].value;
+};

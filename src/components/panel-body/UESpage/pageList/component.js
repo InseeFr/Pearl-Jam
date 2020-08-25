@@ -47,13 +47,21 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
     }
   };
 
+  const removePostCode = str => {
+    return str
+      .split(' ')
+      .slice(1)
+      .toString();
+  };
+
   const renderSimpleTable = sus => {
     return (
       <table className="ue-table">
         <thead>
           <tr>
-            <th>
+            <th className="HeaderTooltip">
               <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
+              <span className="tooltiptext">Tout cocher / Tout décocher</span>
             </th>
             <th>{D.surveyHeader}</th>
             <th>{D.sampleHeader}</th>
@@ -89,20 +97,20 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
                 <td>{su.sampleIdentifiers.ssech}</td>
                 <td>{su.id}</td>
                 <td>{`${su.lastName} ${su.firstName}`}</td>
-                <td>{su.address.l6}</td>
+                <td>{removePostCode(su.address.l6)}</td>
                 <td>{convertSUStateInToDo(getLastState(su).type)}</td>
                 <td className="align-right">{intervalInDays(su)}</td>
                 <td className="align-center">
                   {su.priority && (
                     <span role="img" aria-label="priority">
-                      🚩
+                      <i className="fa fa-flag" aria-hidden="true" />
                     </span>
                   )}
                 </td>
                 <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
                   <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
                     <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
-                      📅
+                      <i className="fa fa-file-text-o" aria-hidden="true" />
                     </span>
                   </Link>
                 </td>
@@ -160,6 +168,7 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
             »
           </button>
         </div>
+        <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
       </>
     );
   };

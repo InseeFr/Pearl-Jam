@@ -1,4 +1,4 @@
-$background-body: #c3ddff;
+$background-body: #c4e1ff;
 $background-panel: #eeeeee;
 
 body {
@@ -14,54 +14,98 @@ body {
 *[disabled] {
   cursor: not-allowed;
 }
+
+button {
+  cursor: pointer;
+  border-radius: 12px;
+  background-color: #646363;
+  border: none;
+
+  &:hover {
+    background-color: #dddddd;
+    border: 1px solid black;
+  }
+}
+
+.top-info {
+  height: 1.6em;
+  display: flex;
+  justify-content: flex-end;
+  align-content: space-around;
+  div {
+    &.user-name {
+      display: flex;
+      padding-right: 2em;
+      align-self: center;
+    }
+
+    &.connexion {
+      display: flex;
+      flex-direction: row;
+      height: min-content;
+      // border-radius: 5px;
+      margin: 0.3em 0.5em 0.3em 0.5em;
+      background-color: white;
+
+      .online {
+        color: #00cc00;
+      }
+
+      .offline {
+        color: #414c5c;
+      }
+
+      svg {
+        display: inline;
+        vertical-align: bottom;
+      }
+    }
+  }
+  span {
+    display: flex;
+  }
+}
+
 .nav-bar {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1em;
-  padding: 1em;
+  padding-left: 1em;
   background-color: $background-panel;
 
   img.insee-logo {
-    margin-right: 1em;
-    height: 50px;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    padding-right: 0.5em;
+    height: 60px;
     width: auto;
+    border-right: thin solid black;
   }
 
   .top-right {
-    display: inline-flex;
+    justify-self: end;
   }
 
   .items {
     display: flex;
-  }
+    width: 50%;
 
-  .connexion {
-    float: right;
-    height: min-content;
-    border-radius: 5px;
-    padding: 0.3em 0.5em 0.3em 0.5em;
-    background-color: white;
-
-    .online {
-      color: #00cc00;
-    }
-
-    .offline {
-      color: #414c5c;
-    }
-
-    svg {
-      display: inline;
-      vertical-align: bottom;
+    a {
+      border-radius: 15px;
+      width: 20%;
     }
   }
 
   button {
-    color: white;
-    padding: 1em;
     display: flex;
     border: none;
-    background-color: inherit;
+    border-radius: 0;
+
+    &:hover {
+      img {
+        filter: invert(43%) sepia(8%) saturate(3%) hue-rotate(314deg) brightness(86%) contrast(86%);
+      }
+    }
   }
 }
 .nav-bar[disabled] {
@@ -69,17 +113,8 @@ body {
 }
 
 .sync {
-  margin-right: 2em;
-  background-color: #2072b8;
-  padding-left: 0.5em;
+  border-left: thin solid black;
   display: flex;
-}
-.sync:hover {
-  background-color: #2685d8;
-}
-
-.sync img {
-  margin: auto;
 }
 
 .sync .rotate {
@@ -88,6 +123,7 @@ body {
 
 .nav-item {
   margin: auto;
+  width: 15%;
 
   svg {
     position: absolute;
@@ -147,6 +183,7 @@ $border-size-bottom: 1px;
   }
   tbody tr:hover td:not(:first-child) {
     background-color: #606060;
+    color: white;
   }
 }
 td.align-center {
@@ -177,13 +214,14 @@ td.align-right {
 }
 
 .nav-bar-ue {
+  height: 1.4em;
   background-color: $background-panel;
   border-bottom: $border-size-bottom solid #969696;
   $border-style: $border-size-bottom solid #969696;
 
   .item {
     text-decoration: none;
-    color: #346574;
+    color: #0f417a;
     padding-top: 0.2em;
     padding-bottom: 0.2em;
     padding-left: 1em;
@@ -193,7 +231,7 @@ td.align-right {
     border-top-right-radius: 5px;
     border-left: $border-style;
     border-right: $border-style;
-    padding-bottom: 2 * $border-size-bottom;
+    padding-bottom: 5 * $border-size-bottom;
     border-bottom: 0;
   }
 
@@ -207,7 +245,7 @@ td.align-right {
 
 .panel-body {
   background-color: $background-panel;
-  padding: 1em;
+  padding: 0.5em;
 }
 
 .panel-body.ue .tab {
@@ -238,10 +276,11 @@ td.align-right {
 
   .ue-item {
     padding: 0.5em;
-    background-color: #a3d361;
+    background-color: $background-body;
     margin: 0.5em;
     text-align: center;
     vertical-align: middle;
+
     svg {
       margin-left: 1em;
       margin-right: 3em;
@@ -251,10 +290,14 @@ td.align-right {
       text-align: left;
       margin-top: auto;
       margin-bottom: auto;
-
+      color: #646363;
       th {
         padding-right: 1em;
       }
+    }
+    &:hover {
+      cursor: pointer;
+      outline: 1px solid #0f417a;
     }
   }
 
@@ -276,24 +319,16 @@ form label {
 
 .panel-body.ue,
 .panel-body.ues {
-  $background-button: #414c5c;
-  $background-button-hover: #667791;
   .button-back-home {
     color: white;
     border: none;
     padding: 0.5em 1em 0.5em 1em;
-
-    background-color: $background-button;
-    &:hover {
-      background-color: $background-button-hover;
-    }
   }
 
   .button-ue {
     justify-content: flex-end;
     display: flex;
-    margin-top: 1em;
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
 
     button {
       margin-left: 2em;
@@ -301,10 +336,6 @@ form label {
       padding: 1em 2em 1em 2em;
       display: flex;
       border: none;
-      background-color: $background-button;
-      &:hover {
-        background-color: $background-button-hover;
-      }
     }
   }
 }

@@ -9,3 +9,10 @@ const contactAttempt = {
 };
 
 export default contactAttempt;
+
+export const findContactAttemptValueByType = type => {
+  const retour = Object.keys(contactAttempt)
+    .map(key => contactAttempt[key])
+    .filter(value => value.type === type);
+  return retour[0].value;
+};

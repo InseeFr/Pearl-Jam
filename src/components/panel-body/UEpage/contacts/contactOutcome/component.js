@@ -2,6 +2,7 @@ import React /* , { useContext } */ from 'react';
 /* import PropTypes from 'prop-types'; */
 import D from 'i18n';
 /* import SurveyUnitContext from '../../UEContext'; */
+import { findContactOutcomeValueByType } from 'common-tools/enum/ContactOutcomEnum';
 
 const ContactOutcome = (/* { saveUE } */) => {
   /* const ue = useContext(SurveyUnitContext); */
@@ -10,11 +11,19 @@ const ContactOutcome = (/* { saveUE } */) => {
     totalNumberOfContactAttempts: 3,
     type: 'INA',
   };
+
+  const outcomeValue = findContactOutcomeValueByType(outcome.type);
   return (
     <div className="ContactOutcome">
-      <h2>{D.contactOutcome}</h2>
-      <div>{`${outcome.type} (${outcome.totalNumberOfContactAttempts} attempts)`}</div>
-      <button type="button" className="bottom-right">{` ✎ ${D.editButton}`}</button>
+      <div className="row">
+        <h2>{D.contactOutcome}</h2>
+        <button type="button" className="bottom-right">
+          <i className="fa fa-pencil" aria-hidden="true" />
+          &nbsp;
+          {D.editButton}
+        </button>
+      </div>
+      <div className="line">{`${outcomeValue} (${outcome.totalNumberOfContactAttempts} essais)`}</div>
     </div>
   );
 };
