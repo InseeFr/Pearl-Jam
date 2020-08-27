@@ -126,18 +126,23 @@ const UESPage = () => {
 
   const anySuSelected = surveyUnits.filter(su => su.selected).length > 0 ? '' : '"disabled"';
 
+  const updateFilter = searchedString => {
+    toggleAllSUSelection(false);
+    setFilter(searchedString);
+  };
+
   return (
     <div className="panel-body ues">
       <div className="column">
         <div className="filters">
           <div className="button-ue">
-            <button id="ShowAll" type="button" onClick={() => setFilter('')}>
+            <button id="ShowAll" type="button" onClick={() => updateFilter('')}>
               <i className="fa fa-bars" aria-hidden="true" />
               &nbsp;
               {D.showAll}
             </button>
             {filter && <div className="searchedString">{`${D.activeFilter} : ${filter}`}</div>}
-            <Search setFilter={setFilter} />
+            <Search setFilter={updateFilter} />
           </div>
         </div>
         <div className="searchResults">{`Résultat : ${searchEchoes[0]} / ${searchEchoes[1]} unités`}</div>

@@ -168,7 +168,6 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
             »
           </button>
         </div>
-        <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
       </>
     );
   };

@@ -15,7 +15,6 @@ export const getLastState = ue => {
 };
 
 export const isValidForTransmission = ue => {
-  console.log('ue id : ', ue.id, ' is valid');
   // TODO insert rules here (i.e contacts)
   return true;
 };

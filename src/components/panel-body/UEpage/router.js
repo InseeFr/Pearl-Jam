@@ -58,14 +58,18 @@ const Router = ({ match, saveUE }) => {
             </span>
           </div>
           <div id="surveyUnitNameAddress" className="row">
-          <span>{`${ue.lastName ? ue.lastName : D.loading} ${ue.firstName ? ue.firstName : D.loading}`}</span>
+            <span>
+              {`${ue.lastName ? ue.lastName : D.loading} ${
+                ue.firstName ? ue.firstName : D.loading
+              }`}
+            </span>
             <span>{ue.geographicalLocation ? ue.geographicalLocation.label : D.loading}</span>
           </div>
           <div className="row">
             <span className="ue-state">
               {ue.states ? convertSUStateInToDo(lastState.type) : D.loading}
               &nbsp;
-              <i class="fa fa-user-circle" aria-hidden="true" />
+              <i className="fa fa-user-circle" aria-hidden="true" />
             </span>
           </div>
         </div>
@@ -77,7 +81,7 @@ const Router = ({ match, saveUE }) => {
             {D.questionnaireButton}
           </button>
           <button type="button" onClick={transmit}>
-            <i class="fa fa-paper-plane" aria-hidden="true" />
+            <i className="fa fa-paper-plane" aria-hidden="true" />
             &nbsp;
             {D.sendButton}
           </button>

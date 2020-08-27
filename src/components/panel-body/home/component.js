@@ -6,10 +6,7 @@ import UESPage from 'components/panel-body/UESpage';
 const Home = ({ match }) => {
   return (
     <div className="home">
-      <Route
-        path={`${match.url}survey-unit/:id`}
-        component={routeProps => <UEPage {...routeProps} />}
-      />
+      <Route path="/survey-unit/:id" component={routeProps => <UEPage {...routeProps} />} />
       <Route exact path={`${match.url}`} component={routeProps => <UESPage {...routeProps} />} />
     </div>
   );

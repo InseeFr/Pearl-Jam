@@ -25,7 +25,7 @@ function App() {
             <Route path="/notifications" component={NotificationsPage} />
             <Route path="/chat" component={ChatPage} />
             <Route path="/training" component={TrainingPage} />
-            <Route path="/(|accueil)" render={routeProps => <Home {...routeProps} />} />
+            <Route path="/" render={routeProps => <Home {...routeProps} />} />
           </>
         )}
       </div>

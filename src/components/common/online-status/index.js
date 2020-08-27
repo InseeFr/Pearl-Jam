@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { addOnlineStatusObserver } from 'common-tools';
 import D from 'i18n';
 
-export default ({ width = 18, height = 18 }) => {
+export default () => {
   const [init, setInit] = useState(false);
   const [status, setStatus] = useState(navigator.onLine);
   useEffect(() => {
