@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pearl
@@ -15,3 +15,9 @@ spec:
       containers:
         - name: pearl
           image: inseefr/pearl-jam:latest
+          env:
+           - name: QUEEN_URL
+             value: 'https://queen.demo.dev.sspcloud.fr'
+          env:
+           - name: PEARL_API_URL
+             value: 'https://pearl-bo.demo.dev.sspcloud.fr'

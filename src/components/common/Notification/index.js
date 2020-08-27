@@ -1,48 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import D from 'i18n';
-import * as serviceWorker from 'serviceWorker';
 import './notification.scss';
 
-const Notification = () => {
-  const [init, setInit] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [installingServiceWorker, setInstallingServiceWorker] = useState(false);
-  const [waitingServiceWorker, setWaitingServiceWorker] = useState(null);
-  const [isUpdateAvailable, setUpdateAvailable] = useState(false);
-  const [isServiceWorkerInstalled, setServiceWorkerInstalled] = useState(false);
+const Notification = ({ serviceWorkerInfo }) => {
+  const [open, setOpen] = useState(true);
 
-  useEffect(() => {
-    if (!init) {
-      const install = async () => {
-        const configuration = await fetch(`${window.location.origin}/configuration.json`);
-        const { QUEEN_URL } = await configuration.json();
-        serviceWorker.register({
-          QUEEN_URL,
-          onInstalling: installing => {
-            setInstallingServiceWorker(installing);
-            setOpen(true);
-          },
-          onUpdate: registration => {
-            setWaitingServiceWorker(registration.waiting);
-            setUpdateAvailable(true);
-            setOpen(true);
-          },
-          onWaiting: waiting => {
-            setWaitingServiceWorker(waiting);
-            setUpdateAvailable(true);
-            setOpen(true);
-          },
-          onSuccess: registration => {
-            setInstallingServiceWorker(false);
-            setServiceWorkerInstalled(!!registration);
-            setOpen(true);
-          },
-        });
-        setInit(true);
-      };
-      install();
-    }
-  }, [init]);
+  const {
+    installingServiceWorker,
+    waitingServiceWorker,
+    isUpdateAvailable,
+    isServiceWorkerInstalled,
+  } = serviceWorkerInfo;
 
   const updateAssets = () => {
     if (waitingServiceWorker) {
@@ -68,30 +37,36 @@ const Notification = () => {
   };
 
   return (
-    <>
-      <div
-        className={`notification ${isUpdateAvailable ? 'update' : ''} ${
-          (isUpdateAvailable || isServiceWorkerInstalled || installingServiceWorker) && open
-            ? 'visible'
-            : ''
-        }`}
-      >
-        {open && (
-          <>
-            <button type="button" className="close-button" onClick={() => setOpen(false)}>
-              {`\u2573 ${D.closeButton}`}
+    <div
+      className={`notification ${isUpdateAvailable ? 'update' : ''} ${
+        (isUpdateAvailable || isServiceWorkerInstalled || installingServiceWorker) && open
+          ? 'visible'
+          : ''
+      }`}
+    >
+      {open && (
+        <>
+          <button type="button" className="close-button" onClick={() => setOpen(false)}>
+            {`\u2573 ${D.closeButton}`}
+          </button>
+          <div className="title">{getMessage()}</div>
+          {isUpdateAvailable && (
+            <button type="button" className="update-button" onClick={updateAssets}>
+              {D.updateNow}
             </button>
-            <div className="title">{getMessage()}</div>
-            {isUpdateAvailable && (
-              <button type="button" className="update-button" onClick={updateAssets}>
-                {D.updateNow}
-              </button>
-            )}
-          </>
-        )}
-      </div>
-    </>
+          )}
+        </>
+      )}
+    </div>
   );
 };
 
 export default Notification;
+Notification.propTypes = {
+  serviceWorkerInfo: PropTypes.shape({
+    installingServiceWorker: PropTypes.any.isRequired,
+    waitingServiceWorker: PropTypes.any.isRequired,
+    isUpdateAvailable: PropTypes.any.isRequired,
+    isServiceWorkerInstalled: PropTypes.any.isRequired,
+  }).isRequired,
+};

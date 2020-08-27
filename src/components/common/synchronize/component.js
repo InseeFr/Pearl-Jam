@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect /* useContext */ } from 'react';
 import { useHistory } from 'react-router-dom';
 import Modal from 'react-modal';
 import imgSync from 'img/sync.png';
 import { addOnlineStatusObserver } from 'common-tools/';
-import { synchronize } from 'common-tools/synchronize';
+import { synchronizePearl, synchronizeQueen } from 'common-tools/synchronize';
 import D from 'i18n';
-import { store } from 'common-tools/store';
 import Loader from '../loader';
 import './result.scss';
 
@@ -15,79 +14,77 @@ const Synchronize = ({ disabled = false }) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [syncResult, setSyncResult] = useState(undefined);
-  const [queenSync, setQueenSync] = useState(undefined);
   const [pearlSync, setPearlSync] = useState(undefined);
 
-  const [init, setInit] = useState(false);
   const [status, setStatus] = useState(navigator.onLine);
 
-  const { dispatch, authInitialized } = useContext(store);
+  useEffect(() => {
+    addOnlineStatusObserver(s => {
+      setStatus(s);
+    });
+  }, []);
 
-  const handleQueenEvent = event => {
-    const { type, command, state } = event.detail;
-    if (type === 'QUEEN' && command === 'UPDATE_SYNCHRONIZE') {
-      if (state === 'FAILURE') {
-        setQueenSync('FAILURE');
-      } else if (state === 'SUCCESS') {
-        setQueenSync('SUCCESS');
+  useEffect(() => {
+    const pearlSynchResult = window.localStorage.getItem('PEARL_SYNC_RESULT');
+    const queenSynchResult = window.localStorage.getItem('QUEEN_SYNC_RESULT');
+
+    if (pearlSync) {
+      if (pearlSync === 'FAILURE') {
+        window.localStorage.removeItem('SYNCHRONIZE');
+        setLoading(false);
+        setSyncResult({ state: false, message: D.syncFailure });
       }
-
-      setTimeout(() => setLoading(false), 3000);
-    }
-  };
-
-  useEffect(() => {
-    if (!init) {
-      addOnlineStatusObserver(s => {
-        setStatus(s);
-      });
-      setInit(true);
-    }
-  }, [init]);
-
-  useEffect(() => {
-    window.addEventListener('QUEEN', handleQueenEvent);
-    return () => {
-      window.removeEventListener('QUEEN', handleQueenEvent);
-    };
-  });
-
-  useEffect(() => {
-    if (pearlSync && queenSync) {
-      console.log(`pearlSync && queenSync :  ${pearlSync} -   ${queenSync}`);
-      if (queenSync === 'SUCCESS' && pearlSync === 'SUCCESS') {
+    } else if (pearlSynchResult !== null && queenSynchResult !== null) {
+      window.localStorage.removeItem('SYNCHRONIZE');
+      if (pearlSynchResult === 'SUCCESS' && queenSynchResult === 'SUCCESS') {
         setSyncResult({ state: true, message: D.syncSuccess });
       } else {
         setSyncResult({ state: false, message: D.syncFailure });
       }
-      setLoading(false);
-      history.push('/');
     }
-  }, [pearlSync, queenSync, history]);
+  }, [pearlSync, history]);
 
   const syncFunction = () => {
+    window.localStorage.removeItem('PEARL_SYNC_RESULT');
+    window.localStorage.removeItem('QUEEN_SYNC_RESULT');
+    window.localStorage.setItem('SYNCHRONIZE', true);
+
     const launchSynchronize = async () => {
       try {
         setPearlSync(undefined);
-        setQueenSync(undefined);
         setLoading(true);
 
-        await synchronize();
-
-        setPearlSync('SUCCESS');
+        await synchronizePearl()
+          .catch(e => {
+            console.log('error in synchronizePearl()');
+            throw e;
+          })
+          .then(() => {
+            console.log('synchronize success');
+            setPearlSync('SUCCESS');
+            window.localStorage.setItem('PEARL_SYNC_RESULT', 'SUCCESS');
+          })
+          .catch(e => {
+            console.log('error during pearl Synchro');
+            console.log(e);
+            setPearlSync('FAILURE');
+            throw e;
+          })
+          .then(async () => {
+            console.log('Pearl synchronization : ENDED !');
+            await synchronizeQueen(history);
+          })
+          .catch(e => {
+            console.log('Error in Queen Synchro');
+            console.log(e);
+          });
       } catch (e) {
-        console.log(e.message);
-        setPearlSync('FAILURE');
-      } finally {
-        console.log('Pearl synchronization : ENDED !');
+        console.log('synch failure');
+        console.log(e);
       }
     };
     launchSynchronize();
-    if (!authInitialized) {
-      dispatch({ type: 'initAuth' });
-    } else {
-      launchSynchronize();
-    }
+
   };
 
   const syncOnClick = () => {
@@ -98,7 +95,10 @@ const Synchronize = ({ disabled = false }) => {
     }
   };
 
-  const close = () => setSyncResult(undefined);
+  const close = async () => {
+    setSyncResult(undefined);
+    window.localStorage.removeItem('PEARL_SYNC_RESULT');
+  };
 
   return (
     <>

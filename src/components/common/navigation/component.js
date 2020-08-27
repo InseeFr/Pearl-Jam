@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import imgInsee from 'img/insee.png';
 import Synchronize from 'components/common/synchronize';
+import { PEARL_USER_KEY } from 'common-tools/constants';
 import D from 'i18n';
 import NavigationItem from './item';
 import OnlineStatus from '../online-status';
@@ -13,8 +14,8 @@ const Navigation = ({ location }) => {
   }, [location]);
 
   const getName = () => {
-    const interviewerFromLocalStorage = localStorage.getItem('pearl-interviewer');
-    return interviewerFromLocalStorage ? JSON.parse(interviewerFromLocalStorage).name : '';
+    const interviewerFromLocalStorage = window.localStorage.getItem(PEARL_USER_KEY);
+    return interviewerFromLocalStorage ? JSON.parse(interviewerFromLocalStorage).firstName : '';
   };
 
   return (

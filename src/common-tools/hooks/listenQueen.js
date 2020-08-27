@@ -62,6 +62,8 @@ const handleQueenEvent = history => async event => {
       case 'UPDATE_SYNCHRONIZE':
         // NOT here
         break;
+      case 'HEALTH_CHECK':
+        return true;
       default:
         break;
     }
