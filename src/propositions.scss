@@ -144,37 +144,6 @@ svg.edit-icon:hover {
   margin-bottom: 6px;
 }
 
-// th{
-//   background: rgb(19,66,120);
-//   color: rgb(240,196,46);
-//   position:relative;
-//   word-wrap: normal;
-// }
-
-.ues > table {
-  border-collapse: collapse;
-  background-color: white;
-
-  th {
-    border: 1px solid #d4d4d4 !important;
-    border-bottom-width: 2px !important;
-  }
-
-  td {
-    border: 1px solid #d4d4d4 !important;
-    text-align: center;
-  }
-
-  th {
-    background-color: white;
-  }
-
-  tr:hover > td {
-    background-color: rgba(0, 0, 0, 0.075) !important;
-    color: black !important;
-  }
-}
-
 .ue-info .infos .row {
   padding: 0 0 5px 0;
   position: relative;
@@ -392,11 +361,6 @@ div.Contacts div.ContactAttempts .row > button {
 
 .ReactModal__Content h3 {
   margin: 0 0 15px 0;
-}
-
-/* Tooltip container */
-.HeaderTooltip {
-  position: relative;
 }
 
 /* Tooltip text */

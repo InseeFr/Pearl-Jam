@@ -160,15 +160,24 @@ button {
 $border-size-bottom: 1px;
 
 .ue-table {
-  $border-style: 1px solid black;
+  border: 1px solid #d4d4d4;
   border-collapse: collapse;
+  background-color: white;
   border-spacing: 0 0.5em;
   margin: auto;
   width: 100%;
 
+  th {
+    border: 1px solid #d4d4d4;
+    background-color: white;
+    border-bottom-width: 2px;
+  }
+
   td {
-    background-color: transparent !important;
+    border: 1px solid #d4d4d4;
+    background-color: transparent;
     color: #444;
+    text-align: center;
   }
 
   tr:nth-of-type(odd) {
@@ -187,17 +196,15 @@ $border-size-bottom: 1px;
     background-color: #969696;
   }
 
-  thead:not(:first-child),
-  th:not(:first-child),
-  td:not(:first-child) {
-    border: $border-style;
+  thead,
+  th,
+  td {
     padding: 0.7em;
     white-space: pre-line;
-    background-color: white;
   }
   tbody tr:hover td:not(:first-child) {
-    background-color: #606060;
-    color: white;
+    background-color: #969696;
+    color: black;
   }
 }
 td.align-center {
@@ -207,6 +214,7 @@ td.align-center {
 td.align-right {
   text-align: right;
 }
+
 .div-nav-page {
   text-align: center;
 }
