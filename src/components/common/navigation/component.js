@@ -24,8 +24,8 @@ const Navigation = ({ location }) => {
 
   return (
     <>
-      <div id="top-info-container">
-        <div id="top-info">
+      <div className="top-info-container">
+        <div className="top-info">
           <div className="user-name">{`${D.welcome} ${getName()}`}</div>
           <OnlineStatus />
         </div>

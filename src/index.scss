@@ -27,43 +27,47 @@ button {
   }
 }
 
-.top-info {
-  height: 1.6em;
-  display: flex;
-  justify-content: flex-end;
-  align-content: space-around;
-  div {
-    &.user-name {
-      display: flex;
-      padding-right: 2em;
-      align-self: center;
-    }
+.top-info-container {
+  height: 2em;
+  position: relative;
 
-    &.connexion {
-      display: flex;
-      flex-direction: row;
-      height: min-content;
-      // border-radius: 5px;
-      margin: 0.3em 0.5em 0.3em 0.5em;
-      background-color: white;
-
-      .online {
-        color: #00cc00;
-      }
-
-      .offline {
-        color: #414c5c;
-      }
-
-      svg {
-        display: inline;
-        vertical-align: bottom;
-      }
-    }
-  }
-  span {
+  .top-info {
     display: flex;
+    justify-content: flex-end;
+    align-content: space-around;
+    padding-bottom: 5px;
+    position: absolute;
+    right: 0;
+
+    div {
+      margin: 5px;
+      text-align: center;
+      display: inline;
+      &.user-name {
+        display: flex;
+        margin-bottom: 3px;
+        align-self: center;
+      }
+      &.connexion {
+        display: flex;
+        flex-direction: row;
+        height: min-content;
+        margin: 0.3em 0.5em 0.3em 0.5em;
+        background-color: white;
+      }
+    }
   }
+}
+
+.nav-bar,
+.home > .panel-body {
+  border-radius: 5px;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+.home > .panel-body {
+  margin-bottom: 50px;
+  padding: 12px;
 }
 
 .nav-bar {
@@ -74,16 +78,16 @@ button {
   background-color: $background-panel;
 
   img.insee-logo {
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-    padding-right: 0.5em;
+    padding: 0.2em 1em 0.2em 0em;
     height: 60px;
     width: auto;
-    border-right: thin solid black;
+    border-right: thin solid #c4e1ff;
   }
 
   .top-right {
     justify-self: end;
+    width: 60px;
+    margin: 3px 3px 3px 0;
   }
 
   .items {
@@ -130,7 +134,7 @@ button {
     margin-left: -2em;
     margin-top: -1em;
     text-align: right;
-    z-index: 9;
+    z-index: 1;
   }
 
   a {
@@ -162,7 +166,16 @@ $border-size-bottom: 1px;
   margin: auto;
   width: 100%;
 
-  tr.inactive td:not(:first-child) {
+  td {
+    background-color: transparent !important;
+    color: #444;
+  }
+
+  tr:nth-of-type(odd) {
+    background-color: rgb(242, 242, 242);
+  }
+
+  tr.inactive {
     background-color: #969696;
   }
   tbody tr:not(.inactive) td:not(:first-child) {
@@ -171,6 +184,7 @@ $border-size-bottom: 1px;
 
   tbody tr.inactive td:not(:first-child) {
     cursor: not-allowed;
+    background-color: #969696;
   }
 
   thead:not(:first-child),
@@ -331,7 +345,10 @@ form label {
     margin-bottom: 0.5em;
 
     button {
-      margin-left: 2em;
+      &:not(#ShowAll) {
+        margin-left: 2em;
+      }
+
       color: white;
       padding: 1em 2em 1em 2em;
       display: flex;
