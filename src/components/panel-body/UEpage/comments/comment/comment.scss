@@ -1,5 +1,6 @@
 div.Comment {
   padding: 0px;
+  display: flex;
   p.title {
     font-size: large;
     line-height: 1.8;
@@ -13,7 +14,7 @@ div.Comment {
     width: 80%;
 
     div.text {
-      width: 80%;
+      width: 90%;
       margin: 15px;
       margin-left: 0px;
       padding: 15px;
@@ -34,7 +35,8 @@ div.Comment {
 
   button {
     justify-content: space-between;
-    align-self: center;
+    align-self: flex-start;
+    justify-self: flex-start;
     font-size: 15px;
     height: 30px;
     width: 120px;

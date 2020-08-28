@@ -26,15 +26,15 @@ const Comment = ({ saveUE, editable }) => {
         <div className="text" data-placeholder={D.organizationComment}>
           {value}
         </div>
-
-        {editable === true && (
-          <button type="button" onClick={openModal}>
-            <i className="fa fa-pencil" aria-hidden="true" />
-            &nbsp;
-            {D.editButton}
-          </button>
-        )}
       </div>
+
+      {editable === true && (
+        <button type="button" onClick={openModal}>
+          <i className="fa fa-pencil" aria-hidden="true" />
+          &nbsp;
+          {D.editButton}
+        </button>
+      )}
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form closeModal={closeModal} surveyUnit={ue} saveUE={save} />
       </Modal>
