@@ -4,7 +4,13 @@ import { convertSUStateInToDo, getLastState } from 'common-tools/functions';
 import { formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 
-const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSelection }) => {
+const PageList = ({
+  surveyUnits,
+  uesByPage,
+  toggleAllSUSelection,
+  toggleOneSUSelection,
+  transmitButton,
+}) => {
   const [page, setPage] = useState(0);
   const [selectAll, setSelectAll] = useState(false);
   const history = useHistory();
@@ -54,71 +60,86 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
       .toString();
   };
 
-  const renderSimpleTable = sus => {
+  const renderSimpleTable = (sus, splitted) => {
     return (
-      <table className="ue-table">
-        <thead>
-          <tr>
-            <th className="HeaderTooltip">
-              <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
-              <span className="tooltiptext">Tout cocher / Tout décocher</span>
-            </th>
-            <th>{D.surveyHeader}</th>
-            <th>{D.sampleHeader}</th>
-            <th>{D.surveyUnitHeader}</th>
-            <th>{D.fullNameHeader}</th>
-            <th>{D.cityHeader}</th>
-            <th>{D.toDoHeader}</th>
-            <th>{D.remainingDaysHeader}</th>
-            <th>{D.priorityHeader}</th>
-            <th>{D.actionHeader}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sus.map(su => {
-            const isDisabled = checkSurveyUnit(su);
-            const rowClickFunct = () => {
-              if (!isDisabled) history.push(`survey-unit/${su.id}`);
-            };
-            const inactive = isDisabled ? 'inactive' : '';
-            return (
-              <tr key={su.id} onClick={e => rowClickFunct(e)} className={inactive}>
-                <td role="gridcell" onClick={e => filterPropagation(e)}>
-                  {!isDisabled && (
-                    <input
-                      type="checkbox"
-                      checked={su.selected || false}
-                      onChange={e => toggleOne(su.id, e.target.checked)}
-                      onClick={e => e.stopPropagation()}
-                    />
-                  )}
-                </td>
-                <td>{su.campaign}</td>
-                <td>{su.sampleIdentifiers.ssech}</td>
-                <td>{su.id}</td>
-                <td>{`${su.lastName} ${su.firstName}`}</td>
-                <td>{removePostCode(su.address.l6)}</td>
-                <td>{convertSUStateInToDo(getLastState(su).type)}</td>
-                <td className="align-right">{intervalInDays(su)}</td>
-                <td className="align-center">
-                  {su.priority && (
-                    <span role="img" aria-label="priority">
-                      <i className="fa fa-flag" aria-hidden="true" />
-                    </span>
-                  )}
-                </td>
-                <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
-                  <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
-                    <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
-                      <i className="fa fa-file-text-o" aria-hidden="true" />
-                    </span>
-                  </Link>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <>
+        <table className="ue-table">
+          <colgroup>
+            <col className="col1" />
+            <col className="col2" />
+            <col className="col3" />
+            <col className="col4" />
+            <col className="col5" />
+            <col className="col6" />
+            <col className="col7" />
+            <col className="col8" />
+            <col className="col9" />
+            <col className="col10" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className="HeaderTooltip">
+                <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
+                <span className="tooltiptext">Tout cocher / Tout décocher</span>
+              </th>
+              <th>{D.surveyHeader}</th>
+              <th>{D.sampleHeader}</th>
+              <th>{D.surveyUnitHeader}</th>
+              <th>{D.fullNameHeader}</th>
+              <th>{D.cityHeader}</th>
+              <th>{D.toDoHeader}</th>
+              <th>{D.remainingDaysHeader}</th>
+              <th>{D.priorityHeader}</th>
+              <th>{D.actionHeader}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sus.map(su => {
+              const isDisabled = checkSurveyUnit(su);
+              const rowClickFunct = () => {
+                if (!isDisabled) history.push(`survey-unit/${su.id}`);
+              };
+              const inactive = isDisabled ? 'inactive' : '';
+              return (
+                <tr key={su.id} onClick={e => rowClickFunct(e)} className={inactive}>
+                  <td role="gridcell" onClick={e => filterPropagation(e)}>
+                    {!isDisabled && (
+                      <input
+                        type="checkbox"
+                        checked={su.selected || false}
+                        onChange={e => toggleOne(su.id, e.target.checked)}
+                        onClick={e => e.stopPropagation()}
+                      />
+                    )}
+                  </td>
+                  <td>{su.campaign}</td>
+                  <td>{su.sampleIdentifiers.ssech}</td>
+                  <td>{su.id}</td>
+                  <td>{`${su.lastName} ${su.firstName}`}</td>
+                  <td>{removePostCode(su.address.l6)}</td>
+                  <td>{convertSUStateInToDo(getLastState(su).type)}</td>
+                  <td className="align-right">{intervalInDays(su)}</td>
+                  <td className="align-center">
+                    {su.priority && (
+                      <span role="img" aria-label="priority">
+                        <i className="fa fa-flag" aria-hidden="true" />
+                      </span>
+                    )}
+                  </td>
+                  <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
+                    <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
+                      <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
+                        <i className="fa fa-file-text-o" aria-hidden="true" />
+                      </span>
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        {!splitted && transmitButton()}
+      </>
     );
   };
 
@@ -133,10 +154,10 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
     let i;
     let j;
     let ueChunk;
-    const tableSize = uesByPage || 10;
+    const tableSize = uesByPage || 6;
     const chunkSize = tableSize;
     if (sortedUes.length <= tableSize) {
-      return renderSimpleTable(sortedUes);
+      return renderSimpleTable(sortedUes, false);
     }
     const ueSplit = [];
     for (i = 0, j = ues.length; i < j; i += chunkSize) {
@@ -145,28 +166,31 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
     }
     return (
       <>
-        {renderSimpleTable(ueSplit[page])}
+        {renderSimpleTable(ueSplit[page], true)}
         <div className="div-nav-page">
-          <button type="button" className="button-page nav" onClick={() => setPage(0)}>
-            «
-          </button>
-          {ueSplit.map((ue, index) => (
+          {transmitButton()}
+          <div>
+            <button type="button" className="button-page nav" onClick={() => setPage(0)}>
+              «
+            </button>
+            {ueSplit.map((ue, index) => (
+              <button
+                type="button"
+                className={`button-page${index === page ? ' active' : ''}`}
+                key={index}
+                onClick={() => setPage(index)}
+              >
+                {index + 1}
+              </button>
+            ))}
             <button
               type="button"
-              className={`button-page${index === page ? ' active' : ''}`}
-              key={index}
-              onClick={() => setPage(index)}
+              className="button-page nav"
+              onClick={() => setPage(ueSplit.length - 1)}
             >
-              {index + 1}
+              »
             </button>
-          ))}
-          <button
-            type="button"
-            className="button-page nav"
-            onClick={() => setPage(ueSplit.length - 1)}
-          >
-            »
-          </button>
+          </div>
         </div>
       </>
     );

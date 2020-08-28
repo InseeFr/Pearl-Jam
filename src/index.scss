@@ -66,7 +66,6 @@ button {
 }
 
 .home > .panel-body {
-  margin-bottom: 50px;
   padding: 12px;
 }
 
@@ -160,12 +159,46 @@ button {
 $border-size-bottom: 1px;
 
 .ue-table {
+  table-layout: fixed;
   border: 1px solid #d4d4d4;
   border-collapse: collapse;
   background-color: white;
   border-spacing: 0 0.5em;
   margin: auto;
   width: 100%;
+
+  col {
+    &.col1 {
+      width: 3%;
+    }
+    &.col2 {
+      width: 12%;
+    }
+    &.col3 {
+      width: 7%;
+    }
+    &.col4 {
+      width: 6%;
+    }
+    &.col5 {
+      width: 15%;
+    }
+    &.col6 {
+      width: 15%;
+    }
+    &.col7 {
+      width: 8%;
+    }
+    &.col8 {
+      width: 6%;
+    }
+    &.col9 {
+      width: 6%;
+    }
+    &.col10 {
+      width: 6%;
+    }
+  }
 
   th {
     border: 1px solid #d4d4d4;
@@ -216,7 +249,10 @@ td.align-right {
 }
 
 .div-nav-page {
+  display: flex;
+  justify-content: space-between;
   text-align: center;
+  margin-top: 1em;
 }
 .button-page {
   border: thin lightgrey solid;
@@ -341,6 +377,7 @@ form label {
 
 .panel-body.ue,
 .panel-body.ues {
+  height: 500px;
   .button-back-home {
     color: white;
     border: none;
@@ -353,10 +390,6 @@ form label {
     margin-bottom: 0.5em;
 
     button {
-      &:not(#ShowAll) {
-        margin-left: 2em;
-      }
-
       color: white;
       padding: 1em 2em 1em 2em;
       display: flex;

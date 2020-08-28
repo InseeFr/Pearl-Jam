@@ -30,7 +30,7 @@ const UEPage = ({ match }) => {
   };
 
   return (
-    <div className="panel-body ue">
+    <>
       {surveyUnit && (
         <SurveyUnitProvider value={surveyUnit}>
           <Router match={match} saveUE={saveUE} />
@@ -45,7 +45,7 @@ const UEPage = ({ match }) => {
           <h2>{`${D.surveyUnitNotFound} ${match.params.id}.`}</h2>
         </>
       )}
-    </div>
+    </>
   );
 };
 

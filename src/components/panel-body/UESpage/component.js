@@ -131,6 +131,15 @@ const UESPage = () => {
     setFilter(searchedString);
   };
 
+  const transmitButton = () => {
+    return (
+      <button type="button" className="transmit" disabled={anySuSelected} onClick={transmit}>
+        <i className="fa fa-paper-plane" aria-hidden="true" />
+        &nbsp;Transmettre
+      </button>
+    );
+  };
+
   return (
     <div className="panel-body ues">
       <div className="column">
@@ -151,11 +160,9 @@ const UESPage = () => {
         surveyUnits={surveyUnits}
         toggleAllSUSelection={toggleAllSUSelection}
         toggleOneSUSelection={toggleOneSUSelection}
+        transmitButton={transmitButton}
       />
-      <button type="button" className="transmit" disabled={anySuSelected} onClick={transmit}>
-        <i className="fa fa-paper-plane" aria-hidden="true" />
-        &nbsp;Transmettre
-      </button>
+
       <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">
         <Form closeModal={closeModal} summary={transmitSummary} />
       </Modal>
