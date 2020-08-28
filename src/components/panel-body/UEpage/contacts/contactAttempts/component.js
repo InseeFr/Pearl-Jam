@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import D from 'i18n';
 import format from 'date-fns/format';
+import { findContactAttemptValueByType } from 'common-tools/enum/ContactAttemptEnum';
 import Form from './form';
 import SurveyUnitContext from '../../UEContext';
 
@@ -43,12 +44,16 @@ const ContactAttempts = ({ saveUE }) => {
         return (
           <tr className="line" key={contAtt.id}>
             <td>
-              <div>{`${date} - ${hour}H - Téléphone - ${contAtt.status}`}</div>
+              <button type="button" className="smallButton">
+                <i className="fa fa-times" aria-hidden="true" />
+              </button>
             </td>
             <td>
-              <button type="button" className="smallButton">
-                <i class="fa fa-trash-o" />
-              </button>
+              <div>
+                {`${date} - ${hour}H - Téléphone - ${findContactAttemptValueByType(
+                  contAtt.status
+                )}`}
+              </div>
             </td>
           </tr>
         );
@@ -80,7 +85,13 @@ const ContactAttempts = ({ saveUE }) => {
         </button>
       </div>
 
-      <table id="contactTable">{lines()}</table>
+      <table className="contactTable">
+        <colgroup>
+          <col className="col1" />
+          <col className="col2" />
+        </colgroup>
+        {lines()}
+      </table>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form
           closeModal={closeModal}

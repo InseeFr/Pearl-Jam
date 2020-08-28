@@ -23,7 +23,8 @@ const ContactOutcome = (/* { saveUE } */) => {
           {D.editButton}
         </button>
       </div>
-      <div className="line">{`${outcomeValue} (${outcome.totalNumberOfContactAttempts} essais)`}</div>
+      <div className="line">{outcomeValue}</div>
+      <div className="line">{`(${outcome.totalNumberOfContactAttempts} essais)`}</div>
     </div>
   );
 };

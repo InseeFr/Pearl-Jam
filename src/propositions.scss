@@ -136,7 +136,6 @@ svg.edit-icon {
 
 .sync:hover,
 svg.edit-icon:hover {
-  //background: linear-gradient(to top right, #2685d8, #91ccff);
   background: linear-gradient(to top right, #667791, #b7bec7);
 }
 
@@ -151,23 +150,6 @@ svg.edit-icon:hover {
 
 .ue-info .infos .row span {
   text-shadow: none !important;
-}
-
-.nav-bar-ue .item {
-  color: black !important;
-  border-radius: 3px 3px 0 0 !important;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
-  background-color: white;
-  border-bottom: 1px solid #969696;
-  padding-bottom: 1px;
-}
-
-.nav-bar-ue .item.active {
-  padding-bottom: 2px !important;
-}
-
-.item.active {
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2) !important;
 }
 
 .sub-page {
@@ -227,45 +209,7 @@ svg.edit-icon:hover {
   padding-top: 0 !important;
 }
 
-.nav-bar-ue .item:hover,
-.nav-bar-ue .item.active {
-  -webkit-text-stroke-width: 0.8px;
-  font-weight: normal !important;
-}
-
-div.border {
-  height: auto !important;
-}
-
-div.Comment div.border {
-  display: block !important;
-}
-
-div.Comment button {
-  margin-left: auto;
-  display: block;
-  height: auto !important;
-}
-
-div.Comment div.border div.text {
-  border-radius: 2px !important;
-  width: 100% !important;
-}
-
-.Contacts > div {
-  border-radius: 4px !important;
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
-}
-
-#contactTable {
-  margin: 20px;
-}
-
 .ue-info .infos .row span.comment {
-  // width: 200px;
-  //   margin-left: auto;
-  //   display: block !important;
-
   position: absolute;
   right: 15px;
 }
@@ -299,9 +243,6 @@ span.ue-state {
   height: 28px;
 }
 
-.nav-bar-ue {
-  height: auto !important;
-}
 .div-nav-ue {
   position: relative;
   bottom: -3px;

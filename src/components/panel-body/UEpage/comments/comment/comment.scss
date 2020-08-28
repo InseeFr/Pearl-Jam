@@ -9,7 +9,7 @@ div.Comment {
   }
   div.border {
     display: flex;
-    height: 175px;
+    height: 15em;
     width: 80%;
 
     div.text {
@@ -17,10 +17,13 @@ div.Comment {
       margin: 15px;
       margin-left: 0px;
       padding: 15px;
-      border-radius: 25px;
+      border-radius: 2px;
       border-style: solid;
       border-width: thin;
       border-color: black;
+      overflow: hidden;
+      white-space: pre-wrap;
+      word-break: break-all;
 
       &:empty:before {
         content: attr(data-placeholder);
