@@ -10,6 +10,8 @@ const PageList = ({
   toggleAllSUSelection,
   toggleOneSUSelection,
   transmitButton,
+  sortOnColumn,
+  defaultOrder,
 }) => {
   const [page, setPage] = useState(0);
   const [selectAll, setSelectAll] = useState(false);
@@ -82,14 +84,59 @@ const PageList = ({
                 <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
                 <span className="tooltiptext">Tout cocher / Tout décocher</span>
               </th>
-              <th>{D.surveyHeader}</th>
-              <th>{D.sampleHeader}</th>
+              <th>
+                <div
+                  onClick={() => sortOnColumn('campaign')}
+                  onKeyPress={() => {}}
+                  role="button"
+                  tabIndex="0"
+                >
+                  {D.surveyHeader}
+                </div>
+              </th>
+              <th>
+                <div
+                  onClick={() => sortOnColumn('sampleIdentifiers')}
+                  onKeyPress={() => {}}
+                  role="button"
+                  tabIndex="0"
+                >
+                  {D.sampleHeader}
+                </div>
+              </th>
               <th>{D.surveyUnitHeader}</th>
               <th>{D.fullNameHeader}</th>
-              <th>{D.cityHeader}</th>
-              <th>{D.toDoHeader}</th>
+              <th>
+                <div
+                  onClick={() => sortOnColumn('geographicalLocation')}
+                  onKeyPress={() => {}}
+                  role="button"
+                  tabIndex="0"
+                >
+                  {D.cityHeader}
+                </div>
+              </th>
+              <th>
+                <div
+                  onClick={() => sortOnColumn('toDo')}
+                  onKeyPress={() => {}}
+                  role="button"
+                  tabIndex="0"
+                >
+                  {D.toDoHeader}
+                </div>
+              </th>
               <th>{D.remainingDaysHeader}</th>
-              <th>{D.priorityHeader}</th>
+              <th>
+                <div
+                  onClick={() => sortOnColumn('priority')}
+                  onKeyPress={() => {}}
+                  role="button"
+                  tabIndex="0"
+                >
+                  {D.priorityHeader}
+                </div>
+              </th>
               <th>{D.actionHeader}</th>
             </tr>
           </thead>
@@ -117,7 +164,7 @@ const PageList = ({
                   <td>{su.id}</td>
                   <td>{`${su.lastName} ${su.firstName}`}</td>
                   <td>{removePostCode(su.address.l6)}</td>
-                  <td>{convertSUStateInToDo(getLastState(su).type)}</td>
+                  <td>{convertSUStateInToDo(getLastState(su).type).value}</td>
                   <td className="align-right">{intervalInDays(su)}</td>
                   <td className="align-center">
                     {su.priority && (
@@ -144,12 +191,15 @@ const PageList = ({
   };
 
   const renderTable = ues => {
-    const sortedUes = ues.sort(
-      (ueA, ueB) =>
-        ueA.collectionEndDate.toString().localeCompare(ueB.collectionEndDate.toString()) ||
-        ueA.campaign.localeCompare(ueB.campaign) ||
-        ueA.sampleIdentifiers.ssech - ueB.sampleIdentifiers.ssech
-    );
+    const sortedUes = ues;
+    if (defaultOrder) {
+      sortedUes.sort(
+        (ueA, ueB) =>
+          ueA.collectionEndDate.toString().localeCompare(ueB.collectionEndDate.toString()) ||
+          ueA.campaign.localeCompare(ueB.campaign) ||
+          ueA.sampleIdentifiers.ssech - ueB.sampleIdentifiers.ssech
+      );
+    }
 
     let i;
     let j;

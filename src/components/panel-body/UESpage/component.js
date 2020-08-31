@@ -3,7 +3,12 @@ import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import D from 'i18n';
 import Modal from 'react-modal';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
-import { isValidForTransmission, addNewState } from 'common-tools/functions';
+import {
+  isValidForTransmission,
+  addNewState,
+  convertSUStateInToDo,
+  getLastState,
+} from 'common-tools/functions';
 import Form from './transmitForm';
 import PageList from './pageList';
 import Search from './search';
@@ -16,6 +21,7 @@ const UESPage = () => {
   const [init, setInit] = useState(false);
   const [showTransmitSummary, setShowTransmitSummary] = useState(false);
   const [transmitSummary, setTransmitSummary] = useState({ ok: 0, ko: 0 });
+  const [columnFilter, setColumnFilter] = useState(undefined);
 
   useEffect(() => {
     if (!init) {
@@ -31,13 +37,61 @@ const UESPage = () => {
   }, [init, surveyUnits]);
 
   useEffect(() => {
+    const sortSU = su => {
+      if (columnFilter === undefined) {
+        return su;
+      }
+      const { column, order } = columnFilter;
+      const newSu = su;
+      if (order === 'ASC') {
+        if (column === 'sampleIdentifiers') {
+          newSu.sort((suA, suB) => {
+            return suA.sampleIdentifiers.ssech - suB.sampleIdentifiers.ssech;
+          });
+        } else if (column === 'geographicalLocation') {
+          newSu.sort((suA, suB) => {
+            return suA.address.l6
+              .split(' ')
+              .slice(1)
+              .toString()
+              .localeCompare(
+                suB.address.l6
+                  .split(' ')
+                  .slice(1)
+                  .toString()
+              );
+          });
+        } else if (column === 'toDo') {
+          newSu.sort((suA, suB) => {
+            return (
+              convertSUStateInToDo(getLastState(suA).type).order -
+              convertSUStateInToDo(getLastState(suB).type).order
+            );
+          });
+        } else if (column === 'priority') {
+          newSu.sort((suA, suB) => {
+            return suA[column] - suB[column];
+          });
+        } else {
+          newSu.sort((suA, suB) => {
+            return suA[column].localeCompare(suB[column]);
+          });
+        }
+      } else {
+        newSu.sort((suA, suB) => {
+          return suB[column].localeCompare(suA[column]);
+        });
+      }
+      return newSu;
+    };
+
     const suPromise = surveyUnitDBService.getAll();
     let totalEchoes = 0;
     let matchingEchoes = totalEchoes;
 
     if (filter === '') {
       suPromise.then(units => {
-        setSurveyUnits(units);
+        setSurveyUnits(sortSU(units));
         totalEchoes = units.length;
         matchingEchoes = units.length;
         setSearchEchoes([matchingEchoes, totalEchoes]);
@@ -60,15 +114,25 @@ const UESPage = () => {
             return filterCondition;
           });
           matchingEchoes = filteredSU.length;
-          setSurveyUnits(filteredSU);
+          setSurveyUnits(sortSU(filteredSU));
           setSearchEchoes([matchingEchoes, totalEchoes]);
         });
     }
-  }, [filter]);
+  }, [filter, columnFilter]);
 
   const isSelectable = su => {
     // TODO implements rules (collection[Start|End]Date)
     return true;
+  };
+
+  const sortOnColumn = column => {
+    if (columnFilter === undefined || columnFilter.column !== column) {
+      setColumnFilter({ column, order: 'ASC' });
+    } else if (columnFilter.order === 'ASC') {
+      setColumnFilter({ column, order: 'DESC' });
+    } else {
+      setColumnFilter(undefined);
+    }
   };
 
   const toggleAllSUSelection = newValue => {
@@ -161,6 +225,8 @@ const UESPage = () => {
         toggleAllSUSelection={toggleAllSUSelection}
         toggleOneSUSelection={toggleOneSUSelection}
         transmitButton={transmitButton}
+        sortOnColumn={sortOnColumn}
+        defaultOrder={columnFilter === undefined}
       />
 
       <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">
