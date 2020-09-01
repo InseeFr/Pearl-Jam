@@ -204,6 +204,31 @@ $border-size-bottom: 1px;
     border: 1px solid #d4d4d4;
     background-color: white;
     border-bottom-width: 2px;
+
+    &.selected {
+      i.fa-sort {
+        visibility: hidden;
+        width: 0px;
+      }
+      &.ascending {
+        i.fa-sort-desc {
+          visibility: hidden;
+          width: 0px;
+        }
+      }
+      &.descending {
+        i.fa-sort-asc {
+          visibility: hidden;
+          width: 0px;
+        }
+      }
+    }
+    &:not(.selected) {
+      i:not(.fa-sort) {
+        visibility: hidden;
+        width: 0px;
+      }
+    }
   }
 
   td {

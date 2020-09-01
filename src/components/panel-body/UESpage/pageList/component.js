@@ -11,7 +11,7 @@ const PageList = ({
   toggleOneSUSelection,
   transmitButton,
   sortOnColumn,
-  defaultOrder,
+  columnFilter,
 }) => {
   const [page, setPage] = useState(0);
   const [selectAll, setSelectAll] = useState(false);
@@ -62,6 +62,26 @@ const PageList = ({
       .toString();
   };
 
+  const getClass = column => {
+    if (columnFilter === undefined) return '';
+    const cfColumn = columnFilter.column;
+    const { order } = columnFilter;
+    if (column === cfColumn) {
+      return order === 'ASC' ? 'selected ascending' : 'selected descending';
+    }
+    return '';
+  };
+
+  const addSortIcons = () => {
+    return (
+      <>
+        <i className="fa fa-sort-desc" aria-hidden="true" />
+        <i className="fa fa-sort-asc" aria-hidden="true" />
+        <i className="fa fa-sort" aria-hidden="true" />
+      </>
+    );
+  };
+
   const renderSimpleTable = (sus, splitted) => {
     return (
       <>
@@ -84,58 +104,58 @@ const PageList = ({
                 <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
                 <span className="tooltiptext">Tout cocher / Tout décocher</span>
               </th>
-              <th>
-                <div
-                  onClick={() => sortOnColumn('campaign')}
-                  onKeyPress={() => {}}
-                  role="button"
-                  tabIndex="0"
-                >
-                  {D.surveyHeader}
-                </div>
+              <th
+                className={getClass('campaign')}
+                onClick={() => sortOnColumn('campaign')}
+                onKeyPress={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                {D.surveyHeader}
+                {addSortIcons()}
               </th>
-              <th>
-                <div
-                  onClick={() => sortOnColumn('sampleIdentifiers')}
-                  onKeyPress={() => {}}
-                  role="button"
-                  tabIndex="0"
-                >
-                  {D.sampleHeader}
-                </div>
+              <th
+                className={getClass('sampleIdentifiers')}
+                onClick={() => sortOnColumn('sampleIdentifiers')}
+                onKeyPress={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                {D.sampleHeader}
+                {addSortIcons()}
               </th>
               <th>{D.surveyUnitHeader}</th>
               <th>{D.fullNameHeader}</th>
-              <th>
-                <div
-                  onClick={() => sortOnColumn('geographicalLocation')}
-                  onKeyPress={() => {}}
-                  role="button"
-                  tabIndex="0"
-                >
-                  {D.cityHeader}
-                </div>
+              <th
+                className={getClass('geographicalLocation')}
+                onClick={() => sortOnColumn('geographicalLocation')}
+                onKeyPress={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                {D.cityHeader}
+                {addSortIcons()}
               </th>
-              <th>
-                <div
-                  onClick={() => sortOnColumn('toDo')}
-                  onKeyPress={() => {}}
-                  role="button"
-                  tabIndex="0"
-                >
-                  {D.toDoHeader}
-                </div>
+              <th
+                className={getClass('toDo')}
+                onClick={() => sortOnColumn('toDo')}
+                onKeyPress={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                {D.toDoHeader}
+                {addSortIcons()}
               </th>
               <th>{D.remainingDaysHeader}</th>
-              <th>
-                <div
-                  onClick={() => sortOnColumn('priority')}
-                  onKeyPress={() => {}}
-                  role="button"
-                  tabIndex="0"
-                >
-                  {D.priorityHeader}
-                </div>
+              <th
+                className={getClass('priority')}
+                onClick={() => sortOnColumn('priority')}
+                onKeyPress={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                {D.priorityHeader}
+                {addSortIcons()}
               </th>
               <th>{D.actionHeader}</th>
             </tr>
@@ -192,7 +212,7 @@ const PageList = ({
 
   const renderTable = ues => {
     const sortedUes = ues;
-    if (defaultOrder) {
+    if (columnFilter === undefined) {
       sortedUes.sort(
         (ueA, ueB) =>
           ueA.collectionEndDate.toString().localeCompare(ueB.collectionEndDate.toString()) ||

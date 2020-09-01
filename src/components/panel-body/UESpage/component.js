@@ -164,7 +164,14 @@ const UESPage = () => {
       <div className="column">
         <div className="filters">
           <div className="button-ue">
-            <button id="ShowAll" type="button" onClick={() => updateFilter('')}>
+            <button
+              id="ShowAll"
+              type="button"
+              onClick={() => {
+                updateFilter('');
+                setColumnFilter(undefined);
+              }}
+            >
               <i className="fa fa-bars" aria-hidden="true" />
               &nbsp;
               {D.showAll}
@@ -181,7 +188,7 @@ const UESPage = () => {
         toggleOneSUSelection={toggleOneSUSelection}
         transmitButton={transmitButton}
         sortOnColumn={sortOnColumn}
-        defaultOrder={columnFilter === undefined}
+        columnFilter={columnFilter}
       />
 
       <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">
