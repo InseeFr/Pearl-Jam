@@ -7,6 +7,8 @@ import {
   isValidForTransmission,
   addNewState,
   sortOnColumnCompareFunction,
+  convertSUStateInToDo,
+  getLastState,
 } from 'common-tools/functions';
 import Form from './transmitForm';
 import PageList from './pageList';
@@ -65,7 +67,17 @@ const UESPage = () => {
               unit.id
                 .toString()
                 .toLowerCase()
-                .includes(filter);
+                .includes(filter) ||
+              unit.address.l6
+                .split(' ')
+                .slice(1)
+                .toString()
+                .toLowerCase()
+                .includes(filter) ||
+              convertSUStateInToDo(getLastState(unit).type)
+                .value.toLowerCase()
+                .includes(filter) ||
+              unit.campaign.toLowerCase().includes(filter);
             return filterCondition;
           });
           matchingEchoes = filteredSU.length;
