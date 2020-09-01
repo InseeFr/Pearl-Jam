@@ -6,8 +6,7 @@ import suStateEnum from 'common-tools/enum/SUStateEnum';
 import {
   isValidForTransmission,
   addNewState,
-  convertSUStateInToDo,
-  getLastState,
+  sortOnColumnCompareFunction,
 } from 'common-tools/functions';
 import Form from './transmitForm';
 import PageList from './pageList';
@@ -38,79 +37,7 @@ const UESPage = () => {
 
   useEffect(() => {
     const sortSU = su => {
-      if (columnFilter === undefined) {
-        return su;
-      }
-      const { column, order } = columnFilter;
-      const newSu = su;
-      if (order === 'ASC') {
-        if (column === 'sampleIdentifiers') {
-          newSu.sort((suA, suB) => {
-            return suA.sampleIdentifiers.ssech - suB.sampleIdentifiers.ssech;
-          });
-        } else if (column === 'geographicalLocation') {
-          newSu.sort((suA, suB) => {
-            return suA.address.l6
-              .split(' ')
-              .slice(1)
-              .toString()
-              .localeCompare(
-                suB.address.l6
-                  .split(' ')
-                  .slice(1)
-                  .toString()
-              );
-          });
-        } else if (column === 'toDo') {
-          newSu.sort((suA, suB) => {
-            return (
-              convertSUStateInToDo(getLastState(suA).type).order -
-              convertSUStateInToDo(getLastState(suB).type).order
-            );
-          });
-        } else if (column === 'priority') {
-          newSu.sort((suA, suB) => {
-            return suA[column] - suB[column];
-          });
-        } else {
-          newSu.sort((suA, suB) => {
-            return suA[column].localeCompare(suB[column]);
-          });
-        }
-      } else if (column === 'sampleIdentifiers') {
-        newSu.sort((suA, suB) => {
-          return suB.sampleIdentifiers.ssech - suA.sampleIdentifiers.ssech;
-        });
-      } else if (column === 'geographicalLocation') {
-        newSu.sort((suA, suB) => {
-          return suB.address.l6
-            .split(' ')
-            .slice(1)
-            .toString()
-            .localeCompare(
-              suA.address.l6
-                .split(' ')
-                .slice(1)
-                .toString()
-            );
-        });
-      } else if (column === 'toDo') {
-        newSu.sort((suA, suB) => {
-          return (
-            convertSUStateInToDo(getLastState(suB).type).order -
-            convertSUStateInToDo(getLastState(suA).type).order
-          );
-        });
-      } else if (column === 'priority') {
-        newSu.sort((suA, suB) => {
-          return suB[column] - suA[column];
-        });
-      } else {
-        newSu.sort((suA, suB) => {
-          return suB[column].localeCompare(suA[column]);
-        });
-      }
-      return newSu;
+      return su.sort(sortOnColumnCompareFunction(columnFilter));
     };
 
     const suPromise = surveyUnitDBService.getAll();
