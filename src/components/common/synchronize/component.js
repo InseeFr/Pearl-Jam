@@ -9,7 +9,7 @@ import './result.scss';
 
 Modal.setAppElement('#root');
 
-const Synchronize = ({ disabled = false }) => {
+const Synchronize = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [syncResult, setSyncResult] = useState(undefined);
@@ -115,8 +115,8 @@ const Synchronize = ({ disabled = false }) => {
         </Modal>
       )}
 
-      <div className="sync" disabled={disabled}>
-        <button type="button" disabled={disabled} onClick={() => syncOnClick()}>
+      <div className={!status ? 'sync offline' : 'sync'}>
+        <button type="button" disabled={!status} onClick={() => syncOnClick()}>
           <i
             alt="sync-logo"
             className={loading ? 'fa fa-refresh fa-2x rotate' : 'fa fa-refresh fa-2x'}

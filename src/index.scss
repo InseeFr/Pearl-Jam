@@ -118,6 +118,10 @@ button {
 .sync {
   border-left: thin solid black;
   display: flex;
+  &.offline,
+  &.offline > * {
+    cursor: not-allowed;
+  }
 }
 
 .sync .rotate {
