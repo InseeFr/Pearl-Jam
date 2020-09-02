@@ -131,7 +131,13 @@ svg.edit-icon {
 }
 
 .sync > button {
+  flex: auto;
+  height: 100%;
   outline: none;
+  i {
+    padding-top: 0.25em;
+    flex: auto;
+  }
 }
 
 .sync:hover,

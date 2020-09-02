@@ -194,11 +194,13 @@ const PageList = ({
                     )}
                   </td>
                   <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
-                    <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
-                      <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
-                        <i className="fa fa-file-text-o" aria-hidden="true" />
-                      </span>
-                    </Link>
+                    {!isDisabled && (
+                      <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
+                        <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
+                          <i className="fa fa-file-text-o" aria-hidden="true" />
+                        </span>
+                      </Link>
+                    )}
                   </td>
                 </tr>
               );
