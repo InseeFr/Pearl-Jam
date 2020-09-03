@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import contactAttemptEnum from 'common-tools/enum/ContactAttemptEnum';
+import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
+import { addNewState } from 'common-tools/functions';
 import './form.scss';
 import D from 'i18n';
 
@@ -47,12 +49,16 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
     }
 
     // lifeCycle update
-    /* if(status ===  ){
+    if (
+      status === contactAttemptEnum.INTERVIEW_ACCEPTED.type ||
+      status === contactAttemptEnum.APPOINTMENT_MADE.type
+    ) {
       // su.State -> enquête acceptée [INI]
-      else{
-        su.State -> au moins un contact
-      }
-    } */
+      addNewState(surveyUnit, surveyUnitStateEnum.APPOINTMENT_MADE.type);
+    } else {
+      // su.State -> au moins un contact
+      addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
+    }
 
     saveUE(newSu);
   };
@@ -72,20 +78,29 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
           <option disabled hidden value="placeholder">
             {D.chooseAnOption}
           </option>
-          <option value={contactAttemptEnum.ANSWERING_MACHINE.type}>
-            {contactAttemptEnum.ANSWERING_MACHINE.value}
-          </option>
-          <option value={contactAttemptEnum.BUSY_LINE.type}>
-            {contactAttemptEnum.BUSY_LINE.value}
-          </option>
-          <option value={contactAttemptEnum.CONTACT_MADE.type}>
-            {contactAttemptEnum.CONTACT_MADE.value}
-          </option>
           <option value={contactAttemptEnum.NO_CONTACT.type}>
             {contactAttemptEnum.NO_CONTACT.value}
           </option>
-          <option value={contactAttemptEnum.NUMBER_NOT_IN_USE.type}>
-            {contactAttemptEnum.NUMBER_NOT_IN_USE.value}
+          <option value={contactAttemptEnum.INTERVIEW_ACCEPTED.type}>
+            {contactAttemptEnum.INTERVIEW_ACCEPTED.value}
+          </option>
+          <option value={contactAttemptEnum.APPOINTMENT_MADE.type}>
+            {contactAttemptEnum.APPOINTMENT_MADE.value}
+          </option>
+          <option value={contactAttemptEnum.REFUSAL.type}>
+            {contactAttemptEnum.REFUSAL.value}
+          </option>
+          <option value={contactAttemptEnum.OCCASIONAL_ABSENCE_OF_INTERVIEWEE.type}>
+            {contactAttemptEnum.OCCASIONAL_ABSENCE_OF_INTERVIEWEE.value}
+          </option>
+          <option value={contactAttemptEnum.INTERVIEW_IMPOSSIBLE.type}>
+            {contactAttemptEnum.INTERVIEW_IMPOSSIBLE.value}
+          </option>
+          <option value={contactAttemptEnum.ALREADY_ANSWERED_IN_ANOTHER_MODE.type}>
+            {contactAttemptEnum.ALREADY_ANSWERED_IN_ANOTHER_MODE.value}
+          </option>
+          <option value={contactAttemptEnum.WISH_TO_ANSWER_IN_ANOTHER_MODE.type}>
+            {contactAttemptEnum.WISH_TO_ANSWER_IN_ANOTHER_MODE.value}
           </option>
         </select>
       </label>

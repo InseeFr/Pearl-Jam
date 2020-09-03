@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import D from 'i18n';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
+import { deleteContactAttempt } from 'common-tools/functions';
 import format from 'date-fns/format';
 import Form from './form';
 import SurveyUnitContext from '../../UEContext';
 
 const ContactAttempts = ({ saveUE }) => {
-  const ue = useContext(SurveyUnitContext);
+  const su = useContext(SurveyUnitContext);
   const [contactAttempt, setContactAttempt] = useState({ status: 'titi', date: 12345 });
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [contactAttempts, setcontactAttempts] = useState([]);
-
+  const [refresh, setRefresh] = useState(true);
   useEffect(() => {
     const getContactAttempts = async ids => {
       if (ids === undefined || ids.length === 0) return [];
@@ -20,22 +21,33 @@ const ContactAttempts = ({ saveUE }) => {
       return cat;
     };
 
-    if (ue !== undefined) {
-      const contactAttemptsId = ue.contactAttempts;
+    if (su !== undefined) {
+      const contactAttemptsId = su.contactAttempts;
       getContactAttempts(contactAttemptsId).then(cA => setcontactAttempts(cA));
+      setRefresh(false);
     }
-  }, [ue]);
+  }, [su, refresh]);
 
   const lines = () => {
     if (Array.isArray(contactAttempts) && contactAttempts.length > 0)
       return contactAttempts.map(contAtt => {
         const date = format(new Date(contAtt.date), 'dd/MM/yyyy');
-        const hour = format(new Date(contAtt.date), 'H');
+        const hour = format(new Date(contAtt.date), 'HH');
+        const minutes = format(new Date(contAtt.date), 'mm');
 
         return (
           <div className="line" key={contAtt.id}>
-            <button type="button" className="smallButton">{` 🗑 `}</button>
-            <div>{`${date} - ${hour}H - Téléphone - ${contAtt.status}`}</div>
+            <button
+              type="button"
+              className="smallButton"
+              onClick={() => {
+                deleteContactAttempt(su, contAtt.id);
+                setRefresh(true);
+              }}
+            >
+              {` 🗑 `}
+            </button>
+            <div>{`${date} - ${hour}h${minutes} - Téléphone - ${contAtt.status}`}</div>
             <button type="button" className="smallButton">{` ✎ `}</button>
           </div>
         );
@@ -81,7 +93,7 @@ const ContactAttempts = ({ saveUE }) => {
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form
           closeModal={closeModal}
-          surveyUnit={ue}
+          surveyUnit={su}
           setContactAttempt={setContactAttempt}
           contactAttempt={contactAttempt}
           saveUE={save}

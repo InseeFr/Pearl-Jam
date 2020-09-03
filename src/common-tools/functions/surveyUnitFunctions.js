@@ -1,4 +1,5 @@
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 
 export const getCommentByType = (type, ue) => {
   if (Array.isArray(ue.comments) && ue.comments.length > 0) {
@@ -18,6 +19,15 @@ export const isValidForTransmission = ue => {
   console.log('ue id : ', ue.id, ' is valid');
   // TODO insert rules here (i.e contacts)
   return true;
+};
+
+export const deleteContactAttempt = async (surveyUnit, contactAttemptId) => {
+  await contactAttemptDBService.delete(contactAttemptId);
+  const newSu = surveyUnit;
+  const { contactAttempts } = newSu;
+  const newCA = contactAttempts.filter(ca => ca !== contactAttemptId);
+  newSu.contactAttempts = newCA;
+  await surveyUnitDBService.addOrUpdateSU(newSu);
 };
 
 export const addNewState = async (surveyUnit, stateType) => {
