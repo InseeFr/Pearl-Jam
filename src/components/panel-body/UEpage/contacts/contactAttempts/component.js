@@ -25,6 +25,8 @@ const ContactAttempts = ({ saveUE }) => {
       const contactAttemptsId = su.contactAttempts;
       getContactAttempts(contactAttemptsId).then(cA => setcontactAttempts(cA));
       setRefresh(false);
+    } else {
+      console.log('undefined');
     }
   }, [su, refresh]);
 

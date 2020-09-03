@@ -21,13 +21,13 @@ export const isValidForTransmission = ue => {
   return true;
 };
 
-export const deleteContactAttempt = async (surveyUnit, contactAttemptId) => {
-  await contactAttemptDBService.delete(contactAttemptId);
+export const deleteContactAttempt = (surveyUnit, contactAttemptId) => {
   const newSu = surveyUnit;
   const { contactAttempts } = newSu;
   const newCA = contactAttempts.filter(ca => ca !== contactAttemptId);
   newSu.contactAttempts = newCA;
-  await surveyUnitDBService.addOrUpdateSU(newSu);
+  surveyUnitDBService.update(newSu);
+  contactAttemptDBService.delete(contactAttemptId);
 };
 
 export const addNewState = async (surveyUnit, stateType) => {
