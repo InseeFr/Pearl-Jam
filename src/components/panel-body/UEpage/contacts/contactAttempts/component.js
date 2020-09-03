@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import D from 'i18n';
+import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import format from 'date-fns/format';
 import Form from './form';
 import SurveyUnitContext from '../../UEContext';
@@ -10,31 +11,22 @@ const ContactAttempts = ({ saveUE }) => {
   const ue = useContext(SurveyUnitContext);
   const [contactAttempt, setContactAttempt] = useState({ status: 'titi', date: 12345 });
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [contactAttempts, setcontactAttempts] = useState([]);
+
+  useEffect(() => {
+    const getContactAttempts = async ids => {
+      if (ids === undefined || ids.length === 0) return [];
+      const cat = await contactAttemptDBService.findByIds(ids);
+      return cat;
+    };
+
+    if (ue !== undefined) {
+      const contactAttemptsId = ue.contactAttempts;
+      getContactAttempts(contactAttemptsId).then(cA => setcontactAttempts(cA));
+    }
+  }, [ue]);
 
   const lines = () => {
-    // TODO use real indexedDB data -> const {contactAttempts }= ue;
-    const contactAttempts = [
-      {
-        date: 1589986800000,
-        status: 'BUL',
-        id: 125,
-      },
-      {
-        date: 1589986800000,
-        status: 'BUL',
-        id: 126,
-      },
-      {
-        date: 1589994000000,
-        status: 'BUL',
-        id: 127,
-      },
-      {
-        date: 1590055200000,
-        status: 'COM',
-        id: 128,
-      },
-    ];
     if (Array.isArray(contactAttempts) && contactAttempts.length > 0)
       return contactAttempts.map(contAtt => {
         const date = format(new Date(contAtt.date), 'dd/MM/yyyy');
@@ -48,7 +40,12 @@ const ContactAttempts = ({ saveUE }) => {
           </div>
         );
       });
-    return <div>No data to process</div>;
+    return (
+      <tr>
+        <td />
+        <td>{D.noContactAttempt}</td>
+      </tr>
+    );
   };
 
   const openModal = () => {
@@ -66,12 +63,21 @@ const ContactAttempts = ({ saveUE }) => {
 
   return (
     <div className="ContactAttempts">
-      <h2>{D.contactAttempts}</h2>
-      {lines()}
-
-      <button type="button" className="bottom-right" onClick={openModal}>
-        {` + ${D.addButton}`}
-      </button>
+      <div className="row">
+        <h2>{D.contactAttempts}</h2>
+        <button type="button" className="bottom-right" onClick={openModal}>
+          <i className="fa fa-plus" aria-hidden="true" />
+          &nbsp;
+          {D.addButton}
+        </button>
+      </div>
+      <table className="contactTable">
+        <colgroup>
+          <col className="col1" />
+          <col className="col2" />
+        </colgroup>
+        <tbody>{lines()}</tbody>
+      </table>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form
           closeModal={closeModal}

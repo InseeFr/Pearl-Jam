@@ -32,6 +32,7 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
   const save = async () => {
     const { contactAttempts } = surveyUnit;
     let { id } = contactAttempt;
+    const { status } = contactAttempt;
     const newSu = surveyUnit;
 
     if (id === undefined) {
@@ -44,6 +45,15 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
       contactAttempts.push(id);
       newSu.contactAttempts = contactAttempts;
     }
+
+    // lifeCycle update
+    /* if(status ===  ){
+      // su.State -> enquête acceptée [INI]
+      else{
+        su.State -> au moins un contact
+      }
+    } */
+
     saveUE(newSu);
   };
 
@@ -60,7 +70,7 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
           required
         >
           <option disabled hidden value="placeholder">
-            Choose an option
+            {D.chooseAnOption}
           </option>
           <option value={contactAttemptEnum.ANSWERING_MACHINE.type}>
             {contactAttemptEnum.ANSWERING_MACHINE.value}
