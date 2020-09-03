@@ -2,7 +2,7 @@ import D from 'i18n';
 
 const contactOutcome = {
   INTERVIEW_ACCEPTED: { type: 'INA', value: `${D.interviewAccepted}` },
-  POSSIBLE_TO_REACH: { type: 'IMP', value: `${D.impossibleReach}` },
+  IMPOSSIBLE_TO_REACH: { type: 'IMP', value: `${D.impossibleReach}` },
   REFUSAL: { type: 'REF', value: `${D.refusal}` },
   INTERVIEW_IMPOSSIBLE: { type: 'INI', value: `${D.interviewImpossible}` },
   ALREADY_ANSWERED: { type: 'ALA', value: `${D.alreadyAnswered}` },
