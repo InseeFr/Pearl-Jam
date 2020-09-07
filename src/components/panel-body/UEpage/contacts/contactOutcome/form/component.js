@@ -40,13 +40,11 @@ const Form = ({ closeModal, surveyUnit, setContactOutcome, contactOutcome, saveU
     const { type } = contactOutcome;
     // lifeCycle update
     if (type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type) {
-      // su.State -> enquête acceptée [INI]
       addNewState(surveyUnit, surveyUnitStateEnum.APPOINTMENT_MADE.type);
     } else {
       // su.State -> au moins un contact
       addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
     }
-
     saveUE(newSu);
   };
 
@@ -111,6 +109,7 @@ Form.propTypes = {
   surveyUnit: PropTypes.shape({
     contactAttempts: PropTypes.array,
     id: PropTypes.string,
+    campaign: PropTypes.string,
   }).isRequired,
   saveUE: PropTypes.func.isRequired,
   setContactOutcome: PropTypes.func.isRequired,
