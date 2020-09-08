@@ -14,6 +14,7 @@ const ContactAttempts = ({ saveUE }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [contactAttempts, setcontactAttempts] = useState([]);
   const [refresh, setRefresh] = useState(true);
+
   useEffect(() => {
     const getContactAttempts = async ids => {
       if (ids === undefined || ids.length === 0) return [];
