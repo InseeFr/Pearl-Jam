@@ -40,8 +40,11 @@ const Router = ({ match, saveUE }) => {
   return (
     <div className="panel-body ue">
       <div className="ue-info">
+        <button type="button" className="button-back-home" onClick={() => history.push('/')}>
+          <i className="fa fa-arrow-left" aria-hidden="true" />
+        </button>
         <div className="infos">
-          <div className="row">
+          <div id="surveyUnitRef" className="row">
             <span>{ue.campaign ? ue.campaign : D.loading}</span>
             <span>
               {ue.sampleIdentifiers && ue.sampleIdentifiers.ssech
@@ -50,28 +53,36 @@ const Router = ({ match, saveUE }) => {
             </span>
             <span>
               {ue.sampleIdentifiers && ue.sampleIdentifiers.numfa
-                ? `VOOOOOO${ue.sampleIdentifiers.numfa}`
+                ? `${ue.sampleIdentifiers.numfa}`
                 : D.loading}
             </span>
           </div>
-          <div className="row">
-            <span>{ue.lastName ? `${ue.lastName}` : D.loading}</span>
-            <span>{ue.firstName ? `${ue.firstName}` : D.loading}</span>
+          <div id="surveyUnitNameAddress" className="row">
+            <span>
+              {`${ue.lastName ? ue.lastName : D.loading} ${
+                ue.firstName ? ue.firstName : D.loading
+              }`}
+            </span>
             <span>{ue.geographicalLocation ? ue.geographicalLocation.label : D.loading}</span>
           </div>
           <div className="row">
             <span className="ue-state">
-              {ue.states ? convertSUStateInToDo(lastState.type) : D.loading}
+              <i className="fa fa-info-circle" aria-hidden="true" />
+              {ue.states ? ` ${convertSUStateInToDo(lastState.type).value}` : D.loading}
+              &nbsp;
             </span>
-            <span className="comment ">Planifié le --/--/----</span>
           </div>
         </div>
 
         <div className="button-ue">
           <button type="button" onClick={openQueen}>
+            <i className="fa fa-file-text-o" aria-hidden="true" />
+            &nbsp;
             {D.questionnaireButton}
           </button>
           <button type="button" onClick={transmit}>
+            <i className="fa fa-paper-plane" aria-hidden="true" />
+            &nbsp;
             {D.sendButton}
           </button>
         </div>

@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import Modal from 'react-modal';
 import D from 'i18n';
 import Icon from '../icon/user.icon';
-import EditIcon from '../icon/pen.icon';
 import Form from './form';
 import SurveyUnitContext from '../../UEContext';
 
@@ -34,32 +33,31 @@ const UEItem = ({ saveUE }) => {
     closeModal();
   };
 
+  const nope = () => {};
+
   return (
-    <div className="ue-item ue">
+    <>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles}>
         <Form closeModal={closeModal} surveyUnit={ue} saveUE={save} />
       </Modal>
-      <Icon width={40} />
-      <div className="data">
-        <table>
-          <tbody>
-            <tr key={1}>
-              <th>{D.surveyUnitLastName}</th>
-              <td>{ue.lastName}</td>
-            </tr>
-            <tr key={2}>
-              <th>{D.surveyUnitFirstName}</th>
-              <td>{ue.firstName}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="ue-item ue" onClick={openModal} onKeyPress={nope} role="button" tabIndex="0">
+        <Icon width={40} />
+        <div className="data">
+          <table>
+            <tbody>
+              <tr key={1}>
+                <th>{D.surveyUnitLastName}</th>
+                <td>{ue.lastName}</td>
+              </tr>
+              <tr key={2}>
+                <th>{D.surveyUnitFirstName}</th>
+                <td>{ue.firstName}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <EditIcon
-        style={{ border: 'solid 1px black', borderRadius: '5px', margin: 'auto', padding: '2px' }}
-        width={30}
-        onClick={openModal}
-      />
-    </div>
+    </>
   );
 };
 

@@ -34,7 +34,7 @@ const dictionary = {
     fr: "Commentaire lié à l'unité enquêtée",
     en: 'Comment related to the survey unit',
   },
-  connexionOK: { fr: 'Connexion ok', en: 'Connection ok' },
+  connexionOK: { fr: 'Connexion OK', en: 'Connection ok' },
   connexionKO: { fr: 'Pas de résau', en: 'No network' },
   interviewer: { fr: 'Enquêteur', en: 'Interviewer' },
   syncResult: { fr: 'Résultat de la synchronisation', en: 'Result of synchronization' },

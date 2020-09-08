@@ -7,16 +7,51 @@ div.Contacts {
   flex-direction: row;
   justify-content: center;
 
+  & > div {
+    border-radius: 4px !important;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .contactTable {
+    width: 100%;
+    margin: 1em;
+
+    .col1 {
+      width: 10%;
+      text-align: left;
+    }
+    .col2 {
+      width: 90%;
+    }
+
+    .smallButton {
+      border: none;
+      background: none;
+      padding-bottom: 0.2em;
+      font-size: 1.2em;
+      box-shadow: none;
+      i {
+        color: red;
+      }
+    }
+  }
+  div.ContactAttempts {
+    width: 60%;
+  }
+  div.ContactOutcome {
+    width: 40%;
+  }
+
   div.ContactOutcome,
   div.ContactAttempts {
     flex-direction: column;
     display: flex;
-    width: 50%;
     height: 90%;
     border: 1px solid #969696;
     border-radius: 30px;
     margin: 0.5em;
     padding: 1em;
+    background-color: #c4e1ff;
 
     div.line {
       display: flex;
@@ -25,34 +60,49 @@ div.Contacts {
       margin-top: 0.5em;
       align-items: center;
     }
+
+    .row {
+      display: flex;
+      > * {
+        margin-right: 2em;
+        margin-bottom: 1em;
+      }
+    }
   }
 
   button {
     justify-content: space-between;
     align-self: center;
     font-size: 15px;
-    height: 30px;
+    min-height: 30px;
     width: 120px;
-    border-radius: 5px;
-    background-color: #2072b8;
     color: white;
-    border: hidden;
+    border-radius: 5px;
 
+    &.bottom-right {
+      margin: 0;
+    }
     &:hover {
       background-color: #649cce;
-      color: black;
+      //color: black;
     }
 
     &.smallButton {
+      color: #0f417a;
+      background-color: white;
       height: 30px;
       width: 30px;
       font-size: 1.5em;
       margin: 0;
       padding: 0;
+      &:hover {
+        border: none;
+      }
     }
   }
 
   h2 {
     margin: 0;
+    color: #0f417a;
   }
 }

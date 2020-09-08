@@ -5,6 +5,7 @@ import D from 'i18n';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import { deleteContactAttempt } from 'common-tools/functions';
 import format from 'date-fns/format';
+import { findContactAttemptValueByType } from 'common-tools/enum/ContactAttemptEnum';
 import Form from './form';
 import SurveyUnitContext from '../../UEContext';
 
@@ -39,20 +40,27 @@ const ContactAttempts = ({ saveUE }) => {
         const minutes = format(new Date(contAtt.date), 'mm');
 
         return (
-          <div className="line" key={contAtt.id}>
-            <button
-              type="button"
-              className="smallButton"
-              onClick={() => {
-                deleteContactAttempt(su, contAtt.id);
-                setRefresh(true);
-              }}
-            >
-              {` 🗑 `}
-            </button>
-            <div>{`${date} - ${hour}h${minutes} - Téléphone - ${contAtt.status}`}</div>
-            <button type="button" className="smallButton">{` ✎ `}</button>
-          </div>
+          <tr className="line" key={contAtt.id}>
+            <td>
+              <button
+                type="button"
+                className="smallButton"
+                onClick={() => {
+                  deleteContactAttempt(su, contAtt.id);
+                  setRefresh(true);
+                }}
+              >
+                <i className="fa fa-times" aria-hidden="true" />
+              </button>
+            </td>
+            <td>
+              <div>
+                {`${date} - ${hour}h${minutes} - ${D.telephone} - ${findContactAttemptValueByType(
+                  contAtt.status
+                )}`}
+              </div>
+            </td>
+          </tr>
         );
       });
     return (
@@ -91,7 +99,7 @@ const ContactAttempts = ({ saveUE }) => {
           <col className="col1" />
           <col className="col2" />
         </colgroup>
-        <tbody>{lines()}</tbody>
+        {lines()}
       </table>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form

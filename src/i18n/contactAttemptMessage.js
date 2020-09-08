@@ -21,6 +21,7 @@ const contactAttemptMessage = {
   },
   noContactAttempt: { fr: "Pas d'essais de contact", en: 'No contacts attempts' },
   chooseAnOption: { fr: 'Choisissez une option', en: 'Choose an option' },
+  telephon: { fr: 'Téléphone', en: 'Telephone' },
 };
 
 export default contactAttemptMessage;

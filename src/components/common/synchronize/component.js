@@ -1,7 +1,6 @@
 import React, { useState, useEffect /* useContext */ } from 'react';
 import { useHistory } from 'react-router-dom';
 import Modal from 'react-modal';
-import imgSync from 'img/sync.png';
 import { addOnlineStatusObserver } from 'common-tools/';
 import { synchronizePearl, synchronizeQueen } from 'common-tools/synchronize';
 import D from 'i18n';
@@ -10,7 +9,7 @@ import './result.scss';
 
 Modal.setAppElement('#root');
 
-const Synchronize = ({ disabled = false }) => {
+const Synchronize = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [syncResult, setSyncResult] = useState(undefined);
@@ -116,10 +115,12 @@ const Synchronize = ({ disabled = false }) => {
         </Modal>
       )}
 
-      <div className="sync" disabled={disabled}>
-        <img alt="sync-logo" className={loading ? 'rotate' : ''} height="30px" src={imgSync} />
-        <button type="button" disabled={disabled} onClick={() => syncOnClick()}>
-          {D.synchronizeButton}
+      <div className={!status ? 'sync offline' : 'sync'}>
+        <button type="button" disabled={!status} onClick={() => syncOnClick()}>
+          <i
+            alt="sync-logo"
+            className={loading ? 'fa fa-refresh fa-2x rotate' : 'fa fa-refresh fa-2x'}
+          />
         </button>
       </div>
     </>

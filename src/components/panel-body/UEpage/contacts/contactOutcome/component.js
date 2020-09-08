@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import D from 'i18n';
+import { findContactOutcomeValueByType } from 'common-tools/enum/ContactOutcomEnum';
 import Form from './form';
 import SurveyUnitContext from '../../UEContext';
 
@@ -42,19 +43,20 @@ const ContactOutcome = ({ saveUE }) => {
     saveUE(surveyUnit);
     closeModal();
   };
-
+  const outcomeValue = findContactOutcomeValueByType(contactOutcome.type);
   return (
     <>
       <div className="ContactOutcome">
-        <h2>{D.contactOutcome}</h2>
-        {contactOutcome !== undefined &&
-          contactOutcome !== null &&
-          contactOutcome.type !== undefined && (
-            <div>{`${contactOutcome.type} (${contactOutcome.totalNumberOfContactAttempts} attempts)`}</div>
-          )}
-        <button type="button" className="bottom-right" onClick={() => openModal()}>
-          {` ✎ ${D.editButton}`}
-        </button>
+        <div className="row">
+          <h2>{D.contactOutcome}</h2>
+          <button type="button" className="bottom-right" onClick={() => openModal()}>
+            <i className="fa fa-pencil" aria-hidden="true" />
+            &nbsp;
+            {D.editButton}
+          </button>
+        </div>
+        <div className="line">{outcomeValue}</div>
+        <div className="line">{`(${contactOutcome.totalNumberOfContactAttempts} ${D.contactOutcomeAttempts})`}</div>
       </div>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form

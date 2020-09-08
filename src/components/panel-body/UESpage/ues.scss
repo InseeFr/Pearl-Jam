@@ -7,8 +7,19 @@
   .button-ue {
     width: 100%;
     margin-bottom: 0;
-    button {
-      padding: 0.8em 2em 0.8em 2em;
+
+    button.rechercher {
+      margin-left: 0;
+      border-radius: 0;
+      padding: 1em;
+    }
+
+    input {
+      border-radius: 3px 0 0 3px !important;
+      border: 1px solid grey;
+      width: 185px;
+      margin-left: 0em;
+      padding-left: 1em;
     }
 
     .searchedString {
@@ -17,8 +28,30 @@
     }
     :first-child {
       margin-right: auto;
+      margin-left: 0em;
       height: auto;
     }
+  }
+}
+button {
+  padding: 0.8em 2em 0.8em 2em;
+  border-radius: 0.5em;
+  color: white;
+  &.transmit {
+    color: white;
+    padding: 12px;
+    display: flex;
+    border: none;
+
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    background: linear-gradient(to top right, #2072b8, #4c9de2);
+    max-height: 50px;
+
+    justify-content: center;
+    align-items: center;
+
+    //margin: 15px 0 0 0;
   }
 }
 .column {

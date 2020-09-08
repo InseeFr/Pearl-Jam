@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Icon = ({ width = 131, color = '#000000' }) => (
+const Icon = ({ width = 131, color = '#0F417A' }) => (
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width={width} viewBox="-0.5 -0.5 131 119">
     <defs />
     <g>

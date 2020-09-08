@@ -1,7 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import D from 'i18n';
 import Comment from './comment';
 import './comments.scss';
 
@@ -12,9 +11,7 @@ const Comments = ({ saveUE }) => {
   };
   return (
     <div className="Comments">
-      <h2>{D.organizationComment}</h2>
-      <Comment title={D.interviewer} editable saveUE={save} />
-      <Comment title="DEM" editable={false} saveUE={save} />
+      <Comment editable saveUE={save} />
     </div>
   );
 };

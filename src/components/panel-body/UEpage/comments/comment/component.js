@@ -7,7 +7,7 @@ import SurveyUnitContext from '../../UEContext';
 import Form from './form';
 import './comment.scss';
 
-const Comment = ({ saveUE, title, editable }) => {
+const Comment = ({ saveUE, editable }) => {
   const ue = useContext(SurveyUnitContext);
   const [modalIsOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
@@ -18,22 +18,23 @@ const Comment = ({ saveUE, title, editable }) => {
     saveUE(surveyUnit);
     closeModal();
   };
+  const value = editable ? getCommentByType('INTERVIEWER', ue) : getCommentByType('MANAGEMENT', ue);
 
   return (
     <div className="Comment">
-      <p className="title">{title}</p>
-
       <div className="border">
-        <div className="text">
-          {editable ? getCommentByType('INTERVIEWER', ue) : getCommentByType('MANAGEMENT', ue)}
+        <div className="text" data-placeholder={D.organizationComment}>
+          {value}
         </div>
-
-        {editable === true && (
-          <button type="button" onClick={openModal}>
-            {` ✎ ${D.editButton}`}
-          </button>
-        )}
       </div>
+
+      {editable === true && (
+        <button type="button" onClick={openModal}>
+          <i className="fa fa-pencil" aria-hidden="true" />
+          &nbsp;
+          {D.editButton}
+        </button>
+      )}
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form closeModal={closeModal} surveyUnit={ue} saveUE={save} />
       </Modal>
@@ -44,6 +45,5 @@ const Comment = ({ saveUE, title, editable }) => {
 export default Comment;
 Comment.propTypes = {
   editable: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
   saveUE: PropTypes.func.isRequired,
 };

@@ -15,11 +15,21 @@ const Navigation = ({ location }) => {
 
   const getName = () => {
     const interviewerFromLocalStorage = window.localStorage.getItem(PEARL_USER_KEY);
-    return interviewerFromLocalStorage ? JSON.parse(interviewerFromLocalStorage).firstName : '';
+    return interviewerFromLocalStorage
+      ? `${JSON.parse(interviewerFromLocalStorage).firstName} ${
+          JSON.parse(interviewerFromLocalStorage).lastName
+        }`
+      : '';
   };
 
   return (
     <>
+      <div className="top-info-container">
+        <div className="top-info">
+          <div className="user-name">{`${D.welcome} ${getName()}`}</div>
+          <OnlineStatus />
+        </div>
+      </div>
       <nav className="nav-bar" disabled={disabled}>
         <div className="items">
           <img alt="logo Insee" src={imgInsee} className="insee-logo" />
@@ -33,12 +43,9 @@ const Navigation = ({ location }) => {
           <NavigationItem disabled={disabled} path="/chat" label={D.goToChatPage} />
           <NavigationItem disabled={disabled} path="/training" label={D.goToTrainingPage} />
         </div>
+
         <div className="top-right">
           <Synchronize disabled={disabled} />
-          <div>
-            <div className="user-name">{`${D.welcome} ${getName()}`}</div>
-            <OnlineStatus />
-          </div>
         </div>
       </nav>
     </>

@@ -6,6 +6,7 @@ const contactOutcomeMessage = {
     fr: `Confirmez vous l'issue des contacts ?`,
     en: 'Please confirm the contacts outcome',
   },
+  contactOutcomeAttempts: { fr: 'essais', en: 'attempts' },
 };
 
 export default contactOutcomeMessage;

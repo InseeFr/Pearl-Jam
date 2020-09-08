@@ -5,7 +5,7 @@ import D from 'i18n';
 const Form = ({ closeModal, summary }) => {
   const { ok, ko } = summary;
   const txtOk = `${D.transmitOk} : ${ok}`;
-  const txtKo = `${D.transmitKo} :${ko}`;
+  const txtKo = `${D.transmitKo} : ${ko}`;
   return (
     <>
       <div>{txtOk}</div>

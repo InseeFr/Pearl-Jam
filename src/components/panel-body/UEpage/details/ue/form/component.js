@@ -36,7 +36,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
 
   return (
     <>
-      <h3>{`Modification de l'unité enquêtée`}</h3>
+      <h3>{`${D.surveyUnitNameChange}`}</h3>
       <form onSubmit={saveTempUE}>
         <label htmlFor="lastName">
           {`${D.surveyUnitLastName} :`}
@@ -61,9 +61,13 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
       </form>
 
       <button type="button" onClick={saveTempUE}>
+        <i className="fa fa-check" aria-hidden="true" />
+        &nbsp;
         {D.validateButton}
       </button>
       <button type="button" onClick={closeModal}>
+        <i className="fa fa-times" aria-hidden="true" />
+        &nbsp;
         {D.cancelButton}
       </button>
     </>
