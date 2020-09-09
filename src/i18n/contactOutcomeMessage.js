@@ -7,6 +7,14 @@ const contactOutcomeMessage = {
     en: 'Please confirm the contacts outcome',
   },
   contactOutcomeAttempts: { fr: 'essais', en: 'attempts' },
+  wishAnswerAnotherMode: {
+    fr: 'Souhaite répondre dans un autre mode',
+    en: 'Wish to answer in another mode',
+  },
+  alreadyAnsweredAnotherMode: {
+    fr: 'Déjà répondu par un autre mode',
+    en: 'Already answered by another mode',
+  },
 };
 
 export default contactOutcomeMessage;

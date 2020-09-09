@@ -99,7 +99,7 @@ const ContactAttempts = ({ saveUE }) => {
           <col className="col1" />
           <col className="col2" />
         </colgroup>
-        {lines()}
+        <tbody>{lines()}</tbody>
       </table>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form

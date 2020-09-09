@@ -43,6 +43,7 @@ const ContactOutcome = ({ saveUE }) => {
     saveUE(surveyUnit);
     closeModal();
   };
+
   const outcomeValue = findContactOutcomeValueByType(contactOutcome.type);
   return (
     <>

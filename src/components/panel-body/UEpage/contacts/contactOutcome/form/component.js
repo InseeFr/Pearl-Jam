@@ -5,23 +5,28 @@ import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import { addNewState } from 'common-tools/functions';
 import D from 'i18n';
 
-const Form = ({ closeModal, surveyUnit, setContactOutcome, contactOutcome, saveUE }) => {
+const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
   const [formIsValid, setFormIsValid] = useState(false);
+  const [formContactAttempt, setFormContactAttempt] = useState(contactOutcome);
 
   const onChange = event => {
     const newType = event.target.value;
     const newDate = new Date().getTime();
-    setContactOutcome({ ...contactOutcome, type: newType, date: newDate });
+    setFormContactAttempt({ ...formContactAttempt, type: newType, date: newDate });
   };
   const onContactAttemptsCountChange = event => {
     const newTotal = event.target.value;
     const newDate = new Date().getTime();
-    setContactOutcome({ ...contactOutcome, totalNumberOfContactAttempts: newTotal, date: newDate });
+    setFormContactAttempt({
+      ...formContactAttempt,
+      totalNumberOfContactAttempts: newTotal,
+      date: newDate,
+    });
   };
 
   useEffect(() => {
     const checkForm = () => {
-      const { type } = contactOutcome;
+      const { type } = formContactAttempt;
       const isValid = Object.keys(contactOutcomeEnum)
         .map(enumKey => {
           return contactOutcomeEnum[enumKey].type;
@@ -32,12 +37,12 @@ const Form = ({ closeModal, surveyUnit, setContactOutcome, contactOutcome, saveU
     };
 
     checkForm();
-  }, [contactOutcome, formIsValid]);
+  }, [formContactAttempt, formIsValid]);
 
   const save = () => {
     const newSu = surveyUnit;
-    newSu.contactOutcome = contactOutcome;
-    const { type } = contactOutcome;
+    newSu.contactOutcome = formContactAttempt;
+    const { type } = formContactAttempt;
     // lifeCycle update
     if (type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type) {
       addNewState(surveyUnit, surveyUnitStateEnum.APPOINTMENT_MADE.type);
@@ -57,7 +62,7 @@ const Form = ({ closeModal, surveyUnit, setContactOutcome, contactOutcome, saveU
           id="contactOutcomeResult"
           name="contactOutcomeResult"
           onChange={onChange}
-          value={contactOutcome.type !== undefined ? contactOutcome.type : 'placeholder'}
+          value={formContactAttempt.type !== undefined ? formContactAttempt.type : 'placeholder'}
           required
         >
           <option disabled hidden value="placeholder">
@@ -90,7 +95,7 @@ const Form = ({ closeModal, surveyUnit, setContactOutcome, contactOutcome, saveU
       <input
         type="number"
         onChange={onContactAttemptsCountChange}
-        value={contactOutcome.totalNumberOfContactAttempts}
+        value={formContactAttempt.totalNumberOfContactAttempts}
       />
       <div className="buttonsGroup">
         <button type="button" onClick={closeModal}>
@@ -112,7 +117,6 @@ Form.propTypes = {
     campaign: PropTypes.string,
   }).isRequired,
   saveUE: PropTypes.func.isRequired,
-  setContactOutcome: PropTypes.func.isRequired,
   contactOutcome: PropTypes.shape({
     date: PropTypes.number.isRequired,
     type: PropTypes.string,

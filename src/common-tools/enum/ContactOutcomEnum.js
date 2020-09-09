@@ -13,6 +13,7 @@ const contactOutcome = {
 export default contactOutcome;
 
 export const findContactOutcomeValueByType = type => {
+  if (type === undefined) return undefined;
   const retour = Object.keys(contactOutcome)
     .map(key => contactOutcome[key])
     .filter(value => value.type === type);
