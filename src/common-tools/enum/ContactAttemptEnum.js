@@ -14,6 +14,7 @@ const contactAttempt = {
 export default contactAttempt;
 
 export const findContactAttemptValueByType = type => {
+  if (type === undefined) return undefined;
   const retour = Object.keys(contactAttempt)
     .map(key => contactAttempt[key])
     .filter(value => value.type === type);

@@ -49,8 +49,6 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
     }
 
     // lifeCycle update
-    // TODO : peut-on doubler le state ? probablement oui si pose de rdv, annulation puis reprise d'un autre rdv
-    // peut-être pas pour 'enquête acceptée'
 
     if (
       status === contactAttemptEnum.INTERVIEW_ACCEPTED.type ||
