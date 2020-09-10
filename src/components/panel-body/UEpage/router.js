@@ -7,7 +7,6 @@ import {
   addNewState,
 } from 'common-tools/functions';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
-import toDoEnum from 'common-tools/enum/SUToDoEnum';
 import PropTypes from 'prop-types';
 import D from 'i18n';
 import Navigation from './navigation';
@@ -37,15 +36,6 @@ const Router = ({ match, saveUE }) => {
       history.push(match.url);
     }
   };
-
-  const wtf = ue.states ? ` ${convertSUStateInToDo(lastState.type).value}` : D.loading;
-  console.log('Debug de convert SuState->ToDo');
-  console.log(wtf);
-  console.log('-----');
-  console.log(toDoEnum.TRANSMIT);
-  console.log(toDoEnum.TRANSMIT.value);
-  console.log(toDoEnum.TERMINATED);
-  console.log(JSON.stringify(toDoEnum.TERMINATED.value));
 
   return (
     <div className="panel-body ue">
@@ -78,7 +68,7 @@ const Router = ({ match, saveUE }) => {
           <div className="row">
             <span className="ue-state">
               <i className="fa fa-info-circle" aria-hidden="true" />
-              {ue.states ? ` ${convertSUStateInToDo(lastState.type).value}` : D.loading}
+              {ue.states ? <span> {convertSUStateInToDo(lastState.type).value}</span> : D.loading}
               &nbsp;
             </span>
           </div>

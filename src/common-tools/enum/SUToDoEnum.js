@@ -10,7 +10,7 @@ const toDoEnum = {
   SYNCHRONIZE: { order: 6, value: `${D.toDoSynchronize}` },
   TERMINATED: {
     order: 7,
-    value: `${(<i className="fa fa-check" aria-hidden="true" />)}`,
+    value: <i className="fa fa-check" aria-hidden="true" />,
   },
 };
 
