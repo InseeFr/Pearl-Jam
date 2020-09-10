@@ -16,7 +16,8 @@ export const getLastState = ue => {
 };
 
 export const isValidForTransmission = ue => {
-  // TODO insert rules here (i.e contacts)
+  //const { contactOutcome } = ue;
+
   return true;
 };
 

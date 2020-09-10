@@ -13,6 +13,10 @@ const suStateMessage = {
     en: 'Waiting for Synchronization',
   },
   suStateFinalized: { fr: 'Finalisée', en: 'Finalized' },
+  suStateVisibleAndClickable: {
+    fr: 'Visible enquêteur et cliquable',
+    en: 'Visible to the interviewer and clickable',
+  },
 };
 
 export default suStateMessage;

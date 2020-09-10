@@ -34,7 +34,7 @@ const UEPage = ({ match }) => {
   useEffect(() => {
     if (surveyUnit !== undefined) {
       const lastState = getLastState(surveyUnit);
-      if (lastState.type === suStateEnum.NOT_STARTED.type) {
+      if (lastState.type === suStateEnum.VISIBLE_AND_CLICKABLE.type) {
         addNewState(surveyUnit, suStateEnum.IN_PREPARATION.type);
         history.push(history.location.pathname);
       }

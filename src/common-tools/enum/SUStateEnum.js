@@ -18,6 +18,14 @@ const surveyUnitState = {
     value: `${D.suStateWaitingForSynchronization}`,
   },
   FINALIZED: { type: 'FIN', value: `${D.suStateFinalized}` },
+  VISIBLE_AND_CLICKABLE: {
+    type: 'VIC',
+    value: `${D.suStateVisibleAndClickable}`,
+  },
+  TO_BE_REVIEWED: {
+    type: 'TBR',
+    value: `${D.suStateToBeReviewed}`,
+  },
 };
 
 export default surveyUnitState;
