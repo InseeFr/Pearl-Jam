@@ -35,7 +35,7 @@ const dictionary = {
     en: 'Comment related to the survey unit',
   },
   connexionOK: { fr: 'Connexion OK', en: 'Connection ok' },
-  connexionKO: { fr: 'Pas de résau', en: 'No network' },
+  connexionKO: { fr: 'Pas de réseau', en: 'No network' },
   interviewer: { fr: 'Enquêteur', en: 'Interviewer' },
   syncResult: { fr: 'Résultat de la synchronisation', en: 'Result of synchronization' },
   syncSuccess: { fr: 'La synchronisation a réussi.', en: 'Synchronization succeeded.' },
