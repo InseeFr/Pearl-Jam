@@ -91,11 +91,12 @@ const addContactState = async (surveyUnit, newState) => {
         });
       }
       surveyUnit.states.push(newState);
+
       break;
     default:
-      console.log('erreur avec le type : ', newState.type);
       break;
   }
+
   return surveyUnit;
 };
 
