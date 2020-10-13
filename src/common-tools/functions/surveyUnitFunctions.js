@@ -1,6 +1,9 @@
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
+<<<<<<< HEAD
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
+=======
+>>>>>>> f896174... WIP life-cycle management
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'common-tools/constants';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import { formatDistanceStrict } from 'date-fns';
@@ -96,7 +99,7 @@ const addContactState = async (surveyUnit, newState) => {
     default:
       break;
   }
-
+  console.log(surveyUnit.states);
   return surveyUnit;
 };
 
@@ -106,6 +109,7 @@ export const addNewState = async (surveyUnit, stateType) => {
   let newSu = surveyUnit;
   switch (lastStateType) {
     case surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type:
+      console.log('case INS');
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = await addContactState(newSu, newState);
 
@@ -171,6 +175,7 @@ export const addNewState = async (surveyUnit, stateType) => {
       }
       break;
     default:
+      console.log('default case nothing done');
       break;
   }
   newSu.selected = false;
