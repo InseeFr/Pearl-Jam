@@ -1,9 +1,6 @@
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
-<<<<<<< HEAD
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
-=======
->>>>>>> f896174... WIP life-cycle management
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'common-tools/constants';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import { formatDistanceStrict } from 'date-fns';
@@ -94,10 +91,6 @@ const addContactState = async (surveyUnit, newState) => {
         });
       }
       surveyUnit.states.push(newState);
-<<<<<<< HEAD
-
-=======
->>>>>>> b15f073... fix asynchronous indexedDB calls
       break;
     default:
       console.log('erreur avec le type : ', newState.type);

@@ -61,6 +61,17 @@ const UESPage = () => {
   }, [surveyUnits]);
 
   useEffect(() => {
+    surveyUnitDBService.getAll().then(units => {
+      const updateNb = units
+        .map(su => {
+          return updateStateWithDates(su);
+        })
+        .reduce((a, b) => a + b, 0);
+      if (updateNb > 0) setInit(false);
+    });
+  }, [surveyUnits]);
+
+  useEffect(() => {
     const sortSU = su => {
       return su.sort(sortOnColumnCompareFunction(columnOrder));
     };
