@@ -94,12 +94,15 @@ const addContactState = async (surveyUnit, newState) => {
         });
       }
       surveyUnit.states.push(newState);
+<<<<<<< HEAD
 
+=======
+>>>>>>> b15f073... fix asynchronous indexedDB calls
       break;
     default:
+      console.log('erreur avec le type : ', newState.type);
       break;
   }
-  console.log(surveyUnit.states);
   return surveyUnit;
 };
 
@@ -109,7 +112,6 @@ export const addNewState = async (surveyUnit, stateType) => {
   let newSu = surveyUnit;
   switch (lastStateType) {
     case surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type:
-      console.log('case INS');
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = await addContactState(newSu, newState);
 
