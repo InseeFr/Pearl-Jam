@@ -1,5 +1,6 @@
 div.filter {
   border: 1px solid grey;
+  border-radius: 10px;
   padding: 0.5em;
   margin-right: 1em;
   height: 3em;
@@ -7,4 +8,10 @@ div.filter {
   display: flex;
   flex-direction: column;
   text-align: center;
+
+  &:hover {
+    color: red;
+    cursor: pointer;
+    border-color: red;
+  }
 }

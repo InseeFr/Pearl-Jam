@@ -172,8 +172,6 @@ export const searchFilterByAttribute = (filters, attribute) => {
 };
 
 export const applyFilters = (surveyUnits, filters) => {
-  console.log('filters to be applied => ', filters);
-
   if (filters === undefined) {
     return {
       searchFilteredSU: surveyUnits,
@@ -235,8 +233,9 @@ export const applyFilters = (surveyUnits, filters) => {
   };
   const filterByToDo = su => {
     if (toDoFilter.value !== undefined) {
-      console.log(convertSUStateInToDo(getLastState(su)), ' - ', toDoFilter.value);
-      return convertSUStateInToDo(getLastState(su)).order === toDoFilter.value.order;
+      return (
+        convertSUStateInToDo(getLastState(su).type).order.toString() === toDoFilter.value.toString()
+      );
     }
     return true;
   };

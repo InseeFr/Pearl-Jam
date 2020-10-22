@@ -211,7 +211,7 @@ const UESPage = () => {
               className="ShowAll"
               type="button"
               onClick={() => {
-                updateSearchFilter('');
+                updateSearchFilter(undefined);
                 setColumnOrder(undefined);
               }}
             >

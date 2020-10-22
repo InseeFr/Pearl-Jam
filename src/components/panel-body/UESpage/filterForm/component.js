@@ -67,7 +67,6 @@ const Form = ({ closeModal, filters, updateFilters }) => {
     setCityNameFilter({ ...cityNameFilter, value });
   };
   const updateToDoFilter = event => {
-    console.log('toDoEvent ', event);
     const { value } = event.target;
     setToDoFilter({ ...toDoFilter, value });
   };
@@ -97,7 +96,7 @@ const Form = ({ closeModal, filters, updateFilters }) => {
   return (
     <>
       <label htmlFor="campaignFilter">
-        <p className="title">Campaign filter value :</p>
+        <div className="filter-label">{D.surveyFilter}</div>
         <select
           type="list"
           id="campaignFilter"
@@ -113,7 +112,7 @@ const Form = ({ closeModal, filters, updateFilters }) => {
         </select>
       </label>
       <label htmlFor="sampleFilter">
-        <p className="title">Sample filter value :</p>
+        <div className="filter-label">{D.sampleFilter}</div>
         <select
           type="list"
           id="sampleFilter"
@@ -130,7 +129,7 @@ const Form = ({ closeModal, filters, updateFilters }) => {
       </label>
 
       <label htmlFor="cityNameFilter">
-        <p className="title">City filter value :</p>
+        <div className="filter-label">{D.cityNameFilter}</div>
         <select
           type="list"
           id="cityNameFilter"
@@ -146,7 +145,7 @@ const Form = ({ closeModal, filters, updateFilters }) => {
         </select>
       </label>
       <label htmlFor="toDoFilter">
-        <p className="title">ToDo filter value :</p>
+        <div className="filter-label">{D.toDoFilter}</div>
         <select
           type="list"
           id="toDoFilter"
@@ -164,18 +163,21 @@ const Form = ({ closeModal, filters, updateFilters }) => {
           {generateOptions(toDoList)}
         </select>
       </label>
-      <label className="switch" htmlFor="priorityFilter">
-        <input
-          type="checkbox"
-          id="priorityFilter"
-          name="priorityFilter"
-          defaultChecked={priorityFilter.value}
-          onClick={e => {
-            e.persist();
-            updatePriorityFilter(e);
-          }}
-        />
-        <span className="slider" />
+      <label htmlFor="priorityFilter">
+        <div className="filter-label">{D.priorityFilter}</div>
+        <div className="switch">
+          <input
+            type="checkbox"
+            id="priorityFilter"
+            name="priorityFilter"
+            defaultChecked={priorityFilter.value}
+            onClick={e => {
+              e.persist();
+              updatePriorityFilter(e);
+            }}
+          />
+          <span className="slider round" />
+        </div>
       </label>
 
       <button type="button" onClick={() => save()}>
