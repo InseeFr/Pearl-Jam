@@ -7,22 +7,33 @@ import {
   isValidForTransmission,
   addNewState,
   sortOnColumnCompareFunction,
-  convertSUStateInToDo,
-  getLastState,
+  applyFilters,
+  searchFilterByAttribute,
 } from 'common-tools/functions';
 import Form from './transmitForm';
+import FilterForm from './filterForm';
 import PageList from './pageList';
 import Search from './search';
+import Filter from './filter';
 import './ues.scss';
 
 const UESPage = () => {
   const [surveyUnits, setSurveyUnits] = useState([]);
-  const [filter, setFilter] = useState('');
+  const [filteredSurveyUnits, setFilteredSurveyUnits] = useState([]);
   const [searchEchoes, setSearchEchoes] = useState([0, 0]);
   const [init, setInit] = useState(false);
   const [showTransmitSummary, setShowTransmitSummary] = useState(false);
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
   const [transmitSummary, setTransmitSummary] = useState({ ok: 0, ko: 0 });
-  const [columnFilter, setColumnFilter] = useState(undefined);
+  const [columnOrder, setColumnOrder] = useState(undefined);
+  const [filters, setFilters] = useState([
+    { attribute: 'search', value: undefined },
+    { attribute: 'campaign', value: undefined },
+    { attribute: 'sample', value: undefined },
+    { attribute: 'cityName', value: undefined },
+    { attribute: 'toDo', value: undefined },
+    { attribute: 'priority', value: undefined },
+  ]);
 
   useEffect(() => {
     if (!init) {
@@ -35,57 +46,19 @@ const UESPage = () => {
         setSearchEchoes([initializedSU.length, initializedSU.length]);
       });
     }
-  }, [init, surveyUnits]);
+  }, [init]);
 
   useEffect(() => {
     const sortSU = su => {
-      return su.sort(sortOnColumnCompareFunction(columnFilter));
+      return su.sort(sortOnColumnCompareFunction(columnOrder));
     };
 
-    const suPromise = surveyUnitDBService.getAll();
-    let totalEchoes = 0;
-    let matchingEchoes = totalEchoes;
+    const filteredSU = applyFilters(surveyUnits, filters);
 
-    if (filter === '') {
-      suPromise.then(units => {
-        setSurveyUnits(sortSU(units));
-        totalEchoes = units.length;
-        matchingEchoes = units.length;
-        setSearchEchoes([matchingEchoes, totalEchoes]);
-      });
-    } else {
-      suPromise
-        .then(us => {
-          totalEchoes = us.length;
-          return us;
-        })
-        .then(units => {
-          const filteredSU = units.filter(unit => {
-            const filterCondition =
-              unit.firstName.toLowerCase().includes(filter) ||
-              unit.lastName.toLowerCase().includes(filter) ||
-              unit.id
-                .toString()
-                .toLowerCase()
-                .includes(filter) ||
-              unit.address.l6
-                .split(' ')
-                .slice(1)
-                .toString()
-                .toLowerCase()
-                .includes(filter) ||
-              convertSUStateInToDo(getLastState(unit).type)
-                .value.toLowerCase()
-                .includes(filter) ||
-              unit.campaign.toLowerCase().includes(filter);
-            return filterCondition;
-          });
-          matchingEchoes = filteredSU.length;
-          setSurveyUnits(sortSU(filteredSU));
-          setSearchEchoes([matchingEchoes, totalEchoes]);
-        });
-    }
-  }, [filter, columnFilter]);
+    const { searchFilteredSU, totalEchoes, matchingEchoes } = filteredSU;
+    setFilteredSurveyUnits(sortSU(searchFilteredSU));
+    setSearchEchoes([matchingEchoes, totalEchoes]);
+  }, [filters, columnOrder, surveyUnits]);
 
   const isSelectable = su => {
     // TODO implements rules (collection[Start|End]Date)
@@ -93,12 +66,12 @@ const UESPage = () => {
   };
 
   const sortOnColumn = column => {
-    if (columnFilter === undefined || columnFilter.column !== column) {
-      setColumnFilter({ column, order: 'ASC' });
-    } else if (columnFilter.order === 'ASC') {
-      setColumnFilter({ column, order: 'DESC' });
+    if (columnOrder === undefined || columnOrder.column !== column) {
+      setColumnOrder({ column, order: 'ASC' });
+    } else if (columnOrder.order === 'ASC') {
+      setColumnOrder({ column, order: 'DESC' });
     } else {
-      setColumnFilter(undefined);
+      setColumnOrder(undefined);
     }
   };
 
@@ -155,11 +128,24 @@ const UESPage = () => {
     setShowTransmitSummary(false);
   };
 
+  const closeFilterPanel = () => {
+    setShowFilterPanel(false);
+  };
+
   const anySuSelected = surveyUnits.filter(su => su.selected).length > 0 ? '' : '"disabled"';
 
-  const updateFilter = searchedString => {
-    toggleAllSUSelection(false);
-    setFilter(searchedString);
+  const updateSearchFilter = searchedString => {
+    // setSearchFilter(searchedString);
+    const newFilters = filters.map(filter => {
+      if (filter.attribute === 'search') {
+        console.log('new search filter value ', searchedString);
+        const newFilter = filter;
+        newFilter.value = searchedString;
+        return newFilter;
+      }
+      return filter;
+    });
+    setFilters(newFilters);
   };
 
   const transmitButton = () => {
@@ -171,37 +157,88 @@ const UESPage = () => {
     );
   };
 
+  const getSearchFilterValue = () => {
+    if (filters === undefined) return '';
+    const searchFilter = filters.filter(filter => filter.attribute === 'search');
+    if (searchFilter.length === 0) {
+      return '';
+    }
+    return searchFilter.value;
+  };
+
+  const removeFilter = attribute => {
+    const newFilters = filters.map(filter => {
+      if (filter.attribute === attribute) {
+        return { attribute, value: undefined };
+      }
+      return filter;
+    });
+    setFilters(newFilters);
+  };
+
+  const updateFilters = newFilters => {
+    const updatedFilters = filters.map(filter => {
+      const newFilter = searchFilterByAttribute(newFilters, filter.attribute);
+      if (newFilter !== undefined) {
+        const updatedFilter = filter;
+        updatedFilter.value = newFilter.value;
+        console.log('updatedFilter : ', updatedFilter);
+        return updatedFilter;
+      }
+
+      return filter;
+    });
+    setFilters(updatedFilters);
+  };
+
   return (
     <div className="panel-body ues">
       <div className="column">
         <div className="filters">
           <div className="button-ue">
             <button
-              id="ShowAll"
+              className="ShowAll"
               type="button"
               onClick={() => {
-                updateFilter('');
-                setColumnFilter(undefined);
+                updateSearchFilter('');
+                setColumnOrder(undefined);
               }}
             >
               <i className="fa fa-bars" aria-hidden="true" />
               &nbsp;
               {D.showAll}
             </button>
-            {filter && <div className="searchedString">{`${D.activeFilter} : ${filter}`}</div>}
-            <Search setFilter={updateFilter} />
+            <Filter filters={filters} removeFilter={removeFilter} />
+            {getSearchFilterValue() && (
+              <div className="searchedString">
+                {`${D.activeFilter} : ${getSearchFilterValue()}`}
+              </div>
+            )}
+            <Search setFilter={updateSearchFilter} />
+            <button type="button" onClick={() => setShowFilterPanel(true)}>
+              Filtrer
+            </button>
           </div>
         </div>
         <div className="searchResults">{`Résultat : ${searchEchoes[0]} / ${searchEchoes[1]} unités`}</div>
       </div>
       <PageList
-        surveyUnits={surveyUnits}
+        surveyUnits={filteredSurveyUnits}
         toggleAllSUSelection={toggleAllSUSelection}
         toggleOneSUSelection={toggleOneSUSelection}
         transmitButton={transmitButton}
         sortOnColumn={sortOnColumn}
-        columnFilter={columnFilter}
+        columnFilter={columnOrder}
       />
+
+      <Modal isOpen={showFilterPanel} onRequestClose={closeFilterPanel} className="modal">
+        <FilterForm
+          closeModal={closeFilterPanel}
+          filters={filters}
+          setFilters={setFilters}
+          updateFilters={updateFilters}
+        />
+      </Modal>
 
       <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">
         <Form closeModal={closeModal} summary={transmitSummary} />

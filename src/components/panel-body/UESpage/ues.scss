@@ -26,11 +26,6 @@
       align-self: center;
       margin-right: 1em;
     }
-    :first-child {
-      margin-right: auto;
-      margin-left: 0em;
-      height: auto;
-    }
   }
 }
 button {
@@ -52,6 +47,10 @@ button {
     align-items: center;
 
     //margin: 15px 0 0 0;
+  }
+  &.ShowAll {
+    height: 200%;
+    margin-right: auto;
   }
 }
 .column {

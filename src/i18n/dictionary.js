@@ -14,6 +14,7 @@ import searchMessage from './searchMessage';
 import transmissionMessage from './transmissionMessage';
 import contactAttemptMessage from './contactAttemptMessage';
 import contactOutcomeMessage from './contactOutcomeMessage';
+import filterMessage from './filterMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -71,6 +72,7 @@ const dictionary = {
   ...transmissionMessage,
   ...contactAttemptMessage,
   ...contactOutcomeMessage,
+  ...filterMessage,
 };
 
 export default dictionary;

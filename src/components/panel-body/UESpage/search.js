@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import D from 'i18n';
 
 const Search = ({ setFilter }) => {
   const [motFilter, setMotFilter] = useState('');
 
   const updateFilter = () => {
-    setFilter(motFilter.toLowerCase());
+    setFilter(motFilter.toLowerCase().trim());
   };
   const handleKeyUp = e => {
     if (e.key === 'Enter') {
@@ -17,7 +18,7 @@ const Search = ({ setFilter }) => {
     const txt = e.target.value;
     setMotFilter(txt);
     // uncomment the next line to apply the filter as soon as you enter a letter in the input.
-    //setFilter(txt.toLowerCase());
+    // setFilter(txt.toLowerCase());
   };
 
   return (
@@ -36,3 +37,7 @@ const Search = ({ setFilter }) => {
 };
 
 export default Search;
+
+Search.propTypes = {
+  setFilter: PropTypes.func.isRequired,
+};
