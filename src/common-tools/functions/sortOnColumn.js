@@ -1,4 +1,5 @@
-import { convertSUStateInToDo, getLastState } from 'common-tools/functions';
+import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
+import { getLastState, intervalInDays } from 'common-tools/functions/surveyUnitFunctions';
 
 export const sortOnColumnCompareFunction = columnFilter => {
   let compareFunction;
@@ -44,6 +45,10 @@ export const sortOnColumnCompareFunction = columnFilter => {
     return a.campaign.localeCompare(b.campaign);
   };
 
+  const remainingDaysSortFunction = (a, b) => {
+    return intervalInDays(a) - intervalInDays(b);
+  };
+
   if (columnFilter === undefined) {
     compareFunction = noSortFunction;
   } else {
@@ -67,6 +72,11 @@ export const sortOnColumnCompareFunction = columnFilter => {
 
       case 'campaign':
         compareFunction = order === 'ASC' ? campaignSortFunction : reverse(campaignSortFunction);
+        break;
+
+      case 'remainingDays':
+        compareFunction =
+          order === 'ASC' ? remainingDaysSortFunction : reverse(remainingDaysSortFunction);
         break;
 
       default:

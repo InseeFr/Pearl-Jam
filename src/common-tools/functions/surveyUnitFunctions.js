@@ -3,6 +3,7 @@ import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-servi
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'common-tools/constants';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
+import { formatDistanceStrict } from 'date-fns';
 
 export const getCommentByType = (type, ue) => {
   if (Array.isArray(ue.comments) && ue.comments.length > 0) {
@@ -17,6 +18,17 @@ export const getLastState = ue => {
     return ue.states.reduce((a, b) => (a.date > b.date ? a : b));
   }
   return false;
+};
+
+export const intervalInDays = su => {
+  const { collectionEndDate } = su;
+
+  const remainingDays = formatDistanceStrict(new Date(), new Date(collectionEndDate), {
+    roundingMethod: 'ceil',
+    unit: 'day',
+  });
+
+  return remainingDays.split(' ')[0];
 };
 
 export const isValidForTransmission = ue => {

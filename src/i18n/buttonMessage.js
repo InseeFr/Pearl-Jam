@@ -10,6 +10,8 @@ const buttonMessage = {
   synchronizeButton: { fr: 'Synchroniser', en: 'Synchronize' },
   closeButton: { fr: 'Fermer', en: 'Close' },
   updateNow: { fr: 'Mettre à jour maintenant', en: 'Update now' },
+  yesButton: { fr: 'Oui', en: 'Yes' },
+  noButton: { fr: 'Non', en: 'No' },
 };
 
 export default buttonMessage;

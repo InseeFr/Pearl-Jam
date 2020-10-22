@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { convertSUStateInToDo, getLastState } from 'common-tools/functions';
-import { formatDistanceStrict } from 'date-fns';
+import { convertSUStateInToDo, getLastState, intervalInDays } from 'common-tools/functions';
 import D from 'i18n';
 
 const PageList = ({
@@ -16,17 +15,6 @@ const PageList = ({
   const [page, setPage] = useState(0);
   const [selectAll, setSelectAll] = useState(false);
   const history = useHistory();
-
-  const intervalInDays = su => {
-    const { collectionEndDate } = su;
-
-    const remainingDays = formatDistanceStrict(new Date(), new Date(collectionEndDate), {
-      roundingMethod: 'ceil',
-      unit: 'day',
-    });
-
-    return remainingDays.split(' ')[0];
-  };
 
   const checkSurveyUnit = su => {
     // false is SU should not be clickable
@@ -148,7 +136,16 @@ const PageList = ({
                 {D.toDoHeader}
                 {addSortIcons()}
               </th>
-              <th>{D.remainingDaysHeader}</th>
+              <th
+                className={getClass('remainingDays')}
+                onClick={() => sortOnColumn('remainingDays')}
+                onKeyPress={() => {}}
+                role="button"
+                tabIndex="0"
+              >
+                {D.remainingDaysHeader}
+                {addSortIcons()}
+              </th>
               <th
                 className={getClass('priority')}
                 onClick={() => sortOnColumn('priority')}

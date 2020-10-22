@@ -126,24 +126,8 @@ const ContactAttempts = ({ saveUE }) => {
             setRefresh(true);
             closeDeletionModal();
           }}
+          onCancel={closeDeletionModal}
         />
-        <form>
-          <h1>Etes-vous sûr?</h1>
-          <button
-            type="button"
-            className="btn btn-primary btn-block"
-            onClick={() => {
-              deleteContactAttempt(su, contactToBeDeletedId);
-              setRefresh(true);
-              closeDeletionModal();
-            }}
-          >
-            Oui
-          </button>
-          <button type="button" className="btn btn-primary btn-block" onClick={closeDeletionModal}>
-            Non
-          </button>
-        </form>
       </Modal>
     </div>
   );

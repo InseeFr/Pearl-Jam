@@ -209,6 +209,10 @@ $border-size-bottom: 1px;
     background-color: white;
     border-bottom-width: 2px;
 
+    &:not(:first-child) {
+      cursor: pointer;
+    }
+
     &.selected {
       i.fa-sort {
         visibility: hidden;
