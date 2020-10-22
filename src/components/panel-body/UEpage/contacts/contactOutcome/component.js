@@ -57,7 +57,10 @@ const ContactOutcome = ({ saveUE }) => {
           </button>
         </div>
         <div className="line">{outcomeValue}</div>
-        <div className="line">{`(${contactOutcome.totalNumberOfContactAttempts} ${D.contactOutcomeAttempts})`}</div>
+        <div className="line">
+          <i className="fa fa-arrow-right" />
+          <p>{`${contactOutcome.totalNumberOfContactAttempts} ${D.contactOutcomeAttempts}`}</p>
+        </div>
       </div>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form

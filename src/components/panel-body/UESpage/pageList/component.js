@@ -29,10 +29,12 @@ const PageList = ({
   };
 
   const checkSurveyUnit = su => {
-    const { collectionStartDate } = su;
-    const suTime = new Date(collectionStartDate).getTime();
+    // false is SU should not be clickable
+    const { identificationPhaseStartDate, endDate } = su;
+    const endTime = new Date(endDate).getTime();
+    const suTime = new Date(identificationPhaseStartDate).getTime();
     const instantTime = new Date().getTime();
-    return suTime > instantTime;
+    return endTime > suTime > instantTime;
   };
 
   const toggleAll = event => {
@@ -196,7 +198,7 @@ const PageList = ({
                   <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
                     {!isDisabled && (
                       <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
-                        <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
+                        <span role="img" aria-label="calendar" title={D.openQuestionnaire}>
                           <i className="fa fa-file-text-o" aria-hidden="true" />
                         </span>
                       </Link>

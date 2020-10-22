@@ -15,6 +15,10 @@ const contactOutcomeMessage = {
     fr: 'Déjà répondu par un autre mode',
     en: 'Already answered by another mode',
   },
+  totalNumberOfContactAttempts: {
+    fr: "Nombre total d'essais de contact",
+    en: 'Contact attempts total',
+  },
 };
 
 export default contactOutcomeMessage;

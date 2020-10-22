@@ -1,6 +1,5 @@
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
-import synchroSummaryDBService from 'indexedbb/services/synchroSummary-idb-service';
 import { getLastState } from 'common-tools/functions';
 import * as api from 'common-tools/api';
 
@@ -68,7 +67,6 @@ const clean = async () => {
   console.log('CLEAN DATA');
   await surveyUnitDBService.deleteAll();
   await contactAttemptDBService.deleteAll();
-  await synchroSummaryDBService.deleteAll();
 };
 
 const validateSU = async su => {
@@ -101,7 +99,6 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
   console.log('GET DATA');
   const surveyUnitsResponse = await api.getSurveyUnits(pearlApiUrl, pearlAuthenticationMode);
   const surveyUnits = await surveyUnitsResponse.data;
-  console.log('nb of SU :', surveyUnits.length);
   await Promise.all(
     surveyUnits.map(async su => {
       const surveyUnitResponse = await api.getSurveyUnitById(
@@ -110,8 +107,8 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
       )(su.id);
       const surveyUnit = await surveyUnitResponse.data;
       const mergedSurveyUnit = { ...surveyUnit, ...su };
-      const validSurveynit = await validateSU(mergedSurveyUnit);
-      await putSurveyUnitsInDataBase(validSurveynit);
+      const validSurveyUnit = await validateSU(mergedSurveyUnit);
+      await putSurveyUnitsInDataBase(validSurveyUnit);
     })
   );
 };

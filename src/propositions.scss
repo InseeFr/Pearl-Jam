@@ -145,15 +145,6 @@ svg.edit-icon:hover {
   margin-bottom: 6px;
 }
 
-.ue-info .infos .row {
-  padding: 0 0 5px 0;
-  position: relative;
-}
-
-.ue-info .infos .row span {
-  text-shadow: none !important;
-}
-
 .sub-page {
   background-color: transparent !important;
 }
@@ -181,47 +172,8 @@ svg.edit-icon:hover {
   z-index: 2;
 }
 
-.ue-info {
-  margin: 0 !important;
-  height: auto !important;
-  width: auto !important;
-}
-
-.ue-info .infos {
-  display: block !important;
-  width: 550px;
-  margin: 0 0 15px 55px;
-}
-
-.ue-info .infos .row {
-  background-color: transparent !important;
-  border: none !important;
-  display: block !important;
-  padding: 0 0 5px 0 !important;
-}
-
-.ue-info .infos .row span {
-  display: inline !important;
-  margin-right: 20px;
-  //font-size: 130% !important;
-  font-weight: bolder;
-}
-
 .home > .panel-body > .panel-body {
   padding-top: 0 !important;
-}
-
-.ue-info .infos .row span.comment {
-  position: absolute;
-  right: 15px;
-}
-
-#surveyUnitNameAddress {
-  font-size: 16px;
-}
-
-#surveyUnitRef.row {
-  font-size: 19px !important;
 }
 
 span.ue-state {

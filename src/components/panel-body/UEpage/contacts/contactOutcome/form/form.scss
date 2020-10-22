@@ -1,0 +1,74 @@
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10040;
+  overflow: auto;
+  background-color: #eeeeee;
+  border-style: solid;
+  border-width: thin;
+  border-color: black;
+}
+div.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+  label {
+    height: 100%;
+    p.title {
+      font-size: x-large;
+      line-height: 1.8;
+      font-weight: bold;
+      margin: 0px;
+      margin-bottom: 0.5em;
+      width: 100%;
+    }
+    select {
+      height: 2em;
+      min-width: 75%;
+    }
+  }
+  div.contactAttemptsTotal {
+    width: auto;
+    margin: 1em 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-self: flex-start;
+    align-content: center;
+    height: auto;
+    p {
+      padding-top: 0.25em;
+      margin: 0;
+    }
+    input {
+      margin: 0;
+      margin-left: 1em;
+      width: 4em;
+      text-align: center;
+      height: 2em;
+    }
+  }
+
+  div.buttonsGroup {
+    height: 100%;
+    display: flex;
+    align-self: flex-end;
+    flex-wrap: wrap;
+
+    button {
+      margin-top: 1em;
+      align-self: flex-end;
+      font-size: 15px;
+      height: 30px;
+      width: 120px;
+      border-radius: 5px;
+      background-color: #2072b8;
+      color: white;
+      border: hidden;
+    }
+  }
+}

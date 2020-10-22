@@ -4,6 +4,7 @@ import contactOutcomeEnum from 'common-tools/enum/ContactOutcomEnum';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import { addNewState } from 'common-tools/functions';
 import D from 'i18n';
+import './form.scss';
 
 const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
   const [formIsValid, setFormIsValid] = useState(false);
@@ -14,8 +15,9 @@ const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
     const newDate = new Date().getTime();
     setFormContactAttempt({ ...formContactAttempt, type: newType, date: newDate });
   };
+
   const onContactAttemptsCountChange = event => {
-    const newTotal = event.target.value;
+    const newTotal = parseInt(event.target.value, 10);
     const newDate = new Date().getTime();
     setFormContactAttempt({
       ...formContactAttempt,
@@ -26,12 +28,13 @@ const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
 
   useEffect(() => {
     const checkForm = () => {
-      const { type } = formContactAttempt;
-      const isValid = Object.keys(contactOutcomeEnum)
+      const { type, totalNumberOfContactAttempts } = formContactAttempt;
+      const typeIsValid = Object.keys(contactOutcomeEnum)
         .map(enumKey => {
           return contactOutcomeEnum[enumKey].type;
         })
         .includes(type);
+      const isValid = typeIsValid && totalNumberOfContactAttempts > 0;
 
       if (isValid !== formIsValid) setFormIsValid(isValid);
     };
@@ -47,8 +50,7 @@ const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
     if (type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type) {
       addNewState(surveyUnit, surveyUnitStateEnum.APPOINTMENT_MADE.type);
     } else {
-      // su.State -> au moins un contact
-      addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
+      addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type);
     }
     saveUE(newSu);
   };
@@ -92,11 +94,15 @@ const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
           </option>
         </select>
       </label>
-      <input
-        type="number"
-        onChange={onContactAttemptsCountChange}
-        value={formContactAttempt.totalNumberOfContactAttempts}
-      />
+      <div className="contactAttemptsTotal">
+        <p>{D.totalNumberOfContactAttempts}</p>
+        <input
+          type="number"
+          onChange={onContactAttemptsCountChange}
+          value={formContactAttempt.totalNumberOfContactAttempts}
+          min="0"
+        />
+      </div>
       <div className="buttonsGroup">
         <button type="button" onClick={closeModal}>
           {`✗ ${D.cancelButton}`}

@@ -1,5 +1,12 @@
 const suStateMessage = {
-  suStateAssignedNotStarted: { fr: 'Affecté, non commencé', en: 'Assigned, not started' },
+  suStateVisibleNotClickable: {
+    fr: 'Visible enquêteur et non cliquable',
+    en: 'Visible to the interviewer and not clickable',
+  },
+  suStateVisibleAndClickable: {
+    fr: 'Visible enquêteur et cliquable',
+    en: 'Visible to the interviewer and clickable',
+  },
   suStateInPreparation: { fr: 'En préparation', en: 'In preparation' },
   suStateAtLeastOneContact: { fr: 'Au moins un contact', en: 'At least one contact' },
   suStateAppointmentMade: { fr: 'Rendez-vous pris', en: 'Appointment made' },
@@ -12,10 +19,11 @@ const suStateMessage = {
     fr: 'En attente de synchronisation',
     en: 'Waiting for Synchronization',
   },
+  suStateToBeReviewed: { fr: 'A relire', en: 'To be reviewed' },
   suStateFinalized: { fr: 'Finalisée', en: 'Finalized' },
-  suStateVisibleAndClickable: {
-    fr: 'Visible enquêteur et cliquable',
-    en: 'Visible to the interviewer and clickable',
+  suStateQuestionnaireNotAvailable: {
+    fr: 'Questionnaire non accessible enquêteur',
+    en: 'Questionnaire not available to interviewer',
   },
 };
 

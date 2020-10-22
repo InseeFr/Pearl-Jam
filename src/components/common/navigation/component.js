@@ -40,7 +40,7 @@ const Navigation = ({ location }) => {
             path="/notifications"
             label={D.goToNotificationsPage}
           />
-          <NavigationItem disabled={disabled} path="/chat" label={D.goToChatPage} />
+          {/* <NavigationItem disabled={disabled} path="/chat" label={D.goToChatPage} /> */}
           <NavigationItem disabled={disabled} path="/training" label={D.goToTrainingPage} />
         </div>
 

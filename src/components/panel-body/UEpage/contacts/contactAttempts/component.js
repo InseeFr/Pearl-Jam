@@ -20,6 +20,7 @@ const ContactAttempts = ({ saveUE }) => {
     const getContactAttempts = async ids => {
       if (ids === undefined || ids.length === 0) return [];
       const cat = await contactAttemptDBService.findByIds(ids);
+      cat.sort((a, b) => b.date - a.date);
       return cat;
     };
 
@@ -27,17 +28,16 @@ const ContactAttempts = ({ saveUE }) => {
       const contactAttemptsId = su.contactAttempts;
       getContactAttempts(contactAttemptsId).then(cA => setcontactAttempts(cA));
       setRefresh(false);
-    } else {
-      console.log('undefined');
     }
   }, [su, refresh]);
 
   const lines = () => {
     if (Array.isArray(contactAttempts) && contactAttempts.length > 0)
-      return contactAttempts.map(contAtt => {
+      return contactAttempts.map((contAtt, index) => {
         const date = format(new Date(contAtt.date), 'dd/MM/yyyy');
         const hour = format(new Date(contAtt.date), 'HH');
         const minutes = format(new Date(contAtt.date), 'mm');
+        const isLastContact = index === 0;
 
         return (
           <tr className="line" key={contAtt.id}>
@@ -45,6 +45,7 @@ const ContactAttempts = ({ saveUE }) => {
               <button
                 type="button"
                 className="smallButton"
+                hidden={isLastContact}
                 onClick={() => {
                   deleteContactAttempt(su, contAtt.id);
                   setRefresh(true);
@@ -81,7 +82,6 @@ const ContactAttempts = ({ saveUE }) => {
 
   const save = surveyUnit => {
     saveUE(surveyUnit);
-    closeModal();
   };
 
   return (

@@ -56,9 +56,13 @@ div.Contacts {
     div.line {
       display: flex;
       flex-direction: row;
-      justify-content: space-evenly;
-      margin-top: 0.5em;
+      justify-content: center;
+      margin-top: 2em;
       align-items: center;
+
+      > :first-child {
+        margin-right: 1em;
+      }
     }
 
     .row {

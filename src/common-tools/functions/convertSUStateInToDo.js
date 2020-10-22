@@ -2,7 +2,11 @@ import suStateEnum from 'common-tools/enum/SUStateEnum';
 import toDoEnum from 'common-tools/enum/SUToDoEnum';
 
 export const convertSUStateInToDo = suState => {
-  if ([suStateEnum.NOT_STARTED.type, suStateEnum.VISIBLE_AND_CLICKABLE.type].includes(suState)) {
+  if (
+    [suStateEnum.VISIBLE_NOT_CLICKABLE.type, suStateEnum.VISIBLE_AND_CLICKABLE.type].includes(
+      suState
+    )
+  ) {
     return toDoEnum.NOT_STARTED;
   }
   if ([suStateEnum.IN_PREPARATION.type, suStateEnum.AT_LEAST_ONE_CONTACT.type].includes(suState)) {
@@ -20,7 +24,13 @@ export const convertSUStateInToDo = suState => {
   if (suState === suStateEnum.WAITING_FOR_SYNCHRONIZATION.type) {
     return toDoEnum.SYNCHRONIZE;
   }
-  if ([suStateEnum.TO_BE_REVIEWED.type, suStateEnum.FINALIZED.type].includes(suState)) {
+  if (
+    [
+      suStateEnum.TO_BE_REVIEWED.type,
+      suStateEnum.FINALIZED.type,
+      suStateEnum.QUESTIONNAIRE_NOT_AVAILABLE.type,
+    ].includes(suState)
+  ) {
     return toDoEnum.TERMINATED;
   }
 

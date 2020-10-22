@@ -8,7 +8,6 @@ import toDoMessage from './toDoMessage';
 import suStateMessage from './suStateMessage';
 import questionnaireStateMessage from './questionnaireStateMessage';
 import addressMessage from './addressMessage';
-import queenMockMessage from './queenMockMessage';
 import surveyUnitMessage from './surveyUnitMessage';
 import searchMessage from './searchMessage';
 import transmissionMessage from './transmissionMessage';
@@ -27,6 +26,7 @@ const dictionary = {
   },
   welcome: { fr: 'Bienvenue', en: 'Welcome' },
   seeSurveyUnit: { fr: 'Voir UE', en: 'See SU' },
+  openQuestionnaire: { fr: 'Questionnaire', en: 'Questionnaire' },
   organizationComment: {
     fr: "Commentaire lié à l'organisation de la collecte",
     en: 'Comment related to the organization of the collection',
@@ -66,7 +66,6 @@ const dictionary = {
   ...suStateMessage,
   ...questionnaireStateMessage,
   ...addressMessage,
-  ...queenMockMessage,
   ...surveyUnitMessage,
   ...searchMessage,
   ...transmissionMessage,

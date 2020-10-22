@@ -44,33 +44,41 @@ const Router = ({ match, saveUE }) => {
           <i className="fa fa-arrow-left" aria-hidden="true" />
         </button>
         <div className="infos">
-          <div id="surveyUnitRef" className="row">
-            <span>{ue.campaign ? ue.campaign : D.loading}</span>
-            <span>
-              {ue.sampleIdentifiers && ue.sampleIdentifiers.ssech
-                ? `${D.suSample}  ${ue.sampleIdentifiers.ssech}`
-                : D.loading}
-            </span>
-            <span>
-              {ue.sampleIdentifiers && ue.sampleIdentifiers.numfa
-                ? `${ue.sampleIdentifiers.numfa}`
-                : D.loading}
-            </span>
+          <div className="small-panel">
+            <i className="fa fa-info-circle" aria-hidden="true" />
+            <div className="column">
+              <div className="row">
+                <div>{ue.campaign ? ue.campaign : D.loading}</div>
+
+                <div>
+                  {ue.sampleIdentifiers && ue.sampleIdentifiers.ssech
+                    ? `${D.suSample}  ${ue.sampleIdentifiers.ssech}`
+                    : D.loading}
+                </div>
+              </div>
+              <div>{ue.id ? `${ue.id}` : D.loading}</div>
+            </div>
           </div>
-          <div id="surveyUnitNameAddress" className="row">
-            <span>
-              {`${ue.lastName ? ue.lastName : D.loading} ${
-                ue.firstName ? ue.firstName : D.loading
-              }`}
-            </span>
-            <span>{ue.geographicalLocation ? ue.geographicalLocation.label : D.loading}</span>
+          <div className="small-panel">
+            <i className="fa fa-user-circle" aria-hidden="true" />
+            <div className="column">
+              <div>
+                {`${ue.lastName ? ue.lastName : D.loading} ${
+                  ue.firstName ? ue.firstName : D.loading
+                }`}
+              </div>
+              <div>{ue.geographicalLocation ? ue.geographicalLocation.label : D.loading}</div>
+            </div>
           </div>
-          <div className="row">
-            <span className="ue-state">
-              <i className="fa fa-info-circle" aria-hidden="true" />
-              {ue.states ? <span> {convertSUStateInToDo(lastState.type).value}</span> : D.loading}
-              &nbsp;
-            </span>
+          <div className="small-panel">
+            <i className="fa fa-question-circle" aria-hidden="true" />
+            <div className="column">
+              {ue.states ? (
+                <div className="bold">{convertSUStateInToDo(lastState.type).value}</div>
+              ) : (
+                D.loading
+              )}
+            </div>
           </div>
         </div>
 

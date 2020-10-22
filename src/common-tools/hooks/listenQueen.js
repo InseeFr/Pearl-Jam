@@ -1,28 +1,22 @@
 import { useEffect } from 'react';
 import questionnaireEnum from 'common-tools/enum/QuestionnaireStateEnum';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
+import { addNewState } from 'common-tools/functions/surveyUnitFunctions';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
-const computeSurveyUnitState = suToCompute => {
-  const { questionnaireState } = suToCompute;
-  let newSuState = '';
+const computeSurveyUnitState = questionnaireState => {
   switch (questionnaireState) {
     case questionnaireEnum.COMPLETED.type:
-      newSuState = suStateEnum.WAITING_FOR_TRANSMISSION.type;
-      break;
+      return suStateEnum.WAITING_FOR_TRANSMISSION.type;
     case questionnaireEnum.STARTED.type:
-      newSuState = suStateEnum.QUESTIONNAIRE_STARTED.type;
-      break;
+      return suStateEnum.QUESTIONNAIRE_STARTED.type;
     default:
-      break;
+      return 'ERR';
   }
-
-  return { date: new Date().getTime(), type: newSuState };
 };
 
 const updateSurveyUnit = (surveyUnitID, queenState) => {
   surveyUnitDBService.getById(surveyUnitID).then(su => {
-    const newSU = su;
     let newQuestionnaireState = '';
     switch (queenState) {
       case 'COMPLETED':
@@ -34,11 +28,10 @@ const updateSurveyUnit = (surveyUnitID, queenState) => {
       default:
         break;
     }
-    newSU.questionnaireState = newQuestionnaireState;
-    const newState = computeSurveyUnitState(newSU);
-    su.states.push(newState);
+
+    const newStateType = computeSurveyUnitState(newQuestionnaireState);
     const update = async () => {
-      await surveyUnitDBService.update(newSU);
+      await addNewState(su, newStateType);
     };
     update();
   });

@@ -1,7 +1,14 @@
 import D from 'i18n';
 
 const surveyUnitState = {
-  NOT_STARTED: { type: 'ANS', value: `${D.suStateAssignedNotStarted}` },
+  VISIBLE_NOT_CLICKABLE: {
+    type: 'VIN',
+    value: `${D.suStateVisibleNotClickable}`,
+  },
+  VISIBLE_AND_CLICKABLE: {
+    type: 'VIC',
+    value: `${D.suStateVisibleAndClickable}`,
+  },
   IN_PREPARATION: { type: 'PRC', value: `${D.suStateInPreparation}` },
   AT_LEAST_ONE_CONTACT: { type: 'AOC', value: `${D.suStateAtLeastOneContact}` },
   APPOINTMENT_MADE: { type: 'APS', value: `${D.suStateAppointmentMade}` },
@@ -17,15 +24,12 @@ const surveyUnitState = {
     type: 'WFS',
     value: `${D.suStateWaitingForSynchronization}`,
   },
-  FINALIZED: { type: 'FIN', value: `${D.suStateFinalized}` },
-  VISIBLE_AND_CLICKABLE: {
-    type: 'VIC',
-    value: `${D.suStateVisibleAndClickable}`,
-  },
   TO_BE_REVIEWED: {
     type: 'TBR',
     value: `${D.suStateToBeReviewed}`,
   },
+  FINALIZED: { type: 'FIN', value: `${D.suStateFinalized}` },
+  QUESTIONNAIRE_NOT_AVAILABLE: { type: 'QNA', value: `${D.suStateQuestionnaireNotAvailable}` },
 };
 
 export default surveyUnitState;

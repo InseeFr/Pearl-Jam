@@ -34,7 +34,6 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
   const save = async () => {
     const { contactAttempts } = surveyUnit;
     let { id } = contactAttempt;
-    const { status } = contactAttempt;
     const newSu = surveyUnit;
 
     if (id === undefined) {
@@ -49,17 +48,7 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
     }
 
     // lifeCycle update
-
-    if (
-      status === contactAttemptEnum.INTERVIEW_ACCEPTED.type ||
-      status === contactAttemptEnum.APPOINTMENT_MADE.type
-    ) {
-      // su.State -> enquête acceptée [INI]
-      addNewState(surveyUnit, surveyUnitStateEnum.APPOINTMENT_MADE.type);
-    } else {
-      // su.State -> au moins un contact
-      addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
-    }
+    await addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
 
     saveUE(newSu);
   };
@@ -107,14 +96,10 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
       </label>
       <div className="buttonsGroup">
         <button type="button" onClick={closeModal}>
-          <i className="fa fa-times" aria-hidden="true" />
-          &nbsp;
-          {D.cancelButton}
+          {`✗ ${D.cancelButton}`}
         </button>
         <button type="button" onClick={save} disabled={!formIsValid}>
-          <i className="fa fa-check" aria-hidden="true" />
-          &nbsp;
-          {D.saveButton}
+          {`✔ ${D.saveButton}`}
         </button>
       </div>
     </div>
