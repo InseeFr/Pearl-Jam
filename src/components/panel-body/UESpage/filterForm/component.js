@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { searchFilterByAttribute } from 'common-tools/functions';
+import { searchFilterByAttribute } from 'common-tools/functions/surveyUnitFunctions';
 import D from 'i18n';
 import './filterForm.scss';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
