@@ -1,10 +1,10 @@
 button {
   cursor: pointer;
   background: transparent;
-}
 
-button:hover {
-  background: transparent;
+  &:hover {
+    background: transparent;
+  }
 }
 
 .pearl-container {
@@ -13,13 +13,13 @@ button:hover {
 
 .nav-item {
   width: auto !important;
-}
 
-.nav-item a {
-  letter-spacing: 1px;
-  border-radius: 4px !important;
-  margin: 0 10px 0 0;
-  padding: 15px 20px;
+  a {
+    letter-spacing: 1px;
+    border-radius: 4px !important;
+    margin: 0 10px 0 0;
+    padding: 15px 20px;
+  }
 }
 
 div.button-ue {
@@ -42,6 +42,7 @@ button.rechercher {
 .button-ue > button,
 .button-back-home,
 div.Comment button,
+div.buttons button,
 div.form div button,
 button.bottom-right,
 button.smallButton,

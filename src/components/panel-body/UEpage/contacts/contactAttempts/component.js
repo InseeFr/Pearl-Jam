@@ -119,7 +119,7 @@ const ContactAttempts = ({ saveUE }) => {
           saveUE={save}
         />
       </Modal>
-      <Modal isOpen={deletionModalIsOpen} onRequestClose={closeDeletionModal}>
+      <Modal isOpen={deletionModalIsOpen} onRequestClose={closeDeletionModal} className="modal">
         <DeletionForm
           onValidate={() => {
             deleteContactAttempt(su, contactToBeDeletedId);
