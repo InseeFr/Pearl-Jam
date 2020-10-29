@@ -39,7 +39,7 @@ self.addEventListener('install', event => {
 
 workbox.routing.registerRoute(
   new RegExp(getUrlRegexJson(self.location.origin)),
-  new workbox.strategies.CacheFirst({
+  new workbox.strategies.NetworkFirst({
     cacheName: configurationCacheName,
     plugins: [
       new workbox.cacheableResponse.Plugin({
