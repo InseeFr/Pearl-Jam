@@ -88,7 +88,7 @@ const UESPage = () => {
     const endTime = new Date(endDate).getTime();
     const identificationPhaseStartTime = new Date(identificationPhaseStartDate).getTime();
     const instantTime = new Date().getTime();
-    return endTime > instantTime > identificationPhaseStartTime;
+    return endTime > instantTime && instantTime > identificationPhaseStartTime;
   };
 
   const sortOnColumn = column => {

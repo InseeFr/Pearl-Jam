@@ -17,12 +17,12 @@ const PageList = ({
   const history = useHistory();
 
   const checkSurveyUnit = su => {
-    // return false if SU should not be clickable
+    // return true if SU should not be clickable
     const { identificationPhaseStartDate, endDate } = su;
     const endTime = new Date(endDate).getTime();
     const identificationPhaseStartTime = new Date(identificationPhaseStartDate).getTime();
     const instantTime = new Date().getTime();
-    return endTime > instantTime > identificationPhaseStartTime;
+    return !(endTime > instantTime && instantTime > identificationPhaseStartTime);
   };
 
   const toggleAll = event => {
