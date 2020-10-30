@@ -175,7 +175,7 @@ const PageList = ({
               return (
                 <tr key={su.id} onClick={e => rowClickFunct(e)} className={inactive}>
                   <td role="gridcell" onClick={e => filterPropagation(e)}>
-                    {!isDisabled && questionnaireAvailable && (
+                    {!isDisabled && (
                       <input
                         type="checkbox"
                         checked={su.selected || false}
@@ -199,7 +199,7 @@ const PageList = ({
                     )}
                   </td>
                   <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
-                    {!isDisabled && (
+                    {!isDisabled && questionnaireAvailable && (
                       <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
                         <span role="img" aria-label="calendar" title={D.openQuestionnaire}>
                           <i className="fa fa-file-text-o" aria-hidden="true" />
