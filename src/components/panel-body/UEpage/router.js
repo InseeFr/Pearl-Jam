@@ -5,6 +5,7 @@ import {
   getLastState,
   isValidForTransmission,
   addNewState,
+  isQuestionnaireAvailable,
 } from 'common-tools/functions';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
 import PropTypes from 'prop-types';
@@ -83,7 +84,7 @@ const Router = ({ match, saveUE }) => {
         </div>
 
         <div className="button-ue">
-          <button type="button" onClick={openQueen}>
+          <button type="button" disabled={!isQuestionnaireAvailable(ue)} onClick={openQueen}>
             <i className="fa fa-file-text-o" aria-hidden="true" />
             &nbsp;
             {D.questionnaireButton}

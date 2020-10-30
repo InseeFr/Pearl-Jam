@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { convertSUStateInToDo, getLastState, intervalInDays } from 'common-tools/functions';
+import {
+  convertSUStateInToDo,
+  getLastState,
+  intervalInDays,
+  isQuestionnaireAvailable,
+} from 'common-tools/functions';
 import D from 'i18n';
 
 const PageList = ({
@@ -166,10 +171,11 @@ const PageList = ({
                 if (!isDisabled) history.push(`survey-unit/${su.id}`);
               };
               const inactive = isDisabled ? 'inactive' : '';
+              const questionnaireAvailable = isQuestionnaireAvailable(su);
               return (
                 <tr key={su.id} onClick={e => rowClickFunct(e)} className={inactive}>
                   <td role="gridcell" onClick={e => filterPropagation(e)}>
-                    {!isDisabled && (
+                    {!isDisabled && questionnaireAvailable && (
                       <input
                         type="checkbox"
                         checked={su.selected || false}
