@@ -5,6 +5,7 @@ const filterMessage = {
   toDoFilter: { fr: 'À Faire', en: 'To Do' },
   priorityFilter: { fr: 'Priorité', en: 'Priority' },
   searchFilter: { fr: 'Recherche', en: 'Search' },
+  activeFilter: { fr: 'Active', en: 'Active' },
 };
 
 export default filterMessage;

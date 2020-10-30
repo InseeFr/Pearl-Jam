@@ -5,6 +5,7 @@ import {
   getLastState,
   intervalInDays,
   isQuestionnaireAvailable,
+  isSurveyUnitInActivePhase,
 } from 'common-tools/functions';
 import D from 'i18n';
 
@@ -20,15 +21,6 @@ const PageList = ({
   const [page, setPage] = useState(0);
   const [selectAll, setSelectAll] = useState(false);
   const history = useHistory();
-
-  const checkSurveyUnit = su => {
-    // return true if SU should not be clickable
-    const { identificationPhaseStartDate, endDate } = su;
-    const endTime = new Date(endDate).getTime();
-    const identificationPhaseStartTime = new Date(identificationPhaseStartDate).getTime();
-    const instantTime = new Date().getTime();
-    return !(endTime > instantTime && instantTime > identificationPhaseStartTime);
-  };
 
   const toggleAll = event => {
     const { target } = event;
@@ -166,7 +158,7 @@ const PageList = ({
           </thead>
           <tbody>
             {sus.map(su => {
-              const isDisabled = checkSurveyUnit(su);
+              const isDisabled = !isSurveyUnitInActivePhase(su);
               const rowClickFunct = () => {
                 if (!isDisabled) history.push(`survey-unit/${su.id}`);
               };

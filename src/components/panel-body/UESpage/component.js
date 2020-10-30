@@ -7,9 +7,16 @@ import {
   isValidForTransmission,
   addNewState,
   sortOnColumnCompareFunction,
+<<<<<<< HEAD
   applyFilters,
   searchFilterByAttribute,
   updateStateWithDates,
+=======
+  updateStateWithDates,
+  applyFilters,
+  searchFilterByAttribute,
+  isSurveyUnitInActivePhase,
+>>>>>>> 7e991e8... WIP
 } from 'common-tools/functions';
 import Form from './transmitForm';
 import FilterForm from './filterForm';
@@ -34,6 +41,7 @@ const UESPage = () => {
     { attribute: 'cityName', value: undefined },
     { attribute: 'toDo', value: undefined },
     { attribute: 'priority', value: undefined },
+    { attribute: 'active', value: true },
   ]);
 
   useEffect(() => {
@@ -41,7 +49,7 @@ const UESPage = () => {
       setInit(true);
       surveyUnitDBService.getAll().then(units => {
         const initializedSU = units.map(su => {
-          return { ...su, selected: false };
+          return { ...su, selected: false, active: isSurveyUnitInActivePhase(su) };
         });
         setSurveyUnits(initializedSU);
         setSearchEchoes([initializedSU.length, initializedSU.length]);

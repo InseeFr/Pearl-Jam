@@ -198,6 +198,7 @@ export const applyFilters = (surveyUnits, filters) => {
   const cityNameFilter = searchFilterByAttribute(filters, 'cityName');
   const toDoFilter = searchFilterByAttribute(filters, 'toDo');
   const priorityFilter = searchFilterByAttribute(filters, 'priority');
+  const activeFilter = searchFilterByAttribute(filters, 'active');
 
   const filterBySearch = su => {
     if (searchFilter.value !== undefined) {
@@ -257,13 +258,20 @@ export const applyFilters = (surveyUnits, filters) => {
     }
     return true;
   };
+  const filterByActive = su => {
+    if (activeFilter.value !== undefined) {
+      return su.priority === activeFilter.value;
+    }
+    return true;
+  };
 
   const filteredSU = surveyUnits
     .filter(unit => filterByCampaign(unit))
     .filter(unit => filterBySample(unit))
     .filter(unit => filterByCityName(unit))
     .filter(unit => filterByToDo(unit))
-    .filter(unit => filterByPriority(unit));
+    .filter(unit => filterByPriority(unit))
+    .filter(unit => filterByActive(unit));
 
   const totalEchoes = filteredSU.length;
   const searchFilteredSU = filteredSU.filter(unit => filterBySearch(unit));
@@ -293,4 +301,12 @@ export const updateStateWithDates = surveyUnit => {
 
 export const isQuestionnaireAvailable = su => {
   return getLastState(su).type !== 'QNA';
+};
+
+export const isSurveyUnitInActivePhase = su => {
+  const { identificationPhaseStartDate, endDate } = su;
+  const endTime = new Date(endDate).getTime();
+  const suTime = new Date(identificationPhaseStartDate).getTime();
+  const instantTime = new Date().getTime();
+  return endTime > suTime > instantTime;
 };

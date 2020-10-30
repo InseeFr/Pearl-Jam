@@ -19,6 +19,8 @@ const Filter = ({ filters, removeFilter }) => {
         return D.toDoFilter;
       case 'sample':
         return D.sampleFilter;
+      case 'active':
+        return D.activeFilter;
 
       default:
         break;
@@ -42,6 +44,7 @@ const Filter = ({ filters, removeFilter }) => {
       case 'sample':
         break;
       case 'priority':
+      case 'active':
         returnedValue = value ? 'Oui' : 'Non';
         break;
       case 'toDo':
