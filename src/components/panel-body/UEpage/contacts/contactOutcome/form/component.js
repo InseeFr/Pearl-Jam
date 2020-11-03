@@ -52,6 +52,7 @@ const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
     } else {
       addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type);
     }
+    console.log('newSu after adding new state : ', newSu);
     saveUE(newSu);
   };
 
