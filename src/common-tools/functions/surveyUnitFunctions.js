@@ -106,13 +106,11 @@ export const addNewState = async (surveyUnit, stateType) => {
   switch (lastStateType) {
     case surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type:
       if (CONTACT_RELATED_STATES.includes(stateType)) {
-        console.log('contact related state added');
         newSu = await addContactState(newSu, newState);
 
         const previousState = { date: new Date().getTime(), type: lastStateType };
         newSu.states.push(previousState);
       } else {
-        console.log('add state not related to contacts');
         newSu.states.push(newState);
       }
       break;
@@ -176,7 +174,6 @@ export const addNewState = async (surveyUnit, stateType) => {
   }
   newSu.selected = false;
   await surveyUnitDBService.addOrUpdate(newSu);
-  console.log('updated SU : ', newSu);
 };
 
 export const searchFilterByAttribute = (filters, attribute) => {
