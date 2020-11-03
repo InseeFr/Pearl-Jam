@@ -1,5 +1,4 @@
 import D from 'i18n';
-import React from 'react';
 
 const toDoEnum = {
   NOT_STARTED: { order: 1, value: '' },
@@ -8,10 +7,7 @@ const toDoEnum = {
   FINALIZE: { order: 4, value: `${D.toDoFinalize}` },
   TRANSMIT: { order: 5, value: `${D.toDoTransmit}` },
   SYNCHRONIZE: { order: 6, value: `${D.toDoSynchronize}` },
-  TERMINATED: {
-    order: 7,
-    value: <i className="fa fa-check" aria-hidden="true" />,
-  },
+  TERMINATED: { order: 7, value: '✓' },
 };
 
 export default toDoEnum;
