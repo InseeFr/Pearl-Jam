@@ -42,15 +42,15 @@ const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
     checkForm();
   }, [formContactAttempt, formIsValid]);
 
-  const save = () => {
+  const save = async () => {
     const newSu = surveyUnit;
     newSu.contactOutcome = formContactAttempt;
     const { type } = formContactAttempt;
     // lifeCycle update
     if (type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type) {
-      addNewState(surveyUnit, surveyUnitStateEnum.APPOINTMENT_MADE.type);
+      await addNewState(surveyUnit, surveyUnitStateEnum.APPOINTMENT_MADE.type);
     } else {
-      addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type);
+      await addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type);
     }
     console.log('newSu after adding new state : ', newSu);
     saveUE(newSu);
