@@ -7,16 +7,10 @@ import {
   isValidForTransmission,
   addNewState,
   sortOnColumnCompareFunction,
-<<<<<<< HEAD
-  applyFilters,
-  searchFilterByAttribute,
-  updateStateWithDates,
-=======
   updateStateWithDates,
   applyFilters,
   searchFilterByAttribute,
   isSurveyUnitInActivePhase,
->>>>>>> 7e991e8... WIP
 } from 'common-tools/functions';
 import Form from './transmitForm';
 import FilterForm from './filterForm';
