@@ -1,11 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { Button, CircularProgress, makeStyles, Slide, Snackbar } from '@material-ui/core';
+import useTimer from 'common-tools/hooks/useTimer';
 import D from 'i18n';
-import './notification.scss';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+
+const useStyles = makeStyles(() => ({
+  root: {
+    top: '0',
+  },
+  content: {
+    backgroundColor: 'rgba(46, 139, 166, 0.9)',
+  },
+}));
+
+const SlideTransition = props => <Slide {...props} direction="down" />;
 
 const Notification = ({ serviceWorkerInfo }) => {
   const [open, setOpen] = useState(true);
-
+  const [progress, setProgress] = useTimer(setOpen);
   const {
     installingServiceWorker,
     waitingServiceWorker,
@@ -36,37 +48,42 @@ const Notification = ({ serviceWorkerInfo }) => {
     return '';
   };
 
+  const classes = useStyles();
+
   return (
-    <div
-      className={`notification ${isUpdateAvailable ? 'update' : ''} ${
-        (isUpdateAvailable || isServiceWorkerInstalled || installingServiceWorker) && open
-          ? 'visible'
-          : ''
-      }`}
-    >
-      {open && (
-        <>
-          <button type="button" className="close-button" onClick={() => setOpen(false)}>
-            {`\u2573 ${D.closeButton}`}
-          </button>
-          <div className="title">{getMessage()}</div>
-          {isUpdateAvailable && (
-            <button type="button" className="update-button" onClick={updateAssets}>
-              {D.updateNow}
-            </button>
-          )}
-        </>
-      )}
-    </div>
+    <Snackbar
+      open={(isUpdateAvailable || isServiceWorkerInstalled || installingServiceWorker) && open}
+      className={classes.root}
+      TransitionComponent={SlideTransition}
+      ContentProps={{ className: classes.content }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      message={getMessage()}
+      onClose={() => setOpen(false)}
+      onEntering={() => setProgress(1)}
+      action={
+        // eslint-disable-next-line react/jsx-wrap-multilines
+        <Button
+          color="inherit"
+          size="small"
+          onClick={isUpdateAvailable ? updateAssets : () => setOpen(false)}
+        >
+          {isUpdateAvailable ? D.updateNow : D.closeButton}
+          <CircularProgress value={progress.current} color="inherit" variant="determinate" />
+        </Button>
+      }
+    />
   );
 };
 
 export default Notification;
 Notification.propTypes = {
   serviceWorkerInfo: PropTypes.shape({
-    installingServiceWorker: PropTypes.any.isRequired,
-    waitingServiceWorker: PropTypes.any.isRequired,
-    isUpdateAvailable: PropTypes.any.isRequired,
-    isServiceWorkerInstalled: PropTypes.any.isRequired,
+    installingServiceWorker: PropTypes.shape({}).isRequired,
+    waitingServiceWorker: PropTypes.shape({
+      postMessage: PropTypes.shape({}),
+      addEventListener: PropTypes.shape({}),
+    }).isRequired,
+    isUpdateAvailable: PropTypes.shape({}).isRequired,
+    isServiceWorkerInstalled: PropTypes.shape({}).isRequired,
   }).isRequired,
 };

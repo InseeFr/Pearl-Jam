@@ -1,13 +1,12 @@
-import { KEYCLOAK, ANONYMOUS, JSON_UTF8_HEADER, PEARL_USER_KEY } from 'common-tools/constants';
-import { refreshToken, kc, keycloakAuthentication } from 'common-tools/keycloak';
+import { ANONYMOUS, JSON_UTF8_HEADER, KEYCLOAK, PEARL_USER_KEY } from 'common-tools/constants';
+import { kc, keycloakAuthentication, refreshToken } from 'common-tools/keycloak';
 
-export const getSecureHeader = token => {
-  return token
+export const getSecureHeader = token =>
+  token
     ? {
         Authorization: `Bearer ${token}`,
       }
     : {};
-};
 
 export const authentication = mode => {
   switch (mode) {

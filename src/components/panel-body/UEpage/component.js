@@ -1,34 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import { useHistory } from 'react-router-dom';
-import D from 'i18n';
-import { getLastState, addNewState } from 'common-tools/functions';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
-import { SurveyUnitProvider } from './UEContext';
+import { addNewState, getLastState } from 'common-tools/functions';
+import D from 'i18n';
+import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import Router from './router';
+import { SurveyUnitProvider } from './UEContext';
 
 const UEPage = ({ match }) => {
   const [surveyUnit, setSurveyUnit] = useState(undefined);
+  const [shouldRefresh, setShouldRefresh] = useState(true);
 
   const history = useHistory();
+  const { id } = useParams();
 
   useEffect(() => {
-    let init = false;
-    surveyUnitDBService.getById(match.params.id).then(ue => {
-      if (!init) {
-        setSurveyUnit(ue);
-      }
-    });
-
-    return () => {
-      init = true;
+    const updateSurveyUnit = async () => {
+      await surveyUnitDBService.getById(id).then(ue => {
+        setSurveyUnit({ ...ue });
+      });
     };
-  }, [match]);
+    if (shouldRefresh) {
+      updateSurveyUnit();
+      setShouldRefresh(false);
+    }
+  }, [id, shouldRefresh]);
 
-  const saveUE = (ue, url) => {
+  const refresh = () => {
+    setShouldRefresh(true);
+  };
+
+  const saveUE = ue => {
     setSurveyUnit(ue);
     surveyUnitDBService.update(ue);
-    history.push(url); //force to update
+    // history.push(url); // force to update
   };
 
   useEffect(() => {
@@ -45,7 +51,7 @@ const UEPage = ({ match }) => {
     <>
       {surveyUnit && (
         <SurveyUnitProvider value={surveyUnit}>
-          <Router match={match} saveUE={saveUE} />
+          <Router match={match} saveUE={saveUE} refresh={refresh} />
         </SurveyUnitProvider>
       )}
 
@@ -54,7 +60,7 @@ const UEPage = ({ match }) => {
           <button type="button" className="button-back-home" onClick={() => history.push('/')}>
             <i className="fa fa-arrow-left" aria-hidden="true" />
           </button>
-          <h2>{`${D.surveyUnitNotFound} ${match.params.id}.`}</h2>
+          <h2>{`${D.surveyUnitNotFound} ${id}.`}</h2>
         </>
       )}
     </>
@@ -62,3 +68,6 @@ const UEPage = ({ match }) => {
 };
 
 export default UEPage;
+UEPage.propTypes = {
+  match: PropTypes.shape({}).isRequired,
+};

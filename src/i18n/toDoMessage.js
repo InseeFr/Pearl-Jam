@@ -1,4 +1,5 @@
 const toDoMessage = {
+  toDoPrepare: { fr: 'Préparer', en: 'Prepare' },
   toDoContact: { fr: 'Contacter', en: 'Contact' },
   toDoSurvey: { fr: 'Enquêter', en: 'Survey' },
   toDoFinalize: { fr: 'Finaliser', en: 'Finalize' },

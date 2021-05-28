@@ -2,12 +2,12 @@ const ONLINE = 'online';
 const OFFLINE = 'offline';
 const observers = [];
 
-const online = e => {
+const online = () => {
   observers.forEach(o => {
     o(true);
   });
 };
-const offline = e => {
+const offline = () => {
   observers.forEach(o => {
     o(false);
   });
@@ -26,7 +26,7 @@ export const clean = () => {
 };
 
 let isInit = false;
-export default o => {
+const observer = o => {
   if (!isInit) {
     isInit = true;
     init();
@@ -36,3 +36,4 @@ export default o => {
     o(navigator.onLine);
   }
 };
+export default observer;

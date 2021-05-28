@@ -1,24 +1,18 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import React from 'react';
 import ContactAttempts from './contactAttempts';
 import ContactOutcome from './contactOutcome';
-import './contacts.scss';
 
-const Contacts = ({ saveUE }) => {
-  const locationUrl = useHistory().location.pathname;
-  const save = unite => {
-    saveUE(unite, locationUrl);
-  };
-  return (
-    <div className="Contacts">
-      <ContactAttempts saveUE={save} />
-      <ContactOutcome saveUE={save} />
-    </div>
-  );
-};
+const Contacts = ({ selectFormType, setInjectableData }) => (
+  <Grid container>
+    <ContactAttempts selectFormType={selectFormType} setInjectableData={setInjectableData} />
+    <ContactOutcome selectFormType={selectFormType} />
+  </Grid>
+);
 
 export default Contacts;
 Contacts.propTypes = {
-  saveUE: PropTypes.func.isRequired,
+  selectFormType: PropTypes.func.isRequired,
+  setInjectableData: PropTypes.func.isRequired,
 };

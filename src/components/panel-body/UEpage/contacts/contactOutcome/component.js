@@ -1,12 +1,32 @@
-import React, { useContext, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Modal from 'react-modal';
-import D from 'i18n';
+import { makeStyles, Paper, Typography } from '@material-ui/core';
 import { findContactOutcomeValueByType } from 'common-tools/enum/ContactOutcomEnum';
-import Form from './form';
+import formEnum from 'common-tools/enum/formEnum';
+import D from 'i18n';
+import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useState } from 'react';
 import SurveyUnitContext from '../../UEContext';
 
-const ContactOutcome = ({ saveUE }) => {
+const useStyles = makeStyles(() => ({
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+    cursor: 'pointer',
+    marginRight: '1em',
+    marginTop: '1em',
+    padding: '1em',
+    boxShadow: 'unset',
+    border: 'LightGray solid 1px',
+    borderRadius: '15px',
+    minWidth: '300px',
+    minHeight: '200px',
+  },
+  upDownMargin: {
+    marginTop: '1em',
+    marginBottom: '1em',
+  },
+}));
+
+const ContactOutcome = ({ selectFormType }) => {
   const su = useContext(SurveyUnitContext);
   const defaultContactOutcome =
     su.contactOutcome !== undefined && su.contactOutcome !== null
@@ -16,7 +36,6 @@ const ContactOutcome = ({ saveUE }) => {
           type: undefined,
           totalNumberOfContactAttempts: '0',
         };
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [contactOutcome, setContactOutcome] = useState(defaultContactOutcome);
 
   useEffect(() => {
@@ -31,51 +50,26 @@ const ContactOutcome = ({ saveUE }) => {
     );
   }, [su]);
 
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-  const save = surveyUnit => {
-    saveUE(surveyUnit);
-    closeModal();
-  };
-
   const outcomeValue = findContactOutcomeValueByType(contactOutcome.type);
+  const classes = useStyles();
   return (
-    <>
-      <div className="ContactOutcome">
-        <div className="row">
-          <h2>{D.contactOutcome}</h2>
-          <button type="button" className="bottom-right" onClick={() => openModal()}>
-            <i className="fa fa-pencil" aria-hidden="true" />
-            &nbsp;
-            {D.editButton}
-          </button>
-        </div>
-        <div className="line">{outcomeValue}</div>
-        <div className="line">
-          <i className="fa fa-arrow-right" />
-          <p>{`${contactOutcome.totalNumberOfContactAttempts} ${D.contactOutcomeAttempts}`}</p>
-        </div>
-      </div>
-      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
-        <Form
-          closeModal={closeModal}
-          surveyUnit={su}
-          setContactOutcome={setContactOutcome}
-          contactOutcome={contactOutcome}
-          saveUE={save}
-        />
-      </Modal>
-    </>
+    <Paper
+      className={classes.column}
+      onClick={() => {
+        selectFormType(formEnum.CONTACT_OUTCOME, true);
+      }}
+    >
+      <Typography variant="h6">{D.contactOutcome}</Typography>
+      <Typography className={classes.upDownMargin}>{outcomeValue}</Typography>
+      <Typography>
+        {contactOutcome.totalNumberOfContactAttempts > 0 &&
+          `> ${contactOutcome.totalNumberOfContactAttempts} ${D.contactOutcomeAttempts}`}
+      </Typography>
+    </Paper>
   );
 };
 
 export default ContactOutcome;
 ContactOutcome.propTypes = {
-  saveUE: PropTypes.func.isRequired,
+  selectFormType: PropTypes.func.isRequired,
 };

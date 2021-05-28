@@ -1,129 +1,138 @@
-import React, { useContext } from 'react';
-import { Route, Redirect, useHistory } from 'react-router-dom';
-import {
-  convertSUStateInToDo,
-  getLastState,
-  isValidForTransmission,
-  addNewState,
-  isQuestionnaireAvailable,
-} from 'common-tools/functions';
-import suStateEnum from 'common-tools/enum/SUStateEnum';
-import PropTypes from 'prop-types';
+import { Dialog, Grid, makeStyles } from '@material-ui/core';
 import D from 'i18n';
-import Navigation from './navigation';
-import Details from './details';
+import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Comments from './comments';
 import Contacts from './contacts';
+import Details from './details';
+import { getForm, getPreviousValue, smartForms } from './forms';
+import Identification from './identification';
+import Letters from './letters';
+import Navigation from './navigation/component';
+import StateLine from './stateLine';
 import SurveyUnitContext from './UEContext';
-import './router.scss';
+import UeSubInfoTile from './ueSubInfoTile';
 
-const Router = ({ match, saveUE }) => {
-  const ue = useContext(SurveyUnitContext);
-  const history = useHistory();
+const useStyles = makeStyles(() => ({
+  ajustScroll: {
+    height: 'calc(100vh - 13.5em)',
+  },
+  modal: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  row: {
+    flexWrap: 'nowrap',
+  },
+  paperModal: {
+    boxShadow: 'unset',
+    backgroundColor: 'transparent',
+    margin: 0,
+    maxWidth: 'unset',
+  },
+}));
 
-  const openQueen = () => {
-    history.push(`/queen/questionnaire/${ue.campaign}/survey-unit/${match.params.id}`);
+const Router = ({ match, saveUE, refresh }) => {
+  const surveyUnit = useContext(SurveyUnitContext);
+
+  /** refs are used for scrolling, dispatched to the clickable link and linked element */
+  const detailsRef = useRef('details');
+  const identificationRef = useRef('spotting');
+  const lettersRef = useRef('letters');
+  const contactsRef = useRef('contacts');
+  const commentsRef = useRef('comments');
+  const refs = { detailsRef, identificationRef, lettersRef, contactsRef, commentsRef };
+
+  /** Form type is dynamically inserted in Modal, with previousValue for edition if needed */
+  const [formType, setFormType] = useState(undefined);
+  const [editionMode, setEditionMode] = useState(false);
+  const [previousValue, setPreviousValue] = useState(undefined);
+  const [injectableData, setInjectableData] = useState(undefined);
+  const [openModal, setOpenModal] = useState(false);
+
+  /** update the previousValue */
+  useEffect(() => {
+    let value;
+    if (editionMode) {
+      value = getPreviousValue(formType, surveyUnit, injectableData);
+    }
+    setPreviousValue(value);
+  }, [formType, editionMode, surveyUnit, injectableData]);
+
+  /** double setter given to sub-components */
+  const selectFormType = (newFormType, isEditionMode) => {
+    setFormType(newFormType);
+    setEditionMode(isEditionMode);
+    setOpenModal(true);
   };
 
-  const save = (unite, url) => {
-    saveUE(unite, url);
+  const closeModal = () => {
+    setOpenModal(false);
   };
-  const lastState = getLastState(ue);
 
-  const transmit = async () => {
-    if (isValidForTransmission(ue)) {
-      const newType = suStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
-      await addNewState(ue, newType);
-      history.push(match.url);
+  const selectedForm = getForm(formType, saveUE, previousValue, closeModal, refresh);
+
+  const classes = useStyles();
+
+  const smartCloseModal = event => {
+    if (event.target.id === 'dialogRoot') {
+      closeModal();
     }
   };
 
+  const smartModalClass = smartForms.includes(formType) ? classes.paperModal : '';
+
   return (
-    <div className="panel-body ue">
-      <div className="ue-info">
-        <button type="button" className="button-back-home" onClick={() => history.push('/')}>
-          <i className="fa fa-arrow-left" aria-hidden="true" />
-        </button>
-        <div className="infos">
-          <div className="small-panel">
-            <i className="fa fa-info-circle" aria-hidden="true" />
-            <div className="column">
-              <div className="row">
-                <div>{ue.campaign ? ue.campaign : D.loading}</div>
-
-                <div>
-                  {ue.sampleIdentifiers && ue.sampleIdentifiers.ssech
-                    ? `${D.suSample}  ${ue.sampleIdentifiers.ssech}`
-                    : D.loading}
-                </div>
-              </div>
-              <div>{ue.id ? `${ue.id}` : D.loading}</div>
-            </div>
-          </div>
-          <div className="small-panel">
-            <i className="fa fa-user-circle" aria-hidden="true" />
-            <div className="column">
-              <div>
-                {`${ue.lastName ? ue.lastName : D.loading} ${
-                  ue.firstName ? ue.firstName : D.loading
-                }`}
-              </div>
-              <div>{ue.geographicalLocation ? ue.geographicalLocation.label : D.loading}</div>
-            </div>
-          </div>
-          <div className="small-panel">
-            <i className="fa fa-question-circle" aria-hidden="true" />
-            <div className="column">
-              {ue.states ? (
-                <div className="bold">{convertSUStateInToDo(lastState.type).value}</div>
-              ) : (
-                D.loading
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="button-ue">
-          <button type="button" disabled={!isQuestionnaireAvailable(ue)} onClick={openQueen}>
-            <i className="fa fa-file-text-o" aria-hidden="true" />
-            &nbsp;
-            {D.questionnaireButton}
-          </button>
-          <button type="button" onClick={transmit}>
-            <i className="fa fa-paper-plane" aria-hidden="true" />
-            &nbsp;
-            {D.sendButton}
-          </button>
+    <>
+      <div>
+        <StateLine />
+        <Navigation refs={refs} match={match} />
+        <div>
+          <UeSubInfoTile reference={detailsRef} title={D.goToContactDetailsPage}>
+            <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
+          </UeSubInfoTile>
+          <UeSubInfoTile reference={identificationRef} title={D.goToSpottingPage}>
+            <Identification selectFormType={selectFormType} />
+          </UeSubInfoTile>
+          <UeSubInfoTile reference={lettersRef} title={D.goToMailsPage}>
+            <Letters selectFormType={selectFormType} />
+          </UeSubInfoTile>
+          <UeSubInfoTile reference={contactsRef} title={D.goToContactPage}>
+            <Contacts selectFormType={selectFormType} setInjectableData={setInjectableData} />
+          </UeSubInfoTile>
+          <UeSubInfoTile
+            reference={commentsRef}
+            title={D.goToCommentsPage}
+            className={classes.ajustScroll}
+          >
+            <Comments save={saveUE} />
+          </UeSubInfoTile>
         </div>
       </div>
-
-      <div className="sub-page">
-        <Navigation />
-        <Route
-          exact
-          path={`${match.url}/details`}
-          component={routeProps => <Details {...routeProps} saveUE={save} />}
-        />
-        <Route
-          exact
-          path={`${match.url}/comments`}
-          component={routeProps => <Comments {...routeProps} saveUE={save} />}
-        />
-        <Route
-          exact
-          path={`${match.url}/contacts`}
-          component={routeProps => <Contacts {...routeProps} saveUE={save} />}
-        />
-        <Route exact path={`${match.url}/`}>
-          <Redirect to={`${match.url}/details`} />
-        </Route>
-      </div>
-    </div>
+      <Dialog
+        maxWidth={false}
+        className={classes.modal}
+        open={openModal}
+        onClose={closeModal}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        PaperProps={{ className: smartModalClass, onClick: smartCloseModal }}
+      >
+        <Grid container className={classes.row}>
+          {selectedForm !== undefined && selectedForm}
+        </Grid>
+      </Dialog>
+    </>
   );
 };
 
 export default Router;
 Router.propTypes = {
-  match: PropTypes.object.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
+    url: PropTypes.string.isRequired,
+  }).isRequired,
   saveUE: PropTypes.func.isRequired,
+  refresh: PropTypes.func.isRequired,
 };

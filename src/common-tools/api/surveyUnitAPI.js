@@ -1,8 +1,8 @@
 import Axios from 'axios';
-import { getHeader, authentication } from './utils';
+import { authentication, getHeader } from './utils';
 
-export const getSurveyUnits = (urlPearApi, authenticationMode) => {
-  return new Promise((resolve, reject) => {
+export const getSurveyUnits = (urlPearApi, authenticationMode) =>
+  new Promise((resolve, reject) => {
     authentication(authenticationMode)
       .then(() => {
         Axios.get(`${urlPearApi}/api/survey-units`, {
@@ -17,10 +17,9 @@ export const getSurveyUnits = (urlPearApi, authenticationMode) => {
         reject(new Error(`Error during refreshToken : ${e.response.data.error.message}`));
       });
   });
-};
 
-export const getSurveyUnitById = (urlPearApi, authenticationMode) => id => {
-  return new Promise((resolve, reject) => {
+export const getSurveyUnitById = (urlPearApi, authenticationMode) => id =>
+  new Promise((resolve, reject) => {
     authentication(authenticationMode)
       .then(() => {
         Axios.get(`${urlPearApi}/api/survey-unit/${id}`, {
@@ -31,10 +30,9 @@ export const getSurveyUnitById = (urlPearApi, authenticationMode) => id => {
       })
       .catch(e => reject(new Error(`Error during refreshToken : ${e.message}`)));
   });
-};
 
-export const putDataSurveyUnitById = (urlPearApi, authenticationMode) => (id, su) => {
-  return new Promise((resolve, reject) => {
+export const putDataSurveyUnitById = (urlPearApi, authenticationMode) => (id, su) =>
+  new Promise((resolve, reject) => {
     authentication(authenticationMode)
       .then(() => {
         Axios.put(`${urlPearApi}/api/survey-unit/${id}`, su, {
@@ -45,4 +43,3 @@ export const putDataSurveyUnitById = (urlPearApi, authenticationMode) => (id, su
       })
       .catch(e => reject(new Error(`Error during refreshToken : ${e.message}`)));
   });
-};

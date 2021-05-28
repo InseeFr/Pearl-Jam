@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
 import questionnaireEnum from 'common-tools/enum/QuestionnaireStateEnum';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
 import { addNewState } from 'common-tools/functions/surveyUnitFunctions';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import { useEffect } from 'react';
 
 const computeSurveyUnitState = questionnaireState => {
   switch (questionnaireState) {
@@ -41,6 +41,7 @@ const closeQueen = history => surveyUnitID => {
   history.push(`/survey-unit/${surveyUnitID}/details`);
 };
 
+// eslint-disable-next-line consistent-return
 const handleQueenEvent = history => async event => {
   const { type, command, ...other } = event.detail;
   if (type === 'QUEEN') {

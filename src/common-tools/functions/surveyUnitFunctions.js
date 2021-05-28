@@ -1,8 +1,9 @@
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'common-tools/constants';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
-import { formatDistanceStrict } from 'date-fns';
+import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
+import { differenceInYears, formatDistanceStrict } from 'date-fns';
+import D from 'i18n';
+import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
 export const getCommentByType = (type, ue) => {
   if (Array.isArray(ue.comments) && ue.comments.length > 0) {
@@ -21,43 +22,46 @@ export const getLastState = ue => {
 
 export const intervalInDays = su => {
   const { collectionEndDate } = su;
-
+  if (new Date().getTime() > new Date(collectionEndDate).getTime()) return 0;
   const remainingDays = formatDistanceStrict(new Date(), new Date(collectionEndDate), {
     roundingMethod: 'ceil',
     unit: 'day',
+    addSuffix: true,
   });
 
   return remainingDays.split(' ')[0];
 };
 
-export const isValidForTransmission = ue => {
+export const isValidForTransmission = ue =>
   /* const { contactOutcome } = ue;
   return contactOutcome !== null; */
-  return true;
-};
+  ue !== undefined;
 
-const getContactAttempts = async surveyUnit => {
+export const getSortedContactAttempts = surveyUnit => {
+  if (surveyUnit === undefined) return [];
+
   const { contactAttempts } = surveyUnit;
-  return contactAttemptDBService.findByIds(contactAttempts);
+
+  if (contactAttempts === undefined || contactAttempts.length === 0) return [];
+
+  contactAttempts.sort((a, b) => b.date - a.date);
+  return contactAttempts;
 };
 
-export const deleteContactAttempt = (surveyUnit, contactAttemptId) => {
-  const newSu = surveyUnit;
-  const { contactAttempts } = newSu;
-  const newCA = contactAttempts.filter(ca => ca !== contactAttemptId);
-  newSu.contactAttempts = newCA;
-  surveyUnitDBService.update(newSu);
-  contactAttemptDBService.delete(contactAttemptId);
+export const deleteContactAttempt = (surveyUnit, contactAttempt) => {
+  const { contactAttempts } = surveyUnit;
+  const newCA = contactAttempts.filter(ca => ca !== contactAttempt);
+  surveyUnitDBService.update({ ...surveyUnit, newCA });
 };
+export const areCaEqual = (ca, anotherCa) =>
+  ca.date === anotherCa.date && ca.status === anotherCa.status;
 
-const getContactAttemptNumber = surveyUnit => {
-  return surveyUnit.states.filter(
-    state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
-  ).length;
-};
+export const getContactAttemptNumber = surveyUnit =>
+  surveyUnit.states.filter(state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
+    .length;
 
-const lastContactAttemptIsSuccessfull = async surveyUnit => {
-  const contactAttempts = await getContactAttempts(surveyUnit);
+const lastContactAttemptIsSuccessfull = surveyUnit => {
+  const { contactAttempts } = surveyUnit;
   let lastContactAttempt;
   if (Array.isArray(contactAttempts) && contactAttempts.length > 1) {
     lastContactAttempt = contactAttempts.reduce((a, b) => (a.date > b.date ? a : b));
@@ -67,9 +71,7 @@ const lastContactAttemptIsSuccessfull = async surveyUnit => {
   return CONTACT_SUCCESS_LIST.includes(lastContactAttempt.status);
 };
 
-const isContactAttemptOk = async surveyUnit => {
-  return lastContactAttemptIsSuccessfull(surveyUnit);
-};
+const isContactAttemptOk = async surveyUnit => lastContactAttemptIsSuccessfull(surveyUnit);
 
 const addContactState = async (surveyUnit, newState) => {
   switch (newState.type) {
@@ -175,10 +177,6 @@ export const addNewState = async (surveyUnit, stateType) => {
   await surveyUnitDBService.addOrUpdate(newSu);
 };
 
-export const checkIfContactAttemptCanBeDeleted = surveyUnit => {
-  return getContactAttemptNumber(surveyUnit) > 1;
-};
-
 export const updateStateWithDates = surveyUnit => {
   const lastState = getLastState(surveyUnit).type;
   const currentDate = new Date().getTime();
@@ -195,6 +193,195 @@ export const updateStateWithDates = surveyUnit => {
   return result;
 };
 
-export const isQuestionnaireAvailable = su => {
-  return getLastState(su).type !== 'QNA';
+export const isQuestionnaireAvailable = su => getLastState(su).type !== 'QNA';
+
+export const applyFilters = (surveyUnits, filters) => {
+  const {
+    search: searchFilter,
+    campaigns: campaignFilter,
+    toDos: toDoFilter,
+    priority: priorityFilter,
+  } = filters;
+
+  const normalize = string =>
+    string
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+  const filterBySearch = su => {
+    const { firstName, lastName } = getprivilegedPerson(su);
+    if (searchFilter !== '') {
+      const normalizedSearchFilter = normalize(searchFilter);
+      return (
+        normalize(firstName).includes(normalizedSearchFilter) ||
+        normalize(lastName).includes(normalizedSearchFilter) ||
+        su.id
+          .toString()
+          .toLowerCase()
+          .includes(normalizedSearchFilter) ||
+        normalize(
+          su.address.l6
+            .split(' ')
+            .slice(1)
+            .toString()
+        ).includes(normalizedSearchFilter) ||
+        convertSUStateInToDo(getLastState(su).type)
+          .value.toLowerCase()
+          .includes(normalizedSearchFilter) ||
+        normalize(su.campaign).includes(normalizedSearchFilter)
+      );
+    }
+
+    return true;
+  };
+
+  const filterByCampaign = su => {
+    if (campaignFilter.length > 0) {
+      return campaignFilter.includes(su.campaign.toString());
+    }
+
+    return true;
+  };
+
+  const filterByToDo = su => {
+    if (toDoFilter.length > 0) {
+      return toDoFilter.includes(convertSUStateInToDo(getLastState(su).type).order.toString());
+    }
+    return true;
+  };
+  const filterByPriority = su => {
+    if (priorityFilter === true) {
+      return su.priority;
+    }
+    return true;
+  };
+
+  const filteredSU = surveyUnits
+    .filter(unit => filterByPriority(unit))
+    .filter(unit => filterByToDo(unit))
+    .filter(unit => filterByCampaign(unit));
+
+  const totalEchoes = surveyUnits.length;
+  const searchFilteredSU = filteredSU.filter(unit => filterBySearch(unit));
+  const matchingEchoes = searchFilteredSU.length;
+
+  return { searchFilteredSU, totalEchoes, matchingEchoes };
+};
+
+export const isSelectable = su => {
+  const { identificationPhaseStartDate, endDate } = su;
+  const endTime = new Date(endDate).getTime();
+  const identificationPhaseStartTime = new Date(identificationPhaseStartDate).getTime();
+  const instantTime = new Date().getTime();
+  return endTime > instantTime && instantTime > identificationPhaseStartTime;
+};
+
+export const getAddressData = su => {
+  const [postCode, cityName] = su.address.l6.split(' ');
+
+  return [
+    { label: D.addressDeliveryPoint, value: su.address.l2 },
+    { label: D.addressAdditionalAddress, value: su.address.l3 },
+    { label: D.addressStreetName, value: su.address.l4 },
+    { label: D.addressLocality, value: su.address.l5 },
+    { label: D.addressPostcode, value: postCode },
+    { label: D.addressCity, value: cityName },
+  ];
+};
+
+export const getAgeGroup = birthdate => {
+  const age = getAge(birthdate);
+  if (age <= 25) return D.ageGroupOne;
+  if (age <= 35) return D.ageGroupTwo;
+  if (age <= 55) return D.ageGroupThree;
+  if (age <= 75) return D.ageGroupFour;
+  return D.ageGroupFive;
+};
+
+export const getAge = birthdate => {
+  if (birthdate === '') return ' ';
+  return differenceInYears(new Date(), new Date(birthdate));
+};
+
+export const getUserData = person => [
+  { label: D.surveyUnitTitle, value: getTitle(person.title) },
+  { label: D.surveyUnitLastName, value: person.lastName },
+  { label: D.surveyUnitFirstName, value: person.firstName },
+  { label: D.surveyUnitAge, value: `${getAge(person.birthdate)} ${D.years}` },
+];
+
+export const getPhoneData = person =>
+  // su.phoneNumbers.map(phoneNumber => ({ label: undefined, value: phoneNumber }));
+  person.phoneNumbers;
+
+export const sortPhoneNumbers = phoneNumbers => {
+  let fiscalPhoneNumbers = [];
+  let directoryPhoneNumbers = [];
+  let interviewerPhoneNumbers = [];
+
+  phoneNumbers.forEach(num => {
+    switch (num.source.toLowerCase()) {
+      case 'fiscal':
+        fiscalPhoneNumbers = [...fiscalPhoneNumbers, num];
+        break;
+      case 'directory':
+        directoryPhoneNumbers = [...directoryPhoneNumbers, num];
+        break;
+      case 'interviewer':
+        interviewerPhoneNumbers = [...interviewerPhoneNumbers, num];
+        break;
+
+      default:
+        break;
+    }
+  });
+  return { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers };
+};
+
+export const getMailData = person => [
+  { label: undefined, value: person.email, favorite: person.favoriteEmail },
+];
+
+export const getTitle = title => {
+  switch (title.toLowerCase()) {
+    case 'mister':
+      return D.titleMister;
+    case 'miss':
+      return D.titleMiss;
+    default:
+      return '';
+  }
+};
+
+export const getPhoneSource = type => {
+  switch (type.toLowerCase()) {
+    case 'fiscal':
+      return D.fiscalSource;
+    case 'directory':
+      return D.directorySource;
+    case 'interviewer':
+      return D.interviewerSource;
+    default:
+      return '';
+  }
+};
+
+export const personPlaceholder = {
+  title: 'MISTER',
+  firstName: '',
+  lastName: '',
+  email: '',
+  birthdate: '',
+  favoriteEmail: false,
+  privileged: true,
+  phoneNumbers: [],
+};
+
+export const getprivilegedPerson = surveyUnit => {
+  const { persons } = surveyUnit;
+  if (!persons || !persons.length || persons.length === 0) return personPlaceholder;
+
+  const privilegedPerson = persons.find(p => p.privileged);
+  return privilegedPerson ? privilegedPerson : persons[0];
 };

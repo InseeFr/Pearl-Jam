@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
 import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'common-tools/constants';
-import { keycloakAuthentication, getTokenInfo } from 'common-tools/keycloak';
+import { getTokenInfo, keycloakAuthentication } from 'common-tools/keycloak';
+import { useEffect, useState } from 'react';
 
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
@@ -62,9 +62,7 @@ export const useAuth = () => {
                     accessDenied();
                   }
                 })
-                .catch(() => {
-                  return isLocalStorageTokenValid() ? accessAuthorized() : accessDenied();
-                });
+                .catch(() => (isLocalStorageTokenValid() ? accessAuthorized() : accessDenied()));
             }
             break;
           default:

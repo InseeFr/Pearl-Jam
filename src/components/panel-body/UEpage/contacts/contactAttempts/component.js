@@ -1,139 +1,59 @@
-import React, { useContext, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Modal from 'react-modal';
+import { makeStyles, Paper, Typography } from '@material-ui/core';
+import formEnum from 'common-tools/enum/formEnum';
+import { getSortedContactAttempts } from 'common-tools/functions';
 import D from 'i18n';
-import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
-import { deleteContactAttempt } from 'common-tools/functions';
-import format from 'date-fns/format';
-import { findContactAttemptValueByType } from 'common-tools/enum/ContactAttemptEnum';
-import Form from './form';
-import DeletionForm from './deletionForm';
+import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useState } from 'react';
 import SurveyUnitContext from '../../UEContext';
+import ContactAttemptLine from './contactAttemptLine';
 
-const ContactAttempts = ({ saveUE }) => {
-  const su = useContext(SurveyUnitContext);
-  const [contactAttempt, setContactAttempt] = useState({ status: 'titi', date: 12345 });
-  const [contactToBeDeletedId, setContactToBeDeletedId] = useState(undefined);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [deletionModalIsOpen, setDeletionModalIsOpen] = useState(false);
+const useStyles = makeStyles(() => ({
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+    cursor: 'pointer',
+    marginRight: '1em',
+    marginTop: '1em',
+    padding: '1em',
+    boxShadow: 'unset',
+    border: 'LightGray solid 1px',
+    borderRadius: '15px',
+    minWidth: '300px',
+    minHeight: '200px',
+  },
+}));
+
+const ContactAttempts = ({ selectFormType, setInjectableData }) => {
+  const surveyUnit = useContext(SurveyUnitContext);
   const [contactAttempts, setcontactAttempts] = useState([]);
-  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
-    const getContactAttempts = async ids => {
-      if (ids === undefined || ids.length === 0) return [];
-      const cat = await contactAttemptDBService.findByIds(ids);
-      cat.sort((a, b) => b.date - a.date);
-      return cat;
-    };
+    const sortedContactAttempts = getSortedContactAttempts(surveyUnit);
+    setcontactAttempts(sortedContactAttempts);
+  }, [surveyUnit]);
 
-    if (su !== undefined) {
-      const contactAttemptsId = su.contactAttempts;
-      getContactAttempts(contactAttemptsId).then(cA => setcontactAttempts(cA));
-      setRefresh(false);
-    }
-  }, [su, refresh]);
-
-  const openDeletionModal = () => {
-    setDeletionModalIsOpen(true);
-  };
-
-  const lines = () => {
-    if (Array.isArray(contactAttempts) && contactAttempts.length > 0)
-      return contactAttempts.map((contAtt, index) => {
-        const date = format(new Date(contAtt.date), 'dd/MM/yyyy');
-        const hour = format(new Date(contAtt.date), 'HH');
-        const minutes = format(new Date(contAtt.date), 'mm');
-        const isLastContact = index === 0;
-        return (
-          <tr className="line" key={contAtt.id}>
-            <td>
-              <button
-                type="button"
-                className="smallButton"
-                hidden={isLastContact}
-                onClick={() => {
-                  setContactToBeDeletedId(contAtt.id);
-                  openDeletionModal();
-                }}
-              >
-                <i className="fa fa-times" aria-hidden="true" />
-              </button>
-            </td>
-            <td>
-              <div>
-                {`${date} - ${hour}h${minutes} - ${D.telephone} - ${findContactAttemptValueByType(
-                  contAtt.status
-                )}`}
-              </div>
-            </td>
-          </tr>
-        );
-      });
-    return (
-      <tr>
-        <td />
-        <td>{D.noContactAttempt}</td>
-      </tr>
-    );
-  };
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-  const closeDeletionModal = () => {
-    setDeletionModalIsOpen(false);
-  };
-
-  const save = surveyUnit => {
-    saveUE(surveyUnit);
-  };
+  const classes = useStyles();
 
   return (
-    <div className="ContactAttempts">
-      <div className="row">
-        <h2>{D.contactAttempts}</h2>
-        <button type="button" className="bottom-right" onClick={openModal}>
-          <i className="fa fa-plus" aria-hidden="true" />
-          &nbsp;
-          {D.addButton}
-        </button>
-      </div>
-      <table className="contactTable">
-        <colgroup>
-          <col className="col1" />
-          <col className="col2" />
-        </colgroup>
-        <tbody>{lines()}</tbody>
-      </table>
-      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
-        <Form
-          closeModal={closeModal}
-          surveyUnit={su}
-          setContactAttempt={setContactAttempt}
-          contactAttempt={contactAttempt}
-          saveUE={save}
-        />
-      </Modal>
-      <Modal isOpen={deletionModalIsOpen} onRequestClose={closeDeletionModal} className="modal">
-        <DeletionForm
-          onValidate={() => {
-            deleteContactAttempt(su, contactToBeDeletedId);
-            setRefresh(true);
-            closeDeletionModal();
-          }}
-          onCancel={closeDeletionModal}
-        />
-      </Modal>
-    </div>
+    <Paper
+      className={classes.column}
+      onClick={() => {
+        selectFormType(formEnum.CONTACT_ATTEMPT, false);
+        setInjectableData({ status: 'NOC', date: new Date().getTime() });
+      }}
+    >
+      <Typography variant="h6">{D.contactAttempts}</Typography>
+      {Array.isArray(contactAttempts) &&
+        contactAttempts.length > 0 &&
+        contactAttempts.map(contAtt => (
+          <ContactAttemptLine contactAttempt={contAtt} key={contAtt.id} />
+        ))}
+    </Paper>
   );
 };
 
 export default ContactAttempts;
 ContactAttempts.propTypes = {
-  saveUE: PropTypes.func.isRequired,
+  selectFormType: PropTypes.func.isRequired,
+  setInjectableData: PropTypes.func.isRequired,
 };

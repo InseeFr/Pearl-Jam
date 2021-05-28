@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/InseeFr/Pearl-Jam.svg?branch=master)](https://travis-ci.org/InseeFr/Pearl-Jam)
+![Build](https://github.com/InseeFr/Pearl-Jam/actions/workflows/release.yml/badge.svg)
 
 # Pearl Jam
 

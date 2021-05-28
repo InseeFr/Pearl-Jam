@@ -1,7 +1,6 @@
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
-import { getLastState } from 'common-tools/functions';
 import * as api from 'common-tools/api';
+import { getLastState } from 'common-tools/functions';
+import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
 export const synchronizeQueen = async history => {
   // 5 seconds limit before throwing error
@@ -44,29 +43,22 @@ const sendData = async (urlPearlApi, authenticationMode) => {
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
       const lastState = getLastState(surveyUnit);
-      let contactAttempts = await contactAttemptDBService.findByIds(surveyUnit.contactAttempts);
-      contactAttempts = contactAttempts.map(ca => {
-        delete ca.id;
-        return ca;
-      });
       const { id } = surveyUnit;
       await api.putDataSurveyUnitById(urlPearlApi, authenticationMode)(id, {
         ...surveyUnit,
         lastState,
-        contactAttempts,
       });
     })
   );
 };
 
-const putSurveyUnitsInDataBase = async su => {
+const putSurveyUnitInDataBase = async su => {
   await surveyUnitDBService.addOrUpdate(su);
 };
 
 const clean = async () => {
   console.log('CLEAN DATA');
   await surveyUnitDBService.deleteAll();
-  await contactAttemptDBService.deleteAll();
 };
 
 const validateSU = async su => {
@@ -80,17 +72,6 @@ const validateSU = async su => {
     su.comments.push(interviewerComment);
     su.comments.push(managementComment);
   }
-
-  let { contactAttempts } = su;
-
-  contactAttempts = await Promise.all(
-    contactAttempts.map(async ca => {
-      const id = await contactAttemptDBService.insert(ca);
-      return id;
-    })
-  );
-  const newSurveyUnit = su;
-  newSurveyUnit.contactAttempts = contactAttempts;
 
   return su;
 };
@@ -108,7 +89,7 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
       const surveyUnit = await surveyUnitResponse.data;
       const mergedSurveyUnit = { ...surveyUnit, ...su };
       const validSurveyUnit = await validateSU(mergedSurveyUnit);
-      await putSurveyUnitsInDataBase(validSurveyUnit);
+      await putSurveyUnitInDataBase(validSurveyUnit);
     })
   );
 };

@@ -1,29 +1,86 @@
 {
   "name": "pearl",
-  "version": "0.1.2",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^11.2.5",
+    "@date-io/date-fns": "1.x",
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@material-ui/pickers": "^3.2.10",
     "axios": "^0.19.2",
-    "date-fns": "^2.11.1",
+    "clsx": "^1.1.1",
+    "date-fns": "^2.18.0",
     "dexie": "^2.0.4",
-    "keycloak-js": "^10.0.2",
     "font-awesome": "^4.7.0",
-    "node-sass": "^4.14.1",
+    "keycloak-js": "^10.0.2",
     "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-modal": "^3.11.1",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0"
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "workbox-cacheable-response": "^5.1.3",
+    "workbox-core": "^5.1.3",
+    "workbox-precaching": "^5.1.3",
+    "workbox-routing": "^5.1.3",
+    "workbox-strategies": "^5.1.3"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && copy-and-watch src/service-worker-custom.js build && copy-and-watch configuration/configuration.json build",
+    "build": "react-scripts build && copy-and-watch configuration/configuration.json build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "prettier",
+      "plugin:react-hooks/recommended",
+      "plugin:jsx-a11y/recommended",
+      "plugin:import/warnings"
+    ],
+    "plugins": [
+      "prettier",
+      "jsx-a11y"
+    ],
+    "rules": {
+      "react/prop-types": [
+        "off"
+      ],
+      "prettier/prettier": [
+        1,
+        {
+          "arrowParens": "avoid"
+        }
+      ]
+    },
+    "globals": {
+      "fetch": true,
+      "window": true,
+      "document": true,
+      "navigator": true
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "paths": [
+            "src"
+          ]
+        }
+      }
+    }
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "endOfLine": "auto",
+    "arrowParens": "avoid"
   },
   "browserslist": {
     "production": [
@@ -38,18 +95,20 @@
     ]
   },
   "devDependencies": {
+   
     "@types/react": "^16.9.23",
     "@types/react-router-dom": "^5.1.3",
     "copy-and-watch": "^0.1.4",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
-    "eslint": "^6.6.0",
     "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.16.0",
+    "jest-sonar-reporter": "^2.0.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "prettier": "^1.19.1"
   }
 }

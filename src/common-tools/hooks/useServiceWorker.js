@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import * as serviceWorker from 'serviceWorker';
+import { useEffect, useState } from 'react';
+import * as serviceWorker from 'serviceWorkerRegistration';
 
 const useServiceWorker = authenticated => {
   const [installingServiceWorker, setInstallingServiceWorker] = useState(false);
