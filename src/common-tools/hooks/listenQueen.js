@@ -10,6 +10,8 @@ const computeSurveyUnitState = questionnaireState => {
       return suStateEnum.WAITING_FOR_TRANSMISSION.type;
     case questionnaireEnum.STARTED.type:
       return suStateEnum.QUESTIONNAIRE_STARTED.type;
+    case questionnaireEnum.VALIDATED.type:
+      return suStateEnum.WAITING_FOR_TRANSMISSION.type;
     default:
       return 'ERR';
   }
@@ -24,6 +26,9 @@ const updateSurveyUnit = (surveyUnitID, queenState) => {
         break;
       case 'STARTED':
         newQuestionnaireState = questionnaireEnum.STARTED.type;
+        break;
+      case 'VALIDATED':
+        newQuestionnaireState = questionnaireEnum.VALIDATED.type;
         break;
       default:
         break;

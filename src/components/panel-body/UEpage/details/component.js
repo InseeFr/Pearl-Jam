@@ -11,8 +11,6 @@ import DetailTile from './detailTile';
 const UEItem = ({ selectFormType, setInjectableData }) => {
   const surveyUnit = useContext(SurveyUnitContext);
   const { persons } = surveyUnit;
-  console.log('surveyUnit ', surveyUnit);
-  console.log('persons ', persons);
   return (
     <>
       {persons &&
@@ -23,12 +21,13 @@ const UEItem = ({ selectFormType, setInjectableData }) => {
               <Contact
                 person={person}
                 index={index + 1}
+                key={index + 1}
                 selectFormType={selectFormType}
                 setInjectableData={setInjectableData}
               />
             );
           })}
-      {persons.length === 0 && (
+      {(!persons || persons.length === 0) && (
         <Contact
           person={personPlaceholder}
           index={1}

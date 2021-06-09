@@ -25,6 +25,7 @@ const suStateMessage = {
     fr: 'Questionnaire non accessible enquêteur',
     en: 'Questionnaire not available to interviewer',
   },
+  suStateClosedSurveyUnit: { fr: 'Unité enquêtée close', en: 'Closed survey unit' },
 };
 
 export default suStateMessage;

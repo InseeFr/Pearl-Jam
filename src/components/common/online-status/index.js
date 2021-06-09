@@ -4,9 +4,9 @@ import clsx from 'clsx';
 import { addOnlineStatusObserver } from 'common-tools';
 import React, { useEffect, useState } from 'react';
 
-const useStyles = makeStyles(() => ({
-  grey: {
-    color: 'disabled',
+const useStyles = makeStyles(theme => ({
+  red: {
+    color: theme.palette.error.main,
   },
   green: {
     color: 'green',
@@ -31,9 +31,9 @@ const OnlineStatus = () => {
     }
   }, [init]);
 
-  const { icon, green, grey } = useStyles();
+  const { icon, green, red } = useStyles();
 
-  return <WifiIcon className={clsx(icon, status ? green : grey)} />;
+  return <WifiIcon className={clsx(icon, status ? green : red)} />;
 };
 
 export default OnlineStatus;

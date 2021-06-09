@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Form = ({ closeModal, save, previousValue }) => {
-  //previousValue is the person in [persons]
+  // previousValue is the person in [persons]
   const surveyUnit = useContext(SurveyUnitContext);
   const { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers } = sortPhoneNumbers(
     previousValue.phoneNumbers
@@ -37,7 +37,7 @@ const Form = ({ closeModal, save, previousValue }) => {
   };
 
   const toggleFavoritePhoneNumber = phoneNumber => {
-    switch (phoneNumber.source) {
+    switch (phoneNumber.source.toLowerCase()) {
       case 'interviewer':
         const updatedInterviewerPhones = interviewerPhones.map(phNum => {
           if (phNum.number === phoneNumber.number) phNum.favorite = !phNum.favorite;
@@ -74,7 +74,7 @@ const Form = ({ closeModal, save, previousValue }) => {
     if (anyEmptyPhone()) return;
     setInterviewerPhones([
       ...interviewerPhones,
-      { source: 'interviewer', favorite: false, number: '' },
+      { source: 'INTERVIEWER', favorite: false, number: '' },
     ]);
   };
 
@@ -86,7 +86,14 @@ const Form = ({ closeModal, save, previousValue }) => {
   };
 
   const saveUE = () => {
-    save({ ...surveyUnit, phoneNumbers: interviewerPhones });
+    const newPersons = surveyUnit.persons.map(p => {
+      if (p.id !== previousValue.id) return p;
+      return {
+        ...p,
+        phoneNumbers: [...fiscalPhones, ...directoryPhones, ...interviewerPhones],
+      };
+    });
+    save({ ...surveyUnit, persons: newPersons });
   };
 
   const classes = useStyles();
@@ -94,15 +101,13 @@ const Form = ({ closeModal, save, previousValue }) => {
   return (
     <div className={classes.column}>
       <DialogTitle id="form-dialog-title">{D.surveyUnitPhoneChange}</DialogTitle>
-      <form onSubmit={save}>
-        <PhoneTile
-          phoneNumbers={[...interviewerPhones, ...fiscalPhoneNumbers, ...directoryPhoneNumbers]}
-          editionMode
-          toggleFavoritePhone={number => toggleFavoritePhoneNumber(number)}
-          updatePhoneNumber={onChange}
-          deletePhoneNumber={deletePhoneNumber}
-        ></PhoneTile>
-      </form>
+      <PhoneTile
+        phoneNumbers={[...interviewerPhones, ...fiscalPhones, ...directoryPhones]}
+        editionMode
+        toggleFavoritePhone={number => toggleFavoritePhoneNumber(number)}
+        updatePhoneNumber={onChange}
+        deletePhoneNumber={deletePhoneNumber}
+      ></PhoneTile>
       <DialogActions>
         <Button type="button" onClick={addPhone}>
           {`+ ${D.addPhoneNumberButton}`}

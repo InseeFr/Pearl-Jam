@@ -56,17 +56,17 @@ const PhoneTile = ({
       <div className={classes.row}>
         <PhoneList
           numbers={fiscalPhoneNumbers}
-          type="fiscal"
+          type="FISCAL"
           toggleFavoritePhone={toggleFavoritePhone}
         />
         <PhoneList
           numbers={directoryPhoneNumbers}
-          type="directory"
+          type="DIRECTORY"
           toggleFavoritePhone={toggleFavoritePhone}
         />
         <PhoneList
           numbers={interviewerPhoneNumbers}
-          type="interviewer"
+          type="INTERVIEWER"
           editable={editionMode}
           toggleFavoritePhone={toggleFavoritePhone}
           updatePhoneNumber={updatePhoneNumber}

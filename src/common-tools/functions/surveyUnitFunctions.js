@@ -48,13 +48,16 @@ export const getSortedContactAttempts = surveyUnit => {
   return contactAttempts;
 };
 
+export const areCaEqual = (ca, anotherCa) => {
+  if (!ca || !anotherCa) return false;
+  return ca.date === anotherCa.date && ca.status === anotherCa.status;
+};
+
 export const deleteContactAttempt = (surveyUnit, contactAttempt) => {
   const { contactAttempts } = surveyUnit;
-  const newCA = contactAttempts.filter(ca => ca !== contactAttempt);
-  surveyUnitDBService.update({ ...surveyUnit, newCA });
+  const newCA = contactAttempts.filter(ca => !areCaEqual(ca, contactAttempt));
+  surveyUnitDBService.update({ ...surveyUnit, contactAttempts: newCA });
 };
-export const areCaEqual = (ca, anotherCa) =>
-  ca.date === anotherCa.date && ca.status === anotherCa.status;
 
 export const getContactAttemptNumber = surveyUnit =>
   surveyUnit.states.filter(state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
@@ -158,7 +161,6 @@ export const addNewState = async (surveyUnit, stateType) => {
     case surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type:
     case surveyUnitStateEnum.TO_BE_REVIEWED.type:
     case surveyUnitStateEnum.FINALIZED.type:
-    case surveyUnitStateEnum.QUESTIONNAIRE_NOT_AVAILABLE.type:
       // TODO : peut-être d'autres états  gérer ici
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = await addContactState(newSu, newState);
@@ -193,7 +195,12 @@ export const updateStateWithDates = surveyUnit => {
   return result;
 };
 
-export const isQuestionnaireAvailable = su => getLastState(su).type !== 'QNA';
+export const isQuestionnaireAvailable = su => {
+  const { collectionEndDate, collectionStartDate } = su;
+  const now = new Date().getTime();
+
+  return now >= collectionStartDate && now <= collectionEndDate;
+};
 
 export const applyFilters = (surveyUnits, filters) => {
   const {
@@ -281,12 +288,12 @@ export const getAddressData = su => {
   const [postCode, cityName] = su.address.l6.split(' ');
 
   return [
-    { label: D.addressDeliveryPoint, value: su.address.l2 },
-    { label: D.addressAdditionalAddress, value: su.address.l3 },
-    { label: D.addressStreetName, value: su.address.l4 },
-    { label: D.addressLocality, value: su.address.l5 },
-    { label: D.addressPostcode, value: postCode },
-    { label: D.addressCity, value: cityName },
+    { label: D.addressDeliveryPoint, value: su.address.l2 || '' },
+    { label: D.addressAdditionalAddress, value: su.address.l3 || '' },
+    { label: D.addressStreetName, value: su.address.l4 || '' },
+    { label: D.addressLocality, value: su.address.l5 || '' },
+    { label: D.addressPostcode, value: postCode || '' },
+    { label: D.addressCity, value: cityName || '' },
   ];
 };
 
@@ -300,7 +307,7 @@ export const getAgeGroup = birthdate => {
 };
 
 export const getAge = birthdate => {
-  if (birthdate === '') return ' ';
+  if (birthdate === '' || !birthdate) return ' ';
   return differenceInYears(new Date(), new Date(birthdate));
 };
 
@@ -311,9 +318,7 @@ export const getUserData = person => [
   { label: D.surveyUnitAge, value: `${getAge(person.birthdate)} ${D.years}` },
 ];
 
-export const getPhoneData = person =>
-  // su.phoneNumbers.map(phoneNumber => ({ label: undefined, value: phoneNumber }));
-  person.phoneNumbers;
+export const getPhoneData = person => person.phoneNumbers;
 
 export const sortPhoneNumbers = phoneNumbers => {
   let fiscalPhoneNumbers = [];
@@ -321,15 +326,16 @@ export const sortPhoneNumbers = phoneNumbers => {
   let interviewerPhoneNumbers = [];
 
   phoneNumbers.forEach(num => {
+    const copiedNum = JSON.parse(JSON.stringify(num));
     switch (num.source.toLowerCase()) {
       case 'fiscal':
-        fiscalPhoneNumbers = [...fiscalPhoneNumbers, num];
+        fiscalPhoneNumbers = [...fiscalPhoneNumbers, copiedNum];
         break;
       case 'directory':
-        directoryPhoneNumbers = [...directoryPhoneNumbers, num];
+        directoryPhoneNumbers = [...directoryPhoneNumbers, copiedNum];
         break;
       case 'interviewer':
-        interviewerPhoneNumbers = [...interviewerPhoneNumbers, num];
+        interviewerPhoneNumbers = [...interviewerPhoneNumbers, copiedNum];
         break;
 
       default:
@@ -379,6 +385,7 @@ export const personPlaceholder = {
 };
 
 export const getprivilegedPerson = surveyUnit => {
+  if (!surveyUnit) return personPlaceholder;
   const { persons } = surveyUnit;
   if (!persons || !persons.length || persons.length === 0) return personPlaceholder;
 

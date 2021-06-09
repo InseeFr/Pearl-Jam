@@ -2,13 +2,18 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheckedSharp';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import { intervalInDays } from 'common-tools/functions';
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
-import { getprivilegedPerson, isSelectable } from 'common-tools/functions/surveyUnitFunctions';
+import {
+  getLastState,
+  getprivilegedPerson,
+  isSelectable,
+} from 'common-tools/functions/surveyUnitFunctions';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -88,7 +93,6 @@ const SurveyUnitCard = ({ surveyUnit }) => {
     address: { l6 },
     campaign,
     sampleIdentifiers: { ssech },
-    states,
     priority,
     persons,
   } = surveyUnit;
@@ -96,7 +100,9 @@ const SurveyUnitCard = ({ surveyUnit }) => {
   const privilegedPerson = getprivilegedPerson(surveyUnit);
   // persons.find(p => p.privileged);
   const { firstName, lastName } = privilegedPerson ? privilegedPerson : persons[0];
-  const lastState = convertSUStateInToDo(states[states.length - 1].type).value;
+  const lastState = getLastState(surveyUnit);
+  const todo = convertSUStateInToDo(lastState.type);
+  const { order, value: toDoLabel } = todo;
   const nbJoursRestant = intervalInDays(surveyUnit);
 
   return (
@@ -138,8 +144,12 @@ const SurveyUnitCard = ({ surveyUnit }) => {
           {`${l6}`}
         </Typography>
         <Typography variant="subtitle1" color="textSecondary" className={classes.flexRow}>
-          <RadioButtonUncheckedSharpIcon className={`${classes.icon} ${classes.stateIcon}`} />
-          <Typography className={classes.leftMargin}>{lastState}</Typography>
+          {order !== 7 ? (
+            <RadioButtonUncheckedSharpIcon className={`${classes.icon} ${classes.stateIcon}`} />
+          ) : (
+            <CheckCircleOutlineIcon className={`${classes.icon} ${classes.stateIcon}`} />
+          )}
+          <Typography className={classes.leftMargin}>{toDoLabel}</Typography>
         </Typography>
       </CardContent>
       <CardContent className={`${classes.content} ${classes.flexRow}`}>

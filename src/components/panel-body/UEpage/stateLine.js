@@ -54,10 +54,10 @@ const StateLine = () => {
 
   return (
     <div className={classes.background}>
-      <Stepper className={classes.root} activeStep={activeState}>
+      <Stepper className={classes.root} activeStep={activeState - 1}>
         {toDos.map(({ order, value }) => {
           const stepProps = {};
-          if (order <= activeState) {
+          if (order < activeState) {
             stepProps.completed = true;
           }
           return (

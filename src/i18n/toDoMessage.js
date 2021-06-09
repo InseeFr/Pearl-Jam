@@ -5,6 +5,7 @@ const toDoMessage = {
   toDoFinalize: { fr: 'Finaliser', en: 'Finalize' },
   toDoTransmit: { fr: 'Transmettre', en: 'Transmit' },
   toDoSynchronize: { fr: 'Synchroniser', en: 'Synchronize' },
+  toDoTerminated: { fr: 'Terminé', en: 'Terminated' },
 };
 
 export default toDoMessage;

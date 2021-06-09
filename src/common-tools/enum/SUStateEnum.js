@@ -29,7 +29,7 @@ const surveyUnitState = {
     value: `${D.suStateToBeReviewed}`,
   },
   FINALIZED: { type: 'FIN', value: `${D.suStateFinalized}` },
-  QUESTIONNAIRE_NOT_AVAILABLE: { type: 'QNA', value: `${D.suStateQuestionnaireNotAvailable}` },
+  CLOSED: { type: 'CLO', value: `${D.suStateClosedSurveyUnit}` },
 };
 
 export default surveyUnitState;

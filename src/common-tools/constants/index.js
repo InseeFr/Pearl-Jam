@@ -1,5 +1,5 @@
-import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import contactAttemptEnum from 'common-tools/enum/ContactAttemptEnum';
+import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 
 export const KEYCLOAK = 'keycloak';
 export const ANONYMOUS = 'anonymous';
@@ -43,5 +43,4 @@ export const STATES_UPDATING_TO_WFT = [
   surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type,
   surveyUnitStateEnum.TO_BE_REVIEWED.type,
   surveyUnitStateEnum.FINALIZED.type,
-  surveyUnitStateEnum.QUESTIONNAIRE_NOT_AVAILABLE.type,
 ];

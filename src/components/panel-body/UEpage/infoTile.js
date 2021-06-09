@@ -4,11 +4,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import PersonIcon from '@material-ui/icons/Person';
 import { Skeleton } from '@material-ui/lab';
+import { getprivilegedPerson } from 'common-tools/functions';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-const InfoTile = () => {
+const InfoTile = ({ refresh }) => {
   const [surveyUnit, setSurveyUnit] = useState(undefined);
 
   const { id } = useParams();
@@ -17,7 +18,7 @@ const InfoTile = () => {
     surveyUnitDBService.getById(id).then(ue => {
       setSurveyUnit(ue);
     });
-  }, [id]);
+  }, [id, refresh]);
 
   const useStyles = makeStyles({
     root: { paddingRight: '3em' },
@@ -49,8 +50,8 @@ const InfoTile = () => {
   });
 
   const classes = useStyles();
-
-  const { firstName, lastName, campaign, sampleIdentifiers } = { ...surveyUnit };
+  const { firstName, lastName } = getprivilegedPerson(surveyUnit);
+  const { campaign, sampleIdentifiers } = { ...surveyUnit };
   const { ssech } = { ...sampleIdentifiers };
 
   return surveyUnit !== undefined ? (

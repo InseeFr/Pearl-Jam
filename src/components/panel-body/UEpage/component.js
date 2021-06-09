@@ -8,7 +8,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import Router from './router';
 import { SurveyUnitProvider } from './UEContext';
 
-const UEPage = ({ match }) => {
+const UEPage = ({ match, refresh: homeRefresh }) => {
   const [surveyUnit, setSurveyUnit] = useState(undefined);
   const [shouldRefresh, setShouldRefresh] = useState(true);
 
@@ -29,6 +29,7 @@ const UEPage = ({ match }) => {
 
   const refresh = () => {
     setShouldRefresh(true);
+    homeRefresh();
   };
 
   const saveUE = ue => {
@@ -70,4 +71,5 @@ const UEPage = ({ match }) => {
 export default UEPage;
 UEPage.propTypes = {
   match: PropTypes.shape({}).isRequired,
+  refresh: PropTypes.func.isRequired,
 };

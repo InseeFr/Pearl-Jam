@@ -115,6 +115,7 @@ const Router = ({ match, saveUE, refresh }) => {
         className={classes.modal}
         open={openModal}
         onClose={closeModal}
+        disableScrollLock
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         PaperProps={{ className: smartModalClass, onClick: smartCloseModal }}

@@ -23,7 +23,7 @@ const detailsMessage = {
   surveyUnitTitle: { fr: 'Civilité', en: 'Title' },
   surveyUnitAge: { fr: 'Âge', en: 'Age' },
   surveyUnitHousing: { fr: 'Logement', en: 'Housing' },
-  surveyUnitIndividual: { fr: 'Individu', en: 'inidividual' },
+  surveyUnitIndividual: { fr: 'Individu', en: 'Individual' },
   surveyUnitDateOfBirth: { fr: 'Date de naissance', en: 'Date of birth' },
 };
 

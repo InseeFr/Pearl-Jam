@@ -25,11 +25,9 @@ export const convertSUStateInToDo = suState => {
     return toDoEnum.SYNCHRONIZE;
   }
   if (
-    [
-      suStateEnum.TO_BE_REVIEWED.type,
-      suStateEnum.FINALIZED.type,
-      suStateEnum.QUESTIONNAIRE_NOT_AVAILABLE.type,
-    ].includes(suState)
+    [suStateEnum.TO_BE_REVIEWED.type, suStateEnum.FINALIZED.type, suStateEnum.CLOSED.type].includes(
+      suState
+    )
   ) {
     return toDoEnum.TERMINATED;
   }

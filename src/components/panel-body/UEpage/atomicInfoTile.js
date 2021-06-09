@@ -43,7 +43,6 @@ const AtomicInfoTile = ({ iconType, data, onClickFunction }) => {
     ],
     []
   );
-  //TODO su fucntions getData for mail => add favorite attribute
   const values = data.reduce((arr, { label, value, favorite }) => {
     const valid = value !== undefined && value !== '';
     return [
@@ -58,7 +57,7 @@ const AtomicInfoTile = ({ iconType, data, onClickFunction }) => {
   }, []);
 
   return (
-    <Paper className={classes.root} onClick={() => onClickFunction()} variant="outlined">
+    <Paper className={classes.root} onClick={onClickFunction} variant="outlined">
       <div className={classes.firstLine}>
         <MaterialIcons type={iconType} />
       </div>

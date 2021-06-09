@@ -22,60 +22,55 @@ const Form = ({ closeModal, save, previousValue }) => {
   );
 
   const [deliveryPoint, setDeliveryPoint] = useState(
-    previousData[D.addressName] ? previousData[D.addressName] : ''
+    previousData[D.addressDeliveryPoint] ? previousData[D.addressDeliveryPoint] : ''
   );
   const [additionalAddress, setAdditionalAddress] = useState(
     previousData[D.addressAdditionalAddress] ? previousData[D.addressAdditionalAddress] : ''
   );
-  const [number, setNumber] = useState(
+  const [streetName, setStreetName] = useState(
     previousData[D.addressStreetName] ? previousData[D.addressStreetName] : ''
   );
-  const [streetType, setStreetType] = useState(
-    previousData[D.addressFullAddress] ? previousData[D.addressFullAddress] : ''
+  const [locality, setLocality] = useState(
+    previousData[D.addressLocality] ? previousData[D.addressLocality] : ''
   );
-  const [streetName, setStreetName] = useState(
-    previousData[D.addressCountry] ? previousData[D.addressCountry] : ''
+  const [postcode, setPostcode] = useState(
+    previousData[D.addressPostcode] ? previousData[D.addressPostcode] : ''
   );
-  const [postcode, setpostcode] = useState(
-    previousData[D.addressCity] ? previousData[D.addressCity] : ''
-  );
-  const [city, setCity] = useState(
-    previousData[D.addressCountry] ? previousData[D.addressCountry] : ''
-  );
+  const [city, setCity] = useState(previousData[D.addressCity] ? previousData[D.addressCity] : '');
 
-  const buildAddress = () => ({
-    l1: deliveryPoint,
-    l2: additionalAddress,
-    l3: number,
-    l4: streetType,
-    l5: streetName,
-    l6: postcode,
-    l7: city,
-  });
+  const buildAddress = surveyUnit => {
+    const { address } = surveyUnit;
+    return {
+      l1: address.l1,
+      l2: deliveryPoint,
+      l3: additionalAddress,
+      l4: streetName,
+      l5: locality,
+      l6: `${postcode} ${city}`,
+    };
+  };
 
   const onChange = event => {
     const key = event.target.name;
+    const value = event.target.value.trim();
     switch (key) {
       case 'deliveryPoint':
-        setDeliveryPoint(event.target.value);
+        setDeliveryPoint(value);
         break;
       case 'additionalAddress':
-        setAdditionalAddress(event.target.value);
-        break;
-      case 'number':
-        setNumber(event.target.value);
-        break;
-      case 'streetType':
-        setStreetType(event.target.value);
+        setAdditionalAddress(value);
         break;
       case 'streetName':
-        setStreetName(event.target.value);
+        setStreetName(value);
+        break;
+      case 'locality':
+        setLocality(value);
         break;
       case 'postcode':
-        setpostcode(event.target.value);
+        setPostcode(value);
         break;
       case 'city':
-        setCity(event.target.value);
+        setCity(value);
         break;
       default:
         break;
@@ -83,7 +78,7 @@ const Form = ({ closeModal, save, previousValue }) => {
   };
 
   const saveUE = () => {
-    save({ ...surveyUnit, address: buildAddress() });
+    save({ ...surveyUnit, address: buildAddress(surveyUnit) });
   };
 
   const classes = useStyles();
@@ -95,7 +90,7 @@ const Form = ({ closeModal, save, previousValue }) => {
         margin="dense"
         id="deliveryPoint"
         name="deliveryPoint"
-        label={D.addressName}
+        label={D.addressDeliveryPoint}
         InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth
@@ -104,20 +99,42 @@ const Form = ({ closeModal, save, previousValue }) => {
       />
       <TextField
         margin="dense"
-        id="streetType"
-        name="streetType"
-        label={D.addressFullAddress}
+        id="additionalAddress"
+        name="additionalAddress"
+        label={D.addressAdditionalAddress}
         InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth
-        defaultValue={streetType}
+        defaultValue={additionalAddress}
+        onChange={onChange}
+      />
+      <TextField
+        margin="dense"
+        id="streetName"
+        name="streetName"
+        label={D.addressStreetName}
+        InputLabelProps={{ color: 'secondary' }}
+        type="text"
+        fullWidth
+        defaultValue={streetName}
+        onChange={onChange}
+      />
+      <TextField
+        margin="dense"
+        id="locality"
+        name="locality"
+        label={D.addressLocality}
+        InputLabelProps={{ color: 'secondary' }}
+        type="text"
+        fullWidth
+        defaultValue={locality}
         onChange={onChange}
       />
       <TextField
         margin="dense"
         id="postcode"
         name="postcode"
-        label={D.addressCity}
+        label={D.addressPostcode}
         InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth
@@ -128,7 +145,7 @@ const Form = ({ closeModal, save, previousValue }) => {
         margin="dense"
         id="city"
         name="city"
-        label={D.addressCountry}
+        label={D.addressCity}
         InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth

@@ -2,6 +2,7 @@ import { Card, Drawer } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -41,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   clickable: { cursor: 'pointer' },
   title: { marginLeft: '1em' },
 }));
-const LateralMenu = ({ openDrawer, setOpenDrawer }) => {
+const LateralMenu = ({ openDrawer, setOpenDrawer, version }) => {
   const classes = useStyles();
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -69,7 +70,7 @@ const LateralMenu = ({ openDrawer, setOpenDrawer }) => {
       >
         <NavLink exact to="/">
           <Card className={classes.card} onClick={() => setOpenDrawer(false)}>
-            <Typography>Accueil</Typography>
+            <Typography>{D.goToHomePage}</Typography>
           </Card>
         </NavLink>
         <NavLink exact to="/">
@@ -83,8 +84,11 @@ const LateralMenu = ({ openDrawer, setOpenDrawer }) => {
           className={`${classes.card} ${classes.clickable}`}
           onClick={handleClick}
         >
-          <Typography>Notifications</Typography>
+          <Typography>{D.goToNotificationsPage}</Typography>
           <ChevronRightIcon />
+        </Card>
+        <Card className={classes.card}>
+          <Typography>{`Version : ${version}`}</Typography>
         </Card>
       </Drawer>
       <Drawer
@@ -101,7 +105,7 @@ const LateralMenu = ({ openDrawer, setOpenDrawer }) => {
         onClose={() => setShowNotifications(false)}
       >
         <Typography variant="h6" className={classes.title}>
-          Notifications
+          {D.goToNotificationsPage}
         </Typography>
         <Notification />
         <Notification />
@@ -115,4 +119,5 @@ export default LateralMenu;
 LateralMenu.propTypes = {
   openDrawer: PropTypes.bool.isRequired,
   setOpenDrawer: PropTypes.func.isRequired,
+  version: PropTypes.string.isRequired,
 };
