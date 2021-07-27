@@ -1,18 +1,21 @@
 const contactAttemptMessage = {
-  noContact: { fr: 'Pas de contact', en: 'No contact' },
   interviewAccepted: { fr: 'Enquête acceptée', en: 'Interview accepted' },
-  appointmentMade: { fr: 'Rendez-vous pris', en: 'Appointment made' },
   refusal: { fr: `Refus`, en: 'Refusal' },
-  occasionalAbsence: {
-    fr: `Absence occasionnelle de l'enquêté`,
-    en: 'Occasional absence of the interviewee',
+  noContact: { fr: 'Pas de contact', en: 'No contact' },
+  appointmentMade: { fr: 'Rendez-vous pris', en: 'Appointment made' },
+  temporaryUnavailable: {
+    fr: `Indisponibilité provisoire`,
+    en: 'Temporary unavailable',
   },
-  interviewImpossible: { fr: 'Enquête impossible', en: 'Interview impossible' },
-  alreadyAnsweredAnotherMode: {
-    fr: 'Déjà répondu par un autre mode',
-    en: 'Already answered by another mode',
+  messageSent: {
+    fr: "Dépôt d'un message (tél,sms,mail)",
+    en: 'Message sent (answering machine, sms, email)',
   },
-  wishAnswerAnotherMode: { fr: 'Souhaite répondre par un autre mode', en: 'Wish to answer' },
+  unusableContactData: {
+    fr: 'Données de contact inutilisables (tél, mail)',
+    en: 'Unusable contact data (phone, email)',
+  },
+  permanentlyUnavailable: { fr: 'Indisponibilité définitive', en: 'Permanently unavailable' },
 
   contactAttempts: { fr: 'Mes essais de contact', en: 'Contact attempts' },
   contactAttempt: {

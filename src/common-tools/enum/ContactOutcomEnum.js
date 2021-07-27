@@ -2,12 +2,18 @@ import D from 'i18n';
 
 const contactOutcome = {
   INTERVIEW_ACCEPTED: { type: 'INA', value: `${D.interviewAccepted}` },
-  IMPOSSIBLE_TO_REACH: { type: 'IMP', value: `${D.impossibleReach}` },
   REFUSAL: { type: 'REF', value: `${D.refusal}` },
-  INTERVIEW_IMPOSSIBLE: { type: 'INI', value: `${D.interviewImpossible}` },
+  IMPOSSIBLE_TO_REACH: { type: 'IMP', value: `${D.impossibleReach}` },
+  UNUSABLE_CONTACT_DATA: { type: 'UCD', value: `${D.unusableContactData}` },
+  UNABLE_TO_RESPOND: { type: 'UTR', value: `${D.unableToRespond}` },
   ALREADY_ANSWERED: { type: 'ALA', value: `${D.alreadyAnsweredAnotherMode}` },
-  WISH_ANOTHER_MODE: { type: 'WAM', value: `${D.wishAnswerAnotherMode}` },
-  OUT_OF_SCOPE: { type: 'OOS', value: `${D.outOfScope}` },
+  ABSENCE_DURING_COLLECTION: { type: 'ACP', value: `${D.absenceDuringCollection}` },
+  DECEASED: { type: 'DCD', value: `${D.deceased}` },
+  NO_LONGER_USED_FOR_HABITATION: { type: 'NUH', value: `${D.noLongerUsedForHabitation}` },
+  NO_INTERVIEW_FOR_EXCEPTIONNAL_REASONS: {
+    type: 'NER',
+    value: `${D.noInterviewForExceptionalReasons}`,
+  },
 };
 
 export default contactOutcome;
