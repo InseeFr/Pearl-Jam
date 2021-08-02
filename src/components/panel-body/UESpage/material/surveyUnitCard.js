@@ -7,13 +7,13 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheckedSharp';
 import ScheduleIcon from '@material-ui/icons/Schedule';
-import { intervalInDays } from 'common-tools/functions';
-import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
+import { intervalInDays } from 'utils/functions';
+import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import {
   getLastState,
   getprivilegedPerson,
   isSelectable,
-} from 'common-tools/functions/surveyUnitFunctions';
+} from 'utils/functions/surveyUnitFunctions';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';

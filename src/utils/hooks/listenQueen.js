@@ -1,6 +1,6 @@
-import questionnaireEnum from 'common-tools/enum/QuestionnaireStateEnum';
-import suStateEnum from 'common-tools/enum/SUStateEnum';
-import { addNewState } from 'common-tools/functions/surveyUnitFunctions';
+import questionnaireEnum from 'utils/enum/QuestionnaireStateEnum';
+import suStateEnum from 'utils/enum/SUStateEnum';
+import { addNewState } from 'utils/functions/surveyUnitFunctions';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import { useEffect } from 'react';
 

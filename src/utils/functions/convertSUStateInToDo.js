@@ -1,5 +1,5 @@
-import suStateEnum from 'common-tools/enum/SUStateEnum';
-import toDoEnum from 'common-tools/enum/SUToDoEnum';
+import suStateEnum from 'utils/enum/SUStateEnum';
+import toDoEnum from 'utils/enum/SUToDoEnum';
 
 export const convertSUStateInToDo = suState => {
   if (

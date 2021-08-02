@@ -1,4 +1,4 @@
-import { intervalInDays } from 'common-tools/functions/surveyUnitFunctions';
+import { intervalInDays } from 'utils/functions/surveyUnitFunctions';
 
 export const sortOnColumnCompareFunction = criteria => {
   let compareFunction;

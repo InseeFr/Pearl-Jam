@@ -1,5 +1,5 @@
 import { Button, CircularProgress, makeStyles, Slide, Snackbar } from '@material-ui/core';
-import useTimer from 'common-tools/hooks/useTimer';
+import useTimer from 'utils/hooks/useTimer';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';

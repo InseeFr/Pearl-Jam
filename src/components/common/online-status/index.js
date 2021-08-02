@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import WifiIcon from '@material-ui/icons/Wifi';
 import clsx from 'clsx';
-import { addOnlineStatusObserver } from 'common-tools';
+import { addOnlineStatusObserver } from 'utils';
 import React, { useEffect, useState } from 'react';
 
 const useStyles = makeStyles(theme => ({

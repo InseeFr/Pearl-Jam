@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import { PEARL_USER_KEY } from 'common-tools/constants';
+import { PEARL_USER_KEY } from 'utils/constants';
 import Synchronize from 'components/common/synchronize';
 import InfoTile from 'components/panel-body/UEpage/infoTile';
 import D from 'i18n';

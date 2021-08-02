@@ -1,6 +1,6 @@
 import { Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import MaterialIcons from 'common-tools/icons/materialIcons';
+import MaterialIcons from 'utils/icons/materialIcons';
 import PropTypes from 'prop-types';
 import React from 'react';
 

@@ -10,7 +10,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import toDoEnum from 'common-tools/enum/SUToDoEnum';
+import toDoEnum from 'utils/enum/SUToDoEnum';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';

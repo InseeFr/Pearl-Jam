@@ -1,5 +1,5 @@
 import { makeStyles, Paper, TextareaAutosize } from '@material-ui/core';
-import { getCommentByType } from 'common-tools/functions/surveyUnitFunctions';
+import { getCommentByType } from 'utils/functions/surveyUnitFunctions';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';

@@ -1,5 +1,5 @@
-import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'common-tools/constants';
-import { getTokenInfo, keycloakAuthentication } from 'common-tools/keycloak';
+import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'utils/constants';
+import { getTokenInfo, keycloakAuthentication } from 'utils/keycloak';
 import { useEffect, useState } from 'react';
 
 export const useAuth = () => {

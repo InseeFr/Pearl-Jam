@@ -1,5 +1,5 @@
-import { useAuth } from 'common-tools/auth/initAuth';
-import useServiceWorker from 'common-tools/hooks/useServiceWorker';
+import { useAuth } from 'utils/auth/initAuth';
+import useServiceWorker from 'utils/hooks/useServiceWorker';
 import Preloader from 'components/common/loader';
 import Notification from 'components/common/Notification';
 import Palette from 'components/common/palette';

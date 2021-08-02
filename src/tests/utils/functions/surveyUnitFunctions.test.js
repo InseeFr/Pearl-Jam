@@ -1,11 +1,11 @@
-const surveyUnitStateEnum = require('common-tools/enum/SUStateEnum');
+const surveyUnitStateEnum = require('utils/enum/SUStateEnum');
 
 const {
   getContactAttemptNumber,
   getLastState,
   isSelectable,
   updateStateWithDates,
-} = require('common-tools/functions');
+} = require('utils/functions');
 
 describe('getLastState', () => {
   it('should return the only state', () => {

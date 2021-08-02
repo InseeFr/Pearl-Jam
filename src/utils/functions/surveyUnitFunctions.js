@@ -1,6 +1,6 @@
-import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'common-tools/constants';
-import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
-import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
+import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'utils/constants';
+import surveyUnitStateEnum from 'utils/enum/SUStateEnum';
+import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { differenceInYears, formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';

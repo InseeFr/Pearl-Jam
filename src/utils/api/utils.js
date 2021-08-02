@@ -1,5 +1,5 @@
-import { ANONYMOUS, JSON_UTF8_HEADER, KEYCLOAK, PEARL_USER_KEY } from 'common-tools/constants';
-import { kc, keycloakAuthentication, refreshToken } from 'common-tools/keycloak';
+import { ANONYMOUS, JSON_UTF8_HEADER, KEYCLOAK, PEARL_USER_KEY } from 'utils/constants';
+import { kc, keycloakAuthentication, refreshToken } from 'utils/keycloak';
 
 export const getSecureHeader = token =>
   token

@@ -1,7 +1,7 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Button, DialogActions, DialogTitle, makeStyles, TextField } from '@material-ui/core';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { getTitle } from 'common-tools/functions';
+import { getTitle } from 'utils/functions';
 import frLocale from 'date-fns/locale/fr';
 import D from 'i18n';
 import PropTypes from 'prop-types';

@@ -1,5 +1,5 @@
-import * as api from 'common-tools/api';
-import { getLastState } from 'common-tools/functions';
+import * as api from 'utils/api';
+import { getLastState } from 'utils/functions';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
 export const synchronizeQueen = async history => {
@@ -61,7 +61,7 @@ const clean = async () => {
   await surveyUnitDBService.deleteAll();
 };
 
-const validateSU = async su => {
+const validateSU = su => {
   const { states, comments } = su;
   if (Array.isArray(states) && states.length === 0) {
     su.states.push(su.lastState);
@@ -88,7 +88,7 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
       )(su.id);
       const surveyUnit = await surveyUnitResponse.data;
       const mergedSurveyUnit = { ...surveyUnit, ...su };
-      const validSurveyUnit = await validateSU(mergedSurveyUnit);
+      const validSurveyUnit = validateSU(mergedSurveyUnit);
       await putSurveyUnitInDataBase(validSurveyUnit);
     })
   );

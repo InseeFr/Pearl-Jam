@@ -1,11 +1,9 @@
 import { Fab, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import contactOutcomeEnum, {
-  findContactOutcomeValueByType,
-} from 'common-tools/enum/ContactOutcomEnum';
-import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
-import { addNewState } from 'common-tools/functions';
+import contactOutcomeEnum, { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomEnum';
+import surveyUnitStateEnum from 'utils/enum/SUStateEnum';
+import { addNewState } from 'utils/functions';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';

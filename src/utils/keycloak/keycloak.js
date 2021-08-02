@@ -1,5 +1,5 @@
 import Keycloak from 'keycloak-js';
-import { PEARL_URL } from 'common-tools/constants';
+import { PEARL_URL } from 'utils/constants';
 
 export const kc = Keycloak(`${PEARL_URL}/keycloak.json`);
 export const keycloakAuthentication = params =>

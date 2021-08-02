@@ -1,5 +1,5 @@
-import suStateEnum from 'common-tools/enum/SUStateEnum';
-import { addNewState, getLastState } from 'common-tools/functions';
+import suStateEnum from 'utils/enum/SUStateEnum';
+import { addNewState, getLastState } from 'utils/functions';
 import D from 'i18n';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import PropTypes from 'prop-types';

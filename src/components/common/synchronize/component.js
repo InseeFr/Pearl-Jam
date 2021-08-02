@@ -1,8 +1,8 @@
 import { Dialog, makeStyles, Typography } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
-import { addOnlineStatusObserver } from 'common-tools';
-import SyncIcon from 'common-tools/icons/SyncIcon';
-import { synchronizePearl, synchronizeQueen } from 'common-tools/synchronize';
+import { addOnlineStatusObserver } from 'utils';
+import SyncIcon from 'utils/icons/SyncIcon';
+import { synchronizePearl, synchronizeQueen } from 'utils/synchronize';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';

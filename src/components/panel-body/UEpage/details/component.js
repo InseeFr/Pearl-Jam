@@ -1,5 +1,5 @@
-import formEnum from 'common-tools/enum/formEnum';
-import { getAddressData, personPlaceholder } from 'common-tools/functions';
+import formEnum from 'utils/enum/formEnum';
+import { getAddressData, personPlaceholder } from 'utils/functions';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';

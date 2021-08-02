@@ -1,5 +1,5 @@
-import contactAttemptEnum from 'common-tools/enum/ContactAttemptEnum';
-import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
+import contactAttemptEnum from 'utils/enum/ContactAttemptEnum';
+import surveyUnitStateEnum from 'utils/enum/SUStateEnum';
 
 export const KEYCLOAK = 'keycloak';
 export const ANONYMOUS = 'anonymous';

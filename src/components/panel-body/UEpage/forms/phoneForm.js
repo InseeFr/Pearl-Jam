@@ -1,5 +1,5 @@
 import { Button, DialogActions, DialogTitle, makeStyles } from '@material-ui/core';
-import { sortPhoneNumbers } from 'common-tools/functions';
+import { sortPhoneNumbers } from 'utils/functions';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';

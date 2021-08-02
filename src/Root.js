@@ -1,6 +1,6 @@
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import App from 'App';
-import { useQueenFromConfig } from 'common-tools/hooks/useQueenFromConfig';
+import { useQueenFromConfig } from 'utils/hooks/useQueenFromConfig';
 import QueenContainer from 'components/panel-body/queen-container';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';

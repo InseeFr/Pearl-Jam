@@ -1,10 +1,6 @@
 import { Button, makeStyles, Tab, Tabs } from '@material-ui/core';
-import suStateEnum from 'common-tools/enum/SUStateEnum';
-import {
-  addNewState,
-  isQuestionnaireAvailable,
-  isValidForTransmission,
-} from 'common-tools/functions';
+import suStateEnum from 'utils/enum/SUStateEnum';
+import { addNewState, isQuestionnaireAvailable, isValidForTransmission } from 'utils/functions';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
