@@ -74,15 +74,16 @@ const lastContactAttemptIsSuccessfull = surveyUnit => {
   return CONTACT_SUCCESS_LIST.includes(lastContactAttempt.status);
 };
 
-const isContactAttemptOk = async surveyUnit => lastContactAttemptIsSuccessfull(surveyUnit);
+const isContactAttemptOk = surveyUnit => lastContactAttemptIsSuccessfull(surveyUnit);
 
 const addContactState = async (surveyUnit, newState) => {
   switch (newState.type) {
     case surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type:
       surveyUnit.states.push(newState);
-      if (await isContactAttemptOk(surveyUnit)) {
+      if (isContactAttemptOk(surveyUnit)) {
         surveyUnit.states.push({
-          date: new Date().getTime(),
+          // prevent two succesive state additions to have same timestamp
+          date: new Date().getTime() + 500,
           type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
         });
       }
@@ -91,7 +92,8 @@ const addContactState = async (surveyUnit, newState) => {
     case surveyUnitStateEnum.APPOINTMENT_MADE.type:
       if (getContactAttemptNumber(surveyUnit) === 0) {
         surveyUnit.states.push({
-          date: newState.date - 1,
+          // make sure the AOC state is inserted 'earlier' than APS in states
+          date: newState.date - 500,
           type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
         });
       }
