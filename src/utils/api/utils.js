@@ -1,6 +1,8 @@
 import { ANONYMOUS, JSON_UTF8_HEADER, KEYCLOAK, PEARL_USER_KEY } from 'utils/constants';
 import { kc, keycloakAuthentication, refreshToken } from 'utils/keycloak';
 
+export const getToken = () => kc.token;
+
 export const getSecureHeader = token =>
   token
     ? {
@@ -33,7 +35,7 @@ export const getHeader = mode => {
         };
       }
       return {
-        ...getSecureHeader(kc.token),
+        ...getSecureHeader(getToken()),
         Accept: JSON_UTF8_HEADER,
       };
     default:
