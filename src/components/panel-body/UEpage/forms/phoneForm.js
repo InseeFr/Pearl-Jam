@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
 
 const Form = ({ closeModal, save, previousValue }) => {
   // previousValue is the person in [persons]
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
   const { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers } = sortPhoneNumbers(
     previousValue.phoneNumbers
   );

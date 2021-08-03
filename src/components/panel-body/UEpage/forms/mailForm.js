@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Form = ({ closeModal, save, previousValue }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
   const [email, setEmail] = useState(previousValue.email);
   const [favoriteEmail, setFavoriteEmail] = useState(previousValue.favoriteEmail);
 

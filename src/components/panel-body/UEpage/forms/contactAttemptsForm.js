@@ -75,7 +75,7 @@ class FrLocalizedUtils extends DateFnsUtils {
 }
 
 const Form = ({ previousValue, save, deleteAction }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactAttempt, setContactAttempt] = useState(previousValue);
   const [visiblePanel, setVisiblePanel] = useState(undefined);

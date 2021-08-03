@@ -9,7 +9,7 @@ import Contact from './contact';
 import DetailTile from './detailTile';
 
 const UEItem = ({ selectFormType, setInjectableData }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
   const { persons } = surveyUnit;
   return (
     <>

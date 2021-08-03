@@ -76,7 +76,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Form = ({ previousValue, save }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactOutcome, setContactOutcome] = useState(previousValue);
   const [secondPanelVisible, setSecondPanelVisible] = useState(false);

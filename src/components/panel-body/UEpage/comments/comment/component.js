@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Comment = ({ editable, save }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
   const value = editable
     ? getCommentByType('INTERVIEWER', surveyUnit)
     : getCommentByType('MANAGEMENT', surveyUnit);

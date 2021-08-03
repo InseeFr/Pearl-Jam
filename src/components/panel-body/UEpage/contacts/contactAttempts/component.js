@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ContactAttempts = ({ selectFormType, setInjectableData }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
   const [contactAttempts, setcontactAttempts] = useState([]);
 
   useEffect(() => {

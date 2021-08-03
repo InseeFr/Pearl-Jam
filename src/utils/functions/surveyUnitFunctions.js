@@ -197,11 +197,11 @@ export const updateStateWithDates = surveyUnit => {
   return result;
 };
 
-export const isQuestionnaireAvailable = su => {
+export const isQuestionnaireAvailable = su => inaccessible => {
   const { collectionEndDate, collectionStartDate } = su;
   const now = new Date().getTime();
 
-  return now >= collectionStartDate && now <= collectionEndDate;
+  return !inaccessible && now >= collectionStartDate && now <= collectionEndDate;
 };
 
 export const applyFilters = (surveyUnits, filters) => {

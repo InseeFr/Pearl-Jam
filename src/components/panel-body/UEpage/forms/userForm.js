@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Form = ({ closeModal, previousValue, save }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
 
   const [lastName, setLastName] = useState(previousValue.lastName);
   const [firstName, setFirstName] = useState(previousValue.firstName);

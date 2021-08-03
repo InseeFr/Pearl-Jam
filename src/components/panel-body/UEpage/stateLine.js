@@ -11,7 +11,7 @@ import React, { useContext } from 'react';
 import SurveyUnitContext from './UEContext';
 
 const StateLine = () => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
 
   const state = getLastState(surveyUnit);
   const { type } = state;
