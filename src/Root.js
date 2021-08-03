@@ -5,19 +5,29 @@ import QueenContainer from 'components/panel-body/queen-container';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import theme from './theme';
+import { useConfiguration } from 'utils/hooks/configuration';
+
+export const AppContext = React.createContext();
 
 function Root() {
-  useQueenFromConfig(`${window.location.origin}/configuration.json`);
+  const { configuration } = useConfiguration();
+  useQueenFromConfig(configuration);
   return (
-    <Router>
-      <Switch>
-        <Route path="/queen" component={routeProps => <QueenContainer {...routeProps} />} />
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Route path="/" component={App} />
-        </ThemeProvider>
-      </Switch>
-    </Router>
+    <>
+      {configuration && (
+        <Router>
+          <Switch>
+            <Route path="/queen" component={routeProps => <QueenContainer {...routeProps} />} />
+            <AppContext.Provider value={configuration}>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Route path="/" component={App} />
+              </ThemeProvider>
+            </AppContext.Provider>
+          </Switch>
+        </Router>
+      )}
+    </>
   );
 }
 

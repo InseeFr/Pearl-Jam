@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { AppContext } from 'Root';
 import * as serviceWorker from 'serviceWorkerRegistration';
 
 const useServiceWorker = authenticated => {
+  const configuration = useContext(AppContext);
   const [installingServiceWorker, setInstallingServiceWorker] = useState(false);
   const [waitingServiceWorker, setWaitingServiceWorker] = useState(null);
   const [isUpdateAvailable, setUpdateAvailable] = useState(false);
@@ -9,8 +11,7 @@ const useServiceWorker = authenticated => {
 
   useEffect(() => {
     const install = async () => {
-      const configuration = await fetch(`${window.location.origin}/configuration.json`);
-      const { QUEEN_URL } = await configuration.json();
+      const { QUEEN_URL } = configuration;
       serviceWorker.register({
         QUEEN_URL,
         onInstalling: installing => {
@@ -31,7 +32,7 @@ const useServiceWorker = authenticated => {
       });
     };
     if (authenticated) install();
-  }, [authenticated]);
+  }, [authenticated, configuration]);
 
   return {
     installingServiceWorker,
