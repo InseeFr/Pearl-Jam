@@ -83,7 +83,7 @@ const SynchronizeWrapper = ({ children }) => {
 
   useEffect(() => {
     const sync = async () => {
-      const result = await synchronizePearl();
+      const result = await synchronizePearl(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
       saveSyncPearlData(result);
       await synchronizeQueen();
     };

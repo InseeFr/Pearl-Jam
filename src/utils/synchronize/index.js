@@ -53,13 +53,6 @@ export const useQueenSynchronisation = () => {
   return { checkQueen, synchronizeQueen, queenReady, queenError };
 };
 
-const getConfiguration = async () => {
-  const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
-  const response = await fetch(`${publicUrl.origin}/configuration.json`);
-  const configuration = await response.json();
-  return configuration;
-};
-
 const sendData = async (urlPearlApi, authenticationMode) => {
   const surveyUnitsInTempZone = [];
   const surveyUnits = await surveyUnitDBService.getAll();
@@ -140,9 +133,7 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
   return { surveyUnitsSuccess, surveyUnitsFailed };
 };
 
-export const synchronizePearl = async () => {
-  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = await getConfiguration();
-
+export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) => {
   const surveyUnitsInTempZone = await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
 
   await clean();
