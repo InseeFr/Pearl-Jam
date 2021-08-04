@@ -17,6 +17,7 @@ import titleMessage from './titleMessage';
 import toDoMessage from './toDoMessage';
 import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
+import mailMessage from './mailMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -80,6 +81,7 @@ const dictionary = {
   ...ageGroupsMessage,
   ...titleMessage,
   ...phoneSourceMessage,
+  ...mailMessage,
 };
 
 export default dictionary;
