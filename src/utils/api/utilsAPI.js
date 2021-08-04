@@ -10,3 +10,13 @@ export const sendMail = (urlPearApi, authenticationMode) => async (subject, cont
     throw new Error(`Error during refreshToken : ${e}`);
   }
 };
+
+export const healthCheck = async (urlPearApi, authenticationMode) => {
+  try {
+    await authentication(authenticationMode);
+    const token = getToken();
+    return API.healthCheck(urlPearApi)(token);
+  } catch (e) {
+    throw new Error(`Error during refreshToken : ${e}`);
+  }
+};

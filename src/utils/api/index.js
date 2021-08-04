@@ -1,2 +1,2 @@
 export * from './surveyUnitAPI';
-export * from './mailAPI';
+export * from './utilsAPI';

@@ -20,6 +20,8 @@ const sendMail = apiUrl => subject => content => token => {
   return postRequest(`${apiUrl}/api/mail`)(token)(mailBody);
 };
 
+const healthCheck = apiUrl => token => getRequest(`${apiUrl}/api/healthcheck`)(token);
+
 export const API = {
   getRequest,
   getSurveyUnits,
@@ -27,4 +29,5 @@ export const API = {
   putDataSurveyUnitById,
   putToTempZone,
   sendMail,
+  healthCheck,
 };
