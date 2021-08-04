@@ -1,33 +1,56 @@
 import * as api from 'utils/api';
 import { getLastState } from 'utils/functions';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import surveyUnitMissingIdbService from 'indexedbb/services/surveyUnitMissing-idb-service';
+import { useCallback, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
-export const synchronizeQueen = async history => {
-  // 5 seconds limit before throwing error
-  const tooLateErrorThrower = setTimeout(() => {
-    throw new Error('Queen service worker not responding');
-  }, 5000);
+export const useQueenSynchronisation = () => {
+  const waitTime = 5000;
 
-  const handleQueenEvent = async event => {
-    const { type, command, state } = event.detail;
-    if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
-      if (state === 'READY') {
+  const [queenError, setQueenError] = useState(false);
+  const [queenReady, setQueenReady] = useState(null);
+  const history = useHistory();
+
+  const checkQueen = () => {
+    setQueenReady(null);
+    const tooLateErrorThrower = setTimeout(() => {
+      setQueenError(true);
+      setQueenReady(false);
+    }, waitTime);
+
+    const handleQueenEvent = async event => {
+      const { type, command, state } = event.detail;
+      if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
         clearTimeout(tooLateErrorThrower);
-        history.push(`/queen/synchronize`);
+        if (state === 'READY') {
+          setQueenReady(true);
+          setQueenError(false);
+          console.log('Queen is ready');
+        } else {
+          setQueenError(true);
+          setQueenReady(false);
+          console.log('Queen is not ready');
+        }
       }
-    }
+    };
+    const removeQueenEventListener = () => {
+      window.removeEventListener('QUEEN', handleQueenEvent);
+    };
+
+    window.addEventListener('QUEEN', handleQueenEvent);
+
+    const data = { type: 'PEARL', command: 'HEALTH_CHECK' };
+    const event = new CustomEvent('PEARL', { detail: data });
+    window.dispatchEvent(event);
+    setTimeout(() => removeQueenEventListener(), waitTime);
   };
-  const removeQueenEventListener = () => {
-    window.removeEventListener('QUEEN', handleQueenEvent);
-  };
 
-  window.addEventListener('QUEEN', handleQueenEvent);
+  const synchronizeQueen = useCallback(() => {
+    history.push(`/queen/synchronize`);
+  }, [history]);
 
-  const data = { type: 'PEARL', command: 'HEALTH_CHECK' };
-  const event = new CustomEvent('PEARL', { detail: data });
-  window.dispatchEvent(event);
-
-  setTimeout(() => removeQueenEventListener(), 2000);
+  return { checkQueen, synchronizeQueen, queenReady, queenError };
 };
 
 const getConfiguration = async () => {
@@ -38,18 +61,30 @@ const getConfiguration = async () => {
 };
 
 const sendData = async (urlPearlApi, authenticationMode) => {
-  console.log('SEND DATA');
+  const surveyUnitsInTempZone = [];
   const surveyUnits = await surveyUnitDBService.getAll();
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
       const lastState = getLastState(surveyUnit);
       const { id } = surveyUnit;
-      await api.putDataSurveyUnitById(urlPearlApi, authenticationMode)(id, {
+      const body = {
         ...surveyUnit,
         lastState,
-      });
+      };
+      const { error, status } = await api.putDataSurveyUnitById(urlPearlApi, authenticationMode)(
+        id,
+        body
+      );
+      if (error && status === 403) {
+        await api.putSurveyUnitToTempZone(urlPearlApi, authenticationMode)(id, body);
+        surveyUnitsInTempZone.push(id);
+      } else if (error) {
+        // stop synchro to not lose data (5xx : server is probably KO)
+        throw new Error('Server is not responding');
+      }
     })
   );
+  return surveyUnitsInTempZone;
 };
 
 const putSurveyUnitInDataBase = async su => {
@@ -57,8 +92,8 @@ const putSurveyUnitInDataBase = async su => {
 };
 
 const clean = async () => {
-  console.log('CLEAN DATA');
   await surveyUnitDBService.deleteAll();
+  await surveyUnitMissingIdbService.deleteAll();
 };
 
 const validateSU = su => {
@@ -77,29 +112,42 @@ const validateSU = su => {
 };
 
 const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
-  console.log('GET DATA');
-  const surveyUnitsResponse = await api.getSurveyUnits(pearlApiUrl, pearlAuthenticationMode);
-  const surveyUnits = await surveyUnitsResponse.data;
-  await Promise.all(
-    surveyUnits.map(async su => {
-      const surveyUnitResponse = await api.getSurveyUnitById(
-        pearlApiUrl,
-        pearlAuthenticationMode
-      )(su.id);
-      const surveyUnit = await surveyUnitResponse.data;
-      const mergedSurveyUnit = { ...surveyUnit, ...su };
-      const validSurveyUnit = validateSU(mergedSurveyUnit);
-      await putSurveyUnitInDataBase(validSurveyUnit);
-    })
+  const surveyUnitsSuccess = [];
+  const surveyUnitsFailed = [];
+  const { data: surveyUnits, error } = await api.getSurveyUnits(
+    pearlApiUrl,
+    pearlAuthenticationMode
   );
+
+  if (!error) {
+    await Promise.all(
+      surveyUnits.map(async su => {
+        const { data: surveyUnit, error: getSuError } = await api.getSurveyUnitById(
+          pearlApiUrl,
+          pearlAuthenticationMode
+        )(su.id);
+        if (!getSuError) {
+          const mergedSurveyUnit = { ...surveyUnit, ...su };
+          const validSurveyUnit = validateSU(mergedSurveyUnit);
+          await putSurveyUnitInDataBase(validSurveyUnit);
+          surveyUnitsSuccess.push(su.id);
+        } else {
+          surveyUnitsFailed.push(su.id);
+        }
+      })
+    );
+  }
+  return { surveyUnitsSuccess, surveyUnitsFailed };
 };
 
 export const synchronizePearl = async () => {
   const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = await getConfiguration();
 
-  await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+  const surveyUnitsInTempZone = await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
 
   await clean();
 
-  await getData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+  const { surveyUnitsSuccess } = await getData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+
+  return { surveyUnitsSuccess, surveyUnitsInTempZone };
 };
