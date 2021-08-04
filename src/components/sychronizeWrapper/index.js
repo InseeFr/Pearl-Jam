@@ -1,4 +1,14 @@
-import { Dialog, makeStyles, Typography } from '@material-ui/core';
+import {
+  Dialog,
+  DialogTitle,
+  Divider,
+  makeStyles,
+  Typography,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+  Button,
+} from '@material-ui/core';
 import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
 import D from 'i18n';
 import React, { useContext, useEffect, useState } from 'react';
@@ -6,14 +16,22 @@ import { analyseResult, saveSyncPearlData } from 'utils/synchronize/check';
 import * as api from 'utils/api';
 import { AppContext } from 'Root';
 import Preloader from 'components/common/loader';
+import { IconStatus } from 'components/common/IconStatus';
 
 export const SynchronizeWrapperContext = React.createContext();
 
 const useStyles = makeStyles(theme => ({
   dialogPaper: {
-    padding: '1em',
     borderRadius: '15px',
-    textAlign: 'center',
+  },
+
+  subTitle: {
+    '& span': {
+      marginLeft: '1em',
+      alignSelf: 'center',
+    },
+    display: 'flex',
+    marginBottom: '1.5em',
   },
   noVisibleFocus: {
     '&:focus, &:hover': {
@@ -54,10 +72,10 @@ const SynchronizeWrapper = ({ children }) => {
 
   useEffect(() => {
     const analyse = async () => {
-      const { message } = await analyseResult(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+      const result = await analyseResult(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
       window.localStorage.removeItem('SYNCHRONIZE');
       setIsSync(false);
-      setSyncResult({ state: true, message });
+      setSyncResult(result);
     };
 
     if (PEARL_API_URL && PEARL_AUTHENTICATION_MODE && isSync && !loading) analyse();
@@ -93,8 +111,8 @@ const SynchronizeWrapper = ({ children }) => {
       }
       if (queenError || pearlError) {
         const result = {
-          state: false,
-          message: 'Le serveur ne répond pas, nous vous invitons à réessayer plus tard',
+          state: 'error',
+          messages: [D.noResponseFromServer],
         };
         window.localStorage.removeItem('SYNCHRONIZE');
         setIsSync(false);
@@ -124,16 +142,32 @@ const SynchronizeWrapper = ({ children }) => {
           className={classes.syncResult}
           open={!!syncResult}
           onClose={close}
-          onClick={close}
           PaperProps={{ className: classes.dialogPaper }}
         >
-          <Typography variant="h4" color={syncResult.state ? 'initial' : 'error'}>
-            {D.syncResult}
-          </Typography>
-          <Typography variant="h6">{syncResult.message}</Typography>
+          <DialogTitle>
+            <Typography variant="h4" color={syncResult.state === 'error' ? 'error' : 'initial'}>
+              {D.syncResult}
+            </Typography>
+          </DialogTitle>
+          <Divider />
+
+          <DialogContent>
+            {syncResult.state && (
+              <DialogContentText className={classes.subTitle}>
+                <IconStatus type={syncResult.state} />
+                <span>{D.titleSync(syncResult.state)}</span>
+              </DialogContentText>
+            )}
+            {syncResult?.messages?.map(message => (
+              <DialogContentText>{message}</DialogContentText>
+            ))}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={close}>{`J'ai compris`}</Button>
+          </DialogActions>
         </Dialog>
       )}
-      {componentReady && !loading && !isSync && !syncResult && children}
+      {componentReady && !loading && !isSync && children}
     </SynchronizeWrapperContext.Provider>
   );
 };

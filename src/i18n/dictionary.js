@@ -18,6 +18,7 @@ import toDoMessage from './toDoMessage';
 import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
 import mailMessage from './mailMessage';
+import syncMessage from './syncMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -42,12 +43,7 @@ const dictionary = {
   connexionOK: { fr: 'Connexion OK', en: 'Connection ok' },
   connexionKO: { fr: 'Pas de réseau', en: 'No network' },
   interviewer: { fr: 'Enquêteur', en: 'Interviewer' },
-  syncResult: { fr: 'Résultat de la synchronisation', en: 'Result of synchronization' },
-  syncSuccess: { fr: 'La synchronisation a réussi.', en: 'Synchronization succeeded.' },
-  syncFailure: {
-    fr: 'La synchronisation a échoué, veuillez recommencer.',
-    en: 'Synchronization has failed, please try again.',
-  },
+
   appInstalling: { fr: 'Installation, veuillez patientez...', en: 'Installation, please wait...' },
   updateAvailable: {
     fr:
@@ -82,6 +78,7 @@ const dictionary = {
   ...titleMessage,
   ...phoneSourceMessage,
   ...mailMessage,
+  ...syncMessage,
 };
 
 export default dictionary;

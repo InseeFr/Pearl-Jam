@@ -69,10 +69,10 @@ export const analyseResult = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) =>
     }
   }
   const result = {
-    success: ok,
-    message: ok
-      ? "Tout s'est bien passé, vous pouvez continuer à travailler."
-      : "Zut, tout ne s'est pas bien passé :/",
+    state: ok ? 'success' : 'warning',
+    messages: ok
+      ? ["Tout s'est bien passé, vous pouvez continuer à travailler."]
+      : ["Zut, tout ne s'est pas bien passé :/", 'Blabla'],
   };
   return result;
 };

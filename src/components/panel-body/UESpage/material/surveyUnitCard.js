@@ -20,7 +20,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Tooltip } from '@material-ui/core';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   root: {
     padding: 8,
     borderRadius: 15,
@@ -80,7 +80,7 @@ const useStyles = makeStyles(() => ({
   leftMargin: {
     marginLeft: '2px',
   },
-  warning: { color: 'orange' },
+  warning: { color: theme.palette.warning.main },
 }));
 
 const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
