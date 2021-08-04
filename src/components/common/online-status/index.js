@@ -1,8 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 import WifiIcon from '@material-ui/icons/Wifi';
 import clsx from 'clsx';
-import { addOnlineStatusObserver } from 'utils';
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import { AppContext } from 'Root';
 
 const useStyles = makeStyles(theme => ({
   red: {
@@ -20,20 +20,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const OnlineStatus = () => {
-  const [init, setInit] = useState(false);
-  const [status, setStatus] = useState(navigator.onLine);
-  useEffect(() => {
-    if (!init) {
-      addOnlineStatusObserver(s => {
-        setStatus(s);
-      });
-      setInit(true);
-    }
-  }, [init]);
+  const { online } = useContext(AppContext);
 
   const { icon, green, red } = useStyles();
 
-  return <WifiIcon className={clsx(icon, status ? green : red)} />;
+  return <WifiIcon className={clsx(icon, online ? green : red)} />;
 };
 
 export default OnlineStatus;
