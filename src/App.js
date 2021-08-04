@@ -8,6 +8,7 @@ import TrainingPage from 'components/panel-body/training';
 import D from 'i18n';
 import React from 'react';
 import { Route } from 'react-router-dom';
+import SynchronizeWrapper from 'components/sychronizeWrapper';
 
 function App() {
   const { authenticated } = useAuth();
@@ -19,11 +20,11 @@ function App() {
       <div>
         {!authenticated && <Preloader message={D.pleaseWait} />}
         {authenticated && (
-          <>
+          <SynchronizeWrapper>
             <Route path="/" render={routeProps => <Home {...routeProps} />} />
             <Route path="/training" component={TrainingPage} />
             <Route path="/palette" component={Palette} />
-          </>
+          </SynchronizeWrapper>
         )}
       </div>
     </>
