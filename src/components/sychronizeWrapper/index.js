@@ -102,7 +102,15 @@ const SynchronizeWrapper = ({ children }) => {
         setLoading(false);
       }
     }
-  }, [queenReady, queenError, pearlReady, pearlError, synchronizeQueen]);
+  }, [
+    queenReady,
+    queenError,
+    pearlReady,
+    pearlError,
+    synchronizeQueen,
+    PEARL_API_URL,
+    PEARL_AUTHENTICATION_MODE,
+  ]);
 
   const classes = useStyles();
 
