@@ -68,14 +68,15 @@ const sendData = async (urlPearlApi, authenticationMode) => {
         id,
         body
       );
-      if (error && status === 403) {
+      if (error && [403, 404, 500].includes(status)) {
         const { error: tempZoneError } = await api.putSurveyUnitToTempZone(
           urlPearlApi,
           authenticationMode
         )(id, body);
         if (!tempZoneError) surveyUnitsInTempZone.push(id);
         else throw new Error('Server is not responding');
-      } else if (error && ![404, 500].includes(status)) throw new Error('Server is not responding');
+      } else if (error && ![403, 404, 500].includes(status))
+        throw new Error('Server is not responding');
     })
   );
   return surveyUnitsInTempZone;
