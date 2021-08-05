@@ -24,12 +24,12 @@ export const useQueenSynchronisation = () => {
       if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
         clearTimeout(tooLateErrorThrower);
         if (state === 'READY') {
-          setQueenReady(true);
           setQueenError(false);
+          setQueenReady(true);
           console.log('Queen is ready');
         } else {
           setQueenError(true);
-          setQueenReady(false);
+          setQueenReady(true);
           console.log('Queen is not ready');
         }
       }
@@ -104,7 +104,7 @@ const validateSU = su => {
 const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
   const surveyUnitsSuccess = [];
   const surveyUnitsFailed = [];
-  const { data: surveyUnits, error } = await api.getSurveyUnits(
+  const { data: surveyUnits, error, status } = await api.getSurveyUnits(
     pearlApiUrl,
     pearlAuthenticationMode
   );
@@ -121,21 +121,30 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
           const validSurveyUnit = validateSU(mergedSurveyUnit);
           await putSurveyUnitInDataBase(validSurveyUnit);
           surveyUnitsSuccess.push(su.id);
-        } else {
-          surveyUnitsFailed.push(su.id);
-        }
+        } else if ([404, 403, 500].includes(status)) surveyUnitsFailed.push(su.id);
+        else throw new Error('Server is not responding');
       })
     );
-  }
+  } else if (![404, 403, 500].includes(status)) throw new Error('Server is not responding');
+
   return { surveyUnitsSuccess, surveyUnitsFailed };
 };
 
 export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) => {
-  const surveyUnitsInTempZone = await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+  var surveyUnitsInTempZone;
+  var surveyUnitsSuccess;
+  try {
+    surveyUnitsInTempZone = await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
 
-  await clean();
+    await clean();
 
-  const { surveyUnitsSuccess } = await getData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
-
-  return { surveyUnitsSuccess, surveyUnitsInTempZone };
+    const { surveyUnitsSuccess: susSuccess } = await getData(
+      PEARL_API_URL,
+      PEARL_AUTHENTICATION_MODE
+    );
+    surveyUnitsSuccess = susSuccess;
+    return { error: false, surveyUnitsSuccess, surveyUnitsInTempZone };
+  } catch (e) {
+    return { error: true, surveyUnitsSuccess, surveyUnitsInTempZone };
+  }
 };
