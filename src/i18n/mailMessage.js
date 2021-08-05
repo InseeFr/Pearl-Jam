@@ -44,8 +44,8 @@ const mailMessage = {
     fr: userId => (queenMissing = []) => {
       return (
         `Bonjour Madame, Monsieur. \n\n ` +
-        `Pour information, l'utilisateur d'identifant "${userId}" n'a pas reçu lors de sa synchronisation toutes les unités enquêtées dont il a la charge.\n` +
-        `Les unités manquantes sur son poste sont : ${queenMissing.join(', ')}.\n` +
+        `Pour information, l'utilisateur d'identifant "${userId}" ne peut pas accéder aux questionnaires de certaines unités enquêtées (Il n'a pas reçu toutes les unités enquêtées dont il a la charge ou il n'a pas reçu les ressources des questionnaires.)\n` +
+        `Les unités problématiques sur son poste sont : ${queenMissing.join(', ')}.\n` +
         `Par conséquent, l'utilisateur ne peut pas collecter de réponses au questionnaire pour ces unités, l'accès au questionnaire est donc bloqué pour celles-ci.\n\n` +
         `Merci.\n\n ${commonMailMessage.autoMail.fr}`
       );
@@ -53,8 +53,8 @@ const mailMessage = {
     en: userId => (queenMissing = []) => {
       return (
         `Hello. \n\n ` +
-        `For information, the user of identifier "${userId}" did not receive during its synchronization all the survey-units for which he is responsible.\n` +
-        `The missing survey-units on his computer are : ${queenMissing.join(', ')}.\n` +
+        `For information, the user of identifier "${userId}" cannot access the questionnaires of some survey-units (He did not receive all the survey-units for which he is responsible or he did not receive the resources for the questionnaires).\n` +
+        `The problematic survey-units on his computer are : ${queenMissing.join(', ')}.\n` +
         `Therefore, the user cannot collect questionnaire responses for these units, so access to the questionnaire is blocked for them.\n\n` +
         `Thank you.\n\n ${commonMailMessage.autoMail.fr}`
       );
