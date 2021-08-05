@@ -12,6 +12,7 @@ const buttonMessage = {
   updateNow: { fr: 'Mettre à jour maintenant', en: 'Update now' },
   yesButton: { fr: 'Oui', en: 'Yes' },
   noButton: { fr: 'Non', en: 'No' },
+  iUnderstand: { fr: `J'ai compris`, en: `I understand` },
 };
 
 export default buttonMessage;

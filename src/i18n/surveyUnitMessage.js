@@ -5,5 +5,9 @@ const surveyUnitMessage = {
   },
   surveyUnit: { fr: 'unité enquêtée', en: 'survey unit' },
   surveyUnits: { fr: 'unités enquêtées', en: 'survey units' },
+  questionnaireInaccessible: {
+    fr: 'Questionnaire inaccessible',
+    en: 'Questionnaire not available',
+  },
 };
 export default surveyUnitMessage;
