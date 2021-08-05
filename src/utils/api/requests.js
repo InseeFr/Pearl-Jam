@@ -13,7 +13,7 @@ const getSurveyUnitById = apiUrl => id => token =>
 const putDataSurveyUnitById = apiUrl => id => token => body =>
   putRequest(`${apiUrl}/api/survey-unit/${id}`)(token)(body);
 const putToTempZone = apiUrl => id => token => body =>
-  putRequest(`${apiUrl}/api/survey-unit/${id}/temp-zone`)(token)(body);
+  postRequest(`${apiUrl}/api/survey-unit/${id}/temp-zone`)(token)(body);
 
 const sendMail = apiUrl => subject => content => token => {
   const mailBody = { subject, content };
