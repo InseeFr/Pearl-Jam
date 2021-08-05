@@ -167,7 +167,7 @@ const FilterPanel = ({
               aria-controls="panel4bh-content"
               id="sortAccordion-header"
             >
-              <Typography className={classes.heading}>Trier par</Typography>
+              <Typography className={classes.heading}>{D.sortBy}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <RadioGroup
@@ -209,7 +209,7 @@ const FilterPanel = ({
               aria-controls="panel4bh-content"
               id="campaignFilterAccordion-header"
             >
-              <Typography className={classes.heading}>Enquêtes</Typography>
+              <Typography className={classes.heading}>{D.sortSurvey}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <FormGroup>
@@ -242,7 +242,7 @@ const FilterPanel = ({
               aria-controls="panel4bh-content"
               id="priorityFilterAccordion-header"
             >
-              <Typography className={classes.heading}>Priorité</Typography>
+              <Typography className={classes.heading}>{D.priority}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <FormGroup>
@@ -273,7 +273,7 @@ const FilterPanel = ({
               aria-controls="panel4bh-content"
               id="toDoFilterAccordion-header"
             >
-              <Typography className={classes.heading}>À faire</Typography>
+              <Typography className={classes.heading}>{D.sortToDo}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <FormGroup>
@@ -306,7 +306,7 @@ const FilterPanel = ({
               aria-controls="panel4bh-content"
               id="priorityFilterAccordion-header"
             >
-              <Typography className={classes.heading}>Terminées</Typography>
+              <Typography className={classes.heading}>{D.sortCompleted}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <FormGroup>

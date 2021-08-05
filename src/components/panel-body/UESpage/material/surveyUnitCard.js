@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Tooltip } from '@material-ui/core';
+import D from 'i18n';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -142,7 +143,7 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
           </div>
         </div>
         {inaccessible && (
-          <Tooltip title="Questionnaire inaccessible">
+          <Tooltip title={D.questionnaireInaccessible}>
             <WarningIcon className={classes.warning} />
           </Tooltip>
         )}
