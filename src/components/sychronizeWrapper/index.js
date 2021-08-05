@@ -17,6 +17,7 @@ import * as api from 'utils/api';
 import { AppContext } from 'Root';
 import Preloader from 'components/common/loader';
 import { IconStatus } from 'components/common/IconStatus';
+import { ThumbUpAlt } from '@material-ui/icons';
 
 export const SynchronizeWrapperContext = React.createContext();
 
@@ -24,20 +25,33 @@ const useStyles = makeStyles(theme => ({
   dialogPaper: {
     borderRadius: '15px',
   },
-
+  title: {
+    '& *': {
+      fontSize: '1.4em',
+    },
+  },
   subTitle: {
     '& span': {
+      fontWeight: 'bold',
       marginLeft: '1em',
       alignSelf: 'center',
     },
     display: 'flex',
     marginBottom: '1.5em',
   },
+  content: {
+    '& span': {
+      alignSelf: 'center',
+    },
+
+    display: 'flex',
+  },
   noVisibleFocus: {
     '&:focus, &:hover': {
       backgroundColor: theme.palette.primary.main,
     },
   },
+  positive: { marginLeft: '0.5em', color: theme.palette.success.main },
 }));
 
 const SynchronizeWrapper = ({ children }) => {
@@ -58,11 +72,11 @@ const SynchronizeWrapper = ({ children }) => {
     setPearlReady(null);
     const { error, status } = await api.healthCheck(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
     if (!error && status === 200) {
-      setPearlReady(true);
       setPearlError(false);
+      setPearlReady(true);
     } else {
-      setPearlReady(false);
       setPearlError(true);
+      setPearlReady(true);
     }
   };
 
@@ -101,18 +115,20 @@ const SynchronizeWrapper = ({ children }) => {
 
   useEffect(() => {
     const sync = async () => {
+      setIsSync(true);
       const result = await synchronizePearl(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
       saveSyncPearlData(result);
-      await synchronizeQueen();
+      const { error } = result;
+      if (!error) await synchronizeQueen();
+      else setLoading(false);
     };
-    if (queenReady !== null && pearlReady !== null) {
-      if (queenReady && pearlReady) {
+    if (queenReady && pearlReady) {
+      if (!queenError && !pearlError) {
         sync();
-      }
-      if (queenError || pearlError) {
+      } else {
         const result = {
           state: 'error',
-          messages: [D.noResponseFromServer],
+          messages: [D.syncNotStarted, D.syncPleaseTryAgain, D.warningOrErrorEndMessage],
         };
         window.localStorage.removeItem('SYNCHRONIZE');
         setIsSync(false);
@@ -134,20 +150,28 @@ const SynchronizeWrapper = ({ children }) => {
 
   const context = { syncFunction };
 
+  const syncMesssage = () => {
+    if (loading && isSync) return D.synchronizationInProgress;
+    if (loading) return D.synchronizationWaiting;
+    if (isSync) return D.synchronizationEnding;
+  };
+
   return (
     <SynchronizeWrapperContext.Provider value={context}>
-      {componentReady && (loading || isSync) && <Preloader message={D.synchronizationInProgress} />}
+      {componentReady && (loading || isSync) && <Preloader message={syncMesssage()} />}
       {componentReady && !loading && !isSync && syncResult && (
         <Dialog
+          maxWidth="md"
           className={classes.syncResult}
           open={!!syncResult}
           onClose={close}
           PaperProps={{ className: classes.dialogPaper }}
         >
-          <DialogTitle>
-            <Typography variant="h4" color={syncResult.state === 'error' ? 'error' : 'initial'}>
-              {D.syncResult}
-            </Typography>
+          <DialogTitle
+            className={classes.title}
+            color={syncResult.state === 'error' ? 'error' : 'initial'}
+          >
+            <Typography>{D.syncResult}</Typography>
           </DialogTitle>
           <Divider />
 
@@ -158,12 +182,17 @@ const SynchronizeWrapper = ({ children }) => {
                 <span>{D.titleSync(syncResult.state)}</span>
               </DialogContentText>
             )}
-            {syncResult?.messages?.map(message => (
-              <DialogContentText>{message}</DialogContentText>
+            {syncResult.messages?.map((message, index) => (
+              <DialogContentText key={index} className={classes.content}>
+                <span>{message}</span>
+                {syncResult.state === 'warning' && index === syncResult.messages.length - 1 && (
+                  <ThumbUpAlt className={classes.positive} />
+                )}
+              </DialogContentText>
             ))}
           </DialogContent>
           <DialogActions>
-            <Button onClick={close}>{`J'ai compris`}</Button>
+            <Button onClick={close}>{D.iUnderstand}</Button>
           </DialogActions>
         </Dialog>
       )}
