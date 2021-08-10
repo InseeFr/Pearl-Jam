@@ -8,7 +8,7 @@ const syncMessage = {
   },
   synchronizationInProgress: { fr: 'Synchronisation en cours', en: 'Synchronization in progress' },
   synchronizationWaiting: {
-    fr: 'En attende de synchronisation',
+    fr: 'En attente de synchronisation',
     en: 'Waiting for synchronization.',
   },
   synchronizationEnding: { fr: 'Fin de la synchronisation', en: 'End of synchronization.' },
