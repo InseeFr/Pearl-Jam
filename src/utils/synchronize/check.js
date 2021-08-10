@@ -1,6 +1,7 @@
 import surveyUnitMissingIdbService from 'indexedbb/services/surveyUnitMissing-idb-service';
 import surveyUnitIdbService from 'indexedbb/services/surveyUnit-idb-service';
-import { PEARL_USER_KEY } from 'utils/constants';
+import notificationIdbService from 'indexedbb/services/notification-idb-service';
+import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 import * as api from 'utils/api';
 import D from 'i18n';
 
@@ -19,6 +20,20 @@ export const checkSyncResult = (pearlSuccess, queenSuccess) => {
     return { queenMissing, pearlMissing };
   }
   return {};
+};
+
+export const getNotifFromResult = result => {
+  const { state, messages } = result;
+  const now = new Date().getTime();
+  return {
+    id: `notification-${now}`,
+    date: now,
+    type: NOTIFICATION_TYPE_SYNC,
+    title: D.titleSync(state),
+    messages,
+    state,
+    read: false,
+  };
 };
 
 const getResult = (
@@ -106,7 +121,7 @@ export const analyseResult = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) =>
     );
   }
 
-  return getResult(
+  const result = getResult(
     pearlError,
     queenError,
     pearlMissing,
@@ -115,6 +130,11 @@ export const analyseResult = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) =>
     pearlTempZone,
     queenTempZone
   );
+
+  const notification = getNotifFromResult(result);
+  await notificationIdbService.addOrUpdateNotif(notification);
+
+  return result;
 };
 
 export const saveSyncPearlData = data =>

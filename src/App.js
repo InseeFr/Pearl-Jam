@@ -11,6 +11,7 @@ import D from 'i18n';
 import React from 'react';
 import { Route } from 'react-router-dom';
 import SynchronizeWrapper from 'components/sychronizeWrapper';
+import { NotificationWrapper } from 'components/notificationWrapper';
 
 function App() {
   const { authenticated } = useAuth();
@@ -24,9 +25,11 @@ function App() {
         {!authenticated && <Preloader message={D.pleaseWait} />}
         {authenticated && (
           <SynchronizeWrapper>
-            <Route path="/" render={routeProps => <Home {...routeProps} />} />
-            <Route path="/training" component={TrainingPage} />
-            <Route path="/palette" component={Palette} />
+            <NotificationWrapper>
+              <Route path="/" render={routeProps => <Home {...routeProps} />} />
+              <Route path="/training" component={TrainingPage} />
+              <Route path="/palette" component={Palette} />
+            </NotificationWrapper>
           </SynchronizeWrapper>
         )}
       </div>
