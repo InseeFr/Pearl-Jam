@@ -9,10 +9,11 @@ import {
   DialogContentText,
   Button,
 } from '@material-ui/core';
+import notificationIdbService from 'indexedbb/services/notification-idb-service';
 import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
 import D from 'i18n';
 import React, { useContext, useEffect, useState } from 'react';
-import { analyseResult, saveSyncPearlData } from 'utils/synchronize/check';
+import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
 import * as api from 'utils/api';
 import { AppContext } from 'Root';
 import Preloader from 'components/common/loader';
@@ -122,19 +123,22 @@ const SynchronizeWrapper = ({ children }) => {
       if (!error) await synchronizeQueen();
       else setLoading(false);
     };
+
+    const failedSync = async () => {
+      const result = {
+        state: 'error',
+        messages: [D.syncNotStarted, D.syncPleaseTryAgain, D.warningOrErrorEndMessage],
+      };
+      const notif = getNotifFromResult(result);
+      await notificationIdbService.addOrUpdateNotif(notif);
+      window.localStorage.removeItem('SYNCHRONIZE');
+      setIsSync(false);
+      setSyncResult(result);
+      setLoading(false);
+    };
     if (queenReady && pearlReady) {
-      if (!queenError && !pearlError) {
-        sync();
-      } else {
-        const result = {
-          state: 'error',
-          messages: [D.syncNotStarted, D.syncPleaseTryAgain, D.warningOrErrorEndMessage],
-        };
-        window.localStorage.removeItem('SYNCHRONIZE');
-        setIsSync(false);
-        setSyncResult(result);
-        setLoading(false);
-      }
+      if (!queenError && !pearlError) sync();
+      else failedSync();
     }
   }, [
     queenReady,
@@ -148,7 +152,7 @@ const SynchronizeWrapper = ({ children }) => {
 
   const classes = useStyles();
 
-  const context = { syncFunction };
+  const context = { syncFunction, setSyncResult };
 
   const syncMesssage = () => {
     if (loading && isSync) return D.synchronizationInProgress;
@@ -180,6 +184,7 @@ const SynchronizeWrapper = ({ children }) => {
               <DialogContentText className={classes.subTitle}>
                 <IconStatus type={syncResult.state} />
                 <span>{D.titleSync(syncResult.state)}</span>
+                {syncResult.date && <span>{`(${syncResult.date})`}</span>}
               </DialogContentText>
             )}
             {syncResult.messages?.map((message, index) => (
