@@ -1,9 +1,10 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Tooltip } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import SyncIcon from 'utils/icons/SyncIcon';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { AppContext } from 'Root';
+import D from 'i18n';
 import { SynchronizeWrapperContext } from 'components/sychronizeWrapper';
 
 const useStyles = makeStyles(theme => ({
@@ -26,17 +27,19 @@ const Synchronize = ({ materialClass }) => {
   const classes = useStyles();
 
   return (
-    <IconButton
-      classes={{
-        root: classes.noVisibleFocus,
-      }}
-      edge="end"
-      disabled={!online}
-      aria-label="launch synchronization"
-      onClick={syncFunction}
-    >
-      <SyncIcon className={materialClass} />
-    </IconButton>
+    <Tooltip title={D.synchronizeButton}>
+      <IconButton
+        classes={{
+          root: classes.noVisibleFocus,
+        }}
+        edge="end"
+        disabled={!online}
+        aria-label="launch synchronization"
+        onClick={syncFunction}
+      >
+        <SyncIcon className={materialClass} />
+      </IconButton>
+    </Tooltip>
   );
 };
 

@@ -139,11 +139,13 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
           <div className={classes.column}>
             <ClickAwayListener onClickAway={handleClickAway}>
               <div>
-                <IconButton onClick={handleClick}>
-                  <Badge badgeContent={unReadNotificationsNumber} color="secondary">
-                    <Notifications />
-                  </Badge>
-                </IconButton>
+                <Tooltip title={D.notifications}>
+                  <IconButton onClick={handleClick}>
+                    <Badge badgeContent={unReadNotificationsNumber} color="secondary">
+                      <Notifications />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
                 <Popper
                   className={classes.notif}
                   open={open}
