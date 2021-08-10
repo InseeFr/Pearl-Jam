@@ -138,7 +138,7 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
           </div>
           <div className={classes.column}>
             <ClickAwayListener onClickAway={handleClickAway}>
-              <>
+              <div>
                 <IconButton onClick={handleClick}>
                   <Badge badgeContent={unReadNotificationsNumber} color="secondary">
                     <Notifications />
@@ -157,7 +157,7 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
                     </Fade>
                   )}
                 </Popper>
-              </>
+              </div>
             </ClickAwayListener>
           </div>
           <div className={classes.column}>
