@@ -16,7 +16,7 @@ export const useQueenSynchronisation = () => {
     setQueenReady(null);
     const tooLateErrorThrower = setTimeout(() => {
       setQueenError(true);
-      setQueenReady(false);
+      setQueenReady(true);
     }, waitTime);
 
     const handleQueenEvent = async event => {
