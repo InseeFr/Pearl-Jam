@@ -17,6 +17,7 @@ const useStyles = makeStyles(theme => ({
   title: {
     color: 'black',
     fontSize: 'larger',
+    textAlign: 'left',
   },
   details: {
     fontSize: '0.8em',

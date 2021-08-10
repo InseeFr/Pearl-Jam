@@ -59,10 +59,10 @@ export const NotificationsRoot = () => {
       <div className={classes.paperNotifContent}>
         {notifications.length > 0 &&
           notifications.map(notif => (
-            <>
+            <React.Fragment key={notif.id}>
               <NotificationItem data={notif} />
               <Divider />
-            </>
+            </React.Fragment>
           ))}
         {notifications.length === 0 && (
           <Typography className={classes.noNotif}>{D.noNotification}</Typography>

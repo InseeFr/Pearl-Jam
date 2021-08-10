@@ -110,8 +110,9 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
               edge="start"
               color="inherit"
               aria-label="open notifications"
+              onClick={() => setOpenDrawer(true)}
             >
-              <MenuIcon className={classes.notificationsIcon} onClick={() => setOpenDrawer(true)} />
+              <MenuIcon className={classes.notificationsIcon} />
             </IconButton>
           </Tooltip>
           <NavLink activeClassName="active" exact to="/">
