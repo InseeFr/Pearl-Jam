@@ -1,4 +1,5 @@
 const syncMessage = {
+  simpleSync: { fr: 'Synchronisation', en: 'Synchronization' },
   syncResult: { fr: 'Résultat de la synchronisation', en: 'Result of synchronization' },
   syncSuccess: { fr: 'La synchronisation a réussi.', en: 'Synchronization succeeded.' },
   syncFailure: {

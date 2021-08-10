@@ -19,6 +19,7 @@ import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
 import mailMessage from './mailMessage';
 import syncMessage from './syncMessage';
+import notificationMessage from './notificationMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -58,6 +59,8 @@ const dictionary = {
   },
   areYouSure: { fr: 'Êtes-vous sûr ?', en: 'Are you sure ?' },
   delete: { fr: 'Supprimer', en: 'Delete' },
+  other: { fr: 'Autre', en: 'Other' },
+
   ...buttonMessage,
   ...navigationMessage,
   ...waitingMessage,
@@ -79,6 +82,7 @@ const dictionary = {
   ...phoneSourceMessage,
   ...mailMessage,
   ...syncMessage,
+  ...notificationMessage,
 };
 
 export default dictionary;

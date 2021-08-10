@@ -13,6 +13,8 @@ const buttonMessage = {
   yesButton: { fr: 'Oui', en: 'Yes' },
   noButton: { fr: 'Non', en: 'No' },
   iUnderstand: { fr: `J'ai compris`, en: `I understand` },
+  deleteAll: { fr: 'Tout supprimer', en: 'Delete all' },
+  markAllAsRead: { fr: 'Tout marquer comme lu', en: 'Mark all as read' },
 };
 
 export default buttonMessage;
