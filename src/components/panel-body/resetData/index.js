@@ -52,28 +52,19 @@ export const ResetData = () => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
-  const [lastOpen, setLastOpen] = useState(false);
   const [deleteStatus, setDeleteStatus] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
-  };
-  const handleClickLastOpen = () => {
-    setLastOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleLastClose = () => {
-    handleClose();
-    setLastOpen(false);
-  };
-
   const deleteAll = async () => {
+    setOpen(false);
     setDeleteStatus('deleting');
-    handleLastClose();
     const deleteOneTable = async tableName => {
       await Dexie.delete(tableName);
     };
@@ -137,25 +128,13 @@ export const ResetData = () => {
         </div>
       </div>
       <ResetDialog
-        key="first"
         open={open}
         title={`${D.deleteAll} ?`}
         agree={D.yesDeleteAll}
-        disagree={D.noButton}
-        agreeFunction={handleClickLastOpen}
-        disagreeFunction={handleClose}
-        body={D.firstBodyDialog}
-      />
-      <ResetDialog
-        key="second"
-        open={lastOpen}
-        title={D.lastTitle}
-        agree={D.yesDeleteAll}
         disagree={D.noImNotSure}
         agreeFunction={deleteAll}
-        disagreeFunction={handleLastClose}
-        body={D.secondBodyDialog}
-        last
+        disagreeFunction={handleClose}
+        body={D.firstBodyDialog}
       />
     </div>
   );

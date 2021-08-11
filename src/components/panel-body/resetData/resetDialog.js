@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 import {
   Button,
   Dialog,
@@ -11,6 +12,7 @@ import {
 } from '@material-ui/core';
 import D from 'i18n';
 import React, { useState } from 'react';
+import { PEARL_USER_KEY } from 'utils/constants';
 
 const useStyles = makeStyles(theme => ({
   agreeBtn: {
@@ -24,6 +26,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 'bold',
     letterSpacing: '1.5px',
   },
+  confirm2: { marginTop: '2em' },
 }));
 
 export const ResetDialog = ({
@@ -34,7 +37,6 @@ export const ResetDialog = ({
   disagree,
   agreeFunction,
   disagreeFunction,
-  last = false,
 }) => {
   const classes = useStyles();
 
@@ -44,75 +46,105 @@ export const ResetDialog = ({
       .substring(2, 10)
       .toUpperCase();
 
+  const [step, setStep] = useState(null);
+
   const [randomText, setRandomText] = useState(() => getRandomText());
-  const [lastConfirmation, setLastConfirmation] = useState(false);
-  const [userInput, setUserInput] = useState('');
-  const [userInputError, setUserInputError] = useState(false);
+  const [placeHolder] = useState(() => getRandomText());
+  const [values, setValues] = useState({ user: null, random: null });
+  const [errors, setErrors] = useState({ user: false, random: false });
 
   const clean = () => {
-    setLastConfirmation(false);
-    setUserInput('');
-    setUserInputError(false);
+    setStep(null);
+    setValues({ user: null, random: null });
+    setErrors({ user: false, random: false });
     setRandomText(getRandomText());
   };
 
   const handleChange = event => {
-    setUserInputError(false);
-    setUserInput(event.target.value);
+    const {
+      target: { id, value },
+    } = event;
+    setValues({ ...values, [id]: value });
+    setErrors({ ...errors, [id]: false });
   };
 
-  const validateInput = () => {
-    if (userInput === randomText) {
-      clean();
-      agreeFunction();
-    } else setUserInputError(true);
+  const validateInput = e => {
+    e.preventDefault();
+    if (step === 'random') {
+      if (randomText === values.random) {
+        setStep('user');
+      } else setErrors({ ...errors, random: true });
+    } else if (step === 'user') {
+      const { id } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
+      if (id.toLowerCase() === values.user.toLowerCase()) {
+        clean();
+        agreeFunction();
+      } else setErrors({ ...errors, user: true });
+    }
   };
 
   const confirm = e => {
-    setLastConfirmation(true);
+    setStep('random');
   };
   const cancel = e => {
-    clean();
     disagreeFunction(e);
+    clean();
   };
 
-  const localDisagreeFunction = last ? cancel : disagreeFunction;
-
-  const localAgreeFunction = last ? confirm : agreeFunction;
-
   return (
-    <Dialog open={open} onClose={localDisagreeFunction}>
-      {!lastConfirmation && (
+    <Dialog open={open} onClose={cancel}>
+      {!step && (
         <>
           <DialogTitle>{title}</DialogTitle>
           <DialogContent>
             <DialogContentText>{body}</DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={localAgreeFunction} className={classes.agreeBtn}>
+            <Button onClick={confirm} className={classes.agreeBtn}>
               {agree}
             </Button>
-            <Button onClick={localDisagreeFunction} className={classes.disagreeBtn}>
+            <Button onClick={cancel} className={classes.disagreeBtn}>
               {disagree}
             </Button>
           </DialogActions>
         </>
       )}
-      {lastConfirmation && (
+      {step && (
         <>
           <DialogTitle>{D.confirmTitle}</DialogTitle>
           <DialogContent>
-            <DialogContentText>{D.confirmRandom}</DialogContentText>
-            <Typography className={classes.randomText}>{randomText}</Typography>
-            <TextField
-              error={userInputError}
-              helperText={userInputError ? D.confirmError : null}
-              defaultValue=""
-              placeholder={getRandomText()}
-              id="name"
-              value={userInput}
-              onChange={handleChange}
-            />
+            <DialogContentText>
+              {step === 'random' ? D.confirmRandom : D.confirmId}
+            </DialogContentText>
+            <form onSubmit={validateInput}>
+              {step === 'random' && (
+                <>
+                  <Typography className={classes.randomText}>{randomText}</Typography>
+                  <TextField
+                    autoFocus
+                    error={errors.random}
+                    helperText={errors.random ? D.confirmError : null}
+                    defaultValue=""
+                    placeholder={placeHolder}
+                    id={'random'}
+                    value={values.random}
+                    onChange={handleChange}
+                  />
+                </>
+              )}
+              {step === 'user' && (
+                <TextField
+                  autoFocus
+                  error={errors.user}
+                  helperText={errors.user ? D.confirmErrorUser : null}
+                  defaultValue=""
+                  placeholder={placeHolder}
+                  id={'user'}
+                  value={values.user}
+                  onChange={handleChange}
+                />
+              )}
+            </form>
           </DialogContent>
           <DialogActions>
             <Button onClick={validateInput} className={classes.agreeBtn}>

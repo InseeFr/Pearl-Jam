@@ -18,17 +18,23 @@ const resetDataMessage = {
     en:
       'You will lose all your data. Make sure your data is already backed up (by a synchronization or otherwise). Are you sure you want to delete everything ?',
   },
-  secondBodyDialog: { fr: 'Dernier avertissement !', en: 'Last warning!' },
-  lastTitle: { fr: 'Êtes vous vraiment sûr(e) ?', en: 'Are you really sure?' },
   mainTitle: { fr: 'Zone dangereuse', en: 'Danger zone' },
   confirmTitle: { fr: 'Confirmation', en: 'Confirmation' },
   confirmRandom: {
     fr: 'Veuillez entrer le texte ci dessous pour confirmer la suppression.',
     en: 'Please enter the text below to confirm the deletion.',
   },
+  confirmId: {
+    fr: "Plus qu'une étape, veuillez également saisir votre identifiant.",
+    en: 'More than a step, please also enter your username.',
+  },
   confirmError: {
     fr: 'La saisie ne correspond pas avec le texte ci-dessus.',
     en: 'The entry does not match the text above.',
+  },
+  confirmErrorUser: {
+    fr: "Ce n'est pas votre identifiant.",
+    en: 'This is not your login.',
   },
 };
 
