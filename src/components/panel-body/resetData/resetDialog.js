@@ -46,7 +46,7 @@ export const ResetDialog = ({
     const now = new Date();
     const dateToConfirm = new Date(userDate);
     const diff = differenceInMinutes(now, dateToConfirm);
-    if (diff === 0 || true) {
+    if (diff === 0) {
       setLastConfirmation(false);
       setUserDate(null);
       setUserDateError(false);

@@ -79,7 +79,7 @@ const syncMessage = {
   },
   nothingToDisplay: {
     fr: 'Rien à afficher',
-    en: 'Nothinf to display',
+    en: 'Nothing to display',
   },
 };
 
