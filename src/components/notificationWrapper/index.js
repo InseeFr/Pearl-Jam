@@ -44,8 +44,11 @@ export const NotificationWrapper = ({ children }) => {
   const markAllFilteredNotifAsRead = async () => {
     const newNotifs = notifications.map(notif => {
       const { type } = notif;
-      if (filterType && type === filterType) return { ...notif, read: true };
-      return notif;
+      if (filterType) {
+        if (type === filterType) return { ...notif, read: true };
+        return notif;
+      }
+      return { ...notif, read: true };
     });
     await Promise.all(
       newNotifs.map(async notif => {
