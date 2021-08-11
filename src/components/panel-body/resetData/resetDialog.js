@@ -11,6 +11,9 @@ import {
 import D from 'i18n';
 import React, { useState } from 'react';
 import { differenceInMinutes } from 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import frLocale from 'date-fns/locale/fr';
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 const useStyles = makeStyles(theme => ({
   agreeBtn: {
@@ -32,14 +35,14 @@ export const ResetDialog = ({
   last = false,
 }) => {
   const classes = useStyles();
-
+  const initDate = new Date('2021-01-01T10:30:00');
   const [lastConfirmation, setLastConfirmation] = useState(false);
-  const [userDate, setUserDate] = useState(null);
+  const [userDate, setUserDate] = useState(initDate);
   const [userDateError, setUserDateError] = useState(false);
 
-  const handleChange = event => {
+  const handleChange = newValue => {
     setUserDateError(false);
-    setUserDate(event.target.value);
+    setUserDate(newValue);
   };
 
   const validDate = () => {
@@ -48,7 +51,7 @@ export const ResetDialog = ({
     const diff = differenceInMinutes(now, dateToConfirm);
     if (diff === 0) {
       setLastConfirmation(false);
-      setUserDate(null);
+      setUserDate(initDate);
       setUserDateError(false);
       agreeFunction();
     } else setUserDateError(true);
@@ -59,7 +62,7 @@ export const ResetDialog = ({
   };
   const cancel = e => {
     setLastConfirmation(false);
-    setUserDate(null);
+    setUserDate(initDate);
     setUserDateError(false);
     disagreeFunction(e);
   };
@@ -90,16 +93,18 @@ export const ResetDialog = ({
         <>
           <DialogContent>
             <DialogContentText>{D.confirmDate}</DialogContentText>
-            <TextField
-              error={userDateError}
-              helperText={userDateError ? D.dateError : null}
-              margin="dense"
-              defaultValue="2021-01-01T10:30"
-              id="name"
-              type="datetime-local"
-              value={userDate}
-              onChange={handleChange}
-            />
+            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={frLocale}>
+              <DateTimePicker
+                renderInput={props => <TextField {...props} />}
+                ampm={false}
+                error={userDateError}
+                helperText={userDateError ? D.dateError : null}
+                value={userDate}
+                onChange={handleChange}
+                disableHighlightToday
+                format="dd/MM/yyyy - HH:mm"
+              />
+            </MuiPickersUtilsProvider>
           </DialogContent>
           <DialogActions>
             <Button onClick={validDate} className={classes.agreeBtn}>

@@ -19,7 +19,7 @@ const resetDataMessage = {
       'You will lose all your data. Make sure your data is already backed up (by a synchronization or otherwise). Are you sure you want to delete everything ?',
   },
   secondBodyDialog: { fr: 'Dernier avertissement !', en: 'Last warning!' },
-  lastTitle: { fr: 'Êtes vous vraiment sûr ?', en: 'Are you really sure?' },
+  lastTitle: { fr: 'Êtes vous vraiment sûr(e) ?', en: 'Are you really sure?' },
   mainTitle: { fr: 'Zone dangereuse', en: 'Danger zone' },
   confirmDate: {
     fr: "Entrer la date et l'heure d'aujourd'hui pour confirmer la suppression.",
