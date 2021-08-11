@@ -1,14 +1,3 @@
-import {
-  Dialog,
-  DialogTitle,
-  Divider,
-  makeStyles,
-  Typography,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
-  Button,
-} from '@material-ui/core';
 import notificationIdbService from 'indexedbb/services/notification-idb-service';
 import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
 import D from 'i18n';
@@ -17,43 +6,9 @@ import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/sync
 import * as api from 'utils/api';
 import { AppContext } from 'Root';
 import Preloader from 'components/common/loader';
-import { IconStatus } from 'components/common/IconStatus';
-import { ThumbUpAlt } from '@material-ui/icons';
+import { SyncDialog } from './sychronizeDialog';
 
 export const SynchronizeWrapperContext = React.createContext();
-
-const useStyles = makeStyles(theme => ({
-  dialogPaper: {
-    borderRadius: '15px',
-  },
-  title: {
-    '& *': {
-      fontSize: '1.4em',
-    },
-  },
-  subTitle: {
-    '& span': {
-      fontWeight: 'bold',
-      marginLeft: '1em',
-      alignSelf: 'center',
-    },
-    display: 'flex',
-    marginBottom: '1.5em',
-  },
-  content: {
-    '& span': {
-      alignSelf: 'center',
-    },
-
-    display: 'flex',
-  },
-  noVisibleFocus: {
-    '&:focus, &:hover': {
-      backgroundColor: theme.palette.primary.main,
-    },
-  },
-  positive: { marginLeft: '0.5em', color: theme.palette.success.main },
-}));
 
 const SynchronizeWrapper = ({ children }) => {
   const { online, PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = useContext(AppContext);
@@ -150,8 +105,6 @@ const SynchronizeWrapper = ({ children }) => {
     PEARL_AUTHENTICATION_MODE,
   ]);
 
-  const classes = useStyles();
-
   const context = { syncFunction, setSyncResult };
 
   const syncMesssage = () => {
@@ -164,42 +117,7 @@ const SynchronizeWrapper = ({ children }) => {
     <SynchronizeWrapperContext.Provider value={context}>
       {componentReady && (loading || isSync) && <Preloader message={syncMesssage()} />}
       {componentReady && !loading && !isSync && syncResult && (
-        <Dialog
-          maxWidth="md"
-          className={classes.syncResult}
-          open={!!syncResult}
-          onClose={close}
-          PaperProps={{ className: classes.dialogPaper }}
-        >
-          <DialogTitle
-            className={classes.title}
-            color={syncResult.state === 'error' ? 'error' : 'initial'}
-          >
-            <Typography>{D.syncResult}</Typography>
-          </DialogTitle>
-          <Divider />
-
-          <DialogContent>
-            {syncResult.state && (
-              <DialogContentText className={classes.subTitle}>
-                <IconStatus type={syncResult.state} />
-                <span>{D.titleSync(syncResult.state)}</span>
-                {syncResult.date && <span>{`(${syncResult.date})`}</span>}
-              </DialogContentText>
-            )}
-            {syncResult.messages?.map((message, index) => (
-              <DialogContentText key={index} className={classes.content}>
-                <span>{message}</span>
-                {syncResult.state === 'warning' && index === syncResult.messages.length - 1 && (
-                  <ThumbUpAlt className={classes.positive} />
-                )}
-              </DialogContentText>
-            ))}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={close}>{D.iUnderstand}</Button>
-          </DialogActions>
-        </Dialog>
+        <SyncDialog close={close} syncResult={syncResult} />
       )}
       {componentReady && !loading && !isSync && children}
     </SynchronizeWrapperContext.Provider>

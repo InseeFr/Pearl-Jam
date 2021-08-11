@@ -4,6 +4,7 @@ import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'indexedbb/services/surveyUnitMissing-idb-service';
 import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import surveyUnitState from 'utils/enum/SUStateEnum';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
@@ -125,7 +126,7 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
           const mergedSurveyUnit = { ...surveyUnit, ...su };
           const validSurveyUnit = validateSU(mergedSurveyUnit);
           await putSurveyUnitInDataBase(validSurveyUnit);
-          surveyUnitsSuccess.push(su.id);
+          surveyUnitsSuccess.push({ id: mergedSurveyUnit.id, campaign: mergedSurveyUnit.campaign });
         } else if ([404, 403, 500].includes(status)) surveyUnitsFailed.push(su.id);
         else throw new Error('Server is not responding');
       })
@@ -135,11 +136,52 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
   return { surveyUnitsSuccess, surveyUnitsFailed };
 };
 
+const getWFSSurveyUnitsSortByCampaign = async () => {
+  const allSurveyUnits = await surveyUnitDBService.getAll();
+  return allSurveyUnits.reduce((wfs, su) => {
+    const { campaign, id } = su;
+    const lastState = getLastState(su);
+    if (lastState?.type === surveyUnitState.WAITING_FOR_SYNCHRONIZATION.type)
+      return { ...wfs, [campaign]: [...(wfs[campaign] || []), id] };
+    return wfs;
+  }, {});
+};
+
+const getAllSurveyUnitsByCampaign = async () => {
+  const allSurveyUnits = await surveyUnitDBService.getAll();
+  return allSurveyUnits.reduce((wfs, su) => {
+    const { campaign, id } = su;
+    return { ...wfs, [campaign]: [...(wfs[campaign] || []), id] };
+  }, {});
+};
+
+const getNewSurveyUnitsByCampaign = async (newSurveyUnits = [], oldSurveyUnits = {}) => {
+  const newSurveyUnitsByCampaign = newSurveyUnits.reduce((_, su) => {
+    const { campaign, id } = su;
+    return { ..._, [campaign]: [...(_[campaign] || []), id] };
+  }, {});
+
+  return Object.entries(newSurveyUnitsByCampaign).reduce((_, [campaign, surveyUnitIds]) => {
+    const newIds = surveyUnitIds.reduce((_, id) => {
+      const oldSus = oldSurveyUnits[campaign] || [];
+      if (!oldSus.includes(id)) return [..._, id];
+      return _;
+    }, []);
+    return { ..._, [campaign]: newIds };
+  }, {});
+};
+
 export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) => {
+  var transmittedSurveyUnits = {};
+  var loadedSurveyUnits = {};
+
   var surveyUnitsInTempZone;
   var surveyUnitsSuccess;
+  const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
     surveyUnitsInTempZone = await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+    transmittedSurveyUnits = await getWFSSurveyUnitsSortByCampaign();
+    console.log('transmittedSurveyUnits', transmittedSurveyUnits);
 
     await clean();
 
@@ -147,8 +189,15 @@ export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE)
       PEARL_API_URL,
       PEARL_AUTHENTICATION_MODE
     );
-    surveyUnitsSuccess = susSuccess;
-    return { error: false, surveyUnitsSuccess, surveyUnitsInTempZone };
+    surveyUnitsSuccess = susSuccess.map(({ id }) => id);
+    loadedSurveyUnits = await getNewSurveyUnitsByCampaign(susSuccess, allOldSurveyUnitsByCampaign);
+    return {
+      error: false,
+      surveyUnitsSuccess,
+      surveyUnitsInTempZone,
+      transmittedSurveyUnits,
+      loadedSurveyUnits,
+    };
   } catch (e) {
     return { error: true, surveyUnitsSuccess, surveyUnitsInTempZone };
   }

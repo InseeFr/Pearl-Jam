@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import notificationIdbService from 'indexedbb/services/notification-idb-service';
+import syncReportIdbService from 'indexedbb/services/syncReport-idb-service';
 
 export const NotificationWrapperContext = React.createContext();
 
@@ -44,6 +45,7 @@ export const NotificationWrapper = ({ children }) => {
 
   const deleteAll = async () => {
     await notificationIdbService.deleteAll();
+    await syncReportIdbService.deleteAll();
     setNotifications([]);
   };
 

@@ -66,7 +66,20 @@ const syncMessage = {
   },
   syncTempZone: {
     fr: `Pour information, certaines unités enquêtées n'ont pas pu être sauvegardées correctement pour un problème de droit. Ces unités ont donc été sauvegardées de manière sécurisée ailleurs, en attendant un éventuel traitement. L'administrateur de l'application a été prévenu.`,
-    en: `For your information, some of the surveyed units could not be saved correctly due to legal issues. These units were therefore saved securely elsewhere, pending further processing. The application administrator has been notified.`,
+    en: `For your information, some of the survey-units could not be saved correctly due to legal issues. These units were therefore saved securely elsewhere, pending further processing. The application administrator has been notified.`,
+  },
+  detailsSync: { fr: 'Détails : Bilan de synchronisation', en: 'Details : Synchronization report' },
+  transmittedSurveyUnits: {
+    fr: n => (n > 1 ? `${n} unités enquêtées transmises` : `${n} unité enquêtée transmise`),
+    en: n => (n > 1 ? `${n} transmitted survey-units` : `${n} transmitted survey-unit`),
+  },
+  loadedSurveyUnits: {
+    fr: n => (n > 1 ? `${n} unités enquêtées chargées` : `${n} unité enquêtée chargée`),
+    en: n => (n > 1 ? `${n} loaded survey-units` : `${n} loaded survey-unit`),
+  },
+  nothingToDisplay: {
+    fr: 'Rien à afficher',
+    en: 'Nothinf to display',
   },
 };
 

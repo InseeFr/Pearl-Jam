@@ -1,6 +1,7 @@
 import surveyUnitMissingIdbService from 'indexedbb/services/surveyUnitMissing-idb-service';
 import surveyUnitIdbService from 'indexedbb/services/surveyUnit-idb-service';
 import notificationIdbService from 'indexedbb/services/notification-idb-service';
+import syncReportIdbService from 'indexedbb/services/syncReport-idb-service';
 import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 import * as api from 'utils/api';
 import D from 'i18n';
@@ -22,18 +23,30 @@ export const checkSyncResult = (pearlSuccess, queenSuccess) => {
   return {};
 };
 
-export const getNotifFromResult = result => {
+export const getNotifFromResult = (result, nowDate) => {
   const { state, messages } = result;
-  const now = new Date().getTime();
   return {
-    id: `notification-${now}`,
-    date: now,
+    date: nowDate || new Date().getTime(),
     type: NOTIFICATION_TYPE_SYNC,
     title: D.titleSync(state),
     messages,
     state,
     read: false,
+    detail: `report-${nowDate}`,
   };
+};
+
+export const getReportFromResult = (result, nowDate = 0) => {
+  const { details, state } = result;
+  if (state !== 'error') {
+    const { transmittedSurveyUnits, loadedSurveyUnits } = details;
+    return {
+      id: `report-${nowDate}`,
+      transmittedSurveyUnits,
+      loadedSurveyUnits,
+    };
+  }
+  return { id: `report-${nowDate}` };
 };
 
 const getResult = (
@@ -43,7 +56,9 @@ const getResult = (
   queenMissing = [],
   pearlSurveyUnits = [],
   pearlTempZone = [],
-  queenTempZone = []
+  queenTempZone = [],
+  transmittedSurveyUnits = {},
+  loadedSurveyUnits = {}
 ) => {
   const messages = [];
   if (pearlError || queenError) {
@@ -68,16 +83,26 @@ const getResult = (
     return {
       state: 'warning',
       messages: [...messages, D.warningOrErrorEndMessage, D.syncYouCanStillWork],
+      details: { transmittedSurveyUnits, loadedSurveyUnits },
     };
   }
-  return { state: 'success', messages: [D.syncSuccessMessage] };
+  return {
+    state: 'success',
+    messages: [D.syncSuccessMessage],
+    details: { transmittedSurveyUnits, loadedSurveyUnits },
+  };
 };
 
 export const analyseResult = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) => {
   const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY)) || {};
   const pearlSus = await surveyUnitIdbService.getAll();
   const pearlSurveyUnitsArray = pearlSus.map(({ id }) => id);
-  const { error: pearlError, surveyUnitsInTempZone: pearlTempZone } = getSavedSyncPearlData() || {};
+  const {
+    error: pearlError,
+    surveyUnitsInTempZone: pearlTempZone,
+    transmittedSurveyUnits,
+    loadedSurveyUnits,
+  } = getSavedSyncPearlData() || {};
   const {
     error: queenError,
     surveyUnitsSuccess: queenSurveyUnitsArray,
@@ -128,11 +153,16 @@ export const analyseResult = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) =>
     queenMissing,
     pearlSurveyUnitsArray,
     pearlTempZone,
-    queenTempZone
+    queenTempZone,
+    transmittedSurveyUnits,
+    loadedSurveyUnits
   );
 
-  const notification = getNotifFromResult(result);
+  const nowDate = new Date().getTime();
+  const notification = getNotifFromResult(result, nowDate);
   await notificationIdbService.addOrUpdateNotif(notification);
+  const report = getReportFromResult(result, nowDate);
+  await syncReportIdbService.addOrUpdateReport(report);
 
   return result;
 };

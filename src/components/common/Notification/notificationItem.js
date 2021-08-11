@@ -8,6 +8,7 @@ import { NOTIFICATION_TYPE_SYNC } from 'utils/constants';
 import { NavigationContext } from '../navigation/component';
 import D from 'i18n';
 import { NotificationWrapperContext } from 'components/notificationWrapper';
+import syncReportIdbService from 'indexedbb/services/syncReport-idb-service';
 
 const useStyles = makeStyles(theme => ({
   root: { padding: '1em' },
@@ -32,7 +33,7 @@ export const NotificationItem = ({ data }) => {
   const { setOpen } = useContext(NavigationContext);
   const { setSyncResult } = useContext(SynchronizeWrapperContext);
 
-  const { id, date, title, type, messages, read, state } = data;
+  const { id, date, title, type, messages, read, state, detail } = data;
 
   const finalType = type === NOTIFICATION_TYPE_SYNC ? D.simpleSync : D.other;
 
@@ -43,13 +44,14 @@ export const NotificationItem = ({ data }) => {
 
   const classes = useStyles();
 
-  const markAsRead = () => {
+  const markAsRead = async () => {
     if (!read) {
       markNotifAsRead(id);
     }
     if (type === NOTIFICATION_TYPE_SYNC) {
+      const report = (await syncReportIdbService.getById(detail)) || {};
       setOpen(false);
-      setSyncResult({ date: finalDate, state, messages });
+      setSyncResult({ date: finalDate, state, messages, details: report });
     }
   };
 
