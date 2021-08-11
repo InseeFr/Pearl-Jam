@@ -181,7 +181,6 @@ export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE)
   try {
     surveyUnitsInTempZone = await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
     transmittedSurveyUnits = await getWFSSurveyUnitsSortByCampaign();
-    console.log('transmittedSurveyUnits', transmittedSurveyUnits);
 
     await clean();
 

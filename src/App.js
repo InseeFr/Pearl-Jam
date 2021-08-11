@@ -6,14 +6,15 @@ import { ThemeProvider, CssBaseline } from '@material-ui/core';
 import theme from './theme';
 import Palette from 'components/common/palette';
 import Home from 'components/panel-body/home';
-import TrainingPage from 'components/panel-body/training';
 import D from 'i18n';
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, useLocation } from 'react-router-dom';
 import SynchronizeWrapper from 'components/sychronizeWrapper';
 import { NotificationWrapper } from 'components/notificationWrapper';
+import { ResetData } from 'components/panel-body/resetData';
 
 function App() {
+  const { pathname } = useLocation();
   const { authenticated } = useAuth();
   const serviceWorkerInfo = useServiceWorker(authenticated);
 
@@ -26,9 +27,11 @@ function App() {
         {authenticated && (
           <SynchronizeWrapper>
             <NotificationWrapper>
-              <Route path="/" render={routeProps => <Home {...routeProps} />} />
-              <Route path="/training" component={TrainingPage} />
-              <Route path="/palette" component={Palette} />
+              {!pathname.startsWith('/support') && (
+                <Route path="/" render={routeProps => <Home {...routeProps} />} />
+              )}
+              <Route path="/support/palette" component={Palette} />
+              <Route path="/support/reset-data" component={ResetData} />
             </NotificationWrapper>
           </SynchronizeWrapper>
         )}

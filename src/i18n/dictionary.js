@@ -20,6 +20,7 @@ import waitingMessage from './waitingMessage';
 import mailMessage from './mailMessage';
 import syncMessage from './syncMessage';
 import notificationMessage from './notificationMessage';
+import resetDataMessage from './resetDataMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -83,6 +84,7 @@ const dictionary = {
   ...mailMessage,
   ...syncMessage,
   ...notificationMessage,
+  ...resetDataMessage,
 };
 
 export default dictionary;
