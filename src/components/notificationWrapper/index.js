@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import notificationIdbService from 'indexedbb/services/notification-idb-service';
 import syncReportIdbService from 'indexedbb/services/syncReport-idb-service';
+import { NOTIFICATION_TYPE_SYNC } from 'utils/constants';
 
 export const NotificationWrapperContext = React.createContext();
 
 export const NotificationWrapper = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
+  const [notificationsFiltered, setNotificatiosFiltered] = useState([]);
+  const [filterType, setFilterType] = useState(null);
+
+  useEffect(() => {
+    const newNotif = filterType
+      ? notifications.filter(({ type }) => type === filterType)
+      : notifications;
+    setNotificatiosFiltered(newNotif);
+  }, [notifications, filterType]);
 
   useEffect(() => {
     const load = async () => {
@@ -31,9 +41,11 @@ export const NotificationWrapper = ({ children }) => {
     setNotifications(newNotifs);
   };
 
-  const markAllAsRead = async () => {
+  const markAllFilteredNotifAsRead = async () => {
     const newNotifs = notifications.map(notif => {
-      return { ...notif, read: true };
+      const { type } = notif;
+      if (filterType && type === filterType) return { ...notif, read: true };
+      return notif;
     });
     await Promise.all(
       newNotifs.map(async notif => {
@@ -44,18 +56,24 @@ export const NotificationWrapper = ({ children }) => {
   };
 
   const deleteAll = async () => {
-    await notificationIdbService.deleteAll();
-    await syncReportIdbService.deleteAll();
-    setNotifications([]);
+    if (filterType === NOTIFICATION_TYPE_SYNC) await syncReportIdbService.deleteAll();
+    const idsToDelete = notificationsFiltered.map(({ id }) => id);
+    await notificationIdbService.deleteByIds(idsToDelete);
+    const newNotifs = notifications.filter(({ id }) => !idsToDelete.includes(id));
+    setNotifications(newNotifs);
   };
 
   const unReadNotificationsNumber = notifications.filter(({ read }) => !read).length;
+  const unReadNotificationsNumberFilterd = notificationsFiltered.filter(({ read }) => !read).length;
 
   const context = {
     markNotifAsRead,
     deleteAll,
-    markAllAsRead,
-    notifications,
+    markAllAsRead: markAllFilteredNotifAsRead,
+    filterType,
+    setFilterType,
+    notifications: notificationsFiltered,
+    unReadNotificationsNumberFilterd,
     unReadNotificationsNumber,
   };
 

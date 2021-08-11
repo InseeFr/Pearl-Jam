@@ -4,7 +4,7 @@ import { SynchronizeWrapperContext } from 'components/sychronizeWrapper';
 import { formatDistance } from 'date-fns';
 import React, { useContext } from 'react';
 import { dateFnsLocal } from 'utils';
-import { NOTIFICATION_TYPE_SYNC } from 'utils/constants';
+import { NOTIFICATION_TYPE_MANAGEMENT, NOTIFICATION_TYPE_SYNC } from 'utils/constants';
 import { NavigationContext } from '../navigation/component';
 import D from 'i18n';
 import { NotificationWrapperContext } from 'components/notificationWrapper';
@@ -35,7 +35,11 @@ export const NotificationItem = ({ data }) => {
 
   const { id, date, title, type, messages, read, state, detail } = data;
 
-  const finalType = type === NOTIFICATION_TYPE_SYNC ? D.simpleSync : D.other;
+  const typeOfNotif = {
+    [NOTIFICATION_TYPE_SYNC]: D.simpleSync,
+    [NOTIFICATION_TYPE_MANAGEMENT]: D.notifManagement,
+  };
+  const finalType = typeOfNotif[type];
 
   const finalDate = `${formatDistance(date || 0, new Date(), {
     addSuffix: true,
