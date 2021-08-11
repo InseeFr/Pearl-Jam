@@ -13,6 +13,7 @@ const Contact = ({ person, selectFormType, setInjectableData, index }) => {
     <DetailTile label={`${D.surveyUnitIndividual} ${index}`}>
       <Grid container>
         <AtomicInfoTile
+          key="user"
           iconType="user"
           data={getUserData(person)}
           onClickFunction={() => {
@@ -29,6 +30,7 @@ const Contact = ({ person, selectFormType, setInjectableData, index }) => {
         ></PhoneTile>
 
         <AtomicInfoTile
+          key="mail"
           iconType="mail"
           data={getMailData(person)}
           onClickFunction={() => {
