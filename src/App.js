@@ -1,5 +1,5 @@
 import { useAuth } from 'utils/auth/initAuth';
-import useServiceWorker from 'utils/hooks/useServiceWorker';
+import { useServiceWorker } from 'utils/hooks/useServiceWorker';
 import Preloader from 'components/common/loader';
 import Notification from 'components/common/Notification';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
