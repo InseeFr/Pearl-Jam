@@ -76,7 +76,7 @@ export const ResetDialog = ({
       } else setErrors({ ...errors, random: true });
     } else if (step === 'user') {
       const { id } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
-      if (id.toLowerCase() === values.user.toLowerCase()) {
+      if ((id || '').toLowerCase() === values.user.toLowerCase()) {
         clean();
         agreeFunction();
       } else setErrors({ ...errors, user: true });
