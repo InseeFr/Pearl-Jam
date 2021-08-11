@@ -50,12 +50,12 @@ export const ResetDialog = ({
 
   const [randomText, setRandomText] = useState(() => getRandomText());
   const [placeHolder] = useState(() => getRandomText());
-  const [values, setValues] = useState({ user: null, random: null });
+  const [values, setValues] = useState({ user: '', random: '' });
   const [errors, setErrors] = useState({ user: false, random: false });
 
   const clean = () => {
     setStep(null);
-    setValues({ user: null, random: null });
+    setValues({ user: '', random: '' });
     setErrors({ user: false, random: false });
     setRandomText(getRandomText());
   };
