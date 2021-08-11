@@ -7,13 +7,10 @@ import {
   DialogTitle,
   makeStyles,
   TextField,
+  Typography,
 } from '@material-ui/core';
 import D from 'i18n';
 import React, { useState } from 'react';
-import { differenceInMinutes } from 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
-import frLocale from 'date-fns/locale/fr';
-import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 const useStyles = makeStyles(theme => ({
   agreeBtn: {
@@ -21,6 +18,11 @@ const useStyles = makeStyles(theme => ({
   },
   disagreeBtn: {
     backgroundColor: theme.palette.success.main,
+  },
+  randomText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    letterSpacing: '1.5px',
   },
 }));
 
@@ -35,35 +37,42 @@ export const ResetDialog = ({
   last = false,
 }) => {
   const classes = useStyles();
-  const initDate = new Date('2021-01-01T10:30:00');
-  const [lastConfirmation, setLastConfirmation] = useState(false);
-  const [userDate, setUserDate] = useState(initDate);
-  const [userDateError, setUserDateError] = useState(false);
 
-  const handleChange = newValue => {
-    setUserDateError(false);
-    setUserDate(newValue);
+  const getRandomText = () =>
+    Math.random()
+      .toString(36)
+      .substring(2, 10)
+      .toUpperCase();
+
+  const [randomText, setRandomText] = useState(() => getRandomText());
+  const [lastConfirmation, setLastConfirmation] = useState(false);
+  const [userInput, setUserInput] = useState('');
+  const [userInputError, setUserInputError] = useState(false);
+
+  const clean = () => {
+    setLastConfirmation(false);
+    setUserInput('');
+    setUserInputError(false);
+    setRandomText(getRandomText());
   };
 
-  const validDate = () => {
-    const now = new Date();
-    const dateToConfirm = new Date(userDate);
-    const diff = differenceInMinutes(now, dateToConfirm);
-    if (diff === 0) {
-      setLastConfirmation(false);
-      setUserDate(initDate);
-      setUserDateError(false);
+  const handleChange = event => {
+    setUserInputError(false);
+    setUserInput(event.target.value);
+  };
+
+  const validateInput = () => {
+    if (userInput === randomText) {
+      clean();
       agreeFunction();
-    } else setUserDateError(true);
+    } else setUserInputError(true);
   };
 
   const confirm = e => {
     setLastConfirmation(true);
   };
   const cancel = e => {
-    setLastConfirmation(false);
-    setUserDate(initDate);
-    setUserDateError(false);
+    clean();
     disagreeFunction(e);
   };
 
@@ -73,9 +82,9 @@ export const ResetDialog = ({
 
   return (
     <Dialog open={open} onClose={localDisagreeFunction}>
-      <DialogTitle>{title}</DialogTitle>
       {!lastConfirmation && (
         <>
+          <DialogTitle>{title}</DialogTitle>
           <DialogContent>
             <DialogContentText>{body}</DialogContentText>
           </DialogContent>
@@ -91,23 +100,22 @@ export const ResetDialog = ({
       )}
       {lastConfirmation && (
         <>
+          <DialogTitle>{D.confirmTitle}</DialogTitle>
           <DialogContent>
-            <DialogContentText>{D.confirmDate}</DialogContentText>
-            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={frLocale}>
-              <DateTimePicker
-                renderInput={props => <TextField {...props} />}
-                ampm={false}
-                error={userDateError}
-                helperText={userDateError ? D.dateError : null}
-                value={userDate}
-                onChange={handleChange}
-                disableHighlightToday
-                format="dd/MM/yyyy - HH:mm"
-              />
-            </MuiPickersUtilsProvider>
+            <DialogContentText>{D.confirmRandom}</DialogContentText>
+            <Typography className={classes.randomText}>{randomText}</Typography>
+            <TextField
+              error={userInputError}
+              helperText={userInputError ? D.confirmError : null}
+              defaultValue=""
+              placeholder={getRandomText()}
+              id="name"
+              value={userInput}
+              onChange={handleChange}
+            />
           </DialogContent>
           <DialogActions>
-            <Button onClick={validDate} className={classes.agreeBtn}>
+            <Button onClick={validateInput} className={classes.agreeBtn}>
               {D.confirmButton}
             </Button>
           </DialogActions>

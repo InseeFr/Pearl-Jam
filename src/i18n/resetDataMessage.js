@@ -21,11 +21,15 @@ const resetDataMessage = {
   secondBodyDialog: { fr: 'Dernier avertissement !', en: 'Last warning!' },
   lastTitle: { fr: 'Êtes vous vraiment sûr(e) ?', en: 'Are you really sure?' },
   mainTitle: { fr: 'Zone dangereuse', en: 'Danger zone' },
-  confirmDate: {
-    fr: "Entrer la date et l'heure d'aujourd'hui pour confirmer la suppression.",
-    en: "Enter today's date and time to confirm deletion.",
+  confirmTitle: { fr: 'Confirmation', en: 'Confirmation' },
+  confirmRandom: {
+    fr: 'Veuillez entrer le texte ci dessous pour confirmer la suppression.',
+    en: 'Please enter the text below to confirm the deletion.',
   },
-  dateError: { fr: "La date ou l'heure est incorrecte.", en: 'The date or time is incorrect.' },
+  confirmError: {
+    fr: 'La saisie ne correspond pas avec le texte ci-dessus.',
+    en: 'The entry does not match the text above.',
+  },
 };
 
 export default resetDataMessage;
