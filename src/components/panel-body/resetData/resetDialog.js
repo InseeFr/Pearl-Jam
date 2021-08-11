@@ -60,10 +60,7 @@ export const ResetDialog = ({
     setRandomText(getRandomText());
   };
 
-  const handleChange = event => {
-    const {
-      target: { id, value },
-    } = event;
+  const handleChange = ({ target: { id, value } }) => {
     setValues({ ...values, [id]: value });
     setErrors({ ...errors, [id]: false });
   };
