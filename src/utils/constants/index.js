@@ -12,7 +12,7 @@ export const PEARL_URL = window.localStorage.getItem('PEARL_URL') || '';
 export const PEARL_USER_KEY = 'pearl-user';
 export const GUEST_PEARL_USER = {
   lastName: 'Guest',
-  firstName: 'Guest',
+  firstName: 'Amazing',
   id: 'Guest',
   roles: ['Guest'],
 };
