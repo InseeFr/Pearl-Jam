@@ -7,7 +7,20 @@ export class LocalDbFactory extends Dexie {
     super(dataBaseName);
     this.version(1).stores(schema);
     // upgrade dataBase (please see https://dexie.org/docs/Tutorial/Design#database-versioning)
-    this.version(2).stores(schema2);
+    this.version(2)
+      .stores(schema2)
+      .upgrade(tx => {
+        // An upgrade function for version 2 will upgrade data based on version 1.
+        // delete unused attribute
+        return tx
+          .table('notification')
+          .toCollection()
+          .modify(notif => {
+            // Modify each friend:
+            delete notif.time;
+            delete notif.message;
+          });
+      });
   }
 
   getStore(name) {
