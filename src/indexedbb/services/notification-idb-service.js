@@ -6,7 +6,7 @@ class NotificationIdbService extends AbstractIdbService {
   }
 
   async addOrUpdateNotif(item) {
-    const { id, ...other } = item;
+    const { id } = item;
     /* prevent duplicated survey-unit */
     if (id) {
       const notification = await this.get(id);
@@ -14,7 +14,7 @@ class NotificationIdbService extends AbstractIdbService {
         return this.update(item);
       }
     }
-    return this.insert({ ...other });
+    return this.insert(item);
   }
 }
 

@@ -1,5 +1,5 @@
 {
-  "notification": "++id,date,type,title,messages,state,read,detail",
+  "notification": "++id,date,type,title,messages,state,read,detail,sync",
   "surveyUnitMissing": "id",
   "syncReport": "id,transmittedSurveyUnits,loadedSurveyUnits"
 }
