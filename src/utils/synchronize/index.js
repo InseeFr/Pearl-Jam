@@ -69,14 +69,14 @@ const sendData = async (urlPearlApi, authenticationMode) => {
         id,
         body
       );
-      if (error && [403, 404, 500].includes(status)) {
+      if (error && [400, 403, 404, 500].includes(status)) {
         const { error: tempZoneError } = await api.putSurveyUnitToTempZone(
           urlPearlApi,
           authenticationMode
         )(id, body);
         if (!tempZoneError) surveyUnitsInTempZone.push(id);
         else throw new Error('Server is not responding');
-      } else if (error && ![403, 404, 500].includes(status))
+      } else if (error && ![400, 403, 404, 500].includes(status))
         throw new Error('Server is not responding');
     })
   );
@@ -127,11 +127,11 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
           const validSurveyUnit = validateSU(mergedSurveyUnit);
           await putSurveyUnitInDataBase(validSurveyUnit);
           surveyUnitsSuccess.push({ id: mergedSurveyUnit.id, campaign: mergedSurveyUnit.campaign });
-        } else if ([404, 403, 500].includes(status)) surveyUnitsFailed.push(su.id);
+        } else if ([400, 403, 404, 500].includes(status)) surveyUnitsFailed.push(su.id);
         else throw new Error('Server is not responding');
       })
     );
-  } else if (![404, 403, 500].includes(status)) throw new Error('Server is not responding');
+  } else if (![400, 403, 404, 500].includes(status)) throw new Error('Server is not responding');
 
   return { surveyUnitsSuccess, surveyUnitsFailed };
 };
