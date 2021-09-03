@@ -3,9 +3,9 @@ import { Fab, makeStyles, Paper, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import { DatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import contactAttemptEnum from 'common-tools/enum/ContactAttemptEnum';
-import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
-import { addNewState, areCaEqual, getSortedContactAttempts } from 'common-tools/functions';
+import contactAttemptEnum from 'utils/enum/ContactAttemptEnum';
+import surveyUnitStateEnum from 'utils/enum/SUStateEnum';
+import { addNewState, areCaEqual, getSortedContactAttempts } from 'utils/functions';
 import frLocale from 'date-fns/locale/fr';
 import D from 'i18n';
 import PropTypes from 'prop-types';
@@ -75,7 +75,7 @@ class FrLocalizedUtils extends DateFnsUtils {
 }
 
 const Form = ({ previousValue, save, deleteAction }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactAttempt, setContactAttempt] = useState(previousValue);
   const [visiblePanel, setVisiblePanel] = useState(undefined);

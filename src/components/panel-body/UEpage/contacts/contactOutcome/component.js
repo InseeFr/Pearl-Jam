@@ -1,6 +1,6 @@
 import { makeStyles, Paper, Typography } from '@material-ui/core';
-import { findContactOutcomeValueByType } from 'common-tools/enum/ContactOutcomEnum';
-import formEnum from 'common-tools/enum/formEnum';
+import { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomEnum';
+import formEnum from 'utils/enum/formEnum';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';

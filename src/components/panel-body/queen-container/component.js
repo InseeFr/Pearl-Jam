@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import listenQueen from 'common-tools/hooks/listenQueen';
+import listenQueen from 'utils/hooks/listenQueen';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 

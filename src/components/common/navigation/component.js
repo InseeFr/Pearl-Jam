@@ -1,20 +1,35 @@
-import { Badge, Card, CardMedia, IconButton, Tooltip } from '@material-ui/core';
+import {
+  Badge,
+  Card,
+  CardMedia,
+  ClickAwayListener,
+  Fade,
+  IconButton,
+  Popper,
+  Tooltip,
+} from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import { PEARL_USER_KEY } from 'common-tools/constants';
+import { PEARL_USER_KEY } from 'utils/constants';
 import Synchronize from 'components/common/synchronize';
 import InfoTile from 'components/panel-body/UEpage/infoTile';
 import D from 'i18n';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, Route } from 'react-router-dom';
 import OnlineStatus from '../online-status';
 import SearchBar from '../search/component';
+import { Notifications } from '@material-ui/icons';
+import { NotificationsRoot } from '../Notification/notificationsRoot';
+import { NotificationWrapperContext } from 'components/notificationWrapper';
+
+export const NavigationContext = React.createContext();
 
 const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refresh }) => {
+  const { unReadNotificationsNumber } = useContext(NotificationWrapperContext);
   const [disabled, setDisable] = useState(location.pathname.startsWith('/queen'));
 
   useEffect(() => {
@@ -65,12 +80,28 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
         backgroundColor: theme.palette.primary.main,
       },
     },
+    notif: {
+      zIndex: 1200,
+    },
   }));
 
   const classes = useStyles();
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickAway = () => {
+    setOpen(false);
+  };
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+    setOpen(o => !o);
+  };
+
+  const context = { setOpen };
+
   return (
-    <>
+    <NavigationContext.Provider value={context}>
       <AppBar position="sticky" className={classes.appBar} elevation={0}>
         <Toolbar className={classes.appBar}>
           <Tooltip title={D.goToHomePage}>
@@ -79,13 +110,9 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
               edge="start"
               color="inherit"
               aria-label="open notifications"
+              onClick={() => setOpenDrawer(true)}
             >
-              <Badge badgeContent={4} color="secondary">
-                <MenuIcon
-                  className={classes.notificationsIcon}
-                  onClick={() => setOpenDrawer(true)}
-                />
-              </Badge>
+              <MenuIcon className={classes.notificationsIcon} />
             </IconButton>
           </Tooltip>
           <NavLink activeClassName="active" exact to="/">
@@ -111,6 +138,32 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
             />
           </div>
           <div className={classes.column}>
+            <ClickAwayListener onClickAway={handleClickAway}>
+              <div>
+                <Tooltip title={D.notifications}>
+                  <IconButton onClick={handleClick}>
+                    <Badge badgeContent={unReadNotificationsNumber} color="secondary">
+                      <Notifications />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+                <Popper
+                  className={classes.notif}
+                  open={open}
+                  anchorEl={anchorEl}
+                  placement="bottom"
+                  transition
+                >
+                  {({ TransitionProps }) => (
+                    <Fade {...TransitionProps} timeout={0}>
+                      <NotificationsRoot />
+                    </Fade>
+                  )}
+                </Popper>
+              </div>
+            </ClickAwayListener>
+          </div>
+          <div className={classes.column}>
             <OnlineStatus />
             <Typography variant="subtitle1" noWrap>
               {getName()}
@@ -119,7 +172,7 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
           <Synchronize disabled={disabled} materialClass={classes.syncIcon} />
         </Toolbar>
       </AppBar>
-    </>
+    </NavigationContext.Provider>
   );
 };
 export default Navigation;

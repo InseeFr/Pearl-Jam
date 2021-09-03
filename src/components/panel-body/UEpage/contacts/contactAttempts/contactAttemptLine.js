@@ -1,6 +1,6 @@
 import { makeStyles, Typography } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { findContactAttemptValueByType } from 'common-tools/enum/ContactAttemptEnum';
+import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
 import format from 'date-fns/format';
 import { fr } from 'date-fns/locale';
 import PropTypes from 'prop-types';

@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Router = ({ match, saveUE, refresh }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
 
   /** refs are used for scrolling, dispatched to the clickable link and linked element */
   const detailsRef = useRef('details');

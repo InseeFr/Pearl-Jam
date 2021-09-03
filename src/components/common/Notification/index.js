@@ -1,89 +1,102 @@
-import { Button, CircularProgress, makeStyles, Slide, Snackbar } from '@material-ui/core';
-import useTimer from 'common-tools/hooks/useTimer';
+import { Box, Button, makeStyles, Slide, Snackbar } from '@material-ui/core';
 import D from 'i18n';
-import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { Alert } from '@material-ui/lab';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   root: {
-    top: '0',
+    position: 'absolute',
+    top: 0,
+    minWidth: '80%',
   },
-  content: {
-    backgroundColor: 'rgba(46, 139, 166, 0.9)',
+  buttonParrent: {
+    marginTop: theme.spacing(1),
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
 
 const SlideTransition = props => <Slide {...props} direction="down" />;
 
 const Notification = ({ serviceWorkerInfo }) => {
-  const [open, setOpen] = useState(true);
-  const [progress, setProgress] = useTimer(setOpen);
+  const classes = useStyles();
+  const [message, setMessage] = useState(null);
   const {
-    installingServiceWorker,
-    waitingServiceWorker,
+    isUpdating,
+    isUpdateInstalled,
+    isInstallingServiceWorker,
     isUpdateAvailable,
     isServiceWorkerInstalled,
+    isInstallationFailed,
+    updateApp,
+    clearUpdating,
   } = serviceWorkerInfo;
-
-  const updateAssets = () => {
-    if (waitingServiceWorker) {
-      waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
-    }
-  };
+  const [open, setOpen] = useState(false);
+  const [severityType, setSeverityType] = useState('info');
 
   useEffect(() => {
-    if (waitingServiceWorker) {
-      waitingServiceWorker.addEventListener('statechange', event => {
-        if (event.target.state === 'activated') {
-          window.location.reload();
-        }
-      });
-    }
-  }, [waitingServiceWorker]);
+    if (message) setOpen(true);
+  }, [message]);
 
-  const getMessage = () => {
-    if (isUpdateAvailable) return D.updateAvailable;
-    if (isServiceWorkerInstalled) return D.appReadyOffline;
-    if (installingServiceWorker) return D.appInstalling;
-    return '';
+  useEffect(() => {
+    if (isUpdating || isInstallingServiceWorker || isUpdateAvailable) setSeverityType('info');
+    if (isInstallationFailed) setSeverityType('error');
+    if (isUpdateInstalled || isServiceWorkerInstalled) setSeverityType('success');
+  }, [
+    isUpdating,
+    isInstallingServiceWorker,
+    isUpdateAvailable,
+    isInstallationFailed,
+    isUpdateInstalled,
+    isServiceWorkerInstalled,
+  ]);
+
+  useEffect(() => {
+    if (isUpdating) setMessage(D.updating);
+    else if (isUpdateInstalled) setMessage(D.updateInstalled);
+    else if (isUpdateAvailable) setMessage(D.updateAvailable);
+    else if (isServiceWorkerInstalled) setMessage(D.appReadyOffline);
+    else if (isInstallingServiceWorker) setMessage(D.appInstalling);
+    else if (isInstallationFailed) setMessage(D.installError);
+    else setMessage(null);
+  }, [
+    isUpdating,
+    isInstallingServiceWorker,
+    isUpdateAvailable,
+    isInstallationFailed,
+    isUpdateInstalled,
+    isServiceWorkerInstalled,
+  ]);
+
+  const close = () => {
+    setOpen(false);
+    if (isUpdateInstalled) setTimeout(() => clearUpdating(), 1000);
   };
-
-  const classes = useStyles();
 
   return (
     <Snackbar
-      open={(isUpdateAvailable || isServiceWorkerInstalled || installingServiceWorker) && open}
+      open={open}
+      onClose={close}
       className={classes.root}
+      anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
       TransitionComponent={SlideTransition}
-      ContentProps={{ className: classes.content }}
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      message={getMessage()}
-      onClose={() => setOpen(false)}
-      onEntering={() => setProgress(1)}
-      action={
-        // eslint-disable-next-line react/jsx-wrap-multilines
-        <Button
-          color="inherit"
-          size="small"
-          onClick={isUpdateAvailable ? updateAssets : () => setOpen(false)}
-        >
-          {isUpdateAvailable ? D.updateNow : D.closeButton}
-          <CircularProgress value={progress.current} color="inherit" variant="determinate" />
-        </Button>
-      }
-    />
+    >
+      <Alert
+        elevation={6}
+        variant="filled"
+        onClose={close}
+        severity={severityType}
+        className={classes.root}
+      >
+        {message}
+        {isUpdateAvailable && !isUpdating && (
+          <Box className={classes.buttonParrent}>
+            <Button onClick={updateApp}>{D.updateNow}</Button>
+          </Box>
+        )}
+      </Alert>
+    </Snackbar>
   );
 };
 
 export default Notification;
-Notification.propTypes = {
-  serviceWorkerInfo: PropTypes.shape({
-    installingServiceWorker: PropTypes.shape({}).isRequired,
-    waitingServiceWorker: PropTypes.shape({
-      postMessage: PropTypes.shape({}),
-      addEventListener: PropTypes.shape({}),
-    }).isRequired,
-    isUpdateAvailable: PropTypes.shape({}).isRequired,
-    isServiceWorkerInstalled: PropTypes.shape({}).isRequired,
-  }).isRequired,
-};

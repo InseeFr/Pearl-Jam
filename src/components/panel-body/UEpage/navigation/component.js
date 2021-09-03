@@ -1,12 +1,9 @@
 import { Button, makeStyles, Tab, Tabs } from '@material-ui/core';
-import suStateEnum from 'common-tools/enum/SUStateEnum';
-import {
-  addNewState,
-  isQuestionnaireAvailable,
-  isValidForTransmission,
-} from 'common-tools/functions';
+import suStateEnum from 'utils/enum/SUStateEnum';
+import { addNewState, isQuestionnaireAvailable, isValidForTransmission } from 'utils/functions';
 import D from 'i18n';
 import PropTypes from 'prop-types';
+import WarningIcon from '@material-ui/icons/Warning';
 import React, { useContext, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import SurveyUnitContext from '../UEContext';
@@ -36,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 
 const Navigation = ({ match, refs }) => {
   const [tabIndex, setTabIndex] = useState(0);
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit, inaccessible } = useContext(SurveyUnitContext);
   const history = useHistory();
   const { id } = useParams();
   const { detailsRef, identificationRef, lettersRef, contactsRef, commentsRef } = refs;
@@ -83,8 +80,9 @@ const Navigation = ({ match, refs }) => {
       <div>
         <Button
           className={classes.button}
-          disabled={!isQuestionnaireAvailable(surveyUnit)}
+          disabled={!isQuestionnaireAvailable(surveyUnit)(inaccessible)}
           onClick={openQueen}
+          endIcon={inaccessible && <WarningIcon style={{ color: 'orange' }} />}
         >
           {D.questionnaireButton}
         </Button>

@@ -1,5 +1,5 @@
-import formEnum from 'common-tools/enum/formEnum';
-import { deleteContactAttempt, getAddressData, getCommentByType } from 'common-tools/functions';
+import formEnum from 'utils/enum/formEnum';
+import { deleteContactAttempt, getAddressData, getCommentByType } from 'utils/functions';
 import React from 'react';
 import AddressForm from './addressForm';
 import ContactAttemptsForm from './contactAttemptsForm';

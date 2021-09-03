@@ -11,14 +11,13 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
   },
-  img: { marginTop: '10%' },
 }));
 
 const Preloader = ({ message }) => {
   const classes = useStyles();
   return (
     <Backdrop className={classes.backdrop} open>
-      <img className={classes.img} src={imgPreloader} alt="waiting..." />
+      <img src={imgPreloader} alt="waiting..." />
       <h2>{D.pleaseWait}</h2>
       <h3>{message}</h3>
     </Backdrop>
