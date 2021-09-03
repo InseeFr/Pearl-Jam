@@ -1,7 +1,7 @@
 import { TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { getPhoneSource } from 'common-tools/functions';
-import MaterialIcons from 'common-tools/icons/materialIcons';
+import { getPhoneSource } from 'utils/functions';
+import MaterialIcons from 'utils/icons/materialIcons';
 import PropTypes from 'prop-types';
 import React from 'react';
 

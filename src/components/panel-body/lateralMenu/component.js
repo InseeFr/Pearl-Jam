@@ -1,12 +1,10 @@
 import { Card, Drawer } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import D from 'i18n';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import Notification from './notificationItem';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -44,14 +42,6 @@ const useStyles = makeStyles(theme => ({
 }));
 const LateralMenu = ({ openDrawer, setOpenDrawer, version }) => {
   const classes = useStyles();
-  const [showNotifications, setShowNotifications] = useState(false);
-
-  const handleClick = event => {
-    if (event.target.id === 'notifications') {
-      setShowNotifications(true);
-      event.stopPropagation();
-    }
-  };
 
   return (
     <>
@@ -79,37 +69,9 @@ const LateralMenu = ({ openDrawer, setOpenDrawer, version }) => {
           </Card>
         </NavLink>
 
-        <Card
-          id="notifications"
-          className={`${classes.card} ${classes.clickable}`}
-          onClick={handleClick}
-        >
-          <Typography>{D.goToNotificationsPage}</Typography>
-          <ChevronRightIcon />
-        </Card>
         <Card className={classes.card}>
           <Typography>{`Version : ${version}`}</Typography>
         </Card>
-      </Drawer>
-      <Drawer
-        className={`${classes.drawer} ${classes.secondDrawer}`}
-        BackdropProps={{
-          classes: {
-            root: classes.backDrop,
-          },
-        }}
-        classes={{
-          paper: classes.secondDrawerPaper,
-        }}
-        open={showNotifications}
-        onClose={() => setShowNotifications(false)}
-      >
-        <Typography variant="h6" className={classes.title}>
-          {D.goToNotificationsPage}
-        </Typography>
-        <Notification />
-        <Notification />
-        <Notification />
       </Drawer>
     </>
   );
