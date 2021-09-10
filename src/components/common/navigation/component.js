@@ -8,23 +8,24 @@ import {
   Popper,
   Tooltip,
 } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import { makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import MenuIcon from '@material-ui/icons/Menu';
-import { PEARL_USER_KEY } from 'utils/constants';
-import Synchronize from 'components/common/synchronize';
-import InfoTile from 'components/panel-body/UEpage/infoTile';
-import D from 'i18n';
-import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, Route } from 'react-router-dom';
-import OnlineStatus from '../online-status';
-import SearchBar from '../search/component';
+import React, { useContext, useEffect, useState } from 'react';
+
+import AppBar from '@material-ui/core/AppBar';
+import D from 'i18n';
+import InfoTile from 'components/panel-body/UEpage/infoTile';
+import MenuIcon from '@material-ui/icons/Menu';
+import { NotificationWrapperContext } from 'components/notificationWrapper';
 import { Notifications } from '@material-ui/icons';
 import { NotificationsRoot } from '../Notification/notificationsRoot';
-import { NotificationWrapperContext } from 'components/notificationWrapper';
+import OnlineStatus from '../online-status';
+import { PEARL_USER_KEY } from 'utils/constants';
+import PropTypes from 'prop-types';
+import SearchBar from '../search/component';
+import Synchronize from 'components/common/synchronize';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 export const NavigationContext = React.createContext();
 
@@ -95,7 +96,8 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
   };
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
-    setOpen(o => !o);
+    // temporary disabling the pop-up
+    setOpen(o => false && !o);
   };
 
   const context = { setOpen };
