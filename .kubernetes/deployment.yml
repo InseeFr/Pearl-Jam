@@ -17,7 +17,6 @@ spec:
           image: inseefr/pearl-jam:latest
           env:
            - name: QUEEN_URL
-             value: 'https://queen.demo.dev.sspcloud.fr'
-          env:
+             value: queen-url
            - name: PEARL_API_URL
-             value: 'https://pearl-bo.demo.dev.sspcloud.fr'
+             value: pearl-api-url
