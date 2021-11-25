@@ -1,23 +1,36 @@
-import { CssBaseline, ThemeProvider } from '@material-ui/core';
-import App from 'App';
-import { useQueenFromConfig } from 'common-tools/hooks/useQueenFromConfig';
-import QueenContainer from 'components/panel-body/queen-container';
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import theme from './theme';
+import { useQueenFromConfig } from 'utils/hooks/useQueenFromConfig';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { useConfiguration } from 'utils/hooks/configuration';
+import { addOnlineStatusObserver } from 'utils';
+import AppRouter from 'AppRooter';
+
+export const AppContext = React.createContext();
 
 function Root() {
-  useQueenFromConfig(`${window.location.origin}/configuration.json`);
+  const { configuration } = useConfiguration();
+  useQueenFromConfig(configuration);
+
+  const [online, setOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    addOnlineStatusObserver(s => {
+      setOnline(s);
+    });
+  }, []);
+
+  const context = { ...configuration, online };
+
   return (
-    <Router>
-      <Switch>
-        <Route path="/queen" component={routeProps => <QueenContainer {...routeProps} />} />
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Route path="/" component={App} />
-        </ThemeProvider>
-      </Switch>
-    </Router>
+    <>
+      {configuration && (
+        <Router>
+          <AppContext.Provider value={context}>
+            <AppRouter />
+          </AppContext.Provider>
+        </Router>
+      )}
+    </>
   );
 }
 

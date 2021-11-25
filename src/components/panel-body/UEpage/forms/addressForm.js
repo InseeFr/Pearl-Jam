@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Form = ({ closeModal, save, previousValue }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
 
   /** previousValue =[ { label: D.anyOne , value: realValue }, {}, ... ] */
   /** previousData = { D.anyOne: realValue , D.anotherOne: anotherRealValue }  */

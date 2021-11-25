@@ -17,6 +17,10 @@ import titleMessage from './titleMessage';
 import toDoMessage from './toDoMessage';
 import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
+import mailMessage from './mailMessage';
+import syncMessage from './syncMessage';
+import notificationMessage from './notificationMessage';
+import resetDataMessage from './resetDataMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -41,18 +45,27 @@ const dictionary = {
   connexionOK: { fr: 'Connexion OK', en: 'Connection ok' },
   connexionKO: { fr: 'Pas de réseau', en: 'No network' },
   interviewer: { fr: 'Enquêteur', en: 'Interviewer' },
-  syncResult: { fr: 'Résultat de la synchronisation', en: 'Result of synchronization' },
-  syncSuccess: { fr: 'La synchronisation a réussi.', en: 'Synchronization succeeded.' },
-  syncFailure: {
-    fr: 'La synchronisation a échoué, veuillez recommencer.',
-    en: 'Synchronization has failed, please try again.',
+  appInstalling: {
+    fr: 'Installation, veuillez patientez...',
+    en: 'Installation, please wait...',
   },
-  appInstalling: { fr: 'Installation, veuillez patientez...', en: 'Installation, please wait...' },
   updateAvailable: {
     fr:
       "Une nouvelle version de l'application est disponible et sera utilisée lorsque tous les onglets de cette page seront fermés.",
     en:
       'New version of the application is available and will be used when all tabs for this page are closed.',
+  },
+  updateInstalled: {
+    fr: "L'application a été mise à jour avec succès",
+    en: 'The application has been successfully updated',
+  },
+  updating: {
+    fr: 'Mise à jour en cours',
+    en: 'Update in progress',
+  },
+  installError: {
+    fr: "Erreur lors de l'installation de l'application",
+    en: 'Error during the installation of the application',
   },
   appReadyOffline: {
     fr:
@@ -61,6 +74,8 @@ const dictionary = {
   },
   areYouSure: { fr: 'Êtes-vous sûr ?', en: 'Are you sure ?' },
   delete: { fr: 'Supprimer', en: 'Delete' },
+  other: { fr: 'Autre', en: 'Other' },
+
   ...buttonMessage,
   ...navigationMessage,
   ...waitingMessage,
@@ -80,6 +95,10 @@ const dictionary = {
   ...ageGroupsMessage,
   ...titleMessage,
   ...phoneSourceMessage,
+  ...mailMessage,
+  ...syncMessage,
+  ...notificationMessage,
+  ...resetDataMessage,
 };
 
 export default dictionary;

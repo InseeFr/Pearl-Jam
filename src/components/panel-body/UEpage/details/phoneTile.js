@@ -1,7 +1,7 @@
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { sortPhoneNumbers } from 'common-tools/functions';
-import MaterialIcons from 'common-tools/icons/materialIcons';
+import { sortPhoneNumbers } from 'utils/functions';
+import MaterialIcons from 'utils/icons/materialIcons';
 import PropTypes from 'prop-types';
 import React from 'react';
 import PhoneList from './phoneList';

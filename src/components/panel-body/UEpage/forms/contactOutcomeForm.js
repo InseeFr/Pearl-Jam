@@ -1,16 +1,15 @@
-import { Fab, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
-import contactOutcomeEnum, {
-  findContactOutcomeValueByType,
-} from 'common-tools/enum/ContactOutcomEnum';
-import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
-import { addNewState } from 'common-tools/functions';
-import D from 'i18n';
-import PropTypes from 'prop-types';
+import { Fab, Grid, Paper, Typography, makeStyles } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
+import contactOutcomeEnum, { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomEnum';
+
+import AddIcon from '@material-ui/icons/Add';
+import D from 'i18n';
 import FormPanel from '../contacts/contactAttempts/formPanel';
+import PropTypes from 'prop-types';
+import RemoveIcon from '@material-ui/icons/Remove';
 import SurveyUnitContext from '../UEContext';
+import { addNewState } from 'utils/functions';
+import surveyUnitStateEnum from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(theme => ({
   contactAttempt: {
@@ -78,7 +77,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Form = ({ previousValue, save }) => {
-  const surveyUnit = useContext(SurveyUnitContext);
+  const { surveyUnit } = useContext(SurveyUnitContext);
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactOutcome, setContactOutcome] = useState(previousValue);
   const [secondPanelVisible, setSecondPanelVisible] = useState(false);
@@ -213,7 +212,7 @@ Form.propTypes = {
   previousValue: PropTypes.shape({
     date: PropTypes.number.isRequired,
     type: PropTypes.string,
-    totalNumberOfContactAttempts: PropTypes.string,
+    totalNumberOfContactAttempts: PropTypes.number,
   }),
 };
 Form.defaultProps = {

@@ -1,10 +1,11 @@
-import { makeStyles, Paper, Typography } from '@material-ui/core';
-import { findContactOutcomeValueByType } from 'common-tools/enum/ContactOutcomEnum';
-import formEnum from 'common-tools/enum/formEnum';
+import { Paper, Typography, makeStyles } from '@material-ui/core';
+import React, { useContext, useEffect, useState } from 'react';
+
 import D from 'i18n';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
 import SurveyUnitContext from '../../UEContext';
+import { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomEnum';
+import formEnum from 'utils/enum/formEnum';
 
 const useStyles = makeStyles(() => ({
   column: {
@@ -27,10 +28,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ContactOutcome = ({ selectFormType }) => {
-  const su = useContext(SurveyUnitContext);
+  const contextSu = useContext(SurveyUnitContext);
+  const { surveyUnit } = contextSu;
+
   const defaultContactOutcome =
-    su.contactOutcome !== undefined && su.contactOutcome !== null
-      ? su.contactOutcome
+    surveyUnit.contactOutcome !== undefined && surveyUnit.contactOutcome !== null
+      ? surveyUnit.contactOutcome
       : {
           date: new Date().getTime(),
           type: undefined,
@@ -40,15 +43,15 @@ const ContactOutcome = ({ selectFormType }) => {
 
   useEffect(() => {
     setContactOutcome(
-      su.contactOutcome !== undefined && su.contactOutcome !== null
-        ? su.contactOutcome
+      surveyUnit.contactOutcome !== undefined && surveyUnit.contactOutcome !== null
+        ? surveyUnit.contactOutcome
         : {
             date: new Date().getTime(),
             type: undefined,
             totalNumberOfContactAttempts: '0',
           }
     );
-  }, [su]);
+  }, [surveyUnit]);
 
   const outcomeValue = findContactOutcomeValueByType(contactOutcome.type);
   const classes = useStyles();

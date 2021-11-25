@@ -3,22 +3,25 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import WarningIcon from '@material-ui/icons/Warning';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheckedSharp';
 import ScheduleIcon from '@material-ui/icons/Schedule';
-import { intervalInDays } from 'common-tools/functions';
-import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
+import { intervalInDays } from 'utils/functions';
+import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import {
   getLastState,
   getprivilegedPerson,
   isSelectable,
-} from 'common-tools/functions/surveyUnitFunctions';
+} from 'utils/functions/surveyUnitFunctions';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { Tooltip } from '@material-ui/core';
+import D from 'i18n';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   root: {
     padding: 8,
     borderRadius: 15,
@@ -33,12 +36,12 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
   },
   justifyStart: {
+    display: 'flex',
     justifyContent: 'flex-start',
   },
   flexColumn: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'flex-end',
   },
   content: {
     flex: '1 0 auto',
@@ -57,7 +60,6 @@ const useStyles = makeStyles(() => ({
     '&:hover': { cursor: 'not-allowed' },
   },
   paddingTop: {
-    height: 'max-content',
     paddingTop: '10px',
     fontSize: 'xxx-large',
   },
@@ -79,9 +81,10 @@ const useStyles = makeStyles(() => ({
   leftMargin: {
     marginLeft: '2px',
   },
+  warning: { color: theme.palette.warning.main },
 }));
 
-const SurveyUnitCard = ({ surveyUnit }) => {
+const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
   const classes = useStyles();
 
   const history = useHistory();
@@ -127,16 +130,23 @@ const SurveyUnitCard = ({ surveyUnit }) => {
           {ssech}
         </Typography>
       </CardContent>
-      <CardContent className={`${classes.content} ${classes.flexRow}  ${classes.justifyStart}`}>
-        <PersonIcon className={`${classes.icon} ${classes.paddingTop}`} />
-        <div className={classes.flexColumn}>
-          <Typography component="h6" variant="h6" noWrap className={classes.maxWidth}>
-            {firstName}
-          </Typography>
-          <Typography component="h6" variant="h6" noWrap className={classes.maxWidth}>
-            {lastName}
-          </Typography>
+      <CardContent className={`${classes.content} ${classes.flexRow} `}>
+        <div className={classes.justifyStart}>
+          <PersonIcon className={`${classes.icon} ${classes.paddingTop}`} />
+          <div className={classes.flexColumn}>
+            <Typography component="h6" variant="h6" noWrap className={classes.maxWidth}>
+              {firstName}
+            </Typography>
+            <Typography component="h6" variant="h6" noWrap className={classes.maxWidth}>
+              {lastName}
+            </Typography>
+          </div>
         </div>
+        {inaccessible && (
+          <Tooltip title={D.questionnaireInaccessible}>
+            <WarningIcon className={classes.warning} />
+          </Tooltip>
+        )}
       </CardContent>
       <CardContent className={`${classes.content} ${classes.flexRow}`}>
         <Typography variant="subtitle1" color="textSecondary" noWrap className={classes.maxWidth}>
@@ -170,9 +180,9 @@ const SurveyUnitCard = ({ surveyUnit }) => {
 export default SurveyUnitCard;
 SurveyUnitCard.propTypes = {
   surveyUnit: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    firstName: PropTypes.string.isRequired,
-    lastName: PropTypes.string.isRequired,
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
     address: PropTypes.shape({ l6: PropTypes.string.isRequired }).isRequired,
     campaign: PropTypes.string.isRequired,
     states: PropTypes.arrayOf(PropTypes.shape({ type: PropTypes.string.isRequired })).isRequired,

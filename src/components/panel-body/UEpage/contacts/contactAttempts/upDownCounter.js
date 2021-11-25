@@ -1,7 +1,7 @@
 import { IconButton, makeStyles } from '@material-ui/core';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import useCounter from 'common-tools/hooks/useCounter';
+import useCounter from 'utils/hooks/useCounter';
 import { getHours, getMinutes, setHours, setMinutes } from 'date-fns';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';

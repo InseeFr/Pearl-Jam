@@ -1,15 +1,12 @@
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  applyFilters,
-  sortOnColumnCompareFunction,
-  updateStateWithDates,
-} from 'common-tools/functions';
+import { applyFilters, sortOnColumnCompareFunction, updateStateWithDates } from 'utils/functions';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import FilterPanel from './filterPanel';
 import SurveyUnitCard from './material/surveyUnitCard';
+import surveyUnitMissingIdbService from 'indexedbb/services/surveyUnitMissing-idb-service';
 
 const UESPage = ({ textSearch }) => {
   const [surveyUnits, setSurveyUnits] = useState([]);
@@ -26,9 +23,15 @@ const UESPage = ({ textSearch }) => {
     terminated: false,
   });
 
+  const [inaccessibles, setInaccessibles] = useState([]);
+
   useEffect(() => {
     if (!init) {
       setInit(true);
+      surveyUnitMissingIdbService
+        .getAll()
+        .then(units => setInaccessibles(units.map(({ id }) => id)));
+
       surveyUnitDBService.getAll().then(units => {
         const initializedSU = units.map(su => ({ ...su, selected: false }));
         setCampaigns([...new Set(units.map(unit => unit.campaign))]);
@@ -93,7 +96,7 @@ const UESPage = ({ textSearch }) => {
         <Grid container className={classes.grid} spacing={4}>
           {filteredSurveyUnits.map(su => (
             <Grid key={su.id} item>
-              <SurveyUnitCard surveyUnit={su} />
+              <SurveyUnitCard surveyUnit={su} inaccessible={inaccessibles.includes(su.id)} />
             </Grid>
           ))}
         </Grid>
