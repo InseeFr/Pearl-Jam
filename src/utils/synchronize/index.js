@@ -1,10 +1,12 @@
 import * as api from 'utils/api';
+
+import { useCallback, useState } from 'react';
+
 import { getLastState } from 'utils/functions';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'indexedbb/services/surveyUnitMissing-idb-service';
-import { useCallback, useState } from 'react';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useHistory } from 'react-router-dom';
-import surveyUnitState from 'utils/enum/SUStateEnum';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
@@ -141,7 +143,7 @@ const getWFSSurveyUnitsSortByCampaign = async () => {
   return allSurveyUnits.reduce((wfs, su) => {
     const { campaign, id } = su;
     const lastState = getLastState(su);
-    if (lastState?.type === surveyUnitState.WAITING_FOR_SYNCHRONIZATION.type)
+    if (lastState?.type === surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type)
       return { ...wfs, [campaign]: [...(wfs[campaign] || []), id] };
     return wfs;
   }, {});

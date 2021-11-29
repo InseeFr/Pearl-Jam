@@ -1,5 +1,5 @@
-import contactAttemptEnum from 'utils/enum/ContactAttemptEnum';
-import surveyUnitStateEnum from 'utils/enum/SUStateEnum';
+import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 export const NOTIFICATION_TYPE_SYNC = 'synchronization';
 export const NOTIFICATION_TYPE_MANAGEMENT = 'management';

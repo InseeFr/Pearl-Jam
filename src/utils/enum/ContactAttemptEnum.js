@@ -1,6 +1,6 @@
 import D from 'i18n';
 
-const contactAttempt = {
+export const contactAttemptEnum = {
   INTERVIEW_ACCEPTED: { type: 'INA', value: `${D.interviewAccepted}` },
   APPOINTMENT_MADE: { type: 'APT', value: `${D.appointmentMade}` },
   REFUSAL: { type: 'REF', value: `${D.refusal}` },
@@ -11,12 +11,10 @@ const contactAttempt = {
   PERMANENTLY_UNAVAILABLE: { type: 'PUN', value: `${D.permanentlyUnavailable}` },
 };
 
-export default contactAttempt;
-
 export const findContactAttemptValueByType = type => {
   if (type === undefined) return undefined;
-  const retour = Object.keys(contactAttempt)
-    .map(key => contactAttempt[key])
+  const retour = Object.keys(contactAttemptEnum)
+    .map(key => contactAttemptEnum[key])
     .filter(value => value.type === type);
   return retour[0].value;
 };

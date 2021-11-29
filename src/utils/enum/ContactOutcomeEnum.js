@@ -1,6 +1,6 @@
 import D from 'i18n';
 
-const contactOutcome = {
+export const contactOutcomeEnum = {
   INTERVIEW_ACCEPTED: { type: 'INA', value: `${D.interviewAccepted}` },
   REFUSAL: { type: 'REF', value: `${D.refusal}` },
   IMPOSSIBLE_TO_REACH: { type: 'IMP', value: `${D.impossibleReach}` },
@@ -16,12 +16,10 @@ const contactOutcome = {
   },
 };
 
-export default contactOutcome;
-
 export const findContactOutcomeValueByType = type => {
   if (type === undefined) return undefined;
-  const retour = Object.keys(contactOutcome)
-    .map(key => contactOutcome[key])
+  const retour = Object.keys(contactOutcomeEnum)
+    .map(key => contactOutcomeEnum[key])
     .filter(value => value.type === type);
   return retour[0].value;
 };
