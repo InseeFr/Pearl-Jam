@@ -24,6 +24,7 @@ jobs:
           node-version: 14
       - run: yarn
       - run: yarn build
+      - run: yarn test
       - name: Upload build
         uses: actions/upload-artifact@v2
         with:
