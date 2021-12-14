@@ -86,7 +86,7 @@ const Navigation = ({ match, refs }) => {
           {D.questionnaireButton}
         </Button>
         <Button
-          disabled={isValidForTransmission(surveyUnit)}
+          disabled={!isValidForTransmission(surveyUnit)}
           className={classes.button}
           onClick={transmit}
         >
