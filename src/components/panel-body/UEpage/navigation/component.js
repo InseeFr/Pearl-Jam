@@ -1,4 +1,4 @@
-import { Button, Tab, Tabs, makeStyles } from '@material-ui/core';
+import { Button, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
 import React, { useContext, useState } from 'react';
 import { addNewState, isQuestionnaireAvailable, isValidForTransmission } from 'utils/functions';
 import { useHistory, useParams } from 'react-router-dom';
@@ -57,6 +57,7 @@ const Navigation = ({ match, refs }) => {
     await addNewState(surveyUnit, newType);
     history.push(match.url);
   };
+  const transmissionValidity = isValidForTransmission(surveyUnit);
 
   const classes = useStyles();
 
@@ -85,13 +86,13 @@ const Navigation = ({ match, refs }) => {
         >
           {D.questionnaireButton}
         </Button>
-        <Button
-          disabled={!isValidForTransmission(surveyUnit)}
-          className={classes.button}
-          onClick={transmit}
-        >
-          {D.sendButton}
-        </Button>
+        <Tooltip title={transmissionValidity ? '' : D.transmissionInvalid}>
+          <span>
+            <Button disabled={!transmissionValidity} className={classes.button} onClick={transmit}>
+              {D.sendButton}
+            </Button>
+          </span>
+        </Tooltip>
       </div>
     </div>
   );
