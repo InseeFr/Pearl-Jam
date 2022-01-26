@@ -1,18 +1,19 @@
-import DateFnsUtils from '@date-io/date-fns';
-import { Fab, makeStyles, Paper, Typography } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import ScheduleIcon from '@material-ui/icons/Schedule';
 import { DatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import contactAttemptEnum from 'utils/enum/ContactAttemptEnum';
-import surveyUnitStateEnum from 'utils/enum/SUStateEnum';
-import { addNewState, areCaEqual, getSortedContactAttempts } from 'utils/functions';
-import frLocale from 'date-fns/locale/fr';
-import D from 'i18n';
-import PropTypes from 'prop-types';
+import { Fab, Paper, Typography, makeStyles } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
+import { addNewState, areCaEqual, getSortedContactAttempts } from 'utils/functions';
+
+import AddIcon from '@material-ui/icons/Add';
 import ContactAttemptLine from '../contacts/contactAttempts/contactAttemptLine';
+import D from 'i18n';
+import DateFnsUtils from '@date-io/date-fns';
 import FormPanel from '../contacts/contactAttempts/formPanel';
+import PropTypes from 'prop-types';
+import ScheduleIcon from '@material-ui/icons/Schedule';
 import SurveyUnitContext from '../UEContext';
+import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
+import frLocale from 'date-fns/locale/fr';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(theme => ({
   contactAttempt: {

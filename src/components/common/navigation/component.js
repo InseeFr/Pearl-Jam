@@ -13,7 +13,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
 import D from 'i18n';
-import InfoTile from 'components/panel-body/UEpage/infoTile';
+import InfoTile from 'components/panel-body/UEpage/infoTile/infoTile';
 import MenuIcon from '@material-ui/icons/Menu';
 import { NotificationWrapperContext } from 'components/notificationWrapper';
 import { Notifications } from '@material-ui/icons';
@@ -96,8 +96,7 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
   };
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
-    // temporary disabling the pop-up
-    setOpen(o => false && !o);
+    setOpen(o => !o);
   };
 
   const context = { setOpen };

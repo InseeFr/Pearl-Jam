@@ -1,6 +1,6 @@
 import D from 'i18n';
 
-const surveyUnitState = {
+export const surveyUnitStateEnum = {
   VISIBLE_NOT_CLICKABLE: {
     type: 'VIN',
     value: `${D.suStateVisibleNotClickable}`,
@@ -32,11 +32,9 @@ const surveyUnitState = {
   CLOSED: { type: 'CLO', value: `${D.suStateClosedSurveyUnit}` },
 };
 
-export default surveyUnitState;
-
 export const findSuStateValueByType = type => {
-  const retour = Object.keys(surveyUnitState)
-    .map(key => surveyUnitState[key])
+  const retour = Object.keys(surveyUnitStateEnum)
+    .map(key => surveyUnitStateEnum[key])
     .filter(value => value.type === type);
   return retour[0].value;
 };

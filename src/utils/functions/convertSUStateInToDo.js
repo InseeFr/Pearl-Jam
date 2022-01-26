@@ -1,33 +1,41 @@
-import suStateEnum from 'utils/enum/SUStateEnum';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import toDoEnum from 'utils/enum/SUToDoEnum';
 
 export const convertSUStateInToDo = suState => {
   if (
-    [suStateEnum.VISIBLE_NOT_CLICKABLE.type, suStateEnum.VISIBLE_AND_CLICKABLE.type].includes(
-      suState
-    )
+    [
+      surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type,
+      surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type,
+    ].includes(suState)
   ) {
     return toDoEnum.NOT_STARTED;
   }
-  if ([suStateEnum.IN_PREPARATION.type, suStateEnum.AT_LEAST_ONE_CONTACT.type].includes(suState)) {
+  if (
+    [
+      surveyUnitStateEnum.IN_PREPARATION.type,
+      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
+    ].includes(suState)
+  ) {
     return toDoEnum.CONTACT;
   }
-  if (suState === suStateEnum.APPOINTMENT_MADE.type) {
+  if (suState === surveyUnitStateEnum.APPOINTMENT_MADE.type) {
     return toDoEnum.SURVEY;
   }
-  if (suState === suStateEnum.QUESTIONNAIRE_STARTED.type) {
+  if (suState === surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type) {
     return toDoEnum.FINALIZE;
   }
-  if (suState === suStateEnum.WAITING_FOR_TRANSMISSION.type) {
+  if (suState === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) {
     return toDoEnum.TRANSMIT;
   }
-  if (suState === suStateEnum.WAITING_FOR_SYNCHRONIZATION.type) {
+  if (suState === surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type) {
     return toDoEnum.SYNCHRONIZE;
   }
   if (
-    [suStateEnum.TO_BE_REVIEWED.type, suStateEnum.FINALIZED.type, suStateEnum.CLOSED.type].includes(
-      suState
-    )
+    [
+      surveyUnitStateEnum.TO_BE_REVIEWED.type,
+      surveyUnitStateEnum.FINALIZED.type,
+      surveyUnitStateEnum.CLOSED.type,
+    ].includes(suState)
   ) {
     return toDoEnum.TERMINATED;
   }

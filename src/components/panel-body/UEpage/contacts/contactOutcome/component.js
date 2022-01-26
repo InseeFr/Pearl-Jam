@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import SurveyUnitContext from '../../UEContext';
-import { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomEnum';
+import { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
 import formEnum from 'utils/enum/formEnum';
 
 const useStyles = makeStyles(() => ({

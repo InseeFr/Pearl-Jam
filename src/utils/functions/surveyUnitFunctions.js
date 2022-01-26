@@ -1,21 +1,23 @@
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'utils/constants';
-import surveyUnitStateEnum from 'utils/enum/SUStateEnum';
-import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { differenceInYears, formatDistanceStrict } from 'date-fns';
-import D from 'i18n';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
-export const getCommentByType = (type, ue) => {
-  if (Array.isArray(ue.comments) && ue.comments.length > 0) {
-    return ue.comments.find(x => x.type === type).value;
+import D from 'i18n';
+import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
+import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
+import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+
+export const getCommentByType = (type, su) => {
+  if (Array.isArray(su.comments) && su.comments.length > 0) {
+    return su.comments.find(x => x.type === type)?.value || '';
   }
   return '';
 };
 
-export const getLastState = ue => {
-  if (Array.isArray(ue.states) && ue.states.length === 1) return ue.states[0];
-  if (Array.isArray(ue.states) && ue.states.length > 1) {
-    return ue.states.reduce((a, b) => (a.date > b.date ? a : b));
+export const getLastState = su => {
+  if (Array.isArray(su.states) && su.states.length === 1) return su.states[0];
+  if (Array.isArray(su.states) && su.states.length > 1) {
+    return su.states.reduce((a, b) => (a.date > b.date ? a : b));
   }
   return false;
 };
@@ -32,10 +34,16 @@ export const intervalInDays = su => {
   return remainingDays.split(' ')[0];
 };
 
-export const isValidForTransmission = ue =>
-  /* const { contactOutcome } = ue;
-  return contactOutcome !== null; */
-  ue !== undefined;
+export const isValidForTransmission = su => {
+  const { contactAttempts, contactOutcome } = su;
+  if (contactAttempts.length === 0) return false;
+  if (!contactOutcome) return false;
+  const { type, totalNumberOfContactAttempts } = contactOutcome;
+  if (totalNumberOfContactAttempts === 0) return false;
+  if (type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.type) return true;
+  if (getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) return true;
+  return false;
+};
 
 export const getSortedContactAttempts = surveyUnit => {
   if (surveyUnit === undefined) return [];
@@ -63,8 +71,9 @@ export const getContactAttemptNumber = surveyUnit =>
   surveyUnit.states.filter(state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
     .length;
 
-const lastContactAttemptIsSuccessfull = surveyUnit => {
+export const lastContactAttemptIsSuccessfull = surveyUnit => {
   const { contactAttempts } = surveyUnit;
+  if (Array.isArray(contactAttempts) && contactAttempts.length === 0) return false;
   let lastContactAttempt;
   if (Array.isArray(contactAttempts) && contactAttempts.length > 1) {
     lastContactAttempt = contactAttempts.reduce((a, b) => (a.date > b.date ? a : b));
@@ -163,7 +172,6 @@ export const addNewState = async (surveyUnit, stateType) => {
     case surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type:
     case surveyUnitStateEnum.TO_BE_REVIEWED.type:
     case surveyUnitStateEnum.FINALIZED.type:
-      // TODO : peut-être d'autres états  gérer ici
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = await addContactState(newSu, newState);
         newSu.states.push({

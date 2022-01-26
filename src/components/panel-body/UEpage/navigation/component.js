@@ -1,12 +1,13 @@
-import { Button, makeStyles, Tab, Tabs } from '@material-ui/core';
-import suStateEnum from 'utils/enum/SUStateEnum';
+import { Button, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
+import React, { useContext, useState } from 'react';
 import { addNewState, isQuestionnaireAvailable, isValidForTransmission } from 'utils/functions';
+import { useHistory, useParams } from 'react-router-dom';
+
 import D from 'i18n';
 import PropTypes from 'prop-types';
-import WarningIcon from '@material-ui/icons/Warning';
-import React, { useContext, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
 import SurveyUnitContext from '../UEContext';
+import WarningIcon from '@material-ui/icons/Warning';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -52,12 +53,11 @@ const Navigation = ({ match, refs }) => {
   };
 
   const transmit = async () => {
-    if (isValidForTransmission(surveyUnit)) {
-      const newType = suStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
-      await addNewState(surveyUnit, newType);
-      history.push(match.url);
-    }
+    const newType = surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
+    await addNewState(surveyUnit, newType);
+    history.push(match.url);
   };
+  const transmissionValidity = isValidForTransmission(surveyUnit);
 
   const classes = useStyles();
 
@@ -86,9 +86,13 @@ const Navigation = ({ match, refs }) => {
         >
           {D.questionnaireButton}
         </Button>
-        <Button className={classes.button} onClick={transmit}>
-          {D.sendButton}
-        </Button>
+        <Tooltip title={transmissionValidity ? '' : D.transmissionInvalid}>
+          <span>
+            <Button disabled={!transmissionValidity} className={classes.button} onClick={transmit}>
+              {D.sendButton}
+            </Button>
+          </span>
+        </Tooltip>
       </div>
     </div>
   );
