@@ -1,17 +1,17 @@
-import questionnaireEnum from 'utils/enum/QuestionnaireStateEnum';
-import suStateEnum from 'utils/enum/SUStateEnum';
 import { addNewState } from 'utils/functions/surveyUnitFunctions';
+import questionnaireEnum from 'utils/enum/QuestionnaireStateEnum';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useEffect } from 'react';
 
 const computeSurveyUnitState = questionnaireState => {
   switch (questionnaireState) {
     case questionnaireEnum.COMPLETED.type:
-      return suStateEnum.WAITING_FOR_TRANSMISSION.type;
+      return surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
     case questionnaireEnum.STARTED.type:
-      return suStateEnum.QUESTIONNAIRE_STARTED.type;
+      return surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type;
     case questionnaireEnum.VALIDATED.type:
-      return suStateEnum.WAITING_FOR_TRANSMISSION.type;
+      return surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
     default:
       return 'ERR';
   }

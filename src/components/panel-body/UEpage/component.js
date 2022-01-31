@@ -1,13 +1,14 @@
-import suStateEnum from 'utils/enum/SUStateEnum';
-import { addNewState, getLastState } from 'utils/functions';
-import D from 'i18n';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { addNewState, getLastState } from 'utils/functions';
 import { useHistory, useParams } from 'react-router-dom';
+
+import D from 'i18n';
+import PropTypes from 'prop-types';
 import Router from './router';
 import { SurveyUnitProvider } from './UEContext';
+import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'indexedbb/services/surveyUnitMissing-idb-service';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const UEPage = ({ match, refresh: homeRefresh }) => {
   const [surveyUnit, setSurveyUnit] = useState(undefined);
@@ -47,8 +48,8 @@ const UEPage = ({ match, refresh: homeRefresh }) => {
   useEffect(() => {
     if (surveyUnit !== undefined) {
       const lastState = getLastState(surveyUnit);
-      if (lastState.type === suStateEnum.VISIBLE_AND_CLICKABLE.type) {
-        addNewState(surveyUnit, suStateEnum.IN_PREPARATION.type);
+      if (lastState.type === surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type) {
+        addNewState(surveyUnit, surveyUnitStateEnum.IN_PREPARATION.type);
         history.push(history.location.pathname);
       }
     }
