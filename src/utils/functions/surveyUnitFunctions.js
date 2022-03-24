@@ -295,7 +295,8 @@ export const isSelectable = su => {
 };
 
 export const getAddressData = su => {
-  const [postCode, cityName] = su.address.l6.split(' ');
+  const [postCode, ...rest] = su.address.l6.split(' ');
+  const cityName = rest.join(' ');
 
   return [
     { label: D.addressDeliveryPoint, value: su.address.l2 || '' },
