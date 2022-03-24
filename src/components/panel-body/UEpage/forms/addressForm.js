@@ -1,7 +1,8 @@
-import { Button, DialogActions, DialogTitle, makeStyles, TextField } from '@material-ui/core';
+import { Button, DialogActions, DialogTitle, TextField, makeStyles } from '@material-ui/core';
+import React, { useContext, useState } from 'react';
+
 import D from 'i18n';
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
 import SurveyUnitContext from '../UEContext';
 
 const useStyles = makeStyles(() => ({
@@ -14,8 +15,6 @@ const useStyles = makeStyles(() => ({
 const Form = ({ closeModal, save, previousValue }) => {
   const { surveyUnit } = useContext(SurveyUnitContext);
 
-  /** previousValue =[ { label: D.anyOne , value: realValue }, {}, ... ] */
-  /** previousData = { D.anyOne: realValue , D.anotherOne: anotherRealValue }  */
   const previousData = previousValue.reduce(
     (obj, { label, value }) => ({ ...obj, [label]: value }),
     {}
