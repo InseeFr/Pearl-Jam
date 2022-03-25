@@ -85,14 +85,23 @@ export const lastContactAttemptIsSuccessfull = surveyUnit => {
 
 const isContactAttemptOk = surveyUnit => lastContactAttemptIsSuccessfull(surveyUnit);
 
+const addLatestState = (surveyUnit, newState) => {
+  const previousLatestState = getLastState(surveyUnit);
+  const { date } = previousLatestState;
+  if (newState.date <= date) {
+    surveyUnit.states.push({ ...newState, date: date + 1 });
+  } else {
+    surveyUnit.states.push(newState);
+  }
+};
+
 const addContactState = async (surveyUnit, newState) => {
   switch (newState.type) {
     case surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type:
-      surveyUnit.states.push(newState);
+      addLatestState(surveyUnit, newState);
       if (isContactAttemptOk(surveyUnit)) {
-        surveyUnit.states.push({
-          // prevent two succesive state additions to have same timestamp
-          date: new Date().getTime() + 500,
+        addLatestState(surveyUnit, {
+          date: new Date().getTime(),
           type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
         });
       }
@@ -100,13 +109,12 @@ const addContactState = async (surveyUnit, newState) => {
 
     case surveyUnitStateEnum.APPOINTMENT_MADE.type:
       if (getContactAttemptNumber(surveyUnit) === 0) {
-        surveyUnit.states.push({
-          // make sure the AOC state is inserted 'earlier' than APS in states
-          date: newState.date - 500,
+        addLatestState(surveyUnit, {
+          date: new Date().getTime(),
           type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
         });
       }
-      surveyUnit.states.push(newState);
+      addLatestState(surveyUnit, newState);
       break;
     default:
       break;
@@ -122,18 +130,16 @@ export const addNewState = async (surveyUnit, stateType) => {
     case surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type:
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = await addContactState(newSu, newState);
-
-        const previousState = { date: new Date().getTime(), type: lastStateType };
-        newSu.states.push(previousState);
+        addLatestState(newSu, { date: new Date().getTime(), type: lastStateType });
       } else {
-        newSu.states.push(newState);
+        addLatestState(newSu, newState);
       }
       break;
 
     case surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type:
       if (surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type === stateType) {
         if (await isContactAttemptOk(surveyUnit)) {
-          surveyUnit.states.push({
+          addLatestState(newSu, {
             date: new Date().getTime(),
             type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
           });
@@ -143,7 +149,7 @@ export const addNewState = async (surveyUnit, stateType) => {
       if (surveyUnitStateEnum.APPOINTMENT_MADE.type === stateType) {
         newSu = await addContactState(newSu, newState);
       } else {
-        newSu.states.push(newState);
+        addLatestState(newSu, newState);
       }
       break;
 
@@ -154,7 +160,7 @@ export const addNewState = async (surveyUnit, stateType) => {
       if (surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type === stateType) {
         newSu = await addContactState(newSu, newState);
       } else {
-        newSu.states.push(newState);
+        addLatestState(newSu, newState);
       }
       break;
 
@@ -164,7 +170,7 @@ export const addNewState = async (surveyUnit, stateType) => {
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = await addContactState(newSu, newState);
       } else {
-        newSu.states.push(newState);
+        addLatestState(newSu, newState);
       }
       break;
 
@@ -174,12 +180,12 @@ export const addNewState = async (surveyUnit, stateType) => {
     case surveyUnitStateEnum.FINALIZED.type:
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = await addContactState(newSu, newState);
-        newSu.states.push({
+        addLatestState(newSu, {
           date: new Date().getTime(),
           type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type,
         });
       } else {
-        newSu.states.push(newState);
+        addLatestState(newSu, newState);
       }
       break;
     default:
