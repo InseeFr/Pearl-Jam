@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import notificationIdbService from 'indexedbb/services/notification-idb-service';
-import syncReportIdbService from 'indexedbb/services/syncReport-idb-service';
+
 import { NOTIFICATION_TYPE_SYNC } from 'utils/constants';
+import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
+import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
 
 export const NotificationWrapperContext = React.createContext();
 

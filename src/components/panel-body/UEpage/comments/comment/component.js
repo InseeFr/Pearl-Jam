@@ -1,9 +1,13 @@
-import { makeStyles, Paper, TextareaAutosize } from '@material-ui/core';
-import { getCommentByType } from 'utils/functions/surveyUnitFunctions';
+import React, { useContext, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import Paper from '@material-ui/core/Paper';
+
 import D from 'i18n';
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
 import SurveyUnitContext from '../../UEContext';
+import { getCommentByType } from 'utils/functions/surveyUnitFunctions';
+import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
 
 const useStyles = makeStyles(() => ({
   noResize: {
@@ -20,7 +24,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Comment = ({ editable, save }) => {
+const Comment = ({ editable }) => {
   const { surveyUnit } = useContext(SurveyUnitContext);
   const value = editable
     ? getCommentByType('INTERVIEWER', surveyUnit)
@@ -36,7 +40,7 @@ const Comment = ({ editable, save }) => {
     newComments.push(managementComment);
     newComments.push(newInterviewerComment);
     surveyUnit.comments = newComments;
-    save(surveyUnit);
+    surveyUnitIdbService.addOrUpdate(surveyUnit);
   };
 
   const onChange = event => {
@@ -53,7 +57,7 @@ const Comment = ({ editable, save }) => {
         cols={50}
         placeholder={D.organizationComment}
         defaultValue={interviewerComment}
-        onChange={onChange}
+        onBlur={onChange}
       />
     </Paper>
   );
@@ -62,5 +66,4 @@ const Comment = ({ editable, save }) => {
 export default Comment;
 Comment.propTypes = {
   editable: PropTypes.bool.isRequired,
-  save: PropTypes.func.isRequired,
 };

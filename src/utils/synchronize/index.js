@@ -3,8 +3,8 @@ import * as api from 'utils/api';
 import { useCallback, useState } from 'react';
 
 import { getLastState } from 'utils/functions';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import surveyUnitMissingIdbService from 'indexedbb/services/surveyUnitMissing-idb-service';
+import surveyUnitDBService from 'utils/indexeddb/services/surveyUnit-idb-service';
+import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useHistory } from 'react-router-dom';
 

@@ -1,14 +1,17 @@
-import { Dialog, Grid, makeStyles } from '@material-ui/core';
-import D from 'i18n';
-import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import Dialog from '@material-ui/core/Dialog';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+
+import { getForm, getPreviousValue, smartForms } from './forms';
 import Comments from './comments';
 import Contacts from './contacts';
+import D from 'i18n';
 import Details from './details';
-import { getForm, getPreviousValue, smartForms } from './forms';
 import Identification from './identification';
 import Letters from './letters';
 import Navigation from './navigation/component';
+import PropTypes from 'prop-types';
 import StateLine from './stateLine';
 import SurveyUnitContext from './UEContext';
 import UeSubInfoTile from './ueSubInfoTile';
@@ -33,7 +36,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Router = ({ match, saveUE, refresh }) => {
+const Router = ({ match }) => {
   const { surveyUnit } = useContext(SurveyUnitContext);
 
   /** refs are used for scrolling, dispatched to the clickable link and linked element */
@@ -71,7 +74,7 @@ const Router = ({ match, saveUE, refresh }) => {
     setOpenModal(false);
   };
 
-  const selectedForm = getForm(formType, saveUE, previousValue, closeModal, refresh);
+  const selectedForm = getForm(formType, previousValue, closeModal);
 
   const classes = useStyles();
 
@@ -106,7 +109,7 @@ const Router = ({ match, saveUE, refresh }) => {
             title={D.goToCommentsPage}
             className={classes.ajustScroll}
           >
-            <Comments save={saveUE} />
+            <Comments />
           </UeSubInfoTile>
         </div>
       </div>
@@ -134,6 +137,4 @@ Router.propTypes = {
     params: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
     url: PropTypes.string.isRequired,
   }).isRequired,
-  saveUE: PropTypes.func.isRequired,
-  refresh: PropTypes.func.isRequired,
 };

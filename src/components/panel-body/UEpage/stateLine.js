@@ -1,3 +1,4 @@
+import React, { useContext } from 'react';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Stepper from '@material-ui/core/Stepper';
@@ -7,7 +8,6 @@ import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import toDoEnum from 'utils/enum/SUToDoEnum';
 import { convertSUStateInToDo, getLastState } from 'utils/functions';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
 import SurveyUnitContext from './UEContext';
 
 const StateLine = () => {

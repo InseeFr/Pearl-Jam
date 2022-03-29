@@ -1,9 +1,10 @@
-import { TextField, Typography } from '@material-ui/core';
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { getPhoneSource } from 'utils/functions';
 import MaterialIcons from 'utils/icons/materialIcons';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: {

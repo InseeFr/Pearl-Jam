@@ -1,5 +1,9 @@
-import { Button, DialogActions, DialogTitle, TextField, makeStyles } from '@material-ui/core';
 import React, { useContext, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
 
 import D from 'i18n';
 import PropTypes from 'prop-types';

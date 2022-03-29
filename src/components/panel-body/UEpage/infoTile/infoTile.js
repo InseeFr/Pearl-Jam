@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import PersonIcon from '@material-ui/icons/Person';
-import { Skeleton } from '@material-ui/lab';
+import Skeleton from '@material-ui/lab/Skeleton';
 import Typography from '@material-ui/core/Typography';
+
 import { getprivilegedPerson } from 'utils/functions';
-import { makeStyles } from '@material-ui/core/styles';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+
 import { useParams } from 'react-router-dom';
+import { useSurveyUnit } from 'utils/hooks/database';
 
 const useStyles = makeStyles({
   root: { paddingRight: '3em' },
@@ -39,14 +40,9 @@ const useStyles = makeStyles({
   },
 });
 
-const InfoTile = ({ refresh }) => {
-  const [surveyUnit, setSurveyUnit] = useState(undefined);
+const InfoTile = () => {
   const { id } = useParams();
-  useEffect(() => {
-    surveyUnitDBService.getById(id).then(ue => {
-      setSurveyUnit(ue);
-    });
-  }, [id, refresh]);
+  const surveyUnit = useSurveyUnit(id);
 
   const classes = useStyles();
   const { firstName, lastName } = getprivilegedPerson(surveyUnit);

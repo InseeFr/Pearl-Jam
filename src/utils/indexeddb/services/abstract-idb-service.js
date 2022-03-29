@@ -1,8 +1,8 @@
-import initIDB from '../idb-config';
+import { db } from '../idb-config';
 
 export default class AbstractIdbService {
   constructor(store) {
-    this.store = initIDB.getStore(store);
+    this.store = db[store];
   }
 
   get(id) {
@@ -10,7 +10,7 @@ export default class AbstractIdbService {
   }
 
   getById(id) {
-    return this.store.get({ id: `${id}` });
+    return this.store.get(id);
   }
 
   getAll() {

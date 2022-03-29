@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core';
-import listenQueen from 'utils/hooks/listenQueen';
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import listenQueen from 'utils/hooks/listenQueen';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
