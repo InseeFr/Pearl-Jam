@@ -1,24 +1,23 @@
-import formEnum from 'utils/enum/formEnum';
-import { deleteContactAttempt, getAddressData, getCommentByType } from 'utils/functions';
 import React from 'react';
+import { deleteContactAttempt, getAddressData, getCommentByType } from 'utils/functions';
 import AddressForm from './addressForm';
 import ContactAttemptsForm from './contactAttemptsForm';
 import ContactOutcomeForm from './contactOutcomeForm';
 import MailForm from './mailForm';
 import PhoneForm from './phoneForm';
 import UserForm from './userForm';
+import formEnum from 'utils/enum/formEnum';
+import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
 
-export const getForm = (formType, saveFunction, previousValue, closeModal, refresh) => {
+export const getForm = (formType, previousValue, closeModal) => {
   const saveAndClose = surveyUnit => {
     closeModal();
-    saveFunction(surveyUnit);
-    refresh();
+    surveyUnitIdbService.addOrUpdate(surveyUnit);
   };
 
   const deleteAndClose = (surveyUnit, contactAttempt) => {
     closeModal();
     deleteContactAttempt(surveyUnit, contactAttempt);
-    refresh();
   };
 
   switch (formType) {

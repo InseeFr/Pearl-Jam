@@ -1,10 +1,12 @@
-import surveyUnitMissingIdbService from 'indexedbb/services/surveyUnitMissing-idb-service';
-import surveyUnitIdbService from 'indexedbb/services/surveyUnit-idb-service';
-import notificationIdbService from 'indexedbb/services/notification-idb-service';
-import syncReportIdbService from 'indexedbb/services/syncReport-idb-service';
-import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 import * as api from 'utils/api';
+
+import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
+
 import D from 'i18n';
+import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
+import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
+import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
+import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
 
 export const checkSyncResult = (pearlSuccess, queenSuccess) => {
   if (pearlSuccess && queenSuccess) {

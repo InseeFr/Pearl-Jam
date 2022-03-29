@@ -1,19 +1,18 @@
-import { Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { applyFilters, sortOnColumnCompareFunction, updateStateWithDates } from 'utils/functions';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { applyFilters, sortOnColumnCompareFunction, updateStateWithDates } from 'utils/functions';
+import { useMissingSurveyUnits, useSurveyUnits } from 'utils/hooks/database';
+
 import FilterPanel from './filterPanel';
+import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
 import SurveyUnitCard from './material/surveyUnitCard';
-import surveyUnitMissingIdbService from 'indexedbb/services/surveyUnitMissing-idb-service';
+import { makeStyles } from '@material-ui/core/styles';
 
 const UESPage = ({ textSearch }) => {
   const [surveyUnits, setSurveyUnits] = useState([]);
   const [filteredSurveyUnits, setFilteredSurveyUnits] = useState([]);
   const [searchEchoes, setSearchEchoes] = useState([0, 0]);
   const [campaigns, setCampaigns] = useState([]);
-  const [init, setInit] = useState(false);
   const [sortCriteria, setSortCriteria] = useState('remainingDays');
   const [filters, setFilters] = useState({
     search: textSearch,
@@ -25,32 +24,27 @@ const UESPage = ({ textSearch }) => {
 
   const [inaccessibles, setInaccessibles] = useState([]);
 
-  useEffect(() => {
-    if (!init) {
-      setInit(true);
-      surveyUnitMissingIdbService
-        .getAll()
-        .then(units => setInaccessibles(units.map(({ id }) => id)));
+  const missingSurveyUnits = useMissingSurveyUnits();
+  const idbSurveyUnits = useSurveyUnits();
 
-      surveyUnitDBService.getAll().then(units => {
-        const initializedSU = units.map(su => ({ ...su, selected: false }));
-        setCampaigns([...new Set(units.map(unit => unit.campaign))]);
-        setSurveyUnits(initializedSU);
-        setSearchEchoes([initializedSU.length, initializedSU.length]);
-      });
-    }
-  }, [init]);
+  useEffect(() => {
+    setInaccessibles(missingSurveyUnits.map(({ id }) => id));
+  }, [missingSurveyUnits]);
+
+  useEffect(() => {
+    idbSurveyUnits.forEach(su => updateStateWithDates(su));
+  }, [idbSurveyUnits]);
+
+  useEffect(() => {
+    const initializedSU = idbSurveyUnits.map(su => ({ ...su, selected: false }));
+    setCampaigns([...new Set(idbSurveyUnits.map(unit => unit.campaign))]);
+    setSurveyUnits(initializedSU);
+    setSearchEchoes([initializedSU.length, initializedSU.length]);
+  }, [idbSurveyUnits]);
 
   useEffect(() => {
     setFilters(f => ({ ...f, search: textSearch }));
   }, [textSearch]);
-
-  useEffect(() => {
-    surveyUnitDBService.getAll().then(units => {
-      const updateNb = units.map(su => updateStateWithDates(su)).reduce((a, b) => a + b, 0);
-      if (updateNb > 0) setInit(false);
-    });
-  }, [surveyUnits]);
 
   useEffect(() => {
     const sortSU = su => su.sort(sortOnColumnCompareFunction(sortCriteria));

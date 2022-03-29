@@ -1,20 +1,16 @@
+import React, { useState } from 'react';
+
+import LateralMenu from '../lateralMenu';
 import Navigation from 'components/common/navigation/component';
+import PropTypes from 'prop-types';
+import { Route } from 'react-router-dom';
 import UEPage from 'components/panel-body/UEpage';
 import UESPage from 'components/panel-body/UESpage';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { Route } from 'react-router-dom';
 import { version } from '../../../../package.json';
-import LateralMenu from '../lateralMenu';
 
 const Home = ({ location, match }) => {
   const [textSearch, setTextSearch] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [shouldRefresh, setShouldRefresh] = useState(false);
-
-  const refresh = () => {
-    setShouldRefresh(prev => !prev);
-  };
 
   return (
     <div>
@@ -23,14 +19,10 @@ const Home = ({ location, match }) => {
         textSearch={textSearch}
         setTextSearch={setTextSearch}
         setOpenDrawer={setOpenDrawer}
-        refresh={shouldRefresh}
       />
       <LateralMenu openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} version={version} />
 
-      <Route
-        path="/survey-unit/:id"
-        render={routeProps => <UEPage {...routeProps} refresh={refresh} />}
-      />
+      <Route path="/survey-unit/:id" render={routeProps => <UEPage {...routeProps} />} />
       <Route
         exact
         path={`${match.url}`}

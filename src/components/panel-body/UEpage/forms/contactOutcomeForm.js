@@ -1,7 +1,9 @@
-import { Fab, Grid, Paper, Typography, makeStyles } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
-import { contactOutcomeEnum, findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
-
+import { makeStyles } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 import D from 'i18n';
 import FormPanel from '../contacts/contactAttempts/formPanel';
@@ -9,6 +11,7 @@ import PropTypes from 'prop-types';
 import RemoveIcon from '@material-ui/icons/Remove';
 import SurveyUnitContext from '../UEContext';
 import { addNewState } from 'utils/functions';
+import { contactOutcomeEnum, findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(theme => ({

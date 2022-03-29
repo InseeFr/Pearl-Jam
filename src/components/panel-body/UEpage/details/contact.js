@@ -1,9 +1,9 @@
-import { Grid } from '@material-ui/core';
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
 import formEnum from 'utils/enum/formEnum';
 import { getMailData, getPhoneData, getUserData } from 'utils/functions';
 import D from 'i18n';
 import PropTypes from 'prop-types';
-import React from 'react';
 import AtomicInfoTile from '../atomicInfoTile';
 import DetailTile from './detailTile';
 import PhoneTile from './phoneTile';

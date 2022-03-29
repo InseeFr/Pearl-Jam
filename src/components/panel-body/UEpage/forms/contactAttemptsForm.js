@@ -1,15 +1,20 @@
-import { DatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { Fab, Paper, Typography, makeStyles } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
+
+import { DatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { makeStyles } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import AddIcon from '@material-ui/icons/Add';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+
 import { addNewState, areCaEqual, getSortedContactAttempts } from 'utils/functions';
 
-import AddIcon from '@material-ui/icons/Add';
 import ContactAttemptLine from '../contacts/contactAttempts/contactAttemptLine';
 import D from 'i18n';
 import DateFnsUtils from '@date-io/date-fns';
 import FormPanel from '../contacts/contactAttempts/formPanel';
 import PropTypes from 'prop-types';
-import ScheduleIcon from '@material-ui/icons/Schedule';
 import SurveyUnitContext from '../UEContext';
 import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
 import frLocale from 'date-fns/locale/fr';

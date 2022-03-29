@@ -4,7 +4,7 @@ import { differenceInYears, formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import surveyUnitDBService from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 export const getCommentByType = (type, su) => {

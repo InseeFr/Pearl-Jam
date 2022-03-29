@@ -1,10 +1,11 @@
-import { IconButton, makeStyles } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useCounter from 'utils/hooks/useCounter';
 import { getHours, getMinutes, setHours, setMinutes } from 'date-fns';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
 
 const useStyles = makeStyles(() => ({
   icon: {

@@ -1,7 +1,11 @@
-import { Box, Button, makeStyles, Slide, Snackbar } from '@material-ui/core';
-import D from 'i18n';
 import React, { useEffect, useState } from 'react';
-import { Alert } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Slide from '@material-ui/core/Slide';
+import Snackbar from '@material-ui/core/Snackbar';
+import D from 'i18n';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles(theme => ({
   root: {

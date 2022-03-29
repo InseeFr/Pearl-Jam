@@ -1,12 +1,14 @@
-import notificationIdbService from 'indexedbb/services/notification-idb-service';
-import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
-import D from 'i18n';
 import React, { useContext, useEffect, useState } from 'react';
-import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
 import * as api from 'utils/api';
+
+import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
+import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
+
 import { AppContext } from 'Root';
+import D from 'i18n';
 import Preloader from 'components/common/loader';
 import { SyncDialog } from './sychronizeDialog';
+import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 
 export const SynchronizeWrapperContext = React.createContext();
 

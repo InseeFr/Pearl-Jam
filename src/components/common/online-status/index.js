@@ -1,7 +1,7 @@
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import WifiIcon from '@material-ui/icons/Wifi';
 import clsx from 'clsx';
-import React, { useContext } from 'react';
 import { AppContext } from 'Root';
 
 const useStyles = makeStyles(theme => ({

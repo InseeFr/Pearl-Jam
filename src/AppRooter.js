@@ -1,6 +1,6 @@
+import React from 'react';
 import App from 'App';
 import QueenContainer from 'components/panel-body/queen-container';
-import React from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 
 function AppRooter() {

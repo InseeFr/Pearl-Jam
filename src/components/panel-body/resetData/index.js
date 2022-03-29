@@ -1,8 +1,13 @@
-import { Button, makeStyles, Typography } from '@material-ui/core';
-import { Delete, Warning } from '@material-ui/icons';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+import Delete from '@material-ui/icons/Delete';
+import Warning from '@material-ui/icons/Warning';
+
 import Dexie from 'dexie';
 import D from 'i18n';
-import React, { useState } from 'react';
 import { unregister } from 'serviceWorkerRegistration';
 import { ResetDialog } from './resetDialog';
 
