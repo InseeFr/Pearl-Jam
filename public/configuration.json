@@ -5,7 +5,7 @@
   "PEARL_API_URL": "https://api.organisation-collecte-enqueteurs.enquetes.developpement.insee.fr",
   "_PEARL_API_URL_COMMENT_": "url of Pearl API",
 
-  "PEARL_AUTHENTICATION_MODE": "keycloak",
+  "PEARL_AUTHENTICATION_MODE": "anonymous",
   "_PEARL_AUTHENTICATION_MODE_COMMENT": "The mode of authentication. Currently, App is supporting 'anonymous'",
   "CHAT_URL": "",
   "_CHAT_URL_COMMENT_": "url of Pearl Chat"
