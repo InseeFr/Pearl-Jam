@@ -1,4 +1,5 @@
-import { Backdrop, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Backdrop from '@material-ui/core/Backdrop';
 import D from 'i18n';
 import imgPreloader from 'img/loader.svg';
 import PropTypes from 'prop-types';

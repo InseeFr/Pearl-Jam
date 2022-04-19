@@ -1,10 +1,11 @@
-import { makeStyles, Typography } from '@material-ui/core';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
 import format from 'date-fns/format';
 import { fr } from 'date-fns/locale';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const useStyles = makeStyles(() => ({
   button: {

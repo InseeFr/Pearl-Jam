@@ -1,16 +1,14 @@
 import React, { useContext } from 'react';
 import D from 'i18n';
-import {
-  Divider,
-  FormControl,
-  FormHelperText,
-  IconButton,
-  makeStyles,
-  NativeSelect,
-  Paper,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import IconButton from '@material-ui/core/IconButton';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import Paper from '@material-ui/core/Paper';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import { NotificationItem } from './notificationItem';
 import { NotificationWrapperContext } from 'components/notificationWrapper';
 import { Delete, Drafts } from '@material-ui/icons';

@@ -1,8 +1,12 @@
-import { Button, DialogActions, DialogTitle, makeStyles, TextField } from '@material-ui/core';
+import React, { useContext, useState } from 'react';
+import Button from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
 import MaterialIcons from 'utils/icons/materialIcons';
 import D from 'i18n';
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
 import SurveyUnitContext from '../UEContext';
 
 const useStyles = makeStyles(() => ({

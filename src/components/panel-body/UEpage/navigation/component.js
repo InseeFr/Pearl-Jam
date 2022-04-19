@@ -1,12 +1,17 @@
-import { Button, Tab, Tabs, Tooltip, makeStyles } from '@material-ui/core';
 import React, { useContext, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Tooltip from '@material-ui/core/Tooltip';
+import WarningIcon from '@material-ui/icons/Warning';
+
 import { addNewState, isQuestionnaireAvailable, isValidForTransmission } from 'utils/functions';
 import { useHistory, useParams } from 'react-router-dom';
 
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import SurveyUnitContext from '../UEContext';
-import WarningIcon from '@material-ui/icons/Warning';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(theme => ({

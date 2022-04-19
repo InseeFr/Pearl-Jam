@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -13,7 +14,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import toDoEnum from 'utils/enum/SUToDoEnum';
 import D from 'i18n';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
 
 const FilterPanel = ({
   searchEchoes,

@@ -1,7 +1,13 @@
-import { Button, DialogActions, Fab, makeStyles, Paper, Typography } from '@material-ui/core';
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import Fab from '@material-ui/core/Fab';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+
+import { makeStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const useStyles = makeStyles(() => ({
   column: {

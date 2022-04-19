@@ -1,9 +1,9 @@
-import { Paper } from '@material-ui/core';
+import React from 'react';
+import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { sortPhoneNumbers } from 'utils/functions';
 import MaterialIcons from 'utils/icons/materialIcons';
 import PropTypes from 'prop-types';
-import React from 'react';
 import PhoneList from './phoneList';
 
 const useStyles = makeStyles(() => ({

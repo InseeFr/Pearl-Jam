@@ -1,6 +1,6 @@
 {
   "name": "pearl",
-  "version": "0.5.4",
+  "version": "0.5.7",
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "1.x",
@@ -13,7 +13,10 @@
     "@testing-library/user-event": "^11.2.5",
     "clsx": "^1.1.1",
     "date-fns": "^2.18.0",
-    "dexie": "^2.0.4",
+    "dexie": "^3.2.1",
+    "dexie-export-import": "^1.0.3",
+    "dexie-react-hooks": "^1.1.1",
+    "downloadjs": "^1.4.7",
     "font-awesome": "^4.7.0",
     "keycloak-js": "^10.0.2",
     "prop-types": "^15.7.2",

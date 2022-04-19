@@ -1,5 +1,5 @@
-import { useQueenFromConfig } from 'utils/hooks/useQueenFromConfig';
 import React, { useEffect, useState } from 'react';
+import { useQueenFromConfig } from 'utils/hooks/useQueenFromConfig';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useConfiguration } from 'utils/hooks/configuration';
 import { addOnlineStatusObserver } from 'utils';

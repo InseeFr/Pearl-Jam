@@ -1,9 +1,11 @@
-import { makeStyles, Paper, Typography } from '@material-ui/core';
+import React, { useContext, useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import formEnum from 'utils/enum/formEnum';
 import { getSortedContactAttempts } from 'utils/functions';
 import D from 'i18n';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
 import SurveyUnitContext from '../../UEContext';
 import ContactAttemptLine from './contactAttemptLine';
 

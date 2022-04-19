@@ -4,7 +4,7 @@ import { differenceInYears, formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 export const getCommentByType = (type, su) => {
@@ -64,7 +64,7 @@ export const areCaEqual = (ca, anotherCa) => {
 export const deleteContactAttempt = (surveyUnit, contactAttempt) => {
   const { contactAttempts } = surveyUnit;
   const newCA = contactAttempts.filter(ca => !areCaEqual(ca, contactAttempt));
-  surveyUnitDBService.update({ ...surveyUnit, contactAttempts: newCA });
+  surveyUnitIdbService.update({ ...surveyUnit, contactAttempts: newCA });
 };
 
 export const getContactAttemptNumber = surveyUnit =>
@@ -192,7 +192,7 @@ export const addNewState = async (surveyUnit, stateType) => {
       break;
   }
   newSu.selected = false;
-  await surveyUnitDBService.addOrUpdate(newSu);
+  await surveyUnitIdbService.addOrUpdate(newSu);
 };
 
 export const updateStateWithDates = surveyUnit => {
@@ -408,4 +408,10 @@ export const getprivilegedPerson = surveyUnit => {
 
   const privilegedPerson = persons.find(p => p.privileged);
   return privilegedPerson ? privilegedPerson : persons[0];
+};
+
+export const createStateIds = async latestSurveyUnit => {
+  const { id, states } = latestSurveyUnit;
+  const previousSurveyUnit = await surveyUnitIdbService.getById(id);
+  surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, states });
 };
