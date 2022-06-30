@@ -10,6 +10,12 @@ const addressMessage = {
   addressFullAddress: { fr: 'Adresse', en: 'Address' },
   addressCountry: { fr: 'Pays', en: 'Country' },
   addressLocality: { fr: 'Lieu-dit', en: 'Locality' },
+  addressBuilding: { fr: 'Bâtiment', en: 'Building' },
+  addressFloor: { fr: 'Etage', en: 'Floor' },
+  addressDoor: { fr: 'Porte', en: 'Door' },
+  addressStaircase: { fr: 'Escalier', en: 'Staircase' },
+  addressElevator: { fr: 'Ascenceur', en: 'Elevator' },
+  addressCityPriorityDistrict: { fr: 'QPV', en: 'City Priority District' },
 };
 
 export default addressMessage;

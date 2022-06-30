@@ -311,6 +311,34 @@ export const getAddressData = su => {
     { label: D.addressLocality, value: su.address.l5 || '' },
     { label: D.addressPostcode, value: postCode || '' },
     { label: D.addressCity, value: cityName || '' },
+    { label: D.addressBuilding, value: su.address.building || '' },
+    { label: D.addressFloor, value: su.address.floor || '' },
+    { label: D.addressDoor, value: su.address.door || '' },
+    { label: D.addressStaircase, value: su.address.staircase || '' },
+    { label: D.addressElevator, value: su.address.elevator || '' },
+    { label: D.addressCityPriorityDistrict, value: su.address.cityPriorityDistrict || '' },
+  ];
+};
+
+export const getIdentificationData = surveyUnit => {
+  const { identification, move } = surveyUnit;
+  if (!identification) {
+    return [
+      { label: 'identification', value: '' },
+      { label: 'access', value: '' },
+      { label: 'situation', value: '' },
+      { label: 'category', value: '' },
+      { label: 'occupant', value: '' },
+      { label: 'move', value: move || false },
+    ];
+  }
+  return [
+    { label: 'identification', value: identification.identification || '' },
+    { label: 'access', value: identification.access || '' },
+    { label: 'situation', value: identification.situation || '' },
+    { label: 'category', value: identification.category || '' },
+    { label: 'occupant', value: identification.occupant || '' },
+    { label: 'move', value: surveyUnit.move || false },
   ];
 };
 

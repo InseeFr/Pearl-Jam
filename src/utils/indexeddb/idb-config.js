@@ -1,6 +1,7 @@
 import Dexie from 'dexie';
 import schema from './schema.json';
 import schema2 from './schema-2.json';
+import schema3 from './schema-3.json';
 
 export const db = new Dexie('Pearl');
 
@@ -20,3 +21,4 @@ db.version(2)
         delete notif.message;
       });
   });
+db.version(3).stores(schema3);

@@ -9,6 +9,11 @@ export const contactAttemptEnum = {
   MESSAGE_SENT: { type: 'MES', value: `${D.messageSent}` },
   UNUSABLE_CONTACT_DATA: { type: 'UCD', value: `${D.unusableContactData}` },
   PERMANENTLY_UNAVAILABLE: { type: 'PUN', value: `${D.permanentlyUnavailable}` },
+  NOTICE_OF_PASSAGE_SENT: { type: 'NPS', value: `${D.noticeOfPassageSent}` },
+  NOTIFICATION_LETTER_HAND_DELIVERED: {
+    type: 'NLH',
+    value: `${D.notificationLetterHandDelivered}`,
+  },
 };
 
 export const findContactAttemptValueByType = type => {

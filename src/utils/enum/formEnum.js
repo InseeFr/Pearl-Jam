@@ -4,6 +4,7 @@ const formEnum = {
   CONTACT_OUTCOME: 'contactOutcome',
   DELETION: 'deletion',
   COMMENT: 'comment',
+  IDENTIFICATION: 'identification',
   MAIL: 'mail',
   PHONE: 'phone',
   USER: 'user',

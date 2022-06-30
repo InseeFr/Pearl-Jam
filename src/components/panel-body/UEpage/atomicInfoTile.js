@@ -1,9 +1,9 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import MaterialIcons from 'utils/icons/materialIcons';
+import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -50,6 +50,7 @@ const AtomicInfoTile = ({ iconType, data, onClickFunction }) => {
       ...arr,
       <div className={classes.row}>
         {favorite !== undefined && <MaterialIcons type={favorite ? 'starFull' : 'starOutlined'} />}
+        {typeof value === 'boolean' && <MaterialIcons type={`${value ? 'checked' : 'cross'}`} />}
         <Typography key={label} className={valid ? '' : classes.invisible}>
           {value !== undefined && value !== '' ? value : '-'}
         </Typography>

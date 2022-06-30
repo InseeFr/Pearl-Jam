@@ -1,20 +1,25 @@
-import React from 'react';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useContext } from 'react';
 
-const Identification = () => {
-  const useStyles = makeStyles(() => ({
-    void: {
-      height: '200px',
-      width: '200px',
-      boxShadow: 'unset',
-      borderRadius: '15px',
-      border: 'LightGray solid 1px',
-    },
-  }));
+import AtomicInfoTile from '../atomicInfoTile';
+import SurveyUnitContext from '../UEContext';
+import formEnum from 'utils/enum/formEnum';
+import { getIdentificationData } from 'utils/functions';
 
-  const classes = useStyles();
-  return <Paper className={classes.void} />;
+const Identification = ({ selectFormType, setInjectableData }) => {
+  const { surveyUnit } = useContext(SurveyUnitContext);
+
+  return (
+    <>
+      <AtomicInfoTile
+        iconType="googles"
+        data={getIdentificationData(surveyUnit)}
+        onClickFunction={() => {
+          selectFormType(formEnum.IDENTIFICATION, true);
+          setInjectableData(surveyUnit);
+        }}
+      ></AtomicInfoTile>
+    </>
+  );
 };
 
 export default Identification;

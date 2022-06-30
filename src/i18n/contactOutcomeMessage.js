@@ -7,16 +7,12 @@ const contactOutcomeMessage = {
   },
   contactOutcomeAttempts: { fr: 'essais', en: 'attempts' },
   unableToRespond: {
-    fr: 'Incapacité à répondre',
+    fr: 'Incapacité de répondre',
     en: 'Unable to respond',
   },
   alreadyAnsweredAnotherMode: {
     fr: "A déjà répondu à une autre enquête de l'Insee depuis moins d'un an",
     en: 'Already answered another Insee survey since last year',
-  },
-  absenceDuringCollection: {
-    fr: 'Absence pendant toute la durée de la collecte',
-    en: 'Absence during collection',
   },
   deceased: {
     fr: 'Enquêté décédé',
@@ -26,13 +22,21 @@ const contactOutcomeMessage = {
     fr: "Logement ayant perdu son usage d'habitation",
     en: 'No longer used for habitation',
   },
-  noInterviewForExceptionalReasons: {
-    fr: 'Non enquêté pour cause exceptionnelle',
-    en: 'No interview for exceptional reasons',
-  },
   totalNumberOfContactAttempts: {
     fr: "Nombre total d'essais de contact",
     en: 'Contact attempts total',
+  },
+  definitlyUnavailableForKnownReason: {
+    fr: 'Indisponibilité définitive pour motif connu',
+    en: 'Unavailable for a known reason',
+  },
+  definitlyUnavailableForUnknownReason: {
+    fr: 'Indisponibilité définitive pour motif inconnu',
+    en: 'Unavailable for an unknown reason',
+  },
+  notApplicable: {
+    fr: 'Sans objet',
+    en: 'Not applicable',
   },
 };
 

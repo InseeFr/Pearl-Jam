@@ -1,10 +1,12 @@
-import React from 'react';
 import { deleteContactAttempt, getAddressData, getCommentByType } from 'utils/functions';
+
 import AddressForm from './addressForm';
 import ContactAttemptsForm from './contactAttemptsForm';
 import ContactOutcomeForm from './contactOutcomeForm';
+import IdentificationForm from './identificationForm';
 import MailForm from './mailForm';
 import PhoneForm from './phoneForm';
+import React from 'react';
 import UserForm from './userForm';
 import formEnum from 'utils/enum/formEnum';
 import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
@@ -53,6 +55,14 @@ export const getForm = (formType, previousValue, closeModal) => {
     case formEnum.USER:
       return <UserForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />;
 
+    case formEnum.IDENTIFICATION:
+      return (
+        <IdentificationForm
+          save={saveAndClose}
+          previousValue={previousValue}
+          closeModal={closeModal}
+        />
+      );
     default:
       return null;
   }
@@ -82,6 +92,9 @@ export const getPreviousValue = (formType, surveyUnit, injectableData) => {
       break;
     case formEnum.CONTACT_OUTCOME:
       value = surveyUnit.contactOutcome === null ? undefined : surveyUnit.contactOutcome;
+      break;
+    case formEnum.IDENTIFICATION:
+      value = injectableData;
       break;
     default:
       value = { titi: 'tutu' };
