@@ -1,7 +1,7 @@
-import React from 'react';
 import CheckCircleOutline from '@material-ui/icons/CheckCircleOutline';
-import Warning from '@material-ui/icons/Warning';
 import Clear from '@material-ui/icons/Clear';
+import React from 'react';
+import Warning from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -16,12 +16,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const IconStatus = ({ type, ...other }) => {
+export const IconStatus = ({ type, className, ...other }) => {
   const classes = useStyles();
   if (type === 'success')
-    return <CheckCircleOutline className={classes.success} {...other} fontSize="large" />;
-  if (type === 'error') return <Clear className={classes.failure} {...other} fontSize="large" />;
+    return (
+      <CheckCircleOutline
+        className={`${classes.success} ${className}`}
+        {...other}
+        fontSize="large"
+      />
+    );
+  if (type === 'error')
+    return <Clear className={`${classes.failure} ${className}`} {...other} fontSize="large" />;
   if (type === 'warning')
-    return <Warning className={classes.warning} {...other} fontSize="large" />;
+    return <Warning className={`${classes.warning} ${className}`} {...other} fontSize="large" />;
   return <></>;
 };

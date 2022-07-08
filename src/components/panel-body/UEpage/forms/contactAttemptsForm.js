@@ -1,23 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react';
-
 import { DatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { makeStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import AddIcon from '@material-ui/icons/Add';
-import ScheduleIcon from '@material-ui/icons/Schedule';
-
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core';
+import React, { useContext, useEffect, useState } from 'react';
 import { addNewState, areCaEqual, getSortedContactAttempts } from 'utils/functions';
 
+import AddIcon from '@material-ui/icons/Add';
 import ContactAttemptLine from '../contacts/contactAttempts/contactAttemptLine';
 import D from 'i18n';
 import DateFnsUtils from '@date-io/date-fns';
+import Fab from '@material-ui/core/Fab';
 import FormPanel from '../contacts/contactAttempts/formPanel';
+import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
+import ScheduleIcon from '@material-ui/icons/Schedule';
 import SurveyUnitContext from '../UEContext';
+import Typography from '@material-ui/core/Typography';
 import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
 import frLocale from 'date-fns/locale/fr';
+import { makeStyles } from '@material-ui/core/styles';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(theme => ({
@@ -84,6 +83,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
   const { surveyUnit } = useContext(SurveyUnitContext);
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactAttempt, setContactAttempt] = useState(previousValue);
+  const [medium, setMedium] = useState(undefined);
   const [visiblePanel, setVisiblePanel] = useState(undefined);
   const [contactAttempts, setcontactAttempts] = useState([]);
   const [contactAttemptToDelete, setContactAttemptToDelete] = useState(undefined);
@@ -98,6 +98,12 @@ const Form = ({ previousValue, save, deleteAction }) => {
 
   const onChange = newStatus => {
     setContactAttempt({ ...contactAttempt, status: newStatus, date: new Date().getTime() });
+  };
+
+  const onMediumChange = event => {
+    const newMedium = event.target.value;
+    setMedium(newMedium);
+    setVisiblePanel('EDITION');
   };
 
   useEffect(() => {
@@ -124,6 +130,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
     suContactAttempts.push({
       ...contactAttempt,
       date: selectedDate.getTime(),
+      medium,
     });
 
     // lifeCycle update
@@ -143,6 +150,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
   const resetForm = value => {
     setVisiblePanel(value);
     setContactAttempt(undefined);
+    setMedium(undefined);
     setFormIsValid(false);
     setContactAttemptToDelete(undefined);
   };
@@ -168,14 +176,49 @@ const Form = ({ previousValue, save, deleteAction }) => {
               />
             );
           })}
-        <Fab className={classes.alignEnd} aria-label="add" onClick={() => resetForm('EDITION')}>
+        <Fab className={classes.alignEnd} aria-label="add" onClick={() => resetForm('MEDIUM')}>
           <AddIcon fontSize="large" />
         </Fab>
       </FormPanel>
       <FormPanel
+        title={D.mediumQuestion}
+        hidden={visiblePanel !== 'MEDIUM'}
+        backFunction={() => resetForm(undefined)}
+      >
+        <FormControl component="fieldset">
+          <RadioGroup aria-label="position">
+            <FormControlLabel
+              value="FIELD"
+              control={
+                <Radio color="primary" onClick={onMediumChange} checked={medium === 'FIELD'} />
+              }
+              label={D.mediumFaceToFace}
+            />
+            <FormControlLabel
+              value="TEL"
+              control={
+                <Radio color="primary" onClick={onMediumChange} checked={medium === 'TEL'} />
+              }
+              label={D.mediumPhone}
+            />
+            <FormControlLabel
+              value="EMAIL"
+              control={
+                <Radio color="primary" onClick={onMediumChange} checked={medium === 'EMAIL'} />
+              }
+              label={D.mediumEmail}
+            />
+          </RadioGroup>
+        </FormControl>
+      </FormPanel>
+
+      <FormPanel
         title={D.contactAttempt}
         hidden={visiblePanel !== 'EDITION'}
-        backFunction={() => resetForm(undefined)}
+        backFunction={() => {
+          setVisiblePanel('MEDIUM');
+          setContactAttempt(undefined);
+        }}
       >
         {Object.values(contactAttemptEnum).map(({ value, type }) => (
           <Paper

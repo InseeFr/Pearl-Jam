@@ -9,7 +9,6 @@ import Dialog from '@material-ui/core/Dialog';
 import Grid from '@material-ui/core/Grid';
 import Identification from './identification';
 import Letters from './letters';
-import PropTypes from 'prop-types';
 import StateLine from './stateLine';
 import SurveyUnitContext from './UEContext';
 import TabSwipper from './navigation/tabSwipper';
@@ -33,7 +32,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Router = ({ match }) => {
+const Router = () => {
   const { surveyUnit } = useContext(SurveyUnitContext);
 
   /** Form type is dynamically inserted in Modal, with previousValue for edition if needed */
@@ -124,9 +123,4 @@ const Router = ({ match }) => {
 };
 
 export default Router;
-Router.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
-    url: PropTypes.string.isRequired,
-  }).isRequired,
-};
+Router.propTypes = {};

@@ -1,11 +1,11 @@
 import D from 'i18n';
 
 export const identificationQuestionsEnum = {
-  IDENTIFICATION: { type: 'IDENTIFICATION', value: `${D.interviewAccepted}` },
-  ACCESS: { type: 'ACCESS', value: `${D.appointmentMade}` },
-  SITUATION: { type: 'SITUATION', value: `${D.refusal}` },
-  CATEGORY: { type: 'GATEGORY', value: `${D.refusal}` },
-  OCCUPANT: { type: 'OCCUPANT', value: `${D.refusal}` },
+  IDENTIFICATION: { type: 'IDENTIFICATION', value: `${D.housingIdentification}` },
+  ACCESS: { type: 'ACCESS', value: `${D.housingAccess}` },
+  SITUATION: { type: 'SITUATION', value: `${D.housingSituation}` },
+  CATEGORY: { type: 'CATEGORY', value: `${D.housingCategory}` },
+  OCCUPANT: { type: 'OCCUPANT', value: `${D.housingOccupant}` },
 };
 
 export const findIdentificationQuestionValueByType = type => {

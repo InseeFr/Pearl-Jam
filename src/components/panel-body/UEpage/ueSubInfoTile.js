@@ -1,7 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -14,10 +14,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const UeSubInfoTile = ({ title, children, reference, className }) => {
+const UeSubInfoTile = ({ title, children, className }) => {
   const classes = useStyles();
   return (
-    <div className={`${classes.root} ${className}`} ref={reference}>
+    <div className={`${classes.root} ${className}`}>
       <Typography variant="h5">{title}</Typography>
       {children}
     </div>
@@ -28,7 +28,6 @@ export default UeSubInfoTile;
 UeSubInfoTile.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-  reference: PropTypes.shape({}).isRequired,
   className: PropTypes.string,
 };
 UeSubInfoTile.defaultProps = {

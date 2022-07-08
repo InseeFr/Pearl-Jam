@@ -6,21 +6,23 @@ import contactOutcomeMessage from './contactOutcomeMessage';
 import criteriaMessage from './criteriaMessage';
 import detailsMessage from './detailsMessage';
 import errorMessage from './errorMessage';
+import identificationMessage from './identificationMessage';
+import mailMessage from './mailMessage';
+import mediumMessage from './mediumMessage';
 import navigationMessage from './navigationMessage';
+import notificationMessage from './notificationMessage';
 import phoneSourceMessage from './phoneSourceMessage';
 import questionnaireStateMessage from './questionnaireStateMessage';
+import resetDataMessage from './resetDataMessage';
 import searchMessage from './searchMessage';
-import surveyUnitMessage from './surveyUnitMessage';
 import suStateMessage from './suStateMessage';
+import surveyUnitMessage from './surveyUnitMessage';
+import syncMessage from './syncMessage';
 import tableHeader from './tableHeaderMessage';
 import titleMessage from './titleMessage';
 import toDoMessage from './toDoMessage';
 import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
-import mailMessage from './mailMessage';
-import syncMessage from './syncMessage';
-import notificationMessage from './notificationMessage';
-import resetDataMessage from './resetDataMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -99,6 +101,8 @@ const dictionary = {
   ...syncMessage,
   ...notificationMessage,
   ...resetDataMessage,
+  ...identificationMessage,
+  ...mediumMessage,
 };
 
 export default dictionary;

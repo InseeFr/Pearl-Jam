@@ -9,7 +9,6 @@ import Tabs from '@material-ui/core/Tabs';
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    // width: 500,
   },
 }));
 
@@ -31,7 +30,6 @@ const addPropsToTabPanels = (tabPanels, value, direction) =>
     })
   );
 const TabSwipper = ({ tabsLabels, children }) => {
-  console.log('tabsLabels ', tabsLabels);
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
