@@ -26,6 +26,7 @@ const addPropsToTabPanels = (tabPanels, value, direction) =>
     React.cloneElement(element, {
       ...element.props,
       hidden: value !== index,
+      key: index,
       dir: { direction },
     })
   );

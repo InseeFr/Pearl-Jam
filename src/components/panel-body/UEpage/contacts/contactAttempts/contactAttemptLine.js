@@ -1,11 +1,11 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
 import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
 import format from 'date-fns/format';
 import { fr } from 'date-fns/locale';
-import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -37,7 +37,7 @@ const ContactAttemptLine = ({ contactAttempt, deleteParams, selected }) => {
   const minutes = format(new Date(contactAttempt.date), 'mm');
 
   return (
-    <div className={classes.flex} key={contactAttempt.id}>
+    <div className={classes.flex} key={contactAttempt.date}>
       <Typography className={classes.top}>
         {`${dayOfWeek} ${date} - ${hour}h${minutes} - ${findContactAttemptValueByType(
           contactAttempt.status

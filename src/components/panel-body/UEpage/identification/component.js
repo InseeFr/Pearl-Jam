@@ -5,7 +5,9 @@ import { formatToSave, useIdentification } from 'utils/functions/identificationF
 import ClickableLine from './clickableLine';
 import LabelledCheckbox from './labelledCheckbox';
 import SurveyUnitContext from '../UEContext';
-import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
+import { addNewState } from 'utils/functions';
+import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(() => ({
   row: {
@@ -14,11 +16,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Identification = ({ selectFormType, setInjectableData }) => {
+const Identification = () => {
   const { surveyUnit } = useContext(SurveyUnitContext);
   const { identification, identificationConfiguration } = surveyUnit;
   const classes = useStyles();
-
+  const visible = identificationConfiguration === identificationConfigurationEnum.IASCO;
   const { data, answers, updateIdentification } = useIdentification(
     identificationConfiguration,
     identification
@@ -26,49 +28,53 @@ const Identification = ({ selectFormType, setInjectableData }) => {
 
   const [visibleAnswers, setVisibleAnswers] = useState(undefined);
   return (
-    <div className={classes.row}>
-      <Paper>
-        {data &&
-          data.map(question => {
-            return (
-              <>
+    visible && (
+      <div className={classes.row}>
+        <Paper>
+          {data &&
+            data.map((question, index) => {
+              return (
                 <ClickableLine
                   placeholder={question.label}
+                  key={`clikableLine-${index}`}
                   value={question.selectedAnswer ? question.selectedAnswer.label : undefined}
                   checked={question.selectedAnswer}
                   onClickFunction={() => setVisibleAnswers(question.answers)}
                 />
-              </>
-            );
-          })}
-      </Paper>
-      <Paper>
-        {visibleAnswers &&
-          visibleAnswers.map(answer => {
-            return (
-              <LabelledCheckbox
-                value={answer.label}
-                checked={
-                  answers.filter(
-                    currentAnswer => currentAnswer && currentAnswer.type === answer.type
-                  ).length > 0
-                }
-                onClickFunction={() => updateIdentification(answer)}
-              />
-            );
-          })}
-      </Paper>
-      <Button
-        onClick={() =>
-          surveyUnitIdbService.addOrUpdateSU({
-            ...surveyUnit,
-            identification: formatToSave(data),
-          })
-        }
-      >
-        Save
-      </Button>
-    </div>
+              );
+            })}
+        </Paper>
+        <Paper>
+          {visibleAnswers &&
+            visibleAnswers.map(answer => {
+              return (
+                <LabelledCheckbox
+                  value={answer.label}
+                  checked={
+                    answers.filter(
+                      currentAnswer => currentAnswer && currentAnswer.type === answer.type
+                    ).length > 0
+                  }
+                  onClickFunction={() => updateIdentification(answer)}
+                />
+              );
+            })}
+        </Paper>
+        <Button
+          onClick={() =>
+            addNewState(
+              {
+                ...surveyUnit,
+                identification: formatToSave(data),
+              },
+              surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
+            )
+          }
+        >
+          Save
+        </Button>
+      </div>
+    )
   );
 };
 

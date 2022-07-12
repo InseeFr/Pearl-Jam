@@ -23,13 +23,13 @@ const contactAttemptMessage = {
   },
   contactAttempts: { fr: 'Mes essais de contact', en: 'Contact attempts' },
   contactAttempt: {
-    fr: "Résultat de l'essai de contact",
-    en: 'Contact attempt result',
+    fr: 'Résultat',
+    en: 'Result',
   },
   noContactAttempt: { fr: "Pas d'essais de contact", en: 'No contacts attempts' },
   chooseAnOption: { fr: 'Choisissez une option', en: 'Choose an option' },
   telephone: { fr: 'Téléphone', en: 'Telephone' },
-  datePicking: { fr: "Indiquez la date de l'essai", en: 'Select contact attempt date and time' },
+  datePicking: { fr: 'Date', en: 'Date' },
   contactAttemptDeletion: { fr: "Supprimer l'essai de contact", en: 'Delete contact attempt' },
 };
 

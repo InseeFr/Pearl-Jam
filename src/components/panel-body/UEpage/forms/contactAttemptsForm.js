@@ -1,5 +1,5 @@
 import { DatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core';
+import { FormControl, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { addNewState, areCaEqual, getSortedContactAttempts } from 'utils/functions';
 
@@ -14,8 +14,9 @@ import PropTypes from 'prop-types';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import SurveyUnitContext from '../UEContext';
 import Typography from '@material-ui/core/Typography';
-import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
 import frLocale from 'date-fns/locale/fr';
+import { getContactAttemptByConfiguration } from 'utils/enum/ContactAttemptEnum';
+import { getMediumByConfiguration } from 'utils/enum/MediumEnum';
 import { makeStyles } from '@material-ui/core/styles';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
@@ -81,6 +82,8 @@ class FrLocalizedUtils extends DateFnsUtils {
 
 const Form = ({ previousValue, save, deleteAction }) => {
   const { surveyUnit } = useContext(SurveyUnitContext);
+  const { contactAttemptConfiguration } = surveyUnit;
+  const [availableContacAttempts, setAvailableContacAttempts] = useState([]);
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactAttempt, setContactAttempt] = useState(previousValue);
   const [medium, setMedium] = useState(undefined);
@@ -90,6 +93,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
 
   const [selectedDate, handleDateChange] = useState(new Date());
   const isEditionMode = previousValue.status !== undefined;
+  const availableMedium = getMediumByConfiguration(contactAttemptConfiguration);
 
   useEffect(() => {
     const sortedContactAttempts = getSortedContactAttempts(surveyUnit);
@@ -103,6 +107,9 @@ const Form = ({ previousValue, save, deleteAction }) => {
   const onMediumChange = event => {
     const newMedium = event.target.value;
     setMedium(newMedium);
+    setAvailableContacAttempts(
+      getContactAttemptByConfiguration(contactAttemptConfiguration, newMedium)
+    );
     setVisiblePanel('EDITION');
   };
 
@@ -110,14 +117,14 @@ const Form = ({ previousValue, save, deleteAction }) => {
     const checkForm = () => {
       const { status } = contactAttempt;
       const isValid = () =>
-        Object.keys(contactAttemptEnum)
-          .map(enumKey => contactAttemptEnum[enumKey].type)
+        Object.keys(availableContacAttempts)
+          .map(enumKey => availableContacAttempts[enumKey].type)
           .includes(status);
       if (isValid !== formIsValid) setFormIsValid(isValid);
     };
 
     if (contactAttempt !== undefined) checkForm();
-  }, [contactAttempt, formIsValid]);
+  }, [availableContacAttempts, contactAttempt, formIsValid]);
 
   const saveUE = async () => {
     let { contactAttempts: suContactAttempts } = surveyUnit;
@@ -187,27 +194,21 @@ const Form = ({ previousValue, save, deleteAction }) => {
       >
         <FormControl component="fieldset">
           <RadioGroup aria-label="position">
-            <FormControlLabel
-              value="FIELD"
-              control={
-                <Radio color="primary" onClick={onMediumChange} checked={medium === 'FIELD'} />
-              }
-              label={D.mediumFaceToFace}
-            />
-            <FormControlLabel
-              value="TEL"
-              control={
-                <Radio color="primary" onClick={onMediumChange} checked={medium === 'TEL'} />
-              }
-              label={D.mediumPhone}
-            />
-            <FormControlLabel
-              value="EMAIL"
-              control={
-                <Radio color="primary" onClick={onMediumChange} checked={medium === 'EMAIL'} />
-              }
-              label={D.mediumEmail}
-            />
+            {Object.keys(availableMedium)
+              .map(enumKey => availableMedium[enumKey])
+              .map(enumEntry => (
+                <FormControlLabel
+                  value={enumEntry.type}
+                  control={
+                    <Radio
+                      color="primary"
+                      onClick={onMediumChange}
+                      checked={medium === enumEntry.type}
+                    />
+                  }
+                  label={enumEntry.value}
+                />
+              ))}
           </RadioGroup>
         </FormControl>
       </FormPanel>
@@ -220,7 +221,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
           setContactAttempt(undefined);
         }}
       >
-        {Object.values(contactAttemptEnum).map(({ value, type }) => (
+        {Object.values(availableContacAttempts).map(({ value, type }) => (
           <Paper
             key={type}
             name={type}

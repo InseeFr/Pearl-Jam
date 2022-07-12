@@ -18,11 +18,11 @@ const useStyles = makeStyles(() => ({
   rightAligned: { marginLeft: 'auto' },
 }));
 
-const ClickableLine = ({ value, placeholder, checked, onClickFunction }) => {
+const ClickableLine = ({ value, placeholder, checked, onClickFunction, key }) => {
   const classes = useStyles();
 
   return (
-    <Paper elevation={0} className={classes.row} onClick={onClickFunction}>
+    <Paper elevation={0} className={classes.row} onClick={onClickFunction} key={key}>
       <Typography className={classes.marginRight}>{value ? value : placeholder}</Typography>
       <div className={classes.rightAligned}>
         {checked && <IconStatus type={'success'} />}

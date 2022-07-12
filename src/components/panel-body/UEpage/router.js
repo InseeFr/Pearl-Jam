@@ -8,7 +8,6 @@ import Details from './details';
 import Dialog from '@material-ui/core/Dialog';
 import Grid from '@material-ui/core/Grid';
 import Identification from './identification';
-import Letters from './letters';
 import StateLine from './stateLine';
 import SurveyUnitContext from './UEContext';
 import TabSwipper from './navigation/tabSwipper';
@@ -73,28 +72,22 @@ const Router = () => {
   };
 
   const smartModalClass = smartForms.includes(formType) ? classes.paperModal : '';
-
+  const tabsLabels = [
+    D.goToContactDetailsPage,
+    D.goToIdentificationPage,
+    D.goToContactPage,
+    D.goToCommentsPage,
+  ];
   return (
     <>
       <div>
         <StateLine />
-        <TabSwipper
-          tabsLabels={[
-            D.goToContactDetailsPage,
-            D.goToSpottingPage,
-            D.goToMailsPage,
-            D.goToContactPage,
-            D.goToCommentsPage,
-          ]}
-        >
+        <TabSwipper tabsLabels={tabsLabels}>
           <UeSubInfoTile title={D.goToContactDetailsPage}>
             <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
           </UeSubInfoTile>
-          <UeSubInfoTile title={D.goToSpottingPage}>
-            <Identification selectFormType={selectFormType} setInjectableData={setInjectableData} />
-          </UeSubInfoTile>
-          <UeSubInfoTile title={D.goToMailsPage}>
-            <Letters selectFormType={selectFormType} />
+          <UeSubInfoTile title={D.goToIdentificationPage}>
+            <Identification />
           </UeSubInfoTile>
           <UeSubInfoTile title={D.goToContactPage}>
             <Contacts selectFormType={selectFormType} setInjectableData={setInjectableData} />

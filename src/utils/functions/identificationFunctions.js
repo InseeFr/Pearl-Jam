@@ -58,8 +58,10 @@ export const useIdentification = (identificationConfiguration, previousData) => 
       return filteredAnswers.length === 0 ? undefined : filteredAnswers[0];
     };
 
-    const generateInitData = questions =>
-      Object.keys(questions)
+    const generateInitData = questions => {
+      if (!questions) return [];
+
+      return Object.keys(questions)
         .map(key => questions[key])
         .map(({ type, value }) => {
           const typedAnswers = getAnswersByQuestionType(type, identificationConfiguration);
@@ -70,6 +72,7 @@ export const useIdentification = (identificationConfiguration, previousData) => 
             answers: typedAnswers,
           };
         });
+    };
 
     setData(generateInitData(getQuestions(identificationConfiguration)));
   }, [identificationConfiguration, previousData]);

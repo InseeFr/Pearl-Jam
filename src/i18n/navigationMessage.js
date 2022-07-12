@@ -4,7 +4,7 @@ const navigationMessage = {
   goToNotificationsPage: { fr: 'Notifications', en: 'Notifications' },
   goToChatPage: { fr: 'Chat', en: 'Chat' },
   goToContactDetailsPage: { fr: 'Coordonnées', en: 'Contact details' },
-  goToSpottingPage: { fr: 'Repérages', en: 'Spotting' },
+  goToIdentificationPage: { fr: 'Repérages', en: 'Spotting' },
   goToMailsPage: { fr: 'Courriers', en: 'Mails' },
   goToContactPage: { fr: 'Contacts', en: 'Contacts' },
   goToCommentsPage: { fr: 'Commentaire', en: 'Comment' },

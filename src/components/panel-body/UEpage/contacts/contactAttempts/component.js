@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+
+import ContactAttemptLine from './contactAttemptLine';
+import D from 'i18n';
 import Paper from '@material-ui/core/Paper';
+import PropTypes from 'prop-types';
+import SurveyUnitContext from '../../UEContext';
 import Typography from '@material-ui/core/Typography';
 import formEnum from 'utils/enum/formEnum';
 import { getSortedContactAttempts } from 'utils/functions';
-import D from 'i18n';
-import PropTypes from 'prop-types';
-import SurveyUnitContext from '../../UEContext';
-import ContactAttemptLine from './contactAttemptLine';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   column: {
@@ -47,9 +48,7 @@ const ContactAttempts = ({ selectFormType, setInjectableData }) => {
       <Typography variant="h6">{D.contactAttempts}</Typography>
       {Array.isArray(contactAttempts) &&
         contactAttempts.length > 0 &&
-        contactAttempts.map(contAtt => (
-          <ContactAttemptLine contactAttempt={contAtt} key={contAtt.id} />
-        ))}
+        contactAttempts.map(contAtt => <ContactAttemptLine contactAttempt={contAtt} />)}
     </Paper>
   );
 };
