@@ -31,34 +31,32 @@ const Identification = () => {
     visible && (
       <div className={classes.row}>
         <Paper>
-          {data &&
-            data.map((question, index) => {
-              return (
-                <ClickableLine
-                  placeholder={question.label}
-                  key={`clikableLine-${index}`}
-                  value={question.selectedAnswer ? question.selectedAnswer.label : undefined}
-                  checked={question.selectedAnswer}
-                  onClickFunction={() => setVisibleAnswers(question.answers)}
-                />
-              );
-            })}
+          {data?.map((question, index) => {
+            return (
+              <ClickableLine
+                placeholder={question.label}
+                key={`clikableLine-${index}`}
+                value={question.selectedAnswer ? question.selectedAnswer.label : undefined}
+                checked={question.selectedAnswer}
+                onClickFunction={() => setVisibleAnswers(question.answers)}
+              />
+            );
+          })}
         </Paper>
         <Paper>
-          {visibleAnswers &&
-            visibleAnswers.map(answer => {
-              return (
-                <LabelledCheckbox
-                  value={answer.label}
-                  checked={
-                    answers.filter(
-                      currentAnswer => currentAnswer && currentAnswer.type === answer.type
-                    ).length > 0
-                  }
-                  onClickFunction={() => updateIdentification(answer)}
-                />
-              );
-            })}
+          {visibleAnswers?.map(answer => {
+            return (
+              <LabelledCheckbox
+                value={answer.label}
+                checked={
+                  answers.filter(
+                    currentAnswer => currentAnswer && currentAnswer.type === answer.type
+                  ).length > 0
+                }
+                onClickFunction={() => updateIdentification(answer)}
+              />
+            );
+          })}
         </Paper>
         <Button
           onClick={() =>
