@@ -1,5 +1,4 @@
 import { DatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { FormControl, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { addNewState, areCaEqual, getSortedContactAttempts } from 'utils/functions';
 
@@ -8,9 +7,13 @@ import ContactAttemptLine from '../contacts/contactAttempts/contactAttemptLine';
 import D from 'i18n';
 import DateFnsUtils from '@date-io/date-fns';
 import Fab from '@material-ui/core/Fab';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormPanel from '../contacts/contactAttempts/formPanel';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import SurveyUnitContext from '../UEContext';
 import Typography from '@material-ui/core/Typography';

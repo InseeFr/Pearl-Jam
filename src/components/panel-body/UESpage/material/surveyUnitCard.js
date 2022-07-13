@@ -1,25 +1,26 @@
-import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import WarningIcon from '@material-ui/icons/Warning';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import PersonIcon from '@material-ui/icons/Person';
-import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheckedSharp';
-import ScheduleIcon from '@material-ui/icons/Schedule';
-import { intervalInDays } from 'utils/functions';
-import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import {
   getLastState,
   getprivilegedPerson,
   isSelectable,
 } from 'utils/functions/surveyUnitFunctions';
-import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import { Tooltip } from '@material-ui/core';
+
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import D from 'i18n';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import PersonIcon from '@material-ui/icons/Person';
+import PropTypes from 'prop-types';
+import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheckedSharp';
+import React from 'react';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import WarningIcon from '@material-ui/icons/Warning';
+import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
+import { intervalInDays } from 'utils/functions';
+import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {

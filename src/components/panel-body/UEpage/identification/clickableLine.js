@@ -1,8 +1,9 @@
-import { Paper, Typography, makeStyles } from '@material-ui/core';
-
-import { ChevronRight } from '@material-ui/icons';
+import ChevronRight from '@material-ui/icons/ChevronRight';
 import { IconStatus } from 'components/common/IconStatus';
+import Paper from '@material-ui/core/Paper';
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   row: {

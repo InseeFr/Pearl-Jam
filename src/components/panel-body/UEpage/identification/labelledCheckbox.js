@@ -1,6 +1,9 @@
-import { Divider, Paper, Radio, Typography, makeStyles } from '@material-ui/core';
-
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
+import Radio from '@material-ui/core/Radio';
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   row: {
