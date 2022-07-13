@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import { contactOutcomeEnum, findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
+
 import AddIcon from '@material-ui/icons/Add';
 import D from 'i18n';
+import Fab from '@material-ui/core/Fab';
 import FormPanel from '../contacts/contactAttempts/formPanel';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import RemoveIcon from '@material-ui/icons/Remove';
 import SurveyUnitContext from '../UEContext';
+import Typography from '@material-ui/core/Typography';
 import { addNewState } from 'utils/functions';
-import { contactOutcomeEnum, findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
+import { makeStyles } from '@material-ui/core/styles';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(theme => ({
@@ -95,8 +96,8 @@ const Form = ({ previousValue, save }) => {
   useEffect(() => {
     const checkForm = () => {
       const { type, totalNumberOfContactAttempts } = contactOutcome;
-      const typeIsValid = Object.keys(contactOutcomeEnum)
-        .map(enumKey => contactOutcomeEnum[enumKey].type)
+      const typeIsValid = Object.values(contactOutcomeEnum)
+        .map(enumValue => enumValue.type)
         .includes(type);
       const isValid = typeIsValid && totalNumberOfContactAttempts > 0;
 

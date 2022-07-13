@@ -20,13 +20,8 @@ export const contactOutcomeEnum = {
   NOT_APPLICABLE: { type: 'NOA', value: `${D.notApplicable}` },
 };
 
-export const findContactOutcomeValueByType = type => {
-  if (type === undefined) return undefined;
-  const retour = Object.keys(contactOutcomeEnum)
-    .map(key => contactOutcomeEnum[key])
-    .filter(value => value.type === type);
-  return retour[0].value;
-};
+export const findContactOutcomeValueByType = type =>
+  Object.values(contactOutcomeEnum).filter(value => value.type === type)?.[0]?.value;
 
 const commonContactOutcomes = {
   INTERVIEW_ACCEPTED: contactOutcomeEnum.INTERVIEW_ACCEPTED,

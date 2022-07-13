@@ -120,8 +120,8 @@ const Form = ({ previousValue, save, deleteAction }) => {
     const checkForm = () => {
       const { status } = contactAttempt;
       const isValid = () =>
-        Object.keys(availableContacAttempts)
-          .map(enumKey => availableContacAttempts[enumKey].type)
+        Object.values(availableContacAttempts)
+          .map(enumKey => enumKey.type)
           .includes(status);
       if (isValid !== formIsValid) setFormIsValid(isValid);
     };
@@ -197,21 +197,15 @@ const Form = ({ previousValue, save, deleteAction }) => {
       >
         <FormControl component="fieldset">
           <RadioGroup aria-label="position">
-            {Object.keys(availableMedium)
-              .map(enumKey => availableMedium[enumKey])
-              .map(enumEntry => (
-                <FormControlLabel
-                  value={enumEntry.type}
-                  control={
-                    <Radio
-                      color="primary"
-                      onClick={onMediumChange}
-                      checked={medium === enumEntry.type}
-                    />
-                  }
-                  label={enumEntry.value}
-                />
-              ))}
+            {Object.values(availableMedium).map(({ value, type }) => (
+              <FormControlLabel
+                value={type}
+                control={
+                  <Radio color="primary" onClick={onMediumChange} checked={medium === type} />
+                }
+                label={value}
+              />
+            ))}
           </RadioGroup>
         </FormControl>
       </FormPanel>

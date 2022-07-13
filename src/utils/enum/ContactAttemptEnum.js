@@ -16,13 +16,9 @@ export const contactAttemptEnum = {
   },
 };
 
-export const findContactAttemptValueByType = type => {
-  if (type === undefined) return undefined;
-  const retour = Object.keys(contactAttemptEnum)
-    .map(key => contactAttemptEnum[key])
-    .filter(value => value.type === type);
-  return retour[0].value;
-};
+export const findContactAttemptValueByType = type =>
+  Object.values(contactAttemptEnum).filter(value => value.type === type)?.[0]?.value;
+
 const commonPhoneContactAttemptEnum = {
   APPOINTMENT_MADE: contactAttemptEnum.APPOINTMENT_MADE,
   MESSAGE_SENT: contactAttemptEnum.MESSAGE_SENT,

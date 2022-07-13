@@ -61,17 +61,15 @@ export const useIdentification = (identificationConfiguration, previousData) => 
     const generateInitData = questions => {
       if (!questions) return [];
 
-      return Object.keys(questions)
-        .map(key => questions[key])
-        .map(({ type, value }) => {
-          const typedAnswers = getAnswersByQuestionType(type, identificationConfiguration);
-          return {
-            label: value,
-            type,
-            selectedAnswer: getSelectedAnswer(type, typedAnswers),
-            answers: typedAnswers,
-          };
-        });
+      return Object.values(questions).map(({ type, value }) => {
+        const typedAnswers = getAnswersByQuestionType(type, identificationConfiguration);
+        return {
+          label: value,
+          type,
+          selectedAnswer: getSelectedAnswer(type, typedAnswers),
+          answers: typedAnswers,
+        };
+      });
     };
 
     setData(generateInitData(getQuestions(identificationConfiguration)));

@@ -58,10 +58,5 @@ export const identificationAnswersEnum = {
   },
 };
 
-export const findIdentificationAnswerValueByType = type => {
-  if (type === undefined) return undefined;
-  const retour = Object.keys(identificationAnswersEnum)
-    .map(key => identificationAnswersEnum[key])
-    .filter(value => value.type === type);
-  return retour[0].value;
-};
+export const findIdentificationAnswerValueByType = type =>
+  Object.values(identificationAnswersEnum).filter(value => value.type === type)?.[0]?.value;

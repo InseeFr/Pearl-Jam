@@ -32,9 +32,5 @@ export const surveyUnitStateEnum = {
   CLOSED: { type: 'CLO', value: `${D.suStateClosedSurveyUnit}` },
 };
 
-export const findSuStateValueByType = type => {
-  const retour = Object.keys(surveyUnitStateEnum)
-    .map(key => surveyUnitStateEnum[key])
-    .filter(value => value.type === type);
-  return retour[0].value;
-};
+export const findSuStateValueByType = type =>
+  Object.values(surveyUnitStateEnum).filter(value => value.type === type)?.[0]?.value;

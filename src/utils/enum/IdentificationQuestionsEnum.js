@@ -8,10 +8,5 @@ export const identificationQuestionsEnum = {
   OCCUPANT: { type: 'OCCUPANT', value: `${D.housingOccupant}` },
 };
 
-export const findIdentificationQuestionValueByType = type => {
-  if (type === undefined) return undefined;
-  const retour = Object.keys(identificationQuestionsEnum)
-    .map(key => identificationQuestionsEnum[key])
-    .filter(value => value.type === type);
-  return retour[0].value;
-};
+export const findIdentificationQuestionValueByType = type =>
+  Object.values(identificationQuestionsEnum).filter(value => value.type === type)?.[0]?.value;
