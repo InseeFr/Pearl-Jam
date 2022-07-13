@@ -103,7 +103,7 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
 
   const privilegedPerson = getprivilegedPerson(surveyUnit);
   // persons.find(p => p.privileged);
-  const { firstName, lastName } = privilegedPerson ? privilegedPerson : persons[0];
+  const { firstName, lastName } = privilegedPerson ?? persons[0];
   const lastState = getLastState(surveyUnit);
   const todo = convertSUStateInToDo(lastState.type);
   const { order, value: toDoLabel } = todo;

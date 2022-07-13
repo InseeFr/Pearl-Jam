@@ -24,37 +24,21 @@ const Form = ({ closeModal, save, previousValue }) => {
     {}
   );
 
-  const [deliveryPoint, setDeliveryPoint] = useState(
-    previousData[D.addressDeliveryPoint] ? previousData[D.addressDeliveryPoint] : ''
-  );
+  const [deliveryPoint, setDeliveryPoint] = useState(previousData[D.addressDeliveryPoint] ?? '');
   const [additionalAddress, setAdditionalAddress] = useState(
-    previousData[D.addressAdditionalAddress] ? previousData[D.addressAdditionalAddress] : ''
+    previousData[D.addressAdditionalAddress] ?? ''
   );
-  const [streetName, setStreetName] = useState(
-    previousData[D.addressStreetName] ? previousData[D.addressStreetName] : ''
-  );
-  const [locality, setLocality] = useState(
-    previousData[D.addressLocality] ? previousData[D.addressLocality] : ''
-  );
-  const [postcode, setPostcode] = useState(
-    previousData[D.addressPostcode] ? previousData[D.addressPostcode] : ''
-  );
-  const [city, setCity] = useState(previousData[D.addressCity] ? previousData[D.addressCity] : '');
-  const [building, setBuilding] = useState(
-    previousData[D.addressBuilding] ? previousData[D.addressBuilding] : ''
-  );
-  const [floor, setFloor] = useState(
-    previousData[D.addressFloor] ? previousData[D.addressFloor] : ''
-  );
-  const [door, setDoor] = useState(previousData[D.addressDoor] ? previousData[D.addressDoor] : '');
-  const [staircase, setStaircase] = useState(
-    previousData[D.addressStaircase] ? previousData[D.addressStaircase] : ''
-  );
-  const [elevator, setElevator] = useState(
-    previousData[D.addressElevator] ? previousData[D.addressElevator] : ''
-  );
+  const [streetName, setStreetName] = useState(previousData[D.addressStreetName] ?? '');
+  const [locality, setLocality] = useState(previousData[D.addressLocality] ?? '');
+  const [postcode, setPostcode] = useState(previousData[D.addressPostcode] ?? '');
+  const [city, setCity] = useState(previousData[D.addressCity] ?? '');
+  const [building, setBuilding] = useState(previousData[D.addressBuilding] ?? '');
+  const [floor, setFloor] = useState(previousData[D.addressFloor] ?? '');
+  const [door, setDoor] = useState(previousData[D.addressDoor] ?? '');
+  const [staircase, setStaircase] = useState(previousData[D.addressStaircase] ?? '');
+  const [elevator, setElevator] = useState(previousData[D.addressElevator] ?? '');
   const [cityPriorityDistrict, setCityPriorityDistrict] = useState(
-    previousData[D.addressCityPriorityDistrict] ? previousData[D.addressCityPriorityDistrict] : ''
+    previousData[D.addressCityPriorityDistrict] ?? ''
   );
 
   const buildAddress = surveyUnit => {

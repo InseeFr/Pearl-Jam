@@ -39,7 +39,7 @@ const AtomicInfoTile = ({ iconType, data, onClickFunction }) => {
     (arr, { label }) => [
       ...arr,
       <Typography key={label} className={classes.label}>
-        {label !== undefined ? label : ''}
+        {label ?? ''}
       </Typography>,
     ],
     []

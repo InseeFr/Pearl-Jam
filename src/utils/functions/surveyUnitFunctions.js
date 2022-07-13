@@ -435,7 +435,7 @@ export const getprivilegedPerson = surveyUnit => {
   if (!persons || !persons.length || persons.length === 0) return personPlaceholder;
 
   const privilegedPerson = persons.find(p => p.privileged);
-  return privilegedPerson ? privilegedPerson : persons[0];
+  return privilegedPerson ?? persons[0];
 };
 
 export const createStateIds = async latestSurveyUnit => {

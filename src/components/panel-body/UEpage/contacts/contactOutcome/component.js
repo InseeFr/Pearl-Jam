@@ -32,14 +32,11 @@ const ContactOutcome = ({ selectFormType }) => {
   const contextSu = useContext(SurveyUnitContext);
   const { surveyUnit } = contextSu;
 
-  const defaultContactOutcome =
-    surveyUnit.contactOutcome !== undefined && surveyUnit.contactOutcome !== null
-      ? surveyUnit.contactOutcome
-      : {
-          date: new Date().getTime(),
-          type: undefined,
-          totalNumberOfContactAttempts: '0',
-        };
+  const defaultContactOutcome = surveyUnit.contactOutcome ?? {
+    date: new Date().getTime(),
+    type: undefined,
+    totalNumberOfContactAttempts: '0',
+  };
   const [contactOutcome, setContactOutcome] = useState(defaultContactOutcome);
 
   useEffect(() => {

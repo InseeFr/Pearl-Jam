@@ -55,7 +55,7 @@ export const useIdentification = (identificationConfiguration, previousData) => 
       if (!previousData) return undefined;
       const value = previousData[type.toLowerCase()];
       const filteredAnswers = typedAnswers.filter(ans => ans.value === value);
-      return filteredAnswers.length === 0 ? undefined : filteredAnswers[0];
+      return filteredAnswers?.[0];
     };
 
     const generateInitData = questions => {
@@ -79,12 +79,9 @@ export const useIdentification = (identificationConfiguration, previousData) => 
 
   return {
     data,
-    answers:
-      data !== undefined
-        ? data.map(q => {
-            return q.selectedAnswer;
-          })
-        : undefined,
+    answers: data?.map(q => {
+      return q.selectedAnswer;
+    }),
     updateIdentification: updateIdentification,
   };
 };
@@ -145,10 +142,8 @@ export const IASCO_CATEGORY_ANSWERS = [
 ];
 export const IASCO_OCCUPANT_ANSWERS = [answers.OCCUPANT_IDENTIFIED, answers.OCCUPANT_UNIDENTIFIED];
 
-const filterByQuestionType = (answers, type) => {
-  const filteredAnswers = answers.filter(ans => ans && ans.questionType === type);
-  return filteredAnswers.length > 0 ? filteredAnswers[0].value : undefined;
-};
+const filterByQuestionType = (answers, type) =>
+  answers.filter(ans => ans && ans.questionType === type)?.[0]?.value;
 
 export const formatToSave = data => {
   // TODO : use identificationConfiguration to adapt to other data formats

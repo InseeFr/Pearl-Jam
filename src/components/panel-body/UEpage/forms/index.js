@@ -81,7 +81,7 @@ export const getPreviousValue = (formType, surveyUnit, injectableData) => {
       value = injectableData;
       break;
     case formEnum.CONTACT_OUTCOME:
-      value = surveyUnit.contactOutcome === null ? undefined : surveyUnit.contactOutcome;
+      value = surveyUnit.contactOutcome ?? undefined;
       break;
     default:
       value = { titi: 'tutu' };
