@@ -1,9 +1,14 @@
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'utils/constants';
+import {
+  IASCO_CATEGORY_FINISHING_VALUES,
+  identificationIsFinished,
+} from './identificationFunctions';
 import { differenceInYears, formatDistanceStrict } from 'date-fns';
 
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
+import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
@@ -34,7 +39,7 @@ export const intervalInDays = su => {
   return remainingDays.split(' ')[0];
 };
 
-export const isValidForTransmission = su => {
+const checkValidityForTransmissionNoident = su => {
   const { contactAttempts, contactOutcome } = su;
   if (contactAttempts.length === 0) return false;
   if (!contactOutcome) return false;
@@ -43,6 +48,41 @@ export const isValidForTransmission = su => {
   if (type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.type) return true;
   if (getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) return true;
   return false;
+};
+
+const checkValidityForTransmissionIasco = su => {
+  if (!identificationIsFinished(su)) return false;
+  const { contactOutcome, identification } = su;
+  if (!contactOutcome) return false;
+
+  const { type } = contactOutcome;
+  // INA contactOutcome + no questionnaire
+  if (
+    type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type &&
+    !getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
+  )
+    return false;
+  // issue NOA + identification.avi
+  const { category } = identification;
+  if (
+    type === contactOutcomeEnum.NOT_APPLICABLE.type &&
+    !IASCO_CATEGORY_FINISHING_VALUES.includes(category)
+  )
+    return false;
+
+  // TO finish There
+  return getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
+};
+
+export const isValidForTransmission = su => {
+  const { identificationConfiguration } = su;
+  switch (identificationConfiguration) {
+    case identificationConfigurationEnum.IASCO:
+      return checkValidityForTransmissionIasco(su);
+    case identificationConfigurationEnum.NOIDENT:
+    default:
+      return checkValidityForTransmissionNoident(su);
+  }
 };
 
 export const getSortedContactAttempts = surveyUnit => {

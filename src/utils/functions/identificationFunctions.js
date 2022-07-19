@@ -154,3 +154,52 @@ export const formatToSave = data => {
     occupant: filterByQuestionType(answers, 'OCCUPANT'),
   };
 };
+
+export const IASCO_IDENTIFICATION_FINISHING_VALUES = [
+  answers.IDENTIFICATION_DESTROYED.value,
+  answers.IDENTIFICATION_UNIDENTIFIED.value,
+];
+export const IASCO_ACCESS_FINISHING_VALUES = [answers.ACCESS_NAC.value];
+export const IASCO_SITUATION_FINISHING_VALUES = [
+  answers.SITUATION_NORDINARY.value,
+  answers.SITUATION_ABSORBED.value,
+];
+export const IASCO_CATEGORY_FINISHING_VALUES = [
+  answers.CATEGORY_OCCASIONAL.value,
+  answers.CATEGORY_VACANT.value,
+];
+export const IASCO_OCCUPANT_FINISHING_VALUES = [
+  answers.OCCUPANT_IDENTIFIED.value,
+  answers.OCCUPANT_UNIDENTIFIED.value,
+];
+
+const identifiationIsValidIasco = su => {
+  const {
+    identification: { identification, access, situation, category, occupant },
+  } = su;
+  if (identification === undefined) return false;
+  if (IASCO_IDENTIFICATION_FINISHING_VALUES.includes(identification)) return true;
+  if (access === undefined) return false;
+  if (IASCO_ACCESS_FINISHING_VALUES.includes(access)) return true;
+  if (situation === undefined) return false;
+  if (IASCO_SITUATION_FINISHING_VALUES.includes(situation)) return true;
+  if (category === undefined) return false;
+  if (IASCO_CATEGORY_FINISHING_VALUES.includes(category)) return true;
+  if (occupant === undefined) return false;
+  if (IASCO_OCCUPANT_FINISHING_VALUES.includes(occupant)) return true;
+  return false;
+};
+const identifiationIsValidNoident = su => {
+  return true;
+};
+
+export const identificationIsFinished = su => {
+  const { identificationConfiguration } = su;
+  switch (identificationConfiguration) {
+    case identificationConfigurationEnum.IASCO:
+      return identifiationIsValidIasco(su);
+    case identificationConfigurationEnum.NOIDENT:
+    default:
+      return identifiationIsValidNoident(su);
+  }
+};
