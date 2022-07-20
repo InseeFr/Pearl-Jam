@@ -25,7 +25,7 @@ const LabelledCheckbox = ({ value, checked, onClickFunction }) => {
   const classes = useStyles();
 
   return (
-    <Paper elevation={0} className={classes.row} onClick={onClickFunction}>
+    <Paper elevation={0} className={classes.row} onClick={onClickFunction} key={value}>
       <Radio checked={checked} />
       <Divider orientation="vertical" flexItem />
       <Typography>{value}</Typography>

@@ -201,7 +201,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
               <FormControlLabel
                 value={type}
                 control={
-                  <Radio color="primary" onClick={onMediumChange} checked={medium === type} />
+                  <Radio color="secondary" onClick={onMediumChange} checked={medium === type} />
                 }
                 label={value}
               />

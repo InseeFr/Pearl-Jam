@@ -1,42 +1,66 @@
+import {
+  identificationAnswersEnum as answers,
+  identificationAnswerTypeEnum,
+} from 'utils/enum/IdentificationAnswersEnum';
 import { useEffect, useState } from 'react';
 
-import { identificationAnswersEnum as answers } from 'utils/enum/IdentificationAnswersEnum';
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 import { identificationQuestionsEnum } from 'utils/enum/IdentificationQuestionsEnum';
 
 export const useIdentification = (identificationConfiguration, previousData) => {
   const [data, setData] = useState(undefined);
-  // previousData structure :
-  // IASCO -- {identification, access, situation, category, occupant}
+  const [visibleAnswers, setVisibleAnswers] = useState(
+    data?.filter(question => question.selected)?.[0]?.answers ?? data?.[0].answers ?? undefined
+  );
 
+  console.log('data ', data);
   const updateIdentification = answer => {
-    const { updatedData, update } = data.reduce(
-      ({ updatedData, update }, current) => {
-        // if update already performed : set selectedAnswers to undefined
-        if (update) {
-          current = { ...current, selectedAnswer: undefined };
+    const { updatedData, update, finished } = data
+      .map(question => ({ ...question, disabled: false, selected: false }))
+      .reduce(
+        ({ updatedData, update, finished, selectNext }, current) => {
+          if (selectNext) {
+            setVisibleAnswers(current.answers);
+          }
+          if (update || finished) {
+            current = {
+              ...current,
+              selectedAnswer: undefined,
+              disabled: finished,
+              selected: selectNext && !finished,
+            };
+            return {
+              updatedData: [...updatedData, current],
+              update,
+              finished,
+              selectNext: false,
+            };
+          }
+          // check if really an update : valid type && (no previousAnswer || different previousAnswer)
+          if (
+            current.answers.filter(currentAnswer => currentAnswer.type === answer.type).length >
+              0 &&
+            (!current.selectedAnswer || current?.selectedAnswer.type !== answer.type)
+          ) {
+            current = { ...current, selectedAnswer: answer, selected: selectNext };
+            update = true;
+            selectNext = true;
+          }
           return {
             updatedData: [...updatedData, current],
             update,
+            finished: answer.concluding,
+            selectNext,
           };
+        },
+        {
+          updatedData: [],
+          update: false,
+          selectNext: false,
+          finished: false,
         }
-        // check if really an update : valid type && (no previousAnswer || different previousAnswer)
-        if (
-          current.answers.filter(currentAnswer => currentAnswer.type === answer.type).length > 0 &&
-          (!current.selectedAnswer ||
-            (current.selectedAnswer && current.selectedAnswer.type !== answer.type))
-        ) {
-          current = { ...current, selectedAnswer: answer };
-          update = true;
-        }
-        return { updatedData: [...updatedData, current], update };
-      },
-      {
-        updatedData: [],
-        update: false,
-      }
-    );
-    if (update) {
+      );
+    if (update || finished) {
       setData(updatedData);
     }
   };
@@ -77,106 +101,62 @@ export const useIdentification = (identificationConfiguration, previousData) => 
 
   return {
     data,
-    answers: data?.map(q => {
-      return q.selectedAnswer;
-    }),
-    updateIdentification: updateIdentification,
+    answers: data?.map(({ selectedAnswer }) => selectedAnswer),
+    visibleAnswers,
+    updateIdentification,
+    setVisibleAnswers,
   };
 };
 
 const getAnswersByQuestionType = (type, config) => {
   switch (config) {
-    case 'IASCO':
+    case identificationConfigurationEnum.IASCO:
       return getIascoAnswersByQuestionType(type);
-    case 'NOIDENT':
+    case identificationConfigurationEnum.NOIDENT:
     default:
       return [];
   }
 };
 
-const getIascoAnswersByQuestionType = type => {
-  let answers;
-  switch (type) {
-    case 'IDENTIFICATION':
-      answers = IASCO_IDENTIFICATION_ANSWERS;
-      break;
-    case 'ACCESS':
-      answers = IASCO_ACCESS_ANSWERS;
-      break;
-    case 'SITUATION':
-      answers = IASCO_SITUATION_ANSWERS;
-      break;
-    case 'CATEGORY':
-      answers = IASCO_CATEGORY_ANSWERS;
-      break;
-    case 'OCCUPANT':
-      answers = IASCO_OCCUPANT_ANSWERS;
-      break;
-    default:
-      answers = [];
-  }
-  return answers.map(ans => {
-    return { ...ans, questionType: type };
-  });
-};
-
-export const IASCO_IDENTIFICATION_ANSWERS = [
-  answers.IDENTIFICATION_IDENTIFIED,
-  answers.IDENTIFICATION_UNIDENTIFIED,
-  answers.IDENTIFICATION_DESTROYED,
-];
-export const IASCO_ACCESS_ANSWERS = [answers.ACCESS_ACC, answers.ACCESS_NAC];
-export const IASCO_SITUATION_ANSWERS = [
-  answers.SITUATION_ORDINARY,
-  answers.SITUATION_NORDINARY,
-  answers.SITUATION_ABSORBED,
-];
-export const IASCO_CATEGORY_ANSWERS = [
-  answers.CATEGORY_PRIMARY,
-  answers.CATEGORY_SECONDARY,
-  answers.CATEGORY_OCCASIONAL,
-  answers.CATEGORY_VACANT,
-  answers.CATEGORY_DK,
-];
-export const IASCO_OCCUPANT_ANSWERS = [answers.OCCUPANT_IDENTIFIED, answers.OCCUPANT_UNIDENTIFIED];
+const getIascoAnswersByQuestionType = type =>
+  Object.values(answers).filter(({ questionType }) => questionType === type);
 
 const filterByQuestionType = (answers, type) =>
-  answers.filter(ans => ans && ans.questionType === type)?.[0]?.value;
+  answers.filter(({ questionType }) => questionType ?? {} === type)?.[0]?.value;
 
 export const formatToSave = data => {
-  // TODO : use identificationConfiguration to adapt to other data formats
+  // TODO : use identificationConfiguration to adapt to later data formats
   const answers = data.map(question => question.selectedAnswer);
   return {
-    identification: filterByQuestionType(answers, 'IDENTIFICATION'),
-    access: filterByQuestionType(answers, 'ACCESS'),
-    situation: filterByQuestionType(answers, 'SITUATION'),
-    category: filterByQuestionType(answers, 'CATEGORY'),
-    occupant: filterByQuestionType(answers, 'OCCUPANT'),
+    identification: filterByQuestionType(answers, identificationAnswerTypeEnum.IDENTIFICATION),
+    access: filterByQuestionType(answers, identificationAnswerTypeEnum.ACCESS),
+    situation: filterByQuestionType(answers, identificationAnswerTypeEnum.SITUATION),
+    category: filterByQuestionType(answers, identificationAnswerTypeEnum.CATEGORY),
+    occupant: filterByQuestionType(answers, identificationAnswerTypeEnum.OCCUPANT),
   };
 };
 
-export const IASCO_IDENTIFICATION_FINISHING_VALUES = [
-  answers.IDENTIFICATION_DESTROYED.value,
-  answers.IDENTIFICATION_UNIDENTIFIED.value,
-];
-export const IASCO_ACCESS_FINISHING_VALUES = [answers.ACCESS_NAC.value];
-export const IASCO_SITUATION_FINISHING_VALUES = [
-  answers.SITUATION_NORDINARY.value,
-  answers.SITUATION_ABSORBED.value,
-];
-export const IASCO_CATEGORY_FINISHING_VALUES = [
-  answers.CATEGORY_OCCASIONAL.value,
-  answers.CATEGORY_VACANT.value,
-];
-export const IASCO_OCCUPANT_FINISHING_VALUES = [
-  answers.OCCUPANT_IDENTIFIED.value,
-  answers.OCCUPANT_UNIDENTIFIED.value,
-];
+const getFinishingAnswersByType = targetType =>
+  getIascoAnswersByQuestionType(targetType).filter(({ concluding }) => concluding);
 
-const identifiationIsValidIasco = su => {
-  const {
-    identification: { identification, access, situation, category, occupant },
-  } = su;
+export const IASCO_IDENTIFICATION_FINISHING_VALUES = getFinishingAnswersByType(
+  identificationAnswerTypeEnum.IDENTIFICATION
+).map(({ value }) => value);
+export const IASCO_ACCESS_FINISHING_VALUES = getFinishingAnswersByType(
+  identificationAnswerTypeEnum.ACCESS
+).map(({ value }) => value);
+export const IASCO_SITUATION_FINISHING_VALUES = getFinishingAnswersByType(
+  identificationAnswerTypeEnum.SITUATION
+).map(({ value }) => value);
+export const IASCO_CATEGORY_FINISHING_VALUES = getFinishingAnswersByType(
+  identificationAnswerTypeEnum.CATEGORY
+).map(({ value }) => value);
+export const IASCO_OCCUPANT_FINISHING_VALUES = getFinishingAnswersByType(
+  identificationAnswerTypeEnum.OCCUPANT
+).map(({ value }) => value);
+
+export const identifiationIsValidIasco = identificationToCheck => {
+  const { identification, access, situation, category, occupant } = identificationToCheck;
   if (identification === undefined) return false;
   if (IASCO_IDENTIFICATION_FINISHING_VALUES.includes(identification)) return true;
   if (access === undefined) return false;
@@ -189,17 +169,16 @@ const identifiationIsValidIasco = su => {
   if (IASCO_OCCUPANT_FINISHING_VALUES.includes(occupant)) return true;
   return false;
 };
-const identifiationIsValidNoident = su => {
+const identifiationIsValidNoident = identificationToCheck => {
   return true;
 };
 
-export const identificationIsFinished = su => {
-  const { identificationConfiguration } = su;
+export const identificationIsFinished = (identificationConfiguration, identification) => {
   switch (identificationConfiguration) {
     case identificationConfigurationEnum.IASCO:
-      return identifiationIsValidIasco(su);
+      return identifiationIsValidIasco(identification);
     case identificationConfigurationEnum.NOIDENT:
     default:
-      return identifiationIsValidNoident(su);
+      return identifiationIsValidNoident(identification);
   }
 };

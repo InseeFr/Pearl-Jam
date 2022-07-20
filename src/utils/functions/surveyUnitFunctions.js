@@ -51,8 +51,8 @@ const checkValidityForTransmissionNoident = su => {
 };
 
 const checkValidityForTransmissionIasco = su => {
-  if (!identificationIsFinished(su)) return false;
-  const { contactOutcome, identification } = su;
+  const { contactOutcome, identification, identificationConfiguration } = su;
+  if (!identificationIsFinished(identificationConfiguration, identification)) return false;
   if (!contactOutcome) return false;
 
   const { type } = contactOutcome;

@@ -1,5 +1,5 @@
 import { Button, Paper, makeStyles } from '@material-ui/core';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { formatToSave, useIdentification } from 'utils/functions/identificationFunctions';
 
 import ClickableLine from './clickableLine';
@@ -21,24 +21,42 @@ const Identification = () => {
   const { identification, identificationConfiguration } = surveyUnit;
   const classes = useStyles();
   const visible = identificationConfiguration === identificationConfigurationEnum.IASCO;
-  const { data, answers, updateIdentification } = useIdentification(
-    identificationConfiguration,
-    identification
-  );
+  const {
+    data,
+    answers,
+    visibleAnswers,
+    setVisibleAnswers,
+    updateIdentification,
+  } = useIdentification(identificationConfiguration, identification);
+  console.log('returned data', data);
 
-  const [visibleAnswers, setVisibleAnswers] = useState(undefined);
+  console.log('visible answers ', visibleAnswers);
+  const saveIdentification = () =>
+    addNewState(
+      {
+        ...surveyUnit,
+        identification: formatToSave(data),
+      },
+      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
+    );
+
   return (
     visible && (
       <div className={classes.row}>
         <Paper>
-          {data?.map((question, index) => {
+          {data?.map(question => {
             return (
               <ClickableLine
                 placeholder={question.label}
-                key={`clikableLine-${index}`}
                 value={question.selectedAnswer ? question.selectedAnswer.label : undefined}
                 checked={question.selectedAnswer}
-                onClickFunction={() => setVisibleAnswers(question.answers)}
+                selected={question.selected}
+                disabled={question.disabled}
+                onClickFunction={() => {
+                  if (!question.disabled) {
+                    setVisibleAnswers(question.answers);
+                  }
+                }}
               />
             );
           })}
@@ -58,19 +76,7 @@ const Identification = () => {
             );
           })}
         </Paper>
-        <Button
-          onClick={() =>
-            addNewState(
-              {
-                ...surveyUnit,
-                identification: formatToSave(data),
-              },
-              surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
-            )
-          }
-        >
-          Save
-        </Button>
+        <Button onClick={saveIdentification}>Save</Button>
       </div>
     )
   );
