@@ -13,12 +13,11 @@ export const useIdentification = (identificationConfiguration, previousData) => 
     data?.filter(question => question.selected)?.[0]?.answers ?? data?.[0].answers ?? undefined
   );
 
-  console.log('data ', data);
   const updateIdentification = answer => {
     const { updatedData, update, finished } = data
       .map(question => ({ ...question, disabled: false, selected: false }))
       .reduce(
-        ({ updatedData, update, finished, selectNext }, current) => {
+        ({ updatedData, update, finished, selectNext }, current, index, originalArray) => {
           if (selectNext) {
             setVisibleAnswers(current.answers);
           }
@@ -37,19 +36,25 @@ export const useIdentification = (identificationConfiguration, previousData) => 
             };
           }
           // check if really an update : valid type && (no previousAnswer || different previousAnswer)
-          if (
-            current.answers.filter(currentAnswer => currentAnswer.type === answer.type).length >
-              0 &&
-            (!current.selectedAnswer || current?.selectedAnswer.type !== answer.type)
-          ) {
-            current = { ...current, selectedAnswer: answer, selected: selectNext };
+          const activeQuestion =
+            current.answers.filter(currentAnswer => currentAnswer.type === answer.type).length > 0;
+          if (activeQuestion) {
+            current = { ...current, selectedAnswer: answer };
             update = true;
             selectNext = true;
+          }
+          console.log(index, '-', update, selectNext);
+          if (
+            (activeQuestion && answer.concluding) ||
+            (selectNext && index === originalArray.length - 1)
+          ) {
+            setVisibleAnswers(undefined);
+            selectNext = false;
           }
           return {
             updatedData: [...updatedData, current],
             update,
-            finished: answer.concluding,
+            finished: activeQuestion && answer.concluding,
             selectNext,
           };
         },
@@ -121,18 +126,28 @@ const getAnswersByQuestionType = (type, config) => {
 const getIascoAnswersByQuestionType = type =>
   Object.values(answers).filter(({ questionType }) => questionType === type);
 
-const filterByQuestionType = (answers, type) =>
-  answers.filter(({ questionType }) => questionType ?? {} === type)?.[0]?.value;
+const filterByQuestionType = (answersArray, type) => {
+  console.log('filter by ', type, ' on answers ', answersArray);
+  console.log(answersArray.filter(answer => answer?.questionType === type));
+  console.log(answersArray.filter(answer => answer?.questionType === type)?.[0]);
+  console.log(answersArray.filter(answer => answer?.questionType === type)?.[0]?.value);
+  return answersArray.filter(answer => answer?.questionType === type)?.[0]?.value;
+};
 
 export const formatToSave = data => {
   // TODO : use identificationConfiguration to adapt to later data formats
-  const answers = data.map(question => question.selectedAnswer);
+  console.log('data to save ', data);
+  const reducedAnswers = data.map(question => question.selectedAnswer);
+  console.log('reduced answers ', reducedAnswers);
   return {
-    identification: filterByQuestionType(answers, identificationAnswerTypeEnum.IDENTIFICATION),
-    access: filterByQuestionType(answers, identificationAnswerTypeEnum.ACCESS),
-    situation: filterByQuestionType(answers, identificationAnswerTypeEnum.SITUATION),
-    category: filterByQuestionType(answers, identificationAnswerTypeEnum.CATEGORY),
-    occupant: filterByQuestionType(answers, identificationAnswerTypeEnum.OCCUPANT),
+    identification: filterByQuestionType(
+      reducedAnswers,
+      identificationAnswerTypeEnum.IDENTIFICATION
+    ),
+    access: filterByQuestionType(reducedAnswers, identificationAnswerTypeEnum.ACCESS),
+    situation: filterByQuestionType(reducedAnswers, identificationAnswerTypeEnum.SITUATION),
+    category: filterByQuestionType(reducedAnswers, identificationAnswerTypeEnum.CATEGORY),
+    occupant: filterByQuestionType(reducedAnswers, identificationAnswerTypeEnum.OCCUPANT),
   };
 };
 

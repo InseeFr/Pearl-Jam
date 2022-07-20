@@ -28,9 +28,7 @@ const Identification = () => {
     setVisibleAnswers,
     updateIdentification,
   } = useIdentification(identificationConfiguration, identification);
-  console.log('returned data', data);
 
-  console.log('visible answers ', visibleAnswers);
   const saveIdentification = () =>
     addNewState(
       {
