@@ -66,6 +66,7 @@ export const useIdentification = (identificationConfiguration, previousData) => 
       );
     if (update || finished) {
       setData(updatedData);
+      return updatedData;
     }
   };
 

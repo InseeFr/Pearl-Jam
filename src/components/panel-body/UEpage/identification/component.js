@@ -29,11 +29,11 @@ const Identification = () => {
     updateIdentification,
   } = useIdentification(identificationConfiguration, identification);
 
-  const saveIdentification = () =>
+  const saveIdentification = identificationData =>
     addNewState(
       {
         ...surveyUnit,
-        identification: formatToSave(data),
+        identification: formatToSave(identificationData),
       },
       surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
     );
@@ -69,12 +69,14 @@ const Identification = () => {
                     currentAnswer => currentAnswer && currentAnswer.type === answer.type
                   ).length > 0
                 }
-                onClickFunction={() => updateIdentification(answer)}
+                onClickFunction={() => {
+                  const newData = updateIdentification(answer);
+                  saveIdentification(newData);
+                }}
               />
             );
           })}
         </Paper>
-        <Button onClick={saveIdentification}>Save</Button>
       </div>
     )
   );
