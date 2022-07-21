@@ -10,7 +10,7 @@ import { identificationQuestionsEnum } from 'utils/enum/IdentificationQuestionsE
 export const useIdentification = (identificationConfiguration, previousData) => {
   const [data, setData] = useState(undefined);
   const [visibleAnswers, setVisibleAnswers] = useState(
-    data?.filter(question => question.selected)?.[0]?.answers ?? data?.[0].answers ?? undefined
+    data?.filter(question => question.selected)?.[0]?.answers ?? data?.[0]?.answers ?? undefined
   );
 
   const updateIdentification = answer => {
