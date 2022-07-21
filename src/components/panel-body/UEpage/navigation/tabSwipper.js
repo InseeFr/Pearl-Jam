@@ -1,7 +1,8 @@
+import React, { useEffect, useMemo } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import AppBar from '@material-ui/core/AppBar';
-import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -33,15 +34,21 @@ const addPropsToTabPanels = (tabPanels, value, direction) =>
 const TabSwipper = ({ tabsLabels, children }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const location = useLocation();
+  const history = useHistory();
+  const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const [value, setValue] = React.useState(parseInt(query.get('panel')) ?? 0);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    history.push(`${location.pathname.split('?')[0]}?panel=${newValue}`);
   };
 
   const handleChangeIndex = index => {
-    setValue(index);
+    history.push(`${location.pathname.split('?')[0]}?panel=${index}`);
   };
+  useEffect(() => {
+    setValue(parseInt(query.get('panel')) ?? 0);
+  }, [location.search, query]);
 
   return (
     <div className={classes.root}>
