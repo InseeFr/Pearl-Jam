@@ -14,7 +14,7 @@ const addressMessage = {
   addressFloor: { fr: 'Etage', en: 'Floor' },
   addressDoor: { fr: 'Porte', en: 'Door' },
   addressStaircase: { fr: 'Escalier', en: 'Staircase' },
-  addressElevator: { fr: 'Ascenceur', en: 'Elevator' },
+  addressElevator: { fr: 'Ascenseur', en: 'Elevator' },
   addressCityPriorityDistrict: { fr: 'QPV', en: 'City Priority District' },
 };
 
