@@ -24,6 +24,7 @@ export const identificationAnswersEnum = {
     concluding: true,
   },
   IDENTIFICATION_DESTROYED: {
+    questionType: identificationAnswerTypeEnum.IDENTIFICATION,
     type: 'IDENTIFICATION_DESTROYED',
     value: 'DESTROYED',
     label: `${D.identificationDestroy}`,
