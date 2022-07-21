@@ -52,11 +52,13 @@ const checkValidityForTransmissionNoident = su => {
 
 const checkValidityForTransmissionIasco = su => {
   const { contactOutcome, identification, identificationConfiguration } = su;
+
   if (!identificationIsFinished(identificationConfiguration, identification)) return false;
   if (!contactOutcome) return false;
 
   const { type } = contactOutcome;
   // INA contactOutcome + no questionnaire
+
   if (
     type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type &&
     !getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type

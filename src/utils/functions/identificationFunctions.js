@@ -43,7 +43,6 @@ export const useIdentification = (identificationConfiguration, previousData) => 
             update = true;
             selectNext = true;
           }
-          console.log(index, '-', update, selectNext);
           if (
             (activeQuestion && answer.concluding) ||
             (selectNext && index === originalArray.length - 1)
@@ -126,19 +125,11 @@ const getAnswersByQuestionType = (type, config) => {
 const getIascoAnswersByQuestionType = type =>
   Object.values(answers).filter(({ questionType }) => questionType === type);
 
-const filterByQuestionType = (answersArray, type) => {
-  console.log('filter by ', type, ' on answers ', answersArray);
-  console.log(answersArray.filter(answer => answer?.questionType === type));
-  console.log(answersArray.filter(answer => answer?.questionType === type)?.[0]);
-  console.log(answersArray.filter(answer => answer?.questionType === type)?.[0]?.value);
-  return answersArray.filter(answer => answer?.questionType === type)?.[0]?.value;
-};
-
+const filterByQuestionType = (answersArray, type) =>
+  answersArray.filter(answer => answer?.questionType === type)?.[0]?.value;
 export const formatToSave = data => {
   // TODO : use identificationConfiguration to adapt to later data formats
-  console.log('data to save ', data);
   const reducedAnswers = data.map(question => question.selectedAnswer);
-  console.log('reduced answers ', reducedAnswers);
   return {
     identification: filterByQuestionType(
       reducedAnswers,
