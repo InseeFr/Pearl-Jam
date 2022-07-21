@@ -87,20 +87,47 @@ export const useIdentification = (identificationConfiguration, previousData) => 
     };
 
     const generateInitData = questions => {
-      if (!questions) return [];
+      if (!questions) return { data: [], nextAnswers: undefined };
 
-      return Object.values(questions).map(({ type, value }) => {
-        const typedAnswers = getAnswersByQuestionType(type, identificationConfiguration);
-        return {
-          label: value,
-          type,
-          selectedAnswer: getSelectedAnswer(type, typedAnswers),
-          answers: typedAnswers,
-        };
-      });
+      return Object.values(questions)
+        .map(({ type, value }) => {
+          const typedAnswers = getAnswersByQuestionType(type, identificationConfiguration);
+          return {
+            label: value,
+            type,
+            selectedAnswer: getSelectedAnswer(type, typedAnswers),
+            answers: typedAnswers,
+          };
+        })
+        .reduce(
+          ({ data, finished, firstEmptyQuestionFound, nextAnswers }, current) => {
+            if (finished) {
+              current = { ...current, disabled: true };
+              return { data: [...data, current], finished, firstEmptyQuestionFound, nextAnswers };
+            }
+            if (!firstEmptyQuestionFound && current.selectedAnswer === undefined) {
+              firstEmptyQuestionFound = true;
+              nextAnswers = current.answers;
+
+              current = { ...current, selected: true };
+            }
+            if (current.selectedAnswer?.concluding) {
+              finished = true;
+            }
+
+            return { data: [...data, current], finished, firstEmptyQuestionFound, nextAnswers };
+          },
+          {
+            data: [],
+            finished: false,
+            firstEmptyQuestionFound: false,
+            nextAnswers: undefined,
+          }
+        );
     };
-
-    setData(generateInitData(getQuestions(identificationConfiguration)));
+    const { data, nextAnswers } = generateInitData(getQuestions(identificationConfiguration));
+    setData(data);
+    setVisibleAnswers(nextAnswers);
   }, [identificationConfiguration, previousData]);
 
   return {
