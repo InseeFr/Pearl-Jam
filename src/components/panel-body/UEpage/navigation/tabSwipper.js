@@ -50,7 +50,7 @@ const TabSwipper = ({ tabsLabels, children }) => {
           value={value}
           onChange={handleChange}
           indicatorColor="primary"
-          textColor="primary"
+          textColor="secondary"
           variant="fullWidth"
           aria-label="full width tabs example"
         >
