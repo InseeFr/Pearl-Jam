@@ -162,6 +162,7 @@ export const IASCO_OCCUPANT_FINISHING_VALUES = getFinishingAnswersByType(
 ).map(({ value }) => value);
 
 export const identifiationIsValidIasco = identificationToCheck => {
+  if (!identificationToCheck) return false;
   const { identification, access, situation, category, occupant } = identificationToCheck;
   if (identification === undefined) return false;
   if (IASCO_IDENTIFICATION_FINISHING_VALUES.includes(identification)) return true;
