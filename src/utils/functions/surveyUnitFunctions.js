@@ -1,6 +1,7 @@
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'utils/constants';
 import {
   IASCO_CATEGORY_FINISHING_VALUES,
+  IASCO_SITUATION_FINISHING_VALUES,
   identificationIsFinished,
 } from './identificationFunctions';
 import { differenceInYears, formatDistanceStrict } from 'date-fns';
@@ -64,10 +65,13 @@ const checkValidityForTransmissionIasco = su => {
     !getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
   )
     return false;
+
   // issue NOA + identification.avi
-  const { category } = identification;
+  const { category, situation } = identification;
+
   if (
     type === contactOutcomeEnum.NOT_APPLICABLE.type &&
+    !IASCO_SITUATION_FINISHING_VALUES.includes(situation) &&
     !IASCO_CATEGORY_FINISHING_VALUES.includes(category)
   )
     return false;
