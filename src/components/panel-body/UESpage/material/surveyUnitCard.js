@@ -112,7 +112,7 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
   return (
     <Card
       className={`${classes.root} ${classes.flexColumn} ${active ? '' : classes.inactive}`}
-      onClick={() => (active ? history.push(`/survey-unit/${id}/details`) : {})}
+      onClick={() => (active ? history.push(`/survey-unit/${id}/details?panel=0`) : {})}
       elevation={0}
     >
       <CardContent className={`${classes.content} ${classes.flexRow}`}>

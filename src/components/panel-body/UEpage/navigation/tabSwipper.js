@@ -37,7 +37,11 @@ const TabSwipper = ({ tabsLabels, children }) => {
   const location = useLocation();
   const history = useHistory();
   const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
-  const [value, setValue] = React.useState(parseInt(query.get('panel')) ?? 0);
+  const [value, setValue] = React.useState(
+    isNaN(parseInt(query.get('panel'))) || parseInt(query.get('panel')) === 'NaN'
+      ? 0
+      : parseInt(query.get('panel'))
+  );
 
   const handleChange = (event, newValue) => {
     history.push(`${location.pathname.split('?')[0]}?panel=${newValue}`);
@@ -47,7 +51,7 @@ const TabSwipper = ({ tabsLabels, children }) => {
     history.push(`${location.pathname.split('?')[0]}?panel=${index}`);
   };
   useEffect(() => {
-    setValue(parseInt(query.get('panel')) ?? 0);
+    setValue(parseInt(query.get('panel')));
   }, [location.search, query]);
 
   return (
