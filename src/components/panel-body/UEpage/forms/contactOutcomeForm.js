@@ -1,5 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { contactOutcomeEnum, findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
+import {
+  contactOutcomeEnum,
+  findContactOutcomeValueByType,
+  getContactOutcomeByConfiguration,
+} from 'utils/enum/ContactOutcomeEnum';
 
 import AddIcon from '@material-ui/icons/Add';
 import D from 'i18n';
@@ -86,6 +90,8 @@ const Form = ({ previousValue, save }) => {
   const [contactOutcome, setContactOutcome] = useState(previousValue);
   const [secondPanelVisible, setSecondPanelVisible] = useState(false);
   const [offsetTop, setOffsetTop] = useState(0);
+  const { contactOutcomeConfiguration } = surveyUnit;
+  const contactOutcomes = getContactOutcomeByConfiguration(contactOutcomeConfiguration);
 
   const changeContactOutcomeTry = add => {
     const previousTotal = contactOutcome.totalNumberOfContactAttempts;
@@ -124,8 +130,7 @@ const Form = ({ previousValue, save }) => {
     setContactOutcome({ ...contactOutcome, type: newStatus, date: new Date().getTime() });
   };
 
-  const caType = contactOutcome && contactOutcome.type;
-  const outcomeValue = findContactOutcomeValueByType(caType);
+  const outcomeValue = findContactOutcomeValueByType(contactOutcome?.type);
   const resetForm = () => {
     setSecondPanelVisible(false);
     setContactOutcome(previousValue);
@@ -163,7 +168,7 @@ const Form = ({ previousValue, save }) => {
       >
         <Grid container>
           <div>
-            {Object.values(contactOutcomeEnum).map(({ value, type }) => (
+            {Object.values(contactOutcomes).map(({ value, type }) => (
               <Paper
                 id={type}
                 key={type}

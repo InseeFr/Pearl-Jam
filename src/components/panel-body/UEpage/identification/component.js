@@ -1,4 +1,4 @@
-import { Button, Paper, makeStyles } from '@material-ui/core';
+import { Paper, makeStyles } from '@material-ui/core';
 import React, { useContext } from 'react';
 import { formatToSave, useIdentification } from 'utils/functions/identificationFunctions';
 
