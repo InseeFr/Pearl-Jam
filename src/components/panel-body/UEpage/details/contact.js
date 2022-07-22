@@ -1,18 +1,27 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import formEnum from 'utils/enum/formEnum';
-import { getMailData, getPhoneData, getUserData } from 'utils/functions';
-import D from 'i18n';
-import PropTypes from 'prop-types';
 import AtomicInfoTile from '../atomicInfoTile';
 import DetailTile from './detailTile';
-import PhoneTile from './phoneTile';
+import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
+import React from 'react';
+import formEnum from 'utils/enum/formEnum';
+import { getUserData } from 'utils/functions';
 
-const Contact = ({ person, selectFormType, setInjectableData, index }) => {
+const Contact = ({ persons, selectFormType, setInjectableData }) => {
   return (
-    <DetailTile label={`${D.surveyUnitIndividual} ${index}`}>
+    <DetailTile>
       <Grid container>
-        <AtomicInfoTile
+        {persons.map(person => (
+          <AtomicInfoTile
+            key="user"
+            iconType="user"
+            data={getUserData(person)}
+            onClickFunction={() => {
+              selectFormType(formEnum.USER, true);
+              setInjectableData(person);
+            }}
+          />
+        ))}
+        {/* <AtomicInfoTile
           key="user"
           iconType="user"
           data={getUserData(person)}
@@ -20,8 +29,8 @@ const Contact = ({ person, selectFormType, setInjectableData, index }) => {
             selectFormType(formEnum.USER, true);
             setInjectableData(person);
           }}
-        />
-        <PhoneTile
+        /> */}
+        {/* <PhoneTile
           phoneNumbers={getPhoneData(person)}
           onClickFunction={() => {
             selectFormType(formEnum.PHONE, true);
@@ -37,7 +46,7 @@ const Contact = ({ person, selectFormType, setInjectableData, index }) => {
             selectFormType(formEnum.MAIL, true);
             setInjectableData(person);
           }}
-        />
+        /> */}
       </Grid>
     </DetailTile>
   );

@@ -402,12 +402,22 @@ export const getAge = birthdate => {
   return differenceInYears(new Date(), new Date(birthdate));
 };
 
-export const getUserData = person => [
-  { label: D.surveyUnitTitle, value: getTitle(person.title) },
-  { label: D.surveyUnitLastName, value: person.lastName },
-  { label: D.surveyUnitFirstName, value: person.firstName },
-  { label: D.surveyUnitAge, value: `${getAge(person.birthdate)} ${D.years}` },
-];
+export const getUserData = person => {
+  const { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers } = sortPhoneNumbers(
+    person.phoneNumbers
+  );
+
+  return [
+    { label: D.surveyUnitTitle, value: getTitle(person.title) },
+    { label: D.surveyUnitLastName, value: person.lastName },
+    { label: D.surveyUnitFirstName, value: person.firstName },
+    { label: D.surveyUnitAge, value: `${getAge(person.birthdate)} ${D.years}` },
+    { label: D.fiscalSource, value: fiscalPhoneNumbers?.[0]?.number },
+    { label: D.directorySource, value: directoryPhoneNumbers?.[0]?.number },
+    { label: D.interviewerSource, value: interviewerPhoneNumbers?.[0]?.number },
+    { label: D.surveyUnitEmail, value: person.email, favorite: person.favoriteEmail },
+  ];
+};
 
 export const getPhoneData = person => person.phoneNumbers;
 
@@ -437,7 +447,7 @@ export const sortPhoneNumbers = phoneNumbers => {
 };
 
 export const getMailData = person => [
-  { label: undefined, value: person.email, favorite: person.favoriteEmail },
+  { label: D.surveyUnitEmail, value: person.email, favorite: person.favoriteEmail },
 ];
 
 export const getTitle = title => {

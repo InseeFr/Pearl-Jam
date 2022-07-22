@@ -8,6 +8,7 @@ const navigationMessage = {
   goToMailsPage: { fr: 'Courriers', en: 'Mails' },
   goToContactPage: { fr: 'Contacts', en: 'Contacts' },
   goToCommentsPage: { fr: 'Commentaire', en: 'Comment' },
+  goToQuestionnairesPage: { fr: 'Questionnaires', en: 'Questionnaires' },
 };
 
 export default navigationMessage;

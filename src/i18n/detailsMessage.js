@@ -15,7 +15,7 @@ const detailsMessage = {
     fr: "Modification de l'adresse",
     en: 'Address modification',
   },
-  surveyUnitEmail: { fr: 'Email', en: 'Email' },
+  surveyUnitEmail: { fr: 'Mail', en: 'Email' },
   surveyUnitPhone: { fr: 'Téléphone', en: 'Phone' },
   surveyUnitNoPhone: { fr: 'Pas de numéro de téléphone', en: 'No phone number' },
   surveyUnitLastName: { fr: 'Nom', en: 'Last name' },

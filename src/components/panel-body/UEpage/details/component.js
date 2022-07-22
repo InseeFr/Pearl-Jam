@@ -1,47 +1,37 @@
 import React, { useContext } from 'react';
-import formEnum from 'utils/enum/formEnum';
-import { getAddressData, personPlaceholder } from 'utils/functions';
-import D from 'i18n';
-import PropTypes from 'prop-types';
-import AtomicInfoTile from '../atomicInfoTile';
-import SurveyUnitContext from '../UEContext';
+
 import Contact from './contact';
-import DetailTile from './detailTile';
+import PropTypes from 'prop-types';
+import SurveyUnitContext from '../UEContext';
+import { personPlaceholder } from 'utils/functions';
 
 const UEItem = ({ selectFormType, setInjectableData }) => {
   const { surveyUnit } = useContext(SurveyUnitContext);
   const { persons } = surveyUnit;
+  const sortedPersons = persons?.sort((a, b) => b.privileged - a.privileged);
   return (
     <>
-      {persons &&
-        persons
-          .sort((a, b) => b.privileged - a.privileged)
-          .map((person, index) => {
-            return (
-              <Contact
-                person={person}
-                index={index + 1}
-                key={index + 1}
-                selectFormType={selectFormType}
-                setInjectableData={setInjectableData}
-              />
-            );
-          })}
-      {(!persons || persons.length === 0) && (
+      {persons && (
         <Contact
-          person={personPlaceholder}
-          index={1}
+          persons={sortedPersons}
           selectFormType={selectFormType}
           setInjectableData={setInjectableData}
         />
       )}
-      <DetailTile label={D.surveyUnitHousing}>
+      {(!persons || persons.length === 0) && (
+        <Contact
+          persons={personPlaceholder}
+          selectFormType={selectFormType}
+          setInjectableData={setInjectableData}
+        />
+      )}
+      {/* <DetailTile label={D.surveyUnitHousing}>
         <AtomicInfoTile
           iconType="home"
           data={getAddressData(surveyUnit)}
           onClickFunction={() => selectFormType(formEnum.ADDRESS, true)}
         />
-      </DetailTile>
+      </DetailTile> */}
     </>
   );
 };

@@ -1,17 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { getForm, getPreviousValue, smartForms } from './forms';
 
+import AtomicInfoTile from './atomicInfoTile';
 import Comments from './comments';
 import Contacts from './contacts';
 import D from 'i18n';
+import DetailTile from './details/detailTile';
 import Details from './details';
 import Dialog from '@material-ui/core/Dialog';
 import Grid from '@material-ui/core/Grid';
 import Identification from './identification';
+import Questionnaires from './questionnaires';
 import StateLine from './stateLine';
 import SurveyUnitContext from './UEContext';
 import TabSwipper from './navigation/tabSwipper';
 import UeSubInfoTile from './ueSubInfoTile';
+import formEnum from 'utils/enum/formEnum';
+import { getAddressData } from 'utils/functions';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -73,27 +78,35 @@ const Router = () => {
 
   const smartModalClass = smartForms.includes(formType) ? classes.paperModal : '';
   const tabsLabels = [
-    D.goToContactDetailsPage,
     D.goToIdentificationPage,
     D.goToContactPage,
     D.goToCommentsPage,
+    D.goToQuestionnairesPage,
   ];
   return (
     <>
       <div>
         <StateLine />
         <TabSwipper tabsLabels={tabsLabels}>
-          <UeSubInfoTile title={D.goToContactDetailsPage}>
-            <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
-          </UeSubInfoTile>
           <UeSubInfoTile title={D.goToIdentificationPage}>
+            <DetailTile label={D.surveyUnitHousing}>
+              <AtomicInfoTile
+                iconType="home"
+                data={getAddressData(surveyUnit)}
+                onClickFunction={() => selectFormType(formEnum.ADDRESS, true)}
+              />
+            </DetailTile>
             <Identification />
           </UeSubInfoTile>
           <UeSubInfoTile title={D.goToContactPage}>
+            <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
             <Contacts selectFormType={selectFormType} setInjectableData={setInjectableData} />
           </UeSubInfoTile>
           <UeSubInfoTile title={D.goToCommentsPage}>
             <Comments />
+          </UeSubInfoTile>
+          <UeSubInfoTile title={D.goToQuestionnairesPage}>
+            <Questionnaires />
           </UeSubInfoTile>
         </TabSwipper>
       </div>
