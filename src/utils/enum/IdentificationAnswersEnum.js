@@ -51,10 +51,10 @@ export const identificationAnswersEnum = {
     label: `${D.situationOrdinary}`,
     concluding: false,
   },
-  SITUATION_NORDINARY: {
+  SITUATION_NOORDINARY: {
     questionType: identificationAnswerTypeEnum.SITUATION,
-    type: 'SITUATION_NORDINARY',
-    value: 'NORDINARY',
+    type: 'SITUATION_NOORDINARY',
+    value: 'NOORDINARY',
     label: `${D.situationNotOrdinary}`,
     concluding: true,
   },
