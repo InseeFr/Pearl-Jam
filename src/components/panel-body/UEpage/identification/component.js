@@ -1,5 +1,5 @@
 import { Paper, makeStyles } from '@material-ui/core';
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { formatToSave, useIdentification } from 'utils/functions/identificationFunctions';
 
 import ClickableLine from './clickableLine';
@@ -28,6 +28,10 @@ const Identification = () => {
     setVisibleAnswers,
     updateIdentification,
   } = useIdentification(identificationConfiguration, identification);
+  const selectedQuestion = useRef(data?.filter(question => question.selected)?.[0]);
+  const setSelectedQuestion = value => {
+    selectedQuestion.current = value;
+  };
 
   const saveIdentification = identificationData =>
     addNewState(
@@ -48,10 +52,14 @@ const Identification = () => {
                 placeholder={question.label}
                 value={question.selectedAnswer ? question.selectedAnswer.label : undefined}
                 checked={question.selectedAnswer}
-                selected={question.selected}
+                selected={
+                  (!selectedQuestion.current && question.selected) ||
+                  question.label === selectedQuestion?.current?.label
+                }
                 disabled={question.disabled}
                 onClickFunction={() => {
                   if (!question.disabled) {
+                    setSelectedQuestion(question);
                     setVisibleAnswers(question.answers);
                   }
                 }}

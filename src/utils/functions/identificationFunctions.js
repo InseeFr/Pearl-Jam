@@ -21,7 +21,7 @@ export const useIdentification = (identificationConfiguration, previousData) => 
           if (selectNext) {
             setVisibleAnswers(current.answers);
           }
-          if (update || finished) {
+          if (finished) {
             current = {
               ...current,
               selectedAnswer: undefined,
@@ -155,6 +155,7 @@ const getIascoAnswersByQuestionType = type =>
 
 const filterByQuestionType = (answersArray, type) =>
   answersArray.filter(answer => answer?.questionType === type)?.[0]?.value;
+
 export const formatToSave = data => {
   // TODO : use identificationConfiguration to adapt to later data formats
   const reducedAnswers = data.map(question => question.selectedAnswer);
@@ -189,7 +190,7 @@ export const IASCO_OCCUPANT_FINISHING_VALUES = getFinishingAnswersByType(
   identificationAnswerTypeEnum.OCCUPANT
 ).map(({ value }) => value);
 
-export const identifiationIsValidIasco = identificationToCheck => {
+export const identificationIsValidIasco = identificationToCheck => {
   if (!identificationToCheck) return false;
   const { identification, access, situation, category, occupant } = identificationToCheck;
   if (identification === undefined) return false;
@@ -211,7 +212,7 @@ const identifiationIsValidNoident = identificationToCheck => {
 export const identificationIsFinished = (identificationConfiguration, identification) => {
   switch (identificationConfiguration) {
     case identificationConfigurationEnum.IASCO:
-      return identifiationIsValidIasco(identification);
+      return identificationIsValidIasco(identification);
     case identificationConfigurationEnum.NOIDENT:
     default:
       return identifiationIsValidNoident(identification);
