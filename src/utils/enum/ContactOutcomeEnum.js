@@ -41,12 +41,12 @@ export const getContactOutcomeByConfiguration = configuration => {
     case 'F2F':
       return {
         ...commonContactOutcomes,
-        NO_LONGER_USED_FOR_HABITATION: contactOutcomeEnum.NO_LONGER_USED_FOR_HABITATION,
+        NOT_APPLICABLE: contactOutcomeEnum.NOT_APPLICABLE,
       };
     case 'TEL':
       return {
         ...commonContactOutcomes,
-        NOT_APPLICABLE: contactOutcomeEnum.NOT_APPLICABLE,
+        NO_LONGER_USED_FOR_HABITATION: contactOutcomeEnum.NO_LONGER_USED_FOR_HABITATION,
       };
     default:
       return {};
