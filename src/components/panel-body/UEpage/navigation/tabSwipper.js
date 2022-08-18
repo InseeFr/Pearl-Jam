@@ -15,6 +15,7 @@ const useStyles = makeStyles(theme => ({
   greyBackground: {
     backgroundColor: grey[200],
     marginTop: '3.5em',
+    height: 'calc(100vh - 13.5em)',
   },
   appBar: { marginTop: '10em' },
 }));
