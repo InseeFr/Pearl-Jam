@@ -3,6 +3,7 @@ import { convertSUStateInToDo, getLastState } from 'utils/functions';
 
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import Navigation from './navigation';
+import { Paper } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import Step from '@material-ui/core/Step';
@@ -21,13 +22,14 @@ const useStyles = makeStyles(theme => ({
   },
   background: {
     width: '100%',
-    height: 'max-content',
+    height: '5em',
     backgroundColor: theme.palette.primary.main,
     position: 'sticky',
     top: '5em',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    zIndex: 10,
   },
 }));
 const StateLine = () => {

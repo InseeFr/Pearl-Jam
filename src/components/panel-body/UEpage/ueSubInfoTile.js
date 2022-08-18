@@ -1,3 +1,4 @@
+import MaterialIcons from 'utils/icons/materialIcons';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -11,13 +12,20 @@ const useStyles = makeStyles(() => ({
     padding: '1em',
     borderRadius: '15px',
   },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
 }));
 
-const UeSubInfoTile = ({ title, children, className }) => {
+const UeSubInfoTile = ({ title, children, className, iconType = 'user' }) => {
   const classes = useStyles();
   return (
     <div className={`${classes.root} ${className}`}>
-      <Typography variant="h5">{title}</Typography>
+      <div className={classes.row}>
+        <Typography variant="h5">{title}</Typography>
+        <MaterialIcons type={iconType} />
+      </div>
       {children}
     </div>
   );

@@ -6,11 +6,17 @@ import AppBar from '@material-ui/core/AppBar';
 import SwipeableViews from 'react-swipeable-views';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.primary.main,
   },
+  greyBackground: {
+    backgroundColor: grey[200],
+    marginTop: '3.5em',
+  },
+  appBar: { marginTop: '10em' },
 }));
 
 const generateTabs = tabsLabels =>
@@ -56,13 +62,14 @@ const TabSwipper = ({ tabsLabels, children }) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="fixed" color="default" className={classes.appBar}>
         <Tabs
           value={value}
           onChange={handleChange}
-          indicatorColor="primary"
+          // indicatorColor="primary"
           textColor="secondary"
           variant="fullWidth"
+          className={classes.root}
           aria-label="full width tabs example"
         >
           {generateTabs(tabsLabels)}
@@ -72,6 +79,7 @@ const TabSwipper = ({ tabsLabels, children }) => {
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
         onChangeIndex={handleChangeIndex}
+        className={classes.greyBackground}
       >
         {addPropsToTabPanels(children, value, theme.direction)}
       </SwipeableViews>
