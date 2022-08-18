@@ -64,10 +64,10 @@ const Comment = ({ editable }) => {
           defaultValue={interviewerComment}
           onBlur={onBlur}
           onChange={onChange}
-          maxLength={240}
+          maxLength={999}
         />
       </Paper>
-      <Typography>{`${interviewerComment.length}/240`}</Typography>
+      <Typography>{`${interviewerComment.length}/999`}</Typography>
     </>
   );
 };
