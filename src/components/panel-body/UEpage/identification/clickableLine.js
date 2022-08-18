@@ -3,22 +3,25 @@ import { IconStatus } from 'components/common/IconStatus';
 import Paper from '@material-ui/core/Paper';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import { grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   row: {
     display: 'flex',
+    minHeight: '3em',
     flexDirection: 'row',
     borderRadius: '15px',
     justifyContent: 'flex-end',
+    backgroundColor: grey[100],
     alignItems: 'center',
-    '&:hover': { backgroundColor: 'lightgrey', cursor: 'pointer' },
+    '&:hover': { backgroundColor: grey[300], cursor: 'pointer' },
     paddingLeft: '1em',
     margin: '5px',
   },
   rightAligned: { marginLeft: 'auto' },
   selected: {
-    backgroundColor: 'lightgrey',
+    backgroundColor: grey[300],
   },
   disabled: {
     color: theme.palette.text.secondary,

@@ -45,7 +45,7 @@ const Identification = () => {
   return (
     visible && (
       <div className={classes.row}>
-        <Paper>
+        <Paper elevation={0}>
           {data?.map(question => {
             return (
               <ClickableLine
@@ -67,7 +67,7 @@ const Identification = () => {
             );
           })}
         </Paper>
-        <Paper>
+        <Paper elevation={0}>
           {visibleAnswers?.map(answer => {
             return (
               <LabelledCheckbox

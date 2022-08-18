@@ -3,7 +3,6 @@ import { convertSUStateInToDo, getLastState } from 'utils/functions';
 
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import Navigation from './navigation';
-import { Paper } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import Step from '@material-ui/core/Step';

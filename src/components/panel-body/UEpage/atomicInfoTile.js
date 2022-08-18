@@ -1,84 +1,36 @@
-import MaterialIcons from 'utils/icons/materialIcons';
+import LabelledBoolean from 'components/common/niceComponents/LabelledBoolean';
+import LabelledText from 'components/common/niceComponents/LabelledText';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: 8,
-    borderRadius: 15,
-    '&:hover': { cursor: 'pointer' },
-    border: ' LightGray solid 1px',
-    minHeight: 130,
-    width: 'max-content',
-    minWidth: '200px',
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '10px',
-  },
-  firstLine: {
-    alignSelf: 'flex-end',
-  },
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  column: {
     display: 'flex',
     flexDirection: 'column',
   },
-  label: { fontWeight: 'bold', marginRight: '0.5em' },
-  invisible: { color: theme.palette.primary.main },
 }));
 
-const AtomicInfoTile = ({ iconType, data, onClickFunction }) => {
+const AtomicInfoTile = ({ data }) => {
   const classes = useStyles();
-  const labels = data.reduce(
-    (arr, { label }) => [
-      ...arr,
-      <Typography key={label} className={classes.label}>
-        {label ?? ''}
-      </Typography>,
-    ],
-    []
-  );
-  const values = data.reduce((arr, { label, value, favorite }) => {
-    const valid = value !== undefined && value !== '';
-    return [
-      ...arr,
-      <div className={classes.row}>
-        {favorite !== undefined && <MaterialIcons type={favorite ? 'starFull' : 'starOutlined'} />}
-        {typeof value === 'boolean' && <MaterialIcons type={`${value ? 'checked' : 'cross'}`} />}
-        <Typography key={label} className={valid ? '' : classes.invisible}>
-          {value !== undefined && value !== '' ? value : '-'}
-        </Typography>
-      </div>,
-    ];
-  }, []);
 
   return (
-    <Paper className={classes.root} onClick={onClickFunction} variant="outlined">
-      <div className={classes.firstLine}>
-        <MaterialIcons type={iconType} />
-      </div>
-      <div className={classes.row}>
-        <div key="labels" className={classes.column}>
-          {[...labels]}
-        </div>
-        <div key="values" className={classes.column}>
-          {[...values]}
-        </div>
-      </div>
+    <Paper className={classes.root} elevation={0}>
+      {data.map(({ label, value }) => {
+        switch (typeof value) {
+          case 'boolean':
+            return <LabelledBoolean labelText={label} value={value} />;
+          default:
+            return <LabelledText labelText={label} text={value} />;
+        }
+      })}
     </Paper>
   );
 };
 
 export default AtomicInfoTile;
 AtomicInfoTile.propTypes = {
-  iconType: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({ key: PropTypes.string, value: PropTypes.string }))
     .isRequired,
-  onClickFunction: PropTypes.func.isRequired,
 };

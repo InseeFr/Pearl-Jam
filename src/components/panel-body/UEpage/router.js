@@ -3,18 +3,19 @@ import { getForm, getPreviousValue, smartForms } from './forms';
 
 import AtomicInfoTile from './atomicInfoTile';
 import Comments from './comments';
-import Contacts from './contacts';
+import ContactAttempts from './contacts/contactAttempts';
+import ContactOutcome from './contacts/contactOutcome';
 import D from 'i18n';
-import DetailTile from './details/detailTile';
 import Details from './details';
 import Dialog from '@material-ui/core/Dialog';
+import GenericTile from 'components/common/niceComponents/GenericTile';
 import Grid from '@material-ui/core/Grid';
 import Identification from './identification';
+import MaterialIcons from 'utils/icons/materialIcons';
 import Questionnaires from './questionnaires';
 import StateLine from './stateLine';
 import SurveyUnitContext from './UEContext';
 import TabSwipper from './navigation/tabSwipper';
-import UeSubInfoTile from './ueSubInfoTile';
 import formEnum from 'utils/enum/formEnum';
 import { getAddressData } from 'utils/functions';
 import { makeStyles } from '@material-ui/core/styles';
@@ -26,7 +27,8 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
   },
   row: {
-    flexWrap: 'nowrap',
+    display: 'flex',
+    direction: 'row',
   },
   paperModal: {
     boxShadow: 'unset',
@@ -88,26 +90,55 @@ const Router = () => {
       <div>
         <StateLine />
         <TabSwipper tabsLabels={tabsLabels}>
-          <UeSubInfoTile title={D.goToIdentificationPage}>
-            <DetailTile label={D.surveyUnitHousing}>
-              <AtomicInfoTile
-                iconType="home"
-                data={getAddressData(surveyUnit)}
-                onClickFunction={() => selectFormType(formEnum.ADDRESS, true)}
-              />
-            </DetailTile>
-            <Identification />
-          </UeSubInfoTile>
-          <UeSubInfoTile title={D.goToContactPage}>
-            <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
-            <Contacts selectFormType={selectFormType} setInjectableData={setInjectableData} />
-          </UeSubInfoTile>
-          <UeSubInfoTile title={D.goToCommentsPage}>
+          <div className={classes.row}>
+            <GenericTile
+              title="Logement"
+              editable
+              icon={() => <MaterialIcons type="home" />}
+              editionIcon={() => (
+                <MaterialIcons
+                  type="pen"
+                  onClick={() => selectFormType(formEnum.ADDRESS, true)}
+                ></MaterialIcons>
+              )}
+            >
+              <AtomicInfoTile data={getAddressData(surveyUnit)} />
+            </GenericTile>
+            <GenericTile title="Repérage" icon={() => <MaterialIcons type="googles" />}>
+              <Identification />
+            </GenericTile>
+          </div>
+          <div className={classes.row}>
+            <GenericTile title={D.surveyUnitIndividual} icon={() => <MaterialIcons type="user" />}>
+              <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
+            </GenericTile>
+            <div className={classes.modal}>
+              <GenericTile
+                title={D.contactAttempts}
+                icon={() => <MaterialIcons type="assignement" />}
+              >
+                <ContactAttempts
+                  selectFormType={selectFormType}
+                  setInjectableData={setInjectableData}
+                />
+              </GenericTile>
+              <GenericTile
+                title={D.contactOutcome}
+                icon={() => <MaterialIcons type="assignement" />}
+              >
+                <ContactOutcome selectFormType={selectFormType} />
+              </GenericTile>
+            </div>
+          </div>
+          <GenericTile title={D.goToCommentsPage} icon={() => <MaterialIcons type="assignement" />}>
             <Comments />
-          </UeSubInfoTile>
-          <UeSubInfoTile title={D.goToQuestionnairesPage}>
+          </GenericTile>
+          <GenericTile
+            title={D.goToQuestionnairesPage}
+            icon={() => <MaterialIcons type="questionnaire" />}
+          >
             <Questionnaires />
-          </UeSubInfoTile>
+          </GenericTile>
         </TabSwipper>
       </div>
       <Dialog

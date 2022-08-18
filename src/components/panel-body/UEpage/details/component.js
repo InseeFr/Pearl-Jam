@@ -25,13 +25,6 @@ const UEItem = ({ selectFormType, setInjectableData }) => {
           setInjectableData={setInjectableData}
         />
       )}
-      {/* <DetailTile label={D.surveyUnitHousing}>
-        <AtomicInfoTile
-          iconType="home"
-          data={getAddressData(surveyUnit)}
-          onClickFunction={() => selectFormType(formEnum.ADDRESS, true)}
-        />
-      </DetailTile> */}
     </>
   );
 };
