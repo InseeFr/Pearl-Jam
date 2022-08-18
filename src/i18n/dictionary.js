@@ -1,5 +1,4 @@
 import addressMessage from './addressMessage';
-import ageGroupsMessage from './ageGroupsMessage';
 import buttonMessage from './buttonMessage';
 import contactAttemptMessage from './contactAttemptMessage';
 import contactOutcomeMessage from './contactOutcomeMessage';
@@ -94,7 +93,6 @@ const dictionary = {
   ...contactAttemptMessage,
   ...contactOutcomeMessage,
   ...criteriaMessage,
-  ...ageGroupsMessage,
   ...titleMessage,
   ...phoneSourceMessage,
   ...mailMessage,
