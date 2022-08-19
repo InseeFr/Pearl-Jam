@@ -36,6 +36,10 @@ const useStyles = makeStyles(() => ({
     margin: 0,
     maxWidth: 'unset',
   },
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
 }));
 
 const Router = () => {
@@ -112,7 +116,7 @@ const Router = () => {
             <GenericTile title={D.surveyUnitIndividual} icon={() => <MaterialIcons type="user" />}>
               <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
             </GenericTile>
-            <div className={classes.modal}>
+            <div className={classes.column}>
               <GenericTile
                 title={D.contactAttempts}
                 icon={() => <MaterialIcons type="assignement" />}
