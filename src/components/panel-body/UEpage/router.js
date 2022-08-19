@@ -102,7 +102,7 @@ const Router = () => {
                 ></MaterialIcons>
               )}
             >
-              <AtomicInfoTile data={getAddressData(surveyUnit)} />
+              <AtomicInfoTile data={getAddressData(surveyUnit)} split />
             </GenericTile>
             <GenericTile title="Repérage" icon={() => <MaterialIcons type="googles" />}>
               <Identification />
