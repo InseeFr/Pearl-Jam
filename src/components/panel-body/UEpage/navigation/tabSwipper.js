@@ -63,7 +63,7 @@ const TabSwipper = ({ tabsLabels, children }) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" color="default" className={classes.appBar}>
+      <AppBar position="fixed" color="default" className={classes.appBar} elevation={0}>
         <Tabs
           value={value}
           onChange={handleChange}

@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
 import { convertSUStateInToDo, getLastState } from 'utils/functions';
 
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import InfoTile from './infoTile/infoTile';
 import Navigation from './navigation';
-import PropTypes from 'prop-types';
-import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Stepper from '@material-ui/core/Stepper';
@@ -14,20 +12,26 @@ import toDoEnum from 'utils/enum/SUToDoEnum';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '50%',
+    display: 'flex',
+    width: 'max-content',
+    padding: 0,
+    flex: '1',
   },
-  icon: {
-    color: 'green',
+  row: {
+    display: 'flex',
+    alignItems: 'start',
+    flex: '1',
   },
   background: {
-    width: '100%',
     height: '5em',
-    backgroundColor: theme.palette.primary.main,
     position: 'sticky',
     top: '5em',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingLeft: '2em',
+    paddingRight: '2em',
+    alignItems: 'flex-start',
     zIndex: 10,
   },
 }));
@@ -45,35 +49,21 @@ const StateLine = () => {
     .map(([, v]) => v)
     .filter(toDo => toDo.order !== 7);
 
-  const icons = {
-    done: <CheckCircleOutlineIcon className={classes.icon} />,
-    future: <RadioButtonUncheckedIcon className={classes.icon} />,
-  };
-  const StepIcon = props => {
-    const { completed } = props;
-
-    return <div>{completed ? icons.done : icons.future}</div>;
-  };
-  StepIcon.propTypes = {
-    completed: PropTypes.bool.isRequired,
-  };
-
   return (
     <div className={classes.background}>
-      <Stepper className={classes.root} activeStep={activeState - 1}>
-        {toDos.map(({ order, value }) => {
-          const stepProps = {};
-          if (order < activeState) {
-            stepProps.completed = true;
-          }
-          return (
-            <Step key={order} {...stepProps}>
-              <StepLabel StepIconComponent={StepIcon}>{value}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      <Navigation />
+      <InfoTile />
+      <div className={classes.row}>
+        <Stepper className={classes.root} activeStep={activeState - 1} alternativeLabel>
+          {toDos.map(({ order, value }) => {
+            return (
+              <Step key={order}>
+                <StepLabel>{value}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+        <Navigation />
+      </div>
     </div>
   );
 };

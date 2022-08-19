@@ -1,29 +1,28 @@
-import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, Route } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+
 import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import D from 'i18n';
 import Fade from '@material-ui/core/Fade';
 import IconButton from '@material-ui/core/IconButton';
-import Popper from '@material-ui/core/Popper';
-import Tooltip from '@material-ui/core/Tooltip';
 import MenuIcon from '@material-ui/icons/Menu';
-import Notifications from '@material-ui/icons/Notifications';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-
-import D from 'i18n';
-import InfoTile from 'components/panel-body/UEpage/infoTile/infoTile';
 import { NotificationWrapperContext } from 'components/notificationWrapper';
+import Notifications from '@material-ui/icons/Notifications';
 import { NotificationsRoot } from '../Notification/notificationsRoot';
 import OnlineStatus from '../online-status';
 import { PEARL_USER_KEY } from 'utils/constants';
+import Popper from '@material-ui/core/Popper';
 import PropTypes from 'prop-types';
 import SearchBar from '../search/component';
 import Synchronize from 'components/common/synchronize';
+import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 export const NavigationContext = React.createContext();
 
@@ -65,7 +64,7 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer }) => {
       flex: '1 1 auto',
     },
     notificationsIcon: {
-      fontSize: 'xxx-large',
+      fontSize: 'xx-large',
       color: theme.palette.secondary.main,
       '&:hover': { color: theme.palette.secondary.dark },
     },
@@ -78,6 +77,8 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer }) => {
       '&:focus, &:hover': {
         backgroundColor: theme.palette.primary.main,
       },
+      marginLeft: '1em',
+      marginRight: '1em',
     },
     notif: {
       zIndex: 1200,
@@ -103,17 +104,6 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer }) => {
     <NavigationContext.Provider value={context}>
       <AppBar position="sticky" className={classes.appBar} elevation={0}>
         <Toolbar className={classes.appBar}>
-          <Tooltip title={D.goToHomePage}>
-            <IconButton
-              className={classes.noVisibleFocus}
-              edge="start"
-              color="inherit"
-              aria-label="open notifications"
-              onClick={() => setOpenDrawer(true)}
-            >
-              <MenuIcon className={classes.notificationsIcon} />
-            </IconButton>
-          </Tooltip>
           <NavLink activeClassName="active" exact to="/">
             <Card className={classes.card}>
               <CardMedia
@@ -123,6 +113,22 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer }) => {
               />
             </Card>
           </NavLink>
+          <Tooltip title={D.goToHomePage}>
+            <IconButton
+              className={classes.noVisibleFocus}
+              edge="end"
+              color="inherit"
+              aria-label="open notifications"
+              onClick={() => setOpenDrawer(true)}
+            >
+              <MenuIcon className={classes.notificationsIcon} />
+            </IconButton>
+          </Tooltip>
+          <Typography variant="h4">Sabiane</Typography>
+          <Typography variant="h4" color="error">
+            Collecte
+          </Typography>
+
           <div className={classes.grow}>
             <Route
               exact
@@ -131,7 +137,6 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer }) => {
                 <SearchBar {...routeProps} textSearch={textSearch} setTextSearch={setTextSearch} />
               )}
             />
-            <Route path="/survey-unit/:id" render={routeProps => <InfoTile {...routeProps} />} />
           </div>
           <div className={classes.column}>
             <ClickAwayListener onClickAway={handleClickAway}>

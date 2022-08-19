@@ -1,13 +1,12 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import PersonIcon from '@material-ui/icons/Person';
+import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Typography from '@material-ui/core/Typography';
-
 import { getprivilegedPerson } from 'utils/functions';
-
+import { grey } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom';
 import { useSurveyUnit } from 'utils/hooks/database';
 
@@ -17,12 +16,9 @@ const useStyles = makeStyles({
   column: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-end',
     padding: '0px',
     '&:last-child': { paddingBottom: '0px' },
   },
-  alignItems: { alignItems: 'center' },
-
   title: {
     fontSize: 14,
   },
@@ -31,12 +27,15 @@ const useStyles = makeStyles({
     justifySelf: 'flex-end',
   },
   rounded: {
-    border: '1px solid',
     borderRadius: '50%',
+    backgroundColor: grey[200],
     width: '1.4em',
     height: '1.4em',
-    marginLeft: '1em',
+    marginRight: '1em',
     lineHeight: 'initial',
+  },
+  bold: {
+    fontWeight: 'bold',
   },
 });
 
@@ -52,29 +51,28 @@ const InfoTile = () => {
   return surveyUnit !== undefined ? (
     <Card className={classes.root} elevation={0}>
       <CardContent className={classes.column}>
-        <Typography
-          component="h6"
-          variant="h6"
-          color="textSecondary"
-          className={`${classes.row} ${classes.alignItems}`}
-        >
+        <Typography className={`${classes.row} ${classes.bold}`}>
           <PersonIcon />
           {`${firstName} ${lastName}`}
         </Typography>
         <div className={classes.row}>
-          <Typography component="h6" variant="h6" className={classes.title} color="textSecondary">
-            {campaign}
-          </Typography>
           <Typography
-            variant="h6"
             color="textSecondary"
             align="center"
             className={`${classes.rounded} ${classes.title}`}
           >
             {ssech}
           </Typography>
+          <Typography className={classes.title} color="textSecondary">
+            {campaign}
+          </Typography>
         </div>
-        <Typography component="h6" variant="h6" className={classes.title} color="textSecondary">
+        <Typography
+          color="error"
+          variant="h6"
+          className={`${classes.title} ${classes.bold}`}
+          // color="textSecondary"
+        >
           {`# ${id}`}
         </Typography>
       </CardContent>

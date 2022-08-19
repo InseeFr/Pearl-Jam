@@ -10,17 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(theme => ({
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    position: 'sticky',
-    top: '10.5em',
-    backgroundColor: 'white',
-    borderBottom: '1px solid gray',
-    height: '3em',
-    boxSizing: 'unset',
-  },
   button: {
     backgroundColor: theme.palette.primary.darker,
     color: 'white',
@@ -40,15 +29,13 @@ const Navigation = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.row}>
-      <Tooltip title={transmissionValidity ? '' : D.transmissionInvalid}>
-        <span>
-          <Button disabled={!transmissionValidity} className={classes.button} onClick={transmit}>
-            {D.sendButton}
-          </Button>
-        </span>
-      </Tooltip>
-    </div>
+    <Tooltip title={transmissionValidity ? '' : D.transmissionInvalid}>
+      <span>
+        <Button disabled={!transmissionValidity} className={classes.button} onClick={transmit}>
+          {D.sendButton}
+        </Button>
+      </span>
+    </Tooltip>
   );
 };
 

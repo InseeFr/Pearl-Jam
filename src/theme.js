@@ -92,6 +92,29 @@ const theme = createMuiTheme({
         },
       },
     },
+    MuiStepIcon: {
+      root: {
+        '& $text': {
+          fill: 'white',
+        },
+        '&$active': {
+          fill: 'black',
+        },
+        '&$completed': {
+          color: 'green',
+        },
+      },
+    },
+    MuiStepLabel: {
+      alternativeLabel: {
+        marginTop: 'auto',
+      },
+      labelContainer: {
+        '& $alternativeLabel': {
+          marginTop: '0.5em',
+        },
+      },
+    },
   },
 });
 export default theme;
