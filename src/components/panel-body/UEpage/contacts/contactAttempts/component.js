@@ -12,7 +12,6 @@ const useStyles = makeStyles(() => ({
   column: {
     display: 'flex',
     flexDirection: 'column',
-    cursor: 'pointer',
   },
 }));
 
@@ -28,17 +27,18 @@ const ContactAttempts = ({ selectFormType, setInjectableData }) => {
   const classes = useStyles();
 
   return (
-    <Paper
-      elevation={0}
-      className={classes.column}
-      onClick={() => {
-        selectFormType(formEnum.CONTACT_ATTEMPT, false);
-        setInjectableData({ status: 'NOC', date: new Date().getTime() });
-      }}
-    >
+    <Paper elevation={0} className={classes.column}>
       {Array.isArray(contactAttempts) &&
         contactAttempts.length > 0 &&
-        contactAttempts.map(contAtt => <ContactAttemptLine contactAttempt={contAtt} />)}
+        contactAttempts.map(contAtt => (
+          <ContactAttemptLine
+            contactAttempt={contAtt}
+            editionFunction={() => {
+              selectFormType(formEnum.CONTACT_ATTEMPT, true);
+              setInjectableData(contAtt);
+            }}
+          />
+        ))}
     </Paper>
   );
 };

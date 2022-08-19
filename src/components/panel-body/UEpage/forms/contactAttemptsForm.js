@@ -89,13 +89,15 @@ const Form = ({ previousValue, save, deleteAction }) => {
   const [availableContacAttempts, setAvailableContacAttempts] = useState([]);
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactAttempt, setContactAttempt] = useState(previousValue);
-  const [medium, setMedium] = useState(undefined);
-  const [visiblePanel, setVisiblePanel] = useState(undefined);
+  const [medium, setMedium] = useState(previousValue?.medium);
+  const isEditionMode = previousValue.status !== undefined;
+  const [visiblePanel, setVisiblePanel] = useState(isEditionMode ? 'MEDIUM' : undefined);
   const [contactAttempts, setcontactAttempts] = useState([]);
   const [contactAttemptToDelete, setContactAttemptToDelete] = useState(undefined);
 
-  const [selectedDate, handleDateChange] = useState(new Date());
-  const isEditionMode = previousValue.status !== undefined;
+  const [selectedDate, handleDateChange] = useState(
+    previousValue.date ? new Date(previousValue.date) : new Date()
+  );
   const availableMedium = getMediumByConfiguration(contactAttemptConfiguration);
 
   useEffect(() => {
@@ -105,6 +107,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
 
   const onChange = newStatus => {
     setContactAttempt({ ...contactAttempt, status: newStatus, date: new Date().getTime() });
+    setVisiblePanel('DATE');
   };
 
   const onMediumChange = event => {
@@ -131,7 +134,6 @@ const Form = ({ previousValue, save, deleteAction }) => {
 
   const saveUE = async () => {
     let { contactAttempts: suContactAttempts } = surveyUnit;
-
     if (isEditionMode) {
       // remove previous contactAttempt
       suContactAttempts = suContactAttempts.filter(ca => !areCaEqual(ca, previousValue));
@@ -158,9 +160,10 @@ const Form = ({ previousValue, save, deleteAction }) => {
   const classes = useStyles();
 
   const resetForm = value => {
-    setVisiblePanel(value);
-    setContactAttempt(undefined);
-    setMedium(undefined);
+    const { panel, contAtt, medium } = value;
+    setVisiblePanel(panel);
+    setContactAttempt(contAtt);
+    setMedium(medium);
     setFormIsValid(false);
     setContactAttemptToDelete(undefined);
   };
@@ -176,24 +179,31 @@ const Form = ({ previousValue, save, deleteAction }) => {
               setContactAttempt(contAtt);
               selectContactAttemptToDelete(contAtt);
             };
-            const deleteParams = { deleteIsAvailable: true, deleteFunction: deleteContactAttempt };
             return (
               <ContactAttemptLine
                 contactAttempt={contAtt}
-                deleteParams={deleteParams}
+                deleteFunction={deleteContactAttempt}
+                editionFunction={() => {
+                  setVisiblePanel('MEDIUM');
+                  setContactAttempt(contAtt);
+                  setMedium(contAtt.medium);
+                }}
                 key={contAtt.date}
-                selected={areCaEqual(contAtt, contactAttemptToDelete)}
               />
             );
           })}
-        <Fab className={classes.alignEnd} aria-label="add" onClick={() => resetForm('MEDIUM')}>
+        <Fab
+          className={classes.alignEnd}
+          aria-label="add"
+          onClick={() => resetForm({ panel: 'MEDIUM' })}
+        >
           <AddIcon fontSize="large" />
         </Fab>
       </FormPanel>
       <FormPanel
         title={D.mediumQuestion}
         hidden={visiblePanel !== 'MEDIUM'}
-        backFunction={() => resetForm(undefined)}
+        backFunction={() => resetForm({ panel: undefined, contAtt: undefined, medium: undefined })}
       >
         <FormControl component="fieldset">
           <RadioGroup aria-label="position">
@@ -213,10 +223,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
       <FormPanel
         title={D.contactAttempt}
         hidden={visiblePanel !== 'EDITION'}
-        backFunction={() => {
-          setVisiblePanel('MEDIUM');
-          setContactAttempt(undefined);
-        }}
+        backFunction={() => resetForm({ panel: 'MEDIUM', medium })}
       >
         {Object.values(availableContacAttempts).map(({ value, type }) => (
           <Paper
@@ -233,10 +240,10 @@ const Form = ({ previousValue, save, deleteAction }) => {
 
       <FormPanel
         title={D.datePicking}
-        hidden={!formIsValid || visiblePanel !== 'EDITION'}
+        hidden={visiblePanel !== 'DATE'}
         actionLabel={`✔ ${D.saveButton}`}
         actionFunction={saveUE}
-        backFunction={() => resetForm('EDITION')}
+        backFunction={() => resetForm({ panel: 'EDITION', medium, contAtt: contactAttempt })}
       >
         <MuiPickersUtilsProvider utils={FrLocalizedUtils} locale={frLocale}>
           <DatePicker
@@ -261,7 +268,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
       <FormPanel
         title={D.contactAttemptDeletion}
         hidden={visiblePanel !== 'DELETION'}
-        backFunction={() => resetForm(undefined)}
+        backFunction={() => resetForm({ panel: undefined, contAtt: undefined, medium: undefined })}
         actionFunction={() => deleteAction(surveyUnit, contactAttemptToDelete)}
         actionLabel={D.delete}
       >

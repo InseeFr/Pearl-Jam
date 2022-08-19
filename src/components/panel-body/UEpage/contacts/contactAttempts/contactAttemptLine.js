@@ -1,5 +1,4 @@
 import D from 'i18n';
-import DeleteIcon from '@material-ui/icons/Delete';
 import MaterialIcons from 'utils/icons/materialIcons';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
@@ -13,9 +12,6 @@ import { grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
-  button: {
-    '&:hover': { cursor: 'pointer' },
-  },
   alignEnd: {
     alignSelf: 'flex-end',
   },
@@ -35,10 +31,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ContactAttemptLine = ({ contactAttempt, deleteParams, selected }) => {
+const ContactAttemptLine = ({ contactAttempt, deleteFunction, editionFunction }) => {
   const classes = useStyles();
   if (contactAttempt === undefined) return '';
-  const { deleteFunction, deleteIsAvailable } = deleteParams;
 
   const day = format(new Date(contactAttempt.date), 'EEEE', {
     locale: fr,
@@ -61,14 +56,8 @@ const ContactAttemptLine = ({ contactAttempt, deleteParams, selected }) => {
         <Typography>{findContactAttemptValueByType(contactAttempt.status)}</Typography>
       </div>
       <div>
-        <MaterialIcons type="pen" />
-        {deleteIsAvailable && (
-          <DeleteIcon
-            className={classes.button}
-            color={selected ? 'error' : 'inherit'}
-            onClick={deleteFunction}
-          />
-        )}
+        {editionFunction && <MaterialIcons type="pen" onClick={editionFunction} />}
+        {deleteFunction && <MaterialIcons type="delete" onClick={deleteFunction} />}
       </div>
     </Paper>
   );
@@ -87,8 +76,8 @@ ContactAttemptLine.propTypes = {
   }),
   selected: PropTypes.bool,
 };
-ContactAttemptLine.defaultProps = {
-  deleteParams: { deleteFunction: () => {}, deleteIsAvailable: false },
-  selected: false,
-  contactAttempt: { date: new Date().getTime(), id: 999, status: 'NOC' },
-};
+// ContactAttemptLine.defaultProps = {
+//   deleteParams: { deleteFunction: () => {}, deleteIsAvailable: false },
+//   selected: false,
+//   contactAttempt: { date: new Date().getTime(), id: 999, status: 'NOC' },
+// };

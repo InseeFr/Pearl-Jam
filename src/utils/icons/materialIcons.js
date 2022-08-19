@@ -30,6 +30,7 @@ const useStyles = makeStyles(() => ({
   clickable: {
     '&:hover': { cursor: 'pointer', color: 'red', transition: '0.25s' },
     '&:not(:hover)': { transition: '0.25s' },
+    fontSize: 'x-large',
   },
 }));
 
@@ -44,7 +45,9 @@ const MaterialIcons = ({ type, onClick = () => {} }) => {
     phone: <PhoneIcon className={classes.infoIcon} />,
     starFull: <StarIcon className={classes.star} onClick={onClick}></StarIcon>,
     starOutlined: <StarOutlineIcon className={classes.star} onClick={onClick}></StarOutlineIcon>,
-    delete: <DeleteIcon className={classes.infoIcon} onClick={onClick} />,
+    delete: (
+      <DeleteIcon className={mixClasses(classes.infoIcon, classes.clickable)} onClick={onClick} />
+    ),
     googles: <SearchIcon className={mixClasses(classes.infoIcon, classes.red)} />,
     checked: <CheckIcon className={classes.green} />,
     cross: <ClearIcon className={classes.red} />,
@@ -52,7 +55,10 @@ const MaterialIcons = ({ type, onClick = () => {} }) => {
     questionnaire: <AssignmentIcon className={mixClasses(classes.infoIcon, classes.red)} />,
     assignementChecked: <AssignmentTurnedInIcon className={classes.infoIcon} />,
     pen: (
-      <BorderColorIcon className={`${classes.infoIcon} ${classes.clickable}`} onClick={onClick} />
+      <BorderColorIcon
+        className={mixClasses(classes.infoIcon, classes.clickable)}
+        onClick={onClick}
+      />
     ),
     bug: <BugReportIcon className={classes.infoIcon} />,
   };
