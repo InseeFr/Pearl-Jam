@@ -21,7 +21,6 @@ const useStyles = makeStyles(() => ({
   infoIcon: {
     fontSize: 'xx-large',
     color: 'gray',
-    marginTop: '-8px',
     alignSelf: 'center',
   },
   star: { color: 'gold', alignSelf: 'center' },
@@ -29,7 +28,8 @@ const useStyles = makeStyles(() => ({
 
   red: { color: 'red' },
   clickable: {
-    '&:hover': { cursor: 'pointer', color: 'red' },
+    '&:hover': { cursor: 'pointer', color: 'red', transition: '0.25s' },
+    '&:not(:hover)': { transition: '0.25s' },
   },
 }));
 

@@ -6,6 +6,7 @@ const useStyles = makeStyles(theme => ({
   row: {
     display: 'flex',
     flexDirection: 'row',
+    marginBottom: '0.5em',
   },
   rightMargin: { marginRight: '1em' },
 }));

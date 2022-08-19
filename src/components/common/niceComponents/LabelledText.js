@@ -5,18 +5,29 @@ const useStyles = makeStyles(theme => ({
   row: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: '0.5em',
   },
-  rightMargin: { marginRight: '1em' },
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginRight: '1em',
+  },
 }));
 
 const LabelledText = ({ labelText, text }) => {
   const classes = useStyles();
-
   return (
     <div className={classes.row}>
-      <Typography color="textSecondary" className={classes.rightMargin}>
-        {labelText}
-      </Typography>
+      <div className={classes.column}>
+        {Array.isArray(labelText) ? (
+          labelText.map(labelTextLine => (
+            <Typography color="textSecondary">{labelTextLine}</Typography>
+          ))
+        ) : (
+          <Typography color="textSecondary">{labelText}</Typography>
+        )}
+      </div>
       <Typography>{text}</Typography>
     </div>
   );
