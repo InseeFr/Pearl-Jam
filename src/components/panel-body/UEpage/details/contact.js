@@ -1,6 +1,4 @@
 import AtomicInfoTile from '../atomicInfoTile';
-import { Button } from '@material-ui/core';
-import D from 'i18n';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import MaterialIcons from 'utils/icons/materialIcons';
