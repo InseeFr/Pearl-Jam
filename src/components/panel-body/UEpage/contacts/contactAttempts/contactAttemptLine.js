@@ -1,29 +1,38 @@
+import D from 'i18n';
 import DeleteIcon from '@material-ui/icons/Delete';
+import MaterialIcons from 'utils/icons/materialIcons';
+import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
+import { findMediumValueByType } from 'utils/enum/MediumEnum';
 import format from 'date-fns/format';
 import { fr } from 'date-fns/locale';
+import { grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   button: {
     '&:hover': { cursor: 'pointer' },
-    marginLeft: '0.5em',
   },
   alignEnd: {
     alignSelf: 'flex-end',
+  },
+  root: {
+    display: 'flex',
+    height: 'max-content',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderRadius: '15px',
+    backgroundColor: grey[100],
+    padding: '0.5em',
+    '&:not(:last-child)': { marginBottom: '1em' },
   },
   column: {
     display: 'flex',
     flexDirection: 'column',
   },
-  flex: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  top: { marginTop: '0.5em' },
 }));
 
 const ContactAttemptLine = ({ contactAttempt, deleteParams, selected }) => {
@@ -31,26 +40,37 @@ const ContactAttemptLine = ({ contactAttempt, deleteParams, selected }) => {
   if (contactAttempt === undefined) return '';
   const { deleteFunction, deleteIsAvailable } = deleteParams;
 
-  const dayOfWeek = format(new Date(contactAttempt.date), 'EEEE', { locale: fr });
-  const date = format(new Date(contactAttempt.date), 'dd/MM/yyyy');
+  const day = format(new Date(contactAttempt.date), 'EEEE', {
+    locale: fr,
+  });
+  const dayOfWeek = day[0].toUpperCase() + day.slice(1);
+  const date = format(new Date(contactAttempt.date), 'dd MMMM', {
+    locale: fr,
+  });
   const hour = format(new Date(contactAttempt.date), 'HH');
   const minutes = format(new Date(contactAttempt.date), 'mm');
 
   return (
-    <div className={classes.flex} key={contactAttempt.date}>
-      <Typography className={classes.top}>
-        {`${dayOfWeek} ${date} - ${hour}h${minutes} - ${findContactAttemptValueByType(
-          contactAttempt.status
-        )}`}
-      </Typography>
-      {deleteIsAvailable && (
-        <DeleteIcon
-          className={classes.button}
-          color={selected ? 'error' : 'inherit'}
-          onClick={deleteFunction}
-        />
-      )}
-    </div>
+    <Paper className={classes.root} key={contactAttempt.date} elevation={0}>
+      <div className={classes.column}>
+        <Typography>
+          {`${dayOfWeek} ${date} ${D.at} ${hour}h${minutes} - ${findMediumValueByType(
+            contactAttempt.medium
+          )}`}
+        </Typography>
+        <Typography>{findContactAttemptValueByType(contactAttempt.status)}</Typography>
+      </div>
+      <div>
+        <MaterialIcons type="pen" />
+        {deleteIsAvailable && (
+          <DeleteIcon
+            className={classes.button}
+            color={selected ? 'error' : 'inherit'}
+            onClick={deleteFunction}
+          />
+        )}
+      </div>
+    </Paper>
   );
 };
 

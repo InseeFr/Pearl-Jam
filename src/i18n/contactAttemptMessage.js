@@ -31,6 +31,7 @@ const contactAttemptMessage = {
   telephone: { fr: 'Téléphone', en: 'Telephone' },
   datePicking: { fr: "Préciser la date de l'essai", en: 'Specify the date of the attempt' },
   contactAttemptDeletion: { fr: "Supprimer l'essai de contact", en: 'Delete contact attempt' },
+  at: { fr: 'à', en: 'at' },
 };
 
 export default contactAttemptMessage;

@@ -1,54 +1,56 @@
 import AtomicInfoTile from '../atomicInfoTile';
-import DetailTile from './detailTile';
+import { Button } from '@material-ui/core';
+import D from 'i18n';
+import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import MaterialIcons from 'utils/icons/materialIcons';
 import PropTypes from 'prop-types';
 import React from 'react';
 import formEnum from 'utils/enum/formEnum';
 import { getUserData } from 'utils/functions';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(() => ({
+  spaceAround: {
+    marginLeft: '1em',
+    marginRight: '1em',
+  },
+  centered: {
+    justifySelf: 'center',
+    width: 'max-content',
+    margin: 'auto',
+  },
+  flex: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+}));
 
 const Contact = ({ persons, selectFormType, setInjectableData }) => {
-  return (
-    <DetailTile>
-      <Grid container>
-        {persons.map(person => (
-          <AtomicInfoTile
-            key="user"
-            iconType="user"
-            data={getUserData(person)}
-            onClickFunction={() => {
-              selectFormType(formEnum.USER, true);
-              setInjectableData(person);
-            }}
-          />
-        ))}
-        {/* <AtomicInfoTile
-          key="user"
-          iconType="user"
-          data={getUserData(person)}
-          onClickFunction={() => {
-            selectFormType(formEnum.USER, true);
-            setInjectableData(person);
-          }}
-        /> */}
-        {/* <PhoneTile
-          phoneNumbers={getPhoneData(person)}
-          onClickFunction={() => {
-            selectFormType(formEnum.PHONE, true);
-            setInjectableData(person);
-          }}
-        ></PhoneTile>
+  const classes = useStyles();
 
-        <AtomicInfoTile
-          key="mail"
-          iconType="mail"
-          data={getMailData(person)}
-          onClickFunction={() => {
-            selectFormType(formEnum.MAIL, true);
-            setInjectableData(person);
-          }}
-        /> */}
-      </Grid>
-    </DetailTile>
+  return (
+    <Grid container>
+      {persons.map((person, index) => {
+        return (
+          <>
+            {index > 0 && (
+              <Divider orientation="vertical" flexItem className={classes.spaceAround} />
+            )}
+            <div className={classes.flex}>
+              <AtomicInfoTile key="user" data={getUserData(person)} />
+              <MaterialIcons
+                type="pen"
+                onClick={() => {
+                  selectFormType(formEnum.USER, true);
+                  setInjectableData(person);
+                }}
+              />
+            </div>
+          </>
+        );
+      })}
+    </Grid>
   );
 };
 
