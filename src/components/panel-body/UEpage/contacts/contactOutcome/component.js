@@ -1,30 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+
 import D from 'i18n';
+import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import SurveyUnitContext from '../../UEContext';
+import Typography from '@material-ui/core/Typography';
 import { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
 import formEnum from 'utils/enum/formEnum';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   column: {
     display: 'flex',
     flexDirection: 'column',
     cursor: 'pointer',
-    marginRight: '1em',
-    marginTop: '1em',
-    padding: '1em',
-    boxShadow: 'unset',
-    border: 'LightGray solid 1px',
-    borderRadius: '15px',
-    minWidth: '300px',
-    minHeight: '200px',
-  },
-  upDownMargin: {
-    marginTop: '1em',
-    marginBottom: '1em',
+    alignItems: 'center',
   },
 }));
 
@@ -55,13 +45,13 @@ const ContactOutcome = ({ selectFormType }) => {
   const classes = useStyles();
   return (
     <Paper
+      elevation={0}
       className={classes.column}
       onClick={() => {
         selectFormType(formEnum.CONTACT_OUTCOME, true);
       }}
     >
-      <Typography variant="h6">{D.contactOutcome}</Typography>
-      <Typography className={classes.upDownMargin}>{outcomeValue}</Typography>
+      <Typography>{outcomeValue}</Typography>
       <Typography>
         {contactOutcome.totalNumberOfContactAttempts > 0 &&
           `> ${contactOutcome.totalNumberOfContactAttempts} ${D.contactOutcomeAttempts}`}

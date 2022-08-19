@@ -116,6 +116,12 @@ const Router = () => {
               <GenericTile
                 title={D.contactAttempts}
                 icon={() => <MaterialIcons type="assignement" />}
+                editionIcon={() => (
+                  <MaterialIcons
+                    type="pen"
+                    onClick={() => selectFormType(formEnum.CONTACT_ATTEMPT, true)}
+                  ></MaterialIcons>
+                )}
               >
                 <ContactAttempts
                   selectFormType={selectFormType}
@@ -125,6 +131,12 @@ const Router = () => {
               <GenericTile
                 title={D.contactOutcome}
                 icon={() => <MaterialIcons type="assignement" />}
+                editionIcon={() => (
+                  <MaterialIcons
+                    type="pen"
+                    onClick={() => selectFormType(formEnum.CONTACT_OUTCOME, true)}
+                  ></MaterialIcons>
+                )}
               >
                 <ContactOutcome selectFormType={selectFormType} />
               </GenericTile>
