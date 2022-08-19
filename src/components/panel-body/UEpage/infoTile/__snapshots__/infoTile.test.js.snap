@@ -9,8 +9,8 @@ exports[`renders correctly 1`] = `
       <div
         class="MuiCardContent-root makeStyles-column-3"
       >
-        <h6
-          class="MuiTypography-root makeStyles-row-2 makeStyles-alignItems-4 MuiTypography-h6 MuiTypography-colorTextSecondary"
+        <p
+          class="MuiTypography-root makeStyles-row-2 makeStyles-bold-7 MuiTypography-body1"
         >
           <svg
             aria-hidden="true"
@@ -23,23 +23,23 @@ exports[`renders correctly 1`] = `
             />
           </svg>
           FirstName LastName
-        </h6>
+        </p>
         <div
           class="makeStyles-row-2"
         >
-          <h6
-            class="MuiTypography-root makeStyles-title-5 MuiTypography-h6 MuiTypography-colorTextSecondary"
-          >
-            Mocked campaign
-          </h6>
-          <h6
-            class="MuiTypography-root makeStyles-rounded-7 makeStyles-title-5 MuiTypography-h6 MuiTypography-colorTextSecondary MuiTypography-alignCenter"
+          <p
+            class="MuiTypography-root makeStyles-rounded-6 makeStyles-title-4 MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-alignCenter"
           >
             1
-          </h6>
+          </p>
+          <p
+            class="MuiTypography-root makeStyles-title-4 MuiTypography-body1 MuiTypography-colorTextSecondary"
+          >
+            Mocked campaign
+          </p>
         </div>
         <h6
-          class="MuiTypography-root makeStyles-title-5 MuiTypography-h6 MuiTypography-colorTextSecondary"
+          class="MuiTypography-root makeStyles-title-4 makeStyles-bold-7 MuiTypography-h6 MuiTypography-colorError"
         >
           # 1
         </h6>
