@@ -139,7 +139,7 @@ const Router = () => {
                 editionIcon={() => (
                   <MaterialIcons
                     type="pen"
-                    onClick={() => selectFormType(formEnum.CONTACT_OUTCOME, true)}
+                    onClick={() => selectFormType(formEnum.CONTACT_ATTEMPT, true)}
                   ></MaterialIcons>
                 )}
               >

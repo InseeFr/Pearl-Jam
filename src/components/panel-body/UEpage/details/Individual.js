@@ -62,10 +62,10 @@ export const Individual = ({ person }) => {
       />
       <LabelledTextWithClickableIcon
         labelText={[D.telephone, `(${D.fiscalSource})`]}
-        value={fiscalPhoneNumbers?.[0].number ?? '/'}
+        value={fiscalPhoneNumbers?.[0]?.number ?? '/'}
         icon={() =>
-          favoriteIcon(fiscalPhoneNumbers?.[0].favorite ?? false, () =>
-            toggleFavoritePhoneNumber(fiscalPhoneNumbers?.[0].number)
+          favoriteIcon(fiscalPhoneNumbers?.[0]?.favorite ?? false, () =>
+            toggleFavoritePhoneNumber(fiscalPhoneNumbers?.[0]?.number)
           )
         }
       />
@@ -73,15 +73,10 @@ export const Individual = ({ person }) => {
         labelText={[D.telephone, `(${D.directorySource})`]}
         value={directoryPhoneNumbers?.[0].number ?? '/'}
         icon={() =>
-          favoriteIcon(directoryPhoneNumbers?.[0].favorite ?? false, () =>
-            toggleFavoritePhoneNumber(directoryPhoneNumbers?.[0].number)
+          favoriteIcon(directoryPhoneNumbers?.[0]?.favorite ?? false, () =>
+            toggleFavoritePhoneNumber(directoryPhoneNumbers?.[0]?.number)
           )
         }
-      />
-
-      <LabelledText
-        labelText={[D.telephone, `(${D.directorySource})`]}
-        value={directoryPhoneNumbers?.[0].number ?? '/'}
       />
       {(interviewerPhoneNumbers?.length > 0 &&
         interviewerPhoneNumbers.map(({ favorite, number }) => (

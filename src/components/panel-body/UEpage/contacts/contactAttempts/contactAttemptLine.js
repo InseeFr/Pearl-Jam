@@ -35,7 +35,6 @@ const useStyles = makeStyles(() => ({
 const ContactAttemptLine = ({ contactAttempt, deleteFunction }) => {
   const classes = useStyles();
   if (contactAttempt === undefined) return '';
-
   const { dayOfWeek, twoDigitdayNumber, month, hour, minutes } = getDateAttributes(
     contactAttempt.date
   );

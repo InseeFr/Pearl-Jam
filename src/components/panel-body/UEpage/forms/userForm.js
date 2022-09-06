@@ -2,7 +2,6 @@ import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useContext, useEffect, useState } from 'react';
 import { getTitle, getToggledTitle, isTitleMister, sortPhoneNumbers } from 'utils/functions';
 
-import Button from '@material-ui/core/Button';
 import D from 'i18n';
 import DateFnsUtils from '@date-io/date-fns';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -23,6 +22,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    gap: '1em',
   },
   title: {
     width: 'max-content',
@@ -49,17 +49,16 @@ const Form = ({ closeModal, previousValue, save }) => {
       if (person.id !== personId) return person;
       return { ...person, title: getToggledTitle(person.title) };
     });
-    console.log(updatedPersons);
     setPersons(updatedPersons);
   };
 
-  // const onEmailChange = (personId, newEmail) => {
-  //   const updatedPersons = persons.map(person => {
-  //     if (personId.id !== personId) return person;
-  //     return { ...person, email: newEmail };
-  //   });
-  //   setPersons(updatedPersons);
-  // };
+  const onEmailChange = (personId, newEmail) => {
+    const updatedPersons = persons.map(person => {
+      if (personId.id !== personId) return person;
+      return { ...person, email: newEmail };
+    });
+    setPersons(updatedPersons);
+  };
 
   const onFavoriteEmailChange = personId => {
     const updatedPersons = persons.map(person => {
@@ -92,14 +91,6 @@ const Form = ({ closeModal, previousValue, save }) => {
     });
     setPersons(updatedPersons);
   };
-
-  // const updatePhone = (phoneNumber, newValue) => {
-  //   const updatedPhones = interviewerPhones.map(phNum => {
-  //     if (phNum.number === phoneNumber.number) phNum.number = newValue;
-  //     return phNum;
-  //   });
-  //   setInterviewerPhones([...updatedPhones]);
-  // };
 
   const onPhoneNumberChange = (personId, newPhoneNumber, phoneNumber) => {
     const updatedPersons = persons.map(person => {
@@ -153,9 +144,9 @@ const Form = ({ closeModal, previousValue, save }) => {
   //   setInterviewerPhones([...updatedInterviewerPhones]);
   // };
 
-  // const saveUE = () => {
-  //   save({ ...surveyUnit, persons });
-  // };
+  const saveUE = () => {
+    save({ ...surveyUnit, persons });
+  };
 
   class FrLocalizedUtils extends DateFnsUtils {
     getDatePickerHeaderText(date) {
@@ -170,7 +161,7 @@ const Form = ({ closeModal, previousValue, save }) => {
   );
 
   return (
-    <GenericTile title={D.contactAttempts} icon={() => <MaterialIcons type="home" />}>
+    <GenericTile title={D.surveyUnitIndividual} icon={() => <MaterialIcons type="home" />}>
       <div className={classes.row}>
         {persons.map((person, index) => {
           const { interviewerPhoneNumbers } = sortPhoneNumbers(person.phoneNumbers);
@@ -223,6 +214,7 @@ const Form = ({ closeModal, previousValue, save }) => {
                     id={'email'}
                     label={D.surveyUnitEmail}
                     defaultValue={person.email}
+                    onChangeFunction={event => onEmailChange(person.id, event.target.value)}
                     icon={() =>
                       favoriteIcon(person.favoriteEmail, () => onFavoriteEmailChange(person.id))
                     }
@@ -233,10 +225,7 @@ const Form = ({ closeModal, previousValue, save }) => {
                     id={`phone-${index}`}
                     label={[D.telephone, `(${D.interviewerSource})`]}
                     defaultValue={itwPhone.number}
-                    onChangeFunction={event => {
-                      console.log('event ', event);
-                      onPhoneNumberChange(person.id, event.target.value);
-                    }}
+                    onChangeFunction={event => onPhoneNumberChange(person.id, event.target.value)}
                     icon={() =>
                       favoriteIcon(itwPhone.favorite, () =>
                         toggleFavoritePhoneNumber(person.id, itwPhone.number)
@@ -255,18 +244,8 @@ const Form = ({ closeModal, previousValue, save }) => {
         })}
       </div>
       <DialogActions>
-        <IconButton
-          iconType="check"
-          label={D.validateButton}
-          onClickFunction={() => console.log('saveUE')}
-        />
+        <IconButton iconType="check" label={D.validateButton} onClickFunction={() => saveUE()} />
         <IconButton iconType="close" label={D.cancelButton} onClickFunction={closeModal} />
-        <Button type="button" onClick={() => console.log('saveUE')}>
-          {`✔ ${D.validateButton}`}
-        </Button>
-        <Button type="button" onClick={closeModal}>
-          {D.cancelButton}
-        </Button>
       </DialogActions>
     </GenericTile>
   );
