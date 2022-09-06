@@ -225,7 +225,9 @@ const Form = ({ closeModal, previousValue, save }) => {
                     id={`phone-${index}`}
                     label={[D.telephone, `(${D.interviewerSource})`]}
                     defaultValue={itwPhone.number}
-                    onChangeFunction={event => onPhoneNumberChange(person.id, event.target.value)}
+                    onChangeFunction={event =>
+                      onPhoneNumberChange(person.id, event.target.value, itwPhone.number)
+                    }
                     icon={() =>
                       favoriteIcon(itwPhone.favorite, () =>
                         toggleFavoritePhoneNumber(person.id, itwPhone.number)
