@@ -71,7 +71,7 @@ export const Individual = ({ person }) => {
       />
       <LabelledTextWithClickableIcon
         labelText={[D.telephone, `(${D.directorySource})`]}
-        value={directoryPhoneNumbers?.[0].number ?? '/'}
+        value={directoryPhoneNumbers?.[0]?.number ?? '/'}
         icon={() =>
           favoriteIcon(directoryPhoneNumbers?.[0]?.favorite ?? false, () =>
             toggleFavoritePhoneNumber(directoryPhoneNumbers?.[0])
