@@ -14,7 +14,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import StarIcon from '@material-ui/icons/Star';
-import StarOutlineIcon from '@material-ui/icons/StarOutline';
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
@@ -25,6 +24,7 @@ const useStyles = makeStyles(() => ({
   },
   star: { color: 'gold', alignSelf: 'center' },
   green: { color: 'green' },
+  grey: { color: 'lightgrey' },
 
   red: { color: 'red' },
   clickable: {
@@ -43,8 +43,8 @@ const MaterialIcons = ({ type, onClick = () => {} }) => {
     home: <HomeIcon className={mixClasses(classes.infoIcon, classes.red)} />,
     mail: <AlternateEmailIcon className={classes.infoIcon} />,
     phone: <PhoneIcon className={classes.infoIcon} />,
-    starFull: <StarIcon className={classes.star} onClick={onClick}></StarIcon>,
-    starOutlined: <StarOutlineIcon className={classes.star} onClick={onClick}></StarOutlineIcon>,
+    starFull: <StarIcon className={classes.red} onClick={onClick}></StarIcon>,
+    starOutlined: <StarIcon className={classes.grey} onClick={onClick}></StarIcon>,
     delete: (
       <DeleteIcon className={mixClasses(classes.infoIcon, classes.clickable)} onClick={onClick} />
     ),

@@ -7,6 +7,11 @@ import { useEffect, useState } from 'react';
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 import { identificationQuestionsEnum } from 'utils/enum/IdentificationQuestionsEnum';
 
+export const isIdentificationVisible = surveyUnit => {
+  const { identificationConfiguration } = surveyUnit;
+  return identificationConfiguration === identificationConfigurationEnum.IASCO;
+};
+
 export const useIdentification = (identificationConfiguration, previousData) => {
   const [data, setData] = useState(undefined);
   const [visibleAnswers, setVisibleAnswers] = useState(

@@ -1,11 +1,8 @@
-import AtomicInfoTile from '../atomicInfoTile';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import MaterialIcons from 'utils/icons/materialIcons';
+import { Individual } from './Individual';
 import PropTypes from 'prop-types';
 import React from 'react';
-import formEnum from 'utils/enum/formEnum';
-import { getUserData } from 'utils/functions';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -24,7 +21,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Contact = ({ persons, selectFormType, setInjectableData }) => {
+const Contact = ({ persons }) => {
   const classes = useStyles();
 
   return (
@@ -33,18 +30,14 @@ const Contact = ({ persons, selectFormType, setInjectableData }) => {
         return (
           <>
             {index > 0 && (
-              <Divider orientation="vertical" flexItem className={classes.spaceAround} />
-            )}
-            <div className={classes.flex}>
-              <AtomicInfoTile key="user" data={getUserData(person)} />
-              <MaterialIcons
-                type="pen"
-                onClick={() => {
-                  selectFormType(formEnum.USER, true);
-                  setInjectableData(person);
-                }}
+              <Divider
+                key={`splitter-${index}`}
+                orientation="vertical"
+                flexItem
+                className={classes.spaceAround}
               />
-            </div>
+            )}
+            <Individual person={person} />
           </>
         );
       })}
@@ -54,8 +47,5 @@ const Contact = ({ persons, selectFormType, setInjectableData }) => {
 
 export default Contact;
 Contact.propTypes = {
-  selectFormType: PropTypes.func.isRequired,
-  setInjectableData: PropTypes.func.isRequired,
-  person: PropTypes.shape({}).isRequired,
-  index: PropTypes.number.isRequired,
+  persons: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };

@@ -393,28 +393,9 @@ export const getAge = birthdate => {
   return differenceInYears(new Date(), new Date(birthdate));
 };
 
-export const getUserData = person => {
-  const { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers } = sortPhoneNumbers(
-    person.phoneNumbers
-  );
+export const isTitleMister = title => title.toLowerCase() === 'mister';
 
-  return [
-    { label: D.surveyUnitTitle, value: getTitle(person.title) },
-    { label: D.surveyUnitLastName, value: person.lastName },
-    { label: D.surveyUnitFirstName, value: person.firstName },
-    { label: D.surveyUnitAge, value: `${getAge(person.birthdate) ?? '/'} ${D.years}` },
-    { label: [D.telephone, `(${D.fiscalSource})`], value: fiscalPhoneNumbers?.[0]?.number ?? '/' },
-    {
-      label: [D.telephone, `(${D.directorySource})`],
-      value: directoryPhoneNumbers?.[0]?.number ?? '/',
-    },
-    {
-      label: [D.telephone, `(${D.interviewerSource})`],
-      value: interviewerPhoneNumbers?.[0]?.number ?? '/',
-    },
-    { label: D.surveyUnitEmail, value: person.email, favorite: person.favoriteEmail },
-  ];
-};
+export const displayAgeInYears = birthdate => `${getAge(birthdate) ?? '/'} ${D.years}`;
 
 export const getPhoneData = person => person.phoneNumbers;
 
@@ -447,16 +428,8 @@ export const getMailData = person => [
   { label: D.surveyUnitEmail, value: person.email, favorite: person.favoriteEmail },
 ];
 
-export const getTitle = title => {
-  switch (title.toLowerCase()) {
-    case 'mister':
-      return D.titleMister;
-    case 'miss':
-      return D.titleMiss;
-    default:
-      return '';
-  }
-};
+export const getTitle = title => (isTitleMister(title) ? D.titleMister : D.titleMiss);
+export const getToggledTitle = title => (isTitleMister(title) ? 'MISS' : 'MISTER');
 
 export const getPhoneSource = type => {
   switch (type.toLowerCase()) {
@@ -495,4 +468,35 @@ export const createStateIds = async latestSurveyUnit => {
   const { id, states } = latestSurveyUnit;
   const previousSurveyUnit = await surveyUnitIdbService.getById(id);
   surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, states });
+};
+
+export const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => {
+  const updatedPersons = surveyUnit.persons.map(person => {
+    if (person.id !== personId) return person;
+
+    const updatedPhoneNumbers = person.phoneNumbers.map(personPhoneNumber => {
+      if (personPhoneNumber.number !== phoneNumber) return personPhoneNumber;
+      return { ...personPhoneNumber, favorite: !personPhoneNumber.favorite };
+    });
+    return { ...person, phoneNumbers: updatedPhoneNumbers };
+  });
+  return { ...surveyUnit, persons: updatedPersons };
+};
+
+export const toggleFavoritePhoneNumberAndPersist = (surveyUnit, personId, phoneNumber) => {
+  const updatedSurveyUnit = toggleFavoritePhoneNumber(surveyUnit, personId, phoneNumber);
+  surveyUnitIdbService.addOrUpdateSU(updatedSurveyUnit);
+};
+
+export const toggleFavoriteEmail = (surveyUnit, personId) => {
+  const updatedPersons = surveyUnit.persons.map(person => {
+    if (person.id !== personId) return person;
+
+    return { ...person, favoriteEmail: !person.favoriteEmail };
+  });
+  return { ...surveyUnit, persons: updatedPersons };
+};
+export const toggleFavoriteEmailAndPersist = (surveyUnit, personId) => {
+  const updatedSurveyUnit = toggleFavoriteEmail(surveyUnit, personId);
+  surveyUnitIdbService.addOrUpdateSU(updatedSurveyUnit);
 };

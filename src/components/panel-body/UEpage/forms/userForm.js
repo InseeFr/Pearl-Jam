@@ -1,17 +1,20 @@
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React, { useContext, useState } from 'react';
-import { getTitle, sortPhoneNumbers } from 'utils/functions';
+import React, { useContext, useEffect, useState } from 'react';
+import { getTitle, getToggledTitle, isTitleMister, sortPhoneNumbers } from 'utils/functions';
 
 import Button from '@material-ui/core/Button';
 import D from 'i18n';
 import DateFnsUtils from '@date-io/date-fns';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { Divider } from '@material-ui/core';
+import { EditableTextField } from 'components/common/niceComponents/EditableTextField';
+import { EditableTextFieldWithClickableIcon } from 'components/common/niceComponents/EditableTextFieldWithClickableIcon';
+import GenericTile from 'components/common/niceComponents/GenericTile';
+import IconButton from 'components/common/niceComponents/IconButton';
+import { LabelledSwitch } from 'components/common/niceComponents/LabelledSwitch';
 import MaterialIcons from 'utils/icons/materialIcons';
-import PhoneTile from '../details/phoneTile';
 import PropTypes from 'prop-types';
 import SurveyUnitContext from '../UEContext';
-import TextField from '@material-ui/core/TextField';
 import frLocale from 'date-fns/locale/fr';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -26,6 +29,8 @@ const useStyles = makeStyles(() => ({
   },
   row: {
     display: 'flex',
+    flexDirection: 'row',
+    gap: '1em',
   },
 }));
 
@@ -33,125 +38,123 @@ const Form = ({ closeModal, previousValue, save }) => {
   const classes = useStyles();
 
   const { surveyUnit } = useContext(SurveyUnitContext);
+  const [persons, setPersons] = useState(previousValue);
 
-  const [lastName, setLastName] = useState(previousValue.lastName);
-  const [firstName, setFirstName] = useState(previousValue.firstName);
-  const [dateOfBirth, setDateOfBirth] = useState(previousValue.birthdate);
-  const [title, setTitle] = useState(previousValue.title);
-  const { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers } = sortPhoneNumbers(
-    previousValue.phoneNumbers
-  );
-  const [email, setEmail] = useState(previousValue.email);
-  const [favoriteEmail, setFavoriteEmail] = useState(previousValue.favoriteEmail);
+  useEffect(() => {
+    if (!persons) setPersons(surveyUnit.persons);
+  }, [persons, surveyUnit]);
 
-  const [interviewerPhones, setInterviewerPhones] = useState([...interviewerPhoneNumbers]);
-  const [fiscalPhones, setFiscalPhones] = useState([...fiscalPhoneNumbers]);
-  const [directoryPhones, setDirectoryPhones] = useState([...directoryPhoneNumbers]);
-
-  const onEmailChange = event => {
-    if (event.target.name === 'email') {
-      setEmail(event.target.value);
-    }
-  };
-
-  const onChange = type => event => {
-    switch (type) {
-      case 'lastName':
-        setLastName(event.target.value);
-        break;
-      case 'firstName':
-        setFirstName(event.target.value);
-        break;
-      case 'title':
-        setTitle(event.target.value === getTitle('Mister') ? 'MISS' : 'MISTER');
-        break;
-      case 'age':
-        setDateOfBirth(event.getTime());
-        break;
-      default:
-        break;
-    }
-  };
-
-  const updatePhone = (phoneNumber, newValue) => {
-    const updatedPhones = interviewerPhones.map(phNum => {
-      if (phNum.number === phoneNumber.number) phNum.number = newValue;
-      return phNum;
+  const onTitleChange = personId => {
+    const updatedPersons = persons.map(person => {
+      if (person.id !== personId) return person;
+      return { ...person, title: getToggledTitle(person.title) };
     });
-    setInterviewerPhones([...updatedPhones]);
+    console.log(updatedPersons);
+    setPersons(updatedPersons);
   };
 
-  const onPhoneChange = phoneNumber => event => {
-    updatePhone(phoneNumber, event.target.value.trim());
+  const onEmailChange = (personId, newEmail) => {
+    const updatedPersons = persons.map(person => {
+      if (personId.id !== personId) return person;
+      return { ...person, email: newEmail };
+    });
+    setPersons(updatedPersons);
   };
 
-  const toggleFavoritePhoneNumber = phoneNumber => {
-    switch (phoneNumber.source.toLowerCase()) {
-      case 'interviewer':
-        const updatedInterviewerPhones = interviewerPhones.map(phNum => {
-          if (phNum.number === phoneNumber.number) phNum.favorite = !phNum.favorite;
-          return phNum;
-        });
-        setInterviewerPhones([...updatedInterviewerPhones]);
-        break;
-
-      case 'fiscal':
-        const updatedFiscalPhones = fiscalPhones.map(phNum => {
-          if (phNum.number === phoneNumber.number) phNum.favorite = !phNum.favorite;
-          return phNum;
-        });
-        setFiscalPhones([...updatedFiscalPhones]);
-        break;
-      case 'directory':
-        const updatedDirectoryPhones = directoryPhones.map(phNum => {
-          if (phNum.number === phoneNumber.number) phNum.favorite = !phNum.favorite;
-          return phNum;
-        });
-        setDirectoryPhones([...updatedDirectoryPhones]);
-        break;
-
-      default:
-        break;
-    }
+  const onFavoriteEmailChange = personId => {
+    const updatedPersons = persons.map(person => {
+      if (person.id !== personId) return person;
+      return { ...person, favoriteEmail: !person.favoriteEmail };
+    });
+    setPersons(updatedPersons);
   };
 
-  const anyEmptyPhone = () => {
-    return interviewerPhones.map(phone => phone.number).filter(num => num.trim() === '').length > 0;
+  const onLastNameChange = (personId, newLastName) => {
+    const updatedPersons = persons.map(person => {
+      if (personId.id !== personId) return person;
+      return { ...person, lastName: newLastName };
+    });
+    setPersons(updatedPersons);
   };
 
-  const addPhone = () => {
-    if (anyEmptyPhone()) return;
-    setInterviewerPhones([
-      ...interviewerPhones,
-      { source: 'INTERVIEWER', favorite: false, number: '' },
-    ]);
+  const onFirstNameChange = (personId, newFirstName) => {
+    const updatedPersons = persons.map(person => {
+      if (personId.id !== personId) return person;
+      return { ...person, firstName: newFirstName };
+    });
+    setPersons(updatedPersons);
   };
 
-  const deletePhoneNumber = phoneNumber => {
-    const updatedInterviewerPhones = interviewerPhones.filter(
-      phNum => phNum.number !== phoneNumber
-    );
-    setInterviewerPhones([...updatedInterviewerPhones]);
+  const onDateOfBirthChange = (personId, newBirthdate) => {
+    const updatedPersons = persons.map(person => {
+      if (personId.id !== personId) return person;
+      return { ...person, birthdate: newBirthdate };
+    });
+    setPersons(updatedPersons);
   };
+
+  // const updatePhone = (phoneNumber, newValue) => {
+  //   const updatedPhones = interviewerPhones.map(phNum => {
+  //     if (phNum.number === phoneNumber.number) phNum.number = newValue;
+  //     return phNum;
+  //   });
+  //   setInterviewerPhones([...updatedPhones]);
+  // };
+
+  const onPhoneNumberChange = (personId, newPhoneNumber, phoneNumber) => {
+    const updatedPersons = persons.map(person => {
+      if (person.id !== personId) return person;
+
+      const updatedPhoneNumbers = person.phoneNumbers.map(personPhoneNumber => {
+        if (personPhoneNumber.number !== phoneNumber) return personPhoneNumber;
+        return { ...personPhoneNumber, number: newPhoneNumber.trim() };
+      });
+      return { ...person, phoneNumbers: updatedPhoneNumbers };
+    });
+    setPersons(updatedPersons);
+  };
+
+  const toggleFavoritePhoneNumber = (personId, phoneNumber) => {
+    const updatedPersons = persons.map(person => {
+      if (person.id !== personId) return person;
+
+      const updatedPhoneNumbers = person.phoneNumbers.map(personPhoneNumber => {
+        if (personPhoneNumber.number !== phoneNumber) return personPhoneNumber;
+        return { ...personPhoneNumber, favorite: !personPhoneNumber.favorite };
+      });
+      return { ...person, phoneNumbers: updatedPhoneNumbers };
+    });
+    setPersons(updatedPersons);
+  };
+
+  const anyEmptyPhone = phoneNumbers => {
+    return phoneNumbers.map(phone => phone.number).some(num => num.trim() === '');
+  };
+
+  const addPhone = personId => {
+    const updatedPersons = persons.map(person => {
+      if (person.id !== personId) return person;
+      if (anyEmptyPhone(person?.phoneNumbers ?? [])) return person;
+      return {
+        ...person,
+        phoneNumbers: [
+          ...person.phoneNumbers,
+          { source: 'INTERVIEWER', favorite: false, number: '' },
+        ],
+      };
+    });
+    setPersons(updatedPersons);
+  };
+
+  // const deletePhoneNumber = phoneNumber => {
+  //   const updatedInterviewerPhones = interviewerPhones.filter(
+  //     phNum => phNum.number !== phoneNumber
+  //   );
+  //   setInterviewerPhones([...updatedInterviewerPhones]);
+  // };
 
   const saveUE = () => {
-    const { id } = previousValue;
-    const { persons } = surveyUnit;
-    const newPersons = persons.map(person => {
-      if (person.id === id)
-        person = {
-          ...person,
-          lastName,
-          firstName,
-          title,
-          birthdate: dateOfBirth,
-          phoneNumbers: [...fiscalPhones, ...directoryPhones, ...interviewerPhones],
-          email,
-          favoriteEmail,
-        };
-      return person;
-    });
-    save({ ...surveyUnit, persons: newPersons });
+    save({ ...surveyUnit, persons });
   };
 
   class FrLocalizedUtils extends DateFnsUtils {
@@ -159,95 +162,113 @@ const Form = ({ closeModal, previousValue, save }) => {
       return this.format(date, 'd MMM yyyy', { locale: this.locale });
     }
   }
+  const favoriteIcon = (favorite, onClickFunction) => (
+    <MaterialIcons
+      type={favorite ? 'starFull' : 'starOutlined'}
+      onClick={() => onClickFunction()}
+    />
+  );
 
   return (
-    <div className={classes.column}>
-      <DialogTitle id="form-dialog-title">{D.surveyUnitNameChange}</DialogTitle>
-
-      <TextField
-        margin="dense"
-        id="title"
-        name="title"
-        label={D.surveyUnitTitle}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        value={getTitle(title) || ''}
-        onClick={onChange('title')}
-      />
-
-      <TextField
-        margin="dense"
-        id="lastName"
-        name="lastName"
-        label={D.surveyUnitLastName}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={lastName || ''}
-        onChange={onChange('lastName')}
-      />
-      <TextField
-        margin="dense"
-        id="firstName"
-        name="firstName"
-        label={D.surveyUnitFirstName}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={firstName || ''}
-        onChange={onChange('firstName')}
-      />
-      <MuiPickersUtilsProvider utils={FrLocalizedUtils} locale={frLocale}>
-        <DatePicker
-          disableFuture
-          openTo="date"
-          format="dd/MM/yyyy"
-          label={D.surveyUnitDateOfBirth}
-          views={['date', 'month', 'year']}
-          InputLabelProps={{ color: 'secondary' }}
-          value={dateOfBirth}
-          onChange={onChange('age')}
-        />
-      </MuiPickersUtilsProvider>
-
+    <GenericTile title={D.contactAttempts} icon={() => <MaterialIcons type="home" />}>
       <div className={classes.row}>
-        <TextField
-          margin="dense"
-          id="email"
-          name="email"
-          label={D.surveyUnitEmail}
-          InputLabelProps={{ color: 'secondary' }}
-          type="text"
-          fullWidth
-          defaultValue={email || ''}
-          onChange={onEmailChange}
-        />
-        <MaterialIcons
-          type={favoriteEmail ? 'starFull' : 'starOutlined'}
-          onClick={() => setFavoriteEmail(prev => !prev)}
-        />
-      </div>
+        {persons.map((person, index) => {
+          const { interviewerPhoneNumbers } = sortPhoneNumbers(person.phoneNumbers);
 
-      <PhoneTile
-        phoneNumbers={[...interviewerPhones, ...fiscalPhones, ...directoryPhones]}
-        editionMode
-        toggleFavoritePhone={number => toggleFavoritePhoneNumber(number)}
-        updatePhoneNumber={onPhoneChange}
-        deletePhoneNumber={deletePhoneNumber}
-      ></PhoneTile>
+          return (
+            <>
+              {index > 0 && (
+                <Divider
+                  key={`splitter-${index}`}
+                  orientation="vertical"
+                  flexItem
+                  className={classes.spaceAround}
+                />
+              )}
+              <div className={classes.column}>
+                <LabelledSwitch
+                  labelText={D.surveyUnitTitle}
+                  value={isTitleMister(person.title)}
+                  text={getTitle(person.title)}
+                  onChangeFunction={() => onTitleChange(person.id)}
+                />
+                <EditableTextField
+                  id={'lastName'}
+                  label={D.surveyUnitLastName}
+                  defaultValue={person?.lastName}
+                  onChangeFunction={event => onLastNameChange(person.id, event.target.value)}
+                />
+                <EditableTextField
+                  id={'firstName'}
+                  label={D.surveyUnitFirstName}
+                  defaultValue={person?.firstName}
+                  onChangeFunction={event => onFirstNameChange(person.id, event.target.value)}
+                />
+
+                <MuiPickersUtilsProvider utils={FrLocalizedUtils} locale={frLocale}>
+                  <DatePicker
+                    disableFuture
+                    openTo="date"
+                    format="dd/MM/yyyy"
+                    label={D.surveyUnitDateOfBirth}
+                    views={['date', 'month', 'year']}
+                    InputLabelProps={{ color: 'secondary' }}
+                    value={person.dateOfBirth}
+                    onChange={event => onDateOfBirthChange(person.id, event.target.value)}
+                  />
+                </MuiPickersUtilsProvider>
+
+                <div className={classes.row}>
+                  <EditableTextFieldWithClickableIcon
+                    id={'email'}
+                    label={D.surveyUnitEmail}
+                    defaultValue={person.email}
+                    icon={() =>
+                      favoriteIcon(person.favoriteEmail, () => onFavoriteEmailChange(person.id))
+                    }
+                  />
+                </div>
+                {interviewerPhoneNumbers.map((itwPhone, index) => (
+                  <EditableTextFieldWithClickableIcon
+                    id={`phone-${index}`}
+                    label={[D.telephone, `(${D.interviewerSource})`]}
+                    defaultValue={itwPhone.number}
+                    onChangeFunction={event => {
+                      console.log('event ', event);
+                      onPhoneNumberChange(person.id, event.target.value);
+                    }}
+                    icon={() =>
+                      favoriteIcon(itwPhone.favorite, () =>
+                        toggleFavoritePhoneNumber(person.id, itwPhone.number)
+                      )
+                    }
+                  />
+                ))}
+                <IconButton
+                  iconType="add"
+                  label={D.addPhoneNumberButton}
+                  onClickFunction={() => addPhone(person.id)}
+                />
+              </div>
+            </>
+          );
+        })}
+      </div>
       <DialogActions>
-        <Button type="button" onClick={addPhone}>
-          {`+ ${D.addPhoneNumberButton}`}
-        </Button>
-        <Button type="button" onClick={saveUE}>
+        <IconButton
+          iconType="check"
+          label={D.validateButton}
+          onClickFunction={() => console.log('saveUE')}
+        />
+        <IconButton iconType="close" label={D.cancelButton} onClickFunction={closeModal} />
+        <Button type="button" onClick={() => console.log('saveUE')}>
           {`✔ ${D.validateButton}`}
         </Button>
         <Button type="button" onClick={closeModal}>
           {D.cancelButton}
         </Button>
       </DialogActions>
-    </div>
+    </GenericTile>
   );
 };
 

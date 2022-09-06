@@ -1,12 +1,12 @@
-import { Paper, makeStyles } from '@material-ui/core';
 import React, { useContext, useRef } from 'react';
 import { formatToSave, useIdentification } from 'utils/functions/identificationFunctions';
 
 import ClickableLine from './clickableLine';
 import LabelledCheckbox from './labelledCheckbox';
+import Paper from '@material-ui/core/Paper';
 import SurveyUnitContext from '../UEContext';
 import { addNewState } from 'utils/functions';
-import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
+import { makeStyles } from '@material-ui/core';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(() => ({
@@ -20,7 +20,6 @@ const Identification = () => {
   const { surveyUnit } = useContext(SurveyUnitContext);
   const { identification, identificationConfiguration } = surveyUnit;
   const classes = useStyles();
-  const visible = identificationConfiguration === identificationConfigurationEnum.IASCO;
   const {
     data,
     answers,
@@ -43,50 +42,47 @@ const Identification = () => {
     );
 
   return (
-    visible && (
-      <div className={classes.row}>
-        <Paper elevation={0}>
-          {data?.map(question => {
-            return (
-              <ClickableLine
-                placeholder={question.label}
-                value={question.selectedAnswer ? question.selectedAnswer.label : undefined}
-                checked={question.selectedAnswer}
-                selected={
-                  (!selectedQuestion.current && question.selected) ||
-                  question.label === selectedQuestion?.current?.label
+    <div className={classes.row}>
+      <Paper elevation={0}>
+        {data?.map(question => {
+          return (
+            <ClickableLine
+              placeholder={question.label}
+              value={question.selectedAnswer ? question.selectedAnswer.label : undefined}
+              checked={question.selectedAnswer}
+              selected={
+                (!selectedQuestion.current && question.selected) ||
+                question.label === selectedQuestion?.current?.label
+              }
+              disabled={question.disabled}
+              onClickFunction={() => {
+                if (!question.disabled) {
+                  setSelectedQuestion(question);
+                  setVisibleAnswers(question.answers);
                 }
-                disabled={question.disabled}
-                onClickFunction={() => {
-                  if (!question.disabled) {
-                    setSelectedQuestion(question);
-                    setVisibleAnswers(question.answers);
-                  }
-                }}
-              />
-            );
-          })}
-        </Paper>
-        <Paper elevation={0}>
-          {visibleAnswers?.map(answer => {
-            return (
-              <LabelledCheckbox
-                value={answer.label}
-                checked={
-                  answers.filter(
-                    currentAnswer => currentAnswer && currentAnswer.type === answer.type
-                  ).length > 0
-                }
-                onClickFunction={() => {
-                  const newData = updateIdentification(answer);
-                  saveIdentification(newData);
-                }}
-              />
-            );
-          })}
-        </Paper>
-      </div>
-    )
+              }}
+            />
+          );
+        })}
+      </Paper>
+      <Paper elevation={0}>
+        {visibleAnswers?.map(answer => {
+          return (
+            <LabelledCheckbox
+              value={answer.label}
+              checked={
+                answers.filter(currentAnswer => currentAnswer && currentAnswer.type === answer.type)
+                  .length > 0
+              }
+              onClickFunction={() => {
+                const newData = updateIdentification(answer);
+                saveIdentification(newData);
+              }}
+            />
+          );
+        })}
+      </Paper>
+    </div>
   );
 };
 

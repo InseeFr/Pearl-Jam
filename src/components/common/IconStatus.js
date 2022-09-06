@@ -22,19 +22,22 @@ const useStyles = makeStyles(theme => ({
 
 export const IconStatus = ({ type, className, ...other }) => {
   const classes = useStyles();
-  if (type === 'success')
-    return (
-      <CheckCircleOutline
-        className={`${classes.success} ${className}`}
-        {...other}
-        fontSize="large"
-      />
-    );
-  if (type === 'error')
-    return <Clear className={`${classes.failure} ${className}`} {...other} fontSize="large" />;
-  if (type === 'warning')
-    return <Warning className={`${classes.warning} ${className}`} {...other} fontSize="large" />;
-  if (type === 'minus')
-    return <RemoveIcon className={`${classes.minus} ${className}`} {...other} fontSize="large" />;
-  return <></>;
+  switch (type) {
+    case 'success':
+      return (
+        <CheckCircleOutline
+          className={`${classes.success} ${className}`}
+          {...other}
+          fontSize="large"
+        />
+      );
+    case 'error':
+      return <Clear className={`${classes.failure} ${className}`} {...other} fontSize="large" />;
+    case 'warning':
+      return <Warning className={`${classes.warning} ${className}`} {...other} fontSize="large" />;
+    case 'minus':
+      return <RemoveIcon className={`${classes.minus} ${className}`} {...other} fontSize="large" />;
+    default:
+      return <></>;
+  }
 };

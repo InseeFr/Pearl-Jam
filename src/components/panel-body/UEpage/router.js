@@ -3,7 +3,6 @@ import { getForm, getPreviousValue, smartForms } from './forms';
 
 import AtomicInfoTile from './atomicInfoTile';
 import Comments from './comments';
-import ContactAttempts from './contacts/contactAttempts';
 import ContactOutcome from './contacts/contactOutcome';
 import D from 'i18n';
 import Details from './details';
@@ -18,6 +17,7 @@ import SurveyUnitContext from './UEContext';
 import TabSwipper from './navigation/tabSwipper';
 import formEnum from 'utils/enum/formEnum';
 import { getAddressData } from 'utils/functions';
+import { isIdentificationVisible } from 'utils/functions/identificationFunctions';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -72,6 +72,8 @@ const Router = () => {
     setOpenModal(false);
   };
 
+  const identificationVisibility = isIdentificationVisible(surveyUnit);
+
   const selectedForm = getForm(formType, previousValue, closeModal);
 
   const classes = useStyles();
@@ -106,14 +108,28 @@ const Router = () => {
                 ></MaterialIcons>
               )}
             >
-              <AtomicInfoTile data={getAddressData(surveyUnit)} split />
+              <AtomicInfoTile data={getAddressData(surveyUnit)} split={true} />
             </GenericTile>
-            <GenericTile title="Repérage" icon={() => <MaterialIcons type="googles" />}>
-              <Identification />
-            </GenericTile>
+            {identificationVisibility && (
+              <GenericTile title="Repérage" icon={() => <MaterialIcons type="googles" />}>
+                <Identification />
+              </GenericTile>
+            )}
           </div>
           <div className={classes.row}>
-            <GenericTile title={D.surveyUnitIndividual} icon={() => <MaterialIcons type="user" />}>
+            <GenericTile
+              title={D.surveyUnitIndividual}
+              editionIcon={() => (
+                <MaterialIcons
+                  type="pen"
+                  onClick={() => {
+                    selectFormType(formEnum.USER, true);
+                    setInjectableData(surveyUnit.persons);
+                  }}
+                ></MaterialIcons>
+              )}
+              icon={() => <MaterialIcons type="user" />}
+            >
               <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
             </GenericTile>
             <div className={classes.column}>
@@ -123,26 +139,14 @@ const Router = () => {
                 editionIcon={() => (
                   <MaterialIcons
                     type="pen"
-                    onClick={() => selectFormType(formEnum.CONTACT_ATTEMPT, true)}
-                  ></MaterialIcons>
-                )}
-              >
-                <ContactAttempts
-                  selectFormType={selectFormType}
-                  setInjectableData={setInjectableData}
-                />
-              </GenericTile>
-              <GenericTile
-                title={D.contactOutcome}
-                icon={() => <MaterialIcons type="assignement" />}
-                editionIcon={() => (
-                  <MaterialIcons
-                    type="pen"
                     onClick={() => selectFormType(formEnum.CONTACT_OUTCOME, true)}
                   ></MaterialIcons>
                 )}
               >
-                <ContactOutcome selectFormType={selectFormType} />
+                <ContactOutcome
+                  selectFormType={selectFormType}
+                  setInjectableData={setInjectableData}
+                />
               </GenericTile>
             </div>
           </div>

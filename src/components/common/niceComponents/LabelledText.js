@@ -6,7 +6,6 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: '0.5em',
   },
   column: {
     display: 'flex',
@@ -15,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LabelledText = ({ labelText, text }) => {
+const LabelledText = ({ labelText, value }) => {
   const classes = useStyles();
   return (
     <div className={classes.row}>
@@ -28,7 +27,7 @@ const LabelledText = ({ labelText, text }) => {
           <Typography color="textSecondary">{labelText}</Typography>
         )}
       </div>
-      <Typography>{text}</Typography>
+      <Typography>{value}</Typography>
     </div>
   );
 };

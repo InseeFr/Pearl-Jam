@@ -102,17 +102,17 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
   } = surveyUnit;
 
   const privilegedPerson = getprivilegedPerson(surveyUnit);
-  // persons.find(p => p.privileged);
   const { firstName, lastName } = privilegedPerson ?? persons[0];
   const lastState = getLastState(surveyUnit);
   const todo = convertSUStateInToDo(lastState.type);
   const { order, value: toDoLabel } = todo;
   const nbJoursRestant = intervalInDays(surveyUnit);
+  const openSurveyUnitPage = id => history.push(`/survey-unit/${id}/details?panel=0`);
 
   return (
     <Card
       className={`${classes.root} ${classes.flexColumn} ${active ? '' : classes.inactive}`}
-      onClick={() => (active ? history.push(`/survey-unit/${id}/details?panel=0`) : {})}
+      onClick={() => (active ? openSurveyUnitPage(id) : {})}
       elevation={0}
     >
       <CardContent className={`${classes.content} ${classes.flexRow}`}>

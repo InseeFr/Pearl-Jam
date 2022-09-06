@@ -40,12 +40,10 @@ const theme = createMuiTheme({
     MuiButton: {
       root: {
         background: '#666666',
-        border: 'transparent solid 1px',
         color: '#ffffff',
         '&:hover': {
           background: '#cdcdcd',
           color: '#000000',
-          border: 'black solid 1px',
         },
         '&:disabled': {
           background: '#cdcdcd',
@@ -80,12 +78,12 @@ const theme = createMuiTheme({
     MuiPickersToolbarButton: {
       toolbarBtn: {
         background: 'transparent',
-        border: 'transparent solid 1px',
+        // border: 'transparent solid 1px',
         color: '#ffffff',
         '&:hover': {
           background: '#cdcdcd',
           color: '#000000',
-          border: 'black solid 1px',
+          // border: 'black solid 1px',
         },
         '&:disabled': {
           background: '#cdcdcd',

@@ -7,15 +7,16 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  column: {
     display: 'flex',
     flexDirection: 'column',
+    gap: '0.5em',
   },
-  row: { display: 'flex', flexDirection: 'row' },
-  spaceAround: {
-    marginLeft: '0.5em',
-    marginRight: '0.5em',
-  },
+  row: { display: 'flex', flexDirection: 'row', gap: '1em' },
+  // spaceAround: {
+  //   marginLeft: '1em',
+  //   marginRight: '1em',
+  // },
 }));
 
 const AtomicInfoTile = ({ data, split = false }) => {
@@ -25,7 +26,7 @@ const AtomicInfoTile = ({ data, split = false }) => {
       case 'boolean':
         return <LabelledBoolean labelText={label} value={value} />;
       default:
-        return <LabelledText labelText={label} text={value} />;
+        return <LabelledText labelText={label} value={value} />;
     }
   });
   var firstHalf;
@@ -37,7 +38,7 @@ const AtomicInfoTile = ({ data, split = false }) => {
   }
 
   return (
-    <Paper className={classes.root} elevation={0}>
+    <Paper className={classes.column} elevation={0}>
       {!split && lines}
       {split && (
         <div className={classes.row}>
