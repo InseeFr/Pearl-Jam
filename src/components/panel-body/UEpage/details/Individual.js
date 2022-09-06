@@ -65,7 +65,7 @@ export const Individual = ({ person }) => {
         value={fiscalPhoneNumbers?.[0]?.number ?? '/'}
         icon={() =>
           favoriteIcon(fiscalPhoneNumbers?.[0]?.favorite ?? false, () =>
-            toggleFavoritePhoneNumber(fiscalPhoneNumbers?.[0]?.number)
+            toggleFavoritePhoneNumber(fiscalPhoneNumbers?.[0])
           )
         }
       />
@@ -74,17 +74,17 @@ export const Individual = ({ person }) => {
         value={directoryPhoneNumbers?.[0].number ?? '/'}
         icon={() =>
           favoriteIcon(directoryPhoneNumbers?.[0]?.favorite ?? false, () =>
-            toggleFavoritePhoneNumber(directoryPhoneNumbers?.[0]?.number)
+            toggleFavoritePhoneNumber(directoryPhoneNumbers?.[0])
           )
         }
       />
       {(interviewerPhoneNumbers?.length > 0 &&
-        interviewerPhoneNumbers.map(({ favorite, number }) => (
+        interviewerPhoneNumbers.map(phone => (
           <>
             <LabelledTextWithClickableIcon
               labelText={[D.telephone, `(${D.interviewerSource})`]}
-              value={number}
-              icon={() => favoriteIcon(favorite, () => toggleFavoritePhoneNumber(number))}
+              value={phone.number}
+              icon={() => favoriteIcon(phone.favorite, () => toggleFavoritePhoneNumber(phone))}
             />
           </>
         ))) || <LabelledText labelText={[D.telephone, `(${D.interviewerSource})`]} value={'/'} />}

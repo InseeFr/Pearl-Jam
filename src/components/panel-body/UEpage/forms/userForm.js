@@ -97,7 +97,8 @@ const Form = ({ closeModal, previousValue, save }) => {
       if (person.id !== personId) return person;
 
       const updatedPhoneNumbers = person.phoneNumbers.map(personPhoneNumber => {
-        if (personPhoneNumber.number !== phoneNumber) return personPhoneNumber;
+        if (personPhoneNumber.number !== phoneNumber || personPhoneNumber.source !== 'INTERVIEWER')
+          return personPhoneNumber;
         return { ...personPhoneNumber, number: newPhoneNumber.trim() };
       });
       return { ...person, phoneNumbers: updatedPhoneNumbers };
@@ -106,11 +107,14 @@ const Form = ({ closeModal, previousValue, save }) => {
   };
 
   const toggleFavoritePhoneNumber = (personId, phoneNumber) => {
+    console.log(phoneNumber);
+    const { number, source } = phoneNumber;
     const updatedPersons = persons.map(person => {
       if (person.id !== personId) return person;
 
       const updatedPhoneNumbers = person.phoneNumbers.map(personPhoneNumber => {
-        if (personPhoneNumber.number !== phoneNumber) return personPhoneNumber;
+        if (personPhoneNumber.number !== number || personPhoneNumber.source !== source)
+          return personPhoneNumber;
         return { ...personPhoneNumber, favorite: !personPhoneNumber.favorite };
       });
       return { ...person, phoneNumbers: updatedPhoneNumbers };
@@ -230,7 +234,7 @@ const Form = ({ closeModal, previousValue, save }) => {
                     }
                     icon={() =>
                       favoriteIcon(itwPhone.favorite, () =>
-                        toggleFavoritePhoneNumber(person.id, itwPhone.number)
+                        toggleFavoritePhoneNumber(person.id, itwPhone)
                       )
                     }
                   />

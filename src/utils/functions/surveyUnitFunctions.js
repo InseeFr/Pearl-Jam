@@ -471,11 +471,13 @@ export const createStateIds = async latestSurveyUnit => {
 };
 
 export const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => {
+  const { number, source } = phoneNumber;
   const updatedPersons = surveyUnit.persons.map(person => {
     if (person.id !== personId) return person;
 
     const updatedPhoneNumbers = person.phoneNumbers.map(personPhoneNumber => {
-      if (personPhoneNumber.number !== phoneNumber) return personPhoneNumber;
+      if (personPhoneNumber.number !== number || personPhoneNumber.source !== source)
+        return personPhoneNumber;
       return { ...personPhoneNumber, favorite: !personPhoneNumber.favorite };
     });
     return { ...person, phoneNumbers: updatedPhoneNumbers };
