@@ -1,18 +1,24 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
+  props: {
+    MuiButton: {
+      disableElevation: true,
+      variant: 'contained',
+    },
+  },
   palette: {
     primary: {
       light: '#eeeeee',
       main: '#ffffff',
       dark: '#cdcdcd',
-      darker: '#666666',
-      contrastText: '#000000',
     },
     secondary: {
       light: '#0066ff',
-      main: '#0f417a',
-      contrastText: '#ffcc00',
+      main: '#0a192e',
+    },
+    success: {
+      main: '#0a192e',
     },
     background: {
       default: '#ffffff',
@@ -93,7 +99,7 @@ const theme = createMuiTheme({
     MuiStepIcon: {
       root: {
         '& $text': {
-          fill: 'white',
+          // fill: 'white',
         },
         '&$active': {
           fill: 'black',
