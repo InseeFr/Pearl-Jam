@@ -53,13 +53,13 @@ const Form = ({ closeModal, previousValue, save }) => {
     setPersons(updatedPersons);
   };
 
-  const onEmailChange = (personId, newEmail) => {
-    const updatedPersons = persons.map(person => {
-      if (personId.id !== personId) return person;
-      return { ...person, email: newEmail };
-    });
-    setPersons(updatedPersons);
-  };
+  // const onEmailChange = (personId, newEmail) => {
+  //   const updatedPersons = persons.map(person => {
+  //     if (personId.id !== personId) return person;
+  //     return { ...person, email: newEmail };
+  //   });
+  //   setPersons(updatedPersons);
+  // };
 
   const onFavoriteEmailChange = personId => {
     const updatedPersons = persons.map(person => {
@@ -71,7 +71,7 @@ const Form = ({ closeModal, previousValue, save }) => {
 
   const onLastNameChange = (personId, newLastName) => {
     const updatedPersons = persons.map(person => {
-      if (personId.id !== personId) return person;
+      if (person.id !== personId) return person;
       return { ...person, lastName: newLastName };
     });
     setPersons(updatedPersons);
@@ -79,7 +79,7 @@ const Form = ({ closeModal, previousValue, save }) => {
 
   const onFirstNameChange = (personId, newFirstName) => {
     const updatedPersons = persons.map(person => {
-      if (personId.id !== personId) return person;
+      if (person.id !== personId) return person;
       return { ...person, firstName: newFirstName };
     });
     setPersons(updatedPersons);
@@ -87,8 +87,8 @@ const Form = ({ closeModal, previousValue, save }) => {
 
   const onDateOfBirthChange = (personId, newBirthdate) => {
     const updatedPersons = persons.map(person => {
-      if (personId.id !== personId) return person;
-      return { ...person, birthdate: newBirthdate };
+      if (person.id !== personId) return person;
+      return { ...person, birthdate: newBirthdate.getTime() };
     });
     setPersons(updatedPersons);
   };
@@ -153,9 +153,9 @@ const Form = ({ closeModal, previousValue, save }) => {
   //   setInterviewerPhones([...updatedInterviewerPhones]);
   // };
 
-  const saveUE = () => {
-    save({ ...surveyUnit, persons });
-  };
+  // const saveUE = () => {
+  //   save({ ...surveyUnit, persons });
+  // };
 
   class FrLocalizedUtils extends DateFnsUtils {
     getDatePickerHeaderText(date) {
@@ -214,7 +214,7 @@ const Form = ({ closeModal, previousValue, save }) => {
                     views={['date', 'month', 'year']}
                     InputLabelProps={{ color: 'secondary' }}
                     value={person.dateOfBirth}
-                    onChange={event => onDateOfBirthChange(person.id, event.target.value)}
+                    onChange={newDate => onDateOfBirthChange(person.id, newDate)}
                   />
                 </MuiPickersUtilsProvider>
 
