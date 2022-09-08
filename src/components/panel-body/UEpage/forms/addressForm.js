@@ -1,18 +1,27 @@
 import React, { useContext, useState } from 'react';
 
-import Button from '@material-ui/core/Button';
 import D from 'i18n';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { Divider } from '@material-ui/core';
+import { EditableBooleanField } from 'components/common/niceComponents/EditableBooleanField';
+import { EditableTextField } from 'components/common/niceComponents/EditableTextField';
+import GenericTile from 'components/common/niceComponents/GenericTile';
+import IconButton from 'components/common/niceComponents/IconButton';
+import MaterialIcons from 'utils/icons/materialIcons';
 import PropTypes from 'prop-types';
 import SurveyUnitContext from '../UEContext';
-import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   column: {
     display: 'flex',
     flexDirection: 'column',
+    gap: '1em',
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '1em',
   },
 }));
 
@@ -113,154 +122,92 @@ const Form = ({ closeModal, save, previousValue }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.column}>
-      <DialogTitle id="form-dialog-title">{D.surveyUnitAddressChange}</DialogTitle>
-      <TextField
-        margin="dense"
-        id="deliveryPoint"
-        name="deliveryPoint"
-        label={D.addressDeliveryPoint}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={deliveryPoint}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="additionalAddress"
-        name="additionalAddress"
-        label={D.addressAdditionalAddress}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={additionalAddress}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="streetName"
-        name="streetName"
-        label={D.addressStreetName}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={streetName}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="locality"
-        name="locality"
-        label={D.addressLocality}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={locality}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="postcode"
-        name="postcode"
-        label={D.addressPostcode}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={postcode}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="city"
-        name="city"
-        label={D.addressCity}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={city}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="building"
-        name="building"
-        label={D.addressBuilding}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={building}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="floor"
-        name="floor"
-        label={D.addressFloor}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={floor}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="door"
-        name="door"
-        label={D.addressDoor}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={door}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="staircase"
-        name="staircase"
-        label={D.addressStaircase}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={staircase}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="elevator"
-        name="elevator"
-        label={D.addressElevator}
-        InputLabelProps={{ color: 'secondary' }}
-        type="checkbox"
-        fullWidth
-        inputProps={{ checked: elevator }}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="cityPriorityDistrict"
-        name="cityPriorityDistrict"
-        label={D.addressCityPriorityDistrict}
-        InputLabelProps={{ color: 'secondary' }}
-        type="checkbox"
-        fullWidth
-        inputProps={{ checked: cityPriorityDistrict }}
-        onChange={onChange}
-      />
+    <GenericTile title={D.surveyUnitAddressChange} icon={() => <MaterialIcons type="home" />}>
+      <div className={classes.row}>
+        <div className={classes.column}>
+          <EditableTextField
+            id={'deliveryPoint'}
+            label={D.addressDeliveryPoint}
+            defaultValue={deliveryPoint}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'additionalAddress'}
+            label={D.addressAdditionalAddress}
+            defaultValue={additionalAddress}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'streetName'}
+            label={D.addressStreetName}
+            defaultValue={streetName}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'locality'}
+            label={D.addressLocality}
+            defaultValue={locality}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'postcode'}
+            label={D.addressPostcode}
+            defaultValue={postcode}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'city'}
+            label={D.addressCity}
+            defaultValue={city}
+            onChangeFunction={onChange}
+          />
+        </div>
+        <Divider key={`splitter`} orientation="vertical" flexItem />
+        <div className={classes.column}>
+          <EditableTextField
+            id={'building'}
+            label={D.addressBuilding}
+            defaultValue={building}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'floor'}
+            label={D.addressFloor}
+            defaultValue={floor}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'door'}
+            label={D.addressDoor}
+            defaultValue={door}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'staircase'}
+            label={D.addressStaircase}
+            defaultValue={staircase}
+            onChangeFunction={onChange}
+          />
+          <EditableBooleanField
+            id="elevator"
+            label={D.addressElevator}
+            defaultValue={elevator}
+            onChangeFunction={onChange}
+          />
+          <EditableBooleanField
+            id="cityPriorityDistrict"
+            label={D.addressCityPriorityDistrict}
+            defaultValue={cityPriorityDistrict}
+            onChangeFunction={onChange}
+          />
+        </div>
+      </div>
 
       <DialogActions>
-        <Button type="button" onClick={saveUE}>
-          <i className="fa fa-check" aria-hidden="true" />
-          &nbsp;
-          {D.validateButton}
-        </Button>
-        <Button type="button" onClick={closeModal}>
-          <i className="fa fa-times" aria-hidden="true" />
-          &nbsp;
-          {D.cancelButton}
-        </Button>
+        <IconButton iconType="check" label={D.validateButton} onClickFunction={() => saveUE()} />
+        <IconButton iconType="close" label={D.cancelButton} onClickFunction={closeModal} />
       </DialogActions>
-    </div>
+    </GenericTile>
   );
 };
 

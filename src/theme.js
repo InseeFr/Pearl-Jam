@@ -48,8 +48,9 @@ const theme = createMuiTheme({
         background: '#666666',
         color: '#ffffff',
         '&:hover': {
-          background: '#cdcdcd',
-          color: '#000000',
+          // background: '#000000',
+          color: '#ffffff',
+          outline: 'red solid 1px',
         },
         '&:disabled': {
           background: '#cdcdcd',
@@ -89,7 +90,7 @@ const theme = createMuiTheme({
         '&:hover': {
           background: '#cdcdcd',
           color: '#000000',
-          // border: 'black solid 1px',
+          // border: '#000000 solid 1px',
         },
         '&:disabled': {
           background: '#cdcdcd',
@@ -99,7 +100,7 @@ const theme = createMuiTheme({
     MuiStepIcon: {
       root: {
         '& $text': {
-          // fill: 'white',
+          fill: 'white',
         },
         '&$active': {
           fill: 'black',

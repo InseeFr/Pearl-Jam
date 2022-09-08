@@ -93,13 +93,13 @@ export const identificationAnswersEnum = {
     label: `${D.categoryVacant}`,
     concluding: true,
   },
-  CATEGORY_DK: {
-    questionType: identificationAnswerTypeEnum.CATEGORY,
-    type: 'CATEGORY_DK',
-    value: 'DK',
-    label: `${D.categoryDontKnow}`,
-    concluding: false,
-  },
+  // CATEGORY_DK: {
+  //   questionType: identificationAnswerTypeEnum.CATEGORY,
+  //   type: 'CATEGORY_DK',
+  //   value: 'DK',
+  //   label: `${D.categoryDontKnow}`,
+  //   concluding: false,
+  // },
   OCCUPANT_IDENTIFIED: {
     questionType: identificationAnswerTypeEnum.OCCUPANT,
     type: 'OCCUPANT_IDENTIFIED',

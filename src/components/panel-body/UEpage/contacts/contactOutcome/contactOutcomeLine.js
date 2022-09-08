@@ -13,12 +13,10 @@ const useStyles = makeStyles(() => ({
   },
   root: {
     display: 'flex',
-    height: 'max-content',
-    justifyContent: 'space-between',
     borderRadius: '15px',
-    backgroundColor: grey[100],
+    backgroundColor: grey[400],
     padding: '0.5em',
-    '&:not(:last-child)': { marginBottom: '1em' },
+    marginBottom: '1em',
   },
   column: {
     display: 'flex',

@@ -21,7 +21,7 @@ const contactAttemptMessage = {
     fr: 'Lettre-avis remise en main propre',
     en: 'Notification letter hand-delivered',
   },
-  contactAttempts: { fr: 'Mes essais de contact', en: 'Contact attempts' },
+  contactAttempts: { fr: 'Mes contacts', en: 'Contacts' },
   contactAttempt: {
     fr: 'Choisir le type de contact',
     en: 'Select contact attempt type',

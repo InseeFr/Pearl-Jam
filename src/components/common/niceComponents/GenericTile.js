@@ -19,12 +19,10 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: '1em',
   },
   marginBottom: {
     marginBottom: '1em',
-  },
-  leftMargin: {
-    marginLeft: '0.5em',
   },
 }));
 
@@ -35,9 +33,7 @@ const GenericTile = ({ title, children, icon: Icon, editionIcon: EditionIcon }) 
       <div className={`${classes.row} ${classes.marginBottom}`}>
         <div className={classes.row}>
           <Icon />
-          <Typography variant="h5" className={classes.leftMargin}>
-            {title}
-          </Typography>
+          <Typography variant="h5">{title}</Typography>
         </div>
         {EditionIcon && <EditionIcon />}
       </div>

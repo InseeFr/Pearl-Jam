@@ -1,9 +1,9 @@
 const contactOutcomeMessage = {
   impossibleReach: { fr: 'Impossible à joindre', en: 'Impossible to reach' },
-  contactOutcome: { fr: 'Issue des contacts', en: 'Contact outcome' },
+  contactOutcome: { fr: 'Bilan des contacts', en: 'Contact outcome' },
   contactOutcomeValidation: {
-    fr: `Confirmez vous l'issue des contacts ?`,
-    en: 'Please confirm the contacts outcome',
+    fr: `Bilan des contacts`,
+    en: 'Contacts outcome',
   },
   contactOutcomeAttempts: { fr: 'essais', en: 'attempts' },
   unableToRespond: {

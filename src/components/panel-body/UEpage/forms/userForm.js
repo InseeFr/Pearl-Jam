@@ -175,7 +175,7 @@ const Form = ({ closeModal, previousValue, save }) => {
   );
 
   return (
-    <GenericTile title={D.surveyUnitIndividual} icon={() => <MaterialIcons type="home" />}>
+    <GenericTile title={D.surveyUnitIndividual} icon={() => <MaterialIcons type="user" />}>
       <div className={classes.row}>
         {persons.map((person, index) => {
           const { interviewerPhoneNumbers } = sortPhoneNumbers(person.phoneNumbers);

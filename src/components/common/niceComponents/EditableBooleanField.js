@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const EditableTextField = ({ id, label, defaultValue = '', onChangeFunction }) => {
+export const EditableBooleanField = ({ id, label, defaultValue = undefined, onChangeFunction }) => {
   const classes = useStyles();
   return (
     <div className={classes.row}>
@@ -22,9 +22,9 @@ export const EditableTextField = ({ id, label, defaultValue = '', onChangeFuncti
         id={id}
         name={id}
         InputLabelProps={{ color: 'secondary' }}
-        type="text"
+        type="checkbox"
         fullWidth
-        defaultValue={defaultValue}
+        inputProps={{ checked: defaultValue }}
         onChange={event => onChangeFunction(event)}
       />
     </div>
