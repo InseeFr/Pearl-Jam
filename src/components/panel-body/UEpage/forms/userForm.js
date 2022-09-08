@@ -101,7 +101,11 @@ const Form = ({ closeModal, previousValue, save }) => {
           return personPhoneNumber;
         return { ...personPhoneNumber, number: newPhoneNumber.trim() };
       });
-      return { ...person, phoneNumbers: updatedPhoneNumbers };
+
+      const map = new Map();
+      updatedPhoneNumbers.forEach(number => map.set(JSON.stringify(number), number));
+
+      return { ...person, phoneNumbers: [...map.values()] };
     });
     setPersons(updatedPersons);
   };
