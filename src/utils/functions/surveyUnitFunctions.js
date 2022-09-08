@@ -1,6 +1,7 @@
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'utils/constants';
 import {
   IASCO_CATEGORY_FINISHING_VALUES,
+  IASCO_IDENTIFICATION_FINISHING_VALUES,
   IASCO_SITUATION_FINISHING_VALUES,
   identificationIsFinished,
 } from './identificationFunctions';
@@ -67,10 +68,10 @@ const checkValidityForTransmissionIasco = su => {
     return false;
 
   // issue NOA + identification.avi
-  const { category, situation } = identification;
-
+  const { identification: identificationValue, category, situation } = identification;
   if (
     type === contactOutcomeEnum.NOT_APPLICABLE.type &&
+    !IASCO_IDENTIFICATION_FINISHING_VALUES.includes(identificationValue) &&
     !IASCO_SITUATION_FINISHING_VALUES.includes(situation) &&
     !IASCO_CATEGORY_FINISHING_VALUES.includes(category)
   )
