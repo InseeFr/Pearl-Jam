@@ -1,6 +1,5 @@
 import { EditableTextField } from './EditableTextField';
 import React from 'react';
-import { icons } from 'utils/icons/materialIcons';
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
