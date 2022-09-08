@@ -1,4 +1,3 @@
-import MaterialIcons from 'utils/icons/materialIcons';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -27,7 +26,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ContactOutcomeLine = ({ contactOutcome, deleteFunction }) => {
+const ContactOutcomeLine = ({ contactOutcome }) => {
   const classes = useStyles();
   if (contactOutcome === undefined) return '';
 
@@ -41,7 +40,6 @@ const ContactOutcomeLine = ({ contactOutcome, deleteFunction }) => {
       <Typography>
         {`${upcasedDayOfWeek} ${date} - ${findContactOutcomeValueByType(contactOutcome.type)}`}
       </Typography>
-      {deleteFunction && <MaterialIcons type="delete" onClick={deleteFunction} />}
     </Paper>
   );
 };

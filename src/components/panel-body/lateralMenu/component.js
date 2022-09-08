@@ -1,11 +1,11 @@
-import React from 'react';
 import Card from '@material-ui/core/Card';
+import D from 'i18n';
 import Drawer from '@material-ui/core/Drawer';
+import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import D from 'i18n';
-import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -33,7 +33,6 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     paddingLeft: '1em',
-    color: 'white',
   },
   link: {
     textDecoration: 'unset',

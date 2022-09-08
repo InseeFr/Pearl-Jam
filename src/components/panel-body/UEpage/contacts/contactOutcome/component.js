@@ -48,10 +48,7 @@ const ContactOutcome = ({ selectFormType, setInjectableData }) => {
   const classes = useStyles();
   return (
     <Paper elevation={0} className={classes.column}>
-      <ContactOutcomeLine
-        contactOutcome={contactOutcome}
-        deleteFunction={() => {}}
-      ></ContactOutcomeLine>
+      <ContactOutcomeLine contactOutcome={contactOutcome} />
       <ContactAttempts selectFormType={selectFormType} setInjectableData={setInjectableData} />
       <div className={classes.row}>
         <IconButton

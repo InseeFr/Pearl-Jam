@@ -54,7 +54,7 @@ const Form = ({ closeModal, previousValue, save }) => {
 
   const onEmailChange = (personId, newEmail) => {
     const updatedPersons = persons.map(person => {
-      if (personId.id !== personId) return person;
+      if (person.id !== personId) return person;
       return { ...person, email: newEmail };
     });
     setPersons(updatedPersons);
@@ -107,7 +107,6 @@ const Form = ({ closeModal, previousValue, save }) => {
   };
 
   const toggleFavoritePhoneNumber = (personId, phoneNumber) => {
-    console.log(phoneNumber);
     const { number, source } = phoneNumber;
     const updatedPersons = persons.map(person => {
       if (person.id !== personId) return person;
@@ -141,12 +140,19 @@ const Form = ({ closeModal, previousValue, save }) => {
     setPersons(updatedPersons);
   };
 
-  // const deletePhoneNumber = phoneNumber => {
-  //   const updatedInterviewerPhones = interviewerPhones.filter(
-  //     phNum => phNum.number !== phoneNumber
-  //   );
-  //   setInterviewerPhones([...updatedInterviewerPhones]);
-  // };
+  const deletePhoneNumber = (personId, phoneNumber) => {
+    const updatedPersons = persons.map(person => {
+      if (person.id !== personId) return person;
+      const updatedPhoneNumbers = person.phoneNumbers.filter(
+        phone => phone.source !== phoneNumber.source || phone.number !== phoneNumber.number
+      );
+      return {
+        ...person,
+        phoneNumbers: updatedPhoneNumbers,
+      };
+    });
+    setPersons(updatedPersons);
+  };
 
   const saveUE = () => {
     save({ ...surveyUnit, persons });
@@ -208,7 +214,7 @@ const Form = ({ closeModal, previousValue, save }) => {
                     label={D.surveyUnitDateOfBirth}
                     views={['date', 'month', 'year']}
                     InputLabelProps={{ color: 'secondary' }}
-                    value={person.dateOfBirth}
+                    value={person.birthdate}
                     onChange={newDate => onDateOfBirthChange(person.id, newDate)}
                   />
                 </MuiPickersUtilsProvider>
@@ -219,9 +225,10 @@ const Form = ({ closeModal, previousValue, save }) => {
                     label={D.surveyUnitEmail}
                     defaultValue={person.email}
                     onChangeFunction={event => onEmailChange(person.id, event.target.value)}
-                    icon={() =>
-                      favoriteIcon(person.favoriteEmail, () => onFavoriteEmailChange(person.id))
-                    }
+                    icons={[
+                      () =>
+                        favoriteIcon(person.favoriteEmail, () => onFavoriteEmailChange(person.id)),
+                    ]}
                   />
                 </div>
                 {interviewerPhoneNumbers.map((itwPhone, index) => (
@@ -232,11 +239,18 @@ const Form = ({ closeModal, previousValue, save }) => {
                     onChangeFunction={event =>
                       onPhoneNumberChange(person.id, event.target.value, itwPhone.number)
                     }
-                    icon={() =>
-                      favoriteIcon(itwPhone.favorite, () =>
-                        toggleFavoritePhoneNumber(person.id, itwPhone)
-                      )
-                    }
+                    icons={[
+                      () =>
+                        favoriteIcon(itwPhone.favorite, () =>
+                          toggleFavoritePhoneNumber(person.id, itwPhone)
+                        ),
+                      () => (
+                        <MaterialIcons
+                          type="delete"
+                          onClick={() => deletePhoneNumber(person.id, itwPhone)}
+                        />
+                      ),
+                    ]}
                   />
                 ))}
                 <IconButton

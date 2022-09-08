@@ -1,5 +1,6 @@
 import { EditableTextField } from './EditableTextField';
 import React from 'react';
+import { icons } from 'utils/icons/materialIcons';
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -15,7 +16,7 @@ export const EditableTextFieldWithClickableIcon = ({
   id,
   label,
   defaultValue = '',
-  icon: Icon,
+  icons = [],
   onChangeFunction,
 }) => {
   const classes = useStyles();
@@ -27,8 +28,9 @@ export const EditableTextFieldWithClickableIcon = ({
         defaultValue={defaultValue}
         onChangeFunction={onChangeFunction}
       />
-
-      <Icon />
+      {icons.map(Icon => (
+        <Icon />
+      ))}
     </div>
   );
 };
