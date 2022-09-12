@@ -1,9 +1,6 @@
-import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
-
 import { Route, useLocation } from 'react-router-dom';
 
+import CssBaseline from '@material-ui/core/CssBaseline';
 import D from 'i18n';
 import { DatabaseConsole } from 'components/panel-body/databaseConsole';
 import Home from 'components/panel-body/home';
@@ -11,8 +8,10 @@ import Notification from 'components/common/Notification';
 import { NotificationWrapper } from 'components/notificationWrapper';
 import Palette from 'components/common/palette';
 import Preloader from 'components/common/loader';
+import React from 'react';
 import { ResetData } from 'components/panel-body/resetData';
 import SynchronizeWrapper from 'components/sychronizeWrapper';
+import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import { useAuth } from 'utils/auth/initAuth';
 import { useServiceWorker } from 'utils/hooks/useServiceWorker';

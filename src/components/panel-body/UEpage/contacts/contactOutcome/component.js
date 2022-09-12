@@ -4,6 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ContactAttempts from '../contactAttempts';
 import ContactOutcomeLine from './contactOutcomeLine';
 import D from 'i18n';
+import { Divider } from '@material-ui/core';
 import IconButton from 'components/common/niceComponents/IconButton';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
@@ -25,8 +26,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ContactOutcome = ({ selectFormType, setInjectableData }) => {
-  const contextSu = useContext(SurveyUnitContext);
-  const { surveyUnit } = contextSu;
+  const classes = useStyles();
+  const { surveyUnit } = useContext(SurveyUnitContext);
+  const { contactAttempts } = surveyUnit;
 
   const defaultContactOutcome = surveyUnit.contactOutcome ?? {
     date: new Date().getTime(),
@@ -45,10 +47,12 @@ const ContactOutcome = ({ selectFormType, setInjectableData }) => {
     );
   }, [surveyUnit]);
 
-  const classes = useStyles();
+  const isSeparator = contactOutcome.type && contactAttempts?.length;
+
   return (
     <Paper elevation={0} className={classes.column}>
       <ContactOutcomeLine contactOutcome={contactOutcome} />
+      {isSeparator && <Divider key="splitter" orientation="horizontal" />}
       <ContactAttempts selectFormType={selectFormType} setInjectableData={setInjectableData} />
       <div className={classes.row}>
         <IconButton

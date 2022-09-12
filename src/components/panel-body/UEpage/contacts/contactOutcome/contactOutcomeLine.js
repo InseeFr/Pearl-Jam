@@ -1,3 +1,4 @@
+import MaterialIcons from 'utils/icons/materialIcons';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -8,19 +9,12 @@ import { grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
-  alignEnd: {
-    alignSelf: 'flex-end',
-  },
   root: {
     display: 'flex',
     borderRadius: '15px',
-    backgroundColor: grey[400],
+    backgroundColor: grey[100],
     padding: '0.5em',
-    marginBottom: '1em',
-  },
-  column: {
-    display: 'flex',
-    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
 }));
 
@@ -38,6 +32,7 @@ const ContactOutcomeLine = ({ contactOutcome }) => {
       <Typography>
         {`${upcasedDayOfWeek} ${date} - ${findContactOutcomeValueByType(contactOutcome.type)}`}
       </Typography>
+      <MaterialIcons type="checked" />
     </Paper>
   );
 };

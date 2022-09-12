@@ -8,11 +8,10 @@ const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
+    gap: '1em',
     padding: '1.5em',
     borderRadius: '15px',
-    marginTop: '2em',
-    marginLeft: '2em',
-    marginRight: '2em',
+    margin: '2em',
     height: 'max-content',
   },
   row: {
@@ -21,16 +20,13 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
     gap: '1em',
   },
-  marginBottom: {
-    marginBottom: '1em',
-  },
 }));
 
 const GenericTile = ({ title, children, icon: Icon, editionIcon: EditionIcon }) => {
   const classes = useStyles();
   return (
     <Paper className={classes.root} elevation={0}>
-      <div className={`${classes.row} ${classes.marginBottom}`}>
+      <div className={classes.row}>
         <div className={classes.row}>
           <Icon />
           <Typography variant="h5">{title}</Typography>

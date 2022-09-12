@@ -1,5 +1,5 @@
 import { NavLink, Route } from 'react-router-dom';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
@@ -26,13 +26,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const NavigationContext = React.createContext();
 
-const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer }) => {
+const Navigation = ({ textSearch, setTextSearch, setOpenDrawer }) => {
   const { unReadNotificationsNumber } = useContext(NotificationWrapperContext);
-  const [disabled, setDisable] = useState(location.pathname.startsWith('/queen'));
-
-  useEffect(() => {
-    setDisable(location.pathname.startsWith('/queen'));
-  }, [location]);
 
   const getName = () => {
     const interviewerFromLocalStorage = window.localStorage.getItem(PEARL_USER_KEY);
@@ -170,7 +165,7 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer }) => {
               {getName()}
             </Typography>
           </div>
-          <Synchronize disabled={disabled} materialClass={classes.syncIcon} />
+          <Synchronize materialClass={classes.syncIcon} />
         </Toolbar>
       </AppBar>
     </NavigationContext.Provider>

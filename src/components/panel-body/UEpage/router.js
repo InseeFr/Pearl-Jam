@@ -28,7 +28,6 @@ const useStyles = makeStyles(() => ({
   },
   row: {
     display: 'flex',
-    direction: 'row',
   },
   paperModal: {
     boxShadow: 'unset',

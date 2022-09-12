@@ -1,17 +1,16 @@
-import React, { useContext } from 'react';
-import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-
 import { NOTIFICATION_TYPE_MANAGEMENT, NOTIFICATION_TYPE_SYNC } from 'utils/constants';
+import React, { useContext } from 'react';
 
 import D from 'i18n';
-import { FiberManualRecord } from '@material-ui/icons';
+import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
+import Link from '@material-ui/core/Link';
 import { NavigationContext } from '../navigation/component';
 import { NotificationWrapperContext } from 'components/notificationWrapper';
 import { SynchronizeWrapperContext } from 'components/sychronizeWrapper';
+import Typography from '@material-ui/core/Typography';
 import { dateFnsLocal } from 'utils';
 import { formatDistance } from 'date-fns';
+import { makeStyles } from '@material-ui/core/styles';
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
 
 const useStyles = makeStyles(theme => ({

@@ -1,5 +1,5 @@
 import ChevronRight from '@material-ui/icons/ChevronRight';
-import { IconStatus } from 'components/common/IconStatus';
+import MaterialIcons from 'utils/icons/materialIcons';
 import Paper from '@material-ui/core/Paper';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -42,8 +42,8 @@ const ClickableLine = ({ value, placeholder, checked, onClickFunction, selected,
     >
       <Typography className={classes.marginRight}>{value ?? placeholder}</Typography>
       <div className={classes.rightAligned}>
-        {checked && <IconStatus type={'success'} />}
-        {disabled && <IconStatus type={'minus'} />}
+        {checked && <MaterialIcons type="success" />}
+        {disabled && <MaterialIcons type="remove" />}
         <ChevronRight />
       </div>
     </Paper>
