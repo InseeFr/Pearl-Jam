@@ -13,6 +13,12 @@ const useStyles = makeStyles(() => ({
   row: {
     display: 'flex',
     borderRadius: '15px',
+    gap: '1em',
+  },
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.5em',
   },
 }));
 
@@ -43,7 +49,7 @@ const Identification = () => {
 
   return (
     <div className={classes.row}>
-      <Paper elevation={0}>
+      <Paper className={classes.column} elevation={0}>
         {data?.map(question => {
           return (
             <ClickableLine

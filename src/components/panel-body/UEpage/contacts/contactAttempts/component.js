@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
   column: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '0.5em',
+    gap: '0.25em',
   },
 }));
 

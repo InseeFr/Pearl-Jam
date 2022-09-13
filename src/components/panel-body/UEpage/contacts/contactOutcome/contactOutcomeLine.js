@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
 
 const ContactOutcomeLine = ({ contactOutcome }) => {
   const classes = useStyles();
-  if (contactOutcome === undefined) return '';
+  if (contactOutcome?.type === undefined) return '';
 
   const { dayOfWeek, twoDigitdayNumber, month } = getDateAttributes(contactOutcome.date);
 

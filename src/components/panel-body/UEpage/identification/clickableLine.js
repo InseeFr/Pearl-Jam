@@ -3,23 +3,23 @@ import MaterialIcons from 'utils/icons/materialIcons';
 import Paper from '@material-ui/core/Paper';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import { grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   row: {
     display: 'flex',
-    minHeight: '3em',
     flexDirection: 'row',
+    minHeight: '3em',
     borderRadius: '15px',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     backgroundColor: grey[100],
     alignItems: 'center',
     '&:hover': { backgroundColor: grey[300], cursor: 'pointer' },
     paddingLeft: '1em',
-    margin: '5px',
+    gap: '0.5em',
   },
-  rightAligned: { marginLeft: 'auto' },
   selected: {
     backgroundColor: grey[300],
   },
@@ -29,19 +29,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ClickableLine = ({ value, placeholder, checked, onClickFunction, selected, disabled }) => {
-  const classes = useStyles();
-  const calculatedClasses = `${classes.row} ${selected && classes.selected} ${disabled &&
-    classes.disabled}`;
+  const { row, selected: selectedClass, disabled: disabledClass } = useStyles();
 
   return (
     <Paper
       elevation={0}
-      className={calculatedClasses}
+      className={clsx(row, selected ? selectedClass : '', disabled ? disabledClass : '')}
       onClick={onClickFunction}
       key={`${value}-${placeholder}`}
     >
-      <Typography className={classes.marginRight}>{value ?? placeholder}</Typography>
-      <div className={classes.rightAligned}>
+      <Typography>{value ?? placeholder}</Typography>
+      <div>
         {checked && <MaterialIcons type="success" />}
         {disabled && <MaterialIcons type="remove" />}
         <ChevronRight />

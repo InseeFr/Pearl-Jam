@@ -3,6 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Radio from '@material-ui/core/Radio';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import { grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -13,8 +14,9 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'flex-start',
     alignItems: 'center',
     '&:hover': { backgroundColor: 'lightgrey', cursor: 'pointer' },
-    paddingLeft: '1em',
+    backgroundColor: grey[100],
     margin: '5px',
+    gap: '0.5em',
   },
   line: {
     minWidth: '20em',

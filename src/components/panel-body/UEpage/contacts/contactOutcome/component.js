@@ -64,7 +64,7 @@ const ContactOutcome = ({ selectFormType, setInjectableData }) => {
         />
 
         <IconButton
-          iconType={contactOutcome.type ? undefined : 'check'}
+          iconType={contactOutcome.type ? 'check' : undefined}
           label={contactOutcome.type ? D.editContactOutcomeButton : D.addContactOutcomeButton}
           startIcon={<AddIcon fontSize="large" />}
           onClickFunction={() => {
