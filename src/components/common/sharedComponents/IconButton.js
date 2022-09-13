@@ -19,7 +19,6 @@ const IconButton = ({ iconType, label, onClickFunction, hasArrow, disabled = fal
   return (
     <Button
       variant="contained"
-      color="secondary"
       startIcon={iconType && ButtonIcons[iconType]}
       endIcon={hasArrow ? ButtonIcons.rightArrow : <></>}
       onClick={onClickFunction}

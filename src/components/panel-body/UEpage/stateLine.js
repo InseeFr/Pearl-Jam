@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between',
     paddingLeft: '2em',
     paddingRight: '2em',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     zIndex: 10,
   },
 }));

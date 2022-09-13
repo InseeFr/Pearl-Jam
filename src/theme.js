@@ -45,15 +45,14 @@ const theme = createMuiTheme({
     },
     MuiButton: {
       root: {
-        background: '#666666',
-        color: '#ffffff',
-        '&:hover': {
-          // background: '#000000',
-          color: '#ffffff',
-          outline: 'red solid 1px',
+        '&.MuiButton-contained': { backgroundColor: '#0a192e', color: '#ffffff' },
+        '&.MuiButton-contained:hover': {
+          backgroundColor: '#ffffff',
+          color: '#0a192e',
+          outline: '#0a192e solid 1px',
         },
         '&:disabled': {
-          background: '#cdcdcd',
+          backgroundColor: '#cdcdcd',
         },
       },
     },
@@ -63,7 +62,7 @@ const theme = createMuiTheme({
         backgroundColor: '#eeeeee',
       },
       daySelected: {
-        backgroundColor: '#555555',
+        backgroundColor: '#0a192e',
         color: '#ffffff',
         fontWeight: 'bolder',
         '&:hover': { backgroundColor: '#aaaaaa' },
@@ -71,29 +70,22 @@ const theme = createMuiTheme({
     },
     MuiPickersYear: {
       yearSelected: {
-        backgroundColor: '#555555',
+        backgroundColor: '#0a192e',
         fontWeight: 'bolder',
       },
     },
     MuiPickersMonth: {
       monthSelected: {
-        backgroundColor: '#555555',
+        backgroundColor: '#0a192e',
         color: '#ffffff',
         '&:hover': { backgroundColor: '#aaaaaa' },
       },
     },
     MuiPickersToolbarButton: {
       toolbarBtn: {
-        background: 'transparent',
-        // border: 'transparent solid 1px',
-        color: '#ffffff',
         '&:hover': {
           background: '#cdcdcd',
           color: '#000000',
-          // border: '#000000 solid 1px',
-        },
-        '&:disabled': {
-          background: '#cdcdcd',
         },
       },
     },
@@ -103,7 +95,7 @@ const theme = createMuiTheme({
           fill: 'white',
         },
         '&$active': {
-          fill: 'black',
+          fill: '#0a192e',
         },
         '&$completed': {
           color: 'green',

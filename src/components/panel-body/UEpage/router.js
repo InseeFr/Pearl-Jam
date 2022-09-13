@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { getForm, getPreviousValue, smartForms } from './forms';
 
-import AtomicInfoTile from './atomicInfoTile';
 import Comments from './comments';
 import ContactOutcome from './contacts/contactOutcome';
 import D from 'i18n';
@@ -9,6 +8,7 @@ import Details from './details';
 import Dialog from '@material-ui/core/Dialog';
 import GenericTile from 'components/common/sharedComponents/GenericTile';
 import Grid from '@material-ui/core/Grid';
+import Housing from './housing/component';
 import Identification from './identification';
 import MaterialIcons from 'utils/icons/materialIcons';
 import Questionnaires from './questionnaires';
@@ -69,6 +69,7 @@ const Router = () => {
 
   const closeModal = () => {
     setOpenModal(false);
+    setInjectableData(undefined);
   };
 
   const identificationVisibility = isIdentificationVisible(surveyUnit);
@@ -97,7 +98,7 @@ const Router = () => {
         <TabSwipper tabsLabels={tabsLabels}>
           <div className={classes.row}>
             <GenericTile
-              title="Logement"
+              title={D.surveyUnitHousing}
               editable
               icon={() => <MaterialIcons type="home" />}
               editionIcon={() => (
@@ -107,10 +108,10 @@ const Router = () => {
                 ></MaterialIcons>
               )}
             >
-              <AtomicInfoTile data={getAddressData(surveyUnit)} split={true} />
+              <Housing address={getAddressData(surveyUnit.address)} />
             </GenericTile>
             {identificationVisibility && (
-              <GenericTile title="Repérage" icon={() => <MaterialIcons type="googles" />}>
+              <GenericTile title={D.identification} icon={() => <MaterialIcons type="googles" />}>
                 <Identification />
               </GenericTile>
             )}

@@ -3,8 +3,6 @@ import { deleteContactAttempt, getAddressData, getCommentByType } from 'utils/fu
 import AddressForm from './addressForm';
 import ContactAttemptsForm from './contactAttemptsForm';
 import ContactOutcomeForm from './contactOutcomeForm';
-import MailForm from './mailForm';
-import PhoneForm from './phoneForm';
 import React from 'react';
 import UserForm from './userForm';
 import formEnum from 'utils/enum/formEnum';
@@ -45,12 +43,6 @@ export const getForm = (formType, previousValue, closeModal) => {
         />
       );
 
-    case formEnum.MAIL:
-      return <MailForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />;
-    case formEnum.PHONE:
-      return (
-        <PhoneForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
-      );
     case formEnum.USER:
       return <UserForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />;
     default:
@@ -63,15 +55,9 @@ export const getPreviousValue = (formType, surveyUnit, injectableData) => {
 
   switch (formType) {
     case formEnum.ADDRESS:
-      value = getAddressData(surveyUnit);
+      value = getAddressData(surveyUnit.address);
       break;
     case formEnum.USER:
-      value = injectableData;
-      break;
-    case formEnum.MAIL:
-      value = injectableData;
-      break;
-    case formEnum.PHONE:
       value = injectableData;
       break;
     case formEnum.COMMENT:
