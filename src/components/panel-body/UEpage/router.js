@@ -7,7 +7,7 @@ import ContactOutcome from './contacts/contactOutcome';
 import D from 'i18n';
 import Details from './details';
 import Dialog from '@material-ui/core/Dialog';
-import GenericTile from 'components/common/niceComponents/GenericTile';
+import GenericTile from 'components/common/sharedComponents/GenericTile';
 import Grid from '@material-ui/core/Grid';
 import Identification from './identification';
 import MaterialIcons from 'utils/icons/materialIcons';

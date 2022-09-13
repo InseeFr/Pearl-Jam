@@ -5,7 +5,7 @@ import ContactAttempts from '../contactAttempts';
 import ContactOutcomeLine from './contactOutcomeLine';
 import D from 'i18n';
 import { Divider } from '@material-ui/core';
-import IconButton from 'components/common/niceComponents/IconButton';
+import IconButton from 'components/common/sharedComponents/IconButton';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import SurveyUnitContext from '../../UEContext';

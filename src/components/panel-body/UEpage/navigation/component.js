@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { addNewState, isValidForTransmission } from 'utils/functions';
 
 import D from 'i18n';
-import IconButton from 'components/common/niceComponents/IconButton';
+import IconButton from 'components/common/sharedComponents/IconButton';
 import PropTypes from 'prop-types';
 import SurveyUnitContext from '../UEContext';
 import Tooltip from '@material-ui/core/Tooltip';

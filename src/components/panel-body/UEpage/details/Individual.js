@@ -8,8 +8,8 @@ import {
 } from 'utils/functions';
 
 import D from 'i18n';
-import LabelledText from 'components/common/niceComponents/LabelledText';
-import { LabelledTextWithClickableIcon } from 'components/common/niceComponents/LabelledTextWithClickableIcon';
+import LabelledText from 'components/common/sharedComponents/LabelledText';
+import { LabelledTextWithClickableIcon } from 'components/common/sharedComponents/LabelledTextWithClickableIcon';
 import MaterialIcons from 'utils/icons/materialIcons';
 import SurveyUnitContext from '../UEContext';
 import { useContext } from 'react';

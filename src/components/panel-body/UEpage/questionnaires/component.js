@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import D from 'i18n';
-import IconButton from 'components/common/niceComponents/IconButton';
+import IconButton from 'components/common/sharedComponents/IconButton';
 import SurveyUnitContext from '../UEContext';
 import { isQuestionnaireAvailable } from 'utils/functions';
 
