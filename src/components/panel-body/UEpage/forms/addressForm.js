@@ -28,43 +28,49 @@ const useStyles = makeStyles(() => ({
 const Form = ({ closeModal, save, previousValue }) => {
   const { surveyUnit } = useContext(SurveyUnitContext);
 
-  const previousData = previousValue.reduce(
-    (obj, { label, value }) => ({ ...obj, [label]: value }),
-    {}
-  );
+  const {
+    deliveryPoint,
+    additionalAddress,
+    streetName,
+    locality,
+    postCode,
+    building,
+    cityName,
+    floor,
+    door,
+    staircase,
+    elevator,
+    cityPriorityDistrict,
+  } = previousValue;
 
-  const [deliveryPoint, setDeliveryPoint] = useState(previousData[D.addressDeliveryPoint] ?? '');
-  const [additionalAddress, setAdditionalAddress] = useState(
-    previousData[D.addressAdditionalAddress] ?? ''
-  );
-  const [streetName, setStreetName] = useState(previousData[D.addressStreetName] ?? '');
-  const [locality, setLocality] = useState(previousData[D.addressLocality] ?? '');
-  const [postcode, setPostcode] = useState(previousData[D.addressPostcode] ?? '');
-  const [city, setCity] = useState(previousData[D.addressCity] ?? '');
-  const [building, setBuilding] = useState(previousData[D.addressBuilding] ?? '');
-  const [floor, setFloor] = useState(previousData[D.addressFloor] ?? '');
-  const [door, setDoor] = useState(previousData[D.addressDoor] ?? '');
-  const [staircase, setStaircase] = useState(previousData[D.addressStaircase] ?? '');
-  const [elevator, setElevator] = useState(previousData[D.addressElevator] ?? '');
-  const [cityPriorityDistrict, setCityPriorityDistrict] = useState(
-    previousData[D.addressCityPriorityDistrict] ?? ''
-  );
+  const [deliveryPointForm, setDeliveryPoint] = useState(deliveryPoint);
+  const [additionalAddressForm, setAdditionalAddress] = useState(additionalAddress);
+  const [streetNameForm, setStreetName] = useState(streetName);
+  const [localityForm, setLocality] = useState(locality);
+  const [postcodeForm, setPostcode] = useState(postCode);
+  const [cityForm, setCity] = useState(cityName);
+  const [buildingForm, setBuilding] = useState(building);
+  const [floorForm, setFloor] = useState(floor);
+  const [doorForm, setDoor] = useState(door);
+  const [staircaseForm, setStaircase] = useState(staircase);
+  const [elevatorForm, setElevator] = useState(elevator);
+  const [cityPriorityDistrictForm, setCityPriorityDistrict] = useState(cityPriorityDistrict);
 
   const buildAddress = surveyUnit => {
     const { address } = surveyUnit;
     return {
       l1: address.l1,
-      l2: deliveryPoint,
-      l3: additionalAddress,
-      l4: streetName,
-      l5: locality,
-      l6: `${postcode} ${city}`,
-      building,
-      floor,
-      door,
-      staircase,
-      elevator,
-      cityPriorityDistrict,
+      l2: deliveryPointForm,
+      l3: additionalAddressForm,
+      l4: streetNameForm,
+      l5: localityForm,
+      l6: `${postcodeForm} ${cityForm}`,
+      building: buildingForm,
+      floor: floorForm,
+      door: doorForm,
+      staircase: staircaseForm,
+      elevator: elevatorForm,
+      cityPriorityDistrict: cityPriorityDistrictForm,
     };
   };
 
@@ -128,37 +134,37 @@ const Form = ({ closeModal, save, previousValue }) => {
           <EditableTextField
             id={'deliveryPoint'}
             label={D.addressDeliveryPoint}
-            defaultValue={deliveryPoint}
+            defaultValue={deliveryPointForm}
             onChangeFunction={onChange}
           />
           <EditableTextField
             id={'additionalAddress'}
             label={D.addressAdditionalAddress}
-            defaultValue={additionalAddress}
+            defaultValue={additionalAddressForm}
             onChangeFunction={onChange}
           />
           <EditableTextField
             id={'streetName'}
             label={D.addressStreetName}
-            defaultValue={streetName}
+            defaultValue={streetNameForm}
             onChangeFunction={onChange}
           />
           <EditableTextField
             id={'locality'}
             label={D.addressLocality}
-            defaultValue={locality}
+            defaultValue={localityForm}
             onChangeFunction={onChange}
           />
           <EditableTextField
             id={'postcode'}
             label={D.addressPostcode}
-            defaultValue={postcode}
+            defaultValue={postcodeForm}
             onChangeFunction={onChange}
           />
           <EditableTextField
             id={'city'}
             label={D.addressCity}
-            defaultValue={city}
+            defaultValue={cityForm}
             onChangeFunction={onChange}
           />
         </div>
@@ -167,37 +173,37 @@ const Form = ({ closeModal, save, previousValue }) => {
           <EditableTextField
             id={'building'}
             label={D.addressBuilding}
-            defaultValue={building}
+            defaultValue={buildingForm}
             onChangeFunction={onChange}
           />
           <EditableTextField
             id={'floor'}
             label={D.addressFloor}
-            defaultValue={floor}
+            defaultValue={floorForm}
             onChangeFunction={onChange}
           />
           <EditableTextField
             id={'door'}
             label={D.addressDoor}
-            defaultValue={door}
+            defaultValue={doorForm}
             onChangeFunction={onChange}
           />
           <EditableTextField
             id={'staircase'}
             label={D.addressStaircase}
-            defaultValue={staircase}
+            defaultValue={staircaseForm}
             onChangeFunction={onChange}
           />
           <EditableBooleanField
             id="elevator"
             label={D.addressElevator}
-            defaultValue={elevator}
+            defaultValue={elevatorForm}
             onChangeFunction={onChange}
           />
           <EditableBooleanField
             id="cityPriorityDistrict"
             label={D.addressCityPriorityDistrict}
-            defaultValue={cityPriorityDistrict}
+            defaultValue={cityPriorityDistrictForm}
             onChangeFunction={onChange}
           />
         </div>

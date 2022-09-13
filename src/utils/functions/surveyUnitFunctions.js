@@ -347,24 +347,24 @@ export const isSelectable = su => {
   return endTime > instantTime && instantTime > identificationPhaseStartTime;
 };
 
-export const getAddressData = su => {
-  const [postCode, ...rest] = su.address.l6.split(' ');
+export const getAddressData = address => {
+  const [postCode, ...rest] = address.l6.split(' ');
   const cityName = rest.join(' ');
 
-  return [
-    { label: D.addressDeliveryPoint, value: su.address.l2 || '' },
-    { label: D.addressAdditionalAddress, value: su.address.l3 || '' },
-    { label: D.addressStreetName, value: su.address.l4 || '' },
-    { label: D.addressLocality, value: su.address.l5 || '' },
-    { label: D.addressPostcode, value: postCode || '' },
-    { label: D.addressCity, value: cityName || '' },
-    { label: D.addressBuilding, value: su.address.building || '' },
-    { label: D.addressFloor, value: su.address.floor || '' },
-    { label: D.addressDoor, value: su.address.door || '' },
-    { label: D.addressStaircase, value: su.address.staircase || '' },
-    { label: D.addressElevator, value: su.address.elevator || '' },
-    { label: D.addressCityPriorityDistrict, value: su.address.cityPriorityDistrict || '' },
-  ];
+  return {
+    deliveryPoint: address.l2 || '',
+    additionalAddress: address.l3 || '',
+    streetName: address.l4 || '',
+    locality: address.l5 || '',
+    postCode: postCode || '',
+    cityName: cityName || '',
+    building: address.building || '',
+    floor: address.floor || '',
+    door: address.door || '',
+    staircase: address.staircase || '',
+    elevator: address.elevator || '',
+    cityPriorityDistrict: address.cityPriorityDistrict || '',
+  };
 };
 
 export const getIdentificationData = surveyUnit => {
