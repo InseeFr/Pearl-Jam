@@ -1,12 +1,12 @@
-import { MemoryRouter, Route } from 'react-router';
-
 import InfoTile from './infoTile';
 import React from 'react';
+import { SurveyUnitProvider } from '../UEContext';
 import { act } from 'react-dom/test-utils';
 import { render } from '@testing-library/react';
 
 jest.mock('utils/hooks/database', () => ({
   useSurveyUnit: () => ({
+    id: '1',
     persons: [{ firstName: 'FirstName', lastName: 'LastName', privileged: true }],
     campaign: 'Mocked campaign',
     sampleIdentifiers: { ssech: '1' },
@@ -15,21 +15,26 @@ jest.mock('utils/hooks/database', () => ({
 
 const dataBaseHooks = require('utils/hooks/database');
 
-const MemoryRouterWithInitialRoutes = ({ children }) => (
-  <MemoryRouter initialEntries={['/survey-unit/1']}>
-    <Route path="/survey-unit/:id">{children}</Route>
-  </MemoryRouter>
-);
-
-const customRender = ui => {
-  // return render(ui, { wrapper: MemoryRouterWithInitialRoutes });
-  return render(ui, { wrapper: MemoryRouterWithInitialRoutes });
+const mockSurveyUnit = {
+  id: '1',
+  persons: [{ firstName: 'FirstName', lastName: 'LastName', privileged: true }],
+  campaign: 'Mocked campaign',
+  sampleIdentifiers: { ssech: '1' },
 };
 
 const wait = async () => new Promise(resolve => setTimeout(resolve, 0));
 
 it('renders correctly', async () => {
-  const result = customRender(<InfoTile />);
+  const result = render(
+    <SurveyUnitProvider
+      value={{
+        surveyUnit: mockSurveyUnit,
+      }}
+    >
+      <InfoTile />
+    </SurveyUnitProvider>
+  );
+
   await act(async () => {
     await wait();
   });
@@ -37,9 +42,5 @@ it('renders correctly', async () => {
 
   const { useSurveyUnit } = dataBaseHooks;
   // check if mock is done
-  await expect(useSurveyUnit(5)).toStrictEqual({
-    persons: [{ firstName: 'FirstName', lastName: 'LastName', privileged: true }],
-    campaign: 'Mocked campaign',
-    sampleIdentifiers: { ssech: '1' },
-  });
+  await expect(useSurveyUnit(5)).toStrictEqual(mockSurveyUnit);
 });
