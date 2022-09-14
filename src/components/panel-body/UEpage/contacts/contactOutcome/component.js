@@ -47,7 +47,7 @@ const ContactOutcome = ({ selectFormType, setInjectableData }) => {
     );
   }, [surveyUnit]);
 
-  const isSeparator = contactOutcome.type && contactAttempts?.length;
+  const isSeparator = contactOutcome.type && contactAttempts?.length > 0;
 
   return (
     <Paper elevation={0} className={classes.column}>

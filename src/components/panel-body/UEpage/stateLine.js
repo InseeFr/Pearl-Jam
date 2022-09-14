@@ -44,9 +44,7 @@ const StateLine = () => {
 
   const classes = useStyles();
 
-  const toDos = Object.entries(toDoEnum)
-    .map(([, v]) => v)
-    .filter(toDo => toDo.order !== 7);
+  const toDos = Object.values(toDoEnum).filter(toDo => toDo.order !== 7);
 
   return (
     <div className={classes.background}>
