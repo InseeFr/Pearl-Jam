@@ -32,7 +32,6 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: '2em',
     paddingRight: '2em',
     alignItems: 'center',
-    zIndex: 10,
   },
 }));
 const StateLine = () => {

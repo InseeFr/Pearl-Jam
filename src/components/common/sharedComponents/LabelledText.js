@@ -6,11 +6,17 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    maxWidth: '20em',
   },
   column: {
     display: 'flex',
     flexDirection: 'column',
     marginRight: '1em',
+  },
+  overflow: {
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
   },
 }));
 
@@ -27,7 +33,7 @@ const LabelledText = ({ labelText, value }) => {
           <Typography color="textSecondary">{labelText}</Typography>
         )}
       </div>
-      <Typography>{value}</Typography>
+      <Typography className={classes.overflow}>{value}</Typography>
     </div>
   );
 };

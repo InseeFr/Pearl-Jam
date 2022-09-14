@@ -16,6 +16,9 @@ const useStyles = makeStyles(() => ({
     padding: '0.5em',
     justifyContent: 'space-between',
   },
+  overflow: {
+    maxWidth: '30em',
+  },
 }));
 
 const ContactOutcomeLine = ({ contactOutcome }) => {
@@ -29,7 +32,7 @@ const ContactOutcomeLine = ({ contactOutcome }) => {
 
   return (
     <Paper className={classes.root} key={contactOutcome.date} elevation={0}>
-      <Typography>
+      <Typography className={classes.overflow}>
         {`${upcasedDayOfWeek} ${date} - ${findContactOutcomeValueByType(contactOutcome.type)}`}
       </Typography>
       <MaterialIcons type="checked" />
