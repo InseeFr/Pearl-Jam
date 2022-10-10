@@ -1,23 +1,26 @@
-import React, { useContext, useEffect, useState } from 'react';
-
 import { DatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { makeStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import AddIcon from '@material-ui/icons/Add';
-import ScheduleIcon from '@material-ui/icons/Schedule';
-
+import React, { useContext, useEffect, useState } from 'react';
 import { addNewState, areCaEqual, getSortedContactAttempts } from 'utils/functions';
 
+import AddIcon from '@material-ui/icons/Add';
 import ContactAttemptLine from '../contacts/contactAttempts/contactAttemptLine';
 import D from 'i18n';
 import DateFnsUtils from '@date-io/date-fns';
+import Fab from '@material-ui/core/Fab';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormPanel from '../contacts/contactAttempts/formPanel';
+import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import ScheduleIcon from '@material-ui/icons/Schedule';
 import SurveyUnitContext from '../UEContext';
-import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
+import Typography from '@material-ui/core/Typography';
 import frLocale from 'date-fns/locale/fr';
+import { getContactAttemptByConfiguration } from 'utils/enum/ContactAttemptEnum';
+import { getMediumByConfiguration } from 'utils/enum/MediumEnum';
+import { makeStyles } from '@material-ui/core/styles';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(theme => ({
@@ -82,14 +85,20 @@ class FrLocalizedUtils extends DateFnsUtils {
 
 const Form = ({ previousValue, save, deleteAction }) => {
   const { surveyUnit } = useContext(SurveyUnitContext);
+  const { contactAttemptConfiguration } = surveyUnit;
+  const [availableContacAttempts, setAvailableContacAttempts] = useState([]);
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactAttempt, setContactAttempt] = useState(previousValue);
-  const [visiblePanel, setVisiblePanel] = useState(undefined);
+  const [medium, setMedium] = useState(previousValue?.medium);
+  const isEditionMode = previousValue.status !== undefined;
+  const [visiblePanel, setVisiblePanel] = useState(isEditionMode ? 'MEDIUM' : undefined);
   const [contactAttempts, setcontactAttempts] = useState([]);
   const [contactAttemptToDelete, setContactAttemptToDelete] = useState(undefined);
 
-  const [selectedDate, handleDateChange] = useState(new Date());
-  const isEditionMode = previousValue.status !== undefined;
+  const [selectedDate, handleDateChange] = useState(
+    previousValue.date ? new Date(previousValue.date) : new Date()
+  );
+  const availableMedium = getMediumByConfiguration(contactAttemptConfiguration);
 
   useEffect(() => {
     const sortedContactAttempts = getSortedContactAttempts(surveyUnit);
@@ -98,24 +107,33 @@ const Form = ({ previousValue, save, deleteAction }) => {
 
   const onChange = newStatus => {
     setContactAttempt({ ...contactAttempt, status: newStatus, date: new Date().getTime() });
+    setVisiblePanel('DATE');
+  };
+
+  const onMediumChange = event => {
+    const newMedium = event.target.value;
+    setMedium(newMedium);
+    setAvailableContacAttempts(
+      getContactAttemptByConfiguration(contactAttemptConfiguration, newMedium)
+    );
+    setVisiblePanel('EDITION');
   };
 
   useEffect(() => {
     const checkForm = () => {
       const { status } = contactAttempt;
       const isValid = () =>
-        Object.keys(contactAttemptEnum)
-          .map(enumKey => contactAttemptEnum[enumKey].type)
+        Object.values(availableContacAttempts)
+          .map(enumKey => enumKey.type)
           .includes(status);
       if (isValid !== formIsValid) setFormIsValid(isValid);
     };
 
     if (contactAttempt !== undefined) checkForm();
-  }, [contactAttempt, formIsValid]);
+  }, [availableContacAttempts, contactAttempt, formIsValid]);
 
   const saveUE = async () => {
     let { contactAttempts: suContactAttempts } = surveyUnit;
-
     if (isEditionMode) {
       // remove previous contactAttempt
       suContactAttempts = suContactAttempts.filter(ca => !areCaEqual(ca, previousValue));
@@ -124,6 +142,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
     suContactAttempts.push({
       ...contactAttempt,
       date: selectedDate.getTime(),
+      medium,
     });
 
     // lifeCycle update
@@ -141,8 +160,10 @@ const Form = ({ previousValue, save, deleteAction }) => {
   const classes = useStyles();
 
   const resetForm = value => {
-    setVisiblePanel(value);
-    setContactAttempt(undefined);
+    const { panel, contAtt, medium } = value;
+    setVisiblePanel(panel);
+    setContactAttempt(contAtt);
+    setMedium(medium);
     setFormIsValid(false);
     setContactAttemptToDelete(undefined);
   };
@@ -158,26 +179,53 @@ const Form = ({ previousValue, save, deleteAction }) => {
               setContactAttempt(contAtt);
               selectContactAttemptToDelete(contAtt);
             };
-            const deleteParams = { deleteIsAvailable: true, deleteFunction: deleteContactAttempt };
             return (
               <ContactAttemptLine
                 contactAttempt={contAtt}
-                deleteParams={deleteParams}
+                deleteFunction={deleteContactAttempt}
+                editionFunction={() => {
+                  setVisiblePanel('MEDIUM');
+                  setContactAttempt(contAtt);
+                  setMedium(contAtt.medium);
+                }}
                 key={contAtt.date}
-                selected={areCaEqual(contAtt, contactAttemptToDelete)}
               />
             );
           })}
-        <Fab className={classes.alignEnd} aria-label="add" onClick={() => resetForm('EDITION')}>
+        <Fab
+          className={classes.alignEnd}
+          aria-label="add"
+          onClick={() => resetForm({ panel: 'MEDIUM' })}
+        >
           <AddIcon fontSize="large" />
         </Fab>
       </FormPanel>
       <FormPanel
+        title={D.mediumQuestion}
+        hidden={visiblePanel !== 'MEDIUM'}
+        backFunction={() => resetForm({ panel: undefined, contAtt: undefined, medium: undefined })}
+      >
+        <FormControl component="fieldset">
+          <RadioGroup aria-label="position">
+            {Object.values(availableMedium).map(({ value, type }) => (
+              <FormControlLabel
+                value={type}
+                control={
+                  <Radio color="secondary" onClick={onMediumChange} checked={medium === type} />
+                }
+                label={value}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+      </FormPanel>
+
+      <FormPanel
         title={D.contactAttempt}
         hidden={visiblePanel !== 'EDITION'}
-        backFunction={() => resetForm(undefined)}
+        backFunction={() => resetForm({ panel: 'MEDIUM', medium })}
       >
-        {Object.values(contactAttemptEnum).map(({ value, type }) => (
+        {Object.values(availableContacAttempts).map(({ value, type }) => (
           <Paper
             key={type}
             name={type}
@@ -192,10 +240,10 @@ const Form = ({ previousValue, save, deleteAction }) => {
 
       <FormPanel
         title={D.datePicking}
-        hidden={!formIsValid || visiblePanel !== 'EDITION'}
+        hidden={visiblePanel !== 'DATE'}
         actionLabel={`✔ ${D.saveButton}`}
         actionFunction={saveUE}
-        backFunction={() => resetForm('EDITION')}
+        backFunction={() => resetForm({ panel: 'EDITION', medium, contAtt: contactAttempt })}
       >
         <MuiPickersUtilsProvider utils={FrLocalizedUtils} locale={frLocale}>
           <DatePicker
@@ -220,7 +268,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
       <FormPanel
         title={D.contactAttemptDeletion}
         hidden={visiblePanel !== 'DELETION'}
-        backFunction={() => resetForm(undefined)}
+        backFunction={() => resetForm({ panel: undefined, contAtt: undefined, medium: undefined })}
         actionFunction={() => deleteAction(surveyUnit, contactAttemptToDelete)}
         actionLabel={D.delete}
       >

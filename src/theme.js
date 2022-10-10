@@ -1,18 +1,24 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
+  props: {
+    MuiButton: {
+      disableElevation: true,
+      variant: 'contained',
+    },
+  },
   palette: {
     primary: {
       light: '#eeeeee',
       main: '#ffffff',
       dark: '#cdcdcd',
-      darker: '#666666',
-      contrastText: '#000000',
     },
     secondary: {
       light: '#0066ff',
-      main: '#0f417a',
-      contrastText: '#ffcc00',
+      main: '#0a192e',
+    },
+    success: {
+      main: '#008000',
     },
     background: {
       default: '#ffffff',
@@ -39,16 +45,14 @@ const theme = createMuiTheme({
     },
     MuiButton: {
       root: {
-        background: '#666666',
-        border: 'transparent solid 1px',
-        color: '#ffffff',
-        '&:hover': {
-          background: '#cdcdcd',
-          color: '#000000',
-          border: 'black solid 1px',
+        '&.MuiButton-contained': { backgroundColor: '#0a192e', color: '#ffffff' },
+        '&.MuiButton-contained:hover': {
+          backgroundColor: '#ffffff',
+          color: '#0a192e',
+          outline: '#0a192e solid 1px',
         },
         '&:disabled': {
-          background: '#cdcdcd',
+          backgroundColor: '#cdcdcd',
         },
       },
     },
@@ -58,7 +62,7 @@ const theme = createMuiTheme({
         backgroundColor: '#eeeeee',
       },
       daySelected: {
-        backgroundColor: '#555555',
+        backgroundColor: '#0a192e',
         color: '#ffffff',
         fontWeight: 'bolder',
         '&:hover': { backgroundColor: '#aaaaaa' },
@@ -66,29 +70,45 @@ const theme = createMuiTheme({
     },
     MuiPickersYear: {
       yearSelected: {
-        backgroundColor: '#555555',
+        backgroundColor: '#0a192e',
         fontWeight: 'bolder',
       },
     },
     MuiPickersMonth: {
       monthSelected: {
-        backgroundColor: '#555555',
+        backgroundColor: '#0a192e',
         color: '#ffffff',
         '&:hover': { backgroundColor: '#aaaaaa' },
       },
     },
     MuiPickersToolbarButton: {
       toolbarBtn: {
-        background: 'transparent',
-        border: 'transparent solid 1px',
-        color: '#ffffff',
         '&:hover': {
           background: '#cdcdcd',
           color: '#000000',
-          border: 'black solid 1px',
         },
-        '&:disabled': {
-          background: '#cdcdcd',
+      },
+    },
+    MuiStepIcon: {
+      root: {
+        '& $text': {
+          fill: 'white',
+        },
+        '&$active': {
+          fill: '#0a192e',
+        },
+        '&$completed': {
+          color: 'green',
+        },
+      },
+    },
+    MuiStepLabel: {
+      alternativeLabel: {
+        marginTop: 'auto',
+      },
+      labelContainer: {
+        '& $alternativeLabel': {
+          marginTop: '0.5em',
         },
       },
     },

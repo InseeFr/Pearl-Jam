@@ -7,19 +7,48 @@ export const contactOutcomeEnum = {
   UNUSABLE_CONTACT_DATA: { type: 'UCD', value: `${D.unusableContactData}` },
   UNABLE_TO_RESPOND: { type: 'UTR', value: `${D.unableToRespond}` },
   ALREADY_ANSWERED: { type: 'ALA', value: `${D.alreadyAnsweredAnotherMode}` },
-  ABSENCE_DURING_COLLECTION: { type: 'ACP', value: `${D.absenceDuringCollection}` },
   DECEASED: { type: 'DCD', value: `${D.deceased}` },
-  NO_LONGER_USED_FOR_HABITATION: { type: 'NUH', value: `${D.noLongerUsedForHabitation}` },
-  NO_INTERVIEW_FOR_EXCEPTIONNAL_REASONS: {
-    type: 'NER',
-    value: `${D.noInterviewForExceptionalReasons}`,
+  DEFINITLY_UNAVAILABLE_FOR_KNOWN_REASON: {
+    type: 'DUK',
+    value: `${D.definitlyUnavailableForKnownReason}`,
   },
+  DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON: {
+    type: 'DUU',
+    value: `${D.definitlyUnavailableForUnknownReason}`,
+  },
+  NO_LONGER_USED_FOR_HABITATION: { type: 'NUH', value: `${D.noLongerUsedForHabitation}` },
+  NOT_APPLICABLE: { type: 'NOA', value: `${D.notApplicable}` },
 };
 
-export const findContactOutcomeValueByType = type => {
-  if (type === undefined) return undefined;
-  const retour = Object.keys(contactOutcomeEnum)
-    .map(key => contactOutcomeEnum[key])
-    .filter(value => value.type === type);
-  return retour[0].value;
+export const findContactOutcomeValueByType = type =>
+  Object.values(contactOutcomeEnum).filter(value => value.type === type)?.[0]?.value;
+
+const commonContactOutcomes = {
+  INTERVIEW_ACCEPTED: contactOutcomeEnum.INTERVIEW_ACCEPTED,
+  REFUSAL: contactOutcomeEnum.REFUSAL,
+  IMPOSSIBLE_TO_REACH: contactOutcomeEnum.IMPOSSIBLE_TO_REACH,
+  UNABLE_TO_RESPOND: contactOutcomeEnum.UNABLE_TO_RESPOND,
+  DECEASED: contactOutcomeEnum.DECEASED,
+  ALREADY_ANSWERED: contactOutcomeEnum.ALREADY_ANSWERED,
+  UNUSABLE_CONTACT_DATA: contactOutcomeEnum.UNUSABLE_CONTACT_DATA,
+  DEFINITLY_UNAVAILABLE_FOR_KNOWN_REASON: contactOutcomeEnum.DEFINITLY_UNAVAILABLE_FOR_KNOWN_REASON,
+  DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON:
+    contactOutcomeEnum.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON,
+};
+
+export const getContactOutcomeByConfiguration = configuration => {
+  switch (configuration) {
+    case 'F2F':
+      return {
+        ...commonContactOutcomes,
+        NOT_APPLICABLE: contactOutcomeEnum.NOT_APPLICABLE,
+      };
+    case 'TEL':
+      return {
+        ...commonContactOutcomes,
+        NO_LONGER_USED_FOR_HABITATION: contactOutcomeEnum.NO_LONGER_USED_FOR_HABITATION,
+      };
+    default:
+      return {};
+  }
 };

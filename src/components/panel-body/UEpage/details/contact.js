@@ -1,52 +1,51 @@
-import React from 'react';
+import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import formEnum from 'utils/enum/formEnum';
-import { getMailData, getPhoneData, getUserData } from 'utils/functions';
-import D from 'i18n';
+import { Individual } from './Individual';
 import PropTypes from 'prop-types';
-import AtomicInfoTile from '../atomicInfoTile';
-import DetailTile from './detailTile';
-import PhoneTile from './phoneTile';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
-const Contact = ({ person, selectFormType, setInjectableData, index }) => {
+const useStyles = makeStyles(() => ({
+  spaceAround: {
+    marginLeft: '1em',
+    marginRight: '1em',
+  },
+  centered: {
+    justifySelf: 'center',
+    width: 'max-content',
+    margin: 'auto',
+  },
+  flex: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+}));
+
+const Contact = ({ persons }) => {
+  const classes = useStyles();
+
   return (
-    <DetailTile label={`${D.surveyUnitIndividual} ${index}`}>
-      <Grid container>
-        <AtomicInfoTile
-          key="user"
-          iconType="user"
-          data={getUserData(person)}
-          onClickFunction={() => {
-            selectFormType(formEnum.USER, true);
-            setInjectableData(person);
-          }}
-        />
-        <PhoneTile
-          phoneNumbers={getPhoneData(person)}
-          onClickFunction={() => {
-            selectFormType(formEnum.PHONE, true);
-            setInjectableData(person);
-          }}
-        ></PhoneTile>
-
-        <AtomicInfoTile
-          key="mail"
-          iconType="mail"
-          data={getMailData(person)}
-          onClickFunction={() => {
-            selectFormType(formEnum.MAIL, true);
-            setInjectableData(person);
-          }}
-        />
-      </Grid>
-    </DetailTile>
+    <Grid container>
+      {persons.map((person, index) => {
+        return (
+          <>
+            {index > 0 && (
+              <Divider
+                key={`splitter-${index}`}
+                orientation="vertical"
+                flexItem
+                className={classes.spaceAround}
+              />
+            )}
+            <Individual person={person} />
+          </>
+        );
+      })}
+    </Grid>
   );
 };
 
 export default Contact;
 Contact.propTypes = {
-  selectFormType: PropTypes.func.isRequired,
-  setInjectableData: PropTypes.func.isRequired,
-  person: PropTypes.shape({}).isRequired,
-  index: PropTypes.number.isRequired,
+  persons: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };

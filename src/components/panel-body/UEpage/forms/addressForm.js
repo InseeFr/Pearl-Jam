@@ -1,61 +1,83 @@
 import React, { useContext, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
 
 import D from 'i18n';
+import DialogActions from '@material-ui/core/DialogActions';
+import { Divider } from '@material-ui/core';
+import { EditableBooleanField } from 'components/common/sharedComponents/EditableBooleanField';
+import { EditableTextField } from 'components/common/sharedComponents/EditableTextField';
+import GenericTile from 'components/common/sharedComponents/GenericTile';
+import IconButton from 'components/common/sharedComponents/IconButton';
+import MaterialIcons from 'utils/icons/materialIcons';
 import PropTypes from 'prop-types';
 import SurveyUnitContext from '../UEContext';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   column: {
     display: 'flex',
     flexDirection: 'column',
+    gap: '1em',
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '1em',
   },
 }));
 
 const Form = ({ closeModal, save, previousValue }) => {
   const { surveyUnit } = useContext(SurveyUnitContext);
 
-  const previousData = previousValue.reduce(
-    (obj, { label, value }) => ({ ...obj, [label]: value }),
-    {}
-  );
+  const {
+    deliveryPoint,
+    additionalAddress,
+    streetName,
+    locality,
+    postCode,
+    building,
+    cityName,
+    floor,
+    door,
+    staircase,
+    elevator,
+    cityPriorityDistrict,
+  } = previousValue;
 
-  const [deliveryPoint, setDeliveryPoint] = useState(
-    previousData[D.addressDeliveryPoint] ? previousData[D.addressDeliveryPoint] : ''
-  );
-  const [additionalAddress, setAdditionalAddress] = useState(
-    previousData[D.addressAdditionalAddress] ? previousData[D.addressAdditionalAddress] : ''
-  );
-  const [streetName, setStreetName] = useState(
-    previousData[D.addressStreetName] ? previousData[D.addressStreetName] : ''
-  );
-  const [locality, setLocality] = useState(
-    previousData[D.addressLocality] ? previousData[D.addressLocality] : ''
-  );
-  const [postcode, setPostcode] = useState(
-    previousData[D.addressPostcode] ? previousData[D.addressPostcode] : ''
-  );
-  const [city, setCity] = useState(previousData[D.addressCity] ? previousData[D.addressCity] : '');
+  const [deliveryPointForm, setDeliveryPoint] = useState(deliveryPoint);
+  const [additionalAddressForm, setAdditionalAddress] = useState(additionalAddress);
+  const [streetNameForm, setStreetName] = useState(streetName);
+  const [localityForm, setLocality] = useState(locality);
+  const [postcodeForm, setPostcode] = useState(postCode);
+  const [cityForm, setCity] = useState(cityName);
+  const [buildingForm, setBuilding] = useState(building);
+  const [floorForm, setFloor] = useState(floor);
+  const [doorForm, setDoor] = useState(door);
+  const [staircaseForm, setStaircase] = useState(staircase);
+  const [elevatorForm, setElevator] = useState(elevator);
+  const [cityPriorityDistrictForm, setCityPriorityDistrict] = useState(cityPriorityDistrict);
 
   const buildAddress = surveyUnit => {
     const { address } = surveyUnit;
     return {
       l1: address.l1,
-      l2: deliveryPoint,
-      l3: additionalAddress,
-      l4: streetName,
-      l5: locality,
-      l6: `${postcode} ${city}`,
+      l2: deliveryPointForm,
+      l3: additionalAddressForm,
+      l4: streetNameForm,
+      l5: localityForm,
+      l6: `${postcodeForm} ${cityForm}`,
+      building: buildingForm,
+      floor: floorForm,
+      door: doorForm,
+      staircase: staircaseForm,
+      elevator: elevatorForm,
+      cityPriorityDistrict: cityPriorityDistrictForm,
     };
   };
 
   const onChange = event => {
     const key = event.target.name;
     const value = event.target.value.trim();
+    const checked = event.target.checked;
     switch (key) {
       case 'deliveryPoint':
         setDeliveryPoint(value);
@@ -75,6 +97,25 @@ const Form = ({ closeModal, save, previousValue }) => {
       case 'city':
         setCity(value);
         break;
+      case 'building':
+        setBuilding(value);
+        break;
+      case 'floor':
+        setFloor(value);
+        break;
+      case 'door':
+        setDoor(value);
+        break;
+      case 'staircase':
+        setStaircase(value);
+        break;
+      case 'elevator':
+        setElevator(checked);
+        break;
+      case 'cityPriorityDistrict':
+        setCityPriorityDistrict(checked);
+        break;
+
       default:
         break;
     }
@@ -87,88 +128,92 @@ const Form = ({ closeModal, save, previousValue }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.column}>
-      <DialogTitle id="form-dialog-title">{D.surveyUnitAddressChange}</DialogTitle>
-      <TextField
-        margin="dense"
-        id="deliveryPoint"
-        name="deliveryPoint"
-        label={D.addressDeliveryPoint}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={deliveryPoint}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="additionalAddress"
-        name="additionalAddress"
-        label={D.addressAdditionalAddress}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={additionalAddress}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="streetName"
-        name="streetName"
-        label={D.addressStreetName}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={streetName}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="locality"
-        name="locality"
-        label={D.addressLocality}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={locality}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="postcode"
-        name="postcode"
-        label={D.addressPostcode}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={postcode}
-        onChange={onChange}
-      />
-      <TextField
-        margin="dense"
-        id="city"
-        name="city"
-        label={D.addressCity}
-        InputLabelProps={{ color: 'secondary' }}
-        type="text"
-        fullWidth
-        defaultValue={city}
-        onChange={onChange}
-      />
+    <GenericTile title={D.surveyUnitAddressChange} icon={() => <MaterialIcons type="home" />}>
+      <div className={classes.row}>
+        <div className={classes.column}>
+          <EditableTextField
+            id={'deliveryPoint'}
+            label={D.addressDeliveryPoint}
+            defaultValue={deliveryPointForm}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'additionalAddress'}
+            label={D.addressAdditionalAddress}
+            defaultValue={additionalAddressForm}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'streetName'}
+            label={D.addressStreetName}
+            defaultValue={streetNameForm}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'locality'}
+            label={D.addressLocality}
+            defaultValue={localityForm}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'postcode'}
+            label={D.addressPostcode}
+            defaultValue={postcodeForm}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'city'}
+            label={D.addressCity}
+            defaultValue={cityForm}
+            onChangeFunction={onChange}
+          />
+        </div>
+        <Divider key={`splitter`} orientation="vertical" flexItem />
+        <div className={classes.column}>
+          <EditableTextField
+            id={'building'}
+            label={D.addressBuilding}
+            defaultValue={buildingForm}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'floor'}
+            label={D.addressFloor}
+            defaultValue={floorForm}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'door'}
+            label={D.addressDoor}
+            defaultValue={doorForm}
+            onChangeFunction={onChange}
+          />
+          <EditableTextField
+            id={'staircase'}
+            label={D.addressStaircase}
+            defaultValue={staircaseForm}
+            onChangeFunction={onChange}
+          />
+          <EditableBooleanField
+            id="elevator"
+            label={D.addressElevator}
+            defaultValue={elevatorForm}
+            onChangeFunction={onChange}
+          />
+          <EditableBooleanField
+            id="cityPriorityDistrict"
+            label={D.addressCityPriorityDistrict}
+            defaultValue={cityPriorityDistrictForm}
+            onChangeFunction={onChange}
+          />
+        </div>
+      </div>
 
       <DialogActions>
-        <Button type="button" onClick={saveUE}>
-          <i className="fa fa-check" aria-hidden="true" />
-          &nbsp;
-          {D.validateButton}
-        </Button>
-        <Button type="button" onClick={closeModal}>
-          <i className="fa fa-times" aria-hidden="true" />
-          &nbsp;
-          {D.cancelButton}
-        </Button>
+        <IconButton iconType="check" label={D.validateButton} onClickFunction={() => saveUE()} />
+        <IconButton iconType="close" label={D.cancelButton} onClickFunction={closeModal} />
       </DialogActions>
-    </div>
+    </GenericTile>
   );
 };
 

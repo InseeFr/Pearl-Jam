@@ -1,56 +1,59 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
-import format from 'date-fns/format';
-import { fr } from 'date-fns/locale';
+import D from 'i18n';
+import MaterialIcons from 'utils/icons/materialIcons';
+import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
+import { findMediumValueByType } from 'utils/enum/MediumEnum';
+import { getDateAttributes } from 'utils/functions/dateFunctions';
+import { grey } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
-  button: {
-    '&:hover': { cursor: 'pointer' },
-    marginLeft: '0.5em',
-  },
   alignEnd: {
     alignSelf: 'flex-end',
+  },
+  root: {
+    display: 'flex',
+    height: 'max-content',
+    justifyContent: 'space-between',
+    borderRadius: '15px',
+    backgroundColor: grey[100],
+    padding: '0.5em',
+    '&:not(:last-child)': { marginBottom: '1em' },
   },
   column: {
     display: 'flex',
     flexDirection: 'column',
   },
-  flex: {
-    display: 'flex',
-    justifyContent: 'space-between',
+  fullWidth: {
+    grow: '1',
   },
-  top: { marginTop: '0.5em' },
 }));
 
-const ContactAttemptLine = ({ contactAttempt, deleteParams, selected }) => {
+const ContactAttemptLine = ({ contactAttempt, deleteFunction }) => {
   const classes = useStyles();
   if (contactAttempt === undefined) return '';
-  const { deleteFunction, deleteIsAvailable } = deleteParams;
+  const { dayOfWeek, twoDigitdayNumber, month, hour, minutes } = getDateAttributes(
+    contactAttempt.date
+  );
 
-  const dayOfWeek = format(new Date(contactAttempt.date), 'EEEE', { locale: fr });
-  const date = format(new Date(contactAttempt.date), 'dd/MM/yyyy');
-  const hour = format(new Date(contactAttempt.date), 'HH');
-  const minutes = format(new Date(contactAttempt.date), 'mm');
+  const upcasedDayOfWeek = dayOfWeek[0].toUpperCase() + dayOfWeek.slice(1);
+  const date = `${twoDigitdayNumber} ${month}`;
 
   return (
-    <div className={classes.flex} key={contactAttempt.id}>
-      <Typography className={classes.top}>
-        {`${dayOfWeek} ${date} - ${hour}h${minutes} - ${findContactAttemptValueByType(
-          contactAttempt.status
-        )}`}
-      </Typography>
-      {deleteIsAvailable && (
-        <DeleteIcon
-          className={classes.button}
-          color={selected ? 'error' : 'inherit'}
-          onClick={deleteFunction}
-        />
-      )}
-    </div>
+    <Paper className={classes.root} key={contactAttempt.date} elevation={0}>
+      <div className={classes.column}>
+        <Typography className={classes.fullWidth}>
+          {`${upcasedDayOfWeek} ${date} ${D.at} ${hour}h${minutes} - ${findMediumValueByType(
+            contactAttempt.medium
+          )}`}
+        </Typography>
+        <Typography>{findContactAttemptValueByType(contactAttempt.status)}</Typography>
+      </div>
+      {deleteFunction && <MaterialIcons type="delete" onClick={deleteFunction} />}
+    </Paper>
   );
 };
 
@@ -66,9 +69,4 @@ ContactAttemptLine.propTypes = {
     status: PropTypes.string.isRequired,
   }),
   selected: PropTypes.bool,
-};
-ContactAttemptLine.defaultProps = {
-  deleteParams: { deleteFunction: () => {}, deleteIsAvailable: false },
-  selected: false,
-  contactAttempt: { date: new Date().getTime(), id: 999, status: 'NOC' },
 };

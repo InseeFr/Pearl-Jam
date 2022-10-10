@@ -1,17 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import {
+  contactOutcomeEnum,
+  findContactOutcomeValueByType,
+  getContactOutcomeByConfiguration,
+} from 'utils/enum/ContactOutcomeEnum';
+
 import AddIcon from '@material-ui/icons/Add';
 import D from 'i18n';
+import Fab from '@material-ui/core/Fab';
 import FormPanel from '../contacts/contactAttempts/formPanel';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import RemoveIcon from '@material-ui/icons/Remove';
 import SurveyUnitContext from '../UEContext';
+import Typography from '@material-ui/core/Typography';
 import { addNewState } from 'utils/functions';
-import { contactOutcomeEnum, findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
+import { makeStyles } from '@material-ui/core/styles';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const useStyles = makeStyles(theme => ({
@@ -85,6 +90,8 @@ const Form = ({ previousValue, save }) => {
   const [contactOutcome, setContactOutcome] = useState(previousValue);
   const [secondPanelVisible, setSecondPanelVisible] = useState(false);
   const [offsetTop, setOffsetTop] = useState(0);
+  const { contactOutcomeConfiguration } = surveyUnit;
+  const contactOutcomes = getContactOutcomeByConfiguration(contactOutcomeConfiguration);
 
   const changeContactOutcomeTry = add => {
     const previousTotal = contactOutcome.totalNumberOfContactAttempts;
@@ -95,8 +102,8 @@ const Form = ({ previousValue, save }) => {
   useEffect(() => {
     const checkForm = () => {
       const { type, totalNumberOfContactAttempts } = contactOutcome;
-      const typeIsValid = Object.keys(contactOutcomeEnum)
-        .map(enumKey => contactOutcomeEnum[enumKey].type)
+      const typeIsValid = Object.values(contactOutcomeEnum)
+        .map(enumValue => enumValue.type)
         .includes(type);
       const isValid = typeIsValid && totalNumberOfContactAttempts > 0;
 
@@ -123,8 +130,7 @@ const Form = ({ previousValue, save }) => {
     setContactOutcome({ ...contactOutcome, type: newStatus, date: new Date().getTime() });
   };
 
-  const caType = contactOutcome && contactOutcome.type;
-  const outcomeValue = findContactOutcomeValueByType(caType);
+  const outcomeValue = findContactOutcomeValueByType(contactOutcome?.type);
   const resetForm = () => {
     setSecondPanelVisible(false);
     setContactOutcome(previousValue);
@@ -162,7 +168,7 @@ const Form = ({ previousValue, save }) => {
       >
         <Grid container>
           <div>
-            {Object.values(contactOutcomeEnum).map(({ value, type }) => (
+            {Object.values(contactOutcomes).map(({ value, type }) => (
               <Paper
                 id={type}
                 key={type}
