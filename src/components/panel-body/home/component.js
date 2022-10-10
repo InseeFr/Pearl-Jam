@@ -8,14 +8,13 @@ import UEPage from 'components/panel-body/UEpage';
 import UESPage from 'components/panel-body/UESpage';
 import { version } from '../../../../package.json';
 
-const Home = ({ location, match }) => {
+const Home = ({ match }) => {
   const [textSearch, setTextSearch] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
 
   return (
     <div>
       <Navigation
-        location={location}
         textSearch={textSearch}
         setTextSearch={setTextSearch}
         setOpenDrawer={setOpenDrawer}

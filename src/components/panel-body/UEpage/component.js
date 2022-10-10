@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { addNewState, getLastState } from 'utils/functions';
 import { useHistory, useParams } from 'react-router-dom';
+
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import Router from './router';
@@ -61,5 +62,4 @@ const UEPage = ({ match }) => {
 export default UEPage;
 UEPage.propTypes = {
   match: PropTypes.shape({}).isRequired,
-  refresh: PropTypes.func.isRequired,
 };

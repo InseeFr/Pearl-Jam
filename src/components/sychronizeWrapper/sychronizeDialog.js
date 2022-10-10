@@ -1,21 +1,20 @@
-import React from 'react';
+import { ExpandMore, ThumbUpAlt } from '@material-ui/icons';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Accordion from '@material-ui/core/Accordion';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
-
-import { ExpandMore, ThumbUpAlt } from '@material-ui/icons';
-import { IconStatus } from 'components/common/IconStatus';
+import Button from '@material-ui/core/Button';
 import D from 'i18n';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Divider from '@material-ui/core/Divider';
+import MaterialIcons from 'utils/icons/materialIcons';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   dialogPaper: {
@@ -97,7 +96,7 @@ export const SyncDialog = ({ close, syncResult }) => {
       <DialogContent>
         {state && (
           <DialogContentText className={classes.subTitle}>
-            <IconStatus type={state} />
+            <MaterialIcons type={state} />
             <span>{D.titleSync(state)}</span>
             {date && <span>{`(${date})`}</span>}
           </DialogContentText>

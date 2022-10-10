@@ -1,9 +1,16 @@
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'utils/constants';
+import {
+  IASCO_CATEGORY_FINISHING_VALUES,
+  IASCO_IDENTIFICATION_FINISHING_VALUES,
+  IASCO_SITUATION_FINISHING_VALUES,
+  identificationIsFinished,
+} from './identificationFunctions';
 import { differenceInYears, formatDistanceStrict } from 'date-fns';
 
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
+import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
@@ -34,7 +41,7 @@ export const intervalInDays = su => {
   return remainingDays.split(' ')[0];
 };
 
-export const isValidForTransmission = su => {
+const checkValidityForTransmissionNoident = su => {
   const { contactAttempts, contactOutcome } = su;
   if (contactAttempts.length === 0) return false;
   if (!contactOutcome) return false;
@@ -43,6 +50,46 @@ export const isValidForTransmission = su => {
   if (type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.type) return true;
   if (getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) return true;
   return false;
+};
+
+const checkValidityForTransmissionIasco = su => {
+  const { contactOutcome, identification, identificationConfiguration } = su;
+
+  if (!identificationIsFinished(identificationConfiguration, identification)) return false;
+  if (!contactOutcome) return false;
+
+  const { type } = contactOutcome;
+  // INA contactOutcome + no questionnaire
+
+  if (
+    type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type &&
+    !getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
+  )
+    return false;
+
+  // issue NOA + identification.avi
+  const { identification: identificationValue, category, situation } = identification;
+  if (
+    type === contactOutcomeEnum.NOT_APPLICABLE.type &&
+    !IASCO_IDENTIFICATION_FINISHING_VALUES.includes(identificationValue) &&
+    !IASCO_SITUATION_FINISHING_VALUES.includes(situation) &&
+    !IASCO_CATEGORY_FINISHING_VALUES.includes(category)
+  )
+    return false;
+
+  // TO finish There
+  return getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
+};
+
+export const isValidForTransmission = su => {
+  const { identificationConfiguration } = su;
+  switch (identificationConfiguration) {
+    case identificationConfigurationEnum.IASCO:
+      return checkValidityForTransmissionIasco(su);
+    case identificationConfigurationEnum.NOIDENT:
+    default:
+      return checkValidityForTransmissionNoident(su);
+  }
 };
 
 export const getSortedContactAttempts = surveyUnit => {
@@ -300,40 +347,56 @@ export const isSelectable = su => {
   return endTime > instantTime && instantTime > identificationPhaseStartTime;
 };
 
-export const getAddressData = su => {
-  const [postCode, ...rest] = su.address.l6.split(' ');
+export const getAddressData = address => {
+  const [postCode, ...rest] = address.l6.split(' ');
   const cityName = rest.join(' ');
 
+  return {
+    deliveryPoint: address.l2 || '',
+    additionalAddress: address.l3 || '',
+    streetName: address.l4 || '',
+    locality: address.l5 || '',
+    postCode: postCode || '',
+    cityName: cityName || '',
+    building: address.building || '',
+    floor: address.floor || '',
+    door: address.door || '',
+    staircase: address.staircase || '',
+    elevator: address.elevator || '',
+    cityPriorityDistrict: address.cityPriorityDistrict || '',
+  };
+};
+
+export const getIdentificationData = surveyUnit => {
+  const { identification, move } = surveyUnit;
+  if (!identification) {
+    return [
+      { label: 'identification', value: '' },
+      { label: 'access', value: '' },
+      { label: 'situation', value: '' },
+      { label: 'category', value: '' },
+      { label: 'occupant', value: '' },
+      { label: 'move', value: move || false },
+    ];
+  }
   return [
-    { label: D.addressDeliveryPoint, value: su.address.l2 || '' },
-    { label: D.addressAdditionalAddress, value: su.address.l3 || '' },
-    { label: D.addressStreetName, value: su.address.l4 || '' },
-    { label: D.addressLocality, value: su.address.l5 || '' },
-    { label: D.addressPostcode, value: postCode || '' },
-    { label: D.addressCity, value: cityName || '' },
+    { label: 'identification', value: identification.identification || '' },
+    { label: 'access', value: identification.access || '' },
+    { label: 'situation', value: identification.situation || '' },
+    { label: 'category', value: identification.category || '' },
+    { label: 'occupant', value: identification.occupant || '' },
+    { label: 'move', value: surveyUnit.move || false },
   ];
 };
 
-export const getAgeGroup = birthdate => {
-  const age = getAge(birthdate);
-  if (age <= 25) return D.ageGroupOne;
-  if (age <= 35) return D.ageGroupTwo;
-  if (age <= 55) return D.ageGroupThree;
-  if (age <= 75) return D.ageGroupFour;
-  return D.ageGroupFive;
-};
-
 export const getAge = birthdate => {
-  if (birthdate === '' || !birthdate) return ' ';
+  if (birthdate === '' || !birthdate) return undefined;
   return differenceInYears(new Date(), new Date(birthdate));
 };
 
-export const getUserData = person => [
-  { label: D.surveyUnitTitle, value: getTitle(person.title) },
-  { label: D.surveyUnitLastName, value: person.lastName },
-  { label: D.surveyUnitFirstName, value: person.firstName },
-  { label: D.surveyUnitAge, value: `${getAge(person.birthdate)} ${D.years}` },
-];
+export const isTitleMister = title => title.toLowerCase() === 'mister';
+
+export const displayAgeInYears = birthdate => `${getAge(birthdate) ?? '/'} ${D.years}`;
 
 export const getPhoneData = person => person.phoneNumbers;
 
@@ -363,19 +426,11 @@ export const sortPhoneNumbers = phoneNumbers => {
 };
 
 export const getMailData = person => [
-  { label: undefined, value: person.email, favorite: person.favoriteEmail },
+  { label: D.surveyUnitEmail, value: person.email, favorite: person.favoriteEmail },
 ];
 
-export const getTitle = title => {
-  switch (title.toLowerCase()) {
-    case 'mister':
-      return D.titleMister;
-    case 'miss':
-      return D.titleMiss;
-    default:
-      return '';
-  }
-};
+export const getTitle = title => (isTitleMister(title) ? D.titleMister : D.titleMiss);
+export const getToggledTitle = title => (isTitleMister(title) ? 'MISS' : 'MISTER');
 
 export const getPhoneSource = type => {
   switch (type.toLowerCase()) {
@@ -407,11 +462,44 @@ export const getprivilegedPerson = surveyUnit => {
   if (!persons || !persons.length || persons.length === 0) return personPlaceholder;
 
   const privilegedPerson = persons.find(p => p.privileged);
-  return privilegedPerson ? privilegedPerson : persons[0];
+  return privilegedPerson ?? persons[0];
 };
 
 export const createStateIds = async latestSurveyUnit => {
   const { id, states } = latestSurveyUnit;
   const previousSurveyUnit = await surveyUnitIdbService.getById(id);
   surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, states });
+};
+
+export const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => {
+  const { number, source } = phoneNumber;
+  const updatedPersons = surveyUnit.persons.map(person => {
+    if (person.id !== personId) return person;
+
+    const updatedPhoneNumbers = person.phoneNumbers.map(personPhoneNumber => {
+      if (personPhoneNumber.number !== number || personPhoneNumber.source !== source)
+        return personPhoneNumber;
+      return { ...personPhoneNumber, favorite: !personPhoneNumber.favorite };
+    });
+    return { ...person, phoneNumbers: updatedPhoneNumbers };
+  });
+  return { ...surveyUnit, persons: updatedPersons };
+};
+
+export const toggleFavoritePhoneNumberAndPersist = (surveyUnit, personId, phoneNumber) => {
+  const updatedSurveyUnit = toggleFavoritePhoneNumber(surveyUnit, personId, phoneNumber);
+  surveyUnitIdbService.addOrUpdateSU(updatedSurveyUnit);
+};
+
+export const toggleFavoriteEmail = (surveyUnit, personId) => {
+  const updatedPersons = surveyUnit.persons.map(person => {
+    if (person.id !== personId) return person;
+
+    return { ...person, favoriteEmail: !person.favoriteEmail };
+  });
+  return { ...surveyUnit, persons: updatedPersons };
+};
+export const toggleFavoriteEmailAndPersist = (surveyUnit, personId) => {
+  const updatedSurveyUnit = toggleFavoriteEmail(surveyUnit, personId);
+  surveyUnitIdbService.addOrUpdateSU(updatedSurveyUnit);
 };

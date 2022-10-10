@@ -1,32 +1,33 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-
+import React, { useContext, useEffect, useState } from 'react';
 import { getForm, getPreviousValue, smartForms } from './forms';
+
 import Comments from './comments';
-import Contacts from './contacts';
+import ContactOutcome from './contacts/contactOutcome';
 import D from 'i18n';
 import Details from './details';
+import Dialog from '@material-ui/core/Dialog';
+import GenericTile from 'components/common/sharedComponents/GenericTile';
+import Grid from '@material-ui/core/Grid';
+import Housing from './housing/component';
 import Identification from './identification';
-import Letters from './letters';
-import Navigation from './navigation/component';
-import PropTypes from 'prop-types';
+import MaterialIcons from 'utils/icons/materialIcons';
+import Questionnaires from './questionnaires';
 import StateLine from './stateLine';
 import SurveyUnitContext from './UEContext';
-import UeSubInfoTile from './ueSubInfoTile';
+import TabSwipper from './navigation/tabSwipper';
+import formEnum from 'utils/enum/formEnum';
+import { getAddressData } from 'utils/functions';
+import { isIdentificationVisible } from 'utils/functions/identificationFunctions';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
-  ajustScroll: {
-    height: 'calc(100vh - 13.5em)',
-  },
   modal: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
   },
   row: {
-    flexWrap: 'nowrap',
+    display: 'flex',
   },
   paperModal: {
     boxShadow: 'unset',
@@ -34,18 +35,14 @@ const useStyles = makeStyles(() => ({
     margin: 0,
     maxWidth: 'unset',
   },
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
 }));
 
-const Router = ({ match }) => {
+const Router = () => {
   const { surveyUnit } = useContext(SurveyUnitContext);
-
-  /** refs are used for scrolling, dispatched to the clickable link and linked element */
-  const detailsRef = useRef('details');
-  const identificationRef = useRef('spotting');
-  const lettersRef = useRef('letters');
-  const contactsRef = useRef('contacts');
-  const commentsRef = useRef('comments');
-  const refs = { detailsRef, identificationRef, lettersRef, contactsRef, commentsRef };
 
   /** Form type is dynamically inserted in Modal, with previousValue for edition if needed */
   const [formType, setFormType] = useState(undefined);
@@ -72,7 +69,10 @@ const Router = ({ match }) => {
 
   const closeModal = () => {
     setOpenModal(false);
+    setInjectableData(undefined);
   };
+
+  const identificationVisibility = isIdentificationVisible(surveyUnit);
 
   const selectedForm = getForm(formType, previousValue, closeModal);
 
@@ -85,33 +85,81 @@ const Router = ({ match }) => {
   };
 
   const smartModalClass = smartForms.includes(formType) ? classes.paperModal : '';
-
+  const tabsLabels = [
+    D.goToIdentificationPage,
+    D.goToContactPage,
+    D.goToCommentsPage,
+    D.goToQuestionnairesPage,
+  ];
   return (
     <>
       <div>
         <StateLine />
-        <Navigation refs={refs} match={match} />
-        <div>
-          <UeSubInfoTile reference={detailsRef} title={D.goToContactDetailsPage}>
-            <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
-          </UeSubInfoTile>
-          <UeSubInfoTile reference={identificationRef} title={D.goToSpottingPage}>
-            <Identification selectFormType={selectFormType} />
-          </UeSubInfoTile>
-          <UeSubInfoTile reference={lettersRef} title={D.goToMailsPage}>
-            <Letters selectFormType={selectFormType} />
-          </UeSubInfoTile>
-          <UeSubInfoTile reference={contactsRef} title={D.goToContactPage}>
-            <Contacts selectFormType={selectFormType} setInjectableData={setInjectableData} />
-          </UeSubInfoTile>
-          <UeSubInfoTile
-            reference={commentsRef}
-            title={D.goToCommentsPage}
-            className={classes.ajustScroll}
-          >
+        <TabSwipper tabsLabels={tabsLabels}>
+          <div className={classes.row}>
+            <GenericTile
+              title={D.surveyUnitHousing}
+              editable
+              icon={() => <MaterialIcons type="home" />}
+              editionIcon={() => (
+                <MaterialIcons
+                  type="pen"
+                  onClick={() => selectFormType(formEnum.ADDRESS, true)}
+                ></MaterialIcons>
+              )}
+            >
+              <Housing address={getAddressData(surveyUnit.address)} />
+            </GenericTile>
+            {identificationVisibility && (
+              <GenericTile title={D.identification} icon={() => <MaterialIcons type="googles" />}>
+                <Identification />
+              </GenericTile>
+            )}
+          </div>
+          <div className={classes.row}>
+            <GenericTile
+              title={D.surveyUnitIndividual}
+              editionIcon={() => (
+                <MaterialIcons
+                  type="pen"
+                  onClick={() => {
+                    selectFormType(formEnum.USER, true);
+                    setInjectableData(surveyUnit.persons);
+                  }}
+                ></MaterialIcons>
+              )}
+              icon={() => <MaterialIcons type="user" />}
+            >
+              <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
+            </GenericTile>
+            <div className={classes.column}>
+              <GenericTile
+                title={D.contactAttempts}
+                icon={() => <MaterialIcons type="assignement" />}
+                editionIcon={() => (
+                  <MaterialIcons
+                    type="pen"
+                    onClick={() => selectFormType(formEnum.CONTACT_ATTEMPT, true)}
+                  ></MaterialIcons>
+                )}
+              >
+                <ContactOutcome
+                  selectFormType={selectFormType}
+                  setInjectableData={setInjectableData}
+                />
+              </GenericTile>
+            </div>
+          </div>
+          <GenericTile title={D.goToCommentsPage} icon={() => <MaterialIcons type="assignement" />}>
             <Comments />
-          </UeSubInfoTile>
-        </div>
+          </GenericTile>
+          <GenericTile
+            title={D.goToQuestionnairesPage}
+            icon={() => <MaterialIcons type="questionnaire" />}
+          >
+            <Questionnaires />
+          </GenericTile>
+        </TabSwipper>
       </div>
       <Dialog
         maxWidth={false}
@@ -132,9 +180,4 @@ const Router = ({ match }) => {
 };
 
 export default Router;
-Router.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
-    url: PropTypes.string.isRequired,
-  }).isRequired,
-};
+Router.propTypes = {};

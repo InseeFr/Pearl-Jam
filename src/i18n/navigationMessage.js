@@ -4,10 +4,11 @@ const navigationMessage = {
   goToNotificationsPage: { fr: 'Notifications', en: 'Notifications' },
   goToChatPage: { fr: 'Chat', en: 'Chat' },
   goToContactDetailsPage: { fr: 'Coordonnées', en: 'Contact details' },
-  goToSpottingPage: { fr: 'Repérages', en: 'Spotting' },
+  goToIdentificationPage: { fr: 'Logement & Repérage', en: 'Housing & identification' },
   goToMailsPage: { fr: 'Courriers', en: 'Mails' },
   goToContactPage: { fr: 'Contacts', en: 'Contacts' },
   goToCommentsPage: { fr: 'Commentaire', en: 'Comment' },
+  goToQuestionnairesPage: { fr: 'Questionnaires', en: 'Questionnaires' },
 };
 
 export default navigationMessage;

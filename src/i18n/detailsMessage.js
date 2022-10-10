@@ -15,7 +15,7 @@ const detailsMessage = {
     fr: "Modification de l'adresse",
     en: 'Address modification',
   },
-  surveyUnitEmail: { fr: 'Email', en: 'Email' },
+  surveyUnitEmail: { fr: 'Mail', en: 'Email' },
   surveyUnitPhone: { fr: 'Téléphone', en: 'Phone' },
   surveyUnitNoPhone: { fr: 'Pas de numéro de téléphone', en: 'No phone number' },
   surveyUnitLastName: { fr: 'Nom', en: 'Last name' },
@@ -25,6 +25,7 @@ const detailsMessage = {
   surveyUnitHousing: { fr: 'Logement', en: 'Housing' },
   surveyUnitIndividual: { fr: 'Individu', en: 'Individual' },
   surveyUnitDateOfBirth: { fr: 'Date de naissance', en: 'Date of birth' },
+  years: { fr: 'ans', en: 'years' },
 };
 
 export default detailsMessage;

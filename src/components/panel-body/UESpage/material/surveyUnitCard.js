@@ -1,25 +1,26 @@
-import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import WarningIcon from '@material-ui/icons/Warning';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import PersonIcon from '@material-ui/icons/Person';
-import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheckedSharp';
-import ScheduleIcon from '@material-ui/icons/Schedule';
-import { intervalInDays } from 'utils/functions';
-import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import {
   getLastState,
   getprivilegedPerson,
   isSelectable,
 } from 'utils/functions/surveyUnitFunctions';
-import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import { Tooltip } from '@material-ui/core';
+
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import D from 'i18n';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import PersonIcon from '@material-ui/icons/Person';
+import PropTypes from 'prop-types';
+import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheckedSharp';
+import React from 'react';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import WarningIcon from '@material-ui/icons/Warning';
+import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
+import { intervalInDays } from 'utils/functions';
+import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -101,17 +102,17 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
   } = surveyUnit;
 
   const privilegedPerson = getprivilegedPerson(surveyUnit);
-  // persons.find(p => p.privileged);
-  const { firstName, lastName } = privilegedPerson ? privilegedPerson : persons[0];
+  const { firstName, lastName } = privilegedPerson ?? persons[0];
   const lastState = getLastState(surveyUnit);
   const todo = convertSUStateInToDo(lastState.type);
   const { order, value: toDoLabel } = todo;
   const nbJoursRestant = intervalInDays(surveyUnit);
+  const openSurveyUnitPage = id => history.push(`/survey-unit/${id}/details?panel=0`);
 
   return (
     <Card
       className={`${classes.root} ${classes.flexColumn} ${active ? '' : classes.inactive}`}
-      onClick={() => (active ? history.push(`/survey-unit/${id}/details`) : {})}
+      onClick={() => (active ? openSurveyUnitPage(id) : {})}
       elevation={0}
     >
       <CardContent className={`${classes.content} ${classes.flexRow}`}>

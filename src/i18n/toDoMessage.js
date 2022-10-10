@@ -1,6 +1,6 @@
 const toDoMessage = {
   toDoPrepare: { fr: 'Préparer', en: 'Prepare' },
-  toDoContact: { fr: 'Contacter', en: 'Contact' },
+  toDoContact: { fr: 'Repérer/Contacter', en: 'Spotting/Contact' },
   toDoSurvey: { fr: 'Enquêter', en: 'Survey' },
   toDoFinalize: { fr: 'Finaliser', en: 'Finalize' },
   toDoTransmit: { fr: 'Transmettre', en: 'Transmit' },

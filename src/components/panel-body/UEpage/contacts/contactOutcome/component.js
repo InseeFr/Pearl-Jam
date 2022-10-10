@@ -1,74 +1,77 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+
+import AddIcon from '@material-ui/icons/Add';
+import ContactAttempts from '../contactAttempts';
+import ContactOutcomeLine from './contactOutcomeLine';
 import D from 'i18n';
+import { Divider } from '@material-ui/core';
+import IconButton from 'components/common/sharedComponents/IconButton';
+import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import SurveyUnitContext from '../../UEContext';
-import { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
 import formEnum from 'utils/enum/formEnum';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   column: {
     display: 'flex',
     flexDirection: 'column',
-    cursor: 'pointer',
-    marginRight: '1em',
-    marginTop: '1em',
-    padding: '1em',
-    boxShadow: 'unset',
-    border: 'LightGray solid 1px',
-    borderRadius: '15px',
-    minWidth: '300px',
-    minHeight: '200px',
+    gap: '1em',
   },
-  upDownMargin: {
-    marginTop: '1em',
-    marginBottom: '1em',
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '1em',
   },
 }));
 
-const ContactOutcome = ({ selectFormType }) => {
-  const contextSu = useContext(SurveyUnitContext);
-  const { surveyUnit } = contextSu;
+const ContactOutcome = ({ selectFormType, setInjectableData }) => {
+  const classes = useStyles();
+  const { surveyUnit } = useContext(SurveyUnitContext);
+  const { contactAttempts } = surveyUnit;
 
-  const defaultContactOutcome =
-    surveyUnit.contactOutcome !== undefined && surveyUnit.contactOutcome !== null
-      ? surveyUnit.contactOutcome
-      : {
-          date: new Date().getTime(),
-          type: undefined,
-          totalNumberOfContactAttempts: '0',
-        };
+  const defaultContactOutcome = surveyUnit.contactOutcome ?? {
+    date: new Date().getTime(),
+    type: undefined,
+    totalNumberOfContactAttempts: '0',
+  };
   const [contactOutcome, setContactOutcome] = useState(defaultContactOutcome);
 
   useEffect(() => {
     setContactOutcome(
-      surveyUnit.contactOutcome !== undefined && surveyUnit.contactOutcome !== null
-        ? surveyUnit.contactOutcome
-        : {
-            date: new Date().getTime(),
-            type: undefined,
-            totalNumberOfContactAttempts: '0',
-          }
+      surveyUnit.contactOutcome ?? {
+        date: new Date().getTime(),
+        type: undefined,
+        totalNumberOfContactAttempts: '0',
+      }
     );
   }, [surveyUnit]);
 
-  const outcomeValue = findContactOutcomeValueByType(contactOutcome.type);
-  const classes = useStyles();
+  const isSeparator = contactOutcome.type && contactAttempts?.length > 0;
+
   return (
-    <Paper
-      className={classes.column}
-      onClick={() => {
-        selectFormType(formEnum.CONTACT_OUTCOME, true);
-      }}
-    >
-      <Typography variant="h6">{D.contactOutcome}</Typography>
-      <Typography className={classes.upDownMargin}>{outcomeValue}</Typography>
-      <Typography>
-        {contactOutcome.totalNumberOfContactAttempts > 0 &&
-          `> ${contactOutcome.totalNumberOfContactAttempts} ${D.contactOutcomeAttempts}`}
-      </Typography>
+    <Paper elevation={0} className={classes.column}>
+      <ContactOutcomeLine contactOutcome={contactOutcome} />
+      {isSeparator && <Divider key="splitter" orientation="horizontal" />}
+      <ContactAttempts selectFormType={selectFormType} setInjectableData={setInjectableData} />
+      <div className={classes.row}>
+        <IconButton
+          iconType="add"
+          label={D.addContactAttemptButton}
+          onClickFunction={() => {
+            selectFormType(formEnum.CONTACT_ATTEMPT, true);
+          }}
+        />
+
+        <IconButton
+          iconType={contactOutcome.type ? 'check' : undefined}
+          label={contactOutcome.type ? D.editContactOutcomeButton : D.addContactOutcomeButton}
+          startIcon={<AddIcon fontSize="large" />}
+          onClickFunction={() => {
+            selectFormType(formEnum.CONTACT_OUTCOME, true);
+          }}
+        ></IconButton>
+      </div>
     </Paper>
   );
 };
