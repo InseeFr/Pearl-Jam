@@ -33,10 +33,10 @@
     "workbox-strategies": "^5.1.3"
   },
   "scripts": {
-    "start": "react-scripts start ",
-    "build": "react-scripts build && copy-and-watch configuration/configuration.json build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "build": "vite build && copy-and-watch configuration/configuration.json dist",
+    "preview": "vite preview",
+    "format": "prettier --write ."
   },
   "eslintConfig": {
     "extends": [
@@ -100,6 +100,7 @@
   "devDependencies": {
     "@types/react": "^16.9.23",
     "@types/react-router-dom": "^5.1.3",
+    "@vitejs/plugin-react": "^3.1.0",
     "copy-and-watch": "^0.1.4",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
@@ -112,6 +113,8 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest-sonar-reporter": "^2.0.0",
     "prettier": "^1.19.1",
-    "react-test-renderer": "^17.0.2"
+    "react-test-renderer": "^17.0.2",
+    "vite": "^4.2.1",
+    "vite-tsconfig-paths": "^3.6.0"
   }
 }

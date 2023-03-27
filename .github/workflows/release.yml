@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: build
+          path: dist
   release:
     runs-on: ubuntu-latest
     steps:
@@ -63,7 +63,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build
-          path: build
+          path: dist
       - name: Get current version
         id: version
         uses: notiz-dev/github-action-json-property@release
