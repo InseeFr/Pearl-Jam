@@ -33,7 +33,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && copy-and-watch configuration/configuration.json dist",
+    "build": "vite build && copy-and-watch configuration/configuration.json build",
     "preview": "vite preview",
     "format": "prettier --write .",
     "test": "vitest"
