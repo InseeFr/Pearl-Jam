@@ -32,7 +32,7 @@ export default defineConfig({
       exclude: ['node_modules/', 'src/setupTests.js'],
     },
   },
-  build: { outDir: 'build' },
+  build: { outDir: 'build', target: 'esnext' },
   plugins: [
     tsconfigPaths(),
     react(),
