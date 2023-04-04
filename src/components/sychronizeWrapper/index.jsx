@@ -59,7 +59,7 @@ const SynchronizeWrapper = ({ children }) => {
       window.localStorage.removeItem('QUEEN_SYNC_RESULT');
       window.localStorage.setItem('SYNCHRONIZE', true);
       setLoading(true);
-      checkQueen();
+      //checkQueen();
       await checkPearl();
     };
     if (online) launchSynchronize();

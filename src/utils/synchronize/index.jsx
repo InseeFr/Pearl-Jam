@@ -12,7 +12,7 @@ export const useQueenSynchronisation = () => {
   const waitTime = 5000;
 
   const [queenError, setQueenError] = useState(false);
-  const [queenReady, setQueenReady] = useState(null);
+  const [queenReady, setQueenReady] = useState(true);
   const history = useHistory();
 
   const checkQueen = () => {
