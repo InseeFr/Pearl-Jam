@@ -4,23 +4,6 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { VitePWA } from 'vite-plugin-pwa';
 import federation from '@originjs/vite-plugin-federation';
 
-const loadConfiguration = async () => {
-  const response = await fetch(`./configuration.json`);
-  const configurationResponse = await response.json();
-  const { QUEEN_URL } = configurationResponse;
-  console.log(QUEEN_URL);
-  return QUEEN_URL + '/assets/remoteEntry.js';
-};
-
-const loadConfiguration2 = () =>
-  fetch('./configuration.json').then(response =>
-    response.json().then(configurationResponse => {
-      const { QUEEN_URL } = configurationResponse;
-      console.log(QUEEN_URL);
-      return QUEEN_URL + '/assets/remoteEntry.js';
-    })
-  );
-
 // https://vitejs.dev/config/
 export default defineConfig({
   test: {
@@ -41,7 +24,7 @@ export default defineConfig({
       remotes: {
         dramaQueen: {
           external:
-            "fetch(`${window.location.origin}/configuration.json`).then(response => response.json().then(configurationResponse => {const { QUEEN_URL } = configurationResponse; console.log(QUEEN_URL); return QUEEN_URL + '/assets/remoteEntry.js';}))",
+            "fetch(`${window.location.origin}/configuration.json`).then(response => response.json().then(configurationResponse => {const { QUEEN_URL } = configurationResponse; return QUEEN_URL + '/assets/remoteEntry.js';}))",
           externalType: 'promise',
         },
       },
