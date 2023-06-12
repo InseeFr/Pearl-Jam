@@ -9,7 +9,6 @@ export const AppContext = React.createContext();
 
 function Root() {
   const { configuration } = useConfiguration();
-  useQueenFromConfig(configuration);
 
   const [online, setOnline] = useState(navigator.onLine);
 

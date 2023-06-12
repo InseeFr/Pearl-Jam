@@ -13,8 +13,9 @@ import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, NetworkFirst } from 'workbox-strategies';
 
-self._QUEEN_URL = new URL(location).searchParams.get('QUEEN_URL');
-importScripts(`${self._QUEEN_URL}/queen-service-worker.js`);
+self._DRAMAQUEEN_URL = new URL(location).searchParams.get('DRAMAQUEEN_URL');
+
+importScripts(`${self._DRAMAQUEEN_URL}/sw-pearl.js`);
 
 clientsClaim();
 
@@ -46,7 +47,7 @@ registerRoute(
 
     return true;
   },
-  createHandlerBoundToURL(`${process.env.PUBLIC_URL}/index.html`)
+  createHandlerBoundToURL(`/index.html`)
 );
 
 const getUrlRegexJson = function(url) {
