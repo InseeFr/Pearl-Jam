@@ -1,5 +1,5 @@
 import { NavLink, Route } from 'react-router-dom';
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
@@ -22,15 +22,19 @@ import Synchronize from 'components/common/synchronize';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import { UserContext } from 'components/panel-body/home/UserContext';
 import { makeStyles } from '@material-ui/core/styles';
 
 export const NavigationContext = React.createContext();
 
 const Navigation = ({ textSearch, setTextSearch, setOpenDrawer }) => {
   const { unReadNotificationsNumber } = useContext(NotificationWrapperContext);
+  const user = useContext(UserContext);
+  const interviewerFromLocalStorage = window.localStorage.getItem(PEARL_USER_KEY);
 
   const getName = () => {
-    const interviewerFromLocalStorage = window.localStorage.getItem(PEARL_USER_KEY);
+    if (user !== undefined) return `${user.firstName} ${user.lastName}`;
+
     return interviewerFromLocalStorage
       ? `${JSON.parse(interviewerFromLocalStorage).firstName} ${
           JSON.parse(interviewerFromLocalStorage).lastName
@@ -93,10 +97,10 @@ const Navigation = ({ textSearch, setTextSearch, setOpenDrawer }) => {
     setOpen(o => !o);
   };
 
-  const context = { setOpen };
+  const contextValue = useMemo(() => ({ setOpen }), [setOpen]);
 
   return (
-    <NavigationContext.Provider value={context}>
+    <NavigationContext.Provider value={contextValue}>
       <AppBar position="sticky" className={classes.appBar} elevation={0}>
         <Toolbar className={classes.appBar}>
           <NavLink activeClassName="active" exact to="/">

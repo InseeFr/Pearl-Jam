@@ -3,11 +3,13 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import BugReportIcon from '@material-ui/icons/BugReport';
+import BuildIcon from '@material-ui/icons/Build';
 import CheckCircleOutline from '@material-ui/icons/CheckCircleOutline';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import CommentIcon from '@material-ui/icons/Comment';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import PhoneIcon from '@material-ui/icons/Phone';
@@ -87,12 +89,21 @@ const MaterialIcons = ({ type, onClick = () => {} }) => {
     warning: <Warning className={classes.warning} fontSize="large" />,
     remove: <RemoveIcon className={classes.minus} fontSize="large" />,
     sync: <SyncIcon className={classes.syncIcon} />,
+    pedestrian: <DirectionsWalkIcon />,
+    tool: <BuildIcon />,
   };
 
   return icons[type];
 };
 
-export const icons = { USER: 'user', HOME: 'home', EDITION: 'pen', GOOGLES: 'googles' };
+export const icons = {
+  USER: 'user',
+  HOME: 'home',
+  EDITION: 'pen',
+  GOOGLES: 'googles',
+  WALK: 'pedestrian',
+  TOOL: 'tool',
+};
 
 export default MaterialIcons;
 MaterialIcons.propTypes = {

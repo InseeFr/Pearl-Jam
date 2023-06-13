@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { getForm, getPreviousValue, smartForms } from './forms';
 
 import Comments from './comments';
+import Communication from './communication';
 import ContactOutcome from './contacts/contactOutcome';
 import D from 'i18n';
 import Details from './details';
@@ -88,9 +89,35 @@ const Router = () => {
   const tabsLabels = [
     D.goToIdentificationPage,
     D.goToContactPage,
+    D.goToCommunicationPage,
     D.goToCommentsPage,
     D.goToQuestionnairesPage,
   ];
+
+  const identificationIcon = () => <MaterialIcons type="googles" />;
+  const housingIcon = () => <MaterialIcons type="home" />;
+  const housingEditIcon = () => (
+    <MaterialIcons type="pen" onClick={() => selectFormType(formEnum.ADDRESS, true)} />
+  );
+  const individualIcon = () => <MaterialIcons type="user" />;
+  const individualEditIcon = () => (
+    <MaterialIcons
+      type="pen"
+      onClick={() => {
+        selectFormType(formEnum.USER, true);
+        setInjectableData(surveyUnit.persons);
+      }}
+    />
+  );
+
+  const commentIcon = () => <MaterialIcons type="questionnaire" />;
+  const assignementIcon = () => <MaterialIcons type="assignement" />;
+  const contactAttemptEditIcon = () => (
+    <MaterialIcons
+      type="pen"
+      onClick={() => selectFormType(formEnum.CONTACT_ATTEMPT, true)}
+    ></MaterialIcons>
+  );
   return (
     <>
       <div>
@@ -100,18 +127,13 @@ const Router = () => {
             <GenericTile
               title={D.surveyUnitHousing}
               editable
-              icon={() => <MaterialIcons type="home" />}
-              editionIcon={() => (
-                <MaterialIcons
-                  type="pen"
-                  onClick={() => selectFormType(formEnum.ADDRESS, true)}
-                ></MaterialIcons>
-              )}
+              icon={housingIcon}
+              editionIcon={housingEditIcon}
             >
               <Housing address={getAddressData(surveyUnit.address)} />
             </GenericTile>
             {identificationVisibility && (
-              <GenericTile title={D.identification} icon={() => <MaterialIcons type="googles" />}>
+              <GenericTile title={D.identification} icon={identificationIcon}>
                 <Identification />
               </GenericTile>
             )}
@@ -119,29 +141,16 @@ const Router = () => {
           <div className={classes.row}>
             <GenericTile
               title={D.surveyUnitIndividual}
-              editionIcon={() => (
-                <MaterialIcons
-                  type="pen"
-                  onClick={() => {
-                    selectFormType(formEnum.USER, true);
-                    setInjectableData(surveyUnit.persons);
-                  }}
-                ></MaterialIcons>
-              )}
-              icon={() => <MaterialIcons type="user" />}
+              editionIcon={individualEditIcon}
+              icon={individualIcon}
             >
               <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
             </GenericTile>
             <div className={classes.column}>
               <GenericTile
                 title={D.contactAttempts}
-                icon={() => <MaterialIcons type="assignement" />}
-                editionIcon={() => (
-                  <MaterialIcons
-                    type="pen"
-                    onClick={() => selectFormType(formEnum.CONTACT_ATTEMPT, true)}
-                  ></MaterialIcons>
-                )}
+                icon={assignementIcon}
+                editionIcon={contactAttemptEditIcon}
               >
                 <ContactOutcome
                   selectFormType={selectFormType}
@@ -150,13 +159,13 @@ const Router = () => {
               </GenericTile>
             </div>
           </div>
-          <GenericTile title={D.goToCommentsPage} icon={() => <MaterialIcons type="assignement" />}>
+          <GenericTile title={D.surveyUnitCommunications} icon={assignementIcon}>
+            <Communication />
+          </GenericTile>
+          <GenericTile title={D.goToCommentsPage} icon={assignementIcon}>
             <Comments />
           </GenericTile>
-          <GenericTile
-            title={D.goToQuestionnairesPage}
-            icon={() => <MaterialIcons type="questionnaire" />}
-          >
+          <GenericTile title={D.goToQuestionnairesPage} icon={commentIcon}>
             <Questionnaires />
           </GenericTile>
         </TabSwipper>

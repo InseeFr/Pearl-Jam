@@ -471,6 +471,12 @@ export const createStateIds = async latestSurveyUnit => {
   surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, states });
 };
 
+export const createCommunicationRequestIds = async latestSurveyUnit => {
+  const { id, communicationRequests } = latestSurveyUnit;
+  const previousSurveyUnit = await surveyUnitIdbService.getById(id);
+  surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, communicationRequests });
+};
+
 export const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => {
   const { number, source } = phoneNumber;
   const updatedPersons = surveyUnit.persons.map(person => {

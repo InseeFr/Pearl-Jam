@@ -23,7 +23,7 @@ const Navigation = () => {
         <IconButton
           disabled={!transmissionValidity}
           onClickFunction={transmit}
-          label={D.sendButton}
+          label={D.transmitButton}
           iconType="transmit"
         ></IconButton>
       </span>

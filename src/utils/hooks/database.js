@@ -7,3 +7,5 @@ export const useSurveyUnits = () => useLiveQuery(() => db.surveyUnit.toArray(), 
 
 export const useMissingSurveyUnits = () =>
   useLiveQuery(() => db.surveyUnitMissing.toArray(), [], []);
+
+export const getUser = () => db.user.limit(1);

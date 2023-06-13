@@ -57,8 +57,8 @@ export const getContactAttemptByConfiguration = (configuration, medium) => {
             INTERVIEW_ACCEPTED: contactAttemptEnum.INTERVIEW_ACCEPTED,
             ...commonPhoneContactAttemptEnum,
           };
-        default:
         case 'F2F':
+        default:
           return commonPhoneContactAttemptEnum;
       }
     case 'EMAIL':
