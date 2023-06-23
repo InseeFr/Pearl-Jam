@@ -23,7 +23,7 @@ const isLocalhost = Boolean(
 
 export function register(config) {
   if (import.meta.env.MODE === 'production' && 'serviceWorker' in navigator) {
-    const swUrl = `/service-worker.js?DRAMAQUEEN_URL=${config.QUEEN_URL}`;
+    const swUrl = `/service-worker.js?QUEEN_URL=${config.QUEEN_URL}`;
 
     if (isLocalhost) {
       // This is running on localhost. Let's check if a service worker still exists or not.

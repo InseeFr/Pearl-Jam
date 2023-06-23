@@ -13,7 +13,7 @@ import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, NetworkFirst } from 'workbox-strategies';
 
-self._DRAMAQUEEN_URL = new URL(location).searchParams.get('DRAMAQUEEN_URL');
+self._DRAMAQUEEN_URL = new URL(location).searchParams.get('QUEEN_URL');
 
 importScripts(`${self._DRAMAQUEEN_URL}/queen-service-worker.js`);
 
