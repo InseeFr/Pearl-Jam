@@ -15,7 +15,7 @@ import { CacheFirst, NetworkFirst } from 'workbox-strategies';
 
 self._DRAMAQUEEN_URL = new URL(location).searchParams.get('DRAMAQUEEN_URL');
 
-importScripts(`${self._DRAMAQUEEN_URL}/sw-pearl.js`);
+importScripts(`${self._DRAMAQUEEN_URL}/queen-service-worker.js`);
 
 clientsClaim();
 
