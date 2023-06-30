@@ -168,14 +168,11 @@ const Form = ({ closeModal, previousValue, save }) => {
     }
   }
   const favoriteIcon = (favorite, onClickFunction) => (
-    <MaterialIcons
-      type={favorite ? 'starFull' : 'starOutlined'}
-      onClick={() => onClickFunction()}
-    />
+    <MaterialIcons type={favorite ? 'starFull' : 'starOutlined'} onClick={onClickFunction} />
   );
 
   return (
-    <GenericTile title={D.surveyUnitIndividual} icon={() => <MaterialIcons type="user" />}>
+    <GenericTile title={D.surveyUnitIndividual} icon={<MaterialIcons type="user" />}>
       <div className={classes.row}>
         {persons.map((person, index) => {
           const { interviewerPhoneNumbers } = sortPhoneNumbers(person.phoneNumbers);
@@ -184,7 +181,7 @@ const Form = ({ closeModal, previousValue, save }) => {
             <>
               {index > 0 && (
                 <Divider
-                  key={`splitter-${index}`}
+                  key={`splitter`}
                   orientation="vertical"
                   flexItem
                   className={classes.spaceAround}
@@ -238,22 +235,26 @@ const Form = ({ closeModal, previousValue, save }) => {
                 {interviewerPhoneNumbers.map((itwPhone, index) => (
                   <EditableTextFieldWithClickableIcon
                     id={`phone-${index}`}
+                    key={`phone-${itwPhone.number}`}
                     label={[D.telephone, `(${D.interviewerSource})`]}
                     defaultValue={itwPhone.number}
                     onChangeFunction={event =>
                       onPhoneNumberChange(person.id, event.target.value, itwPhone.number)
                     }
                     icons={[
-                      () =>
-                        favoriteIcon(itwPhone.favorite, () =>
-                          toggleFavoritePhoneNumber(person.id, itwPhone)
-                        ),
-                      () => (
-                        <MaterialIcons
-                          type="delete"
-                          onClick={() => deletePhoneNumber(person.id, itwPhone)}
-                        />
-                      ),
+                      <React.Fragment key="favoriteIcon">
+                        {() =>
+                          favoriteIcon(itwPhone.favorite, () =>
+                            toggleFavoritePhoneNumber(person.id, itwPhone)
+                          )
+                        }
+                      </React.Fragment>,
+
+                      <MaterialIcons
+                        type="delete"
+                        key="deletionIcon"
+                        onClick={() => deletePhoneNumber(person.id, itwPhone)}
+                      />,
                     ]}
                   />
                 ))}

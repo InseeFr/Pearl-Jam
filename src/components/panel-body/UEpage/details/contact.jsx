@@ -28,17 +28,17 @@ const Contact = ({ persons }) => {
     <Grid container>
       {persons.map((person, index) => {
         return (
-          <>
+          <React.Fragment key={`person-${person.id}`}>
             {index > 0 && (
               <Divider
-                key={`splitter-${index}`}
+                key={`splitter`}
                 orientation="vertical"
                 flexItem
                 className={classes.spaceAround}
               />
             )}
             <Individual person={person} />
-          </>
+          </React.Fragment>
         );
       })}
     </Grid>

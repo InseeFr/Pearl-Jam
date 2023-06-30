@@ -20,7 +20,6 @@ function App() {
   const { pathname } = useLocation();
   const { authenticated } = useAuth();
   const serviceWorkerInfo = useServiceWorker(authenticated);
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

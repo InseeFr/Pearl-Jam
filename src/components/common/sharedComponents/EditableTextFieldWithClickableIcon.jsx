@@ -27,9 +27,7 @@ export const EditableTextFieldWithClickableIcon = ({
         defaultValue={defaultValue}
         onChangeFunction={onChangeFunction}
       />
-      {icons.map(Icon => (
-        <Icon />
-      ))}
+      {icons.map(icon => icon)}
     </div>
   );
 };

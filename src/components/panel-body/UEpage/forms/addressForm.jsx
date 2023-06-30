@@ -128,7 +128,7 @@ const Form = ({ closeModal, save, previousValue }) => {
   const classes = useStyles();
 
   return (
-    <GenericTile title={D.surveyUnitAddressChange} icon={() => <MaterialIcons type="home" />}>
+    <GenericTile title={D.surveyUnitAddressChange} icon={<MaterialIcons type="home" />}>
       <div className={classes.row}>
         <div className={classes.column}>
           <EditableTextField

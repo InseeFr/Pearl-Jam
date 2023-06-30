@@ -1,6 +1,6 @@
 import * as api from 'utils/api';
 
-import { createStateIds, getLastState } from 'utils/functions';
+import { createCommunicationRequestIds, createStateIds, getLastState } from 'utils/functions';
 import { useCallback, useState } from 'react';
 
 import surveyUnitDBService from 'utils/indexeddb/services/surveyUnit-idb-service';
@@ -73,6 +73,7 @@ const sendData = async (urlPearlApi, authenticationMode) => {
       )(id, body);
       if (!error) {
         await createStateIds(latestSurveyUnit);
+        await createCommunicationRequestIds(latestSurveyUnit);
       }
       if (error && [400, 403, 404, 500].includes(status)) {
         const { error: tempZoneError } = await api.putSurveyUnitToTempZone(

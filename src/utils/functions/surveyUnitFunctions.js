@@ -1,4 +1,4 @@
-import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'utils/constants';
+import { CIVILITIES, CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'utils/constants';
 import {
   IASCO_CATEGORY_FINISHING_VALUES,
   IASCO_IDENTIFICATION_FINISHING_VALUES,
@@ -185,7 +185,7 @@ export const addNewState = async (surveyUnit, stateType) => {
 
     case surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type:
       if (surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type === stateType) {
-        if (await isContactAttemptOk(surveyUnit)) {
+        if (isContactAttemptOk(surveyUnit)) {
           addLatestState(newSu, {
             date: new Date().getTime(),
             type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
@@ -394,7 +394,7 @@ export const getAge = birthdate => {
   return differenceInYears(new Date(), new Date(birthdate));
 };
 
-export const isTitleMister = title => title.toLowerCase() === 'mister';
+export const isTitleMister = title => title.toUpperCase() === CIVILITIES.MISTER.type;
 
 export const displayAgeInYears = birthdate => `${getAge(birthdate) ?? '/'} ${D.years}`;
 
@@ -429,8 +429,10 @@ export const getMailData = person => [
   { label: D.surveyUnitEmail, value: person.email, favorite: person.favoriteEmail },
 ];
 
-export const getTitle = title => (isTitleMister(title) ? D.titleMister : D.titleMiss);
-export const getToggledTitle = title => (isTitleMister(title) ? 'MISS' : 'MISTER');
+export const getTitle = title =>
+  isTitleMister(title) ? CIVILITIES.MISTER.value : CIVILITIES.MISS.value;
+export const getToggledTitle = title =>
+  isTitleMister(title) ? CIVILITIES.MISS.type : CIVILITIES.MISTER.type;
 
 export const getPhoneSource = type => {
   switch (type.toLowerCase()) {
@@ -446,7 +448,7 @@ export const getPhoneSource = type => {
 };
 
 export const personPlaceholder = {
-  title: 'MISTER',
+  title: CIVILITIES.MISTER.type,
   firstName: '',
   lastName: '',
   email: '',
@@ -458,8 +460,8 @@ export const personPlaceholder = {
 
 export const getprivilegedPerson = surveyUnit => {
   if (!surveyUnit) return personPlaceholder;
-  const { persons } = surveyUnit;
-  if (!persons || !persons.length || persons.length === 0) return personPlaceholder;
+  const { persons = [] } = surveyUnit;
+  if (!persons.length || persons.length === 0) return personPlaceholder;
 
   const privilegedPerson = persons.find(p => p.privileged);
   return privilegedPerson ?? persons[0];
@@ -469,6 +471,12 @@ export const createStateIds = async latestSurveyUnit => {
   const { id, states } = latestSurveyUnit;
   const previousSurveyUnit = await surveyUnitIdbService.getById(id);
   surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, states });
+};
+
+export const createCommunicationRequestIds = async latestSurveyUnit => {
+  const { id, communicationRequests } = latestSurveyUnit;
+  const previousSurveyUnit = await surveyUnitIdbService.getById(id);
+  surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, communicationRequests });
 };
 
 export const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => {
