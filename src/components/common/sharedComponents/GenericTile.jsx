@@ -22,16 +22,16 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const GenericTile = ({ title, children, icon: Icon, editionIcon: EditionIcon }) => {
+const GenericTile = ({ title, children, icon, editionIcon }) => {
   const classes = useStyles();
   return (
     <Paper className={classes.root} elevation={0}>
       <div className={classes.row}>
         <div className={classes.row}>
-          <Icon />
+          {icon}
           <Typography variant="h5">{title}</Typography>
         </div>
-        {EditionIcon && <EditionIcon />}
+        {editionIcon}
       </div>
       {children}
     </Paper>
@@ -42,5 +42,5 @@ export default GenericTile;
 GenericTile.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-  icon: PropTypes.func.isRequired,
+  icon: PropTypes.node.isRequired,
 };

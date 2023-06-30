@@ -1,3 +1,12 @@
+import {
+  communicationEmiterEnum,
+  communicationMediumEnum,
+  communicationReasonEnum,
+  communicationStatusEnum,
+  communicationTypeEnum,
+} from 'utils/enum/CommunicationEnums';
+
+import D from 'i18n';
 import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
@@ -46,4 +55,98 @@ export const STATES_UPDATING_TO_WFT = [
   surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type,
   surveyUnitStateEnum.TO_BE_REVIEWED.type,
   surveyUnitStateEnum.FINALIZED.type,
+];
+
+export const HEALTHY_COMMUNICATION_REQUEST_STATUS = [
+  communicationStatusEnum.INIT.type,
+  communicationStatusEnum.READY.type,
+  communicationStatusEnum.SUBMITTED.type,
+];
+
+export const mediumRadioValues = [
+  { value: communicationMediumEnum.MEDIUM_MAIL.type, label: D.mediumMail, disabled: false },
+  { value: communicationMediumEnum.MEDIUM_EMAIL.type, label: D.mediumEmail, disabled: true },
+];
+
+export const typeRadioValues = [
+  {
+    value: communicationTypeEnum.COMMUNICATION_NOTICE.type,
+    label: D.communicationNotification,
+    disabled: true,
+  },
+  {
+    value: communicationTypeEnum.COMMUNICATION_REMINDER.type,
+    label: D.communicationReminder,
+    disabled: false,
+  },
+];
+
+export const reasonRadioValues = [
+  {
+    value: communicationReasonEnum.UNREACHABLE.type,
+    label: D.communicationMotiveUnreachable,
+    disabled: false,
+  },
+  {
+    value: communicationReasonEnum.REFUSAL.type,
+    label: D.communicationMotiveRefusal,
+    disabled: false,
+  },
+];
+
+export const EMPTY_COMMUNICATION_REQUEST = {
+  medium: '',
+  reason: '',
+  emiter: communicationEmiterEnum.INTERVIEWER,
+  type: communicationTypeEnum.COMMUNICATION_REMINDER.type,
+  status: [],
+};
+
+export const CIVILITIES = {
+  MISS: { type: 'MISS', value: D.titleMiss },
+  MISTER: { type: 'MISTER', value: D.titleMister },
+};
+
+export const COMMUNICATION_REQUEST_STUB = [
+  {
+    status: [{ date: 123456789000, status: communicationStatusEnum.FAILED.type }],
+    medium: communicationMediumEnum.MEDIUM_MAIL.type,
+    type: communicationTypeEnum.COMMUNICATION_REMINDER.type,
+    emiter: communicationEmiterEnum.INTERVIEWER,
+  },
+  {
+    status: [{ date: 123456000000, status: communicationStatusEnum.SUBMITTED.type }],
+    medium: communicationMediumEnum.MEDIUM_EMAIL.type,
+    type: communicationTypeEnum.COMMUNICATION_NOTICE.type,
+    emiter: communicationEmiterEnum.TOOL,
+  },
+];
+
+export const COMMUNICATION_REQUEST_FORM_STEPS = [
+  {
+    title: D.selectCommunciationRequestMedium,
+    valueName: 'medium',
+    values: mediumRadioValues,
+    previousLabel: D.cancelButton,
+    nextLabel: D.confirmButton,
+  },
+  {
+    title: D.selectCommunciationRequestType,
+    valueName: 'type',
+    values: typeRadioValues,
+    previousLabel: D.previousButton,
+    nextLabel: D.confirmButton,
+  },
+  {
+    title: D.selectCommunciationRequestReason,
+    valueName: 'reason',
+    values: reasonRadioValues,
+    previousLabel: D.previousButton,
+    nextLabel: D.confirmButton,
+  },
+  {
+    title: D.communicationRequestValidation,
+    previousLabel: D.previousButton,
+    nextLabel: D.sendButton,
+  },
 ];

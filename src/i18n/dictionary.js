@@ -1,5 +1,6 @@
 import addressMessage from './addressMessage';
 import buttonMessage from './buttonMessage';
+import communicationMessage from './communicationMessage';
 import contactAttemptMessage from './contactAttemptMessage';
 import contactOutcomeMessage from './contactOutcomeMessage';
 import criteriaMessage from './criteriaMessage';
@@ -101,6 +102,7 @@ const dictionary = {
   ...resetDataMessage,
   ...identificationMessage,
   ...mediumMessage,
+  ...communicationMessage,
 };
 
 export default dictionary;

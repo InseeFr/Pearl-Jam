@@ -33,6 +33,7 @@ const ContactAttempts = ({ selectFormType, setInjectableData }) => {
         contactAttempts.length > 0 &&
         contactAttempts.map(contAtt => (
           <ContactAttemptLine
+            key={contAtt.date}
             contactAttempt={contAtt}
             editionFunction={() => {
               selectFormType(formEnum.CONTACT_ATTEMPT, true);

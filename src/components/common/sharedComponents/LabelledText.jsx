@@ -27,7 +27,9 @@ const LabelledText = ({ labelText, value }) => {
       <div className={classes.column}>
         {Array.isArray(labelText) ? (
           labelText.map(labelTextLine => (
-            <Typography color="textSecondary">{labelTextLine}</Typography>
+            <Typography key={labelTextLine} color="textSecondary">
+              {labelTextLine}
+            </Typography>
           ))
         ) : (
           <Typography color="textSecondary">{labelText}</Typography>

@@ -24,6 +24,7 @@ const generateTabs = tabsLabels =>
   tabsLabels.map((currentLabel, index) => (
     <Tab
       label={currentLabel}
+      key={currentLabel}
       id={`full-width-tab-${index}`}
       aria-controls={`full-width-tabpanel-${index}`}
     />
