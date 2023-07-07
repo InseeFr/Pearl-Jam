@@ -15,6 +15,8 @@ const useStyles = makeStyles(() => ({
     resize: 'none',
     border: 'none',
     margin: '10px',
+    fontSize: '2vw',
+    overflow: 'scroll'
   },
   paper: {
     borderRadius: '15px',
@@ -58,8 +60,8 @@ const Comment = ({ editable }) => {
       <Paper className={classes.paper}>
         <TextareaAutosize
           className={classes.noResize}
-          rowsMin={10}
-          cols={50}
+          rowsMax={6}
+          cols={75}
           placeholder={D.organizationComment}
           defaultValue={interviewerComment}
           onBlur={onBlur}
