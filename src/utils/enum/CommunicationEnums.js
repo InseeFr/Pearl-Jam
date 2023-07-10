@@ -27,7 +27,7 @@ export const findCommunicationReasonValueByType = type =>
 
 // Communication status
 export const communicationStatusEnum = {
-  INIT: { type: 'INIT', value: `${D.communicationStatusInit}` },
+  INITIATED: { type: 'INITIATED', value: `${D.communicationStatusInit}` },
   READY: { type: 'READY', value: `${D.communicationStatusReady}` },
   SUBMITTED: { type: 'SUBMITTED', value: `${D.communicationStatusSubmitted}` },
   FAILED: { type: 'FAILED', value: `${D.communicationStatusFailed}` },

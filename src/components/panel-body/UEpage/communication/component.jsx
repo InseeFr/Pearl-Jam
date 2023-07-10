@@ -5,7 +5,6 @@ import {
   getRecipientInformation,
 } from 'utils/functions/communicationFunctions';
 
-import { COMMUNICATION_REQUEST_STUB } from 'utils/constants';
 import { CommunicationRequestForm } from './form/CommunicationRequestForm';
 import { CommunicationRequestLine } from './CommunicationRequestLine';
 import D from 'i18n';
@@ -40,8 +39,7 @@ const Communication = () => {
 
   const recipientInformation = getRecipientInformation(surveyUnit);
 
-  // TODO : remove stub when feature is finished
-  const { communicationRequests = COMMUNICATION_REQUEST_STUB } = surveyUnit;
+  const { communicationRequests = [] } = surveyUnit;
   const disabled = !canSendCommunication(surveyUnit);
   const addCommunicationRequest = communicationRequest => {
     const previousCommunicationRequests = communicationRequests ?? [];

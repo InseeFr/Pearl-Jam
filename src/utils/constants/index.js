@@ -58,7 +58,7 @@ export const STATES_UPDATING_TO_WFT = [
 ];
 
 export const HEALTHY_COMMUNICATION_REQUEST_STATUS = [
-  communicationStatusEnum.INIT.type,
+  communicationStatusEnum.INITIATED.type,
   communicationStatusEnum.READY.type,
   communicationStatusEnum.SUBMITTED.type,
 ];
