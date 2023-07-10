@@ -60,6 +60,7 @@ const Comment = ({ editable }) => {
       <Paper className={classes.paper}>
         <TextareaAutosize
           className={classes.noResize}
+          rowsMin={6}
           rowsMax={6}
           cols={75}
           placeholder={D.organizationComment}
