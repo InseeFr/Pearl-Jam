@@ -42,7 +42,7 @@ export const CommunicationRequestForm = ({
 
   const generateCommunicationRequest = commRequ => ({
     ...commRequ,
-    status: [{ date: new Date().getTime(), status: communicationStatusEnum.INIT.type }],
+    status: [{ date: new Date().getTime(), status: communicationStatusEnum.INITIATED.type }],
   });
 
   const nextStepAction = () => {
