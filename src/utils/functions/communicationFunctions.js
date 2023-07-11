@@ -2,10 +2,13 @@ import { CIVILITIES } from 'utils/constants';
 import { communicationEmiterEnum } from 'utils/enum/CommunicationEnums';
 import { getAddressData } from './surveyUnitFunctions';
 import { icons } from 'utils/icons/materialIcons';
+import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 
 export const canSendCommunication = surveyUnit => {
-  // TODO : insert business rules here
-  return true;
+  // #1 communicationRequestConfiguration should be set to true
+  const {communicationRequestConfiguration = false, contactOutcome} = surveyUnit;
+  // #2 contactOutcome should be different from INTERVIEW_ACCEPTED
+  return communicationRequestConfiguration && contactOutcome?.type!==contactOutcomeEnum.INTERVIEW_ACCEPTED.type;
 };
 
 export const getCommunicationIconFromType = emiter =>
