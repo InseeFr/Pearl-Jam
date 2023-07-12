@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { getTitle } from 'utils/functions';
 import { makeStyles } from '@material-ui/core';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(() => ({
   commRequestContent: {
@@ -27,6 +28,9 @@ const useStyles = makeStyles(() => ({
   },
   lines: {
     fontWeight: 'bold',
+  },
+  invalidAddress: {
+    border: '1px red solid',
   },
 }));
 
@@ -62,6 +66,10 @@ export const CommunicationRequestValidation = ({
     recipientLastName
   );
   const userAddress = buildAddressFirstLine(civility, firstName, lastName);
+  const hasError = data => Object.values(data).some(error => error === true);
+
+  const isUserInfoValid = !hasError(userError);
+  const isRecipientInfoValid = !hasError(recipientError);
 
   return (
     <Paper className={classes.commRequestContent} elevation={0}>
@@ -71,26 +79,28 @@ export const CommunicationRequestValidation = ({
         <li>{typeLabel}</li>
         {reason && <li>{reasonLabel}</li>}
       </ul>
-      <Typography className={classes.lines}>{D.communicationSummaryRecipient}</Typography>
-      <Typography className={classes.address}>{recipientAddress}</Typography>
-      {address
-        .filter(addressLine => addressLine.length > 0)
-        .map(addressLine => (
-          <Typography key={addressLine} className={classes.address}>
-            {addressLine}
-          </Typography>
-        ))}
-      <Typography
-        className={classes.address}
-      >{`${recipientPostcode}, ${recipientCityName}`}</Typography>
-
-      <Typography className={classes.lines}>{D.communicationSummaryInterviewer}</Typography>
-
-      <Typography className={classes.address}>{userAddress}</Typography>
-      <Typography className={classes.address}>{email}</Typography>
-      <Typography className={classes.address}>{phoneNumber}</Typography>
-      <ErrorDisplayer errors={userError} prefix="user" />
-      <ErrorDisplayer errors={recipientError} prefix="recipient" />
+      <Typography className={classes.lines}>{D.communicationSummaryRecipientAddress}</Typography>
+      <div className={clsx(isRecipientInfoValid ? '' : classes.invalidAddress)}>
+        <Typography className={classes.address}>{recipientAddress}</Typography>
+        {address
+          .filter(addressLine => addressLine.length > 0)
+          .map(addressLine => (
+            <Typography key={addressLine} className={classes.address}>
+              {addressLine}
+            </Typography>
+          ))}
+        <Typography
+          className={classes.address}
+        >{`${recipientPostcode}, ${recipientCityName}`}</Typography>
+      </div>
+      <Typography className={classes.lines}>{D.communicationSummaryInterviewerAddress}</Typography>
+      <div className={clsx(isUserInfoValid ? '' : classes.invalidAddress)}>
+        <Typography className={classes.address}> {userAddress} </Typography>
+        <Typography className={classes.address}>{email}</Typography>
+        <Typography className={classes.address}>{phoneNumber}</Typography>
+      </div>
+      <ErrorDisplayer errors={userError} prefix={D.communicationSummaryInterviewer} />
+      <ErrorDisplayer errors={recipientError} prefix={D.communicationSummaryRecipient} />
       <ErrorDisplayer errors={communicationRequestError} prefix="communication-request" />
     </Paper>
   );
@@ -100,10 +110,10 @@ const ErrorDisplayer = ({ errors, prefix }) => {
   const classes = useStyles();
   return Object.entries(errors)
     .filter(([, val]) => val)
-    .map(([key, value]) => (
+    .map(([key]) => (
       <Typography
         key={`${prefix}-error-${key}`}
         className={classes.error}
-      >{`${prefix}-${key} : ${value}`}</Typography>
+      >{`${prefix} : ${key}`}</Typography>
     ));
 };
