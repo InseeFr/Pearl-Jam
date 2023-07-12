@@ -95,7 +95,7 @@ export const CommunicationRequestValidation = ({
       </div>
       <Typography className={classes.lines}>{D.communicationSummaryInterviewerAddress}</Typography>
       <div className={clsx(isUserInfoValid ? '' : classes.invalidAddress)}>
-        <Typography> {userAddress} </Typography>
+        <Typography className={classes.address}> {userAddress} </Typography>
         <Typography className={classes.address}>{email}</Typography>
         <Typography className={classes.address}>{phoneNumber}</Typography>
       </div>
