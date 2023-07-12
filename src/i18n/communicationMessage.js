@@ -23,10 +23,21 @@ const communicationMessage = {
   },
   communicationRequestValidation: { fr: 'Confirmation', en: 'Confirmation' },
   communicationSummaryContent: { fr: 'Vous souhaitez envoyer :', en: 'You are about to send :' },
-  communicationSummaryRecipient: { fr: "A l'adresse suivante :", en: 'To the following address :' },
-  communicationSummaryInterviewer: {
+  communicationSummaryRecipientAddress: {
+    fr: "A l'adresse suivante :",
+    en: 'To the following address :',
+  },
+  communicationSummaryRecipient: {
+    fr: 'Destinataire',
+    en: 'Recipient',
+  },
+  communicationSummaryInterviewerAddress: {
     fr: "Coordonnées de l'enquêteur·rice :",
     en: 'Interviewer contact information :',
+  },
+  communicationSummaryInterviewer: {
+    fr: 'Enquêteur',
+    en: 'Interviewer',
   },
   communicationStatusInit: { fr: 'Créé', en: 'Created' },
   communicationStatusReady: { fr: 'Enregistré', en: 'Created' },

@@ -36,7 +36,7 @@ export const CommunicationRequestForm = ({
         const steps = COMMUNICATION_REQUEST_FORM_STEPS;
         const [selectedStep, setSelectedStep] = useState(steps[0]);
 
-        const [currentAttributeIsValid, setCurrentAttributeIsValid] = useState(false);
+        const [currentStepIsValid, setCurrentStepIsValid] = useState(false);
 
         const getStepIndex = () => steps.findIndex(step => step.title === selectedStep.title);
         const isFirstStep = () => getStepIndex() === 0;
@@ -66,21 +66,26 @@ export const CommunicationRequestForm = ({
 
         const isValueValid = value => !!value;
 
-        const isAddressingValid = () => {
-          // TODO : add business rules here
-          return true;
-        };
-
-        const checkValidity = useCallback((communicationRequest, selectedStep) => {
-          if (selectedStep.valueName !== undefined)
-            return isValueValid(communicationRequest[selectedStep.valueName]);
-
-          return isAddressingValid();
-        }, []);
+        const isAddressingValid = communicationRequest =>
+          !Object.values(
+            checkCommunicationRequestFormAddressesValidity(
+              recipientInformation,
+              userInformation,
+              communicationRequest
+            )
+          )
+            .map(Object.values)
+            .flat()
+            .some(error => error === true);
 
         useEffect(() => {
-          setCurrentAttributeIsValid(checkValidity(communicationRequest, selectedStep));
-        }, [checkValidity, communicationRequest, selectedStep]);
+          const stepValidity =
+            selectedStep.valueName !== undefined
+              ? isValueValid(communicationRequest[selectedStep.valueName])
+              : isAddressingValid(communicationRequest);
+
+          setCurrentStepIsValid(stepValidity);
+        }, [communicationRequest, selectedStep]);
 
         const handleChange = event => {
           const {
@@ -88,18 +93,12 @@ export const CommunicationRequestForm = ({
           } = event;
           setCommunicationRequest({ ...communicationRequest, [selectedStep.valueName]: value });
         };
+
         const addressesErrors = checkCommunicationRequestFormAddressesValidity(
           recipientInformation,
           userInformation,
           communicationRequest
         );
-
-        const addressesHaveError = Object.values(addressesErrors)
-          .map(Object.values)
-          .flat()
-          .some(error => error === true);
-
-        const buttonIsDisabled = selectedStep.valueName ? !currentAttributeIsValid : addressesHaveError;
 
         return (
           <>
@@ -122,7 +121,7 @@ export const CommunicationRequestForm = ({
               <Button variant="outlined" onClick={previousStepAction}>
                 {selectedStep.previousLabel}
               </Button>
-              <Button disabled={buttonIsDisabled} onClick={nextStepAction}>
+              <Button disabled={!currentStepIsValid} onClick={nextStepAction}>
                 {selectedStep.nextLabel}
               </Button>
             </div>
