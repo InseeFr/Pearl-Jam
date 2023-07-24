@@ -1,22 +1,21 @@
-import { getRecipientInformation, isEmailValid, isValidCivility } from 'utils/functions';
+import { TITLES } from 'utils/constants';
+import { getRecipientInformation, isEmailValid, isValidTitle } from 'utils/functions';
 
-import { CIVILITIES } from 'utils/constants';
-
-describe('isValidCivility', () => {
+describe('isValidTitle', () => {
   const MISTER = 'MISTER';
   const mister = 'mister';
   const MISS = 'MISS';
   const miss = 'miss';
   const mylady = 'mylady';
 
-  it('should return true if value is in CIVILITIES enum', () => {
-    expect(isValidCivility(mister)).toBeTruthy();
-    expect(isValidCivility(MISTER)).toBeTruthy();
-    expect(isValidCivility(miss)).toBeTruthy();
-    expect(isValidCivility(MISS)).toBeTruthy();
+  it('should return true if value is in TITLES enum', () => {
+    expect(isValidTitle(mister)).toBeTruthy();
+    expect(isValidTitle(MISTER)).toBeTruthy();
+    expect(isValidTitle(miss)).toBeTruthy();
+    expect(isValidTitle(MISS)).toBeTruthy();
   });
-  it('should return false if value not in CIVILITIES enum', () => {
-    expect(isValidCivility(mylady)).toBeFalsy();
+  it('should return false if value not in TITLES enum', () => {
+    expect(isValidTitle(mylady)).toBeFalsy();
   });
 });
 
@@ -52,12 +51,12 @@ describe('getRecipientInformation', () => {
   const VALID_LASTNAME2 = 'Babbage';
 
   const ADA = {
-    title: CIVILITIES.MISS.type,
+    title: TITLES.MISS.type,
     firstName: VALID_FIRSTNAME1,
     lastName: VALID_LASTNAME1,
   };
   const BABBAGE = {
-    title: CIVILITIES.MISTER.type,
+    title: TITLES.MISTER.type,
     firstName: VALID_FIRSTNAME2,
     lastName: VALID_LASTNAME2,
   };
@@ -78,7 +77,7 @@ describe('getRecipientInformation', () => {
       ...BABBAGE,
     },
   ];
-  const validePrivilegedSecondPersons = [
+  const validPrivilegedSecondPersons = [
     {
       privileged: false,
       ...ADA,
@@ -105,7 +104,7 @@ describe('getRecipientInformation', () => {
     address: validAddress,
   };
   const secondPersonValidSurveyUnit = {
-    persons: validePrivilegedSecondPersons,
+    persons: validPrivilegedSecondPersons,
     address: validAddress,
   };
 
@@ -138,7 +137,7 @@ describe('getRecipientInformation', () => {
     );
   });
   const generateExpectedOutput = (person, cityName, postCode) => ({
-    civility: person.title,
+    title: person.title,
     recipientFirstName: person.firstName,
     recipientLastName: person.lastName,
     recipientCityName: cityName,

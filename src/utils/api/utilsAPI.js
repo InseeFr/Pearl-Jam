@@ -20,3 +20,12 @@ export const healthCheck = async (urlPearApi, authenticationMode) => {
     throw new Error(`Error during refreshToken : ${e}`);
   }
 };
+export const getUserData = (urlPearApi, authenticationMode) => async id => {
+  try {
+    await authentication(authenticationMode);
+    const token = getToken();
+    return API.getInterviewer(urlPearApi)(id)(token);
+  } catch (e) {
+    throw new Error(`Error during refreshToken : ${e}`);
+  }
+};

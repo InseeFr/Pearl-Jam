@@ -43,7 +43,7 @@ export const CommunicationRequestValidation = ({
   const classes = useStyles();
   const { reason, type, medium } = communicationRequest;
   const {
-    civility: recipientCivility,
+    title: recipientTitle,
     recipientFirstName,
     recipientLastName,
     recipientPostcode,
@@ -51,21 +51,21 @@ export const CommunicationRequestValidation = ({
     address,
   } = recipientInformation;
 
-  const { phoneNumber, email, civility, firstName, lastName } = userInformation;
+  const { phoneNumber, email, title, firstName, lastName } = userInformation;
   const { userError, recipientError, communicationRequestError } = addressesErrors;
 
   const mediumLabel = findCommunicationMediumValueByType(medium);
   const typeLabel = findCommunicationTypeValueByType(type);
   const reasonLabel = findCommunicationReasonValueByType(reason);
 
-  const buildAddressFirstLine = (civility, firstname, lastName) =>
-    `${getTitle(civility)} ${firstname} ${lastName}`;
+  const buildAddressFirstLine = (title, firstname, lastName) =>
+    `${getTitle(title)} ${firstname} ${lastName}`;
   const recipientAddress = buildAddressFirstLine(
-    recipientCivility,
+    recipientTitle,
     recipientFirstName,
     recipientLastName
   );
-  const userAddress = buildAddressFirstLine(civility, firstName, lastName);
+  const userAddress = buildAddressFirstLine(title, firstName, lastName);
   const hasError = data => Object.values(data).some(error => error === true);
 
   const isUserInfoValid = !hasError(userError);

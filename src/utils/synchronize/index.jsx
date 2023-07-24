@@ -7,6 +7,8 @@ import surveyUnitDBService from 'utils/indexeddb/services/surveyUnit-idb-service
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useHistory } from 'react-router-dom';
+import { TITLES, PEARL_USER_KEY } from 'utils/constants';
+import userIdbService from 'utils/indexeddb/services/user-idb-service';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
@@ -87,6 +89,19 @@ const sendData = async (urlPearlApi, authenticationMode) => {
     })
   );
   return surveyUnitsInTempZone;
+};
+
+const getUserData = async (urlPearlApi, authenticationMode) => {
+  const result = window.localStorage.getItem(PEARL_USER_KEY);
+  const jsonInterviewer = JSON.parse(result);
+  const { id } = jsonInterviewer;
+  const { data: interviewer } = await api.getUserData(
+    urlPearlApi,
+    authenticationMode
+  )(id.toUpperCase());
+  await userIdbService.deleteAll();
+  // prevent missing civility from crushing IDB inserts for schema-4
+  await userIdbService.addOrUpdate({ civility: TITLES.MISTER.type, ...interviewer });
 };
 
 const putSurveyUnitInDataBase = async su => {
@@ -185,6 +200,7 @@ export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE)
   var surveyUnitsSuccess;
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
+    await getUserData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
     surveyUnitsInTempZone = await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
     transmittedSurveyUnits = await getWFSSurveyUnitsSortByCampaign();
 
@@ -204,6 +220,7 @@ export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE)
       loadedSurveyUnits,
     };
   } catch (e) {
+    console.debug(e);
     return { error: true, surveyUnitsSuccess, surveyUnitsInTempZone };
   }
 };

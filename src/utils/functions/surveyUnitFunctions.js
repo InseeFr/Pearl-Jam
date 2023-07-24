@@ -1,4 +1,4 @@
-import { CIVILITIES, CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'utils/constants';
+import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST, TITLES } from 'utils/constants';
 import {
   IASCO_CATEGORY_FINISHING_VALUES,
   IASCO_IDENTIFICATION_FINISHING_VALUES,
@@ -394,7 +394,7 @@ export const getAge = birthdate => {
   return differenceInYears(new Date(), new Date(birthdate));
 };
 
-export const isTitleMister = title => title.toUpperCase() === CIVILITIES.MISTER.type;
+export const isTitleMister = title => title.toUpperCase() === TITLES.MISTER.type;
 
 export const displayAgeInYears = birthdate => `${getAge(birthdate) ?? '/'} ${D.years}`;
 
@@ -429,10 +429,9 @@ export const getMailData = person => [
   { label: D.surveyUnitEmail, value: person.email, favorite: person.favoriteEmail },
 ];
 
-export const getTitle = title =>
-  isTitleMister(title) ? CIVILITIES.MISTER.value : CIVILITIES.MISS.value;
+export const getTitle = title => (isTitleMister(title) ? TITLES.MISTER.value : TITLES.MISS.value);
 export const getToggledTitle = title =>
-  isTitleMister(title) ? CIVILITIES.MISS.type : CIVILITIES.MISTER.type;
+  isTitleMister(title) ? TITLES.MISS.type : TITLES.MISTER.type;
 
 export const getPhoneSource = type => {
   switch (type.toLowerCase()) {
@@ -448,7 +447,7 @@ export const getPhoneSource = type => {
 };
 
 export const personPlaceholder = {
-  title: CIVILITIES.MISTER.type,
+  title: TITLES.MISTER.type,
   firstName: '',
   lastName: '',
   email: '',
