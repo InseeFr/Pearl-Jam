@@ -102,7 +102,7 @@ export const EMPTY_COMMUNICATION_REQUEST = {
   status: [],
 };
 
-export const CIVILITIES = {
+export const TITLES = {
   MISS: { type: 'MISS', value: D.titleMiss },
   MISTER: { type: 'MISTER', value: D.titleMister },
 };
@@ -150,3 +150,12 @@ export const COMMUNICATION_REQUEST_FORM_STEPS = [
     nextLabel: D.sendButton,
   },
 ];
+
+export const DEFAULT_USER_DATA = {
+  id: 'Aidee',
+  title: TITLES.MISS.type,
+  firstName: 'Int',
+  lastName: 'Erviewer',
+  email: 'int.erviewer@mai.il',
+  phoneNumber: '0123456789',
+};

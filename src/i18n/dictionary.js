@@ -23,6 +23,7 @@ import titleMessage from './titleMessage';
 import toDoMessage from './toDoMessage';
 import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
+import profileMessage from './profileMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -103,6 +104,7 @@ const dictionary = {
   ...identificationMessage,
   ...mediumMessage,
   ...communicationMessage,
+  ...profileMessage,
 };
 
 export default dictionary;

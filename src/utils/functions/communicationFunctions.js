@@ -1,4 +1,4 @@
-import { CIVILITIES } from 'utils/constants';
+import { TITLES } from 'utils/constants';
 import { communicationEmiterEnum } from 'utils/enum/CommunicationEnums';
 import { getAddressData } from './surveyUnitFunctions';
 import { icons } from 'utils/icons/materialIcons';
@@ -6,9 +6,12 @@ import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 
 export const canSendCommunication = surveyUnit => {
   // #1 communicationRequestConfiguration should be set to true
-  const {communicationRequestConfiguration = false, contactOutcome} = surveyUnit;
+  const { communicationRequestConfiguration = false, contactOutcome } = surveyUnit;
   // #2 contactOutcome should be different from INTERVIEW_ACCEPTED
-  return communicationRequestConfiguration && contactOutcome?.type!==contactOutcomeEnum.INTERVIEW_ACCEPTED.type;
+  return (
+    communicationRequestConfiguration &&
+    contactOutcome?.type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.type
+  );
 };
 
 export const getCommunicationIconFromType = emiter =>
@@ -18,7 +21,7 @@ export const VALID_MAIL_FORMAT = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
 export const isEmailValid = email => email?.match(VALID_MAIL_FORMAT) ?? false;
 
-export const isValidCivility = civility => Object.keys(CIVILITIES).includes(civility.toUpperCase());
+export const isValidTitle = title => Object.keys(TITLES).includes(title.toUpperCase());
 
 export const checkCommunicationRequestFormAddressesValidity = (
   recipientInformation,
@@ -26,14 +29,14 @@ export const checkCommunicationRequestFormAddressesValidity = (
   communicationRequest
 ) => {
   let userError = {
-      civility: true,
+      title: true,
       firstName: true,
       lastName: true,
       email: true,
       phoneNumber: true,
     },
     recipientError = {
-      civility: true,
+      title: true,
       firstName: true,
       lastName: true,
       postCode: true,
@@ -46,8 +49,8 @@ export const checkCommunicationRequestFormAddressesValidity = (
     communicationRequestError.medium = !medium;
   }
   if (userInformation !== undefined) {
-    const { civility, firstName, lastName, email, phoneNumber } = userInformation;
-    userError.civility = !['MISTER', 'MISS'].includes(civility);
+    const { title, firstName, lastName, email, phoneNumber } = userInformation;
+    userError.title = !isValidTitle(title);
     userError.firstName = !firstName || firstName.length === 0;
     userError.lastName = !lastName || lastName.length === 0;
     userError.email = !isEmailValid(email);
@@ -55,13 +58,13 @@ export const checkCommunicationRequestFormAddressesValidity = (
   }
   if (recipientInformation !== undefined) {
     const {
-      civility,
+      title,
       recipientFirstName,
       recipientLastName,
       recipientPostcode,
       recipientCityName,
     } = recipientInformation;
-    recipientError.civility = !['MISTER', 'MISS'].includes(civility);
+    recipientError.title = !isValidTitle(title);
     recipientError.firstName = !recipientFirstName || recipientFirstName.length === 0;
     recipientError.lastName = !recipientLastName || recipientLastName.length === 0;
     recipientError.postCode = !recipientPostcode || recipientPostcode.length === 0;
@@ -79,7 +82,7 @@ export const getRecipientInformation = surveyUnit => {
   const { postCode, cityName, elevator, cityPriorityDistrict, ...rest } = getAddressData(address);
 
   return {
-    civility: title,
+    title: title,
     recipientFirstName: firstName,
     recipientLastName: lastName,
     recipientCityName: cityName,

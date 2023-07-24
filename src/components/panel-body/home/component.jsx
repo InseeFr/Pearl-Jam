@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import LateralMenu from '../lateralMenu';
 import Navigation from 'components/common/navigation/component';
@@ -6,24 +6,31 @@ import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 import UEPage from 'components/panel-body/UEpage';
 import UESPage from 'components/panel-body/UESpage';
+import userIdbService from 'utils/indexeddb/services/user-idb-service';
 import { UserProvider } from './UserContext';
 import { version } from '../../../../package.json';
+import { DEFAULT_USER_DATA } from 'utils/constants';
 
 const Home = ({ match }) => {
   const [textSearch, setTextSearch] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
-  // TODO : use indexedDB user info retrieved with synchronization
-  const user = {
-    civility: 'MISS',
-    firstName: 'Int',
-    lastName: 'Erviewer',
-    email: 'int.erviewer@mai.il',
-    phoneNumber: '0123456789',
-  };
+  const [user, setUser] = useState(DEFAULT_USER_DATA);
+
+  useEffect(async () => {
+    const getUser = async () => {
+      const idbUsers = await userIdbService.getAll();
+      const onlyUser = idbUsers?.[0];
+      return onlyUser;
+    };
+    const myUser = await getUser();
+    setUser(myUser);
+  }, []);
+
+  const memoUser = useMemo(() => user, [user]);
 
   return (
     <div>
-      <UserProvider value={user}>
+      <UserProvider value={memoUser}>
         <Navigation
           textSearch={textSearch}
           setTextSearch={setTextSearch}
@@ -45,5 +52,4 @@ const Home = ({ match }) => {
 export default Home;
 Home.propTypes = {
   match: PropTypes.shape({ url: PropTypes.string.isRequired }).isRequired,
-  location: PropTypes.shape({}).isRequired,
 };

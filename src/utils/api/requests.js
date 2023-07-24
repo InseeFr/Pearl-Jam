@@ -21,10 +21,13 @@ const sendMail = apiUrl => subject => content => token => {
 };
 
 const healthCheck = apiUrl => token => getRequest(`${apiUrl}/api/healthcheck`)(token);
+const getInterviewer = apiUrl => id => token =>
+  getRequest(`${apiUrl}/api/interviewer/${id}`)(token);
 
 export const API = {
   getRequest,
   getSurveyUnits,
+  getInterviewer,
   getSurveyUnitById,
   putDataSurveyUnitById,
   putToTempZone,
