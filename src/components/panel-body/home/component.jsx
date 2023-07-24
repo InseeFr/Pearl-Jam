@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 
 import LateralMenu from '../lateralMenu';
 import Navigation from 'components/common/navigation/component';
@@ -16,14 +16,25 @@ const Home = ({ match }) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [user, setUser] = useState(DEFAULT_USER_DATA);
 
+  // prevent double run on strict mode
+  const isUser = useRef(false);
+  // prevent setting user if unmounted
+  let isMounted = true;
   useEffect(async () => {
+    if (isUser.current) {
+      return;
+    }
     const getUser = async () => {
       const idbUsers = await userIdbService.getAll();
       const onlyUser = idbUsers?.[0];
       return onlyUser;
     };
     const myUser = await getUser();
-    setUser(myUser);
+    if (isMounted) {
+      setUser(myUser);
+    }
+    isUser.current = true;
+    return () => (isMounted = false);
   }, []);
 
   const memoUser = useMemo(() => user, [user]);
