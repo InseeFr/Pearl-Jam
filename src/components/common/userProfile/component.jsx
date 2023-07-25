@@ -30,12 +30,12 @@ export const UserProfile = ({
   user = {
     firstName: 'Unknown',
     lastName: 'Interviewer',
-    phone: '0123456789',
+    phoneNumber: '0123456789',
     email: 'no.data@y.et',
   },
 }) => {
   const classes = useStyles();
-  const { firstName, lastName, phone, email } = user;
+  const { firstName, lastName, phoneNumber, email } = user;
   return (
     <Paper className={classes.outterPaper} elevation={0}>
       <Typography variant="h5">{D.myProfile}</Typography>
@@ -43,7 +43,7 @@ export const UserProfile = ({
         <LabelledText labelText={`${D.profileLastName} :`} value={lastName} />
         <LabelledText labelText={`${D.profileFirstName} :`} value={firstName} />
         <LabelledText labelText={`${D.profileEmail} :`} value={email} />
-        <LabelledText labelText={`${D.profilePhone} :`} value={phone} />
+        <LabelledText labelText={`${D.profilePhone} :`} value={phoneNumber} />
       </Paper>
       <Typography className={classes.version}>{`V.${version}`}</Typography>
     </Paper>
