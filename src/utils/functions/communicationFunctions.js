@@ -22,6 +22,7 @@ export const VALID_MAIL_FORMAT = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 export const isEmailValid = email => email?.match(VALID_MAIL_FORMAT) ?? false;
 
 export const isValidTitle = title => Object.keys(TITLES).includes(title.toUpperCase());
+export const isValidString = string => !!string && string?.length !== 0;
 
 export const checkCommunicationRequestFormAddressesValidity = (
   recipientInformation,
@@ -30,10 +31,8 @@ export const checkCommunicationRequestFormAddressesValidity = (
 ) => {
   let userError = {
       title: true,
-      firstName: true,
-      lastName: true,
-      email: true,
-      phoneNumber: true,
+      name: true,
+      emailAndPhoneNumber: true,
     },
     recipientError = {
       title: true,
@@ -51,10 +50,9 @@ export const checkCommunicationRequestFormAddressesValidity = (
   if (userInformation !== undefined) {
     const { title, firstName, lastName, email, phoneNumber } = userInformation;
     userError.title = !isValidTitle(title);
-    userError.firstName = !firstName || firstName.length === 0;
-    userError.lastName = !lastName || lastName.length === 0;
-    userError.email = !isEmailValid(email);
-    userError.phoneNumber = !phoneNumber || phoneNumber.length < 10;
+    userError.name = !isValidString(lastName);
+    userError.emailAndPhoneNumber =
+      !isEmailValid(email) && (!phoneNumber || phoneNumber.length < 10);
   }
   if (recipientInformation !== undefined) {
     const {
@@ -65,10 +63,10 @@ export const checkCommunicationRequestFormAddressesValidity = (
       recipientCityName,
     } = recipientInformation;
     recipientError.title = !isValidTitle(title);
-    recipientError.firstName = !recipientFirstName || recipientFirstName.length === 0;
-    recipientError.lastName = !recipientLastName || recipientLastName.length === 0;
-    recipientError.postCode = !recipientPostcode || recipientPostcode.length === 0;
-    recipientError.cityName = !recipientCityName || recipientCityName.length === 0;
+    recipientError.firstName = !isValidString(recipientFirstName);
+    recipientError.lastName = !isValidString(recipientLastName);
+    recipientError.postCode = !isValidString(recipientPostcode);
+    recipientError.cityName = !isValidString(recipientCityName);
   }
 
   return { userError, recipientError, communicationRequestError };
