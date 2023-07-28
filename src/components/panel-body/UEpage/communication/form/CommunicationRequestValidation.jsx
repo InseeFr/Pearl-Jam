@@ -7,7 +7,7 @@ import {
 import D from 'i18n';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { getTitle } from 'utils/functions';
+import { getTitle, isValidString } from 'utils/functions';
 import { makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 
@@ -21,7 +21,6 @@ const useStyles = makeStyles(() => ({
   },
   address: {
     paddingLeft: '2em',
-    // fontWeight: 'bold',
   },
   error: {
     color: 'red',
@@ -59,7 +58,9 @@ export const CommunicationRequestValidation = ({
   const reasonLabel = findCommunicationReasonValueByType(reason);
 
   const buildAddressFirstLine = (title, firstname, lastName) =>
-    `${getTitle(title)} ${firstname} ${lastName}`;
+    `${getTitle(title)} ${isValidString(firstname) ? firstname : ''} ${
+      isValidString(lastName) ? lastName : '!!!'
+    }`;
   const recipientAddress = buildAddressFirstLine(
     recipientTitle,
     recipientFirstName,
