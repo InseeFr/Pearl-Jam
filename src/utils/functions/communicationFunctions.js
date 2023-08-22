@@ -1,6 +1,6 @@
 import { TITLES } from 'utils/constants';
 import { communicationEmiterEnum } from 'utils/enum/CommunicationEnums';
-import { getAddressData } from './surveyUnitFunctions';
+import { getAddressData, getprivilegedPerson } from './surveyUnitFunctions';
 import { icons } from 'utils/icons/materialIcons';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 
@@ -73,7 +73,7 @@ export const checkCommunicationRequestFormAddressesValidity = (
 };
 
 export const getRecipientInformation = surveyUnit => {
-  const recipient = surveyUnit.persons?.find(p => p.privileged);
+  const recipient = getprivilegedPerson(surveyUnit);
   const { title, firstName, lastName } = recipient;
 
   const { address } = surveyUnit;
