@@ -55,7 +55,7 @@ jobs:
           context: .
           tags: |
             inseefr/pearl-jam:latest,
-            inseefr/pearl-jam:${{ needs.check_if_version_upgraded.outputs.version }}
+            inseefr/pearl-jam:${{ needs.check_if_version_upgraded.outputs.version }}-rc
   release:
     needs: check_if_version_upgraded
     if: needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true'
