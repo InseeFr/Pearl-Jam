@@ -9,24 +9,18 @@ jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - name: Use Node.js 14C
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
+      - uses: actions/setup-node@v3
       - run: yarn --frozen-lockfile
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 14
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
       - run: yarn
-      - run: yarn build
       - run: yarn test
+      - run: yarn build
       - name: Upload build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build
           path: build
