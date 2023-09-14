@@ -1,19 +1,20 @@
-const { surveyUnitStateEnum } = require('utils/enum/SUStateEnum');
-const { contactAttemptEnum } = require('utils/enum/ContactAttemptEnum');
-const { contactOutcomeEnum } = require('utils/enum/ContactOutcomeEnum');
-// Mock for surveyUnitFunctions done here
-const functions = require('utils/functions');
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
+import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
+import functions from 'utils/functions';
 
-jest.mock('utils/functions', () => {
-  const originalModule = jest.requireActual('utils/functions');
-
+vi.mock('utils/functions', async () => {
+  const originalModule = await vi.importActual('utils/functions');
   //Mock addNewState
   return {
-    __esModule: true,
-    ...originalModule,
-    addNewState: jest.fn(),
+    default: {
+      ...originalModule,
+    },
+    addNewState: vi.fn(),
   };
 });
+
+// Mock for surveyUnitFunctions done here
 
 const {
   getContactAttemptNumber,
@@ -169,10 +170,10 @@ describe('getContactAttemptNumber', () => {
 });
 describe('updateStateWithDates', () => {
   beforeAll(() => {
-    jest.useFakeTimers('modern').setSystemTime(new Date(2021, 2, 15).getTime());
+    vi.useFakeTimers('modern').setSystemTime(new Date(2021, 2, 15).getTime());
   });
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
   const beforeCurrent = new Date(2021, 2, 10).getTime();
   const afterCurrent = new Date(2021, 2, 20).getTime();
@@ -198,10 +199,10 @@ describe('updateStateWithDates', () => {
 
 describe('isSelectable', () => {
   beforeAll(() => {
-    jest.useFakeTimers('modern').setSystemTime(new Date(2021, 2, 15).getTime());
+    vi.useFakeTimers('modern').setSystemTime(new Date(2021, 2, 15).getTime());
   });
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
   it('should return false if date not in range', () => {
     const surveyUnitBefore = {
@@ -226,10 +227,10 @@ describe('isSelectable', () => {
 
 describe('isQuestionnaireAvailable', () => {
   beforeAll(() => {
-    jest.useFakeTimers('modern').setSystemTime(new Date(2021, 2, 15).getTime());
+    vi.useFakeTimers('modern').setSystemTime(new Date(2021, 2, 15).getTime());
   });
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
   const suInRange = {
     collectionStartDate: new Date(2021, 2, 1).getTime(),

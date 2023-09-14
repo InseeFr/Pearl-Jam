@@ -3,17 +3,22 @@ import React from 'react';
 import { SurveyUnitProvider } from '../UEContext';
 import { act } from 'react-dom/test-utils';
 import { render } from '@testing-library/react';
+import { vi } from 'vitest';
 
-jest.mock('utils/hooks/database', () => ({
-  useSurveyUnit: () => ({
-    id: '1',
-    persons: [{ firstName: 'FirstName', lastName: 'LastName', privileged: true }],
-    campaign: 'Mocked campaign',
-    sampleIdentifiers: { ssech: '1' },
-  }),
-}));
+vi.mock('utils/hooks/database', () => {
+  return {
+    default: {
+      useSurveyUnit: () => ({
+        id: '1',
+        persons: [{ firstName: 'FirstName', lastName: 'LastName', privileged: true }],
+        campaign: 'Mocked campaign',
+        sampleIdentifiers: { ssech: '1' },
+      }),
+    },
+  };
+});
 
-const dataBaseHooks = require('utils/hooks/database');
+import dataBaseHooks from 'utils/hooks/database';
 
 const mockSurveyUnit = {
   id: '1',

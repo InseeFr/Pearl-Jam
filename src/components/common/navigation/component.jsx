@@ -173,9 +173,6 @@ const Navigation = ({ textSearch, setTextSearch, setOpenDrawer }) => {
 };
 export default Navigation;
 Navigation.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-  }).isRequired,
   textSearch: PropTypes.string.isRequired,
   setTextSearch: PropTypes.func.isRequired,
   setOpenDrawer: PropTypes.func.isRequired,
