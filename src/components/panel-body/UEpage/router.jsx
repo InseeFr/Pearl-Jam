@@ -44,6 +44,7 @@ const useStyles = makeStyles(() => ({
 
 const Router = () => {
   const { surveyUnit } = useContext(SurveyUnitContext);
+  const { communicationRequestConfiguration = false } = surveyUnit;
 
   /** Form type is dynamically inserted in Modal, with previousValue for edition if needed */
   const [formType, setFormType] = useState(undefined);
@@ -86,13 +87,16 @@ const Router = () => {
   };
 
   const smartModalClass = smartForms.includes(formType) ? classes.paperModal : '';
-  const tabsLabels = [
-    D.goToIdentificationPage,
-    D.goToContactPage,
-    D.goToCommunicationPage,
-    D.goToCommentsPage,
-    D.goToQuestionnairesPage,
-  ];
+
+  const tabsLabels = communicationRequestConfiguration
+    ? [
+        D.goToIdentificationPage,
+        D.goToContactPage,
+        D.goToCommunicationPage,
+        D.goToCommentsPage,
+        D.goToQuestionnairesPage,
+      ]
+    : [D.goToIdentificationPage, D.goToContactPage, D.goToCommentsPage, D.goToQuestionnairesPage];
 
   const setFormTypeToAddress = () => selectFormType(formEnum.ADDRESS, true);
   const setFormTypeToUser = () => {
@@ -151,9 +155,11 @@ const Router = () => {
               </GenericTile>
             </div>
           </div>
-          <GenericTile title={D.surveyUnitCommunications} icon={AssignementIcon}>
-            <Communication />
-          </GenericTile>
+          {communicationRequestConfiguration && (
+            <GenericTile title={D.surveyUnitCommunications} icon={AssignementIcon}>
+              <Communication />
+            </GenericTile>
+          )}
           <GenericTile title={D.goToCommentsPage} icon={AssignementIcon}>
             <Comments />
           </GenericTile>
