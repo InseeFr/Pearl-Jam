@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import WifiIcon from '@material-ui/icons/Wifi';
 import clsx from 'clsx';
-import { AppContext } from 'Root';
+import { useNetworkOnline } from '../../../utils/hooks/useOnline';
 
 const useStyles = makeStyles(theme => ({
   red: {
@@ -14,12 +14,12 @@ const useStyles = makeStyles(theme => ({
   icon: {
     fontSize: '24px',
     alignSelf: 'center',
-    marginRight: "60px"
+    marginRight: '60px',
   },
 }));
 
 const OnlineStatus = () => {
-  const { online } = useContext(AppContext);
+  const online = useNetworkOnline();
 
   const { icon, green, red } = useStyles();
 

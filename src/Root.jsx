@@ -1,34 +1,85 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { useConfiguration } from 'utils/hooks/useConfiguration';
+import QueenContainer from './components/panel-body/queen-container';
+import { PearlTheme } from './ui/PearlTheme';
+import { Home } from './pages/Home';
+import { useAuth } from './utils/auth/initAuth';
+import { useServiceWorker } from './utils/hooks/useServiceWorker';
+import { ThemeProvider as ThemeProviderV4 } from '@material-ui/styles';
+import theme from './theme';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Notification from './components/common/Notification';
+import Preloader from './components/common/loader';
+import D from './i18n/build-dictionary';
+import SynchronizeWrapper from './components/sychronizeWrapper';
+import { NotificationWrapper } from './components/notificationWrapper';
+import Palette from './components/common/palette';
+import { ResetData } from './components/panel-body/resetData';
+import { DatabaseConsole } from './components/panel-body/databaseConsole';
+import { useEffectOnce } from './utils/hooks/useEffectOnce';
 
-import AppRouter from 'AppRooter';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { addOnlineStatusObserver } from 'utils';
-import { useConfiguration } from 'utils/hooks/configuration';
-
-export const AppContext = React.createContext();
+const router = createBrowserRouter([
+  {
+    path: '/queen',
+    element: <QueenContainer />,
+  },
+  {
+    path: '/',
+    element: <AppWrapper />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/support/palette',
+        element: <Palette />,
+      },
+      {
+        path: '/support/reset-data',
+        element: <ResetData />,
+      },
+      {
+        path: '/support/database',
+        element: <DatabaseConsole />,
+      },
+    ],
+  },
+]);
 
 function Root() {
-  const { configuration } = useConfiguration();
-  const [online, setOnline] = useState(navigator.onLine);
+  const { configuration, loadConfiguration } = useConfiguration();
 
-  useEffect(() => {
-    addOnlineStatusObserver(s => {
-      setOnline(s);
-    });
-  }, []);
+  useEffectOnce(loadConfiguration, []);
 
-  const context = useMemo(() => ({ ...configuration, online }), [configuration]);
+  if (!configuration) {
+    return null;
+  }
 
+  return <RouterProvider router={router} />;
+}
+
+function AppWrapper() {
+  const { authenticated } = useAuth();
+  const serviceWorkerInfo = useServiceWorker(authenticated);
   return (
-    <>
-      {configuration && (
-        <Router>
-          <AppContext.Provider value={context}>
-            <AppRouter />
-          </AppContext.Provider>
-        </Router>
-      )}
-    </>
+    <PearlTheme>
+      <ThemeProviderV4 theme={theme}>
+        <CssBaseline />
+        <Notification serviceWorkerInfo={serviceWorkerInfo} />
+        <div>
+          {!authenticated && <Preloader message={D.pleaseWait} />}
+          {authenticated && (
+            <SynchronizeWrapper>
+              <NotificationWrapper>
+                <Outlet />
+              </NotificationWrapper>
+            </SynchronizeWrapper>
+          )}
+        </div>
+      </ThemeProviderV4>
+    </PearlTheme>
   );
 }
 

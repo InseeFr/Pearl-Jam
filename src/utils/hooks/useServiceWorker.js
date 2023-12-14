@@ -1,11 +1,11 @@
 import { useState, useEffect, useContext } from 'react';
-import { AppContext } from 'Root';
 import * as serviceWorker from 'serviceWorkerRegistration';
+import { useConfiguration } from './useConfiguration';
 
 const SW_UPDATE_KEY = 'installing-update';
 
 export const useServiceWorker = authenticated => {
-  const { QUEEN_URL } = useContext(AppContext);
+  const { QUEEN_URL } = useConfiguration().configuration;
   const [isInstallingServiceWorker, setIsInstallingServiceWorker] = useState(false);
   const [waitingServiceWorker, setWaitingServiceWorker] = useState(null);
   const [isUpdateAvailable, setUpdateAvailable] = useState(false);

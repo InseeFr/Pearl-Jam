@@ -1,14 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import listenQueen from 'utils/hooks/listenQueen';
-import { useLocation, useHistory } from 'react-router-dom';
-// import { mount } from 'dramaQueen/DramaIndex';s
+import { useQueenListener } from 'utils/hooks/useQueenListener';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const QueenContainer = queenSwState => {
   const wrapperRef = useRef(null);
   const location = useLocation();
 
-  const history = useHistory();
-  listenQueen(history);
+  useQueenListener(useNavigate());
 
   const isFirstRunRef = useRef(true);
   const unmountRef = useRef(() => {});

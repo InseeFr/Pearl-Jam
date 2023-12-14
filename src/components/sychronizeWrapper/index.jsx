@@ -1,19 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as api from 'utils/api';
 
 import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
 import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
-
-import { AppContext } from 'Root';
 import D from 'i18n';
 import Preloader from 'components/common/loader';
 import { SyncDialog } from './sychronizeDialog';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
+import { useNetworkOnline } from '../../utils/hooks/useOnline';
+import { useConfiguration } from '../../utils/hooks/useConfiguration';
 
 export const SynchronizeWrapperContext = React.createContext();
 
 const SynchronizeWrapper = ({ children }) => {
-  const { online, PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = useContext(AppContext);
+  const online = useNetworkOnline();
+  const { configuration } = useConfiguration();
+  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = configuration;
   const { checkQueen, synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
   const [isSync, setIsSync] = useState(() => {

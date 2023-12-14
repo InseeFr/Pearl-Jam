@@ -42,17 +42,21 @@ const updateSurveyUnit = (surveyUnitID, queenState) => {
   });
 };
 
-const closeQueen = history => surveyUnitID => {
-  history.push(`/survey-unit/${surveyUnitID}/details`);
+/**
+ @param {(s: string) => void} redirect
+ * @return {(s: string) => void}
+ */
+const closeQueen = redirect => surveyUnitID => {
+  redirect(`/survey-unit/${surveyUnitID}/details`);
 };
 
 // eslint-disable-next-line consistent-return
-const handleQueenEvent = history => async event => {
+const handleQueenEvent = redirect => async event => {
   const { type, command, ...other } = event.detail;
   if (type === 'QUEEN') {
     switch (command) {
       case 'CLOSE_QUEEN':
-        closeQueen(history)(other.surveyUnit);
+        closeQueen(redirect)(other.surveyUnit);
         break;
       case 'UPDATE_SURVEY_UNIT':
         await updateSurveyUnit(other.surveyUnit, other.state);
@@ -69,13 +73,15 @@ const handleQueenEvent = history => async event => {
   }
 };
 
-function useQueenListener(history) {
+/**
+ * @param {(s: string) => void} redirect
+ */
+export function useQueenListener(redirect) {
   useEffect(() => {
-    window.addEventListener('QUEEN', handleQueenEvent(history));
+    const listener = handleQueenEvent(redirect)
+    window.addEventListener('QUEEN', listener);
     return () => {
-      window.removeEventListener('QUEEN', handleQueenEvent(history));
+      window.removeEventListener('QUEEN', listener);
     };
-  });
+  }, [history]);
 }
-
-export default useQueenListener;
