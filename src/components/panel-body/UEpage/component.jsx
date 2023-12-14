@@ -3,14 +3,13 @@ import { addNewState, getLastState } from 'utils/functions';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import D from 'i18n';
-import PropTypes from 'prop-types';
 import Router from './router';
 import { SurveyUnitProvider } from './UEContext';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useSurveyUnit } from 'utils/hooks/database';
 
-const UEPage = ({ match }) => {
+const UEPage = () => {
   const [inaccessible, setInaccessible] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -43,7 +42,7 @@ const UEPage = ({ match }) => {
     <>
       {surveyUnit && !loading && (
         <SurveyUnitProvider value={{ surveyUnit, inaccessible }}>
-          <Router match={match} />
+          <Router />
         </SurveyUnitProvider>
       )}
 
@@ -60,6 +59,3 @@ const UEPage = ({ match }) => {
 };
 
 export default UEPage;
-UEPage.propTypes = {
-  match: PropTypes.shape({}).isRequired,
-};

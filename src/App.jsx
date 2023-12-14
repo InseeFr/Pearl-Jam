@@ -3,6 +3,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { loadConfiguration, useConfiguration } from 'utils/hooks/useConfiguration';
 import QueenContainer from './components/panel-body/queen-container';
 import { PearlTheme } from './ui/PearlTheme';
+import { Header } from './ui/Header';
 import { Home } from './pages/Home';
 import HomeOld from './components/panel-body/home';
 import { useAuth } from './utils/auth/initAuth';
@@ -19,6 +20,7 @@ import Palette from './components/common/palette';
 import { ResetData } from './components/panel-body/resetData';
 import { DatabaseConsole } from './components/panel-body/databaseConsole';
 import { useEffectOnce } from './utils/hooks/useEffectOnce';
+import { SurveyUnitPage } from './pages/SurveyUnitPage';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,20 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
+      },
+      {
+        path: '/survey-unit/:id',
+        element: (
+          <>
+            <Outlet />
+          </>
+        ),
+        children: [
+          {
+            path: 'details',
+            element: <SurveyUnitPage />,
+          },
+        ],
       },
       // TODO : remove this when finished
       {
@@ -79,6 +95,7 @@ function AppWrapper() {
           {authenticated && (
             <SynchronizeWrapper>
               <NotificationWrapper>
+                <Header />
                 <Outlet />
               </NotificationWrapper>
             </SynchronizeWrapper>

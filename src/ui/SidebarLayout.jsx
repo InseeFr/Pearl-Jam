@@ -1,0 +1,27 @@
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+
+/**
+ * Global layout for the app with 3 sections (header, sidebar and main content)
+ *
+ * @param {ReactNode} sidebar
+ * @param {ReactNode} children
+ * @return {JSX.Element}
+ */
+export function SidebarLayout({ sidebar, children }) {
+  return (
+    <Grid
+      gap={4}
+      p={2}
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: '280px 1fr',
+        height: 'calc(100vh - 90px)',
+      }}
+      bgcolor="surfacePrimary.main"
+    >
+      <Box bgcolor="white.main">{sidebar}</Box>
+      <Box bgcolor="white.main">{children}</Box>
+    </Grid>
+  );
+}

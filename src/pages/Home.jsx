@@ -1,10 +1,6 @@
-import { Header } from '../ui/Header';
-import { Layout } from '../ui/Layout';
+import UESPage from '../components/panel-body/UESpage';
+import React from 'react';
 
-export function Home () {
-  return <Layout
-    header={<Header/>}
-    sidebar={<>Sidebar</>}>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore error expedita facere impedit officia, temporibus. Beatae deleniti eum molestias nobis sapiente temporibus velit voluptate! Alias libero minus repudiandae sit velit!
-  </Layout>
+export function Home() {
+  return <UESPage textSearch="" setTextSearch={console.log} />;
 }
