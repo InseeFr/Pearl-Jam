@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { applyFilters, sortOnColumnCompareFunction, updateStateWithDates } from 'utils/functions';
 import { useMissingSurveyUnits, useSurveyUnits } from 'utils/hooks/database';
 import FilterPanel from './filterPanel';
@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import SurveyUnitCard from './material/surveyUnitCard';
 import { makeStyles } from '@material-ui/core/styles';
-import { Accordion, AccordionDetails, Select, MenuItem, FormControl,Typography } from '@material-ui/core';
+import { FormControl, MenuItem, Select, Typography } from '@material-ui/core';
 import SearchBar from 'components/common/search/component';
 import D from 'i18n';
 
@@ -139,7 +139,7 @@ const UESPage = ({ textSearch, setTextSearch, setOpenDrawer }) => {
       <Typography className={classes.typoFilter}>Trier par:</Typography>
     <FormControl className={classes.formControl}>
       <Select
-      disableUnderline 
+        disableUnderline
         labelId="sortCriteria-label"
         id="sortCriteria-select"
         value={sortCriteria}
