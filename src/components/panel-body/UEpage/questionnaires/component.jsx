@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import D from 'i18n';
 import IconButton from 'components/common/sharedComponents/IconButton';
@@ -8,10 +8,10 @@ import { isQuestionnaireAvailable } from 'utils/functions';
 
 const Questionnaires = () => {
   const { surveyUnit, inaccessible } = useContext(SurveyUnitContext);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id } = useParams();
   const openQueen = () => {
-    history.push(`/queen/survey-unit/${id}`);
+    navigate(`/queen/survey-unit/${id}`);
   };
 
   return (

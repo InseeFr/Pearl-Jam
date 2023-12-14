@@ -6,7 +6,7 @@ import { useConfiguration } from '../hooks/useConfiguration';
 
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
-  const { configuration } = useConfiguration();
+  const configuration = useConfiguration();
 
   const interviewerRoles = ['pearl-interviewer', 'uma_authorization', 'Guest'];
 

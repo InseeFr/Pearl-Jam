@@ -1,5 +1,10 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import Navigation from './component';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-export default withRouter(props => <Navigation {...props} />);
+export default props => {
+  let location = useLocation();
+  let navigate = useNavigate();
+  let params = useParams();
+  return <Navigation {...props} router={{ location, navigate, params }} />;
+};

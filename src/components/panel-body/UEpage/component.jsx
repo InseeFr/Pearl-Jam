@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { addNewState, getLastState } from 'utils/functions';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import D from 'i18n';
 import PropTypes from 'prop-types';
@@ -14,7 +14,7 @@ const UEPage = ({ match }) => {
   const [inaccessible, setInaccessible] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id } = useParams();
   const surveyUnit = useSurveyUnit(id);
 
@@ -49,7 +49,7 @@ const UEPage = ({ match }) => {
 
       {!surveyUnit && !loading && (
         <>
-          <button type="button" className="button-back-home" onClick={() => history.push('/')}>
+          <button type="button" className="button-back-home" onClick={() => navigate.push('/')}>
             <i className="fa fa-arrow-left" aria-hidden="true" />
           </button>
           <h2>{`${D.surveyUnitNotFound} ${id}.`}</h2>

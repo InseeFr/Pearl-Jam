@@ -16,7 +16,7 @@ const baseTheme = createTheme({
       fontSize: '.875rem',
       lineHeight: '1.125rem',
       fontWeight: 600,
-      textTransform: 'none'
+      textTransform: 'none',
     },
     headingXL: {
       fontSize: '3rem',
@@ -57,39 +57,39 @@ const baseTheme = createTheme({
   },
   palette: {
     white: {
-      main: '#FFF'
+      main: '#FFF',
     },
     green: {
-      main: '#019A3E'
+      main: '#019A3E',
     },
     red: {
-      main: '#ED1443'
+      main: '#ED1443',
     },
     surfacePrimary: {
-      main: '#F5F7FA'
+      main: '#F5F7FA',
     },
     surfaceSecondary: {
-      main: '#FFF'
+      main: '#FFF',
     },
     typographyblack: {
-      main: "#000000"
+      main: '#000000',
     },
     typographyprimary: {
-      main: "#0A192E"
+      main: '#0A192E',
     },
     typographyhint: {
-      main: "#797676"
+      main: '#797676',
     },
     typographytertiary: {
-      main: "#57677D"
+      main: '#57677D',
     },
     typographyaccent: {
-      main: "#ED1443"
-    }
+      main: '#ED1443',
+    },
   },
-})
+});
 
-const theme = createTheme(baseTheme, {
+export const theme = createTheme(baseTheme, {
   components: {
     MuiButton: {
       variants: [
@@ -100,6 +100,24 @@ const theme = createTheme(baseTheme, {
           },
         },
       ],
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 16,
+        },
+      },
+    },
+    MuiPopper: {
+      defaultProps: {
+        slotProps: {
+          paper: {
+            sx: {
+              borderRadius: 16,
+            },
+          },
+        },
+      },
     },
     MuiTypography: {
       defaultProps: {
@@ -122,9 +140,11 @@ const theme = createTheme(baseTheme, {
 /**
  * Material theme provider embedded in a component
  */
-export function PearlTheme ({children}) {
-  return <ThemeProvider theme={theme}>
-    <CssBaseline />
-    {children}
-  </ThemeProvider>
+export function PearlTheme({ children }) {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </ThemeProvider>
+  );
 }

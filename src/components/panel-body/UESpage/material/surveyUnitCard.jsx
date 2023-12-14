@@ -20,7 +20,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { intervalInDays } from 'utils/functions';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const colorMapping = {
   1: '#FFC9D5',
@@ -44,12 +44,12 @@ const useStyles = makeStyles(theme => ({
     return acc;
   }, {}),
   root: {
-    padding: "24px",
-    borderRadius: "16px",
+    padding: '24px',
+    borderRadius: '16px',
     '&:hover': { cursor: 'pointer' },
     backgroundColor: '#FFFFFF',
-    height: "236px",
-    width: "306px",
+    height: '236px',
+    width: '306px',
   },
   flexRow: {
     display: 'flex',
@@ -144,20 +144,19 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     width: '100%',
   },
-  wrapperSchedule:
-  {
+  wrapperSchedule: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textRight: {
     textAlign: 'right',
-  }
+  },
 }));
 
 const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
   const classes = useStyles();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const active = isSelectable(surveyUnit);
 
@@ -176,7 +175,7 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
   const todo = convertSUStateInToDo(lastState.type);
   const { order, value: toDoLabel } = todo;
   const nbJoursRestant = intervalInDays(surveyUnit);
-  const openSurveyUnitPage = id => history.push(`/survey-unit/${id}/details?panel=0`);
+  const openSurveyUnitPage = id => navigate(`/survey-unit/${id}/details?panel=0`);
 
   return (
     <Card
@@ -230,9 +229,7 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
         ></Typography>
       </CardContent>
       <CardContent className={`${classes.content} ${classes.verticalIconContainer}`}>
-        <div
-          className={classes.cardContent}
-        >
+        <div className={classes.cardContent}>
           <div className={classes.wrapperSchedule}>
             <ScheduleIcon className={classes.scheduleIcon} />
             <Typography className={classes.leftMargin} variant="subtitle1" color="textSecondary">

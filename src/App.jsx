@@ -1,27 +1,74 @@
-import { Route, useLocation } from 'react-router-dom';
-
-import CssBaseline from '@material-ui/core/CssBaseline';
-import D from 'i18n';
-import { DatabaseConsole } from 'components/panel-body/databaseConsole';
-import { Home } from 'pages/Home';
-import Notification from 'components/common/Notification';
-import { NotificationWrapper } from 'components/notificationWrapper';
-import Palette from 'components/common/palette';
-import Preloader from 'components/common/loader';
 import React from 'react';
-import { ResetData } from 'components/panel-body/resetData';
-import SynchronizeWrapper from 'components/sychronizeWrapper';
-import { ThemeProvider as ThemeProviderV4 } from '@material-ui/core/styles';
-import theme from './theme';
-import { useAuth } from 'utils/auth/initAuth';
-import { useServiceWorker } from 'utils/hooks/useServiceWorker';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { loadConfiguration, useConfiguration } from 'utils/hooks/useConfiguration';
+import QueenContainer from './components/panel-body/queen-container';
 import { PearlTheme } from './ui/PearlTheme';
+import { Home } from './pages/Home';
+import HomeOld from './components/panel-body/home';
+import { useAuth } from './utils/auth/initAuth';
+import { useServiceWorker } from './utils/hooks/useServiceWorker';
+import { ThemeProvider as ThemeProviderV4 } from '@material-ui/styles';
+import theme from './theme';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Notification from './components/common/Notification';
+import Preloader from './components/common/loader';
+import D from './i18n/build-dictionary';
+import SynchronizeWrapper from './components/sychronizeWrapper';
+import { NotificationWrapper } from './components/notificationWrapper';
+import Palette from './components/common/palette';
+import { ResetData } from './components/panel-body/resetData';
+import { DatabaseConsole } from './components/panel-body/databaseConsole';
+import { useEffectOnce } from './utils/hooks/useEffectOnce';
 
-function App () {
-  const { pathname } = useLocation();
+const router = createBrowserRouter([
+  {
+    path: '/queen/*',
+    element: <QueenContainer />,
+  },
+  {
+    path: '/',
+    element: <AppWrapper />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      // TODO : remove this when finished
+      {
+        path: '/old',
+        element: <HomeOld />,
+      },
+      {
+        path: '/support/palette',
+        element: <Palette />,
+      },
+      {
+        path: '/support/reset-data',
+        element: <ResetData />,
+      },
+      {
+        path: '/support/database',
+        element: <DatabaseConsole />,
+      },
+    ],
+  },
+]);
+
+export function App() {
+  const configuration = useConfiguration();
+
+  useEffectOnce(loadConfiguration, []);
+
+  if (!configuration) {
+    return null;
+  }
+
+  return <RouterProvider router={router} />;
+}
+
+function AppWrapper() {
   const { authenticated } = useAuth();
   const serviceWorkerInfo = useServiceWorker(authenticated);
-
   return (
     <PearlTheme>
       <ThemeProviderV4 theme={theme}>
@@ -32,12 +79,7 @@ function App () {
           {authenticated && (
             <SynchronizeWrapper>
               <NotificationWrapper>
-                {!pathname.startsWith('/support') && (
-                  <Route path='/' render={routeProps => <Home {...routeProps} />} />
-                )}
-                <Route path='/support/palette' component={Palette} />
-                <Route path='/support/reset-data' component={ResetData} />
-                <Route path='/support/database' component={DatabaseConsole} />
+                <Outlet />
               </NotificationWrapper>
             </SynchronizeWrapper>
           )}
@@ -46,5 +88,3 @@ function App () {
     </PearlTheme>
   );
 }
-
-export default App;

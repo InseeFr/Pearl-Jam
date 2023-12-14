@@ -65,11 +65,11 @@ const UESPage = ({ textSearch, setTextSearch, setOpenDrawer }) => {
     setSearchEchoes([matchingEchoes, totalEchoes]);
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }, [textSearch, filters, sortCriteria, surveyUnits]);
-  const useStyles = makeStyles((theme) => ({
+  const useStyles = makeStyles(theme => ({
     root: {
       height: 'calc(100vh - 5em)',
       scrollbarWidth: 'none',
-      backgroundColor:"#F5F7FA"
+      backgroundColor: '#F5F7FA',
     },
     grid: {
       height: '100%',
@@ -82,7 +82,7 @@ const UESPage = ({ textSearch, setTextSearch, setOpenDrawer }) => {
       },
       paddingTop: 0,
       alignContent: 'flex-start',
-      marginTop:"0.5em"
+      marginTop: '0.5em',
     },
     grow: {
       flex: '1 1 auto',
@@ -91,75 +91,69 @@ const UESPage = ({ textSearch, setTextSearch, setOpenDrawer }) => {
     formControl: {
       margin: theme.spacing(1),
       minWidth: 220,
-      backgroundColor:"white",
-      borderRadius:"3em",
+      backgroundColor: 'white',
+      borderRadius: '3em',
     },
     wrapper: {
-      width:"100%",
-      display:"flex",
-      justifyContent:"space-between",
-      margin:"2em"
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'space-between',
+      margin: '2em',
     },
     select: {
-      display:"flex"
+      display: 'flex',
     },
     typoFilter: {
-      marginRight:"0.3em",
-      alignSelf:"center",
-      fontWeight:"bold"
-    }
+      marginRight: '0.3em',
+      alignSelf: 'center',
+      fontWeight: 'bold',
+    },
   }));
   const classes = useStyles();
 
   return (
-      <Grid container className={classes.root} spacing={0}>
-        <FilterPanel
-          searchEchoes={searchEchoes}
-          campaigns={campaigns}
-          sortCriteria={sortCriteria}
-          setSortCriteria={setSortCriteria}
-          filters={filters}
-          setFilters={setFilters}
-        />
-        <Grid container className={classes.grid} spacing={4}>
-             <div className={classes.grow}>
-            <Route
-              exact
-              path="/"
-              render={routeProps => (
-                <SearchBar {...routeProps} textSearch={textSearch} setTextSearch={setTextSearch} />
-              )}
-            />
-          </div>
-          <div className={classes.wrapper}>
+    <Grid container className={classes.root} spacing={0}>
+      <FilterPanel
+        searchEchoes={searchEchoes}
+        campaigns={campaigns}
+        sortCriteria={sortCriteria}
+        setSortCriteria={setSortCriteria}
+        filters={filters}
+        setFilters={setFilters}
+      />
+      <Grid container className={classes.grid} spacing={4}>
+        <div className={classes.grow}>
+          <SearchBar textSearch={textSearch} setTextSearch={setTextSearch} />
+        </div>
+        <div className={classes.wrapper}>
           <div className={classes.leftMargin}>
-          {`${searchEchoes[0]} ${D.surveyUnits} ${searchEchoes[1]}`}
+            {`${searchEchoes[0]} ${D.surveyUnits} ${searchEchoes[1]}`}
+          </div>
+          <div className={classes.select}>
+            <Typography className={classes.typoFilter}>Trier par:</Typography>
+            <FormControl className={classes.formControl}>
+              <Select
+                disableUnderline
+                labelId="sortCriteria-label"
+                id="sortCriteria-select"
+                value={sortCriteria}
+                onChange={changeCriteria}
+              >
+                <MenuItem value="remainingDays">{D.remainingDays}</MenuItem>
+                <MenuItem value="priority">{D.priority}</MenuItem>
+                <MenuItem value="campaign">{D.survey}</MenuItem>
+                <MenuItem value="sampleIdentifiers">{D.subSample}</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
         </div>
-        <div className={classes.select}>
-      <Typography className={classes.typoFilter}>Trier par:</Typography>
-    <FormControl className={classes.formControl}>
-      <Select
-        disableUnderline
-        labelId="sortCriteria-label"
-        id="sortCriteria-select"
-        value={sortCriteria}
-        onChange={changeCriteria}
-      >
-        <MenuItem value="remainingDays">{D.remainingDays}</MenuItem>
-        <MenuItem value="priority">{D.priority}</MenuItem>
-        <MenuItem value="campaign">{D.survey}</MenuItem>
-        <MenuItem value="sampleIdentifiers">{D.subSample}</MenuItem>
-      </Select>
-    </FormControl>
-</div>
-        </div>
-          {filteredSurveyUnits.map(su => (
-            <Grid key={su.id} item>
-              <SurveyUnitCard surveyUnit={su} inaccessible={inaccessibles.includes(su.id)} />
-            </Grid>
-          ))}
-        </Grid>
+        {filteredSurveyUnits.map(su => (
+          <Grid key={su.id} item>
+            <SurveyUnitCard surveyUnit={su} inaccessible={inaccessibles.includes(su.id)} />
+          </Grid>
+        ))}
       </Grid>
+    </Grid>
   );
 };
 

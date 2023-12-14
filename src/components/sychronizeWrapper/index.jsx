@@ -14,8 +14,7 @@ export const SynchronizeWrapperContext = React.createContext();
 
 const SynchronizeWrapper = ({ children }) => {
   const online = useNetworkOnline();
-  const { configuration } = useConfiguration();
-  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = configuration;
+  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = useConfiguration();
   const { checkQueen, synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
   const [isSync, setIsSync] = useState(() => {

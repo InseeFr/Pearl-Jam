@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import AppBar from '@material-ui/core/AppBar';
 import SwipeableViews from 'react-swipeable-views';
@@ -43,7 +43,7 @@ const TabSwipper = ({ tabsLabels, children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const [value, setValue] = React.useState(
     isNaN(parseInt(query.get('panel'))) || parseInt(query.get('panel')) === 'NaN'
@@ -52,11 +52,11 @@ const TabSwipper = ({ tabsLabels, children }) => {
   );
 
   const handleChange = (event, newValue) => {
-    history.push(`${location.pathname.split('?')[0]}?panel=${newValue}`);
+    navigate(`${location.pathname.split('?')[0]}?panel=${newValue}`);
   };
 
   const handleChangeIndex = index => {
-    history.push(`${location.pathname.split('?')[0]}?panel=${index}`);
+    navigate(`${location.pathname.split('?')[0]}?panel=${index}`);
   };
   useEffect(() => {
     setValue(parseInt(query.get('panel')));

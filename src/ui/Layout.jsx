@@ -9,18 +9,23 @@ import Box from '@mui/material/Box';
  * @param {ReactNode} children
  * @return {JSX.Element}
  */
-export function Layout ({ sidebar, header, children }) {
-  return <Grid sx={{
-    display: 'grid',
-    gridTemplateColumns: '280px 1fr',
-    gridTemplateRows: 'min-content 1fr',
-    gap: '1rem 2rem',
-    width: '100%',
-    height: '100vh',
-  }}
-  bgcolor="surfacePrimary.main">
-    <Box sx={{ gridColumn: '1 / -1' }}>{header}</Box>
-    <Box bgcolor='typographyaccent.main'>{sidebar}</Box>
-    <Box bgcolor='typographyhint.main'>{children}</Box>
-  </Grid>;
+export function Layout({ sidebar, header, children }) {
+  return (
+    <>
+      {header}
+      <Grid
+        gap={4}
+        p={2}
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: '280px 1fr',
+          height: 'calc(100vh - 90px)',
+        }}
+        bgcolor="surfacePrimary.main"
+      >
+        <Box bgcolor="white.main">{sidebar}</Box>
+        <Box bgcolor="white.main">{children}</Box>
+      </Grid>
+    </>
+  );
 }
