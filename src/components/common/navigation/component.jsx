@@ -13,6 +13,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { NotificationWrapperContext } from 'components/notificationWrapper';
 import Notifications from '@material-ui/icons/Notifications';
+import ListOutlinedIcon from '@material-ui/icons/ListOutlined';
+import NotificationsActiveOutlinedIcon from '@material-ui/icons/NotificationsActiveOutlined';
 import { NotificationsRoot } from 'components/common/Notification/notificationsRoot';
 import OnlineStatus from 'components/common/online-status';
 import { PEARL_USER_KEY } from 'utils/constants';
@@ -27,6 +29,7 @@ import { UserContext } from 'components/panel-body/home/UserContext';
 import { makeStyles } from '@material-ui/core/styles';
 import { Modal } from '@material-ui/core';
 import { UserProfile } from 'components/common/userProfile';
+import { version } from '../../../../package.json';
 
 export const NavigationContext = React.createContext();
 
@@ -37,14 +40,17 @@ const Navigation = ({ textSearch, setTextSearch, setOpenDrawer }) => {
   const useStyles = makeStyles(theme => ({
     appBar: {
       backgroundColor: theme.palette.primary.main,
-      height: '5em',
+      height: '83px',
+      paddingRight: '32px',
+      paddingLeft: '32px',
     },
     column: {
       display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'end',
+      width: '800px',
+      justifyContent: 'flex-end',
     },
     card: {
+      marginRight: '40px',
       borderRadius: 0,
     },
     media: {
@@ -60,7 +66,7 @@ const Navigation = ({ textSearch, setTextSearch, setOpenDrawer }) => {
       '&:hover': { color: theme.palette.secondary.dark },
     },
     syncIcon: {
-      fontSize: 'xxx-large',
+      fontSize: '24px',
       color: theme.palette.secondary.main,
       alignSelf: 'center',
     },
@@ -68,8 +74,6 @@ const Navigation = ({ textSearch, setTextSearch, setOpenDrawer }) => {
       '&:focus, &:hover': {
         backgroundColor: theme.palette.primary.main,
       },
-      marginLeft: '1em',
-      marginRight: '1em',
     },
     notif: {
       zIndex: 1200,
@@ -79,6 +83,38 @@ const Navigation = ({ textSearch, setTextSearch, setOpenDrawer }) => {
       display: 'flex',
       justifyContent: 'flex-end',
       margin: '1em',
+    },
+    rightMargin: {
+      marginRight: '60px',
+    },
+    leftMargin: {
+      marginLeft: '1em',
+    },
+    containerAppBar: {
+      display: 'flex',
+      width: '100vw',
+      justifyContent: 'space-between',
+    },
+    navLinkContainer: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    logoWrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginLeft: '0.5em',
+    },
+    typoLogo: {
+      display: 'flex',
+    },
+    typoMarginRight: {
+      marginRight: '0.2em',
+    },
+    badgeMargin: {
+      margin: '0 0 15px 15px',
+    },
+    marginProfile: {
+      marginRight: '40px',
     },
   }));
 
@@ -106,79 +142,85 @@ const Navigation = ({ textSearch, setTextSearch, setOpenDrawer }) => {
     <NavigationContext.Provider value={contextValue}>
       <AppBar position="sticky" className={classes.appBar} elevation={0}>
         <Toolbar className={classes.appBar}>
-          <NavLink activeClassName="active" exact to="/">
-            <Card className={classes.card}>
-              <CardMedia
-                className={classes.media}
-                image="/static/images/logo-insee-header.png"
-                title="Insee"
-              />
-            </Card>
-          </NavLink>
-          <Tooltip title={D.goToHomePage}>
-            <IconButton
-              className={classes.noVisibleFocus}
-              edge="end"
-              color="inherit"
-              aria-label="open notifications"
-              onClick={() => setOpenDrawer(true)}
-            >
-              <MenuIcon className={classes.notificationsIcon} />
-            </IconButton>
-          </Tooltip>
-          <Typography variant="h4">Sabiane</Typography>
-          <Typography variant="h4" color="error">
-            Collecte
-          </Typography>
-
-          <div className={classes.grow}>
-            <Route
-              exact
-              path="/"
-              render={routeProps => (
-                <SearchBar {...routeProps} textSearch={textSearch} setTextSearch={setTextSearch} />
-              )}
-            />
-          </div>
-          <div className={classes.column}>
-            <ClickAwayListener onClickAway={handleClickAway}>
+          <div className={classes.containerAppBar}>
+            <div className={classes.navLinkContainer}>
+              <NavLink activeClassName="active" exact to="/">
+                <Card className={classes.card}>
+                  <CardMedia
+                    className={classes.media}
+                    image="/static/images/logo-insee-header.png"
+                    title="Insee"
+                  />
+                </Card>
+              </NavLink>
+              <div className={classes.logoWrapper}>
+                <div className={classes.typoLogo}>
+                  <Typography variant="h5" className={classes.typoMarginRight}>
+                    Sabiane
+                  </Typography>
+                  <Typography variant="h5" color="error">
+                    Collecte
+                  </Typography>
+                </div>
+                <Typography variant="subtitle2">{`V.${version}`}</Typography>
+              </div>
+            </div>
+            <div className={classes.column}>
               <div>
-                <Tooltip title={D.notifications}>
-                  <IconButton onClick={handleClick}>
-                    <Badge badgeContent={unReadNotificationsNumber} color="secondary">
-                      <Notifications />
-                    </Badge>
+                <Tooltip title={'Mon suivi'}>
+                  <IconButton className={classes.rightMargin}>
+                    <ListOutlinedIcon className={classes.syncIcon} />
+                    <Typography variant="subtitle2" className={classes.leftMargin}>
+                      Mon suivi
+                    </Typography>
                   </IconButton>
                 </Tooltip>
-                <Popper
-                  className={classes.notif}
-                  open={open}
-                  anchorEl={anchorEl}
-                  placement="bottom"
-                  transition
-                >
-                  {({ TransitionProps }) => (
-                    <Fade {...TransitionProps} timeout={0}>
-                      <NotificationsRoot />
-                    </Fade>
-                  )}
-                </Popper>
               </div>
-            </ClickAwayListener>
+              <ClickAwayListener onClickAway={handleClickAway}>
+                <div>
+                  <Tooltip title={D.notifications}>
+                    <IconButton className={classes.rightMargin} onClick={handleClick}>
+                      <NotificationsActiveOutlinedIcon className={classes.syncIcon} />
+                      <Typography variant="subtitle2" className={classes.leftMargin}>
+                        Mes notifications
+                      </Typography>
+                      <Badge
+                        className={classes.badgeMargin}
+                        badgeContent={unReadNotificationsNumber}
+                        color="error"
+                      ></Badge>
+                    </IconButton>
+                  </Tooltip>
+                  <Popper
+                    className={classes.notif}
+                    open={open}
+                    anchorEl={anchorEl}
+                    placement="bottom"
+                    transition
+                  >
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={0}>
+                        <NotificationsRoot />
+                      </Fade>
+                    )}
+                  </Popper>
+                </div>
+              </ClickAwayListener>
+              <Synchronize className={classes.syncIcon} />
+              <OnlineStatus />
+              <IconButton
+                className={classes.noVisibleFocus}
+                edge="end"
+                color="inherit"
+                aria-label="open profile"
+                onClick={clickOnProfile}
+              >
+                <AssignmentIndIcon className={classes.syncIcon} />
+              </IconButton>
+            </div>
           </div>
-          <OnlineStatus />
-          <Synchronize materialClass={classes.syncIcon} />
-          <IconButton
-            className={classes.noVisibleFocus}
-            edge="end"
-            color="inherit"
-            aria-label="open profile"
-            onClick={clickOnProfile}
-          >
-            <AssignmentIndIcon className={classes.syncIcon} />
-          </IconButton>
           <Modal open={profileOpen} onClose={clickOnProfile} className={classes.profileModal}>
-            <UserProfile user={user} />
+            <UserProfile className={classes.marginProfile} user={user} />
           </Modal>
         </Toolbar>
       </AppBar>

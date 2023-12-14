@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import listenQueen from 'utils/hooks/listenQueen';
 import { useLocation, useHistory } from 'react-router-dom';
-import { mount } from 'dramaQueen/DramaIndex';
+// import { mount } from 'dramaQueen/DramaIndex';s
 
 const QueenContainer = queenSwState => {
   const wrapperRef = useRef(null);
@@ -17,11 +17,11 @@ const QueenContainer = queenSwState => {
     if (!isFirstRunRef.current) {
       return;
     }
-    unmountRef.current = mount({
-      mountPoint: wrapperRef.current,
-      //For the future we should have location.pathname.replace('queen', '') and remove useless /queen in queens routes
-      initialPathname: location.pathname.replace('', ''),
-    });
+    // unmountRef.current = mount({
+    //   mountPoint: wrapperRef.current,
+    //   //For the future we should have location.pathname.replace('queen', '') and remove useless /queen in queens routes
+    //   initialPathname: location.pathname.replace('', ''),
+    // });
     isFirstRunRef.current = false;
   }, [location]);
 

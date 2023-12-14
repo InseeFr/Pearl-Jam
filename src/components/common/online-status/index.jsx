@@ -9,13 +9,12 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.error.main,
   },
   green: {
-    color: 'green',
+    color: '#019A3E',
   },
   icon: {
-    transform: 'rotate(45deg)',
-    fontSize: 'xxx-large',
-    marginBottom: '-10px',
+    fontSize: '24px',
     alignSelf: 'center',
+    marginRight: "60px"
   },
 }));
 

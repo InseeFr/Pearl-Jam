@@ -5,7 +5,7 @@ const criteriaMessage = {
   survey: { fr: 'Enquête', en: 'Campaign' },
   subSample: { fr: 'Sous-échantillon', en: 'Sub sample' },
   sortSurvey: { fr: 'Enquêtes', en: 'Surveys' },
-  sortToDo: { fr: 'À faire', en: 'To do' },
+  sortStatus: { fr: "Statut de l'unité", en: 'Unit status' },
   sortCompleted: { fr: 'Terminées', en: 'Completed' },
 };
 

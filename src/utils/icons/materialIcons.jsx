@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.primary.darker,
   },
   syncIcon: {
-    fontSize: 'xxx-large',
+    fontSize: '24px',
     color: theme.palette.secondary.main,
     alignSelf: 'center',
   },

@@ -53,7 +53,7 @@ const Home = ({ match }) => {
         <Route
           exact
           path={`${match.url}`}
-          render={routeProps => <UESPage {...routeProps} textSearch={textSearch} />}
+          render={routeProps => <UESPage {...routeProps} textSearch={textSearch} setTextSearch={setTextSearch} />}
         />
       </UserProvider>
     </div>

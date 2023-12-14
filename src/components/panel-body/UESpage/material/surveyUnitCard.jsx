@@ -22,14 +22,34 @@ import { intervalInDays } from 'utils/functions';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 
+const colorMapping = {
+  1: '#FFC9D5',
+  2: '#F8E4A5',
+  3: '#E9C09C',
+  4: '#B7A1C8',
+  5: '#A5BCDB',
+  6: '#9AE3AB',
+};
+
 const useStyles = makeStyles(theme => ({
+  ...Object.keys(colorMapping).reduce((acc, order) => {
+    acc[`todoColor${order}`] = {
+      backgroundColor: colorMapping[order],
+      borderRadius: '0.5em',
+      padding: '0.05em 0.6em 0.05em 0.6em',
+      margin: '0.2em',
+      fontSize: '14px',
+      color: '#0A192E',
+    };
+    return acc;
+  }, {}),
   root: {
-    padding: 8,
-    borderRadius: 15,
+    padding: "24px",
+    borderRadius: "16px",
     '&:hover': { cursor: 'pointer' },
-    border: ' LightGray solid 1px',
-    height: 165,
-    width: 325,
+    backgroundColor: '#FFFFFF',
+    height: "236px",
+    width: "306px",
   },
   flexRow: {
     display: 'flex',
@@ -39,6 +59,7 @@ const useStyles = makeStyles(theme => ({
   justifyStart: {
     display: 'flex',
     justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   flexColumn: {
     display: 'flex',
@@ -53,16 +74,33 @@ const useStyles = makeStyles(theme => ({
   },
 
   icon: {
-    verticalAlign: 'bottom',
-    color: 'LightGray',
+    verticalAlign: 'middle',
+    color: '#57677D',
+  },
+  locationIcon: {
+    verticalAlign: 'middle',
+    color: '#0A192E',
+    height: '16px',
+    width: '16px',
+  },
+  personIcon: {
+    verticalAlign: 'middle',
+    color: '#0A192E',
+    width: '24px',
+    height: '24px',
+  },
+  scheduleIcon: {
+    verticalAlign: 'middle',
+    color: '#57677D',
+    width: '16px',
+    height: '16px',
   },
   inactive: {
     backgroundColor: 'grey',
     '&:hover': { cursor: 'not-allowed' },
   },
   paddingTop: {
-    paddingTop: '10px',
-    fontSize: 'xxx-large',
+    fontSize: '32px',
   },
   stateIcon: {
     color: 'green',
@@ -83,6 +121,37 @@ const useStyles = makeStyles(theme => ({
     marginLeft: '2px',
   },
   warning: { color: theme.palette.warning.main },
+  marginRight: {
+    margin: ' 4px 4px 4px 4px',
+  },
+  verticalIconContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  typo: {
+    backgroundColor: '#E6EAF0',
+    width: '150px',
+    borderRadius: '3em',
+    fontSize: '14px',
+    textAlign: 'center',
+    fontWeight: '600',
+    color: '#0A192E',
+  },
+  cardContent: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  wrapperSchedule:
+  {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  textRight: {
+    textAlign: 'right',
+  }
 }));
 
 const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
@@ -100,7 +169,7 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
     priority,
     persons,
   } = surveyUnit;
-
+  const cityName = l6.replace(/^\d+\s/, '').trim();
   const privilegedPerson = getprivilegedPerson(surveyUnit);
   const { firstName, lastName } = privilegedPerson ?? persons[0];
   const lastState = getLastState(surveyUnit);
@@ -115,30 +184,29 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
       onClick={() => (active ? openSurveyUnitPage(id) : {})}
       elevation={0}
     >
-      <CardContent className={`${classes.content} ${classes.flexRow}`}>
-        <Typography component="h5" variant="h5" className={`${priority ? '' : classes.hidden}`}>
-          !
-        </Typography>
-        <Typography component="h6" variant="h6" noWrap>
+      <CardContent className={` ${classes.flexRow}`}>
+        <Typography className={classes.typo} component="h6" variant="h6" noWrap>
           {campaign.toLowerCase()}
         </Typography>
-        <Typography
-          variant="subtitle1"
-          color="textSecondary"
-          align="center"
-          className={classes.rounded}
-        >
-          {ssech}
-        </Typography>
       </CardContent>
-      <CardContent className={`${classes.content} ${classes.flexRow} `}>
+      <CardContent className={`${classes.content} ${classes.verticalIconContainer}`}>
         <div className={classes.justifyStart}>
-          <PersonIcon className={`${classes.icon} ${classes.paddingTop}`} />
-          <div className={classes.flexColumn}>
-            <Typography component="h6" variant="h6" noWrap className={classes.maxWidth}>
+          <PersonIcon className={classes.personIcon} />
+          <div className={`${classes.flexRow} ${classes.alignItemsCenter}`}>
+            <Typography
+              component="h6"
+              variant="subtitle1"
+              noWrap
+              className={`${classes.maxWidth} ${classes.marginRight}`}
+            >
               {firstName}
             </Typography>
-            <Typography component="h6" variant="h6" noWrap className={classes.maxWidth}>
+            <Typography
+              component="h6"
+              variant="subtitle1"
+              noWrap
+              className={`${classes.maxWidth} ${classes.marginRight}`}
+            >
               {lastName}
             </Typography>
           </div>
@@ -149,28 +217,32 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
           </Tooltip>
         )}
       </CardContent>
-      <CardContent className={`${classes.content} ${classes.flexRow}`}>
+
+      <CardContent className={`${classes.content} ${classes.verticalIconContainer}`}>
         <Typography variant="subtitle1" color="textSecondary" noWrap className={classes.maxWidth}>
-          <LocationOnIcon className={`${classes.icon} ${classes.negativeLeftMargin}`} />
-          {`${l6}`}
+          <LocationOnIcon className={classes.locationIcon} />
+          {cityName}
         </Typography>
-        <Typography variant="subtitle1" color="textSecondary" className={classes.flexRow}>
-          {order !== 7 ? (
-            <RadioButtonUncheckedSharpIcon className={`${classes.icon} ${classes.stateIcon}`} />
-          ) : (
-            <CheckCircleOutlineIcon className={`${classes.icon} ${classes.stateIcon}`} />
-          )}
-          <Typography className={classes.leftMargin}>{toDoLabel}</Typography>
-        </Typography>
+        <Typography
+          variant="subtitle1"
+          color="textSecondary"
+          className={classes.flexRow}
+        ></Typography>
       </CardContent>
-      <CardContent className={`${classes.content} ${classes.flexRow}`}>
-        <Typography variant="subtitle1" color="textSecondary">
-          {` # ${id}`}
-        </Typography>
-        <div className={classes.flexRow}>
-          <ScheduleIcon className={classes.icon} />
-          <Typography className={classes.leftMargin} variant="subtitle1" color="textSecondary">
-            {`${nbJoursRestant} jours`}
+      <CardContent className={`${classes.content} ${classes.verticalIconContainer}`}>
+        <div
+          className={classes.cardContent}
+        >
+          <div className={classes.wrapperSchedule}>
+            <ScheduleIcon className={classes.scheduleIcon} />
+            <Typography className={classes.leftMargin} variant="subtitle1" color="textSecondary">
+              {`${nbJoursRestant} jours`}
+            </Typography>
+          </div>
+          <Typography
+            className={`${classes.leftMargin} ${classes.textRight} ${classes[`todoColor${order}`]}`}
+          >
+            {toDoLabel}
           </Typography>
         </div>
       </CardContent>

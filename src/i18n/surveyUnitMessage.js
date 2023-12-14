@@ -4,7 +4,7 @@ const surveyUnitMessage = {
     en: 'Sample',
   },
   surveyUnit: { fr: 'unité enquêtée', en: 'survey unit' },
-  surveyUnits: { fr: 'unités enquêtées', en: 'survey units' },
+  surveyUnits: { fr: 'unités sur', en: 'units on' },
   questionnaireInaccessible: {
     fr: 'Questionnaire inaccessible',
     en: 'Questionnaire not available',

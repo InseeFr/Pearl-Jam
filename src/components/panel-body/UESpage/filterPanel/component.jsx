@@ -6,8 +6,12 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Drawer from '@material-ui/core/Drawer';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
 import Radio from '@material-ui/core/Radio';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import Switch from '@material-ui/core/Switch';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -23,14 +27,49 @@ const FilterPanel = ({
   filters,
   setFilters,
 }) => {
+  const colorMapping = {
+    1: '#FFC9D5',
+    2: '#F8E4A5',
+    3: '#E9C09C',
+    4: '#B7A1C8',
+    5: '#A5BCDB',
+    6: '#9AE3AB',
+  };
   const useStyles = makeStyles(() => ({
+    ...Object.keys(colorMapping).reduce((acc, order) => {
+      acc[`customLabelOrder${order}`] = {
+        backgroundColor: colorMapping[order],
+        borderRadius: '0.5em',
+        padding: '0.05em 0.6em 0.05em 0.6em',
+        margin: '0.2em',
+        fontSize: '14px',
+        color: '#0A192E',
+      };
+      return acc;
+    }, {}),
+    labelPlacementStart: {
+      marginLeft: 0,
+    },
+    switchLabel: {
+      fontSize: '0.7rem',
+      fontWeight: 'bold',
+    },
+    switch: {
+      transform: 'scale(0.8)',
+      '& .MuiSwitch-colorPrimary.Mui-checked + .MuiSwitch-track': {
+        backgroundColor: '#52CF6F',
+      },
+    },
     leftMargin: { marginLeft: '16px' },
     drawer: {
-      height: 'calc(100vh - 5em)',
-      width: 200,
+      height: '100%',
+      width: 300,
+      margin: '1em',
+      zIndex: 100,
     },
     drawerPaper: {
       position: 'relative',
+      borderRadius: '2em',
     },
     drawerContainer: {
       overflow: 'auto',
@@ -43,8 +82,34 @@ const FilterPanel = ({
     paddingFour: {
       padding: 4,
     },
+    customAccordionSummary: {
+      '&.Mui-expanded': {
+        margin: '0px',
+        '& > .MuiAccordionSummary-content': {
+          margin: '0px',
+        },
+      },
+    },
+    heading: {
+      fontSize: '14px',
+    },
+    accordionDetailsVertical: {
+      flexDirection: 'column',
+    },
+    customAccordionDetails: {
+      padding: '0px 16px 16px',
+    },
+    formControlLabel: {
+      '& .MuiFormControlLabel-label': {
+        fontSize: '14px',
+      },
+    },
     accordion: { '&.MuiAccordion-root.Mui-expanded': { margin: '0px' } },
     accordionSummary: { '&.MuiAccordionSummary-root.Mui-expanded': { minHeight: '0px' } },
+    typoTitle: {
+      margin: '1rem 1rem 0rem 1rem',
+      fontWeight: 'bold',
+    },
   }));
 
   const classes = useStyles();
@@ -58,6 +123,18 @@ const FilterPanel = ({
   const [terminatedFilterExpanded, setTerminatedFilterExpanded] = useState(true);
 
   const [toDoFilterExpanded, setToDoFilterExpanded] = useState(true);
+
+  const [subSampleFilterExpanded, setSubSampleFilterExpanded] = useState(true);
+  const [selectedSubSample, setSelectedSubSample] = useState('');
+  const [selectedCluster, setSelectedCluster] = useState('');
+
+  const handleSubSampleChange = event => {
+    setSelectedSubSample(event.target.value);
+  };
+
+  const handleClusterChange = event => {
+    setSelectedCluster(event.target.value);
+  };
 
   const setPriority = value => {
     setFilters({ ...filters, priority: value });
@@ -144,191 +221,176 @@ const FilterPanel = ({
     .filter(todo => todo.order < 7);
 
   return (
-    <>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.leftMargin}>
-          {`${searchEchoes[0]} / ${searchEchoes[1]} ${D.surveyUnits}`}
-        </div>
-        <div className={classes.drawerContainer}>
-          <Accordion
-            expanded={sortCriteriaExpanded}
-            onChange={handleChange('sortAccordion')}
-            className={classes.accordion}
+    <Drawer
+      className={classes.drawer}
+      variant="permanent"
+      classes={{
+        paper: classes.drawerPaper,
+      }}
+    >
+      <div className={classes.drawerContainer}>
+        <Typography
+          className={classes.typoTitle}
+        >
+          Filtrer les unités par
+        </Typography>
+        <Accordion
+          className={classes.accordion}
+          expanded={campaignFilterExpanded}
+          onChange={handleChange('campaignFilterAccordion')}
+        >
+          <AccordionSummary
+            className={`${classes.accordionSummary} ${classes.customAccordionSummary}`}
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel4bh-content"
+            id="campaignFilterAccordion-header"
           >
-            <AccordionSummary
-              className={classes.accordionSummary}
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel4bh-content"
-              id="sortAccordion-header"
-            >
-              <Typography className={classes.heading}>{D.sortBy}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <RadioGroup
-                aria-label="sortCriteriaSelect"
-                name="sortCriteriaSelect"
-                value={sortCriteria}
+            <Typography className={classes.heading}>{D.sortSurvey}</Typography>
+          </AccordionSummary>
+          <AccordionDetails className={classes.customAccordionDetails}>
+            <FormGroup>
+              {campaigns.map(campaign => (
+                <FormControlLabel
+                  key={campaign}
+                  className={classes.formControlLabel}
+                  control={
+                    // eslint-disable-next-line react/jsx-wrap-multilines
+                    <Checkbox
+                      className={classes.paddingFour}
+                      checked={selectedCampaigns.includes(campaign)}
+                      onChange={handleChange('campaignCheckbox')}
+                      name={campaign}
+                    />
+                  }
+                  label={campaign.toLowerCase()}
+                />
+              ))}
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          className={classes.accordion}
+          expanded={priorityFilterExpanded}
+          onChange={handleChange('priorityFilterAccordion')}
+        >
+          <AccordionSummary
+            className={`${classes.accordionSummary} ${classes.customAccordionSummary}`}
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel4bh-content"
+            id="priorityFilterAccordion-header"
+          >
+            <Typography className={classes.heading}>{D.priority}</Typography>
+          </AccordionSummary>
+          <AccordionDetails className={classes.customAccordionDetails}>
+            <FormGroup>
+              <FormControlLabel
+                key={priority}
+                className={classes.formControlLabel}
+                control={
+                  // eslint-disable-next-line react/jsx-wrap-multilines
+                  <Checkbox
+                    className={classes.paddingFour}
+                    checked={priority}
+                    onChange={handleChange('priority')}
+                    name="priority"
+                  />
+                }
+                label="Unités prioritaires"
+              />
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={toDoFilterExpanded}
+          onChange={handleChange('toDoFilterAccordion')}
+          className={classes.accordion}
+        >
+          <AccordionSummary
+            className={`${classes.accordionSummary} ${classes.customAccordionSummary}`}
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel4bh-content"
+            id="toDoFilterAccordion-header"
+          >
+            <Typography className={classes.heading}>{D.sortStatus}</Typography>
+          </AccordionSummary>
+          <AccordionDetails className={classes.customAccordionDetails}>
+            <FormGroup>
+              <FormControlLabel
+                key={terminated}
+                labelPlacement="start"
+                classes={{ labelPlacementStart: classes.labelPlacementStart }}
+                control={
+                  <Switch
+                    checked={terminated}
+                    onChange={handleChange('terminated')}
+                    name="terminated"
+                    color="primary"
+                    className={classes.switch}
+                  />
+                }
+                label={
+                  <Typography className={classes.switchLabel}>
+                    Masquer les unités terminées
+                  </Typography>
+                }
+              />
+              {toDoEnumValues.map(todo => (
+                <FormControlLabel
+                  key={todo.order}
+                  classes={{ label: classes[`customLabelOrder${todo.order}`] }}
+                  control={
+                    <Checkbox
+                      className={classes.paddingFour}
+                      checked={selectedToDos.includes(todo.order.toString())}
+                      onChange={handleChange('toDoCheckbox')}
+                      name={todo.order.toString()}
+                    />
+                  }
+                  label={todo.value}
+                />
+              ))}
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={subSampleFilterExpanded}
+          onChange={() => setSubSampleFilterExpanded(!subSampleFilterExpanded)}
+          className={classes.accordion}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="subSampleFilter-content"
+            id="subSampleFilter-header"
+          >
+            <Typography className={classes.heading}>Sous-échantillon et grappe</Typography>
+          </AccordionSummary>
+          <AccordionDetails className={classes.accordionDetailsVertical}>
+            <FormControl fullWidth>
+              <InputLabel id="subSample-select-label">Sous-échantillon...</InputLabel>
+              <Select
+                labelId="subSample-select-label"
+                id="subSample-select"
+                value={selectedSubSample}
+                onChange={handleSubSampleChange}
               >
-                <FormControlLabel
-                  value="remainingDays"
-                  control={<Radio onClick={changeCriteria} className={classes.paddingFour} />}
-                  label={D.remainingDays}
-                />
-                <FormControlLabel
-                  value="priority"
-                  control={<Radio onClick={changeCriteria} className={classes.paddingFour} />}
-                  label={D.priority}
-                />
-                <FormControlLabel
-                  value="campaign"
-                  control={<Radio onClick={changeCriteria} className={classes.paddingFour} />}
-                  label={D.survey}
-                />
-                <FormControlLabel
-                  value="sampleIdentifiers"
-                  control={<Radio onClick={changeCriteria} className={classes.paddingFour} />}
-                  label={D.subSample}
-                />
-              </RadioGroup>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            className={classes.accordion}
-            expanded={campaignFilterExpanded}
-            onChange={handleChange('campaignFilterAccordion')}
-          >
-            <AccordionSummary
-              className={classes.accordionSummary}
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel4bh-content"
-              id="campaignFilterAccordion-header"
-            >
-              <Typography className={classes.heading}>{D.sortSurvey}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <FormGroup>
-                {campaigns.map(campaign => (
-                  <FormControlLabel
-                    key={campaign}
-                    control={
-                      // eslint-disable-next-line react/jsx-wrap-multilines
-                      <Checkbox
-                        className={classes.paddingFour}
-                        checked={selectedCampaigns.includes(campaign)}
-                        onChange={handleChange('campaignCheckbox')}
-                        name={campaign}
-                      />
-                    }
-                    label={campaign.toLowerCase()}
-                  />
-                ))}
-              </FormGroup>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            className={classes.accordion}
-            expanded={priorityFilterExpanded}
-            onChange={handleChange('priorityFilterAccordion')}
-          >
-            <AccordionSummary
-              className={classes.accordionSummary}
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel4bh-content"
-              id="priorityFilterAccordion-header"
-            >
-              <Typography className={classes.heading}>{D.priority}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <FormGroup>
-                <FormControlLabel
-                  key={priority}
-                  control={
-                    // eslint-disable-next-line react/jsx-wrap-multilines
-                    <Checkbox
-                      className={classes.paddingFour}
-                      checked={priority}
-                      onChange={handleChange('priority')}
-                      name="priority"
-                    />
-                  }
-                  label={D.yesButton}
-                />
-              </FormGroup>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={toDoFilterExpanded}
-            onChange={handleChange('toDoFilterAccordion')}
-            className={classes.accordion}
-          >
-            <AccordionSummary
-              className={classes.accordionSummary}
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel4bh-content"
-              id="toDoFilterAccordion-header"
-            >
-              <Typography className={classes.heading}>{D.sortToDo}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <FormGroup>
-                {toDoEnumValues.map(todo => (
-                  <FormControlLabel
-                    key={todo.order}
-                    control={
-                      // eslint-disable-next-line react/jsx-wrap-multilines
-                      <Checkbox
-                        className={classes.paddingFour}
-                        checked={selectedToDos.includes(todo.order.toString())}
-                        onChange={handleChange('toDoCheckbox')}
-                        name={todo.order.toString()}
-                      />
-                    }
-                    label={todo.value}
-                  />
-                ))}
-              </FormGroup>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={terminatedFilterExpanded}
-            onChange={handleChange('terminatedFilterAccordion')}
-            className={classes.accordion}
-          >
-            <AccordionSummary
-              className={classes.accordionSummary}
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel4bh-content"
-              id="priorityFilterAccordion-header"
-            >
-              <Typography className={classes.heading}>{D.sortCompleted}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <FormGroup>
-                <FormControlLabel
-                  key={terminated}
-                  control={
-                    // eslint-disable-next-line react/jsx-wrap-multilines
-                    <Checkbox
-                      className={classes.paddingFour}
-                      checked={terminated}
-                      onChange={handleChange('terminated')}
-                      name="terminated"
-                    />
-                  }
-                  label={D.yesButton}
-                />
-              </FormGroup>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      </Drawer>
-    </>
+                {/* Options pour le select "Sous-échantillon" */}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="cluster-select-label">Grappe...</InputLabel>
+              <Select
+                labelId="cluster-select-label"
+                id="cluster-select"
+                value={selectedCluster}
+                onChange={handleClusterChange}
+              >
+                {/* Options pour le select "Grappe" */}
+              </Select>
+            </FormControl>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+    </Drawer>
   );
 };
 
