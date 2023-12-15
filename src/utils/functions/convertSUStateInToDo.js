@@ -1,5 +1,5 @@
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import toDoEnum from 'utils/enum/SUToDoEnum';
+import { toDoEnum } from 'utils/enum/SUToDoEnum';
 
 export const convertSUStateInToDo = suState => {
   if (

@@ -4,11 +4,10 @@ import Box from '@mui/material/Box';
 /**
  * Global layout for the app with 3 sections (header, sidebar and main content)
  *
- * @param {ReactNode} sidebar
  * @param {ReactNode} children
  * @return {JSX.Element}
  */
-export function SidebarLayout({ sidebar, children }) {
+export function SidebarLayout({ children }) {
   return (
     <Grid
       gap={4}
@@ -20,8 +19,7 @@ export function SidebarLayout({ sidebar, children }) {
       }}
       bgcolor="surfacePrimary.main"
     >
-      <Box bgcolor="white.main">{sidebar}</Box>
-      <Box bgcolor="white.main">{children}</Box>
+      {children}
     </Grid>
   );
 }

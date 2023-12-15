@@ -8,7 +8,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Stepper from '@material-ui/core/Stepper';
 import SurveyUnitContext from './UEContext';
 import { makeStyles } from '@material-ui/core/styles';
-import toDoEnum from 'utils/enum/SUToDoEnum';
+import { toDoEnum } from 'utils/enum/SUToDoEnum';
 
 const useStyles = makeStyles(theme => ({
   root: {

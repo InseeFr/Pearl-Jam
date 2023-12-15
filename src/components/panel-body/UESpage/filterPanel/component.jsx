@@ -15,7 +15,7 @@ import Switch from '@material-ui/core/Switch';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import toDoEnum from 'utils/enum/SUToDoEnum';
+import { toDoEnum } from 'utils/enum/SUToDoEnum';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 
@@ -229,11 +229,7 @@ const FilterPanel = ({
       }}
     >
       <div className={classes.drawerContainer}>
-        <Typography
-          className={classes.typoTitle}
-        >
-          Filtrer les unités par
-        </Typography>
+        <Typography className={classes.typoTitle}>Filtrer les unités par</Typography>
         <Accordion
           className={classes.accordion}
           expanded={campaignFilterExpanded}

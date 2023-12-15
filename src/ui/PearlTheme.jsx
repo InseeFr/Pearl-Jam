@@ -62,6 +62,9 @@ const baseTheme = createTheme({
     green: {
       main: '#019A3E',
     },
+    separator: {
+      main: '#D7DBE1',
+    },
     red: {
       main: '#ED1443',
     },
@@ -107,6 +110,37 @@ export const theme = createTheme(baseTheme, {
           borderRadius: 16,
         },
       },
+    },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        root: {
+          marginLeft: 0,
+          gap: '1rem',
+        },
+        label: {
+          ...baseTheme.typography.s,
+          color: baseTheme.palette.typographyprimary.main,
+        },
+      },
+    },
+    MuiAccordion: {
+      variants: [
+        {
+          props: { variant: 'sidebar' },
+          style: {
+            ['& .MuiAccordionSummary-root']: {
+              margin: 0,
+              padding: 0,
+              minHeight: 0,
+            },
+            ['& .MuiAccordionSummary-root.Mui-expanded']: {
+              margin: 0,
+              minHeight: 'auto',
+            },
+            ['& .MuiAccordionSummary-root .MuiAccordionSummary-content']: { margin: 0 },
+          },
+        },
+      ],
     },
     MuiPopper: {
       defaultProps: {
