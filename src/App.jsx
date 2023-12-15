@@ -21,6 +21,7 @@ import { ResetData } from './components/panel-body/resetData';
 import { DatabaseConsole } from './components/panel-body/databaseConsole';
 import { useEffectOnce } from './utils/hooks/useEffectOnce';
 import { SurveyUnitPage } from './pages/SurveyUnitPage';
+import './app.css';
 
 const router = createBrowserRouter([
   {

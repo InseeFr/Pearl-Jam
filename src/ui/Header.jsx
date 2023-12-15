@@ -26,7 +26,13 @@ export function Header() {
     >
       <Stack direction="row" alignItems="center" gap={5}>
         <NavLink activeClassName="active" exact to="/">
-          <img width={47} height={50} src="/static/images/logo-insee-header.png" alt="Logo Insee" />
+          <img
+            width={47}
+            height={50}
+            src="/static/images/logo-insee-header.png"
+            alt="Logo Insee"
+            style={{ display: 'block' }}
+          />
         </NavLink>
         {/* Logo Sabiane */}
         <Stack>

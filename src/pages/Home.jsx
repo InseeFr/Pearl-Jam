@@ -1,4 +1,3 @@
-import UESPage from '../components/panel-body/UESpage';
 import React, { useMemo } from 'react';
 import { SidebarLayout } from '../ui/SidebarLayout';
 import Paper from '@mui/material/Paper';
@@ -9,26 +8,117 @@ import { Accordion } from '../ui/Accordion';
 import { useSurveyUnits } from '../utils/hooks/database';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Switch from '@mui/material/Switch';
 import { useSearchFilter } from '../utils/hooks/useSearchFilter';
 import { Hr } from '../ui/Hr';
 import { toDoEnum } from '../utils/enum/SUToDoEnum';
 import { StatusChip } from '../ui/StatusChip';
+import Grid from '@mui/material/Grid';
+import SurveyUnitCard from '../components/panel-body/UESpage/material/surveyUnitCard';
+import { SwitchIOS } from '../ui/Switch';
+import Button from '@mui/material/Button';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import IconButton from '@mui/material/IconButton';
+import { IconDesc } from '../ui/Icons/IconDesc';
+import { IconAsc } from '../ui/Icons/IconAsc';
+import { applyFilters, sortOnColumnCompareFunction } from '../utils/functions';
+import { SearchField } from '../ui/SearchField';
 
 export function Home() {
+  /** @type {unknown[]} */
   const surveyUnits = useSurveyUnits();
+  const { sortField, sortDirection, campaigns, statuses, priority, search } = useSearchFilter();
+
+  const searchCriteria = useMemo(
+    () => ({
+      campaigns,
+      toDos: statuses,
+      search,
+      priority,
+    }),
+    [campaigns, statuses, search, priority]
+  );
+
+  const filteredSurveyUnits = useMemo(() => {
+    return applyFilters([...surveyUnits], searchCriteria).searchFilteredSU.sort(
+      sortOnColumnCompareFunction(sortField, sortDirection)
+    );
+  }, [surveyUnits, searchCriteria, sortDirection, sortField]);
+
   return (
     <>
       <SidebarLayout>
         <Sidebar surveyUnits={surveyUnits} />
-        <div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores commodi deleniti ea
-          id illo laboriosam maiores minus molestiae natus necessitatibus, officiis optio quas qui
-          quia quis sint tempora! Ex, magnam.
-        </div>
+        <Stack sx={{ minHeight: 0 }}>
+          <GridHeader visibleCount={filteredSurveyUnits.length} totalCount={surveyUnits.length} />
+          <Grid
+            sx={{
+              minHeight: 0,
+              overflow: 'auto',
+              width: '100%',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            }}
+            gap={2}
+          >
+            {filteredSurveyUnits.map(su => (
+              <SurveyUnitCard key={su.id} surveyUnit={su} inaccessible={false} />
+            ))}
+          </Grid>
+        </Stack>
       </SidebarLayout>
-      <UESPage textSearch="" setTextSearch={console.log} />
     </>
+  );
+}
+
+function GridHeader({ visibleCount, totalCount }) {
+  const {
+    setSortField,
+    sortField,
+    sortDirection,
+    toggleSortDirection,
+    setSearch,
+    search,
+  } = useSearchFilter();
+  return (
+    <Stack gap={2} sx={{ flex: 'none' }}>
+      <SearchField value={search} onChange={setSearch} />
+      <Stack alignItems="center" direction="row" justifyContent="space-between" mb={2.5}>
+        <Typography size="m">
+          {visibleCount} unités sur {totalCount}
+        </Typography>
+        <Stack direction="row" gap={1} alignItems="center">
+          <Typography as="label" id="sort-field" sx={{ flex: 'none' }}>
+            Trier par:
+          </Typography>
+          <Select
+            sx={{ width: 200 }}
+            variant="standard"
+            size="small"
+            labelId="sort-field"
+            value={sortField}
+            onChange={e => setSortField(e.target.value)}
+          >
+            <MenuItem dense value="remainingDays">
+              {D.remainingDays}
+            </MenuItem>
+            <MenuItem dense value="priority">
+              {D.priority}
+            </MenuItem>
+            <MenuItem dense value="campaign">
+              {D.survey}
+            </MenuItem>
+            <MenuItem dense value="sampleIdentifiers">
+              {D.subSample}
+            </MenuItem>
+          </Select>
+          <IconButton aria-label="delete" color="typographyprimary" onClick={toggleSortDirection}>
+            {sortDirection === 'ASC' ? <IconAsc /> : <IconDesc />}
+          </IconButton>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }
 
@@ -41,78 +131,132 @@ function Sidebar({ surveyUnits }) {
   const statuses = useMemo(() => Object.entries(toDoEnum), []);
 
   return (
-    <Stack p={2} as={Paper} gap={2} alignItems="stretch">
-      <Typography variant="m">Filtrer les unités par</Typography>
-      <Accordion title={D.sortSurvey}>
-        <Stack gap={0.5}>
-          {campaigns.map(campaign => (
-            <FormControlLabel
-              key={campaign}
-              control={
-                <Checkbox
-                  checked={filter.campaigns.includes(campaign)}
-                  onChange={() => filter.toggle('campaigns', campaign)}
-                  sx={{ padding: 0 }}
-                />
-              }
-              label={campaign.toLowerCase()}
-            />
-          ))}
-        </Stack>
-      </Accordion>
-
-      <Hr />
-
-      <Accordion title={D.priority}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={filter.priority}
-              onChange={() => filter.toggle('priority')}
-              sx={{ padding: 0 }}
-            />
-          }
-          label="Unités prioritaires"
-        />
-      </Accordion>
-
-      <Hr />
-
-      <Accordion title={D.sortStatus}>
-        <Stack gap={2} alignItems="stretch" width="100%">
-          <FormControlLabel
-            sx={{ width: '100%', justifyContent: 'space-between' }}
-            labelPlacement="start"
-            control={
-              <Switch
-                color="success"
-                defaultChecked
-                checked={filter.terminated}
-                onChange={() => filter.toggle('terminated')}
-              />
-            }
-            label="Label"
-          />
-
+    <Paper
+      sx={{
+        height: '100%',
+        display: 'flex',
+        minHeight: 0,
+        borderRadius: '1rem',
+        overflow: 'hidden',
+      }}
+      elevation={0}
+    >
+      <Stack
+        p={2}
+        gap={2}
+        alignItems="stretch"
+        sx={{ height: '100%', overflowY: 'auto', minHeight: 0 }}
+      >
+        <Typography variant="m">Filtrer les unités par</Typography>
+        <Accordion variant="sidebar" title={D.sortSurvey}>
           <Stack gap={0.5}>
-            {statuses.map(([statusKey, statusInfo]) => (
+            {campaigns.map(campaign => (
               <FormControlLabel
-                key={statusKey}
+                key={campaign}
                 control={
                   <Checkbox
-                    checked={filter.statuses.includes(statusInfo.order)}
-                    onChange={() => filter.toggle('statuses', statusInfo.order)}
+                    checked={filter.campaigns.includes(campaign)}
+                    onChange={() => filter.toggle('campaigns', campaign)}
                     sx={{ padding: 0 }}
                   />
                 }
-                label={<StatusChip status={statusKey} />}
+                label={campaign.toLowerCase()}
               />
             ))}
           </Stack>
-        </Stack>
-      </Accordion>
+        </Accordion>
+        <Hr />
+        <Accordion variant="sidebar" title={D.priority}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={filter.priority}
+                onChange={() => filter.toggle('priority')}
+                sx={{ padding: 0 }}
+              />
+            }
+            label="Unités prioritaires"
+          />
+        </Accordion>
+        <Hr />
+        <Accordion variant="sidebar" title={D.sortStatus}>
+          <Stack gap={2} alignItems="stretch" width="100%">
+            <FormControlLabel
+              sx={{ width: '100%', justifyContent: 'space-between' }}
+              labelPlacement="start"
+              control={
+                <SwitchIOS
+                  defaultChecked
+                  checked={filter.terminated}
+                  onChange={() => filter.toggle('terminated')}
+                />
+              }
+              label="Masquer les unités terminées"
+            />
 
-      <Hr />
-    </Stack>
+            <Stack gap={0.5}>
+              {statuses.map(([statusKey, statusInfo]) => (
+                <FormControlLabel
+                  key={statusKey}
+                  control={
+                    <Checkbox
+                      checked={filter.statuses.includes(statusInfo.order)}
+                      onChange={() => filter.toggle('statuses', statusInfo.order)}
+                      sx={{ padding: 0 }}
+                    />
+                  }
+                  label={<StatusChip status={statusKey} />}
+                />
+              ))}
+            </Stack>
+          </Stack>
+        </Accordion>
+        <Hr />
+        <Accordion variant="sidebar" title="Sous-échantillon et grappe">
+          <Stack gap={2} sx={{ width: '100%' }}>
+            <Select
+              variant="standard"
+              size="small"
+              value=""
+              displayEmpty
+              renderValue={selected => {
+                if (!selected) {
+                  return <em>Sous-échantillon...</em>;
+                }
+
+                return selected;
+              }}
+            >
+              <MenuItem dense disabled value="">
+                Sous-échantillon...
+              </MenuItem>
+            </Select>
+            <Select
+              variant="standard"
+              size="small"
+              value=""
+              renderValue={selected => {
+                if (!selected) {
+                  return <em>Grappe...</em>;
+                }
+
+                return selected;
+              }}
+            >
+              <MenuItem dense disabled value="">
+                Grappe...
+              </MenuItem>
+            </Select>
+          </Stack>
+        </Accordion>
+        <Hr />
+        <div>
+          <Button size="edge" color="typographyprimary" variant="underlined" onClick={filter.reset}>
+            <RestartAltIcon />
+            Réinitialiser les filtres
+          </Button>
+        </div>
+      </Stack>
+    </Paper>
   );
 }

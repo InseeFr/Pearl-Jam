@@ -6,16 +6,22 @@ import React from 'react';
 import { useToggle } from '../utils/hooks/useToggle';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export function Accordion({ title, children }) {
+/**
+ *
+ * @param {string} title
+ * @param {import('react').ReactNode} children
+ * @param {"sidebar"} [variant]
+ * @return {JSX.Element}
+ */
+export function Accordion({ title, children, variant }) {
   const [expanded, toggleExpand] = useToggle(true);
 
   return (
-    <AccordionMaterial variant="sidebar" expanded={expanded} onChange={toggleExpand} disableGutters>
+    <AccordionMaterial variant={variant} expanded={expanded} onChange={toggleExpand} disableGutters>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1bh-content"
         id="panel1bh-header"
-        size="large"
       >
         <Typography variant="s" color="secondary">
           {title}

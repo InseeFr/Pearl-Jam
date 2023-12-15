@@ -5,8 +5,11 @@ import { toggleItem } from '../functions/array';
 const emptyFilter = {
   campaigns: [],
   statuses: [],
+  search: '',
   priority: false,
   terminated: false,
+  sortField: 'remainingDays',
+  sortDirection: 'DESC',
 };
 
 const $filter = signal(emptyFilter);
@@ -39,5 +42,13 @@ export function useSearchFilter() {
   return {
     ...useSignalValue($filter),
     toggle,
+    setSortField: field => $filter.set({ ...$filter(), sortField: field, sortDirection: 'DESC' }),
+    setSearch: q => $filter.set({ ...$filter(), search: q }),
+    toggleSortDirection: dir =>
+      $filter.set({
+        ...$filter(),
+        sortDirection: $filter().sortDirection === 'ASC' ? 'DESC' : 'ASC',
+      }),
+    reset: () => $filter.set(emptyFilter),
   };
 }

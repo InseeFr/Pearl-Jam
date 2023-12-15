@@ -265,6 +265,12 @@ export const isQuestionnaireAvailable = su => inaccessible => {
   return !inaccessible && now >= collectionStartDate && now <= collectionEndDate;
 };
 
+/**
+ * @template T
+ * @param {T[]} surveyUnits
+ * @param {{search: string, campaigns: string[], toDos: number[], priority: boolean}} filters
+ * @return {{matchingEchoes: *, totalEchoes: *, searchFilteredSU: *}}
+ */
 export const applyFilters = (surveyUnits, filters) => {
   const {
     search: searchFilter,

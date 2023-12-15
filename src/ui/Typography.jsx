@@ -9,7 +9,7 @@ import TypographyMaterial from '@mui/material/Typography';
  * @param {import('react').ComponentProps<typeof TypographyMaterial>} props
  * @return {JSX.Element}
  */
-export function Typography({ variant, color = 'primary', fontWeight = 600, ...props }) {
+export function Typography({ variant = 'm', color = 'primary', fontWeight = 600, ...props }) {
   return (
     <TypographyMaterial
       variant={variant}

@@ -9,6 +9,17 @@ import CssBaseline from '@mui/material/CssBaseline';
 const fontFamily = 'Montserrat, sans-serif';
 
 const baseTheme = createTheme({
+  shadows: [
+    'none',
+    '0px 1px 4px 0px rgba(80, 76, 75, 0.80)',
+    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
+    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
+    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
+    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
+    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
+    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
+    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
+  ],
   typography: {
     fontFamily: fontFamily,
     fontWeight: 600,
@@ -102,24 +113,32 @@ export const theme = createTheme(baseTheme, {
             padding: '.5rem 1rem',
           },
         },
-      ],
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          borderRadius: 16,
+        {
+          props: { variant: 'underlined' },
+          style: {
+            textDecoration: 'underline',
+          },
         },
-      },
+        {
+          props: { size: 'edge' },
+          style: {
+            padding: 0,
+          },
+        },
+      ],
     },
     MuiFormControlLabel: {
       styleOverrides: {
         root: {
           marginLeft: 0,
-          gap: '1rem',
+          gap: '.5rem',
         },
         label: {
           ...baseTheme.typography.s,
-          color: baseTheme.palette.typographyprimary.main,
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          color: baseTheme.palette.typographytertiary.main,
         },
       },
     },
@@ -128,6 +147,12 @@ export const theme = createTheme(baseTheme, {
         {
           props: { variant: 'sidebar' },
           style: {
+            ['&.Mui-expanded']: {
+              margin: 0,
+            },
+            ['&::before']: {
+              display: 'none',
+            },
             ['& .MuiAccordionSummary-root']: {
               margin: 0,
               padding: 0,
@@ -160,13 +185,44 @@ export const theme = createTheme(baseTheme, {
           headingL: 'h2',
           headingM: 'h3',
           headingS: 'h4',
-          xl: 'p',
-          l: 'p',
-          m: 'p',
-          s: 'p',
-          xs: 'p',
+          xl: 'span',
+          l: 'span',
+          m: 'span',
+          s: 'span',
+          xs: 'span',
         },
       },
+    },
+    MuiSelect: {
+      variants: [
+        {
+          props: { size: 'small' },
+          style: {
+            ...baseTheme.typography.s,
+            '& .MuiSelect-select': {
+              minHeight: 'auto',
+              padding: '.5rem',
+            },
+          },
+        },
+        {
+          props: { variant: 'standard' },
+          style: {
+            padding: 0,
+            backgroundColor: baseTheme.palette.surfaceSecondary.main,
+            borderColor: 'transparent',
+            boxShadow: baseTheme.shadows[2],
+            width: '100%',
+            '&::before': {
+              display: 'none',
+            },
+            em: {
+              color: baseTheme.palette.typographyhint.main,
+              fontStyle: 'normal',
+            },
+          },
+        },
+      ],
     },
   },
 });

@@ -34,6 +34,13 @@ export function UserButton() {
           vertical: 'bottom',
           horizontal: 'right',
         }}
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: 2,
+            },
+          },
+        }}
       >
         <Stack gap={1} p={2} sx={{ width: 360 }}>
           <Typography variant="headingM">{D.myProfile}</Typography>

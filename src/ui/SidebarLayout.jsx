@@ -15,6 +15,7 @@ export function SidebarLayout({ children }) {
       sx={{
         display: 'grid',
         gridTemplateColumns: '280px 1fr',
+        alignItems: 'stretch',
         height: 'calc(100vh - 90px)',
       }}
       bgcolor="surfacePrimary.main"

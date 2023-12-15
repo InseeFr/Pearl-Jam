@@ -49,7 +49,6 @@ const useStyles = makeStyles(theme => ({
     '&:hover': { cursor: 'pointer' },
     backgroundColor: '#FFFFFF',
     height: '236px',
-    width: '306px',
   },
   flexRow: {
     display: 'flex',
