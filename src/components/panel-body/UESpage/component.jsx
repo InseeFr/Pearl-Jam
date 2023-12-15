@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { FormControl, MenuItem, Select, Typography } from '@material-ui/core';
 import SearchBar from 'components/common/search/component';
 import D from 'i18n';
+import { SurveyCard } from 'ui/SurveyCard';
 
 const UESPage = ({ textSearch, setTextSearch, setOpenDrawer }) => {
   const [surveyUnits, setSurveyUnits] = useState([]);
@@ -149,7 +150,8 @@ const UESPage = ({ textSearch, setTextSearch, setOpenDrawer }) => {
         </div>
         {filteredSurveyUnits.map(su => (
           <Grid key={su.id} item>
-            <SurveyUnitCard surveyUnit={su} inaccessible={inaccessibles.includes(su.id)} />
+            {/* <SurveyUnitCard surveyUnit={su} inaccessible={inaccessibles.includes(su.id)} /> */}
+            <SurveyCard surveyUnit={su} inaccessible={inaccessibles.includes(su.id)}/>
           </Grid>
         ))}
       </Grid>
