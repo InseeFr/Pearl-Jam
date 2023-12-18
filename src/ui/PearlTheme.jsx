@@ -100,6 +100,9 @@ const baseTheme = createTheme({
     typographyaccent: {
       main: '#ED1443',
     },
+    iconLock: {
+      main: '#323232',
+    },
   },
 });
 
