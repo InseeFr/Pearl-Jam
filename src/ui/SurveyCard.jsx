@@ -7,7 +7,7 @@ import {
 } from 'utils/functions';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import { Typography } from './Typography';
 import Chip from '@mui/material/Chip';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
@@ -38,38 +38,49 @@ export function SurveyCard({ surveyUnit, inaccessible = false }) {
         <Stack direction="row" gap={0.5} alignItems="center">
           <Chip
             label={campaign.toLowerCase()}
-            sx={{ overflow: 'hidden', textOverflow: 'ellispsis' }}
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellispsis',
+              fontSize: '14px',
+              fontWeight: 600,
+            }}
           />
-          <Chip label="2" />
+          <Chip label="2" sx={{ fontSize: '14px', fontWeight: 600 }} />
           <Stack sx={{ marginLeft: 'auto' }} pl={2} alignItems="center">
-            <Typography noWrap>223-1111-75</Typography>
+            <Typography color="surfaceSecondary" variant="s" noWrap>
+              223-1111-75
+            </Typography>
           </Stack>
         </Stack>
         <Stack gap={0.5}>
           {/* Username */}
           <Stack direction="row" justifyContent="space-between">
             <Stack direction="row" gap={1}>
-              <PersonOutlinedIcon />
-              <Typography>
+              <PersonOutlinedIcon color="typographyprimary" />
+              <Typography sx={{ fontWeight: '700' }} color="black" variant="xl">
                 {lastName} {firstName}
               </Typography>
             </Stack>
-            <LockIcon />
+            <LockIcon color="iconLock" />
           </Stack>
           {/* data en dur pour le moment */}
-          <Typography as="div">#02000000000</Typography>
+          <Typography variant="s" color="hint" as="div">
+            #02000000000
+          </Typography>
         </Stack>
         <Stack direction="row" gap={1}>
-          <FmdGoodIcon />
-          <Typography>{cityName}</Typography>
+          <FmdGoodIcon color="typographyprimary" />
+          <Typography variant="s" color="primary">
+            {cityName}
+          </Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Stack direction="row" gap={0.5} alignItems="center">
-            <AccessTimeIcon />
-            <Typography>{`${nbJoursRestant} jours`}</Typography>
+            <AccessTimeIcon color="typographytertiary" />
+            <Typography color="tertiary" variant="s">{`${nbJoursRestant} jours`}</Typography>
           </Stack>
           <Stack>
-            <StatusChip status={todo} />
+            <StatusChip color="#0A192E" status={todo} />
           </Stack>
         </Stack>
       </Stack>
