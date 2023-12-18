@@ -45,25 +45,26 @@ export function SurveyCard({ surveyUnit, inaccessible = false }) {
             <Typography noWrap>223-1111-75</Typography>
           </Stack>
         </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Stack direction="row" gap={1}>
-            <PersonOutlinedIcon />
-            <Typography>
-              {lastName} {firstName}
-            </Typography>
+        <Stack gap={0.5}>
+          {/* Username */}
+          <Stack direction="row" justifyContent="space-between">
+            <Stack direction="row" gap={1}>
+              <PersonOutlinedIcon />
+              <Typography>
+                {lastName} {firstName}
+              </Typography>
+            </Stack>
+            <LockIcon />
           </Stack>
-          <LockIcon />
+          {/* data en dur pour le moment */}
+          <Typography as="div">#02000000000</Typography>
         </Stack>
-        {/* data en dur pour le moment */}
-        <Typography as="div">#02000000000</Typography>
-        <Stack>
-          <Stack direction="row" gap={1}>
-            <FmdGoodIcon />
-            <Typography>{cityName}</Typography>
-          </Stack>
+        <Stack direction="row" gap={1}>
+          <FmdGoodIcon />
+          <Typography>{cityName}</Typography>
         </Stack>
-        <Stack direction="row" justifyContent="space-between">
-          <Stack direction="row" gap={0.5}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack direction="row" gap={0.5} alignItems="center">
             <AccessTimeIcon />
             <Typography>{`${nbJoursRestant} jours`}</Typography>
           </Stack>

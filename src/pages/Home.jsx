@@ -54,12 +54,13 @@ export function Home() {
           <GridHeader visibleCount={filteredSurveyUnits.length} totalCount={surveyUnits.length} />
           <Grid
             sx={{
-              minHeight: 0,
-              overflow: 'auto',
-              width: '100%',
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-              gridTemplateRows: '1fr',
+              minHeight: 0,
+              overflow: 'auto',
+              // Offset the scrollbar out of the container
+              width: 'calc(100% + .5rem)',
+              paddingRight: '.5rem',
             }}
             gap={2}
           >
