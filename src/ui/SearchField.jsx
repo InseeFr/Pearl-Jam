@@ -15,6 +15,7 @@ export function SearchField({ onChange, value }) {
     <TextField
       value={value}
       onChange={e => onChange(e.target.value)}
+      placeholder='Nom, prénom, ville, enquête, ID...'
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
