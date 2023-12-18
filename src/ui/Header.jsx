@@ -10,21 +10,20 @@ import { SynchronizeButton } from './Header/SynchronizeButton';
 import { NetworkStatus } from './Header/NetworkStatus';
 import { UserButton } from './Header/UserButton';
 import { theme } from './PearlTheme';
+import { Row } from './Row';
 
 export function Header() {
   return (
-    <Stack
+    <Row
       as="header"
-      direction="row"
       justifyContent="space-between"
-      alignItems="center"
       bgcolor="white.main"
       py={2}
       px={4}
       position="relative"
       zIndex={theme.zIndex.appBar}
     >
-      <Stack direction="row" alignItems="center" gap={5}>
+      <Row gap={5}>
         <NavLink activeClassName="active" exact to="/">
           <img
             width={47}
@@ -36,22 +35,22 @@ export function Header() {
         </NavLink>
         {/* Logo Sabiane */}
         <Stack>
-          <Stack direction="row" gap={0.5}>
+          <Row gap={0.5}>
             <Typography color="primary" variant="headingM" as="span">
               Sabiane
             </Typography>
             <Typography color="accent" variant="headingM" as="span">
               Collecte
             </Typography>
-          </Stack>
+          </Row>
           <Typography color="hint" variant="xs" as="span" style={{ color: '#BDBDBD' }}>
             V.{version}
           </Typography>
         </Stack>
-      </Stack>
-      <Stack direction="row" alignItems="center" gap={3}>
+      </Row>
+      <Row gap={3}>
         <Button color="typographyprimary">
-          <Stack direction="row" gap={1} alignItems="center">
+          <Row gap={1}>
             <Stack
               alignItems="center"
               justifyContent="center"
@@ -62,7 +61,7 @@ export function Header() {
               <FormatListBulletedIcon fontSize="small" />
             </Stack>
             Mon suivi
-          </Stack>
+          </Row>
         </Button>
 
         <SynchronizeButton />
@@ -70,7 +69,7 @@ export function Header() {
         <NetworkStatus />
 
         <UserButton />
-      </Stack>
-    </Stack>
+      </Row>
+    </Row>
   );
 }

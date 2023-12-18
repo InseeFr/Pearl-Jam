@@ -24,6 +24,7 @@ import { IconAsc } from '../ui/Icons/IconAsc';
 import { applyFilters, sortOnColumnCompareFunction } from '../utils/functions';
 import { SearchField } from '../ui/SearchField';
 import { SurveyCard } from '../ui/SurveyCard';
+import { Row } from '../ui/Row';
 
 export function Home() {
   /** @type {unknown[]} */
@@ -88,11 +89,11 @@ function GridHeader({ visibleCount, totalCount }) {
   return (
     <Stack gap={2} sx={{ flex: 'none' }}>
       <SearchField value={search} onChange={setSearch} />
-      <Stack alignItems="center" direction="row" justifyContent="space-between" mb={2.5}>
+      <Row justifyContent="space-between" mb={2.5}>
         <Typography size="m">
           {visibleCount} unités sur {totalCount}
         </Typography>
-        <Stack direction="row" gap={1} alignItems="center">
+        <Row gap={1}>
           <Typography as="label" id="sort-field" sx={{ flex: 'none' }}>
             Trier par:
           </Typography>
@@ -120,8 +121,8 @@ function GridHeader({ visibleCount, totalCount }) {
           <IconButton aria-label="delete" color="typographyprimary" onClick={toggleSortDirection}>
             {sortDirection === 'ASC' ? <IconAsc /> : <IconDesc />}
           </IconButton>
-        </Stack>
-      </Stack>
+        </Row>
+      </Row>
     </Stack>
   );
 }
