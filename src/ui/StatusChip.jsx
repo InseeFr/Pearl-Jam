@@ -10,12 +10,12 @@ export function StatusChip({ status }) {
   return (
     <Chip
       sx={{
-        backgroundColor: toDoEnum[status].color,
+        backgroundColor: status.color,
         height: 28,
         color: theme.palette.typographyprimary.main,
       }}
       slotProps={{}}
-      label={toDoEnum[status].value}
+      label={status.value}
     />
   );
 }
