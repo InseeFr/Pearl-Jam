@@ -9,6 +9,7 @@ import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LockIcon from '@mui/icons-material/Lock';
 import { StatusChip } from './StatusChip';
+import { toDoEnum } from '../utils/enum/SUToDoEnum';
 
 export function SurveyCard({ surveyUnit, inaccessible = false }) {
   const {
@@ -23,9 +24,9 @@ export function SurveyCard({ surveyUnit, inaccessible = false }) {
   const privilegedPerson = getprivilegedPerson(surveyUnit);
   const { firstName, lastName } = privilegedPerson ?? persons[0];
   const nbJoursRestant = intervalInDays(surveyUnit);
-  // const lastState = getLastState(surveyUnit);
-  // const todo = convertSUStateInToDo(lastState.type);
-  // const { order, value: toDoLabel } = todo;
+  const lastState = getLastState(surveyUnit);
+  const todo = convertSUStateInToDo(lastState.type);
+  const { order, value: toDoLabel } = todo;
   // const openSurveyUnitPage = id => navigate(`/survey-unit/${id}/details?panel=0`);
   return (
     <Card sx={{ p: 3, minWidth: "360px" }}>
@@ -60,11 +61,8 @@ export function SurveyCard({ surveyUnit, inaccessible = false }) {
             <AccessTimeIcon />
             <Typography>{`${nbJoursRestant} jours`}</Typography>
           </Stack>
-          {/* <Stack>
-            <StatusChip />
-          </Stack> */}
           <Stack>
-            <Chip label="Toto" />
+          <StatusChip status={todo}/>
           </Stack>
         </Stack>
       </Stack>
