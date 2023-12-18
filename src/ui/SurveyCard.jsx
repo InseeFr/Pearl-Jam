@@ -1,5 +1,10 @@
 import React from 'react';
-import { getLastState,getprivilegedPerson,isSelectable, convertSUStateInToDo,intervalInDays } from 'utils/functions';
+import {
+  convertSUStateInToDo,
+  getLastState,
+  getprivilegedPerson,
+  intervalInDays,
+} from 'utils/functions';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -9,7 +14,6 @@ import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LockIcon from '@mui/icons-material/Lock';
 import { StatusChip } from './StatusChip';
-import { toDoEnum } from '../utils/enum/SUToDoEnum';
 
 export function SurveyCard({ surveyUnit, inaccessible = false }) {
   const {
@@ -29,27 +33,29 @@ export function SurveyCard({ surveyUnit, inaccessible = false }) {
   const { order, value: toDoLabel } = todo;
   // const openSurveyUnitPage = id => navigate(`/survey-unit/${id}/details?panel=0`);
   return (
-    <Card sx={{ p: 3, minWidth: "360px" }}>
+    <Card sx={{ p: 3 }} elevation={0}>
       <Stack gap={2}>
-        <Stack direction="row" justifyContent="space-between">
-          <Stack direction="row" gap={0.5}>
-            <Chip label={campaign.toLowerCase()} />
-            <Chip label="2" />
-          </Stack>
-          <Stack>
-        {/* data en dur pour le moment */}
-            <Typography>223-1111-75</Typography>
+        <Stack direction="row" gap={0.5} alignItems="center">
+          <Chip
+            label={campaign.toLowerCase()}
+            sx={{ overflow: 'hidden', textOverflow: 'ellispsis' }}
+          />
+          <Chip label="2" />
+          <Stack sx={{ marginLeft: 'auto' }} pl={2} alignItems="center">
+            <Typography noWrap>223-1111-75</Typography>
           </Stack>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
           <Stack direction="row" gap={1}>
             <PersonOutlinedIcon />
-            <Typography>{lastName} {firstName}</Typography>
+            <Typography>
+              {lastName} {firstName}
+            </Typography>
           </Stack>
           <LockIcon />
         </Stack>
         {/* data en dur pour le moment */}
-          <Typography as="div">#02000000000</Typography>
+        <Typography as="div">#02000000000</Typography>
         <Stack>
           <Stack direction="row" gap={1}>
             <FmdGoodIcon />
@@ -62,7 +68,7 @@ export function SurveyCard({ surveyUnit, inaccessible = false }) {
             <Typography>{`${nbJoursRestant} jours`}</Typography>
           </Stack>
           <Stack>
-          <StatusChip status={todo}/>
+            <StatusChip status={todo} />
           </Stack>
         </Stack>
       </Stack>

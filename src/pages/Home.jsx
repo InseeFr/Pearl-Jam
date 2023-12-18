@@ -13,7 +13,6 @@ import { Hr } from '../ui/Hr';
 import { toDoEnum } from '../utils/enum/SUToDoEnum';
 import { StatusChip } from '../ui/StatusChip';
 import Grid from '@mui/material/Grid';
-import SurveyUnitCard from '../components/panel-body/UESpage/material/surveyUnitCard';
 import { SwitchIOS } from '../ui/Switch';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -24,6 +23,7 @@ import { IconDesc } from '../ui/Icons/IconDesc';
 import { IconAsc } from '../ui/Icons/IconAsc';
 import { applyFilters, sortOnColumnCompareFunction } from '../utils/functions';
 import { SearchField } from '../ui/SearchField';
+import { SurveyCard } from '../ui/SurveyCard';
 
 export function Home() {
   /** @type {unknown[]} */
@@ -59,11 +59,14 @@ export function Home() {
               width: '100%',
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+              gridTemplateRows: '1fr',
             }}
             gap={2}
           >
             {filteredSurveyUnits.map(su => (
-              <SurveyUnitCard key={su.id} surveyUnit={su} inaccessible={false} />
+              <div key={su.id}>
+                <SurveyCard key={su.id} surveyUnit={su} inaccessible={false} />
+              </div>
             ))}
           </Grid>
         </Stack>
@@ -205,7 +208,7 @@ function Sidebar({ surveyUnits }) {
                       sx={{ padding: 0 }}
                     />
                   }
-                  label={<StatusChip status={statusKey} />}
+                  label={<StatusChip status={statusInfo} />}
                 />
               ))}
             </Stack>

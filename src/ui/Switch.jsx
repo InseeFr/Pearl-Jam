@@ -10,6 +10,7 @@ export const SwitchIOS = () => {
         width: 40,
         height: 24,
         padding: 0,
+        backgroundColor: 'red',
         '& .MuiSwitch-switchBase': {
           padding: 0,
           margin: '4px',
@@ -18,7 +19,7 @@ export const SwitchIOS = () => {
             transform: 'translateX(16px)',
             color: '#fff',
             '& + .MuiSwitch-track': {
-              backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
+              backgroundColor: '#35C758',
               opacity: 1,
               border: 0,
             },
@@ -27,7 +28,7 @@ export const SwitchIOS = () => {
             },
           },
           '&.Mui-focusVisible .MuiSwitch-thumb': {
-            color: '#33cf4d',
+            color: '#35C758',
             border: '6px solid #fff',
           },
           '&.Mui-disabled .MuiSwitch-thumb': {
@@ -46,7 +47,7 @@ export const SwitchIOS = () => {
         },
         '& .MuiSwitch-track': {
           borderRadius: 26 / 2,
-          backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+          backgroundColor: theme.palette.separator.main,
           opacity: 1,
           transition: theme.transitions.create(['background-color'], {
             duration: 500,

@@ -127,6 +127,13 @@ export const theme = createTheme(baseTheme, {
         },
       ],
     },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: '1rem',
+        },
+      },
+    },
     MuiFormControlLabel: {
       styleOverrides: {
         root: {

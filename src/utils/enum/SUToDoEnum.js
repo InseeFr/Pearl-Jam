@@ -10,5 +10,4 @@ export const toDoEnum = {
   TRANSMIT: { order: '4', value: `${D.toDoTransmit}`, color: '#BB6BD966' },
   SYNCHRONIZE: { order: '5', value: `${D.toDoSynchronize}`, color: '#2F80ED4D' },
   TERMINATED: { order: '6', value: `${D.toDoTerminated}`, color: '#35C75880' },
-  FINALIZE: { order: '10', value: `${D.toDoFinalize}`, color: '#35C75880' },
 };
