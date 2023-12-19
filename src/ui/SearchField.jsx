@@ -15,11 +15,11 @@ export function SearchField({ onChange, value }) {
     <TextField
       value={value}
       onChange={e => onChange(e.target.value)}
-      placeholder='Nom, prénom, ville, enquête, ID...'
+      placeholder="Nom, prénom, ville, enquête, ID..."
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <SearchIcon color="typographyprimary" />
+            <SearchIcon color="textPrimary" />
           </InputAdornment>
         ),
       }}

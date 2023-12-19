@@ -20,11 +20,11 @@ declare module '@mui/material/styles' {
     red: Palette['primary'];
     surfacePrimary: Palette['primary'];
     surfaceSecondary: Palette['primary'];
-    typographyblack: Palette['primary'];
-    typographyprimary: Palette['primary'];
-    typographyhint: Palette['primary'];
-    typographytertiary: Palette['primary'];
-    typographyaccent: Palette['primary'];
+    black: Palette['primary'];
+    textPrimary: Palette['primary'];
+    textHint: Palette['primary'];
+    textTertiary: Palette['primary'];
+    accent: Palette['primary'];
     iconLock: Palette['primary'];
   }
 
@@ -35,11 +35,11 @@ declare module '@mui/material/styles' {
     red?: Palette['primary'];
     surfacePrimary?: Palette['primary'];
     surfaceSecondary?: Palette['primary'];
-    typographyblack?: Palette['primary'];
-    typographyprimary?: Palette['primary'];
-    typographyhint?: Palette['primary'];
-    typographytertiary?: Palette['primary'];
-    typographyaccent?: Palette['primary'];
+    black?: Palette['primary'];
+    textPrimary?: Palette['primary'];
+    textHint?: Palette['primary'];
+    textTertiary?: Palette['primary'];
+    accent?: Palette['primary'];
     iconLock?: Palette['primary'];
   }
 }

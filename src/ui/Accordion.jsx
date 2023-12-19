@@ -23,7 +23,7 @@ export function Accordion({ title, children, variant }) {
         aria-controls="panel1bh-content"
         id="panel1bh-header"
       >
-        <Typography variant="s" color="secondary">
+        <Typography variant="s" color="textPrimary">
           {title}
         </Typography>
       </AccordionSummary>

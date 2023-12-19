@@ -6,14 +6,40 @@ import '@fontsource/montserrat/500.css';
 import { ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 
+export const red = {
+  '100': '#FFB7C6',
+  '200': '#FF93AA',
+  '300': '#F26987',
+  '400': '#F33B63',
+  '500': '#ED1443',
+  '600': '#C51138',
+  '700': '#AD0D30',
+  '800': '#980727',
+  '900': '#80031E',
+};
+
+export const gray = {
+  '100': '#F5F7FA',
+  '200': '#E6EAF0',
+  '300': '#D3DBE5',
+  '400': '#BCC2CC',
+  '500': '#7C8A9D',
+  '600': '#57677D',
+  '700': '#3A4657',
+  '800': '#1D2A3D',
+  '900': '#0A192E',
+};
+
 const fontFamily = 'Montserrat, sans-serif';
 
-const baseTheme = createTheme({
+let theme = createTheme({});
+
+theme = createTheme({
   shadows: [
     'none',
     '0px 1px 4px 0px rgba(80, 76, 75, 0.80)',
     '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
-    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
+    '0px 0px 4px 0px rgba(80, 76, 75, 0.25);',
     '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
     '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
     '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
@@ -70,14 +96,14 @@ const baseTheme = createTheme({
     white: {
       main: '#FFF',
     },
+    black: {
+      main: '#000000',
+    },
     green: {
       main: '#019A3E',
     },
     separator: {
       main: '#D7DBE1',
-    },
-    red: {
-      main: '#ED1443',
     },
     surfacePrimary: {
       main: '#F5F7FA',
@@ -85,35 +111,39 @@ const baseTheme = createTheme({
     surfaceSecondary: {
       main: '#FFF',
     },
-    typographyblack: {
-      main: '#000000',
+    surfaceTertiary: {
+      main: '#E6EAF0',
     },
-    typographyprimary: {
+    textPrimary: {
       main: '#0A192E',
     },
-    typographyhint: {
+    textHint: {
       main: '#797676',
     },
-    typographytertiary: {
+    textTertiary: {
       main: '#57677D',
     },
-    typographyaccent: {
-      main: '#ED1443',
-    },
+    accent: theme.palette.augmentColor({
+      color: {
+        main: red['500'],
+      },
+    }),
     iconLock: {
       main: '#323232',
     },
   },
 });
+console.log('palette', theme.palette);
 
-export const theme = createTheme(baseTheme, {
+theme = createTheme(theme, {
   components: {
     MuiButton: {
       variants: [
         {
           props: { variant: 'contained' },
           style: {
-            padding: `${baseTheme.spacing(1)} ${baseTheme.spacing(2)}`,
+            background: '#FFF',
+            padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
           },
         },
         {
@@ -134,7 +164,7 @@ export const theme = createTheme(baseTheme, {
       styleOverrides: {
         root: {
           position: 'relative',
-          borderRadius: baseTheme.spacing(2),
+          borderRadius: theme.spacing(2),
         },
       },
       variants: [
@@ -150,10 +180,35 @@ export const theme = createTheme(baseTheme, {
         },
       ],
     },
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          minHeight: 'auto',
+        },
+        indicator: {
+          backgroundColor: theme.palette.textPrimary.main,
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          padding: `${theme.spacing(1)} 0`,
+          color: theme.palette.textHint.main,
+          minHeight: 'auto',
+          '& ~ .MuiTab-root': {
+            marginLeft: 20,
+          },
+          '&[aria-selected="true"]': {
+            color: theme.palette.textPrimary.main,
+          },
+        },
+      },
+    },
     MuiCardContent: {
       styleOverrides: {
         root: {
-          padding: baseTheme.spacing(3),
+          padding: theme.spacing(3),
         },
       },
     },
@@ -161,21 +216,32 @@ export const theme = createTheme(baseTheme, {
       styleOverrides: {
         root: {
           marginLeft: 0,
-          gap: baseTheme.spacing(1),
+          gap: theme.spacing(1),
         },
         label: {
-          ...baseTheme.typography.s,
+          ...theme.typography.s,
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
-          color: baseTheme.palette.typographytertiary.main,
+          color: theme.palette.textTertiary.main,
+        },
+      },
+    },
+    MuiBadge: {
+      styleOverrides: {
+        badge: {
+          marginLeft: 0,
+          height: 15,
+          minWidth: 18,
+          transform: 'scale(1) translate(50%, -10%)',
+          padding: `${theme.spacing(0.25)} ${theme.spacing(0.5)}`,
         },
       },
     },
     MuiAccordion: {
       variants: [
         {
-          props: { variant: 'sidebar' },
+          props: { variant: 'dense' },
           style: {
             ['&.Mui-expanded']: {
               margin: 0,
@@ -202,7 +268,7 @@ export const theme = createTheme(baseTheme, {
         slotProps: {
           paper: {
             sx: {
-              borderRadius: baseTheme.spacing(2),
+              borderRadius: theme.spacing(2),
             },
           },
         },
@@ -228,10 +294,10 @@ export const theme = createTheme(baseTheme, {
         {
           props: { size: 'small' },
           style: {
-            ...baseTheme.typography.s,
+            ...theme.typography.s,
             '& .MuiSelect-select': {
               minHeight: 'auto',
-              padding: baseTheme.spacing(1),
+              padding: theme.spacing(1),
             },
           },
         },
@@ -239,15 +305,15 @@ export const theme = createTheme(baseTheme, {
           props: { variant: 'standard' },
           style: {
             padding: 0,
-            backgroundColor: baseTheme.palette.surfaceSecondary.main,
+            backgroundColor: theme.palette.surfaceSecondary.main,
             borderColor: 'transparent',
-            boxShadow: baseTheme.shadows[2],
+            boxShadow: theme.shadows[2],
             width: '100%',
             '&::before': {
               display: 'none',
             },
             em: {
-              color: baseTheme.palette.typographyhint.main,
+              color: theme.palette.textHint.main,
               fontStyle: 'normal',
             },
           },
@@ -256,6 +322,8 @@ export const theme = createTheme(baseTheme, {
     },
   },
 });
+
+export { theme };
 
 /**
  * Material theme provider embedded in a component

@@ -60,7 +60,9 @@ export function SurveyCard({ surveyUnit, locked = false }) {
                   223-1111-75
                 </Typography>
               ) : (
-                <Typography variant="s" color="accent">Prioritaire</Typography>
+                <Typography variant="s" color="accent">
+                  Prioritaire
+                </Typography>
               )}
             </Stack>
           </Row>
@@ -68,9 +70,9 @@ export function SurveyCard({ surveyUnit, locked = false }) {
             {/* Username */}
             <Row justifyContent="space-between">
               <Row gap={1}>
-                <PersonOutlinedIcon color="typographyprimary" />
+                <PersonOutlinedIcon color="textPrimary" />
                 <AbsoluteLink to={`/survey-unit/${id}/details?panel=0`}>
-                  <Typography sx={{ fontWeight: '700' }} color="black" variant="xl">
+                  <Typography fontWeight={700} color="black" variant="xl">
                     {lastName} {firstName}
                   </Typography>
                 </AbsoluteLink>
@@ -78,20 +80,20 @@ export function SurveyCard({ surveyUnit, locked = false }) {
               {locked && <LockIcon color="iconLock" />}
             </Row>
             {/* data en dur pour le moment */}
-            <Typography variant="s" color="hint" as="div">
+            <Typography variant="s" color="textHint" as="div">
               #02000000000
             </Typography>
           </Stack>
           <Row gap={1}>
-            <FmdGoodIcon color="typographyprimary" />
-            <Typography variant="s" color="primary">
+            <FmdGoodIcon color="textPrimary" />
+            <Typography variant="s" color="textPrimary">
               {cityName}
             </Typography>
           </Row>
           <Row justifyContent="space-between">
             <Row gap={0.5}>
-              <AccessTimeIcon color="typographytertiary" />
-              <Typography color="tertiary" variant="s">{`${nbJoursRestant} jours`}</Typography>
+              <AccessTimeIcon color="textTertiary" />
+              <Typography color="textTertiary" variant="s">{`${nbJoursRestant} jours`}</Typography>
             </Row>
             <StatusChip color="#0A192E" status={todo} />
           </Row>

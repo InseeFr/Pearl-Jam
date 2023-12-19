@@ -67,7 +67,11 @@ export function Home() {
           >
             {filteredSurveyUnits.map(su => (
               <div key={su.id}>
-                <SurveyCard key={su.id} surveyUnit={su} locked={missingSurveyUnitIds.includes(su.id)} />
+                <SurveyCard
+                  key={su.id}
+                  surveyUnit={su}
+                  locked={missingSurveyUnitIds.includes(su.id)}
+                />
               </div>
             ))}
           </Grid>
@@ -118,7 +122,7 @@ function GridHeader({ visibleCount, totalCount }) {
               {D.subSample}
             </MenuItem>
           </Select>
-          <IconButton aria-label="delete" color="typographyprimary" onClick={toggleSortDirection}>
+          <IconButton aria-label="delete" color="textPrimary" onClick={toggleSortDirection}>
             {sortDirection === 'ASC' ? <IconAsc /> : <IconDesc />}
           </IconButton>
         </Row>
@@ -152,7 +156,7 @@ function Sidebar({ surveyUnits }) {
         sx={{ height: '100%', overflowY: 'auto', minHeight: 0 }}
       >
         <Typography variant="m">Filtrer les unités par</Typography>
-        <Accordion variant="sidebar" title={D.sortSurvey}>
+        <Accordion variant="dense" title={D.sortSurvey}>
           <Stack gap={0.5}>
             {campaigns.map(campaign => (
               <FormControlLabel
@@ -254,7 +258,7 @@ function Sidebar({ surveyUnits }) {
         </Accordion>
         <Hr />
         <div>
-          <Button size="edge" color="typographyprimary" variant="underlined" onClick={filter.reset}>
+          <Button size="edge" color="textPrimary" variant="underlined" onClick={filter.reset}>
             <RestartAltIcon />
             Réinitialiser les filtres
           </Button>

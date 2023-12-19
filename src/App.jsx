@@ -95,10 +95,8 @@ function AppWrapper() {
           {!authenticated && <Preloader message={D.pleaseWait} />}
           {authenticated && (
             <SynchronizeWrapper>
-              <NotificationWrapper>
-                <Header />
-                <Outlet />
-              </NotificationWrapper>
+              <Header />
+              <Outlet />
             </SynchronizeWrapper>
           )}
         </div>

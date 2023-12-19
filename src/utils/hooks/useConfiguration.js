@@ -20,9 +20,8 @@ export const loadConfiguration = () => {
 };
 
 /**
- * Load the configuration.json file content
+ * Get the configuration
  *
- * @template T
  * @return {{
  *   QUEEN_URL: string
  *   PEARL_API_URL: string

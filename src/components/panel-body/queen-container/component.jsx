@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from 'react';
-import { useQueenListener } from 'utils/hooks/useQueenListener';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { mount } from 'dramaQueen/DramaIndex';
+import { useQueenListener } from '../../../utils/hooks/useQueenListener';
 
 const QueenContainer = queenSwState => {
   const wrapperRef = useRef(null);
   const location = useLocation();
 
-  useQueenListener(useNavigate());
+  const navigate = useNavigate();
+  useQueenListener(navigate);
 
   const isFirstRunRef = useRef(true);
   const unmountRef = useRef(() => {});
@@ -15,11 +17,10 @@ const QueenContainer = queenSwState => {
     if (!isFirstRunRef.current) {
       return;
     }
-    // unmountRef.current = mount({
-    //   mountPoint: wrapperRef.current,
-    //   //For the future we should have location.pathname.replace('queen', '') and remove useless /queen in queens routes
-    //   initialPathname: location.pathname.replace('', ''),
-    // });
+    unmountRef.current = mount({
+      mountPoint: wrapperRef.current,
+      initialPathname: location.pathname.replace('', ''),
+    });
     isFirstRunRef.current = false;
   }, [location]);
 
