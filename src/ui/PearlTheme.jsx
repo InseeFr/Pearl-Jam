@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 import '@fontsource/montserrat/800.css';
 import '@fontsource/montserrat/700.css';
 import '@fontsource/montserrat/600.css';
@@ -113,7 +113,7 @@ export const theme = createTheme(baseTheme, {
         {
           props: { variant: 'contained' },
           style: {
-            padding: '.5rem 1rem',
+            padding: `${baseTheme.spacing(1)} ${baseTheme.spacing(2)}`,
           },
         },
         {
@@ -133,7 +133,27 @@ export const theme = createTheme(baseTheme, {
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: '1rem',
+          position: 'relative',
+          borderRadius: baseTheme.spacing(2),
+        },
+      },
+      variants: [
+        {
+          props: { variant: 'disabled' },
+          style: {
+            backgroundColor: '#E6EAF0',
+            opacity: '0.5',
+            '&:hover': {
+              cursor: 'not-allowed',
+            },
+          },
+        },
+      ],
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          padding: baseTheme.spacing(3),
         },
       },
     },
@@ -141,7 +161,7 @@ export const theme = createTheme(baseTheme, {
       styleOverrides: {
         root: {
           marginLeft: 0,
-          gap: '.5rem',
+          gap: baseTheme.spacing(1),
         },
         label: {
           ...baseTheme.typography.s,
@@ -182,7 +202,7 @@ export const theme = createTheme(baseTheme, {
         slotProps: {
           paper: {
             sx: {
-              borderRadius: 16,
+              borderRadius: baseTheme.spacing(2),
             },
           },
         },
@@ -211,7 +231,7 @@ export const theme = createTheme(baseTheme, {
             ...baseTheme.typography.s,
             '& .MuiSelect-select': {
               minHeight: 'auto',
-              padding: '.5rem',
+              padding: baseTheme.spacing(1),
             },
           },
         },

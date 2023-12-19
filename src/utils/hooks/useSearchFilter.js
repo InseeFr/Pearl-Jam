@@ -9,7 +9,7 @@ const emptyFilter = {
   priority: false,
   terminated: false,
   sortField: 'remainingDays',
-  sortDirection: 'DESC',
+  sortDirection: 'ASC',
 };
 
 const $filter = signal(emptyFilter);
