@@ -30,18 +30,17 @@ export function Home() {
   /** @type {unknown[]} */
   const surveyUnits = useSurveyUnits();
   const missingSurveyUnitIds = useMissingSurveyUnits().map(surveyUnit => surveyUnit.id);
-  const { sortField, sortDirection, campaigns, statuses, priority, search } = useSearchFilter();
-
+  const { sortField, sortDirection, campaigns, statuses, priority, search, terminated } = useSearchFilter();
   const searchCriteria = useMemo(
     () => ({
       campaigns,
       toDos: statuses,
       search,
       priority,
+      terminated
     }),
-    [campaigns, statuses, search, priority]
+    [campaigns, statuses, search, priority, terminated]
   );
-
   const filteredSurveyUnits = useMemo(() => {
     return applyFilters([...surveyUnits], searchCriteria).searchFilteredSU.sort(
       sortOnColumnCompareFunction(sortField, sortDirection)
@@ -135,7 +134,6 @@ function Sidebar({ surveyUnits }) {
 
   const filter = useSearchFilter();
   const statuses = useMemo(() => Object.entries(toDoEnum), []);
-
   return (
     <Paper
       sx={{
@@ -192,7 +190,6 @@ function Sidebar({ surveyUnits }) {
               labelPlacement="start"
               control={
                 <SwitchIOS
-                  defaultChecked
                   checked={filter.terminated}
                   onChange={() => filter.toggle('terminated')}
                 />

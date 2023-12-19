@@ -23,7 +23,6 @@ export function useSearchFilter() {
    */
   const toggle = (key, value) => {
     const filter = $filter();
-
     // Boolean filter
     if (['priority', 'terminated'].includes(key)) {
       return $filter.set({

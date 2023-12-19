@@ -277,6 +277,7 @@ export const applyFilters = (surveyUnits, filters) => {
     campaigns: campaignFilter,
     toDos: toDoFilter,
     priority: priorityFilter,
+    terminated: terminatedFilter
   } = filters;
 
   const normalize = string =>
@@ -333,10 +334,21 @@ export const applyFilters = (surveyUnits, filters) => {
     return true;
   };
 
+  const filterByTerminated = su => {
+    if (terminatedFilter === true) {
+       const suOrder = convertSUStateInToDo(getLastState(su).type).order.toString();
+      if (suOrder !== toDoEnum.TERMINATED.order) {
+        return false
+      }
+    }
+    return true;
+  }
+
   const filteredSU = surveyUnits
     .filter(unit => filterByPriority(unit))
     .filter(unit => filterByToDo(unit))
-    .filter(unit => filterByCampaign(unit));
+    .filter(unit => filterByCampaign(unit))
+    .filter(unit => filterByTerminated(unit))
 
   const totalEchoes = surveyUnits.length;
   const searchFilteredSU = filteredSU.filter(unit => filterBySearch(unit));
