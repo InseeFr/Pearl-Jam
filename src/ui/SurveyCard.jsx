@@ -40,7 +40,6 @@ export function SurveyCard({ surveyUnit, locked = false }) {
   const inactiveStyle = {
     backgroundColor: '#E6EAF0',
     opacity:"0.5",
-    color: "red",
     '&:hover': {
       cursor: 'not-allowed',
     },
@@ -61,9 +60,13 @@ export function SurveyCard({ surveyUnit, locked = false }) {
           />
           <Chip label="2" sx={{ fontSize: '14px', fontWeight: 600 }} />
           <Stack sx={{ marginLeft: 'auto' }} pl={2} alignItems="center">
+          {!priority ? (
             <Typography color="surfaceSecondary" variant="s" noWrap>
               223-1111-75
             </Typography>
+          ) : (
+            <Typography variant="s" color="accent">Prioritaire</Typography>
+          )}
           </Stack>
         </Row>
         <Stack gap={0.5}>
