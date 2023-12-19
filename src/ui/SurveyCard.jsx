@@ -16,8 +16,10 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LockIcon from '@mui/icons-material/Lock';
 import { StatusChip } from './StatusChip';
 import { Row } from './Row';
+import { Link } from 'react-router-dom';
+import { Opacity } from '@material-ui/icons';
 
-export function SurveyCard({ surveyUnit, inaccessible = false }) {
+export function SurveyCard({ surveyUnit, locked = false }) {
   const {
     id,
     address: { l6 },
@@ -33,17 +35,16 @@ export function SurveyCard({ surveyUnit, inaccessible = false }) {
   const lastState = getLastState(surveyUnit);
   const todo = convertSUStateInToDo(lastState.type);
   const { order, value: toDoLabel } = todo;
-  // const openSurveyUnitPage = id => navigate(`/survey-unit/${id}/details?panel=0`);
 
   const active = isSelectable(surveyUnit);
   const inactiveStyle = {
     backgroundColor: '#E6EAF0',
+    opacity:"0.5",
     color: "red",
     '&:hover': {
       cursor: 'not-allowed',
     },
   };
-
 
   return (
     <Card sx={{ p: 3, ...(active ? inactiveStyle : {}) }} elevation={0}>
@@ -70,11 +71,13 @@ export function SurveyCard({ surveyUnit, inaccessible = false }) {
           <Row justifyContent="space-between">
             <Row gap={1}>
               <PersonOutlinedIcon color="typographyprimary" />
+              <Link to={`/survey-unit/${id}/details?panel=0`}>
               <Typography sx={{ fontWeight: '700' }} color="black" variant="xl">
                 {lastName} {firstName}
               </Typography>
+              </Link>
             </Row>
-            {inaccessible && (
+            {locked && (
             <LockIcon color="iconLock" />
             )}
           </Row>

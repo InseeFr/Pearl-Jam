@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import { Typography } from '../ui/Typography';
 import D from '../i18n/build-dictionary';
 import { Accordion } from '../ui/Accordion';
-import { useSurveyUnits } from '../utils/hooks/database';
+import { useMissingSurveyUnits, useSurveyUnits } from '../utils/hooks/database';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { useSearchFilter } from '../utils/hooks/useSearchFilter';
@@ -29,6 +29,7 @@ import { Row } from '../ui/Row';
 export function Home() {
   /** @type {unknown[]} */
   const surveyUnits = useSurveyUnits();
+  const missingSurveyUnitIds = useMissingSurveyUnits().map(surveyUnit => surveyUnit.id);
   const { sortField, sortDirection, campaigns, statuses, priority, search } = useSearchFilter();
 
   const searchCriteria = useMemo(
@@ -67,7 +68,7 @@ export function Home() {
           >
             {filteredSurveyUnits.map(su => (
               <div key={su.id}>
-                <SurveyCard key={su.id} surveyUnit={su} inaccessible={false} />
+                <SurveyCard key={su.id} surveyUnit={su} locked={missingSurveyUnitIds.includes(su.id)} />
               </div>
             ))}
           </Grid>
