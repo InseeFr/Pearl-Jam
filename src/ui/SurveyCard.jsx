@@ -4,6 +4,7 @@ import {
   getLastState,
   getprivilegedPerson,
   intervalInDays,
+  isSelectable
 } from 'utils/functions';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -34,8 +35,18 @@ export function SurveyCard({ surveyUnit, inaccessible = false }) {
   const { order, value: toDoLabel } = todo;
   // const openSurveyUnitPage = id => navigate(`/survey-unit/${id}/details?panel=0`);
 
+  const active = isSelectable(surveyUnit);
+  const inactiveStyle = {
+    backgroundColor: '#E6EAF0',
+    color: "red",
+    '&:hover': {
+      cursor: 'not-allowed',
+    },
+  };
+
+
   return (
-    <Card sx={{ p: 3 }} elevation={0}>
+    <Card sx={{ p: 3, ...(active ? inactiveStyle : {}) }} elevation={0}>
       <Stack gap={2}>
         <Row gap={0.5}>
           <Chip
@@ -63,7 +74,9 @@ export function SurveyCard({ surveyUnit, inaccessible = false }) {
                 {lastName} {firstName}
               </Typography>
             </Row>
+            {inaccessible && (
             <LockIcon color="iconLock" />
+            )}
           </Row>
           {/* data en dur pour le moment */}
           <Typography variant="s" color="hint" as="div">
