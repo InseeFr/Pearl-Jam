@@ -1,16 +1,16 @@
 import Switch from '@mui/material/Switch';
 import { theme } from '../ui/PearlTheme';
 
-export const SwitchIOS = () => {
+export const SwitchIOS = props => {
   return (
     <Switch
+      {...props}
       focusVisibleClassName=".Mui-focusVisible"
       disableRipple
       sx={{
         width: 40,
         height: 24,
         padding: 0,
-        backgroundColor: 'red',
         '& .MuiSwitch-switchBase': {
           padding: 0,
           margin: '4px',

@@ -13,6 +13,7 @@ import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { toDoEnum } from '../enum/SUToDoEnum';
 
 export const getCommentByType = (type, su) => {
   if (Array.isArray(su.comments) && su.comments.length > 0) {
@@ -277,7 +278,7 @@ export const applyFilters = (surveyUnits, filters) => {
     campaigns: campaignFilter,
     toDos: toDoFilter,
     priority: priorityFilter,
-    terminated: terminatedFilter
+    terminated: terminatedFilter,
   } = filters;
 
   const normalize = string =>
@@ -335,20 +336,14 @@ export const applyFilters = (surveyUnits, filters) => {
   };
 
   const filterByTerminated = su => {
-    if (terminatedFilter === true) {
-       const suOrder = convertSUStateInToDo(getLastState(su).type).order.toString();
-      if (suOrder !== toDoEnum.TERMINATED.order) {
-        return false
-      }
-    }
-    return true;
-  }
+    return !terminatedFilter || convertSUStateInToDo(getLastState(su).type) !== toDoEnum.TERMINATED;
+  };
 
   const filteredSU = surveyUnits
     .filter(unit => filterByPriority(unit))
     .filter(unit => filterByToDo(unit))
     .filter(unit => filterByCampaign(unit))
-    .filter(unit => filterByTerminated(unit))
+    .filter(unit => filterByTerminated(unit));
 
   const totalEchoes = surveyUnits.length;
   const searchFilteredSU = filteredSU.filter(unit => filterBySearch(unit));

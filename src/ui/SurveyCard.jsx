@@ -24,7 +24,6 @@ export function SurveyCard({ surveyUnit, locked = false }) {
     id,
     address: { l6 },
     campaign,
-    sampleIdentifiers: { ssech },
     priority,
     persons,
   } = surveyUnit;
@@ -32,12 +31,10 @@ export function SurveyCard({ surveyUnit, locked = false }) {
   const privilegedPerson = getprivilegedPerson(surveyUnit);
   const { firstName, lastName } = privilegedPerson ?? persons[0];
   const nbJoursRestant = intervalInDays(surveyUnit);
-  const lastState = getLastState(surveyUnit);
-  const todo = convertSUStateInToDo(lastState.type);
-  const { order, value: toDoLabel } = todo;
+  const todo = convertSUStateInToDo(getLastState(surveyUnit).type);
 
-  const active = isSelectable(surveyUnit);
-  const variant = active ? undefined : 'disabled';
+  const isActive = isSelectable(surveyUnit);
+  const variant = isActive ? undefined : 'disabled';
 
   return (
     <Card elevation={0} variant={variant}>
@@ -56,7 +53,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
             <Chip label="2" sx={{ fontSize: '14px', fontWeight: 600 }} />
             <Stack sx={{ marginLeft: 'auto' }} pl={2} alignItems="center">
               {!priority ? (
-                <Typography color="surfaceSecondary" variant="s" noWrap>
+                <Typography color="textHint" variant="s" noWrap>
                   223-1111-75
                 </Typography>
               ) : (
@@ -71,7 +68,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
             <Row justifyContent="space-between">
               <Row gap={1}>
                 <PersonOutlinedIcon color="textPrimary" />
-                <AbsoluteLink to={`/survey-unit/${id}/details?panel=0`}>
+                <AbsoluteLink to={isActive ? `/survey-unit/${id}/details?panel=0` : undefined}>
                   <Typography fontWeight={700} color="black" variant="xl">
                     {lastName} {firstName}
                   </Typography>

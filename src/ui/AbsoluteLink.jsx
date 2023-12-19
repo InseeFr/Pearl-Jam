@@ -16,6 +16,9 @@ const style = {
  * @return {JSX.Element}
  */
 export function AbsoluteLink({ to, children }) {
+  if (!to) {
+    return <>{children}</>;
+  }
   return (
     <Link component={RouterLink} to={to} sx={style} underline="none">
       {children}
