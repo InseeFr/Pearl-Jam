@@ -133,7 +133,6 @@ theme = createTheme({
     },
   },
 });
-console.log('palette', theme.palette);
 
 theme = createTheme(theme, {
   components: {
