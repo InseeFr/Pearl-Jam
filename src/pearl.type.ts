@@ -88,3 +88,14 @@ export type SurveyUnit = {
   contactOutcomeConfiguration: string;
   contactAttemptConfiguration: string;
 };
+
+export type Notification = {
+  date: number;
+  type: string;
+  title: string;
+  messages: string[];
+  state: 'warning' | 'success' | 'error';
+  read: boolean;
+  detail: string;
+  id: number;
+};

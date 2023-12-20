@@ -14,7 +14,9 @@ import { Typography } from '../Typography';
 import { HeaderBackdrop } from './HeaderBackdrop';
 import {
   deleteNotification,
+  deleteNotifications,
   markNotificationAsRead,
+  markNotificationsAsRead,
   useNotifications,
 } from '../../utils/hooks/useNotifications';
 import { Row } from '../Row';
@@ -28,6 +30,10 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import Badge from '@mui/material/Badge';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { SynchronizeWrapperContext } from '../../components/sychronizeWrapper';
+import IconButton from '@mui/material/IconButton';
+import D from '../../i18n/build-dictionary';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MarkAsReadIcon from '@mui/icons-material/MarkAsUnread';
 
 export function Notifications({ target, onClose }) {
   const open = !!target;
@@ -63,7 +69,21 @@ export function Notifications({ target, onClose }) {
         }}
       >
         <Stack gap={2} p={3}>
-          <Typography variant="headingM">Notifications</Typography>
+          <Row justifyContent="space-between">
+            <Typography variant="headingM">Notifications</Typography>
+            <Row gap={1}>
+              <IconButton
+                color="textPrimary"
+                title={D.markAllAsRead}
+                onClick={markNotificationsAsRead}
+              >
+                <MarkAsReadIcon />
+              </IconButton>
+              <IconButton color="textPrimary" title={D.deleteAll} onClick={deleteNotifications}>
+                <DeleteIcon />
+              </IconButton>
+            </Row>
+          </Row>
           <Tabs
             value={type}
             onChange={(_, type) => setType(type)}
