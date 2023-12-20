@@ -15,7 +15,6 @@ export function StatusChip({ status }) {
         color: theme.palette.textPrimary.main,
         fontWeight: '600',
       }}
-      slotProps={{}}
       label={status.value}
     />
   );

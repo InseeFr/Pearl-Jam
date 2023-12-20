@@ -22,6 +22,7 @@ import { DatabaseConsole } from './components/panel-body/databaseConsole';
 import { useEffectOnce } from './utils/hooks/useEffectOnce';
 import { SurveyUnitPage } from './pages/SurveyUnitPage';
 import './app.css';
+import { SuiviPage } from './pages/SuiviPage';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
+      },
+      {
+        path: '/suivi',
+        element: <SuiviPage />,
       },
       {
         path: '/survey-unit/:id',

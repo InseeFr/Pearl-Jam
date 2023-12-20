@@ -125,5 +125,8 @@
     "vite-plugin-pwa": "^0.14.7",
     "vite-tsconfig-paths": "^3.6.0",
     "vitest": "^0.29.7"
+  },
+  "volta": {
+    "node": "16.20.2"
   }
 }

@@ -33,6 +33,7 @@ export const gray = {
 const fontFamily = 'Montserrat, sans-serif';
 
 let theme = createTheme({});
+const colors = color => theme.palette.augmentColor({ color: { main: color } });
 
 theme = createTheme({
   shadows: [
@@ -99,18 +100,14 @@ theme = createTheme({
     black: {
       main: '#000000',
     },
-    green: {
-      main: '#019A3E',
-    },
+    green: colors('#35C758'),
     separator: {
       main: '#D7DBE1',
     },
     surfacePrimary: {
       main: '#F5F7FA',
     },
-    surfaceSecondary: {
-      main: '#FFF',
-    },
+    surfaceSecondary: colors('#FFF'),
     surfaceTertiary: {
       main: '#E6EAF0',
     },
@@ -141,7 +138,6 @@ theme = createTheme(theme, {
         {
           props: { variant: 'contained' },
           style: {
-            background: '#FFF',
             padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
           },
         },
@@ -177,7 +173,20 @@ theme = createTheme(theme, {
             },
           },
         },
+        {
+          props: { raised: true },
+          style: { background: theme.palette.surfacePrimary.main },
+        },
       ],
+    },
+    MuiCircularProgress: {
+      styleOverrides: {
+        root: {
+          '& svg': {
+            strokeLinecap: 'round',
+          },
+        },
+      },
     },
     MuiTabs: {
       styleOverrides: {
@@ -285,6 +294,13 @@ theme = createTheme(theme, {
           m: 'span',
           s: 'span',
           xs: 'span',
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          ...theme.typography.s,
         },
       },
     },

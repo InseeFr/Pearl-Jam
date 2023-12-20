@@ -10,6 +10,9 @@ import TypographyMaterial from '@mui/material/Typography';
  * @return {JSX.Element}
  */
 export function Typography({ variant = 'm', color = 'textPrimary', fontWeight = 600, ...props }) {
+  if (props.noWrap) {
+    props.sx = { ...props.sx, maxWidth: '100%', minWidth: 0 };
+  }
   return (
     <TypographyMaterial
       variant={variant}

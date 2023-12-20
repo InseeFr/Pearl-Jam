@@ -15,6 +15,7 @@ import { Row } from './Row';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { loadNotifications, useUnreadNotificationsCount } from '../utils/hooks/useNotifications';
 import { Notifications } from './Header/Notifications';
+import { Link } from 'react-router-dom';
 
 export function Header() {
   const notificationsCount = useUnreadNotificationsCount();
@@ -60,7 +61,9 @@ export function Header() {
         </Stack>
       </Row>
       <Row gap={3}>
-        <HeaderNavLink icon={FormatListBulletedIcon}>Mon suivi</HeaderNavLink>
+        <HeaderNavLink to="/suivi" icon={FormatListBulletedIcon}>
+          Mon suivi
+        </HeaderNavLink>
 
         <HeaderNavLink
           onClick={e => setNotificationTarget(e.currentTarget)}
@@ -86,7 +89,12 @@ export function Header() {
 function HeaderNavLink({ icon: IconComponent, children, badge = 0, ...props }) {
   return (
     <Badge color="accent" badgeContent={badge}>
-      <Button color="textPrimary" {...props}>
+      <Button
+        as={props.to ? Link : undefined}
+        color="textPrimary"
+        sx={{ textDecoration: 'none' }}
+        {...props}
+      >
         <Row gap={1}>
           <Stack
             alignItems="center"

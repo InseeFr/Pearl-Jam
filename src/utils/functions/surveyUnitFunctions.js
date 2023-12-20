@@ -22,6 +22,15 @@ export const getCommentByType = (type, su) => {
   return '';
 };
 
+/**
+ * Extract the survey unit state
+ * @param {import("@src/pearl.type").SurveyUnit[]} su
+ * @returns {{ order: string, value: string, color: string }}
+ */
+export const getSuTodoState = su => {
+  return convertSUStateInToDo(getLastState(su).type);
+};
+
 export const getLastState = su => {
   if (Array.isArray(su.states) && su.states.length === 1) return su.states[0];
   if (Array.isArray(su.states) && su.states.length > 1) {
