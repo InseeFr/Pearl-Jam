@@ -92,7 +92,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
               <AccessTimeIcon color="textTertiary" />
               <Typography color="textTertiary" variant="s">{`${nbJoursRestant} jours`}</Typography>
             </Row>
-            <StatusChip color="#0A192E" status={todo} />
+            <StatusChip status={todo} />
           </Row>
         </Stack>
       </CardContent>
