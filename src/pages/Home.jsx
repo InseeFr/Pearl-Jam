@@ -174,7 +174,7 @@ function Sidebar({ surveyUnits }) {
           </Stack>
         </Accordion>
         <Hr />
-        <Accordion variant="sidebar" title={D.priority}>
+        <Accordion variant="dense" title={D.priority}>
           <FormControlLabel
             control={
               <Checkbox
@@ -187,7 +187,7 @@ function Sidebar({ surveyUnits }) {
           />
         </Accordion>
         <Hr />
-        <Accordion variant="sidebar" title={D.sortStatus}>
+        <Accordion variant="dense" title={D.sortStatus}>
           <Stack gap={2} alignItems="stretch" width="100%">
             <FormControlLabel
               sx={{ width: '100%', justifyContent: 'space-between' }}
@@ -219,7 +219,7 @@ function Sidebar({ surveyUnits }) {
           </Stack>
         </Accordion>
         <Hr />
-        <Accordion variant="sidebar" title="Sous-échantillon et grappe">
+        <Accordion variant="dense" title="Sous-échantillon et grappe">
           <Stack gap={2} sx={{ width: '100%' }}>
             <Select
               variant="standard"
