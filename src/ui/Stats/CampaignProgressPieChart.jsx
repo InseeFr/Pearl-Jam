@@ -22,31 +22,28 @@ const legendBar = {
 };
 
 /**
- * @param {Record<string, import("@src/pearl.type").SurveyUnit[]>} surveyUnits
+ * Card with a pie chart that show surveyUnits in progress
+ *
+ * @param {import("@src/pearl.type").SurveyUnit[]} surveyUnits
  * @return {JSX.Element}
  */
 export function CampaignProgressPieChart({ surveyUnits }) {
-  const surveyUnitsInProgressPerCampaign = groupBy(
-    surveyUnits.filter(su => getSuTodoState(su).order !== toDoEnum.TERMINATED.order),
-    su => su.campaign
-  );
+  // Only keep survey units that are not finished
+  surveyUnits = surveyUnits.filter(su => getSuTodoState(su).order !== toDoEnum.TERMINATED.order);
+  const total = surveyUnits.length;
+  // We have no survey units in progress, we won't be able to show a graph
+  if (total === 0) {
+    return '';
+  }
 
-  const total = Object.values(surveyUnitsInProgressPerCampaign).reduce(
-    (acc, sus) => acc + sus.length,
-    0
-  );
-  const maxDays = Math.max(
-    ...Object.values(surveyUnitsInProgressPerCampaign).map(daysLeftForSurveyUnit)
-  );
+  const maxDays = Math.max(...surveyUnits.map(daysLeftForSurveyUnit));
+  const surveyUnitsInProgressPerCampaign = groupBy(surveyUnits, su => su.campaign);
   const slices = Object.entries(surveyUnitsInProgressPerCampaign).map(([label, surveyUnits]) => ({
     label,
     value: surveyUnits.length / total,
     rate: maxDays === 0 ? 0 : daysLeftForSurveyUnit(surveyUnits) / maxDays,
     color: getColorForRate(maxDays === 0 ? 0 : daysLeftForSurveyUnit(surveyUnits) / maxDays),
   }));
-  if (total === 0) {
-    return '';
-  }
   return (
     <Card elevation={0} raised>
       <Stack gap={2} alignItems="center" p={2} sx={{ height: 646 }}>
