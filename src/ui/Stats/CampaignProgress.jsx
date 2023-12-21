@@ -15,7 +15,7 @@ import { StatusChip } from '../StatusChip';
 
 /**
  * @param {string} label
- * @param {import("@src/pearl.type").SurveyUnit[]} surveyUnits
+ * @param {SurveyUnit[]} surveyUnits
  * @return {JSX.Element}
  */
 export function CampaignProgress({ label, surveyUnits }) {

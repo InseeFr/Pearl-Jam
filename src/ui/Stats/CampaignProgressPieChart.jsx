@@ -24,7 +24,7 @@ const legendBar = {
 /**
  * Card with a pie chart that show surveyUnits in progress
  *
- * @param {import("@src/pearl.type").SurveyUnit[]} surveyUnits
+ * @param {SurveyUnit[]} surveyUnits
  * @return {JSX.Element}
  */
 export function CampaignProgressPieChart({ surveyUnits }) {

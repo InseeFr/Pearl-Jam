@@ -5,6 +5,7 @@ import {
   getprivilegedPerson,
   daysLeftForSurveyUnit,
   isSelectable,
+  getSuTodoState,
 } from 'utils/functions';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -20,10 +21,9 @@ import { Row } from './Row';
 import { AbsoluteLink } from './AbsoluteLink';
 
 /**
- * @param {import('@src/pearl.type').SurveyUnit} surveyUnit
+ * @param {SurveyUnit} surveyUnit
  * @param {boolean} locked
  * @returns {JSX.Element}
- * @constructor
  */
 export function SurveyCard({ surveyUnit, locked = false }) {
   const {
@@ -36,8 +36,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
   const cityName = l6.replace(/^\d+\s/, '').trim();
   const privilegedPerson = getprivilegedPerson(surveyUnit);
   const { firstName, lastName } = privilegedPerson ?? persons[0];
-  const nbJoursRestant = daysLeftForSurveyUnit(surveyUnit);
-  const todo = convertSUStateInToDo(getLastState(surveyUnit).type);
+  const state = getSuTodoState(surveyUnit);
 
   const isActive = isSelectable(surveyUnit);
   const variant = isActive ? undefined : 'disabled';
@@ -87,7 +86,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
             </Row>
             {/* data en dur pour le moment */}
             <Typography variant="s" color="textHint" as="div">
-              #02000000000
+              #{surveyUnit.id}
             </Typography>
           </Stack>
           <Row gap={1}>
@@ -99,9 +98,11 @@ export function SurveyCard({ surveyUnit, locked = false }) {
           <Row justifyContent="space-between">
             <Row gap={0.5}>
               <AccessTimeIcon color="textTertiary" />
-              <Typography color="textTertiary" variant="s">{`${nbJoursRestant} jours`}</Typography>
+              <Typography color="textTertiary" variant="s">{`${daysLeftForSurveyUnit(
+                surveyUnit
+              )} jours`}</Typography>
             </Row>
-            <StatusChip status={todo} />
+            <StatusChip status={state} />
           </Row>
         </Stack>
       </CardContent>

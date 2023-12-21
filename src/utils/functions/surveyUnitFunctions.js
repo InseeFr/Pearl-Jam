@@ -14,10 +14,7 @@ import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfig
 import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { toDoEnum } from '../enum/SUToDoEnum';
-
-/**
- * @typedef {import("@src/pearl.type").SurveyUnit} SurveyUnit
- */
+import { normalize } from './string';
 
 export const getCommentByType = (type, su) => {
   if (Array.isArray(su.comments) && su.comments.length > 0) {
@@ -28,13 +25,19 @@ export const getCommentByType = (type, su) => {
 
 /**
  * Extract the survey unit state
- * @param {import("@src/pearl.type").SurveyUnit[]} su
+ *
+ * @param {SurveyUnit} surveyUnit
  * @returns {{ order: string, value: string, color: string }}
  */
-export const getSuTodoState = su => {
-  return convertSUStateInToDo(getLastState(su).type);
+export const getSuTodoState = surveyUnit => {
+  return convertSUStateInToDo(getLastState(surveyUnit).type);
 };
 
+/**
+ * @deprecated shouldn't be used outside of surveyUnitFunctions, use getSuTodoState() instead
+ * @param {SurveyUnit} su
+ * @returns {SurveyUnitState}
+ */
 export const getLastState = su => {
   if (Array.isArray(su.states) && su.states.length === 1) return su.states[0];
   if (Array.isArray(su.states) && su.states.length > 1) {
@@ -286,9 +289,10 @@ export const isQuestionnaireAvailable = su => inaccessible => {
 };
 
 /**
+ * @deprecated used in the legacy code
  * @template T
  * @param {T[]} surveyUnits
- * @param {{search: string, campaigns: string[], toDos: number[], priority: boolean}} filters
+ * @param {{search: string, campaigns: string[], toDos: number[], priority: boolean, terminated: boolean, subSample: number}} filters
  * @return {{matchingEchoes: *, totalEchoes: *, searchFilteredSU: *}}
  */
 export const applyFilters = (surveyUnits, filters) => {
@@ -298,13 +302,8 @@ export const applyFilters = (surveyUnits, filters) => {
     toDos: toDoFilter,
     priority: priorityFilter,
     terminated: terminatedFilter,
+    subSample: subSampleFilter,
   } = filters;
-
-  const normalize = string =>
-    string
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
 
   const filterBySearch = su => {
     const { firstName, lastName } = getprivilegedPerson(su);
@@ -347,6 +346,7 @@ export const applyFilters = (surveyUnits, filters) => {
     }
     return true;
   };
+
   const filterByPriority = su => {
     if (priorityFilter === true) {
       return su.priority;
@@ -356,6 +356,14 @@ export const applyFilters = (surveyUnits, filters) => {
 
   const filterByTerminated = su => {
     return !terminatedFilter || convertSUStateInToDo(getLastState(su).type) !== toDoEnum.TERMINATED;
+  };
+
+  const filterBySubSample = su => {
+    if (!subSampleFilter > 0) {
+      return campaignFilter.includes(su.campaign.toString());
+    }
+
+    return true;
   };
 
   const filteredSU = surveyUnits
@@ -489,6 +497,12 @@ export const personPlaceholder = {
   phoneNumbers: [],
 };
 
+/**
+ * Person linked to the survey unit
+ *
+ * @param {SurveyUnit} surveyUnit
+ * @returns {SurveyUnitPerson}
+ */
 export const getprivilegedPerson = surveyUnit => {
   if (!surveyUnit) return personPlaceholder;
   const { persons = [] } = surveyUnit;

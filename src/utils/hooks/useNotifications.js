@@ -3,7 +3,6 @@ import notificationIdbService from '../indexeddb/services/notification-idb-servi
 import { useSignalValue } from './useSignalValue';
 
 /**
- * @typedef {import('@src/pearl.type').Notification}
  * @type {import('@maverick-js/signals').WriteSignal<Notification[]>}
  */
 const $notifications = signal([]);

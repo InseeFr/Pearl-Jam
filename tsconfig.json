@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "@src/*": ["src/*"],
-      "@src": ["src/"]
-    }
+    "esModuleInterop": true,
+    "typeRoots": ["./src/types"],
+    "lib": ["es6", "dom"],
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true
   }
 }

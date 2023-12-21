@@ -3,6 +3,7 @@ import { daysLeftForSurveyUnit } from 'utils/functions/surveyUnitFunctions';
 /**
  * Generate a comparison function based on a field / direction
  *
+ * @deprecated Used for legacy
  * @template T
  * @param {'sampleIdentifiers' | 'priority' | 'campaign' | 'remainingDays'} field
  * @param {'ASC' | 'DESC'} direction

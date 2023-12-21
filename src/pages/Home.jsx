@@ -8,7 +8,7 @@ import { Accordion } from '../ui/Accordion';
 import { useMissingSurveyUnits, useSurveyUnits } from '../utils/hooks/database';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { useSearchFilter } from '../utils/hooks/useSearchFilter';
+import { filterSurveyUnits, useSearchFilter } from '../utils/hooks/useSearchFilter';
 import { Hr } from '../ui/Hr';
 import { toDoEnum } from '../utils/enum/SUToDoEnum';
 import { StatusChip } from '../ui/StatusChip';
@@ -21,39 +21,29 @@ import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import { IconDesc } from '../ui/Icons/IconDesc';
 import { IconAsc } from '../ui/Icons/IconAsc';
-import { applyFilters, sortOnColumnCompareFunction } from '../utils/functions';
+import {
+  applyFilters,
+  convertSUStateInToDo,
+  daysLeftForSurveyUnit,
+  getLastState,
+  getSuTodoState,
+  sortOnColumnCompareFunction,
+} from '../utils/functions';
 import { SearchField } from '../ui/SearchField';
 import { SurveyCard } from '../ui/SurveyCard';
 import { Row } from '../ui/Row';
+import { normalize } from '../utils/functions/string';
+
+/**
+ *
+ */
 
 export function Home() {
-  /** @type {unknown[]} */
   const surveyUnits = useSurveyUnits();
   const missingSurveyUnitIds = useMissingSurveyUnits().map(surveyUnit => surveyUnit.id);
-  const {
-    sortField,
-    sortDirection,
-    campaigns,
-    statuses,
-    priority,
-    search,
-    terminated,
-  } = useSearchFilter();
-  const searchCriteria = useMemo(
-    () => ({
-      campaigns,
-      toDos: statuses,
-      search,
-      priority,
-      terminated,
-    }),
-    [campaigns, statuses, search, priority, terminated]
-  );
-  const filteredSurveyUnits = useMemo(() => {
-    return applyFilters([...surveyUnits], searchCriteria).searchFilteredSU.sort(
-      sortOnColumnCompareFunction(sortField, sortDirection)
-    );
-  }, [surveyUnits, searchCriteria, sortDirection, sortField]);
+  const filter = useSearchFilter();
+
+  const filteredSurveyUnits = filterSurveyUnits(surveyUnits, filter);
 
   return (
     <>
@@ -140,12 +130,14 @@ function GridHeader({ visibleCount, totalCount }) {
 }
 
 function Sidebar({ surveyUnits }) {
-  const campaigns = useMemo(() => [...new Set(surveyUnits.map(unit => unit.campaign))], [
+  const campaigns = useMemo(() => [...new Set(surveyUnits.map(u => u.campaign))], [surveyUnits]);
+
+  const filter = useSearchFilter();
+  const states = useMemo(() => Object.entries(toDoEnum), []);
+  const subSamples = useMemo(() => [...new Set(surveyUnits.map(u => u.sampleIdentifiers.ssech))], [
     surveyUnits,
   ]);
 
-  const filter = useSearchFilter();
-  const statuses = useMemo(() => Object.entries(toDoEnum), []);
   return (
     <Paper
       sx={{
@@ -210,13 +202,13 @@ function Sidebar({ surveyUnits }) {
             />
 
             <Stack gap={0.5}>
-              {statuses.map(([statusKey, statusInfo]) => (
+              {states.map(([statusKey, statusInfo]) => (
                 <FormControlLabel
                   key={statusKey}
                   control={
                     <Checkbox
-                      checked={filter.statuses.includes(statusInfo.order)}
-                      onChange={() => filter.toggle('statuses', statusInfo.order)}
+                      checked={filter.states.includes(statusInfo.order)}
+                      onChange={() => filter.toggle('states', statusInfo.order)}
                       sx={{ padding: 0 }}
                     />
                   }
@@ -232,19 +224,18 @@ function Sidebar({ surveyUnits }) {
             <Select
               variant="standard"
               size="small"
-              value=""
+              value={filter.subSample}
               displayEmpty
-              renderValue={selected => {
-                if (!selected) {
-                  return <em>Sous-échantillon...</em>;
-                }
-
-                return selected;
-              }}
+              onChange={e => filter.setSubSample(e.target.value)}
             >
-              <MenuItem dense disabled value="">
+              <MenuItem dense value="">
                 Sous-échantillon...
               </MenuItem>
+              {subSamples.map(subSample => (
+                <MenuItem dense value={subSample} key={subSample}>
+                  {subSample}
+                </MenuItem>
+              ))}
             </Select>
             <Select
               variant="standard"
