@@ -112,9 +112,9 @@ theme = createTheme({
     surfaceTertiary: {
       main: '#E6EAF0',
     },
-    textPrimary: {
-      main: '#0A192E',
-    },
+    primary: colors('#0A192E'),
+    secondary: colors('#797676'),
+    textPrimary: colors('#0A192E'),
     textHint: {
       main: '#797676',
     },

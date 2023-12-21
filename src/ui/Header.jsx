@@ -1,6 +1,5 @@
 import Stack from '@mui/material/Stack';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import { NavLink } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { Typography } from './Typography';
 import { version } from '../../package.json';
@@ -90,7 +89,7 @@ function HeaderNavLink({ icon: IconComponent, children, badge = 0, ...props }) {
   return (
     <Badge color="accent" badgeContent={badge}>
       <Button
-        as={props.to ? Link : undefined}
+        component={props.to ? Link : undefined}
         color="textPrimary"
         sx={{ textDecoration: 'none' }}
         {...props}

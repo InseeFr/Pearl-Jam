@@ -1,23 +1,21 @@
-import { makeStyles } from '@material-ui/core/styles';
-import Backdrop from '@material-ui/core/Backdrop';
+import Backdrop from '@mui/material/Backdrop';
 import D from 'i18n';
 import imgPreloader from 'img/loader.svg';
 import PropTypes from 'prop-types';
 import React from 'react';
-
-const useStyles = makeStyles(theme => ({
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-}));
+import { theme } from '../../../ui/PearlTheme';
 
 const Preloader = ({ message }) => {
-  const classes = useStyles();
   return (
-    <Backdrop className={classes.backdrop} open>
+    <Backdrop
+      open
+      sx={{
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <img src={imgPreloader} alt="waiting..." />
       <h2>{D.pleaseWait}</h2>
       <h3>{message}</h3>

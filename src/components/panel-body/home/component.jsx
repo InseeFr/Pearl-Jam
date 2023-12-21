@@ -72,5 +72,5 @@ const Home = () => {
 
 export default Home;
 Home.propTypes = {
-  match: PropTypes.shape({ url: PropTypes.string.isRequired }).isRequired,
+  match: PropTypes.shape({ url: PropTypes.string.isRequired }),
 };

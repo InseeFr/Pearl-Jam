@@ -39,7 +39,7 @@ export function SuiviPage() {
                   <ScrollableBox height="calc(100vh - 32px - 160px - 84px)">
                     <Grid container spacing={2}>
                       {Object.entries(surveyUnitsPerCampaign).map(([name, units]) => (
-                        <Grid item xs={6}>
+                        <Grid item xs={6} key={name}>
                           <CampaignProgress label={name} surveyUnits={units} />
                         </Grid>
                       ))}

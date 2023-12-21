@@ -50,7 +50,7 @@ export function Notifications({ target, onClose }) {
       <Popover
         id="basic-menu"
         anchorEl={target}
-        open={target}
+        open={open}
         onClose={onClose}
         aria-labelledby="notifications-button"
         anchorOrigin={{
@@ -88,7 +88,7 @@ export function Notifications({ target, onClose }) {
             value={type}
             onChange={(_, type) => setType(type)}
             aria-label="Type de notification"
-            textColor="textHint"
+            textColor="secondary"
           >
             <Tab label="Toutes les notifications" value={null} />
             <Tab label="Notification techniques" value={NOTIFICATION_TYPE_SYNC} />
@@ -96,7 +96,7 @@ export function Notifications({ target, onClose }) {
           </Tabs>
           <Stack gap={1}>
             {filteredNotifications.map(notification => (
-              <Notification notification={notification} onExit={onClose} />
+              <Notification key={notification.id} notification={notification} onExit={onClose} />
             ))}
           </Stack>
         </Stack>
