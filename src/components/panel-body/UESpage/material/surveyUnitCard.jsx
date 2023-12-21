@@ -18,7 +18,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import WarningIcon from '@material-ui/icons/Warning';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
-import { intervalInDays } from 'utils/functions';
+import { daysLeftForSurveyUnit } from 'utils/functions';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom';
 
@@ -173,7 +173,7 @@ const SurveyUnitCard = ({ surveyUnit, inaccessible = false }) => {
   const lastState = getLastState(surveyUnit);
   const todo = convertSUStateInToDo(lastState.type);
   const { order, value: toDoLabel } = todo;
-  const nbJoursRestant = intervalInDays(surveyUnit);
+  const nbJoursRestant = daysLeftForSurveyUnit(surveyUnit);
   const openSurveyUnitPage = id => navigate(`/survey-unit/${id}/details?panel=0`);
 
   return (

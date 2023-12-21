@@ -9,13 +9,15 @@ import { CampaignProgress } from '../ui/Stats/CampaignProgress';
 import { useMemo } from 'react';
 import { groupBy } from '../utils/functions/array';
 import { CampaignProgressPieChart } from '../ui/Stats/CampaignProgressPieChart';
+import { ScrollableBox } from '../ui/ScrollableBox';
+import { getSuTodoState } from '../utils/functions';
+import { toDoEnum } from '../utils/enum/SUToDoEnum';
 
 export function SuiviPage() {
   const surveyUnits = useSurveyUnits();
-  const surveyUnitsPerCampaign = useMemo(
-    () => Object.entries(groupBy(surveyUnits, su => su.campaign)),
-    [surveyUnits]
-  );
+  const surveyUnitsPerCampaign = useMemo(() => groupBy(surveyUnits, su => su.campaign), [
+    surveyUnits,
+  ]);
 
   return (
     <Box m={2}>
@@ -34,16 +36,18 @@ export function SuiviPage() {
 
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <Grid container spacing={2}>
-                    {surveyUnitsPerCampaign.map(([name, units]) => (
-                      <Grid item xs={6}>
-                        <CampaignProgress label={name} surveyUnits={units} />
-                      </Grid>
-                    ))}
-                  </Grid>
+                  <ScrollableBox height="calc(100vh - 32px - 160px - 84px)">
+                    <Grid container spacing={2}>
+                      {Object.entries(surveyUnitsPerCampaign).map(([name, units]) => (
+                        <Grid item xs={6}>
+                          <CampaignProgress label={name} surveyUnits={units} />
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </ScrollableBox>
                 </Grid>
                 <Grid item xs={6}>
-                  <CampaignProgressPieChart />
+                  <CampaignProgressPieChart surveyUnits={surveyUnits} />
                 </Grid>
               </Grid>
             </Stack>

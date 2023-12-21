@@ -3,7 +3,7 @@ import {
   convertSUStateInToDo,
   getLastState,
   getprivilegedPerson,
-  intervalInDays,
+  daysLeftForSurveyUnit,
   isSelectable,
 } from 'utils/functions';
 import Card from '@mui/material/Card';
@@ -19,6 +19,12 @@ import { StatusChip } from './StatusChip';
 import { Row } from './Row';
 import { AbsoluteLink } from './AbsoluteLink';
 
+/**
+ * @param {import('@src/pearl.type').SurveyUnit} surveyUnit
+ * @param {boolean} locked
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function SurveyCard({ surveyUnit, locked = false }) {
   const {
     id,
@@ -30,7 +36,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
   const cityName = l6.replace(/^\d+\s/, '').trim();
   const privilegedPerson = getprivilegedPerson(surveyUnit);
   const { firstName, lastName } = privilegedPerson ?? persons[0];
-  const nbJoursRestant = intervalInDays(surveyUnit);
+  const nbJoursRestant = daysLeftForSurveyUnit(surveyUnit);
   const todo = convertSUStateInToDo(getLastState(surveyUnit).type);
 
   const isActive = isSelectable(surveyUnit);
@@ -50,7 +56,10 @@ export function SurveyCard({ surveyUnit, locked = false }) {
                 fontWeight: 600,
               }}
             />
-            <Chip label="2" sx={{ fontSize: '14px', fontWeight: 600 }} />
+            <Chip
+              label={surveyUnit.sampleIdentifiers.ssech}
+              sx={{ fontSize: '14px', fontWeight: 600 }}
+            />
             <Stack sx={{ marginLeft: 'auto' }} pl={2} alignItems="center">
               {!priority ? (
                 <Typography color="textHint" variant="s" noWrap>
@@ -70,7 +79,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
                 <PersonOutlinedIcon color="textPrimary" />
                 <AbsoluteLink to={isActive ? `/survey-unit/${id}/details?panel=0` : undefined}>
                   <Typography fontWeight={700} color="black" variant="xl">
-                    {lastName} {firstName}
+                    {lastName.toUpperCase()} {firstName}
                   </Typography>
                 </AbsoluteLink>
               </Row>

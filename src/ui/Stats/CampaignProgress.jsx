@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import { Row } from '../Row';
 import { theme } from '../PearlTheme';
 import { CenteredBox } from '../CenteredBox';
-import { getSuTodoState } from '../../utils/functions';
+import { daysLeftForSurveyUnit, getSuTodoState } from '../../utils/functions';
 import { groupBy } from '../../utils/functions/array';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
 import { useToggle } from '../../utils/hooks/useToggle';
@@ -27,7 +27,7 @@ export function CampaignProgress({ label, surveyUnits }) {
   return (
     <Card elevation={0} raised>
       <CardActionArea onClick={toggleFlip}>
-        <Stack gap={2} alignItems="center" p={2} sx={{ height: 315 }}>
+        <Stack gap={2} alignItems="center" p={2} sx={{ height: 325 }}>
           <Typography fontWeight={700} noWrap variant="headingS" component="h2" color="black">
             {label}
           </Typography>
@@ -73,13 +73,18 @@ export function CampaignProgress({ label, surveyUnits }) {
                     value={(100 * finished) / total}
                     thickness={3}
                   />
-                  <Typography variant="headingL" component="div" color="textPrimary">
+                  <Typography
+                    variant="headingL"
+                    component="div"
+                    color="textPrimary"
+                    fontWeight={400}
+                  >
                     {finished}/{total}
                   </Typography>
                 </CenteredBox>
               </Box>
               <Typography variant="s" color="textHint" fontWeight={700}>
-                Échéance : 2 jours
+                Échéance : {`${daysLeftForSurveyUnit(surveyUnits)} jours`}
               </Typography>
             </>
           )}

@@ -30,14 +30,22 @@ export function Home() {
   /** @type {unknown[]} */
   const surveyUnits = useSurveyUnits();
   const missingSurveyUnitIds = useMissingSurveyUnits().map(surveyUnit => surveyUnit.id);
-  const { sortField, sortDirection, campaigns, statuses, priority, search, terminated } = useSearchFilter();
+  const {
+    sortField,
+    sortDirection,
+    campaigns,
+    statuses,
+    priority,
+    search,
+    terminated,
+  } = useSearchFilter();
   const searchCriteria = useMemo(
     () => ({
       campaigns,
       toDos: statuses,
       search,
       priority,
-      terminated
+      terminated,
     }),
     [campaigns, statuses, search, priority, terminated]
   );

@@ -36,7 +36,7 @@ export function Header() {
       zIndex={theme.zIndex.appBar}
     >
       <Row gap={5}>
-        <NavLink activeClassName="active" exact to="/">
+        <Link to="/">
           <img
             width={47}
             height={50}
@@ -44,10 +44,10 @@ export function Header() {
             alt="Logo Insee"
             style={{ display: 'block' }}
           />
-        </NavLink>
+        </Link>
         {/* Logo Sabiane */}
         <Stack>
-          <Row gap={0.5}>
+          <Row gap={0.5} as={Link} sx={{ textDecoration: 'none' }}>
             <Typography color="textPrimary" variant="headingM" as="span">
               Sabiane
             </Typography>

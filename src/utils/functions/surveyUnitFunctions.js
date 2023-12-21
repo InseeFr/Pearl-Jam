@@ -15,6 +15,10 @@ import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-servic
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { toDoEnum } from '../enum/SUToDoEnum';
 
+/**
+ * @typedef {import("@src/pearl.type").SurveyUnit} SurveyUnit
+ */
+
 export const getCommentByType = (type, su) => {
   if (Array.isArray(su.comments) && su.comments.length > 0) {
     return su.comments.find(x => x.type === type)?.value || '';
@@ -39,16 +43,22 @@ export const getLastState = su => {
   return false;
 };
 
-export const intervalInDays = su => {
-  const { collectionEndDate } = su;
-  if (new Date().getTime() > new Date(collectionEndDate).getTime()) return 0;
-  const remainingDays = formatDistanceStrict(new Date(), new Date(collectionEndDate), {
-    roundingMethod: 'ceil',
-    unit: 'day',
-    addSuffix: true,
-  });
+const DAY = 1000 * 24 * 60 * 60;
 
-  return remainingDays.split(' ')[0];
+/**
+ * Number of days left before the end of the collection for a surveyUnit
+ *
+ * @param {SurveyUnit|SurveyUnit[]} su
+ */
+export const daysLeftForSurveyUnit = su => {
+  // For multiple survey units find the min endDate
+  if (Array.isArray(su)) {
+    return Math.min(...su.map(daysLeftForSurveyUnit));
+  }
+  return Math.max(
+    0,
+    Math.ceil((new Date(su.collectionEndDate).getTime() - new Date().getTime()) / DAY)
+  );
 };
 
 const checkValidityForTransmissionNoident = su => {

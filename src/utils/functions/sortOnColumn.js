@@ -1,4 +1,4 @@
-import { intervalInDays } from 'utils/functions/surveyUnitFunctions';
+import { daysLeftForSurveyUnit } from 'utils/functions/surveyUnitFunctions';
 
 /**
  * Generate a comparison function based on a field / direction
@@ -24,7 +24,7 @@ export const sortOnColumnCompareFunction = (field, direction) => {
       return (a, b) => a.campaign.localeCompare(b.campaign);
 
     case 'remainingDays':
-      return (a, b) => intervalInDays(a) - intervalInDays(b);
+      return (a, b) => daysLeftForSurveyUnit(a) - daysLeftForSurveyUnit(b);
 
     default:
       return (a, b) => 0;
