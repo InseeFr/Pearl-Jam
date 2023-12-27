@@ -6,7 +6,7 @@ import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import Link from '@material-ui/core/Link';
 import { NavigationContext } from '../navigation/component';
 import { NotificationWrapperContext } from 'components/notificationWrapper';
-import { SynchronizeWrapperContext } from 'components/sychronizeWrapper';
+import { SyncContext } from 'ui/Sync/SyncContextProvider';
 import Typography from '@material-ui/core/Typography';
 import { dateFnsLocal } from 'utils';
 import { formatDistance } from 'date-fns';
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 export const NotificationItem = ({ data }) => {
   const { markNotifAsRead } = useContext(NotificationWrapperContext);
   const { setOpen } = useContext(NavigationContext);
-  const { setSyncResult } = useContext(SynchronizeWrapperContext);
+  const { setSyncResult } = useContext(SyncContext);
 
   const { id, date, title, type, messages, read, state, detail } = data;
 

@@ -5,14 +5,14 @@ import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/sync
 import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
 import D from 'i18n';
 import Preloader from 'components/common/loader';
-import { SyncDialog } from './sychronizeDialog';
+import { SyncDialog } from './SyncDialog';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { useConfiguration } from '../../utils/hooks/useConfiguration';
 
-export const SynchronizeWrapperContext = React.createContext();
+export const SyncContext = React.createContext();
 
-const SynchronizeWrapper = ({ children }) => {
+export function SyncContextProvider({ children }) {
   const online = useNetworkOnline();
   const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = useConfiguration();
   const { checkQueen, synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
@@ -66,7 +66,7 @@ const SynchronizeWrapper = ({ children }) => {
     if (online) launchSynchronize();
   };
 
-  const close = async () => {
+  const handleClose = async () => {
     setSyncResult(null);
     window.localStorage.removeItem('PEARL_SYNC_RESULT');
     window.localStorage.removeItem('QUEEN_SYNC_RESULT');
@@ -117,14 +117,12 @@ const SynchronizeWrapper = ({ children }) => {
   };
 
   return (
-    <SynchronizeWrapperContext.Provider value={context}>
+    <SyncContext.Provider value={context}>
       {componentReady && (loading || isSync) && <Preloader message={syncMesssage()} />}
       {componentReady && !loading && !isSync && syncResult && (
-        <SyncDialog close={close} syncResult={syncResult} />
+        <SyncDialog onClose={handleClose} syncResult={syncResult} />
       )}
       {componentReady && !loading && !isSync && children}
-    </SynchronizeWrapperContext.Provider>
+    </SyncContext.Provider>
   );
-};
-
-export default SynchronizeWrapper;
+}

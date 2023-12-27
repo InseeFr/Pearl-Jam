@@ -4,7 +4,7 @@ import D from 'i18n';
 import IconButton from '@material-ui/core/IconButton';
 import LoopIcon from '@material-ui/icons/Loop';
 import PropTypes from 'prop-types';
-import { SynchronizeWrapperContext } from 'components/sychronizeWrapper';
+import { SyncContext } from 'ui/Sync/SyncContextProvider';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 const Synchronize = ({ materialClass }) => {
   const online = useNetworkOnline();
-  const { syncFunction } = useContext(SynchronizeWrapperContext);
+  const { syncFunction } = useContext(SyncContext);
 
   const classes = useStyles();
 

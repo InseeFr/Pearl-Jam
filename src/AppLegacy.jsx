@@ -10,7 +10,7 @@ import Palette from 'components/common/palette';
 import Preloader from 'components/common/loader';
 import React from 'react';
 import { ResetData } from 'components/panel-body/resetData';
-import SynchronizeWrapper from 'components/sychronizeWrapper';
+import SynchronizeWrapper from 'ui/Sync/SyncContextProvider';
 import { ThemeProvider as ThemeProviderV4 } from '@material-ui/core/styles';
 import theme from './theme';
 import { useAuth } from 'utils/auth/initAuth';

@@ -14,8 +14,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Notification from './components/common/Notification';
 import Preloader from './components/common/loader';
 import D from './i18n/build-dictionary';
-import SynchronizeWrapper from './components/sychronizeWrapper';
-import { NotificationWrapper } from './components/notificationWrapper';
+import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
 import Palette from './components/common/palette';
 import { ResetData } from './components/panel-body/resetData';
 import { DatabaseConsole } from './components/panel-body/databaseConsole';
@@ -99,10 +98,10 @@ function AppWrapper() {
         <div>
           {!authenticated && <Preloader message={D.pleaseWait} />}
           {authenticated && (
-            <SynchronizeWrapper>
+            <SyncContextProvider>
               <Header />
               <Outlet />
-            </SynchronizeWrapper>
+            </SyncContextProvider>
           )}
         </div>
       </ThemeProviderV4>

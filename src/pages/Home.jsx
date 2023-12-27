@@ -156,7 +156,7 @@ function Sidebar({ surveyUnits }) {
         sx={{ height: '100%', overflowY: 'auto', minHeight: 0 }}
       >
         <Typography variant="m">Filtrer les unités par</Typography>
-        <Accordion variant="dense" title={D.sortSurvey}>
+        <Accordion variant="dense" title={D.sortSurvey} defaultOpen>
           <Stack gap={0.5}>
             {campaigns.map(campaign => (
               <FormControlLabel
@@ -174,7 +174,7 @@ function Sidebar({ surveyUnits }) {
           </Stack>
         </Accordion>
         <Hr />
-        <Accordion variant="dense" title={D.priority}>
+        <Accordion variant="dense" title={D.priority} defaultOpen>
           <FormControlLabel
             control={
               <Checkbox
@@ -187,7 +187,7 @@ function Sidebar({ surveyUnits }) {
           />
         </Accordion>
         <Hr />
-        <Accordion variant="dense" title={D.sortStatus}>
+        <Accordion variant="dense" title={D.sortStatus} defaultOpen>
           <Stack gap={2} alignItems="stretch" width="100%">
             <FormControlLabel
               sx={{ width: '100%', justifyContent: 'space-between' }}
@@ -219,7 +219,7 @@ function Sidebar({ surveyUnits }) {
           </Stack>
         </Accordion>
         <Hr />
-        <Accordion variant="dense" title="Sous-échantillon et grappe">
+        <Accordion variant="dense" title="Sous-échantillon et grappe" defaultOpen>
           <Stack gap={2} sx={{ width: '100%' }}>
             <Select
               variant="standard"

@@ -139,7 +139,7 @@ theme = createTheme(theme, {
         {
           props: { variant: 'contained' },
           style: {
-            padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
+            padding: `${theme.spacing(1.25)} ${theme.spacing(2)}`,
           },
         },
         {
@@ -189,6 +189,40 @@ theme = createTheme(theme, {
         },
       },
     },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          ...theme.typography.xl,
+          padding: '1.5rem',
+          textAlign: 'center',
+        },
+      },
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          padding: '0 1.5rem 1.5rem',
+        },
+      },
+    },
+    MuiDialogContentText: {
+      styleOverrides: {
+        root: {
+          ...theme.typography.s,
+          color: theme.palette.textTertiary.main,
+          fontWeight: 600,
+          ['& svg']: {
+            verticalAlign: 'middle',
+          },
+        },
+      },
+      variants: [
+        {
+          props: { variant: 'm' },
+          style: theme.typography.m,
+        },
+      ],
+    },
     MuiTabs: {
       styleOverrides: {
         root: {
@@ -196,6 +230,13 @@ theme = createTheme(theme, {
         },
         indicator: {
           backgroundColor: theme.palette.textPrimary.main,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: '1rem',
         },
       },
     },

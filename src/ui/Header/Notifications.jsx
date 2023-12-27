@@ -29,7 +29,7 @@ import syncReportIdbService from '../../utils/indexeddb/services/syncReport-idb-
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import Badge from '@mui/material/Badge';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { SynchronizeWrapperContext } from '../../components/sychronizeWrapper';
+import { SyncContext } from '../Sync/SyncContextProvider';
 import IconButton from '@mui/material/IconButton';
 import D from '../../i18n/build-dictionary';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -111,7 +111,7 @@ function Notification({ notification, onExit }) {
     addSuffix: true,
     locale: dateFnsLocal,
   })}`;
-  const { setSyncResult } = useContext(SynchronizeWrapperContext);
+  const { setSyncResult } = useContext(SyncContext);
 
   const handleOpen = async e => {
     e.preventDefault();

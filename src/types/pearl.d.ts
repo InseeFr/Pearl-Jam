@@ -102,4 +102,13 @@ declare global {
     detail: string;
     id: number;
   };
+
+  type SyncResult = {
+    state: string;
+    messages: string[];
+    details: {
+      transmittedSurveyUnits: Record<string, string[]>;
+      loadedSurveyUnits: Record<string, string[]>;
+    };
+  };
 }
