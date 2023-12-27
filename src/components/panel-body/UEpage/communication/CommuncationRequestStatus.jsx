@@ -2,7 +2,7 @@ import D from 'i18n';
 import { HEALTHY_COMMUNICATION_REQUEST_STATUS } from 'utils/constants';
 import MaterialIcons from 'utils/icons/materialIcons';
 import { findCommunicationStatusValueByType } from 'utils/enum/CommunicationEnums';
-import { getDateAttributes } from 'utils/functions/dateFunctions';
+import { getDateAttributes } from 'utils/functions/date';
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((healthy = false) => ({

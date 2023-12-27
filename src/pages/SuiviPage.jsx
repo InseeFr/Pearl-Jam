@@ -6,18 +6,46 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import { useSurveyUnits } from '../utils/hooks/database';
 import { CampaignProgress } from '../ui/Stats/CampaignProgress';
-import { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { groupBy } from '../utils/functions/array';
 import { CampaignProgressPieChart } from '../ui/Stats/CampaignProgressPieChart';
 import { ScrollableBox } from '../ui/ScrollableBox';
-import { getSuTodoState } from '../utils/functions';
-import { toDoEnum } from '../utils/enum/SUToDoEnum';
+import { Row } from '../ui/Row';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import {
+  getCommentByType,
+  getprivilegedPerson,
+  getSortedContactAttempts,
+  getSuTodoState,
+  isSelectable,
+} from '../utils/functions';
+import { StatusChip } from '../ui/StatusChip';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import { Link } from '../ui/Link';
+import { findContactOutcomeValueByType } from '../utils/enum/ContactOutcomeEnum';
+import { formatDate } from '../utils/functions/date';
+import { findMediumValueByType } from '../utils/enum/MediumEnum';
+import { findContactAttemptValueByType } from '../utils/enum/ContactAttemptEnum';
+import { Select } from '../ui/Select';
 
 export function SuiviPage() {
   const surveyUnits = useSurveyUnits();
-  const surveyUnitsPerCampaign = useMemo(() => groupBy(surveyUnits, su => su.campaign), [
-    surveyUnits,
-  ]);
+  const [campaign, setCampaign] = useState('');
+  const campaigns = useMemo(
+    () =>
+      Array.from(new Set(surveyUnits.map(su => su.campaign))).map(c => ({
+        label: c.toLowerCase(),
+        value: c,
+      })),
+    [surveyUnits]
+  );
+  const [tab, setTab] = useState('stats');
 
   return (
     <Box m={2}>
@@ -25,35 +53,180 @@ export function SuiviPage() {
         <CardContent>
           <Stack gap={4}>
             {/* Header */}
-            <Typography variant="headingM" color="black" as="h1">
-              Mon suivi
-            </Typography>
+            <Row justifyContent="space-between">
+              <Row gap={2}>
+                <Typography sx={{ flex: 'none' }} variant="headingM" color="black" as="h1">
+                  Mon suivi
+                </Typography>
+                {tab === 'table' && (
+                  <>
+                    {' | '}
+                    <Select
+                      onChange={setCampaign}
+                      sx={{ minWidth: 210 }}
+                      value={campaign}
+                      placeholder="Sélectionnez..."
+                      options={campaigns}
+                    />
+                  </>
+                )}
+              </Row>
 
-            <Stack gap={2}>
-              <Typography variant="s" color="textTertiary" as="p">
-                Pour accéder au détail, cliquez directement sur l’enquête souhaitée.
-              </Typography>
+              <Tabs
+                value={tab}
+                onChange={(_, tab) => setTab(tab)}
+                aria-label="Type de notification"
+                textColor="secondary"
+              >
+                <Tab label="Toutes les enquêtes" value="stats" />
+                <Tab label="Suivi des unités par enquête" value="table" />
+              </Tabs>
+            </Row>
 
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <ScrollableBox height="calc(100vh - 32px - 160px - 84px)">
-                    <Grid container spacing={2}>
-                      {Object.entries(surveyUnitsPerCampaign).map(([name, units]) => (
-                        <Grid item xs={6} key={name}>
-                          <CampaignProgress label={name} surveyUnits={units} />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </ScrollableBox>
-                </Grid>
-                <Grid item xs={6}>
-                  <CampaignProgressPieChart surveyUnits={surveyUnits} />
-                </Grid>
-              </Grid>
-            </Stack>
+            {tab === 'stats' ? (
+              <SuiviStats surveyUnits={surveyUnits} />
+            ) : (
+              <SuiviTable surveyUnits={surveyUnits} campaign={campaign} />
+            )}
           </Stack>
         </CardContent>
       </Card>
     </Box>
+  );
+}
+
+/**
+ * @param {SurveyUnit[]} surveyUnits
+ */
+function SuiviStats({ surveyUnits }) {
+  const surveyUnitsPerCampaign = useMemo(() => groupBy(surveyUnits, su => su.campaign), [
+    surveyUnits,
+  ]);
+  return (
+    <Stack gap={2}>
+      <Typography variant="s" color="textTertiary" as="p">
+        Pour accéder au détail, cliquez directement sur l’enquête souhaitée.
+      </Typography>
+
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <ScrollableBox height="calc(100vh - 32px - 160px - 84px)">
+            <Grid container spacing={2}>
+              {Object.entries(surveyUnitsPerCampaign).map(([name, units]) => (
+                <Grid item xs={6} key={name}>
+                  <CampaignProgress label={name} surveyUnits={units} />
+                </Grid>
+              ))}
+            </Grid>
+          </ScrollableBox>
+        </Grid>
+        <Grid item xs={6}>
+          <CampaignProgressPieChart surveyUnits={surveyUnits} />
+        </Grid>
+      </Grid>
+    </Stack>
+  );
+}
+
+/**
+ * @param {string} campaign
+ * @param {SurveyUnit[]} surveyUnits
+ */
+function SuiviTable({ surveyUnits, campaign }) {
+  const maxHeight = 'calc(100vh - 230px)';
+  if (!campaign) {
+    return (
+      <Row
+        borderRadius={4}
+        justifyContent="center"
+        bgcolor="surfacePrimary.main"
+        sx={{ height: maxHeight }}
+      >
+        <Typography variant="m" color="textHint">
+          Sélectionnez une enquête dans la liste déroulante ci-dessus.
+        </Typography>
+      </Row>
+    );
+  }
+
+  const filteredSurveyUnits = surveyUnits.filter(su => su.campaign === campaign);
+
+  return (
+    <TableContainer sx={{ maxHeight: maxHeight }}>
+      <Table stickyHeader>
+        <TableHead>
+          <TableRow>
+            <TableCell>Unité</TableCell>
+            <TableCell>Nom/Prénom</TableCell>
+            <TableCell>Status de l'unité</TableCell>
+            <TableCell>Dernier essai de contact</TableCell>
+            <TableCell>Bilan de contact</TableCell>
+            <TableCell>Commentaire</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {filteredSurveyUnits.map(su => (
+            <SurveyUnitRow surveyUnit={su} key={su.id} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
+/**
+ * @param {SurveyUnit} surveyUnit
+ */
+function SurveyUnitRow({ surveyUnit }) {
+  const person = getprivilegedPerson(surveyUnit);
+  const state = getSuTodoState(surveyUnit);
+  const isActive = isSelectable(surveyUnit);
+  const lastContact = getSortedContactAttempts(surveyUnit)[0];
+
+  return (
+    <TableRow>
+      <TableCell>
+        {isActive ? (
+          <Link to={`/survey-unit/${surveyUnit.id}/details?panel=0`}>#{surveyUnit.id}</Link>
+        ) : (
+          `#${surveyUnit.id}`
+        )}
+      </TableCell>
+      <TableCell>
+        {person.lastName.toUpperCase()} {person.firstName}
+      </TableCell>
+      <TableCell>
+        <StatusChip status={state} />
+      </TableCell>
+      <TableCell>
+        {lastContact && (
+          <>
+            <Typography as="span" variant="s" color="textPrimary">
+              {findContactAttemptValueByType(lastContact.status)}
+              {' - '}
+              {findMediumValueByType(lastContact.medium)}
+            </Typography>
+            {' | '}
+            <Typography as="span" variant="s" color="textTertiary">
+              {formatDate(lastContact.date)}
+            </Typography>
+          </>
+        )}
+      </TableCell>
+      <TableCell>
+        {surveyUnit.contactOutcome && (
+          <>
+            <Typography as="span" variant="s" color="textPrimary">
+              {findContactOutcomeValueByType(surveyUnit.contactOutcome.type)}
+            </Typography>
+            {' | '}
+            <Typography as="span" variant="s" color="textTertiary">
+              {formatDate(surveyUnit.contactOutcome.date)}
+            </Typography>
+          </>
+        )}
+      </TableCell>
+      <TableCell>{getCommentByType('INTERVIEWER', surveyUnit)}</TableCell>
+    </TableRow>
   );
 }

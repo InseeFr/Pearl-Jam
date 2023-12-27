@@ -68,6 +68,12 @@ declare global {
     occupant: unknown;
   };
 
+  type SurveyUnitContactAttempt = {
+    status: string;
+    date: number;
+    medium: string;
+  };
+
   type SurveyUnit = {
     id: string;
     persons: SurveyUnitPerson[];
@@ -78,7 +84,8 @@ declare global {
     comments: SurveyUnitComment[];
     sampleIdentifiers: SurveyUnitSampleIdentifiers;
     states: SurveyUnitState[];
-    contactAttempts: unknown[];
+    contactAttempts: SurveyUnitContactAttempt[];
+    contactOutcome?: { date: number; totalNumberOfContactAttempts: number; type: string };
     identification: SurveyUnitIdentification;
     campaignLabel: string;
     managementStartDate: number;

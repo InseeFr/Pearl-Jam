@@ -16,23 +16,13 @@ import Grid from '@mui/material/Grid';
 import { SwitchIOS } from '../ui/Switch';
 import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import { IconDesc } from '../ui/Icons/IconDesc';
 import { IconAsc } from '../ui/Icons/IconAsc';
-import {
-  applyFilters,
-  convertSUStateInToDo,
-  daysLeftForSurveyUnit,
-  getLastState,
-  getSuTodoState,
-  sortOnColumnCompareFunction,
-} from '../utils/functions';
 import { SearchField } from '../ui/SearchField';
 import { SurveyCard } from '../ui/SurveyCard';
 import { Row } from '../ui/Row';
-import { normalize } from '../utils/functions/string';
+import { Select } from '../ui/Select';
 
 /**
  *
@@ -101,25 +91,16 @@ function GridHeader({ visibleCount, totalCount }) {
           </Typography>
           <Select
             sx={{ width: 200 }}
-            variant="standard"
-            size="small"
             labelId="sort-field"
             value={sortField}
-            onChange={e => setSortField(e.target.value)}
-          >
-            <MenuItem dense value="remainingDays">
-              {D.remainingDays}
-            </MenuItem>
-            <MenuItem dense value="priority">
-              {D.priority}
-            </MenuItem>
-            <MenuItem dense value="campaign">
-              {D.survey}
-            </MenuItem>
-            <MenuItem dense value="sampleIdentifiers">
-              {D.subSample}
-            </MenuItem>
-          </Select>
+            onChange={setSortField}
+            options={[
+              { label: D.remainingDays, value: 'remainingDays' },
+              { label: D.priority, value: 'priority' },
+              { label: D.survey, value: 'campaign' },
+              { label: D.subSample, value: 'sampleIdentifiers' },
+            ]}
+          />
           <IconButton aria-label="delete" color="textPrimary" onClick={toggleSortDirection}>
             {sortDirection === 'ASC' ? <IconAsc /> : <IconDesc />}
           </IconButton>
@@ -222,37 +203,13 @@ function Sidebar({ surveyUnits }) {
         <Accordion variant="dense" title="Sous-échantillon et grappe" defaultOpen>
           <Stack gap={2} sx={{ width: '100%' }}>
             <Select
-              variant="standard"
-              size="small"
               value={filter.subSample}
-              displayEmpty
-              onChange={e => filter.setSubSample(e.target.value)}
-            >
-              <MenuItem dense value="">
-                Sous-échantillon...
-              </MenuItem>
-              {subSamples.map(subSample => (
-                <MenuItem dense value={subSample} key={subSample}>
-                  {subSample}
-                </MenuItem>
-              ))}
-            </Select>
-            <Select
-              variant="standard"
-              size="small"
-              value=""
-              renderValue={selected => {
-                if (!selected) {
-                  return <em>Grappe...</em>;
-                }
-
-                return selected;
-              }}
-            >
-              <MenuItem dense disabled value="">
-                Grappe...
-              </MenuItem>
-            </Select>
+              allowEmpty
+              placeholder="Sous-échantillon..."
+              onChange={v => filter.setSubSample(v)}
+              options={subSamples}
+            />
+            <Select value="" placeholder="Grappe..." allowEmpty />
           </Stack>
         </Accordion>
         <Hr />

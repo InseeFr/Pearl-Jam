@@ -8,7 +8,7 @@ import {
 import { differenceInYears, formatDistanceStrict } from 'date-fns';
 
 import D from 'i18n';
-import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
+import { contactOutcomeEnum, findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
@@ -115,15 +115,15 @@ export const isValidForTransmission = su => {
   }
 };
 
+/**
+ * Contact attempts sorted by date descending
+ *
+ * @param {SurveyUnit} surveyUnit
+ * @returns {SurveyUnitContactAttempt[]}
+ */
 export const getSortedContactAttempts = surveyUnit => {
   if (surveyUnit === undefined) return [];
-
-  const { contactAttempts } = surveyUnit;
-
-  if (contactAttempts === undefined || contactAttempts.length === 0) return [];
-
-  contactAttempts.sort((a, b) => b.date - a.date);
-  return contactAttempts;
+  return [...(surveyUnit?.contactAttempts ?? [])].sort((a, b) => b.date - a.date);
 };
 
 export const areCaEqual = (ca, anotherCa) => {

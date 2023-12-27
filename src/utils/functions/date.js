@@ -18,3 +18,16 @@ export const getDateAttributes = timestamp => {
 
   return { dayOfWeek, twoDigitdayNumber, year, month, hour, minutes };
 };
+
+/**
+ * @param {number} time - Timestamp in seconds
+ * @return string
+ */
+export const formatDate = time => {
+  if (!time) {
+    return '';
+  }
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: 'full',
+  }).format(new Date(time));
+};

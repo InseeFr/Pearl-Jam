@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
-import { getDateAttributes } from 'utils/functions/dateFunctions';
+import { getDateAttributes } from 'utils/functions/date';
 import { grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 

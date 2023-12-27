@@ -356,6 +356,55 @@ theme = createTheme(theme, {
               minHeight: 'auto',
               padding: theme.spacing(1),
             },
+            '& .MuiSelect-select em': {
+              ...theme.typography.s,
+            },
+          },
+        },
+        {
+          props: { variant: 'standard' },
+          style: {
+            padding: 0,
+            backgroundColor: theme.palette.surfaceSecondary.main,
+            borderColor: 'transparent',
+            boxShadow: theme.shadows[2],
+            width: '100%',
+            '&::before': {
+              display: 'none',
+            },
+            em: {
+              color: theme.palette.textHint.main,
+              fontStyle: 'normal',
+            },
+          },
+        },
+      ],
+    },
+    MuiTableCell: {
+      variants: [
+        {
+          props: { variant: 'head' },
+          style: {
+            color: '#000',
+            fontWeight: 700,
+            ...theme.typography.s,
+            backgroundColor: theme.palette.surfaceTertiary.main,
+            border: 'solid 2px #FFFF',
+            '&:last-child': {
+              borderTopRightRadius: '1rem',
+            },
+            '&:first-child': {
+              borderTopLeftRadius: '1rem',
+            },
+          },
+        },
+        {
+          props: { variant: 'body' },
+          style: {
+            ...theme.typography.s,
+            fontWeight: 500,
+            backgroundColor: theme.palette.surfacePrimary.main,
+            border: 'solid 2px #FFFF',
           },
         },
         {

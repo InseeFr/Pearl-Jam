@@ -10,7 +10,7 @@ import D from 'i18n';
 import MaterialIcons from 'utils/icons/materialIcons';
 import Paper from '@material-ui/core/Paper';
 import { getCommunicationIconFromType } from 'utils/functions/communicationFunctions';
-import { getDateAttributes } from 'utils/functions/dateFunctions';
+import { getDateAttributes } from 'utils/functions/date';
 import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(() => ({

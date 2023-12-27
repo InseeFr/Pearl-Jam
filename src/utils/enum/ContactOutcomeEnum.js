@@ -20,8 +20,13 @@ export const contactOutcomeEnum = {
   NOT_APPLICABLE: { type: 'NOA', value: `${D.notApplicable}` },
 };
 
+/**
+ * Extract contact outcome from a type
+ * @param {string} type
+ * @returns {{type: string, value: string} | undefined}
+ */
 export const findContactOutcomeValueByType = type =>
-  Object.values(contactOutcomeEnum).filter(value => value.type === type)?.[0]?.value;
+  Object.values(contactOutcomeEnum).find(value => value.type === type)?.value;
 
 const commonContactOutcomes = {
   INTERVIEW_ACCEPTED: contactOutcomeEnum.INTERVIEW_ACCEPTED,
