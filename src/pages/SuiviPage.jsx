@@ -223,13 +223,13 @@ function SurveyUnitRow({ surveyUnit }) {
             </>
           )}
         </TableCell>
-        <TableCell>
+        <TableCell align="center">
           {surveyUnit.contactOutcome && (
             <>
               <Typography as="span" variant="s" color="textPrimary">
                 {findContactOutcomeValueByType(surveyUnit.contactOutcome.type)}
               </Typography>
-              {' | '}
+              <br />
               <Typography as="span" variant="s" color="textTertiary">
                 {formatDate(surveyUnit.contactOutcome.date)}
               </Typography>
