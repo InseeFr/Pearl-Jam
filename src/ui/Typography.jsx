@@ -13,7 +13,7 @@ import { forwardRef } from 'react';
 export const Typography = forwardRef(
   ({ variant = 'm', color = 'textPrimary', fontWeight = 600, ...props }, ref) => {
     if (props.noWrap) {
-      props.sx = { ...props.sx, maxWidth: '100%', minWidth: 0 };
+      props.sx = { maxWidth: '100%', minWidth: 0, ...props.sx };
     }
     return (
       <TypographyMaterial

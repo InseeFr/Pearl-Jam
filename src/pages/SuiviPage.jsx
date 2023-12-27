@@ -13,6 +13,7 @@ import { ScrollableBox } from '../ui/ScrollableBox';
 import { Row } from '../ui/Row';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import AddIcon from '@mui/icons-material/Add';
 import {
   getCommentByType,
   getprivilegedPerson,
@@ -33,6 +34,10 @@ import { formatDate } from '../utils/functions/date';
 import { findMediumValueByType } from '../utils/enum/MediumEnum';
 import { findContactAttemptValueByType } from '../utils/enum/ContactAttemptEnum';
 import { Select } from '../ui/Select';
+import { CommentModal } from '../ui/SurveyUnit/CommentModal';
+import { useToggle } from '../utils/hooks/useToggle';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
 
 export function SuiviPage() {
   const surveyUnits = useSurveyUnits();
@@ -45,7 +50,7 @@ export function SuiviPage() {
       })),
     [surveyUnits]
   );
-  const [tab, setTab] = useState('stats');
+  const [tab, setTab] = useState('table');
 
   return (
     <Box m={2}>
@@ -129,6 +134,8 @@ function SuiviStats({ surveyUnits }) {
 }
 
 /**
+ * Table showing every unit for a specific campaign
+ *
  * @param {string} campaign
  * @param {SurveyUnit[]} surveyUnits
  */
@@ -182,51 +189,84 @@ function SurveyUnitRow({ surveyUnit }) {
   const state = getSuTodoState(surveyUnit);
   const isActive = isSelectable(surveyUnit);
   const lastContact = getSortedContactAttempts(surveyUnit)[0];
+  const [showModal, toggleModal] = useToggle(false);
+  const comment = getCommentByType('INTERVIEWER', surveyUnit);
 
   return (
-    <TableRow>
-      <TableCell>
-        {isActive ? (
-          <Link to={`/survey-unit/${surveyUnit.id}/details?panel=0`}>#{surveyUnit.id}</Link>
-        ) : (
-          `#${surveyUnit.id}`
-        )}
-      </TableCell>
-      <TableCell>
-        {person.lastName.toUpperCase()} {person.firstName}
-      </TableCell>
-      <TableCell>
-        <StatusChip status={state} />
-      </TableCell>
-      <TableCell>
-        {lastContact && (
-          <>
-            <Typography as="span" variant="s" color="textPrimary">
-              {findContactAttemptValueByType(lastContact.status)}
-              {' - '}
-              {findMediumValueByType(lastContact.medium)}
+    <>
+      <TableRow>
+        <TableCell align="center">
+          {isActive ? (
+            <Link to={`/survey-unit/${surveyUnit.id}/details?panel=0`}>#{surveyUnit.id}</Link>
+          ) : (
+            `#${surveyUnit.id}`
+          )}
+        </TableCell>
+        <TableCell align="center">
+          {person.lastName.toUpperCase()} {person.firstName}
+        </TableCell>
+        <TableCell align="center">
+          <StatusChip status={state} />
+        </TableCell>
+        <TableCell align="center">
+          {lastContact && (
+            <>
+              <Typography as="span" variant="s" color="textPrimary">
+                {findContactAttemptValueByType(lastContact.status)}
+                <br />
+                {findMediumValueByType(lastContact.medium)}
+              </Typography>
+              {' | '}
+              <Typography as="span" variant="s" color="textTertiary">
+                {formatDate(lastContact.date)}
+              </Typography>
+            </>
+          )}
+        </TableCell>
+        <TableCell>
+          {surveyUnit.contactOutcome && (
+            <>
+              <Typography as="span" variant="s" color="textPrimary">
+                {findContactOutcomeValueByType(surveyUnit.contactOutcome.type)}
+              </Typography>
+              {' | '}
+              <Typography as="span" variant="s" color="textTertiary">
+                {formatDate(surveyUnit.contactOutcome.date)}
+              </Typography>
+            </>
+          )}
+        </TableCell>
+        <TableCell align="center">
+          {comment ? (
+            <Typography
+              textAlign="center"
+              onClick={toggleModal}
+              role="button"
+              as="span"
+              sx={{ maxWidth: '10em', display: 'inline-block', cursor: 'pointer' }}
+              noWrap
+              variant="s"
+              color="inherit"
+            >
+              {comment}
             </Typography>
-            {' | '}
-            <Typography as="span" variant="s" color="textTertiary">
-              {formatDate(lastContact.date)}
-            </Typography>
-          </>
-        )}
-      </TableCell>
-      <TableCell>
-        {surveyUnit.contactOutcome && (
-          <>
-            <Typography as="span" variant="s" color="textPrimary">
-              {findContactOutcomeValueByType(surveyUnit.contactOutcome.type)}
-            </Typography>
-            {' | '}
-            <Typography as="span" variant="s" color="textTertiary">
-              {formatDate(surveyUnit.contactOutcome.date)}
-            </Typography>
-          </>
-        )}
-      </TableCell>
-      <TableCell>{getCommentByType('INTERVIEWER', surveyUnit)}</TableCell>
-    </TableRow>
+          ) : (
+            <IconButton
+              onClick={toggleModal}
+              component={Paper}
+              bgcolor="surfaceTertiary.main"
+              aria-label="delete"
+              ali
+              justifyContent="center"
+              elevation={2}
+              sx={{ width: 25, height: 25, borderRadius: 25, display: 'inline-flex' }}
+            >
+              <AddIcon fontSize="small" color="textPrimary" />
+            </IconButton>
+          )}
+        </TableCell>
+      </TableRow>
+      <CommentModal surveyUnit={surveyUnit} open={showModal} onClose={toggleModal} />
+    </>
   );
 }

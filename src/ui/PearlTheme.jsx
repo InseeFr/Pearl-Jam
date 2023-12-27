@@ -41,12 +41,7 @@ theme = createTheme({
     'none',
     '0px 1px 4px 0px rgba(80, 76, 75, 0.80)',
     '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
-    '0px 0px 4px 0px rgba(80, 76, 75, 0.25);',
-    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
-    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
-    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
-    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
-    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
+    ...theme.shadows.slice(3),
   ],
   typography: {
     fontFamily: fontFamily,
@@ -201,6 +196,8 @@ theme = createTheme(theme, {
     MuiDialogActions: {
       styleOverrides: {
         root: {
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
           padding: '0 1.5rem 1.5rem',
         },
       },
@@ -425,6 +422,25 @@ theme = createTheme(theme, {
           },
         },
       ],
+    },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: {
+          textarea: {
+            ...theme.typography.s,
+          },
+          '&::before, &::after': {
+            border: 'none',
+          },
+          '&:hover:not(.Mui-disabled, .Mui-error):before': {
+            border: 'none',
+          },
+          '&.Mui-focused:after': {
+            border: 'none',
+          },
+          background: theme.palette.surfacePrimary.main,
+        },
+      },
     },
   },
 });
