@@ -85,6 +85,7 @@ export function SyncDialog({ onClose, syncResult }) {
         </Stack>
       </DialogContent>
       <DialogActions>
+        <div></div>
         <Button variant="contained" onClick={onClose}>
           {D.iUnderstand}
         </Button>
