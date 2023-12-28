@@ -104,9 +104,7 @@ theme = createTheme({
       main: '#F5F7FA',
     },
     surfaceSecondary: colors('#FFF'),
-    surfaceTertiary: {
-      main: '#E6EAF0',
-    },
+    surfaceTertiary: colors('#E6EAF0'),
     primary: colors('#0A192E'),
     secondary: colors('#797676'),
     textPrimary: colors('#0A192E'),
@@ -340,6 +338,7 @@ theme = createTheme(theme, {
       styleOverrides: {
         root: {
           ...theme.typography.s,
+          fontWeight: 600,
         },
       },
     },
@@ -439,6 +438,47 @@ theme = createTheme(theme, {
             border: 'none',
           },
           background: theme.palette.surfacePrimary.main,
+        },
+      },
+    },
+    MuiStepConnector: {
+      styleOverrides: {
+        alternativeLabel: {
+          left: 'calc(-50% + 30px)',
+          right: 'calc(50% + 30px)',
+        },
+      },
+    },
+    MuiStepLabel: {
+      styleOverrides: {
+        iconContainer: {
+          ...theme.typography.s,
+          color: theme.palette.white.main,
+          background: theme.palette.textPrimary.main,
+          borderRadius: 30,
+          fontWeight: 600,
+          width: 30,
+          height: 24,
+          display: 'grid',
+          placeItems: 'center',
+          '&.Mui-disabled': {
+            background: theme.palette.textHint.main,
+          },
+          '&.Mui-completed': {
+            color: theme.palette.white.main,
+            background: '#089616',
+          },
+        },
+        label: {
+          ...theme.typography.xs,
+          fontWeight: 600,
+          whiteSpace: 'nowrap',
+          '&.Mui-completed': {
+            color: '#089616',
+          },
+          '&.MuiStepLabel-alternativeLabel': {
+            marginTop: 8,
+          },
         },
       },
     },

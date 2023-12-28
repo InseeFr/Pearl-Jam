@@ -36,8 +36,7 @@ import { findContactAttemptValueByType } from '../utils/enum/ContactAttemptEnum'
 import { Select } from '../ui/Select';
 import { CommentModal } from '../ui/SurveyUnit/CommentModal';
 import { useToggle } from '../utils/hooks/useToggle';
-import IconButton from '@mui/material/IconButton';
-import Paper from '@mui/material/Paper';
+import { PaperIconButton } from '../ui/PaperIconButton';
 
 export function SuiviPage() {
   const surveyUnits = useSurveyUnits();
@@ -251,18 +250,9 @@ function SurveyUnitRow({ surveyUnit }) {
               {comment}
             </Typography>
           ) : (
-            <IconButton
-              onClick={toggleModal}
-              component={Paper}
-              bgcolor="surfaceTertiary.main"
-              aria-label="delete"
-              ali
-              justifyContent="center"
-              elevation={2}
-              sx={{ width: 25, height: 25, borderRadius: 25, display: 'inline-flex' }}
-            >
+            <PaperIconButton>
               <AddIcon fontSize="small" color="textPrimary" />
-            </IconButton>
+            </PaperIconButton>
           )}
         </TableCell>
       </TableRow>

@@ -8,4 +8,14 @@ const toDoMessage = {
   toDoTerminated: { fr: 'Terminé', en: 'Terminated' },
 };
 
+export const stepNames = {
+  stepPrepared: { fr: 'Préparé', en: 'Prepared' },
+  stepContacted: { fr: 'Repéré / contacté', en: 'Spotted / Contacted' },
+  stepSurveyed: { fr: 'Enquêté', en: 'Investigated' },
+  stepFinalized: { fr: 'Finalisé', en: 'Finalized' },
+  stepTransmitted: { fr: 'Transmis', en: 'Forwarded' },
+  stepSynchronized: { fr: 'Synchronisé', en: 'Synchronize' },
+  stepTerminated: { fr: 'Terminé', en: 'Terminated' },
+};
+
 export default toDoMessage;

@@ -20,7 +20,7 @@ import surveyUnitMessage from './surveyUnitMessage';
 import syncMessage from './syncMessage';
 import tableHeader from './tableHeaderMessage';
 import titleMessage from './titleMessage';
-import toDoMessage from './toDoMessage';
+import toDoMessage, { stepNames } from './toDoMessage';
 import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
 import profileMessage from './profileMessage';
@@ -105,6 +105,7 @@ const dictionary = {
   ...mediumMessage,
   ...communicationMessage,
   ...profileMessage,
+  ...stepNames,
 };
 
 export default dictionary;

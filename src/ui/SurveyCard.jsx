@@ -51,14 +51,9 @@ export function SurveyCard({ surveyUnit, locked = false }) {
               sx={{
                 overflow: 'hidden',
                 textOverflow: 'ellispsis',
-                fontSize: '14px',
-                fontWeight: 600,
               }}
             />
-            <Chip
-              label={surveyUnit.sampleIdentifiers.ssech}
-              sx={{ fontSize: '14px', fontWeight: 600 }}
-            />
+            <Chip label={surveyUnit.sampleIdentifiers.ssech} />
             <Stack sx={{ marginLeft: 'auto' }} pl={2} alignItems="center">
               {!priority ? (
                 <Typography color="textHint" variant="s" noWrap>

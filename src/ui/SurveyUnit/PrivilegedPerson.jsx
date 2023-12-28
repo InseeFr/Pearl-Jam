@@ -15,7 +15,7 @@ export function PrivilegedPerson({ surveyUnit }) {
     <Stack gap={0.5}>
       <Row gap={1}>
         <PersonOutlineIcon color="textPrimary" />
-        <Typography color="textPrimary" variant="s">
+        <Typography color="textPrimary" variant="xl" fontWeight={700}>
           {person.lastName.toUpperCase()} {person.firstName}
         </Typography>
       </Row>
