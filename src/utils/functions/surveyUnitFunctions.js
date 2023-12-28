@@ -387,23 +387,26 @@ export const isSelectable = su => {
   return endTime > instantTime && instantTime > identificationPhaseStartTime;
 };
 
+/**
+ * Extract address info from surveyUni address
+ * @param {SurveyUnit["address"]} address
+ */
 export const getAddressData = address => {
   const [postCode, ...rest] = address.l6.split(' ');
-  const cityName = rest.join(' ');
 
   return {
-    deliveryPoint: address.l2 || '',
-    additionalAddress: address.l3 || '',
-    streetName: address.l4 || '',
-    locality: address.l5 || '',
-    postCode: postCode || '',
-    cityName: cityName || '',
-    building: address.building || '',
-    floor: address.floor || '',
-    door: address.door || '',
-    staircase: address.staircase || '',
-    elevator: address.elevator || '',
-    cityPriorityDistrict: address.cityPriorityDistrict || '',
+    deliveryPoint: address.l2,
+    additionalAddress: address.l3,
+    streetName: address.l4,
+    locality: address.l5,
+    postCode: postCode,
+    cityName: rest.join(' '),
+    building: address.building,
+    floor: address.floor,
+    door: address.door,
+    staircase: address.staircase,
+    elevator: address.elevator,
+    cityPriorityDistrict: address.cityPriorityDistrict,
   };
 };
 

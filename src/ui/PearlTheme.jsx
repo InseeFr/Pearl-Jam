@@ -97,6 +97,7 @@ theme = createTheme({
       main: '#000000',
     },
     green: colors('#35C758'),
+    red: colors('#ED1443'),
     separator: {
       main: '#D7DBE1',
     },
@@ -227,6 +228,19 @@ theme = createTheme(theme, {
           backgroundColor: theme.palette.textPrimary.main,
         },
       },
+      variants: [
+        {
+          props: { variant: 'navigation' },
+          style: {
+            padding: `0 ${theme.spacing(4)}`,
+            background: theme.palette.white.main,
+            '.MuiTab-root': {
+              padding: theme.spacing(2),
+              ...theme.typography.m,
+            },
+          },
+        },
+      ],
     },
     MuiPaper: {
       styleOverrides: {
@@ -479,6 +493,17 @@ theme = createTheme(theme, {
           '&.MuiStepLabel-alternativeLabel': {
             marginTop: 8,
           },
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        input: {
+          ...theme.typography.s,
+          color: theme.palette.textPrimary.main,
+          fontWeight: 600,
+          padding: '5px 10px',
+          height: '28px',
         },
       },
     },

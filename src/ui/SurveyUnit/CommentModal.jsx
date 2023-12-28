@@ -9,7 +9,7 @@ import { Typography } from '../Typography';
 import { PrivilegedPerson } from './PrivilegedPerson';
 import { getCommentByType } from '../../utils/functions';
 import { FilledInput } from '@mui/material';
-import surveyUnitIDBService from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 
 /**
  *

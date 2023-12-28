@@ -2,6 +2,10 @@ import UEPage from '../components/panel-body/UEpage';
 import { SurveyUnitHeader } from '../ui/SurveyUnit/SurveyUnitHeader';
 import { useParams } from 'react-router-dom';
 import { useSurveyUnit } from '../utils/hooks/database';
+import { SwipeableTab, SwipeableTabs } from '../SwipeableTabs';
+import D from '../i18n/build-dictionary';
+import Box from '@mui/material/Box';
+import { AddressCard } from '../ui/SurveyUnit/AddressCard';
 
 export function SurveyUnitPage() {
   const { id } = useParams();
@@ -13,9 +17,31 @@ export function SurveyUnitPage() {
   if (!surveyUnit) {
     return null;
   }
-
   if (isNewDesign) {
-    return <SurveyUnitHeader surveyUnit={surveyUnit} />;
+    return (
+      <>
+        <SurveyUnitHeader surveyUnit={surveyUnit} />
+        <SwipeableTabs>
+          <SwipeableTab index={0} label={D.goToIdentificationPage}>
+            <Box style={{ display: 'grid', gridTemplateColumn: '1fr 1fr', gap: '2rem' }}>
+              <AddressCard surveyUnit={surveyUnit} />
+            </Box>
+          </SwipeableTab>
+          <SwipeableTab index={1} label={D.goToContactPage}>
+            b
+          </SwipeableTab>
+          <SwipeableTab index={2} label={D.goToCommunicationPage}>
+            c
+          </SwipeableTab>
+          <SwipeableTab index={3} label={D.goToQuestionnairesPage}>
+            d
+          </SwipeableTab>
+          <SwipeableTab index={4} label={D.goToCommentsPage}>
+            e
+          </SwipeableTab>
+        </SwipeableTabs>
+      </>
+    );
   }
 
   return <UEPage />;
