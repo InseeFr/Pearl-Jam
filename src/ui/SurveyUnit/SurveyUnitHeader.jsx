@@ -25,8 +25,6 @@ export function SurveyUnitHeader({ surveyUnit }) {
   const states = Object.values(toDoEnum).filter(toDo => toDo.order < 6);
   const currentState = getSuTodoState(surveyUnit).order;
 
-  console.log(states, currentState);
-
   return (
     <Box
       px={4}
@@ -36,7 +34,7 @@ export function SurveyUnitHeader({ surveyUnit }) {
     >
       {/* Left side */}
       <Row gap={4}>
-        <PaperIconButton component={Link} to="/">
+        <PaperIconButton component={Link} to="/" elevation={0}>
           <KeyboardArrowLeftIcon />
         </PaperIconButton>
         <Stack gap={2}>

@@ -48,10 +48,8 @@ export function AddressForm({ onClose, surveyUnit }) {
     onClose();
   };
 
-  console.log(register('elevator'));
-
   return (
-    <Dialog maxWidth="md" open={true} onClose={close}>
+    <Dialog maxWidth="md" open={true} onClose={onClose}>
       <form action="" onSubmit={onSubmit}>
         <DialogTitle>{D.surveyUnitAddressChange}</DialogTitle>
         <DialogContent>

@@ -16,9 +16,7 @@ export function SwipeableTab(props) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      <Box sx={{ p: 4 }}>
-        <Typography>{children}</Typography>
-      </Box>
+      <Box sx={{ p: 4 }}>{children}</Box>
     </div>
   );
 }
@@ -44,9 +42,9 @@ export function SwipeableTabs({ children }) {
 
   return (
     <>
-      <Tabs variant="navigation" value={value} onChange={handleChange}>
+      <Tabs className="navigation" value={value} onChange={handleChange}>
         {tabs.map((tab, index) => (
-          <Tab label={tab} {...a11yProps(index)} />
+          <Tab key={index} label={tab} {...a11yProps(index)} />
         ))}
       </Tabs>
       <SwipeableViews axis="x" index={value} onChangeIndex={handleChangeIndex}>

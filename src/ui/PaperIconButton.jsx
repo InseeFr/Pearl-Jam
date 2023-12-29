@@ -8,27 +8,22 @@ const style = {
   padding: 0.25,
   display: 'inline-block',
   border: 'none',
-  background: theme.palette.surfaceTertiary.main,
+  bgcolor: 'surfaceTertiary.main',
   cursor: 'pointer',
   '& svg': {
     width: 20,
     height: 20,
   },
   '&:hover': {
-    background: theme.palette.surfaceTertiary.light,
+    bgcolor: 'surfaceTertiary.light',
   },
 };
-
-console.log(theme.palette.surfaceTertiary);
 
 export function PaperIconButton(props) {
   return (
     <Paper
       component="button"
-      bgcolor="surfaceTertiary.main"
       aria-label="delete"
-      alignItems="center"
-      justifyContent="center"
       elevation={2}
       sx={{ ...style, ...props.sx }}
       {...props}

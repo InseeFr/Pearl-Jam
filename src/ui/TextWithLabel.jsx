@@ -24,11 +24,11 @@ export function TextWithLabel({ label, children }) {
   }
   return (
     <div>
-      <Typography as="span" color="textTertiary">
+      <Typography as="span" color="textTertiary" variant="s">
         {label} :
       </Typography>
       &nbsp; &nbsp;
-      <Typography as="span" color="textPrimary">
+      <Typography as="span" color="textPrimary" variant="s">
         {children || '-'}
       </Typography>
     </div>

@@ -96,30 +96,19 @@ theme = createTheme({
     black: {
       main: '#000000',
     },
+    success: colors('#089616'),
     green: colors('#35C758'),
-    red: colors('#ED1443'),
-    separator: {
-      main: '#D7DBE1',
-    },
-    surfacePrimary: {
-      main: '#F5F7FA',
-    },
+    red: colors(red['500']),
+    separator: colors('#D7DBE1'),
+    surfacePrimary: colors('#F5F7FA'),
     surfaceSecondary: colors('#FFF'),
     surfaceTertiary: colors('#E6EAF0'),
     primary: colors('#0A192E'),
     secondary: colors('#797676'),
     textPrimary: colors('#0A192E'),
-    textHint: {
-      main: '#797676',
-    },
-    textTertiary: {
-      main: '#57677D',
-    },
-    accent: theme.palette.augmentColor({
-      color: {
-        main: red['500'],
-      },
-    }),
+    textHint: colors('#797676'),
+    textTertiary: colors('#57677D'),
+    accent: colors(red['500']),
     iconLock: {
       main: '#323232',
     },
@@ -230,7 +219,7 @@ theme = createTheme(theme, {
       },
       variants: [
         {
-          props: { variant: 'navigation' },
+          props: { className: 'navigation' },
           style: {
             padding: `0 ${theme.spacing(4)}`,
             background: theme.palette.white.main,

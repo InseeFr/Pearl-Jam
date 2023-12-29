@@ -41,7 +41,7 @@ export function AddressCard({ surveyUnit }) {
                 Modifier
               </Button>
             </Row>
-            <div>
+            <Stack gap={0.5}>
               <TextWithLabel label={D.addressStreetName}>{address.streetName}</TextWithLabel>
               <TextWithLabel label={D.addressAdditionalAddress}>
                 {address.additionalAddress}
@@ -58,7 +58,7 @@ export function AddressCard({ surveyUnit }) {
               <TextWithLabel label={D.addressCityPriorityDistrict}>
                 {address.cityPriorityDistrict}
               </TextWithLabel>
-            </div>
+            </Stack>
           </Stack>
         </CardContent>
       </Card>
