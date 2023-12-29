@@ -10,6 +10,7 @@ import { PrivilegedPerson } from './PrivilegedPerson';
 import { getCommentByType } from '../../utils/functions';
 import { FilledInput } from '@mui/material';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import D from 'i18n';
 
 /**
  *
@@ -79,10 +80,10 @@ export function CommentModal({ surveyUnit, open, onClose }) {
       </DialogContent>
       <DialogActions>
         <Button color="white" variant="contained" onClick={handleCancel}>
-          Annuler
+          {D.cancelButton}
         </Button>
         <Button variant="contained" onClick={handleSave} disabled={!comment}>
-          Enregistrer
+          {D.saveButton}
         </Button>
       </DialogActions>
     </Dialog>

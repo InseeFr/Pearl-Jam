@@ -49,7 +49,7 @@ export function SuiviPage() {
       })),
     [surveyUnits]
   );
-  const [tab, setTab] = useState('table');
+  const [tab, setTab] = useState('stats');
 
   return (
     <Box m={2}>

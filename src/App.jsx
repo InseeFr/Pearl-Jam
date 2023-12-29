@@ -22,7 +22,8 @@ import { useEffectOnce } from './utils/hooks/useEffectOnce';
 import { SurveyUnitPage } from './pages/SurveyUnitPage';
 import './app.css';
 import { SuiviPage } from './pages/SuiviPage';
-
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 const router = createBrowserRouter([
   {
     path: '/queen/*',
@@ -92,19 +93,21 @@ function AppWrapper() {
   const serviceWorkerInfo = useServiceWorker(authenticated);
   return (
     <PearlTheme>
-      <ThemeProviderV4 theme={theme}>
-        <CssBaseline />
-        <Notification serviceWorkerInfo={serviceWorkerInfo} />
-        <div>
-          {!authenticated && <Preloader message={D.pleaseWait} />}
-          {authenticated && (
-            <SyncContextProvider>
-              <Header />
-              <Outlet />
-            </SyncContextProvider>
-          )}
-        </div>
-      </ThemeProviderV4>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <ThemeProviderV4 theme={theme}>
+          <CssBaseline />
+          <Notification serviceWorkerInfo={serviceWorkerInfo} />
+          <div>
+            {!authenticated && <Preloader message={D.pleaseWait} />}
+            {authenticated && (
+              <SyncContextProvider>
+                <Header />
+                <Outlet />
+              </SyncContextProvider>
+            )}
+          </div>
+        </ThemeProviderV4>
+      </LocalizationProvider>
     </PearlTheme>
   );
 }

@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import React from 'react';
 import Stack from '@mui/material/Stack';
 import { getAddressData } from '../../utils/functions';
-import D from '../../i18n/build-dictionary';
+import D from 'i18n';
 import { FieldRow } from '../FieldRow';
 import { useForm } from 'react-hook-form';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
@@ -60,9 +60,9 @@ export function AddressForm({ onClose, surveyUnit }) {
             <FieldRow label={D.addressLocality} {...register('locality')} />
             <FieldRow maxWidth={5} label={D.addressPostcode} required {...register('postCode')} />
             <FieldRow label={D.addressCity} required {...register('cityName')} />
-            <FieldRow checkbox label={D.addressElevator} control={control} name="elevator" />
+            <FieldRow type="switch" label={D.addressElevator} control={control} name="elevator" />
             <FieldRow
-              checkbox
+              type="switch"
               label={D.addressCityPriorityDistrict}
               control={control}
               name="cityPriorityDistrict"
@@ -75,10 +75,10 @@ export function AddressForm({ onClose, surveyUnit }) {
         </DialogContent>
         <DialogActions>
           <Button type="button" color="white" variant="contained" onClick={handleCancel}>
-            Annuler
+            {D.cancelButton}
           </Button>
           <Button variant="contained" type="submit">
-            Enregistrer
+            {D.saveButton}
           </Button>
         </DialogActions>
       </form>
