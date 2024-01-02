@@ -250,7 +250,7 @@ function SurveyUnitRow({ surveyUnit }) {
               {comment}
             </Typography>
           ) : (
-            <PaperIconButton>
+            <PaperIconButton onClick={toggleModal}>
               <AddIcon fontSize="small" color="textPrimary" />
             </PaperIconButton>
           )}
