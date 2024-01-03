@@ -34,7 +34,7 @@ import { formatDate } from '../utils/functions/date';
 import { findMediumValueByType } from '../utils/enum/MediumEnum';
 import { findContactAttemptValueByType } from '../utils/enum/ContactAttemptEnum';
 import { Select } from '../ui/Select';
-import { CommentModal } from '../ui/SurveyUnit/CommentModal';
+import { CommentDialog } from '../ui/SurveyUnit/CommentDialog';
 import { useToggle } from '../utils/hooks/useToggle';
 import { PaperIconButton } from '../ui/PaperIconButton';
 
@@ -256,7 +256,7 @@ function SurveyUnitRow({ surveyUnit }) {
           )}
         </TableCell>
       </TableRow>
-      <CommentModal surveyUnit={surveyUnit} open={showModal} onClose={toggleModal} />
+      <CommentDialog surveyUnit={surveyUnit} open={showModal} onClose={toggleModal} />
     </>
   );
 }
