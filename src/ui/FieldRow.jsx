@@ -9,6 +9,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import Stack from '@mui/material/Stack';
+import { RadioLine } from './RadioLine';
+import IconButton from '@mui/material/IconButton';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 /**
  * Displays a field with the label on the side
  *
@@ -29,23 +34,25 @@ export const FieldRow = forwardRef(
 
     return (
       <Row gap={3}>
-        <Box sx={{ flex: 'none', minWidth: 90 }}>
-          <Typography
-            as="label"
-            id={`label-${props.name}`}
-            htmlFor={props.name}
-            variant="s"
-            color="textTertiary"
-            sx={{ whiteSpace: 'noWrap' }}
-          >
-            {label}
-            {props.required && (
-              <Typography as="span" color="red" variant="s">
-                {' *'}
-              </Typography>
-            )}
-          </Typography>
-        </Box>
+        {label && (
+          <Box sx={{ flex: 'none', minWidth: 90 }}>
+            <Typography
+              as="label"
+              id={`label-${props.name}`}
+              htmlFor={props.name}
+              variant="s"
+              color="textTertiary"
+              sx={{ whiteSpace: 'noWrap' }}
+            >
+              {label}
+              {props.required && (
+                <Typography as="span" color="red" variant="s">
+                  {' *'}
+                </Typography>
+              )}
+            </Typography>
+          </Box>
+        )}
         <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
           {isControlled && (
             <Controller
@@ -103,6 +110,50 @@ export function controlledField({ type, name, options }, field) {
           />
         ))}
       </RadioGroup>
+    );
+  }
+  if (type === 'radiostack') {
+    return (
+      <RadioGroup
+        value={field.value}
+        onChange={e => field.onChange(e.target.value)}
+        row
+        aria-labelledby={`label-${name}`}
+        name={name}
+      >
+        <Stack gap={1}>
+          {options.map(o => (
+            <RadioLine value={o.value} key={o.value} label={o.label} />
+          ))}
+        </Stack>
+      </RadioGroup>
+    );
+  }
+  if (type === 'increment') {
+    return (
+      <Row gap={0.5}>
+        <IconButton onClick={() => field.onChange(Math.max(field.value - 1, 0))}>
+          <RemoveIcon color="textPrimary" fontSize="small" />
+        </IconButton>
+        <Row
+          borderRadius={1}
+          border={1}
+          borderColor="surfaceTertiary.main"
+          bgcolor="surfacePrimary.main"
+          height={28}
+          px={1}
+          justifyContent="center"
+          minWidth={30}
+          typography="s"
+          fontWeight={600}
+          lineHeight={1}
+        >
+          {field.value ?? 0}
+        </Row>
+        <IconButton onClick={() => field.onChange(field.value + 1)}>
+          <AddIcon color="textPrimary" fontSize="small" />
+        </IconButton>
+      </Row>
     );
   }
   return null;

@@ -15,6 +15,11 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import { findContactAttemptValueByType } from '../../utils/enum/ContactAttemptEnum';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { ContactOutcomeForm } from './ContactOutcomeForm';
+import { useToggle } from '../../utils/hooks/useToggle';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 
 /**
  * Display persons linked to a survey unit
@@ -24,6 +29,8 @@ import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-
 export function ContactsCard({ surveyUnit }) {
   const contactAttempts = surveyUnit.contactAttempts ?? [];
   const showDivider = surveyUnit.contactOutcome?.type && contactAttempts.length > 0;
+  const [showOutcomeForm, toggleOutcomeForm] = useToggle(false);
+  const [showAttemptForm, toggleAttemptForm] = useToggle(false);
 
   /** @type {(a: SurveyUnitContactAttempt) => void}} */
   const handleDeleteAttempt = attempt => {
@@ -32,6 +39,8 @@ export function ContactsCard({ surveyUnit }) {
       contactAttempts: contactAttempts.filter(a => a !== attempt),
     });
   };
+  const hasOutcome = !!surveyUnit.contactOutcome;
+
   return (
     <>
       <Card p={2} elevation={0}>
@@ -42,6 +51,24 @@ export function ContactsCard({ surveyUnit }) {
               <Typography as="h2" variant="xl" fontWeight={700}>
                 {D.contactAttempts}
               </Typography>
+            </Row>
+
+            <Row
+              sx={{ display: 'grid', gridTemplateColumns: '210fr 360fr' }}
+              gap={1}
+              width={1}
+              justifyContent="stretch"
+            >
+              <Button variant="contained" startIcon={<AddIcon />}>
+                {D.addContactAttemptButton}
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={hasOutcome ? <EditIcon /> : <PermContactCalendarOutlinedIcon />}
+                onClick={toggleOutcomeForm}
+              >
+                {hasOutcome ? D.editContactOutcomeButton : D.addContactOutcomeButton}
+              </Button>
             </Row>
 
             <Stack gap={3} alignItems="stretch">
@@ -60,6 +87,9 @@ export function ContactsCard({ surveyUnit }) {
           </Stack>
         </CardContent>
       </Card>
+      {showOutcomeForm && (
+        <ContactOutcomeForm surveyUnit={surveyUnit} onClose={toggleOutcomeForm} />
+      )}
     </>
   );
 }
