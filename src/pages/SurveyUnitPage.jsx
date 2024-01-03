@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import { AddressCard } from '../ui/SurveyUnit/AddressCard';
 import { IdentificationCard } from '../ui/SurveyUnit/IdentificationCard';
 import { PersonsCard } from '../ui/SurveyUnit/PersonsCard';
+import { ContactsCard } from '../ui/SurveyUnit/ContactsCard';
 
 export function SurveyUnitPage() {
   const { id } = useParams();
@@ -23,7 +24,7 @@ export function SurveyUnitPage() {
     return (
       <>
         <SurveyUnitHeader surveyUnit={surveyUnit} />
-        <SwipeableTabs>
+        <SwipeableTabs value={1}>
           <SwipeableTab index={0} label={D.goToIdentificationPage}>
             <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
               <AddressCard surveyUnit={surveyUnit} />
@@ -33,6 +34,7 @@ export function SurveyUnitPage() {
           <SwipeableTab index={1} label={D.goToContactPage}>
             <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
               <PersonsCard surveyUnit={surveyUnit} />
+              <ContactsCard surveyUnit={surveyUnit} />
             </Box>
           </SwipeableTab>
           <SwipeableTab index={2} label={D.goToCommunicationPage}>

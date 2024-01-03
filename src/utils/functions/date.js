@@ -21,13 +21,15 @@ export const getDateAttributes = timestamp => {
 
 /**
  * @param {number} time - Timestamp in seconds
+ * @param {boolean} [withTime] - Add time information (hour / minutes)
  * @return string
  */
-export const formatDate = time => {
+export const formatDate = (time, withTime) => {
   if (!time) {
     return '';
   }
   return new Intl.DateTimeFormat(undefined, {
     dateStyle: 'full',
+    timeStyle: withTime ? 'short' : undefined,
   }).format(new Date(time));
 };

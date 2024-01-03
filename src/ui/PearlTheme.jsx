@@ -317,6 +317,13 @@ theme = createTheme(
           },
         ],
       },
+      MuiDivider: {
+        styleOverrides: {
+          root: {
+            borderColor: '#D7DBE1',
+          },
+        },
+      },
       MuiPopper: {
         defaultProps: {
           slotProps: {
