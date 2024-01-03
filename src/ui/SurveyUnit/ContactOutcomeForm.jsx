@@ -23,6 +23,7 @@ const defaultValue = {
 };
 
 /**
+ * Form to update or create a new contact outcome
  *
  * @param {() => void} onClose
  * @param {SurveyUnit} surveyUnit
@@ -35,11 +36,11 @@ export function ContactOutcomeForm({ onClose, surveyUnit }) {
 
   const onSubmit = handleSubmit(async data => {
     // Update survey unit state
+    let newState = surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
     if (data.type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type) {
-      await addNewState(surveyUnit, surveyUnitStateEnum.APPOINTMENT_MADE.type);
-    } else {
-      await addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type);
+      newState = surveyUnitStateEnum.APPOINTMENT_MADE.type;
     }
+    await addNewState(surveyUnit, newState);
     surveyUnitIDBService.update({
       ...surveyUnit,
       contactOutcome: data,

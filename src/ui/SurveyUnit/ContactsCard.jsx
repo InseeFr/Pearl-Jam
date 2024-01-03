@@ -20,6 +20,7 @@ import { useToggle } from '../../utils/hooks/useToggle';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import { ContactAttemptForm } from './ContactAttemptForm';
 
 /**
  * Display persons linked to a survey unit
@@ -59,7 +60,7 @@ export function ContactsCard({ surveyUnit }) {
               width={1}
               justifyContent="stretch"
             >
-              <Button variant="contained" startIcon={<AddIcon />}>
+              <Button variant="contained" startIcon={<AddIcon />} onClick={toggleAttemptForm}>
                 {D.addContactAttemptButton}
               </Button>
               <Button
@@ -89,6 +90,9 @@ export function ContactsCard({ surveyUnit }) {
       </Card>
       {showOutcomeForm && (
         <ContactOutcomeForm surveyUnit={surveyUnit} onClose={toggleOutcomeForm} />
+      )}
+      {showAttemptForm && (
+        <ContactAttemptForm surveyUnit={surveyUnit} onClose={toggleAttemptForm} />
       )}
     </>
   );

@@ -192,6 +192,13 @@ const addContactState = async (surveyUnit, newState) => {
   return surveyUnit;
 };
 
+/**
+ * Add a new state to a surveyUnit
+ *
+ * @param surveyUnit
+ * @param stateType
+ * @returns {Promise<SurveyUnit>}
+ */
 export const addNewState = async (surveyUnit, stateType) => {
   const lastStateType = getLastState(surveyUnit).type;
   const newState = { date: new Date().getTime(), type: stateType };
@@ -263,6 +270,7 @@ export const addNewState = async (surveyUnit, stateType) => {
   }
   newSu.selected = false;
   await surveyUnitIdbService.addOrUpdate(newSu);
+  return newSu;
 };
 
 export const updateStateWithDates = surveyUnit => {
