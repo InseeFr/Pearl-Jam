@@ -23,10 +23,7 @@ import { SearchField } from '../ui/SearchField';
 import { SurveyCard } from '../ui/SurveyCard';
 import { Row } from '../ui/Row';
 import { Select } from '../ui/Select';
-
-/**
- *
- */
+import { seedSurveyUnits } from '../utils/functions/seeder';
 
 export function Home() {
   const surveyUnits = useSurveyUnits();
@@ -34,6 +31,7 @@ export function Home() {
   const filter = useSearchFilter();
 
   const filteredSurveyUnits = filterSurveyUnits(surveyUnits, filter);
+  const isDev = filteredSurveyUnits.length === 0 && window.location.hostname === 'localhost';
 
   return (
     <>
@@ -62,6 +60,16 @@ export function Home() {
                 />
               </div>
             ))}
+            {isDev && (
+              <Stack gap={2} py={5} alignItems="center" w={1} sx={{ gridColumn: '1 / -1' }}>
+                <Typography variant="m" color="textTertiary" as="p">
+                  Vous êtes en mode développement
+                </Typography>
+                <Button variant="contained" onClick={seedSurveyUnits}>
+                  Importer des données de test
+                </Button>
+              </Stack>
+            )}
           </Grid>
         </Stack>
       </SidebarLayout>
