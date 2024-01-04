@@ -74,6 +74,14 @@ declare global {
     medium: string;
   };
 
+  type SurveyUnitCommunicationRequest = {
+    emiter: 'INTERVIEWER' | 'TOOL';
+    medium: string;
+    reason: string;
+    type: string;
+    status: { date: number; status: string }[];
+  };
+
   type SurveyUnit = {
     id: string;
     persons: SurveyUnitPerson[];
@@ -97,6 +105,8 @@ declare global {
     identificationConfiguration: string;
     contactOutcomeConfiguration: string;
     contactAttemptConfiguration: string;
+    communicationRequestConfiguration: boolean;
+    communicationRequests: SurveyUnitCommunicationRequest[];
   };
 
   type Notification = {

@@ -32,6 +32,7 @@ const style = {
 export function RadioLine({ value, disabled, label, checked, ...props }) {
   return (
     <FormControlLabel
+      disabled={disabled}
       sx={style}
       value={value}
       control={<Radio size="small" sx={{ p: 0 }} />}

@@ -5,6 +5,11 @@ class SurveyUnitIdbService extends AbstractIdbService {
     super('surveyUnit');
   }
 
+  /**
+   * Update or insert a surveyUnit if the ID is unknown
+   * @param {SurveyUnit} item
+   * @returns {Promise<void>}
+   */
   async addOrUpdateSU(item) {
     const { id, ...other } = item;
     const surveyUnit = await this.getById(id);

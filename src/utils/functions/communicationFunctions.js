@@ -21,7 +21,7 @@ export const VALID_MAIL_FORMAT = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
 export const isEmailValid = email => email?.match(VALID_MAIL_FORMAT) ?? false;
 
-export const isValidTitle = title => Object.keys(TITLES).includes(title.toUpperCase());
+export const isValidTitle = title => Object.keys(TITLES).includes((title ?? '').toUpperCase());
 export const isValidString = string => !!string && string?.length !== 0;
 
 export const checkCommunicationRequestFormAddressesValidity = (

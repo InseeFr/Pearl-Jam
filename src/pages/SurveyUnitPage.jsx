@@ -9,6 +9,7 @@ import { AddressCard } from '../ui/SurveyUnit/AddressCard';
 import { IdentificationCard } from '../ui/SurveyUnit/IdentificationCard';
 import { PersonsCard } from '../ui/SurveyUnit/PersonsCard';
 import { ContactsCard } from '../ui/SurveyUnit/ContactsCard';
+import { CommunicationsCard } from '../ui/SurveyUnit/CommunicationsCard';
 
 export function SurveyUnitPage() {
   const { id } = useParams();
@@ -38,7 +39,7 @@ export function SurveyUnitPage() {
             </Box>
           </SwipeableTab>
           <SwipeableTab index={2} label={D.goToCommunicationPage}>
-            c
+            <CommunicationsCard surveyUnit={surveyUnit} />
           </SwipeableTab>
           <SwipeableTab index={3} label={D.goToQuestionnairesPage}>
             d

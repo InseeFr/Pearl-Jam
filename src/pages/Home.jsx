@@ -23,7 +23,7 @@ import { SearchField } from '../ui/SearchField';
 import { SurveyCard } from '../ui/SurveyCard';
 import { Row } from '../ui/Row';
 import { Select } from '../ui/Select';
-import { seedSurveyUnits } from '../utils/functions/seeder';
+import { seedData } from '../utils/functions/seeder';
 
 export function Home() {
   const surveyUnits = useSurveyUnits();
@@ -65,7 +65,7 @@ export function Home() {
                 <Typography variant="m" color="textTertiary" as="p">
                   Vous êtes en mode développement
                 </Typography>
-                <Button variant="contained" onClick={seedSurveyUnits}>
+                <Button variant="contained" onClick={seedData}>
                   Importer des données de test
                 </Button>
               </Stack>
