@@ -1,7 +1,6 @@
 import React from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { loadConfiguration, useConfiguration } from 'utils/hooks/useConfiguration';
-import QueenContainer from './components/panel-body/queen-container';
 import { PearlTheme } from './ui/PearlTheme';
 import { Header } from './ui/Header';
 import { Home } from './pages/Home';
@@ -12,7 +11,7 @@ import { ThemeProvider as ThemeProviderV4 } from '@material-ui/styles';
 import theme from './theme';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Notification from './components/common/Notification';
-import Preloader from './components/common/loader';
+import { Preloader } from './ui/Preloader';
 import D from './i18n/build-dictionary';
 import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
 import Palette from './components/common/palette';
@@ -24,10 +23,12 @@ import './app.css';
 import { SuiviPage } from './pages/SuiviPage';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { QueenPage } from './pages/QueenPage';
+
 const router = createBrowserRouter([
   {
     path: '/queen/*',
-    element: <QueenContainer />,
+    element: <QueenPage />,
   },
   {
     path: '/',
@@ -98,12 +99,13 @@ function AppWrapper() {
           <CssBaseline />
           <Notification serviceWorkerInfo={serviceWorkerInfo} />
           <div>
-            {!authenticated && <Preloader message={D.pleaseWait} />}
-            {authenticated && (
+            {authenticated ? (
               <SyncContextProvider>
                 <Header />
                 <Outlet />
               </SyncContextProvider>
+            ) : (
+              <Preloader message={D.pleaseWait} />
             )}
           </div>
         </ThemeProviderV4>

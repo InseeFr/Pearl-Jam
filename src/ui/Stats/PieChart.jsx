@@ -78,9 +78,13 @@ export function PieChart({ parts, size, paddingInline = 0, paddingBlock = 0 }) {
         style={{ width: size + 2 * paddingInline, height: size + 2 * paddingBlock }}
       >
         <g mask="url(#pieMask)">
-          {parts.map((part, k) => (
-            <path key={k} fill={part.color} d={sliceToPath(pieSlices[k], radius)} />
-          ))}
+          {parts.map((part, k) =>
+            part.value === 1 ? (
+              <circle fill={part.color} x={0} y={0} r={radius} />
+            ) : (
+              <path key={k} fill={part.color} d={sliceToPath(pieSlices[k], radius)} />
+            )
+          )}
         </g>
         <mask id="pieMask">
           <rect fill="white" x={radius * -1} y={radius * -1} width={size} height={size}></rect>

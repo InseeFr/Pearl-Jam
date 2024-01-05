@@ -4,7 +4,7 @@ import * as api from 'utils/api';
 import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
 import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
 import D from 'i18n';
-import Preloader from 'components/common/loader';
+import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
@@ -15,7 +15,7 @@ export const SyncContext = React.createContext();
 export function SyncContextProvider({ children }) {
   const online = useNetworkOnline();
   const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = useConfiguration();
-  const { checkQueen, synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
+  const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
   const [isSync, setIsSync] = useState(() => {
     return window.localStorage.getItem('SYNCHRONIZE') === 'true';
