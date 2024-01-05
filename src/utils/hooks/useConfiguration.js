@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
-import { effect, signal } from '@maverick-js/signals';
-import { useEffectOnce } from './useEffectOnce';
+import { signal } from '@maverick-js/signals';
 import { useSignalValue } from './useSignalValue';
 
 /**

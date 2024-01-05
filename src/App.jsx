@@ -1,18 +1,13 @@
 import React from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import { loadConfiguration, useConfiguration } from 'utils/hooks/useConfiguration';
+import { loadConfiguration, useConfiguration } from './utils/hooks/useConfiguration';
 import { PearlTheme } from './ui/PearlTheme';
 import { Header } from './ui/Header';
 import { Home } from './pages/Home';
-import HomeOld from './components/panel-body/home';
 import { useAuth } from './utils/auth/initAuth';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { Preloader } from './ui/Preloader';
 import D from './i18n/build-dictionary';
 import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
-import Palette from './components/common/palette';
-import { ResetData } from './components/panel-body/resetData';
-import { DatabaseConsole } from './components/panel-body/databaseConsole';
 import { useEffectOnce } from './utils/hooks/useEffectOnce';
 import { SurveyUnitPage } from './pages/SurveyUnitPage';
 import './app.css';
@@ -41,34 +36,13 @@ const router = createBrowserRouter([
       },
       {
         path: '/survey-unit/:id',
-        element: (
-          <>
-            <Outlet />
-          </>
-        ),
+        element: <Outlet />,
         children: [
           {
             path: 'details',
             element: <SurveyUnitPage />,
           },
         ],
-      },
-      // TODO : remove this when finished
-      {
-        path: '/old',
-        element: <HomeOld />,
-      },
-      {
-        path: '/support/palette',
-        element: <Palette />,
-      },
-      {
-        path: '/support/reset-data',
-        element: <ResetData />,
-      },
-      {
-        path: '/support/database',
-        element: <DatabaseConsole />,
       },
     ],
   },
@@ -92,7 +66,6 @@ function AppWrapper() {
   return (
     <PearlTheme>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <CssBaseline />
         <ServiceWorkerStatus authenticated={authenticated} />
         <div>
           {authenticated ? (
