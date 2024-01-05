@@ -22,10 +22,9 @@ const getMessageFromState = state => {
 };
 
 const getSeverity = state => {
-  if (state.isUpdating || state.isInstallingServiceWorker || state.isUpdateAvailable) return 'info';
   if (state.isInstallationFailed) return 'error';
   if (state.isUpdateInstalled || state.isServiceWorkerInstalled) return 'success';
-  return '';
+  return 'info';
 };
 
 /**
@@ -34,7 +33,6 @@ const getSeverity = state => {
  */
 export function ServiceWorkerStatus({ authenticated }) {
   const state = useServiceWorker(authenticated);
-  state.isUpdateInstalled = true;
   const message = getMessageFromState(state);
   const severity = getSeverity(state);
   const [isOpen, setOpen] = useState(!!message);

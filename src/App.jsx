@@ -6,11 +6,7 @@ import { Header } from './ui/Header';
 import { Home } from './pages/Home';
 import HomeOld from './components/panel-body/home';
 import { useAuth } from './utils/auth/initAuth';
-import { useServiceWorker } from './utils/hooks/useServiceWorker';
-import { ThemeProvider as ThemeProviderV4 } from '@material-ui/styles';
-import theme from './theme';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Notification from './components/common/Notification';
 import { Preloader } from './ui/Preloader';
 import D from './i18n/build-dictionary';
 import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
@@ -92,28 +88,22 @@ export function App() {
 
 function AppWrapper() {
   const { authenticated } = useAuth();
-  const serviceWorkerInfo = useServiceWorker(authenticated);
-  console.log({ authenticated });
-  serviceWorkerInfo.isUpdateAvailable = true;
 
   return (
     <PearlTheme>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <ThemeProviderV4 theme={theme}>
-          <CssBaseline />
-          <Notification serviceWorkerInfo={serviceWorkerInfo} />
-          <ServiceWorkerStatus authenticated={authenticated} />
-          <div>
-            {authenticated ? (
-              <SyncContextProvider>
-                <Header />
-                <Outlet />
-              </SyncContextProvider>
-            ) : (
-              <Preloader message={D.pleaseWait} />
-            )}
-          </div>
-        </ThemeProviderV4>
+        <CssBaseline />
+        <ServiceWorkerStatus authenticated={authenticated} />
+        <div>
+          {authenticated ? (
+            <SyncContextProvider>
+              <Header />
+              <Outlet />
+            </SyncContextProvider>
+          ) : (
+            <Preloader message={D.pleaseWait} />
+          )}
+        </div>
       </LocalizationProvider>
     </PearlTheme>
   );
