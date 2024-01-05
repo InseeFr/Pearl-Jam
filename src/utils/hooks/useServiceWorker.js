@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from 'react';
-import * as serviceWorker from 'serviceWorkerRegistration';
+import { useEffect, useState } from 'react';
+import * as serviceWorker from '../../serviceWorkerRegistration';
 import { useConfiguration } from './useConfiguration';
 
 const SW_UPDATE_KEY = 'installing-update';

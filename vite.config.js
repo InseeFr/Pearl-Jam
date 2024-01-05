@@ -3,16 +3,25 @@ import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { VitePWA } from 'vite-plugin-pwa';
 import federation from '@originjs/vite-plugin-federation';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: './src/setupTests.js',
     coverage: {
       reporter: ['text', 'html'],
       exclude: ['node_modules/', 'src/setupTests.js'],
+    },
+  },
+  resolve: {
+    alias: {
+      i18n: resolve(__dirname, 'src/i18n/index.js'),
+      utils: resolve(__dirname, 'src/utils'),
     },
   },
   build: { outDir: 'build', target: 'esnext' },

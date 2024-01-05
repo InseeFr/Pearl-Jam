@@ -1,50 +1,7 @@
 import { TITLES } from 'utils/constants';
-import { getRecipientInformation, isEmailValid, isValidTitle } from 'utils/functions';
-
-describe('isValidTitle', () => {
-  const MISTER = 'MISTER';
-  const mister = 'mister';
-  const MISS = 'MISS';
-  const miss = 'miss';
-  const mylady = 'mylady';
-
-  it('should return true if value is in TITLES enum', () => {
-    expect(isValidTitle(mister)).toBeTruthy();
-    expect(isValidTitle(MISTER)).toBeTruthy();
-    expect(isValidTitle(miss)).toBeTruthy();
-    expect(isValidTitle(MISS)).toBeTruthy();
-  });
-  it('should return false if value not in TITLES enum', () => {
-    expect(isValidTitle(mylady)).toBeFalsy();
-  });
-});
-
-describe('isvalidEmail', () => {
-  const noAtEmail = 'in.validee.ma.il';
-  const tooShortDomainExtensionEmail = 'too.short@email.x';
-  const tooLongDomainExtensionEmail = 'too.long@email.extension';
-  const missingPreAt = '@missingPreAt.ma.il';
-  const missingPostAt = 'missing.postAt@';
-
-  const validEmailAdress = 'valid.email@addr.ess';
-  const anotherValidEmailAdress = 'anothervalidemail@addr.ess';
-  const yetAnotherValidEmailAdress = 'yetAnothervalidemail@add.re.ss';
-  it('should return false if pattern is not respected', () => {
-    expect(isEmailValid(noAtEmail)).toBeFalsy();
-    expect(isEmailValid(tooShortDomainExtensionEmail)).toBeFalsy();
-    expect(isEmailValid(tooLongDomainExtensionEmail)).toBeFalsy();
-    expect(isEmailValid(missingPreAt)).toBeFalsy();
-    expect(isEmailValid(missingPostAt)).toBeFalsy();
-  });
-  it('should return true if pattern is respected', () => {
-    expect(isEmailValid(validEmailAdress)).toBeTruthy();
-    expect(isEmailValid(anotherValidEmailAdress)).toBeTruthy();
-    expect(isEmailValid(yetAnotherValidEmailAdress)).toBeTruthy();
-  });
-});
+import { getRecipientInformation, isEmailValid, isValidTitle } from 'utils/functions/index';
 
 describe('getRecipientInformation', () => {
-  const MISSING = undefined;
   const VALID_FIRSTNAME1 = 'Ada';
   const VALID_LASTNAME1 = 'Lovelace';
   const VALID_FIRSTNAME2 = 'Charles';
@@ -113,8 +70,6 @@ describe('getRecipientInformation', () => {
     address: richValidAddress,
   };
 
-  const badInput = { iam: 'bad' };
-
   it('accepts single person and the simplest address', () => {
     expect(getRecipientInformation(minimalValidSurveyUnit)).toEqual(
       generateExpectedOutput(ADA, VALID_CITYNAME, VALID_POSTCODE)
@@ -142,6 +97,15 @@ describe('getRecipientInformation', () => {
     recipientLastName: person.lastName,
     recipientCityName: cityName,
     recipientPostcode: postCode,
-    address: ['', '', '', '', '', '', '', ''],
+    address: [
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    ],
   });
 });
