@@ -358,6 +358,14 @@ theme = createTheme(
           },
         },
       },
+      MuiAlert: {
+        styleOverrides: {
+          root: {
+            ...theme.typography.s,
+            fontWeight: 600,
+          },
+        },
+      },
       MuiSelect: {
         variants: [
           {

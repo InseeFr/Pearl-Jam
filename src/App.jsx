@@ -24,6 +24,7 @@ import { SuiviPage } from './pages/SuiviPage';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { QueenPage } from './pages/QueenPage';
+import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
 
 const router = createBrowserRouter([
   {
@@ -92,12 +93,16 @@ export function App() {
 function AppWrapper() {
   const { authenticated } = useAuth();
   const serviceWorkerInfo = useServiceWorker(authenticated);
+  console.log({ authenticated });
+  serviceWorkerInfo.isUpdateAvailable = true;
+
   return (
     <PearlTheme>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <ThemeProviderV4 theme={theme}>
           <CssBaseline />
           <Notification serviceWorkerInfo={serviceWorkerInfo} />
+          <ServiceWorkerStatus authenticated={authenticated} />
           <div>
             {authenticated ? (
               <SyncContextProvider>
