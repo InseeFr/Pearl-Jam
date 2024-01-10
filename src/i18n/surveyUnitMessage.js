@@ -9,5 +9,13 @@ const surveyUnitMessage = {
     fr: 'Questionnaire inaccessible',
     en: 'Questionnaire not available',
   },
+  notFoundSurveyUnit: {
+    fr: 'Aucune enquête ne correspond à cet ID',
+    en: 'No survey matches this ID',
+  },
+  backListSurveyUnit: {
+    fr: 'Revenir à la liste des enquêtes',
+    en: 'Back to the survey list',
+  },
 };
 export default surveyUnitMessage;

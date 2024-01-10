@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 import { effect } from '@maverick-js/signals';
 
 /**
@@ -8,11 +8,7 @@ import { effect } from '@maverick-js/signals';
  * @return {T}
  */
 export function useSignalValue(signal) {
-  const [state, setState] = useState(() => signal());
+  const subscribe = useCallback(onChange => effect(() => onChange(signal())), []);
 
-  useEffect(() => {
-    return effect(() => setState(signal()));
-  }, []);
-
-  return state;
+  return useSyncExternalStore(subscribe, signal, signal);
 }
