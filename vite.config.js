@@ -24,9 +24,13 @@ export default defineConfig({
       utils: resolve(__dirname, 'src/utils'),
     },
   },
-  build: { outDir: 'build', target: 'esnext', rollupOptions: {
-    external: ['@mui/styles'],
-  }, },
+  build: {
+    outDir: 'build',
+    target: 'esnext',
+    rollupOptions: {
+      external: ['@mui/styles'],
+    },
+  },
   plugins: [
     tsconfigPaths(),
     react(),
