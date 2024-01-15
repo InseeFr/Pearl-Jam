@@ -10,6 +10,7 @@ import { PersonsCard } from '../ui/SurveyUnit/PersonsCard';
 import { ContactsCard } from '../ui/SurveyUnit/ContactsCard';
 import { CommunicationsCard } from '../ui/SurveyUnit/CommunicationsCard';
 import { CommentCard } from '../ui/SurveyUnit/CommentCard';
+import { QuestionnaireCard } from '../ui/Questionnaire/QuestionnaireCard';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
@@ -70,7 +71,7 @@ export function SurveyUnitPage() {
           <CommunicationsCard surveyUnit={surveyUnit} />
         </SwipeableTab>
         <SwipeableTab index={3} label={D.goToQuestionnairesPage}>
-          d
+          <QuestionnaireCard surveyUnit={surveyUnit} />
         </SwipeableTab>
         <SwipeableTab index={4} label={D.goToCommentsPage}>
           <CommentCard surveyUnit={surveyUnit} />
