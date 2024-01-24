@@ -27,9 +27,6 @@ export default defineConfig({
   build: {
     outDir: 'build',
     target: 'esnext',
-    rollupOptions: {
-      external: ['@mui/styles'],
-    },
   },
   plugins: [
     tsconfigPaths(),
