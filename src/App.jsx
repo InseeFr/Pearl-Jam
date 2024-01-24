@@ -16,6 +16,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { QueenPage } from './pages/QueenPage';
 import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
+import { ResetData } from './pages/ResetData';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
             element: <SurveyUnitPage />,
           },
         ],
+      },
+      {
+        path: '/support/reset-data',
+        element: <ResetData />,
       },
     ],
   },

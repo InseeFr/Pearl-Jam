@@ -10,27 +10,27 @@ import { frFR as DatepickerfrFR } from '@mui/x-date-pickers/locales';
 import { frFR } from '@mui/material/locale';
 
 export const red = {
-  '100': '#FFB7C6',
-  '200': '#FF93AA',
-  '300': '#F26987',
-  '400': '#F33B63',
-  '500': '#ED1443',
-  '600': '#C51138',
-  '700': '#AD0D30',
-  '800': '#980727',
-  '900': '#80031E',
+  100: '#FFB7C6',
+  200: '#FF93AA',
+  300: '#F26987',
+  400: '#F33B63',
+  500: '#ED1443',
+  600: '#C51138',
+  700: '#AD0D30',
+  800: '#980727',
+  900: '#80031E',
 };
 
 export const gray = {
-  '100': '#F5F7FA',
-  '200': '#E6EAF0',
-  '300': '#D3DBE5',
-  '400': '#BCC2CC',
-  '500': '#7C8A9D',
-  '600': '#57677D',
-  '700': '#3A4657',
-  '800': '#1D2A3D',
-  '900': '#0A192E',
+  100: '#F5F7FA',
+  200: '#E6EAF0',
+  300: '#D3DBE5',
+  400: '#BCC2CC',
+  500: '#7C8A9D',
+  600: '#57677D',
+  700: '#3A4657',
+  800: '#1D2A3D',
+  900: '#0A192E',
 };
 
 const fontFamily = 'Montserrat, sans-serif';
@@ -100,6 +100,7 @@ theme = createTheme({
     },
     success: colors('#089616'),
     green: colors('#35C758'),
+    danger: colors(red['500']),
     red: colors(red['500']),
     yellow: colors('#FFC700'),
     separator: colors('#D7DBE1'),
