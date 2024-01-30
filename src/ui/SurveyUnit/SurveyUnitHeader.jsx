@@ -1,3 +1,4 @@
+import react, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -9,7 +10,6 @@ import { Link } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import { PrivilegedPerson } from './PrivilegedPerson';
 import Chip from '@mui/material/Chip';
-import React from 'react';
 import { Typography } from '../Typography';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
 import { addNewState, getSuTodoState, isValidForTransmission } from '../../utils/functions';
@@ -17,11 +17,64 @@ import CheckIcon from '@mui/icons-material/Check';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
+import { Popover, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import FiberManualRecordOutlinedIcon from '@mui/icons-material/FiberManualRecordOutlined';
+import { useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
+import { makeStyles } from '@mui/styles';
 
 /**
  * @param {SurveyUnit} surveyUnit
  */
+
+const useStyles = makeStyles({
+  rotateBox: {
+    transform: 'rotate(-90deg)',
+  },
+  buttonFixed: {
+    position: 'fixed',
+    bottom: 0,
+    borderRadius: '12px 12px 0px 0px',
+  },
+  alignTitle: {
+    textAlign: 'center',
+  },
+});
+
 export function SurveyUnitHeader({ surveyUnit }) {
+  const classes = useStyles();
+  const [isContactOutcomeValid, setIsContactOutcomeValid] = useState(false);
+  const { questions, setQuestion, answers, question, setAnswer } =
+    useIdentificationQuestions(surveyUnit);
+  const [isCompleted, setIsCompleted] = useState(false);
+
+  useEffect(() => {
+    const allQuestionsAnswered = questions.every(q => !!q.answer);
+    setIsCompleted(allQuestionsAnswered);
+  }, [questions]);
+
+  useEffect(() => {
+    const checkContactOutcomeValidity = () => {
+      if (!surveyUnit.contactOutcome) {
+        return false;
+      }
+      return true;
+    };
+
+    setIsContactOutcomeValid(checkContactOutcomeValidity());
+  }, [surveyUnit, surveyUnit.contactOutcome]);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleOpen = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
   const states = Object.values(toDoEnum).filter(toDo => toDo.order < 6);
   const currentState = getSuTodoState(surveyUnit).order;
 
@@ -29,7 +82,8 @@ export function SurveyUnitHeader({ surveyUnit }) {
     <Box
       px={4}
       py={2}
-      sx={{ display: 'grid', gridTemplateColumns: '1fr 700px', alignItems: 'center' }}
+      pr={0}
+      sx={{ display: 'grid', gridTemplateColumns: '1fr 1000px auto', alignItems: 'center' }}
       bgcolor="white.main"
     >
       {/* Left side */}
@@ -56,7 +110,7 @@ export function SurveyUnitHeader({ surveyUnit }) {
         </Stack>
       </Row>
 
-      {/* Right Side */}
+      {/* Middle Side */}
       <Stepper activeStep={currentState - 1} alternativeLabel>
         {states.map(state => {
           return (
@@ -69,6 +123,58 @@ export function SurveyUnitHeader({ surveyUnit }) {
           );
         })}
       </Stepper>
+      {/* Right Side */}
+      <Box className={classes.rotateBox} sx={{ justifySelf: 'end' }}>
+        <Button
+          onClick={handleOpen}
+          variant="contained"
+          color="primary"
+          className={classes.buttonFixed}
+        >
+          Aide
+        </Button>
+      </Box>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        className={classes.alignTitle}
+      >
+        <Typography sx={{ p: 2 }}>Conditions de transmission</Typography>
+        <List>
+          {!isCompleted && (
+            <ListItem>
+              <ListItemIcon>
+                <FiberManualRecordOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Compléter le formulaire de repérage" />
+            </ListItem>
+          )}
+          <ListItem>
+            <ListItemIcon>
+              <FiberManualRecordOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Traiter le questionnaire" />
+          </ListItem>
+          {!isContactOutcomeValid && (
+            <ListItem>
+              <ListItemIcon>
+                <FiberManualRecordOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Renseigner le bilan des contacts" />
+            </ListItem>
+          )}
+        </List>
+      </Popover>
     </Box>
   );
 }
@@ -88,7 +194,7 @@ function SubmitButton({ surveyUnit }) {
 
   if (!canSubmit) {
     return null;
-  }
+  } 
 
   return (
     <Box position="relative">
