@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
 import Chip from '@mui/material/Chip';
 
 const CustomChip = ({ label, icon, color, shadow }) => {
