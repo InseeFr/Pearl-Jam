@@ -96,7 +96,6 @@ export function QuestionnaireCard() {
   };
 
   const getColorForPerson = age => {
-    console.log(getColorForPerson);
     const ageNumber = parseInt(age.split(' ')[0]);
     return ageNumber < 16 ? 'lightGrey' : 'inherit';
   };
