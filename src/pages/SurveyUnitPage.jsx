@@ -16,6 +16,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import Button from '@mui/material/Button';
 import { Typography } from '../ui/Typography';
+import { Questionnaires } from '../ui/Questionnaire/Questionnaires';
 
 export function SurveyUnitPage() {
   const { id } = useParams();
@@ -71,7 +72,8 @@ export function SurveyUnitPage() {
           <CommunicationsCard surveyUnit={surveyUnit} />
         </SwipeableTab>
         <SwipeableTab index={3} label={D.goToQuestionnairesPage}>
-          <QuestionnaireCard surveyUnit={surveyUnit} />
+          {/* <QuestionnaireCard surveyUnit={surveyUnit} /> */}
+          <Questionnaires surveyUnit={surveyUnit} />
         </SwipeableTab>
         <SwipeableTab index={4} label={D.goToCommentsPage}>
           <CommentCard surveyUnit={surveyUnit} />
