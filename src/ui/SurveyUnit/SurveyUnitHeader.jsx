@@ -83,7 +83,7 @@ export function SurveyUnitHeader({ surveyUnit }) {
       px={4}
       py={2}
       pr={0}
-      sx={{ display: 'grid', gridTemplateColumns: '1fr 1000px auto', alignItems: 'center' }}
+      sx={{ display: 'grid', gridTemplateColumns: '1fr 700px auto', alignItems: 'center', gap: 5}}
       bgcolor="white.main"
     >
       {/* Left side */}
