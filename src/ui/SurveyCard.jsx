@@ -57,7 +57,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
             <Stack sx={{ marginLeft: 'auto' }} pl={2} alignItems="center">
               {!priority ? (
                 <Typography color="textHint" variant="s" noWrap>
-                  223-1111-75
+                  {surveyUnit.sampleIdentifiers.nograp}
                 </Typography>
               ) : (
                 <Typography variant="s" color="accent">

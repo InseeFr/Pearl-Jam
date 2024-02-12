@@ -34,58 +34,50 @@ export function Home() {
   const isDev = filteredSurveyUnits.length === 0 && window.location.hostname === 'localhost';
 
   return (
-    <>
-      <SidebarLayout>
-        <Sidebar surveyUnits={surveyUnits} />
-        <Stack sx={{ minHeight: 0 }}>
-          <GridHeader visibleCount={filteredSurveyUnits.length} totalCount={surveyUnits.length} />
-          <Grid
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-              minHeight: 0,
-              overflow: 'auto',
-              // Offset the scrollbar out of the container
-              width: 'calc(100% + .5rem)',
-              paddingRight: '.5rem',
-            }}
-            gap={2}
-          >
-            {filteredSurveyUnits.map(su => (
-              <div key={su.id}>
-                <SurveyCard
-                  key={su.id}
-                  surveyUnit={su}
-                  locked={missingSurveyUnitIds.includes(su.id)}
-                />
-              </div>
-            ))}
-            {isDev && (
-              <Stack gap={2} py={5} alignItems="center" w={1} sx={{ gridColumn: '1 / -1' }}>
-                <Typography variant="m" color="textTertiary" as="p">
-                  Vous êtes en mode développement
-                </Typography>
-                <Button variant="contained" onClick={seedData}>
-                  Importer des données de test
-                </Button>
-              </Stack>
-            )}
-          </Grid>
-        </Stack>
-      </SidebarLayout>
-    </>
+    <SidebarLayout>
+      <Sidebar surveyUnits={surveyUnits} />
+      <Stack sx={{ minHeight: 0 }}>
+        <GridHeader visibleCount={filteredSurveyUnits.length} totalCount={surveyUnits.length} />
+        <Grid
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            minHeight: 0,
+            overflow: 'auto',
+            // Offset the scrollbar out of the container
+            width: 'calc(100% + .5rem)',
+            paddingRight: '.5rem',
+          }}
+          gap={2}
+        >
+          {filteredSurveyUnits.map(su => (
+            <div key={su.id}>
+              <SurveyCard
+                key={su.id}
+                surveyUnit={su}
+                locked={missingSurveyUnitIds.includes(su.id)}
+              />
+            </div>
+          ))}
+          {isDev && (
+            <Stack gap={2} py={5} alignItems="center" w={1} sx={{ gridColumn: '1 / -1' }}>
+              <Typography variant="m" color="textTertiary" as="p">
+                Vous êtes en mode développement
+              </Typography>
+              <Button variant="contained" onClick={seedData}>
+                Importer des données de test
+              </Button>
+            </Stack>
+          )}
+        </Grid>
+      </Stack>
+    </SidebarLayout>
   );
 }
 
 function GridHeader({ visibleCount, totalCount }) {
-  const {
-    setSortField,
-    sortField,
-    sortDirection,
-    toggleSortDirection,
-    setSearch,
-    search,
-  } = useSearchFilter();
+  const { setSortField, sortField, sortDirection, toggleSortDirection, setSearch, search } =
+    useSearchFilter();
   return (
     <Stack gap={2} sx={{ flex: 'none' }}>
       <SearchField value={search} onChange={setSearch} />
@@ -123,9 +115,14 @@ function Sidebar({ surveyUnits }) {
 
   const filter = useSearchFilter();
   const states = useMemo(() => Object.entries(toDoEnum), []);
-  const subSamples = useMemo(() => [...new Set(surveyUnits.map(u => u.sampleIdentifiers.ssech))], [
-    surveyUnits,
-  ]);
+  const subSamples = useMemo(
+    () => [...new Set(surveyUnits.map(u => u.sampleIdentifiers.ssech))],
+    [surveyUnits]
+  );
+  const subGrappe = useMemo(
+    () => [...new Set(surveyUnits.map(u => u.sampleIdentifiers.nograp))],
+    [surveyUnits]
+  );
 
   return (
     <Paper
@@ -144,38 +141,6 @@ function Sidebar({ surveyUnits }) {
         alignItems="stretch"
         sx={{ height: '100%', overflowY: 'auto', minHeight: 0 }}
       >
-        <Typography variant="m">Filtrer les unités par</Typography>
-        <Accordion variant="dense" title={D.sortSurvey} defaultOpen>
-          <Stack gap={0.5}>
-            {campaigns.map(campaign => (
-              <FormControlLabel
-                key={campaign}
-                control={
-                  <Checkbox
-                    checked={filter.campaigns.includes(campaign)}
-                    onChange={() => filter.toggle('campaigns', campaign)}
-                    sx={{ padding: 0 }}
-                  />
-                }
-                label={campaign.toLowerCase()}
-              />
-            ))}
-          </Stack>
-        </Accordion>
-        <Hr />
-        <Accordion variant="dense" title={D.priority} defaultOpen>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={filter.priority}
-                onChange={() => filter.toggle('priority')}
-                sx={{ padding: 0 }}
-              />
-            }
-            label="Unités prioritaires"
-          />
-        </Accordion>
-        <Hr />
         <Accordion variant="dense" title={D.sortStatus} defaultOpen>
           <Stack gap={2} alignItems="stretch" width="100%">
             <FormControlLabel
@@ -208,6 +173,38 @@ function Sidebar({ surveyUnits }) {
           </Stack>
         </Accordion>
         <Hr />
+        <Accordion variant="dense" title={D.priority} defaultOpen>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={filter.priority}
+                onChange={() => filter.toggle('priority')}
+                sx={{ padding: 0 }}
+              />
+            }
+            label="Unités prioritaires"
+          />
+        </Accordion>
+        <Hr />
+        <Typography variant="m">Filtrer les unités par</Typography>
+        <Accordion variant="dense" title={D.sortSurvey} defaultOpen>
+          <Stack gap={0.5}>
+            {campaigns.map(campaign => (
+              <FormControlLabel
+                key={campaign}
+                control={
+                  <Checkbox
+                    checked={filter.campaigns.includes(campaign)}
+                    onChange={() => filter.toggle('campaigns', campaign)}
+                    sx={{ padding: 0 }}
+                  />
+                }
+                label={campaign.toLowerCase()}
+              />
+            ))}
+          </Stack>
+        </Accordion>
+        <Hr />
         <Accordion variant="dense" title="Sous-échantillon et grappe" defaultOpen>
           <Stack gap={2} sx={{ width: '100%' }}>
             <Select
@@ -217,7 +214,13 @@ function Sidebar({ surveyUnits }) {
               onChange={v => filter.setSubSample(v)}
               options={subSamples}
             />
-            <Select value="" placeholder="Grappe..." allowEmpty />
+            <Select
+              value={filter.subGrappe}
+              allowEmpty
+              placeholder="Grappe..."
+              onChange={v => filter.setSubGrappe(v)}
+              options={subGrappe}
+            />
           </Stack>
         </Accordion>
         <Hr />

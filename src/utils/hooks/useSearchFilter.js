@@ -14,8 +14,9 @@ const emptyFilter = {
   states: [],
   search: '',
   priority: false,
-  terminated: false,
+  terminated: true,
   subSample: '',
+  subGrappe: '',
   sortField: 'remainingDays',
   sortDirection: 'ASC',
 };
@@ -28,6 +29,7 @@ const $filter = signal(emptyFilter);
  *   toggle: (key: string, value: string) => void,
  *   setSortField: (s: string) => void,
  *   setSubSample: (s: number | null) => void,
+ *   setSubGrappe: (s: number | null) => void,
  *   setSearch: (s: string) => void,
  *   toggleSortDirection: () => void,
  *   reset: () => void,
@@ -62,6 +64,7 @@ export function useSearchFilter() {
     toggle,
     setSortField: field => $filter.set({ ...$filter(), sortField: field, sortDirection: 'DESC' }),
     setSubSample: subSample => $filter.set({ ...$filter(), subSample: subSample }),
+    setSubGrappe: subGrappe => $filter.set({ ...$filter(), subGrappe: subGrappe }),
     setSearch: q => $filter.set({ ...$filter(), search: q }),
     toggleSortDirection: () =>
       $filter.set({
@@ -136,6 +139,10 @@ export function filterSurveyUnits(surveyUnits, criteria) {
       return false;
     }
 
+    if (criteria.subGrappe && surveyUnit.sampleIdentifiers.nograp !== criteria.subGrappe) {
+      return false;
+    }
+
     if (criteria.terminated && getSuTodoState(surveyUnit) === toDoEnum.TERMINATED) {
       return false;
     }
@@ -149,10 +156,7 @@ export function filterSurveyUnits(surveyUnits, criteria) {
           person.firstName,
           person.lastName,
           surveyUnit.id,
-          surveyUnit.address.l6
-            .split(' ')
-            .slice(1)
-            .toString(),
+          surveyUnit.address.l6.split(' ').slice(1).toString(),
           getSuTodoState(surveyUnit).value,
         ].join(' ')
       );
