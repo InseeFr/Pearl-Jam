@@ -37,6 +37,8 @@ import { Select } from '../ui/Select';
 import { CommentDialog } from '../ui/SurveyUnit/CommentDialog';
 import { useToggle } from '../utils/hooks/useToggle';
 import { PaperIconButton } from '../ui/PaperIconButton';
+import { IconDesc } from '../ui/Icons/IconDesc';
+import { IconAsc } from '../ui/Icons/IconAsc';
 
 export function SuiviPage() {
   const surveyUnits = useSurveyUnits();
@@ -50,7 +52,6 @@ export function SuiviPage() {
     [surveyUnits]
   );
   const [tab, setTab] = useState('stats');
-
   return (
     <Box m={2}>
       <Card elevation={2}>
@@ -103,9 +104,10 @@ export function SuiviPage() {
  * @param {SurveyUnit[]} surveyUnits
  */
 function SuiviStats({ surveyUnits }) {
-  const surveyUnitsPerCampaign = useMemo(() => groupBy(surveyUnits, su => su.campaign), [
-    surveyUnits,
-  ]);
+  const surveyUnitsPerCampaign = useMemo(
+    () => groupBy(surveyUnits, su => su.campaign),
+    [surveyUnits]
+  );
   return (
     <Stack gap={2}>
       <Typography variant="s" color="textTertiary" as="p">
@@ -139,6 +141,14 @@ function SuiviStats({ surveyUnits }) {
  * @param {SurveyUnit[]} surveyUnits
  */
 function SuiviTable({ surveyUnits, campaign }) {
+  const [sortConfig, setSortConfig] = useState({ key: 'unit', direction: 'asc' });
+  const toggleSort = key => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
   const maxHeight = 'calc(100vh - 230px)';
   if (!campaign) {
     return (
@@ -154,19 +164,163 @@ function SuiviTable({ surveyUnits, campaign }) {
       </Row>
     );
   }
+  const compareValues = (a, b, isAscending) => {
+    if (a < b) return isAscending ? -1 : 1;
+    if (a > b) return isAscending ? 1 : -1;
+    return 0;
+  };
 
-  const filteredSurveyUnits = surveyUnits.filter(su => su.campaign === campaign);
+  const getLastName = su => getprivilegedPerson(su).lastName.toUpperCase();
+  const getOrder = su => parseInt(getSuTodoState(su).order, 10);
+  const getOutcomeIndex = (su, order) => {
+    const index = order.indexOf(su.contactOutcome?.type);
+    return index === -1 ? Infinity : index;
+  };
+
+  const filteredSurveyUnits = surveyUnits
+    .filter(su => su.campaign === campaign)
+    .sort((a, b) => {
+      const isAscending = sortConfig.direction === 'asc';
+      let compareA, compareB;
+      switch (sortConfig.key) {
+        case 'lastName':
+          compareA = getLastName(a);
+          compareB = getLastName(b);
+          break;
+        case 'order':
+          compareA = getOrder(a);
+          compareB = getOrder(b);
+          break;
+        case 'outcome':
+          const order = [
+            'INA',
+            'REF',
+            'IMP',
+            'UCD',
+            'UTR',
+            'DCD',
+            'ALA',
+            'UCD',
+            'DUK',
+            'DUU',
+            'NUH',
+            'NOA',
+          ];
+          compareA = getOutcomeIndex(a, order);
+          compareB = getOutcomeIndex(b, order);
+          if (!isAscending) {
+            compareA = compareA === Infinity ? -Infinity : compareA;
+            compareB = compareB === Infinity ? -Infinity : compareB;
+          }
+          break;
+        default:
+          compareA = a.id;
+          compareB = b.id;
+      }
+
+      return compareValues(compareA, compareB, isAscending);
+    });
+  const defaultSortIcon = <IconAsc sx={{ opacity: 0.3 }} />;
 
   return (
     <TableContainer sx={{ maxHeight: maxHeight }}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell>Unité</TableCell>
-            <TableCell>Nom/Prénom</TableCell>
-            <TableCell>Status de l'unité</TableCell>
+            <TableCell>
+              <Box
+                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              >
+                <Box component="span" sx={{ flexGrow: 1 }}>
+                  Unité
+                </Box>
+                <Box component="span" onClick={() => toggleSort('unit')} sx={{ cursor: 'pointer' }}>
+                  {sortConfig.key === 'unit' ? (
+                    sortConfig.direction === 'asc' ? (
+                      <IconAsc />
+                    ) : (
+                      <IconDesc />
+                    )
+                  ) : (
+                    defaultSortIcon
+                  )}
+                </Box>
+              </Box>
+            </TableCell>
+            <TableCell>
+              <Box
+                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              >
+                <Box component="span" sx={{ flexGrow: 1 }}>
+                  Nom/Prénom
+                </Box>
+                <Box
+                  component="span"
+                  onClick={() => toggleSort('lastName')}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  {sortConfig.key === 'lastName' ? (
+                    sortConfig.direction === 'asc' ? (
+                      <IconAsc />
+                    ) : (
+                      <IconDesc />
+                    )
+                  ) : (
+                    <IconAsc sx={{ opacity: 0.3 }} />
+                  )}
+                </Box>
+              </Box>
+            </TableCell>
+            <TableCell>
+              <Box
+                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              >
+                <Box component="span" sx={{ flexGrow: 1 }}>
+                  Status de l'unité
+                </Box>
+                <Box
+                  component="span"
+                  onClick={() => toggleSort('order')}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  {sortConfig.key === 'order' ? (
+                    sortConfig.direction === 'asc' ? (
+                      <IconAsc />
+                    ) : (
+                      <IconDesc />
+                    )
+                  ) : (
+                    <IconAsc sx={{ opacity: 0.3 }} />
+                  )}
+                </Box>
+              </Box>
+            </TableCell>
+
             <TableCell>Dernier essai de contact</TableCell>
-            <TableCell>Bilan de contact</TableCell>
+            <TableCell>
+              <Box
+                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              >
+                <Box component="span" sx={{ flexGrow: 1 }}>
+                  Bilan de contact
+                </Box>
+                <Box
+                  component="span"
+                  onClick={() => toggleSort('outcome')}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  {sortConfig.key === 'outcome' ? (
+                    sortConfig.direction === 'asc' ? (
+                      <IconAsc />
+                    ) : (
+                      <IconDesc />
+                    )
+                  ) : (
+                    <IconAsc sx={{ opacity: 0.3 }} />
+                  )}
+                </Box>
+              </Box>
+            </TableCell>
             <TableCell>Commentaire</TableCell>
           </TableRow>
         </TableHead>
@@ -190,7 +344,6 @@ function SurveyUnitRow({ surveyUnit }) {
   const lastContact = getSortedContactAttempts(surveyUnit)[0];
   const [showModal, toggleModal] = useToggle(false);
   const comment = getCommentByType('INTERVIEWER', surveyUnit);
-
   return (
     <>
       <TableRow>

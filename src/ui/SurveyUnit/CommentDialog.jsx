@@ -54,7 +54,7 @@ export function CommentDialog({ surveyUnit, open, onClose }) {
           <Button color="white" variant="contained" type="button" onClick={handleCancel}>
             {D.cancelButton}
           </Button>
-          <Button variant="contained" type="submit" disabled={!comment}>
+          <Button variant="contained" type="submit">
             {D.saveButton}
           </Button>
         </DialogActions>
