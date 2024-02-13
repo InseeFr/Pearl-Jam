@@ -215,7 +215,7 @@ function Sidebar({ surveyUnits }) {
               options={subSamples}
             />
             <Select
-              value={filter.subGrappe || ""}
+              value={filter.subGrappe !== null ? filter.subGrappe : ""}
               allowEmpty
               placeholder="Grappe..."
               onChange={v => filter.setSubGrappe(v)}
