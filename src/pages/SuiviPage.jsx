@@ -1,5 +1,8 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import TextField from '@mui/material/TextField';
 import { Typography } from '../ui/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -43,6 +46,7 @@ import { IconAsc } from '../ui/Icons/IconAsc';
 export function SuiviPage() {
   const surveyUnits = useSurveyUnits();
   const [campaign, setCampaign] = useState('');
+  const [searchText, setSearchText] = useState('');
   const campaigns = useMemo(
     () =>
       Array.from(new Set(surveyUnits.map(su => su.campaign))).map(c => ({
@@ -52,6 +56,9 @@ export function SuiviPage() {
     [surveyUnits]
   );
   const [tab, setTab] = useState('stats');
+  const handleSearchTextChange = event => {
+    setSearchText(event.target.value);
+  };
   return (
     <Box m={2}>
       <Card elevation={2}>
@@ -73,6 +80,21 @@ export function SuiviPage() {
                       placeholder="Sélectionnez..."
                       options={campaigns}
                     />
+                    <TextField
+                      label="Nom/prénom"
+                      variant="outlined"
+                      size="small"
+                      value={searchText}
+                      onChange={handleSearchTextChange}
+                      sx={{ marginLeft: 0.5, marginRight: 2, width: '300px' }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchOutlinedIcon />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
                   </>
                 )}
               </Row>
@@ -91,7 +113,7 @@ export function SuiviPage() {
             {tab === 'stats' ? (
               <SuiviStats surveyUnits={surveyUnits} />
             ) : (
-              <SuiviTable surveyUnits={surveyUnits} campaign={campaign} />
+              <SuiviTable surveyUnits={surveyUnits} campaign={campaign} searchText={searchText} />
             )}
           </Stack>
         </CardContent>
@@ -140,7 +162,7 @@ function SuiviStats({ surveyUnits }) {
  * @param {string} campaign
  * @param {SurveyUnit[]} surveyUnits
  */
-function SuiviTable({ surveyUnits, campaign }) {
+function SuiviTable({ surveyUnits, campaign, searchText }) {
   const [sortConfig, setSortConfig] = useState({ key: 'unit', direction: 'asc' });
   const toggleSort = key => {
     let direction = 'asc';
@@ -178,7 +200,15 @@ function SuiviTable({ surveyUnits, campaign }) {
   };
 
   const filteredSurveyUnits = surveyUnits
-    .filter(su => su.campaign === campaign)
+    .filter(su => {
+      const person = getprivilegedPerson(su);
+      return (
+        su.campaign === campaign &&
+        (searchText === '' ||
+          person.lastName.toUpperCase().includes(searchText.toUpperCase()) ||
+          person.firstName.toUpperCase().includes(searchText.toUpperCase()))
+      );
+    })
     .sort((a, b) => {
       const isAscending = sortConfig.direction === 'asc';
       let compareA, compareB;
@@ -209,6 +239,7 @@ function SuiviTable({ surveyUnits, campaign }) {
           compareA = getOutcomeIndex(a, order);
           compareB = getOutcomeIndex(b, order);
           if (!isAscending) {
+            // Inverse les valeurs pour le tri descendant
             compareA = compareA === Infinity ? -Infinity : compareA;
             compareB = compareB === Infinity ? -Infinity : compareB;
           }
@@ -217,9 +248,9 @@ function SuiviTable({ surveyUnits, campaign }) {
           compareA = a.id;
           compareB = b.id;
       }
-
       return compareValues(compareA, compareB, isAscending);
     });
+
   const defaultSortIcon = <IconAsc sx={{ opacity: 0.3 }} />;
 
   return (
@@ -228,9 +259,7 @@ function SuiviTable({ surveyUnits, campaign }) {
         <TableHead>
           <TableRow>
             <TableCell>
-              <Box
-                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-              >
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box component="span" sx={{ flexGrow: 1 }}>
                   Unité
                 </Box>
@@ -248,9 +277,7 @@ function SuiviTable({ surveyUnits, campaign }) {
               </Box>
             </TableCell>
             <TableCell>
-              <Box
-                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-              >
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box component="span" sx={{ flexGrow: 1 }}>
                   Nom/Prénom
                 </Box>
@@ -272,9 +299,7 @@ function SuiviTable({ surveyUnits, campaign }) {
               </Box>
             </TableCell>
             <TableCell>
-              <Box
-                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-              >
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box component="span" sx={{ flexGrow: 1 }}>
                   Status de l'unité
                 </Box>
@@ -298,9 +323,7 @@ function SuiviTable({ surveyUnits, campaign }) {
 
             <TableCell>Dernier essai de contact</TableCell>
             <TableCell>
-              <Box
-                sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-              >
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box component="span" sx={{ flexGrow: 1 }}>
                   Bilan de contact
                 </Box>
