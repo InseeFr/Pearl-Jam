@@ -2,6 +2,7 @@ import { surveyUnitStateEnum } from '../enum/SUStateEnum';
 import { contactOutcomeEnum } from '../enum/ContactOutcomeEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
 import userIdbService from '../indexeddb/services/user-idb-service';
+import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 
 const day = 60 * 60 * 1000 * 24;
 const year = day * 365;
@@ -175,6 +176,15 @@ export async function seedData() {
       },
     });
   }
+  // Create a fillable TEL surveyUnit
+  surverUnits.push({
+    ...surverUnits[0],
+    id: 'sutel',
+    identification: {},
+    firstName: 'ET',
+    lastName: 'Telephone',
+    identificationConfiguration: identificationConfigurationEnum.TEL,
+  });
   await userIdbService.insert({
     id: 1,
     title: 'MISTER',

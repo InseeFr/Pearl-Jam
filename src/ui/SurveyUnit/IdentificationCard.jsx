@@ -21,9 +21,8 @@ import RadioGroup from '@mui/material/RadioGroup';
  * @param {SurveyUnit} surveyUnit
  */
 export function IdentificationCard({ surveyUnit }) {
-  const { questions, setQuestion, answers, question, setAnswer } = useIdentificationQuestions(
-    surveyUnit
-  );
+  const { questions, setQuestion, answers, question, setAnswer } =
+    useIdentificationQuestions(surveyUnit);
   return (
     <>
       <Card p={2} elevation={0}>
