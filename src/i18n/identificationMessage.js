@@ -20,6 +20,9 @@ const identificationMessage = {
   housingCategory: { fr: 'Catégorie du logement', en: 'Housing category' },
   housingOccupant: { fr: "Identification de l'occupant", en: 'Occupant identification' },
   identification: { fr: 'Repérage', en: 'Identification' },
+  move: { fr: 'Déplacement terrain', en: 'Moving in the field' },
+  yes: { fr: 'Oui', en: 'Yes' },
+  no: { fr: 'Non', en: 'No' },
 };
 
 export default identificationMessage;

@@ -9,7 +9,11 @@ const getQuestions = config => {
   switch (config) {
     case identificationConfigurationEnum.IASCO:
       return identificationQuestionsEnum;
-    case identificationConfigurationEnum.NOIDENT:
+    case identificationConfigurationEnum.TEL:
+      return {
+        SITUATION: identificationQuestionsEnum.SITUATION,
+        CATEGORY: identificationQuestionsEnum.CATEGORY,
+      };
     default:
       return {};
   }
@@ -21,6 +25,8 @@ const getAnswersByQuestionType = (type, config) => {
   }
   switch (config) {
     case identificationConfigurationEnum.IASCO:
+      return Object.values(identificationAnswersEnum).filter(a => a.questionType === type);
+    case identificationConfigurationEnum.TEL:
       return Object.values(identificationAnswersEnum).filter(a => a.questionType === type);
     case identificationConfigurationEnum.NOIDENT:
     default:
@@ -64,10 +70,10 @@ export function useIdentificationQuestions(surveyUnit) {
   });
 
   /* @var {{questionType: string, value: string, label: string}[]} */
-  const answers = useMemo(() => getAnswersByQuestionType(question?.type, config), [
-    question,
-    config,
-  ]);
+  const answers = useMemo(
+    () => getAnswersByQuestionType(question?.type, config),
+    [question, config]
+  );
 
   /**
    * @param {Answer} answer
@@ -97,7 +103,6 @@ export function useIdentificationQuestions(surveyUnit) {
       // Automatically select the next unanswered question or close the current selected question
       const currentIndex = questions.findIndex(q => q.type === question.type);
       const nextIndex = questions.findIndex((q, k) => k > currentIndex && !q.answer);
-      console.log('aa', { currentIndex, nextIndex });
       setQuestion(nextIndex ? questions[nextIndex] : undefined);
     }
 

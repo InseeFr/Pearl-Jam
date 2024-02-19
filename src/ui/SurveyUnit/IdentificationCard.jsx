@@ -9,6 +9,9 @@ import { ButtonLine } from '../ButtonLine';
 import { useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
 
 import DialogTitle from '@mui/material/DialogTitle';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
@@ -16,14 +19,14 @@ import Button from '@mui/material/Button';
 import React, { useState } from 'react';
 import { RadioLine } from '../RadioLine';
 import RadioGroup from '@mui/material/RadioGroup';
+import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 
 /**
  * @param {SurveyUnit} surveyUnit
  */
 export function IdentificationCard({ surveyUnit }) {
-  const { questions, setQuestion, answers, question, setAnswer } = useIdentificationQuestions(
-    surveyUnit
-  );
+  const { questions, setQuestion, answers, question, setAnswer } =
+    useIdentificationQuestions(surveyUnit);
   return (
     <>
       <Card p={2} elevation={0}>
@@ -45,6 +48,7 @@ export function IdentificationCard({ surveyUnit }) {
                   onClick={() => setQuestion(question)}
                 />
               ))}
+              <MoveQuestion surveyUnit={surveyUnit} />
             </Stack>
           </Stack>
         </CardContent>
@@ -58,6 +62,47 @@ export function IdentificationCard({ surveyUnit }) {
         onClose={() => setQuestion(undefined)}
       />
     </>
+  );
+}
+
+/**
+ * @param {SurveyUnit} surveyUnit
+ */
+function MoveQuestion({ surveyUnit }) {
+  const options = [
+    { label: D.yes, value: true },
+    { label: D.no, value: false },
+  ];
+  const value = surveyUnit.move;
+  const handleChange = e => {
+    surveyUnitIDBService.addOrUpdateSU({
+      ...surveyUnit,
+      move: e.target.checked ? e.target.value === 'true' : null,
+    });
+  };
+  return (
+    <Row gap={2} mt={1}>
+      <Typography as="legend" color="textTertiary" variant="s">
+        {D.move}
+      </Typography>
+      <FormGroup row>
+        {options.map(option => (
+          <FormControlLabel
+            key={option.label}
+            sx={{ gap: 0 }}
+            control={
+              <Checkbox
+                size="small"
+                value={option.value}
+                checked={value === option.value}
+                onChange={handleChange}
+              />
+            }
+            label={option.label}
+          />
+        ))}
+      </FormGroup>
+    </Row>
   );
 }
 
