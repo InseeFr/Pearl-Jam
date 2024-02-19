@@ -120,6 +120,8 @@ export function filterSurveyUnits(surveyUnits, criteria) {
    * @returns {boolean}
    */
   const filterFn = surveyUnit => {
+    const searchNormalized = criteria.search ? normalize(criteria.search) : '';
+    const campaignNormalized = normalize(surveyUnit.campaign);
     if (
       criteria.campaigns.length > 0 &&
       !criteria.campaigns.includes(surveyUnit.campaign.toString())
@@ -148,21 +150,12 @@ export function filterSurveyUnits(surveyUnits, criteria) {
     }
 
     if (criteria.search) {
-      const search = normalize(criteria.search);
       const person = getprivilegedPerson(surveyUnit);
-      // Instead of searching on multiple string, merge search targets into a simple string
       const searchString = normalize(
-        [
-          person.firstName,
-          person.lastName,
-          surveyUnit.id,
-          surveyUnit.address.l6.split(' ').slice(1).toString(),
-          getSuTodoState(surveyUnit).value,
-        ].join(' ')
+        `${person.firstName} ${person.lastName} ${surveyUnit.id} ${surveyUnit.address.l6} ${getSuTodoState(surveyUnit).value}`
       );
-      if (!searchString.includes(search)) {
-        return false;
-      }
+      
+      if (!searchString.includes(searchNormalized) && !campaignNormalized.includes(searchNormalized)) return false;
     }
 
     return true;
