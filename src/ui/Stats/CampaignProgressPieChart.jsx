@@ -51,8 +51,8 @@ export function CampaignProgressPieChart({ surveyUnits }) {
           Nombre d’unités restantes à traiter
           <br /> par enquête et échéance
         </Typography>
-        <div style={{ marginBlock: -20 }}>
-          <PieChart size={280} parts={slices} paddingBlock={40} paddingInline={100} />
+        <div>
+          <PieChart size={280} parts={slices} paddingBlock={80} paddingInline={100} />
         </div>
         <Stack gap={0} sx={{ width: 330 }}>
           <Typography variant="xl" color="black" as="p" textAlign="center">
