@@ -30,16 +30,16 @@ export function Select({ options, placeholder, allowEmpty, ...props }) {
           {placeholder}
         </MenuItem>
       )}
-      {options?.map(o =>
-        (typeof o === 'object' && o.value !== "") ? (
+            {options?.map(o =>
+        typeof o === 'object' ? (
           <MenuItem key={o.value} dense value={o.value}>
             {o.label}
           </MenuItem>
-        ) : typeof o === 'string' && o !== "" ? (
+        ) : (
           <MenuItem key={o} dense value={o}>
             {o}
           </MenuItem>
-        ) : null
+        )
       )}
     </SelectMaterial>
   );
