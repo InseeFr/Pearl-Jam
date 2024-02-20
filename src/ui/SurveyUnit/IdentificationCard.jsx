@@ -20,6 +20,8 @@ import React, { useState } from 'react';
 import { RadioLine } from '../RadioLine';
 import RadioGroup from '@mui/material/RadioGroup';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { identificationConfigurationEnum } from '../../utils/enum/IdentificationConfigurationEnum';
+import Box from '@mui/material/Box';
 
 /**
  * @param {SurveyUnit} surveyUnit
@@ -48,7 +50,10 @@ export function IdentificationCard({ surveyUnit }) {
                   onClick={() => setQuestion(question)}
                 />
               ))}
-              <MoveQuestion surveyUnit={surveyUnit} />
+              {surveyUnit.identificationConfiguration === identificationConfigurationEnum.NOIDENT ? <Box typography="s" color="textTertiary">
+                  Pas de repérage pour cette enquête
+                </Box> :
+                <MoveQuestion surveyUnit={surveyUnit} />}
             </Stack>
           </Stack>
         </CardContent>

@@ -185,6 +185,14 @@ export async function seedData() {
     lastName: 'Telephone',
     identificationConfiguration: identificationConfigurationEnum.TEL,
   });
+  surverUnits.push({
+    ...surverUnits[0],
+    id: 'sunoident',
+    identification: {},
+    firstName: 'John',
+    lastName: 'Absent',
+    identificationConfiguration: identificationConfigurationEnum.NOIDENT,
+  });
   await userIdbService.insert({
     id: 1,
     title: 'MISTER',
