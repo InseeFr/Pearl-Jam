@@ -25,7 +25,6 @@ const getAnswersByQuestionType = (type, config) => {
   }
   switch (config) {
     case identificationConfigurationEnum.IASCO:
-      return Object.values(identificationAnswersEnum).filter(a => a.questionType === type);
     case identificationConfigurationEnum.TEL:
       return Object.values(identificationAnswersEnum).filter(a => a.questionType === type);
     case identificationConfigurationEnum.NOIDENT:
@@ -34,11 +33,13 @@ const getAnswersByQuestionType = (type, config) => {
   }
 };
 
-const getAnswerByType = type => {
-  if (!type) {
+const getAnswerFromValue = (type, value) => {
+  if (!value) {
     return undefined;
   }
-  return Object.values(identificationAnswersEnum).find(a => a.value === type);
+  return Object.values(identificationAnswersEnum).find(
+    a => a.value === value && a.questionType === type
+  );
 };
 
 /**
@@ -61,7 +62,7 @@ export function useIdentificationQuestions(surveyUnit) {
     const question = {
       ...q,
       disabled: concluded,
-      answer: concluded ? undefined : getAnswerByType(surveyUnit.identification[key]),
+      answer: concluded ? undefined : getAnswerFromValue(q.type, surveyUnit.identification[key]),
     };
     if (question.answer?.concluding) {
       concluded = true;

@@ -50,10 +50,14 @@ export function IdentificationCard({ surveyUnit }) {
                   onClick={() => setQuestion(question)}
                 />
               ))}
-              {surveyUnit.identificationConfiguration === identificationConfigurationEnum.NOIDENT ? <Box typography="s" color="textTertiary">
+              {surveyUnit.identificationConfiguration ===
+              identificationConfigurationEnum.NOIDENT ? (
+                <Box typography="s" color="textTertiary">
                   Pas de repérage pour cette enquête
-                </Box> :
-                <MoveQuestion surveyUnit={surveyUnit} />}
+                </Box>
+              ) : (
+                <MoveQuestion surveyUnit={surveyUnit} />
+              )}
             </Stack>
           </Stack>
         </CardContent>
