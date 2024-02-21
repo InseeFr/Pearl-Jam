@@ -1,9 +1,11 @@
-import { signal } from '@maverick-js/signals';
+import { signal, effect } from '@maverick-js/signals';
 import { useSignalValue } from './useSignalValue';
 import { toggleItem } from '../functions/array';
 import { daysLeftForSurveyUnit, getprivilegedPerson, getSuTodoState } from '../functions';
 import { normalize } from '../functions/string';
 import { toDoEnum } from '../enum/SUToDoEnum';
+
+const storageKey = 'pearl-search-filter';
 
 /**
  * @typedef {{search: string, campaigns: string[], states: number[], priority: boolean, terminated: boolean, subSample: number, sortField: string, sortDirection: 'ASC' | 'DESC'}} SearchCriteria
@@ -21,7 +23,16 @@ const emptyFilter = {
   sortDirection: 'ASC',
 };
 
-const $filter = signal(emptyFilter);
+const storedFilter = localStorage.getItem(storageKey);
+const $filter = signal(storedFilter ? JSON.parse(storedFilter) : emptyFilter);
+
+// Persist filter state in the localStorage
+effect(() => {
+  const filter = $filter();
+  if (filter !== emptyFilter) {
+    localStorage.setItem(storageKey, JSON.stringify($filter()));
+  }
+});
 
 /**
  *
