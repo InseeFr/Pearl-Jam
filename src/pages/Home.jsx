@@ -215,13 +215,13 @@ function Sidebar({ surveyUnits }) {
               options={subSamples}
             />
             {/* TODO later grappe select */}
-            {/* <Select
+            <Select
               value={filter.subGrappe}
               allowEmpty
               placeholder="Grappe..."
               onChange={v => filter.setSubGrappe(v)}
               options={subGrappe}
-            /> */}
+            />
           </Stack>
         </Accordion>
         <Hr />
