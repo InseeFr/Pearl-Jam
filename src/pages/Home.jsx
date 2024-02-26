@@ -116,11 +116,19 @@ function Sidebar({ surveyUnits }) {
   const filter = useSearchFilter();
   const states = useMemo(() => Object.entries(toDoEnum), []);
   const subSamples = useMemo(
-    () => [...new Set(surveyUnits.map(u => u.sampleIdentifiers.ssech))],
+    () => [
+      ...new Set(
+        surveyUnits.map(u => u.sampleIdentifiers.ssech).filter(val => val !== null && val > -1)
+      ),
+    ],
     [surveyUnits]
   );
   const subGrappe = useMemo(
-    () => [...new Set(surveyUnits.map(u => u.sampleIdentifiers.nograp))],
+    () => [
+      ...new Set(
+        surveyUnits.map(u => u.sampleIdentifiers.nograp).filter(val => val !== null && val !== '')
+      ),
+    ],
     [surveyUnits]
   );
 
@@ -214,7 +222,6 @@ function Sidebar({ surveyUnits }) {
               onChange={v => filter.setSubSample(v)}
               options={subSamples}
             />
-            {/* TODO later grappe select */}
             <Select
               value={filter.subGrappe}
               allowEmpty
