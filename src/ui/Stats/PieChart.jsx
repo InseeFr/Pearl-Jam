@@ -75,7 +75,7 @@ export function PieChart({ parts, size, paddingInline = 0, paddingBlock = 0 }) {
       <svg
         viewBox={`${radius * -1 - paddingInline} ${radius * -1 - paddingBlock} ${size +
           2 * paddingInline} ${size + 2 * paddingBlock}`}
-        style={{ width: size + 2 * paddingInline, height: size + 2 * paddingBlock }}
+        style={{ width: size + 5 * paddingInline, height: size + 1.5 * paddingBlock }}
       >
         <g mask="url(#pieMask)">
           {parts.map((part, k) =>
@@ -156,7 +156,7 @@ function PieChartLabel({ slice, radius, label }) {
       <foreignObject
         x={endPoint[0] * text}
         y={endPoint[1] * text}
-        width="80"
+        width="160"
         height="100%"
         style={{ transform: `translate(${translateX}px, ${translateY}px)` }}
       >
