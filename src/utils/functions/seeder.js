@@ -3,6 +3,7 @@ import { contactOutcomeEnum } from '../enum/ContactOutcomeEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
 import userIdbService from '../indexeddb/services/user-idb-service';
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
+import { getRandomIntBetween, getRandomItemFromArray } from './random';
 
 const day = 60 * 60 * 1000 * 24;
 const year = day * 365;
@@ -80,7 +81,7 @@ export async function seedData() {
           firstName: user.name.split(' ')[0],
           lastName: user.name.split(' ')[1],
           email: user.email,
-          birthdate: new Date(year - getRandomInt(20, 80)).getTime(),
+          birthdate: new Date(year - getRandomIntBetween(20, 80)).getTime(),
           favoriteEmail: false,
           privileged: true,
           phoneNumbers: [
@@ -142,12 +143,12 @@ export async function seedData() {
       contactAttempts: [
         {
           status: contactOutcomeEnum.IMPOSSIBLE_TO_REACH.type,
-          date: new Date().getTime() - getRandomInt(10, 100) * day,
+          date: new Date().getTime() - getRandomIntBetween(10, 100) * day,
           medium: 'FIELD',
         },
         {
           status: contactOutcomeEnum.INTERVIEW_ACCEPTED.type,
-          date: new Date().getTime() - getRandomInt(3, 9) * day,
+          date: new Date().getTime() - getRandomIntBetween(3, 9) * day,
           medium: 'FIELD',
         },
       ],
@@ -202,38 +203,4 @@ export async function seedData() {
     email: 'john@doe.fr',
   });
   await surveyUnitIDBService.addAll(surverUnits);
-}
-
-/**
- * Get a random item from an array.
- *
- * @template T
- * @param {T[]} array - The input array.
- * @returns {T[]} - A randomly selected item from the array.
- */
-function getRandomItemFromArray(array) {
-  // Check if the array is empty
-  if (array.length === 0) {
-    throw new Error('Array is empty, cannot pick a random item.');
-  }
-
-  return array[Math.floor(Math.random() * array.length)];
-}
-
-/**
- * Generates a random integer between the specified minimum and maximum values (inclusive).
- *
- * @param {number} min - The minimum value of the range.
- * @param {number} max - The maximum value of the range.
- * @returns {number} A random integer between min and max (inclusive).
- */
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  if (min > max) {
-    throw new Error('Minimum value must be less than or equal to the maximum value');
-  }
-
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 }

@@ -18,6 +18,7 @@ import { FormHelperText } from '@mui/material';
 import { PEARL_USER_KEY } from 'utils/constants';
 import Dexie from 'dexie';
 import { unregister } from '../serviceWorkerRegistration';
+import { generateRandomInt } from '../utils/functions/random';
 
 export function ResetData() {
   const [state, setState] = useState(D.youCanDeleteData);
@@ -73,7 +74,10 @@ export function ResetData() {
 }
 
 function ConfirmDialog({ open, onConfirm, onCancel }) {
-  const randomText = useMemo(() => Math.random().toString(36).substring(2, 10).toUpperCase(), []);
+  const randomText = useMemo(
+    () => generateRandomInt().toString(36).substring(2, 10).toUpperCase(),
+    []
+  );
   const [step, setStep] = useState(0);
   const [error, setError] = useState('');
   const handleSubmit = e => {
