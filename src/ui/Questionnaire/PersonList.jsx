@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, IconButton, Stack,Button } from '@mui/material';
+import { Grid, IconButton, Stack, Button } from '@mui/material';
 import { Typography } from '../Typography';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
@@ -51,7 +51,7 @@ const useStyles = makeStyles({
 
 const PersonList = ({
   data,
-  getColorForPerson,
+  isOfLegalAge,
   questionnaireProgress,
   questionnairesVisible,
   toggleQuestionnaire,
@@ -63,81 +63,75 @@ const PersonList = ({
 
   return (
     <Stack gap={2}>
-      {data.map((person, index) => (
-        <React.Fragment key={index}>
-          <Grid container spacing={1} gap={1} alignItems="center">
-            <Grid item>
-              <PersonOutlineOutlinedIcon
-                className={classes.personOutline}
-                style={{
-                  color: getColorForPerson(person.age),
-                }}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={isHouseHoldFinished && getColorForPerson(person.age) !== 'lightGrey' ? 2.5 : 3}
-              p={1}
-              className={classes.gridBackground}
-            >
-              <Typography style={{ color: getColorForPerson(person.age) }}>
-                {person.name}
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={isHouseHoldFinished && getColorForPerson(person.age) !== 'lightGrey' ? 2.9 : 4.2}
-              p={1}
-              className={classes.gridBackground}
-            >
-              <Typography style={{ color: getColorForPerson(person.age) }}>
-                {person.gender}
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={isHouseHoldFinished && getColorForPerson(person.age) !== 'lightGrey' ? 2.9 : 4.2}
-              p={1}
-              className={classes.gridBackground}
-            >
-              <Typography style={{ color: getColorForPerson(person.age) }}>{person.age}</Typography>
-            </Grid>
-            {isHouseHoldFinished && getColorForPerson(person.age) !== 'lightGrey' && (
-              <Grid item xs={3.05} className={classes.flexGrid}>
-                <div className={classes.divFlex}>
-                  <CustomChip
-                    label={questionnaireProgress[index]}
-                    icon={
-                      questionnaireProgress[index] === 'terminé' ? (
-                        <CircleIcon />
-                      ) : questionnaireProgress[index] === 'en cours' ? (
-                        <TimeIcon />
-                      ) : (
-                        <DisturbIcon />
-                      )
-                    }
-                    color={
-                      questionnaireProgress[index] === 'terminé'
-                        ? 'green'
-                        : questionnaireProgress[index] === 'en cours'
-                          ? '#FD8A02'
-                          : '#6C6E70'
-                    }
-                    shadow={true}
-                  />
-                </div>
-                <IconButton onClick={() => toggleQuestionnaire(index)} size="small">
-                  {questionnairesVisible[index] ? (
-                    <ExpandLessOutlinedIcon />
-                  ) : (
-                    <ExpandMoreOutlinedIcon />
-                  )}
-                </IconButton>
+      {data.map((person, index) => {
+        const personOfLegalAge = isOfLegalAge(person);
+        const colorByPersonAge = personOfLegalAge ? 'lightGrey' : 'inherit';
+        const couldBeInterviewed = isHouseHoldFinished && personOfLegalAge;
+
+        return (
+          <React.Fragment key={index}>
+            <Grid container spacing={1} gap={1} alignItems="center">
+              <Grid item>
+                <PersonOutlineOutlinedIcon
+                  className={classes.personOutline}
+                  style={{
+                    color: colorByPersonAge,
+                  }}
+                />
               </Grid>
-            )}
-            {questionnairesVisible[index] &&
-              isHouseHoldFinished &&
-              getColorForPerson(person.age) !== 'lightGrey' && (
+              <Grid item xs={couldBeInterviewed ? 2.5 : 3} p={1} className={classes.gridBackground}>
+                <Typography style={{ color: colorByPersonAge }}>{person.name}</Typography>
+              </Grid>
+              <Grid
+                item
+                xs={couldBeInterviewed ? 2.9 : 4.2}
+                p={1}
+                className={classes.gridBackground}
+              >
+                <Typography style={{ color: colorByPersonAge }}>{person.gender}</Typography>
+              </Grid>
+              <Grid
+                item
+                xs={couldBeInterviewed ? 2.9 : 4.2}
+                p={1}
+                className={classes.gridBackground}
+              >
+                <Typography style={{ color: colorByPersonAge }}>{person.age}</Typography>
+              </Grid>
+              {couldBeInterviewed && (
+                <Grid item xs={3.05} className={classes.flexGrid}>
+                  <div className={classes.divFlex}>
+                    <CustomChip
+                      label={questionnaireProgress[index]}
+                      icon={
+                        questionnaireProgress[index] === 'terminé' ? (
+                          <CircleIcon />
+                        ) : questionnaireProgress[index] === 'en cours' ? (
+                          <TimeIcon />
+                        ) : (
+                          <DisturbIcon />
+                        )
+                      }
+                      color={
+                        questionnaireProgress[index] === 'terminé'
+                          ? 'green'
+                          : questionnaireProgress[index] === 'en cours'
+                            ? '#FD8A02'
+                            : '#6C6E70'
+                      }
+                      shadow={true}
+                    />
+                  </div>
+                  <IconButton onClick={() => toggleQuestionnaire(index)} size="small">
+                    {questionnairesVisible[index] ? (
+                      <ExpandLessOutlinedIcon />
+                    ) : (
+                      <ExpandMoreOutlinedIcon />
+                    )}
+                  </IconButton>
+                </Grid>
+              )}
+              {questionnairesVisible[index] && couldBeInterviewed && (
                 <Grid item xs={12} container justifyContent="flex-end">
                   <Stack
                     className={classes.stackBackgroundSize}
@@ -175,9 +169,10 @@ const PersonList = ({
                   </Stack>
                 </Grid>
               )}
-          </Grid>
-        </React.Fragment>
-      ))}
+            </Grid>
+          </React.Fragment>
+        );
+      })}
     </Stack>
   );
 };

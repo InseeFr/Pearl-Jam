@@ -95,9 +95,11 @@ export function QuestionnaireCard() {
     // Logique pour le bouton Modifier
   };
 
-  const getColorForPerson = age => {
+  const isOfLegalAge = person => {
+    // handle missing age -> can't be interviewed
+    const { age = '10 ans' } = person;
     const ageNumber = parseInt(age.split(' ')[0]);
-    return ageNumber < 16 ? 'lightGrey' : 'inherit';
+    return ageNumber > 16;
   };
 
   return (
@@ -187,14 +189,16 @@ export function QuestionnaireCard() {
             </Stack>
           )}
           {startHousing && (
-            <PersonList data={data}
-            getColorForPerson={getColorForPerson}
-            questionnaireProgress={questionnaireProgress}
-            questionnairesVisible={questionnairesVisible}
-            toggleQuestionnaire={toggleQuestionnaire}
-            handleStartQuestionnaire={handleStartQuestionnaire}
-            isHouseHoldFinished={isHouseHoldFinished}
-            toggleModal={toggleModal} />
+            <PersonList
+              data={data}
+              isOfLegalAge={isOfLegalAge}
+              questionnaireProgress={questionnaireProgress}
+              questionnairesVisible={questionnairesVisible}
+              toggleQuestionnaire={toggleQuestionnaire}
+              handleStartQuestionnaire={handleStartQuestionnaire}
+              isHouseHoldFinished={isHouseHoldFinished}
+              toggleModal={toggleModal}
+            />
           )}
         </Stack>
       </CardContent>
