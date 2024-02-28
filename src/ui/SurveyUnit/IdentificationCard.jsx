@@ -136,6 +136,7 @@ function IdentificationDialog({ answers, question, onClose, onSubmit }) {
             onChange={handleChange}
             value={localAnswer}
             aria-labelledby="identification-title"
+            name="identification-radio-group"
           >
             <Stack gap={1}>
               {answers.map(answer => (

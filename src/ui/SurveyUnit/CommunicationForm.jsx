@@ -29,7 +29,11 @@ const max = COMMUNICATION_REQUEST_FORM_STEPS.length - 1;
  * @returns {JSX.Element}
  */
 export function CommunicationForm({ onClose, surveyUnit }) {
-  const { value: currentIndex, decrement, increment } = useIncrement(0, {
+  const {
+    value: currentIndex,
+    decrement,
+    increment,
+  } = useIncrement(0, {
     min: 0,
     max: max,
   });
@@ -93,7 +97,7 @@ export function CommunicationForm({ onClose, surveyUnit }) {
               onChange={e => setValue(e.target.value)}
               row
               aria-labelledby="dialogtitle"
-              name={name}
+              name="communication-radio-group"
             >
               <Stack gap={1} width={1}>
                 {options.map(o => (

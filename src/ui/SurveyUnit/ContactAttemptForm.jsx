@@ -41,7 +41,11 @@ const getTitle = step => {
  * @returns {JSX.Element}
  */
 export function ContactAttemptForm({ onClose, surveyUnit }) {
-  const { value: step, increment, decrement } = useIncrement(1, {
+  const {
+    value: step,
+    increment,
+    decrement,
+  } = useIncrement(1, {
     min: 1,
     max: 3,
   });
@@ -130,7 +134,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }) {
               onChange={e => setValue(e.target.value)}
               row
               aria-labelledby="dialogtitle"
-              name={name}
+              name="contact-attempt-radio-group"
             >
               <Stack gap={1} width={1}>
                 {options.map(o => (
