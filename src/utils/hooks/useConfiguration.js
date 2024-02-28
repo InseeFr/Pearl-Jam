@@ -6,7 +6,6 @@ import { useSignalValue } from './useSignalValue';
  *   QUEEN_URL: string
  *   PEARL_API_URL: string
  *   PEARL_AUTHENTICATION_MODE: string
- *   CHAT_URL: string
  * } | null>}
  */
 const $configuration = signal(null);
@@ -24,7 +23,6 @@ export const loadConfiguration = () => {
  *   QUEEN_URL: string
  *   PEARL_API_URL: string
  *   PEARL_AUTHENTICATION_MODE: string
- *   CHAT_URL: string
  * } | null}
  */
 export const useConfiguration = () => {
