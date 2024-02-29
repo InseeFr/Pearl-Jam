@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import { useSurveyUnits } from '../utils/hooks/database';
 import { CampaignProgress } from '../ui/Stats/CampaignProgress';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect  } from 'react';
 import { groupBy } from '../utils/functions/array';
 import { CampaignProgressPieChart } from '../ui/Stats/CampaignProgressPieChart';
 import { ScrollableBox } from '../ui/ScrollableBox';
@@ -45,7 +45,9 @@ import { IconAsc } from '../ui/Icons/IconAsc';
 
 export function SuiviPage() {
   const surveyUnits = useSurveyUnits();
-  const [campaign, setCampaign] = useState('');
+  const [campaign, setCampaign] = useState(() => {
+    return localStorage.getItem('selectedCampaign') || '';
+  });
   const [searchText, setSearchText] = useState('');
   const campaigns = useMemo(
     () =>
@@ -55,6 +57,11 @@ export function SuiviPage() {
       })),
     [surveyUnits]
   );
+
+  useEffect(() => {
+    localStorage.setItem('selectedCampaign', campaign);
+  }, [campaign]);
+  
   const [tab, setTab] = useState('stats');
   const handleSearchTextChange = event => {
     setSearchText(event.target.value);
