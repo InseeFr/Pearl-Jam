@@ -51,7 +51,7 @@ export function IdentificationCard({ surveyUnit }) {
                 />
               ))}
               {surveyUnit.identificationConfiguration ===
-              identificationConfigurationEnum.NOIDENT ? (
+              identificationConfigurationEnum.NOIDENT || identificationConfigurationEnum.IASCO ? (
                 <Box typography="s" color="textTertiary">
                   Pas de repérage pour cette enquête
                 </Box>
