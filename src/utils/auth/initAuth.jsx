@@ -41,8 +41,8 @@ export const useAuth = () => {
 
       case 'keycloak':
         keycloakAuthentication({
-          onLoad: 'check-sso',
-          silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+          onLoad: 'login-required',
+          checkLoginIframe: false,
         })
           .then(auth => {
             if (auth) {

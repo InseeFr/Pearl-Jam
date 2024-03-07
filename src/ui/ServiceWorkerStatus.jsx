@@ -3,7 +3,6 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import D from '../i18n/build-dictionary';
 import { useState } from 'react';
-import { useRefSync } from '../utils/hooks/useRefSync';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Slide from '@mui/material/Slide';
