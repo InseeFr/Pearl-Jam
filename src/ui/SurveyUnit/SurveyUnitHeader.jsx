@@ -1,4 +1,4 @@
-import react, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -19,8 +19,10 @@ import SendIcon from '@mui/icons-material/Send';
 import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
 import { Popover, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import FiberManualRecordOutlinedIcon from '@mui/icons-material/FiberManualRecordOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
-import { makeStyles } from '@mui/styles';
+import { makeStyles, useTheme } from '@mui/styles';
+import D from '../../i18n/build-dictionary';
 
 /**
  * @param {SurveyUnit} surveyUnit
@@ -41,10 +43,10 @@ const useStyles = makeStyles({
 });
 
 export function SurveyUnitHeader({ surveyUnit }) {
+  const theme = useTheme();
   const classes = useStyles();
   const [isContactOutcomeValid, setIsContactOutcomeValid] = useState(false);
-  const { questions, setQuestion, answers, question, setAnswer } =
-    useIdentificationQuestions(surveyUnit);
+  const { questions } = useIdentificationQuestions(surveyUnit);
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
@@ -54,14 +56,11 @@ export function SurveyUnitHeader({ surveyUnit }) {
 
   useEffect(() => {
     const checkContactOutcomeValidity = () => {
-      if (!surveyUnit.contactOutcome) {
-        return false;
-      }
-      return true;
+      return !!surveyUnit.contactOutcome;
     };
 
     setIsContactOutcomeValid(checkContactOutcomeValidity());
-  }, [surveyUnit, surveyUnit.contactOutcome]);
+  }, [surveyUnit.contactOutcome]);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -83,7 +82,7 @@ export function SurveyUnitHeader({ surveyUnit }) {
       px={4}
       py={2}
       pr={0}
-      sx={{ display: 'grid', gridTemplateColumns: '1fr 700px auto', alignItems: 'center', gap: 5}}
+      sx={{ display: 'grid', gridTemplateColumns: '1fr 700px auto', alignItems: 'center', gap: 5 }}
       bgcolor="white.main"
     >
       {/* Left side */}
@@ -131,7 +130,7 @@ export function SurveyUnitHeader({ surveyUnit }) {
           color="primary"
           className={classes.buttonFixed}
         >
-          Aide
+          {D.transmissionHelpButton}
         </Button>
       </Box>
       <Popover
@@ -149,30 +148,35 @@ export function SurveyUnitHeader({ surveyUnit }) {
         }}
         className={classes.alignTitle}
       >
-        <Typography sx={{ p: 2 }}>Conditions de transmission</Typography>
+        <Typography sx={{ p: 2 }}>{D.transmissionHelperTitle}</Typography>
         <List>
-          {!isCompleted && (
-            <ListItem>
-              <ListItemIcon>
+          <ListItem>
+            <ListItemIcon>
+              {isCompleted ? (
+                <CheckCircleOutlineIcon htmlColor={theme.palette.green.main} />
+              ) : (
                 <FiberManualRecordOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Compléter le formulaire de repérage" />
-            </ListItem>
-          )}
+              )}
+            </ListItemIcon>
+            <ListItemText primary={D.transmissionTaskIdentification} />
+          </ListItem>
           <ListItem>
             <ListItemIcon>
               <FiberManualRecordOutlinedIcon />
             </ListItemIcon>
-            <ListItemText primary="Traiter le questionnaire" />
+            <ListItemText primary={D.transmissionTaskQuestionnaire} />
           </ListItem>
-          {!isContactOutcomeValid && (
-            <ListItem>
-              <ListItemIcon>
+
+          <ListItem>
+            <ListItemIcon>
+              {isContactOutcomeValid ? (
+                <CheckCircleOutlineIcon htmlColor={theme.palette.green.main} />
+              ) : (
                 <FiberManualRecordOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Renseigner le bilan des contacts" />
-            </ListItem>
-          )}
+              )}
+            </ListItemIcon>
+            <ListItemText primary={D.transmissionTaskContactOutcome} />
+          </ListItem>
         </List>
       </Popover>
     </Box>
@@ -194,7 +198,7 @@ function SubmitButton({ surveyUnit }) {
 
   if (!canSubmit) {
     return null;
-  } 
+  }
 
   return (
     <Box position="relative">
@@ -231,11 +235,9 @@ function SubmitButton({ surveyUnit }) {
  * Custom icon for the stepper
  *
  * @param {boolean} completed
- * @param {boolean} active
- * @param {boolean} error
  * @param {string} icon
  */
-function StepIcon({ completed, active, error, icon }) {
+function StepIcon({ completed, icon }) {
   if (completed) {
     return <CheckIcon fontSize="inherit" color="white" />;
   }
