@@ -23,7 +23,8 @@ const isLocalhost = Boolean(
 
 export function register(config) {
   if (import.meta.env.MODE === 'production' && 'serviceWorker' in navigator) {
-    const swUrl = `/service-worker.js?QUEEN_URL=${config.QUEEN_URL}`;
+    // const swUrl = `/service-worker.js?QUEEN_URL=${config.QUEEN_URL}`;
+    const swUrl = `/service-worker.js`;
 
     if (isLocalhost) {
       // This is running on localhost. Let's check if a service worker still exists or not.
@@ -48,8 +49,10 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
+      console.log('registring with ', { registration });
       if (registration.installing) {
         if (config && config.onInstalling) {
+          console.log('installing');
           config.onInstalling(registration.installing);
         }
       }
