@@ -11,6 +11,7 @@ import Slide from '@mui/material/Slide';
  * @returns {string}
  */
 const getMessageFromState = state => {
+  console.log({ method: 'getMessageFromState', state });
   if (state.isUpdating) return D.updating;
   else if (state.isUpdateInstalled) return D.updateInstalled;
   else if (state.isUpdateAvailable) return D.updateAvailable;
@@ -35,7 +36,9 @@ export function ServiceWorkerStatus({ authenticated }) {
   const message = getMessageFromState(state);
   const severity = getSeverity(state);
   const [isOpen, setOpen] = useState(!!message);
-
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
   const handleClose = () => {
     setOpen(false);
     if (state.isUpdateInstalled) {
