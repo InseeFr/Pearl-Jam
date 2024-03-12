@@ -1,7 +1,8 @@
 import Switch from '@mui/material/Switch';
-import { theme } from '../ui/PearlTheme';
+import { useTheme } from '@mui/material/styles';
 
 export const SwitchIOS = props => {
+  const theme = useTheme();
   return (
     <Switch
       {...props}

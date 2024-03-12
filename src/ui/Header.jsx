@@ -8,8 +8,9 @@ import Badge from '@mui/material/Badge';
 import Paper from '@mui/material/Paper';
 import { SynchronizeButton } from './Header/SynchronizeButton';
 import { NetworkStatus } from './Header/NetworkStatus';
+import D from '../i18n/build-dictionary';
 import { UserButton } from './Header/UserButton';
-import { theme } from './PearlTheme';
+import { useTheme } from '@mui/material/styles';
 import { Row } from './Row';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { loadNotifications, useUnreadNotificationsCount } from '../utils/hooks/useNotifications';
@@ -19,6 +20,7 @@ import { Link } from 'react-router-dom';
 export function Header() {
   const notificationsCount = useUnreadNotificationsCount();
   const [notificationTarget, setNotificationTarget] = useState(null);
+  const theme = useTheme();
 
   useEffect(() => {
     loadNotifications();
@@ -61,7 +63,7 @@ export function Header() {
       </Row>
       <Row gap={3}>
         <HeaderNavLink to="/suivi" icon={FormatListBulletedIcon}>
-          Mon suivi
+          {D.goToMyTracking}
         </HeaderNavLink>
 
         <HeaderNavLink
@@ -70,7 +72,7 @@ export function Header() {
           icon={NotificationsNoneIcon}
           badge={notificationsCount}
         >
-          Mes notifications
+          {D.goToNotificationsPage}
         </HeaderNavLink>
 
         <Notifications target={notificationTarget} onClose={() => setNotificationTarget(null)} />

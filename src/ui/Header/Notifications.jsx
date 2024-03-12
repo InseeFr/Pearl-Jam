@@ -23,7 +23,7 @@ import { Row } from '../Row';
 import { formatDistance } from 'date-fns';
 import { dateFnsLocal } from '../../utils';
 import BuildIcon from '@mui/icons-material/Build';
-import { theme } from '../PearlTheme';
+import { useTheme } from '@mui/material/styles';
 import { NOTIFICATION_TYPE_MANAGEMENT, NOTIFICATION_TYPE_SYNC } from '../../utils/constants';
 import syncReportIdbService from '../../utils/indexeddb/services/syncReport-idb-service';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
@@ -38,7 +38,7 @@ import MarkAsReadIcon from '@mui/icons-material/MarkAsUnread';
 export function Notifications({ target, onClose }) {
   const open = !!target;
   const { notifications } = useNotifications();
-
+  const theme = useTheme();
   const [type, setType] = useState(null);
 
   const filteredNotifications = type
@@ -107,6 +107,7 @@ export function Notifications({ target, onClose }) {
 }
 
 function Notification({ notification, onExit }) {
+  const theme = useTheme();
   const date = `${formatDistance(notification.date || 0, new Date(), {
     addSuffix: true,
     locale: dateFnsLocal,

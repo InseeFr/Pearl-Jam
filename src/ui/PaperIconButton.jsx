@@ -1,5 +1,4 @@
 import Paper from '@mui/material/Paper';
-import { theme } from './PearlTheme';
 
 const style = {
   width: 24,

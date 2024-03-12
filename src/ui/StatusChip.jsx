@@ -1,12 +1,13 @@
 import { toDoEnum } from '../utils/enum/SUToDoEnum';
 import Chip from '@mui/material/Chip';
-import { theme } from './PearlTheme';
+import { useTheme } from '@mui/material/styles';
 
 /**
  * @param {keyof typeof toDoEnum} status
  * @return {JSX.Element}
  */
 export function StatusChip({ status }) {
+  const theme = useTheme();
   return (
     <Chip
       sx={{

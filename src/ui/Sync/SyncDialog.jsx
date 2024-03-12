@@ -12,9 +12,9 @@ import Box from '@mui/material/Box';
 import WarningIcon from '@mui/icons-material/Warning';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Accordion } from '../Accordion';
-import { theme } from '../PearlTheme';
 import { Typography } from '../Typography';
 import ErrorIcon from '@mui/icons-material/Error';
+import { useTheme } from '@emotion/react';
 
 /**
  * Dialog that summarize synchronization results
@@ -101,6 +101,7 @@ export function SyncDialog({ onClose, syncResult }) {
  * @constructor
  */
 function SyncDetail({ campaigns }) {
+  const theme = useTheme();
   return (
     <Accordion
       defaultOpen={false}
@@ -110,7 +111,7 @@ function SyncDetail({ campaigns }) {
     >
       {campaigns.length === 0 && <DialogContentText>{D.nothingToDisplay}</DialogContentText>}
       {campaigns.map(campaign => (
-        <Stack gap={2}>
+        <Stack gap={2} key={campaign.name}>
           {campaign.total === 0 && <DialogContentText>{D.nothingToDisplay}</DialogContentText>}
           {campaign.loaded > 0 && (
             <DialogContentText>

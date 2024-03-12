@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import { useSurveyUnits } from '../utils/hooks/database';
 import { CampaignProgress } from '../ui/Stats/CampaignProgress';
-import React, { useMemo, useState, useEffect  } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { groupBy } from '../utils/functions/array';
 import { CampaignProgressPieChart } from '../ui/Stats/CampaignProgressPieChart';
 import { ScrollableBox } from '../ui/ScrollableBox';
@@ -42,6 +42,7 @@ import { useToggle } from '../utils/hooks/useToggle';
 import { PaperIconButton } from '../ui/PaperIconButton';
 import { IconDesc } from '../ui/Icons/IconDesc';
 import { IconAsc } from '../ui/Icons/IconAsc';
+import D from 'i18n';
 
 export function SuiviPage() {
   const surveyUnits = useSurveyUnits();
@@ -61,7 +62,7 @@ export function SuiviPage() {
   useEffect(() => {
     localStorage.setItem('selectedCampaign', campaign);
   }, [campaign]);
-  
+
   const [tab, setTab] = useState('stats');
   const handleSearchTextChange = event => {
     setSearchText(event.target.value);
@@ -75,7 +76,7 @@ export function SuiviPage() {
             <Row justifyContent="space-between">
               <Row gap={2}>
                 <Typography sx={{ flex: 'none' }} variant="headingM" color="black" as="h1">
-                  Mon suivi
+                  {D.goToMyTracking}
                 </Typography>
                 {tab === 'table' && (
                   <>
@@ -140,7 +141,7 @@ function SuiviStats({ surveyUnits }) {
   return (
     <Stack gap={2}>
       <Typography variant="s" color="textTertiary" as="p">
-        Pour accéder au détail, cliquez directement sur l’enquête souhaitée.
+        {D.trackingAccessDetailedData}
       </Typography>
 
       <Grid container spacing={2}>
@@ -188,7 +189,7 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
         sx={{ height: maxHeight }}
       >
         <Typography variant="m" color="textHint">
-          Sélectionnez une enquête dans la liste déroulante ci-dessus.
+          {D.trackingSelectCampaign}
         </Typography>
       </Row>
     );
@@ -201,8 +202,22 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
 
   const getLastName = su => getprivilegedPerson(su).lastName.toUpperCase();
   const getOrder = su => parseInt(getSuTodoState(su).order, 10);
-  const getOutcomeIndex = (su, order) => {
-    const index = order.indexOf(su.contactOutcome?.type);
+  const contactOutcomeOrder = [
+    'INA',
+    'REF',
+    'IMP',
+    'UCD',
+    'UTR',
+    'DCD',
+    'ALA',
+    'UCD',
+    'DUK',
+    'DUU',
+    'NUH',
+    'NOA',
+  ];
+  const getOutcomeIndex = su => {
+    const index = contactOutcomeOrder.indexOf(su.contactOutcome?.type);
     return index === -1 ? Infinity : index;
   };
 
@@ -229,22 +244,8 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
           compareB = getOrder(b);
           break;
         case 'outcome':
-          const order = [
-            'INA',
-            'REF',
-            'IMP',
-            'UCD',
-            'UTR',
-            'DCD',
-            'ALA',
-            'UCD',
-            'DUK',
-            'DUU',
-            'NUH',
-            'NOA',
-          ];
-          compareA = getOutcomeIndex(a, order);
-          compareB = getOutcomeIndex(b, order);
+          compareA = getOutcomeIndex(a);
+          compareB = getOutcomeIndex(b);
           if (!isAscending) {
             // Inverse les valeurs pour le tri descendant
             compareA = compareA === Infinity ? -Infinity : compareA;
@@ -268,7 +269,7 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
             <TableCell>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box component="span" sx={{ flexGrow: 1 }}>
-                  Unité
+                  {D.trackingUnit}
                 </Box>
                 <Box component="span" onClick={() => toggleSort('unit')} sx={{ cursor: 'pointer' }}>
                   {sortConfig.key === 'unit' ? (
@@ -286,7 +287,7 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
             <TableCell>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box component="span" sx={{ flexGrow: 1 }}>
-                  Nom/Prénom
+                  {D.trackingName}
                 </Box>
                 <Box
                   component="span"
@@ -308,7 +309,7 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
             <TableCell>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box component="span" sx={{ flexGrow: 1 }}>
-                  Status de l'unité
+                  {D.trackingSurveyUnitStatus}
                 </Box>
                 <Box
                   component="span"
@@ -328,11 +329,11 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
               </Box>
             </TableCell>
 
-            <TableCell>Dernier essai de contact</TableCell>
+            <TableCell>{D.trackingLastContactAttempt}</TableCell>
             <TableCell>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box component="span" sx={{ flexGrow: 1 }}>
-                  Bilan de contact
+                  {D.contactOutcome}
                 </Box>
                 <Box
                   component="span"

@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-  convertSUStateInToDo,
-  getLastState,
   getprivilegedPerson,
   daysLeftForSurveyUnit,
   isSelectable,
@@ -79,7 +77,6 @@ export function SurveyCard({ surveyUnit, locked = false }) {
               </Row>
               {locked && <LockIcon color="iconLock" />}
             </Row>
-            {/* data en dur pour le moment */}
             <Typography variant="s" color="textHint" as="div">
               #{surveyUnit.id}
             </Typography>
