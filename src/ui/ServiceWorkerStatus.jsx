@@ -2,7 +2,7 @@ import { useServiceWorker } from '../utils/hooks/useServiceWorker';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import D from '../i18n/build-dictionary';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Slide from '@mui/material/Slide';
