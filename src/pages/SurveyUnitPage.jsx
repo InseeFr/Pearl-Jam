@@ -16,10 +16,22 @@ import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import Button from '@mui/material/Button';
 import { Typography } from '../ui/Typography';
 import { Questionnaires } from '../ui/Questionnaire/Questionnaires';
+import { addNewState, getLastState } from '../utils/functions';
+import { useEffect } from 'react';
+import { surveyUnitStateEnum } from '../utils/enum/SUStateEnum';
 
 export function SurveyUnitPage() {
   const { id } = useParams();
   const surveyUnit = useSurveyUnit(id);
+
+  useEffect(() => {
+    if (surveyUnit !== undefined) {
+      const lastState = getLastState(surveyUnit);
+      if (lastState.type === surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type) {
+        addNewState(surveyUnit, surveyUnitStateEnum.IN_PREPARATION.type);
+      }
+    }
+  }, [surveyUnit]);
 
   if (surveyUnit === undefined) {
     return (
