@@ -31,8 +31,10 @@ import Box from '@mui/material/Box';
  * @returns {JSX.Element}
  */
 export function PersonsForm({ onClose, surveyUnit, persons }) {
-  const { register, handleSubmit, control, getValues, setValue } = useForm({
-    defaultValues: surveyUnit,
+  const { register, handleSubmit, control } = useForm({
+    // input persons is sorted and its order could be different from surveyUnit.persons used by useForm
+    // => force the same order of persons in surveyUnit
+    defaultValues: { ...surveyUnit, persons: persons },
   });
 
   const onSubmit = handleSubmit(data => {
@@ -62,8 +64,6 @@ export function PersonsForm({ onClose, surveyUnit, persons }) {
                   person={p}
                   register={register}
                   control={control}
-                  setValue={setValue}
-                  getValues={getValues}
                 />
               </Fragment>
             ))}
@@ -92,7 +92,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }) {
  * @param {(name: string) => unknown} getValues
  * @param {number} index
  */
-function PersonFields({ person, register, control, index, setValue, getValues }) {
+function PersonFields({ person, register, control, index }) {
   const titles = [
     { label: TITLES.MISS.value, value: TITLES.MISS.type },
     { label: TITLES.MISTER.value, value: TITLES.MISTER.type },
@@ -162,7 +162,7 @@ function PersonFields({ person, register, control, index, setValue, getValues })
               onRemove={() => remove(k)}
             />
           )
-      )}
+        )}
       <Box ml="110px">
         <Button
           onClick={addPhoneNumber}
