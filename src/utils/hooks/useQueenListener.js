@@ -78,7 +78,7 @@ const handleQueenEvent = redirect => async event => {
  */
 export function useQueenListener(redirect) {
   useEffect(() => {
-    const listener = handleQueenEvent(redirect)
+    const listener = handleQueenEvent(redirect);
     window.addEventListener('QUEEN', listener);
     return () => {
       window.removeEventListener('QUEEN', listener);

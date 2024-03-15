@@ -61,15 +61,6 @@ const getUrlRegexManifestFiles = function (url) {
 const configurationCacheName = 'configuration-cache';
 const manifestImageCacheName = 'manifest-cache';
 
-const fallBackConfigurationPlugin = {
-  handlerDidError: async ({ request, event, error, state }) => {
-    // Return a previously stored configuration as fallback
-    const fallBack = JSON.stringify(window.localStorage.getItem(CONFIGURATION_FALLBACK));
-    console.log({ fallbackWith: fallBack });
-    return fallBack;
-  },
-};
-
 registerRoute(
   new RegExp(getUrlRegexJson(self.location.origin)),
   new NetworkFirst({
@@ -78,7 +69,6 @@ registerRoute(
       new CacheableResponsePlugin({
         statuses: [0, 200],
       }),
-      fallBackConfigurationPlugin,
     ],
   })
 );

@@ -1,5 +1,4 @@
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 
 /**
  * Global layout for the app with 3 sections (header, sidebar and main content)

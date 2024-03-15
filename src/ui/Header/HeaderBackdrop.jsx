@@ -1,11 +1,12 @@
 import { createPortal } from 'react-dom';
 import Backdrop from '@mui/material/Backdrop';
-import { theme } from '../PearlTheme';
+import { useTheme } from '@mui/material/styles';
 
 /**
  * A backdrop with a specific index to go under the header
  */
 export function HeaderBackdrop({ open }) {
+  const theme = useTheme();
   return (
     <>
       {createPortal(

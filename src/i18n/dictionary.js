@@ -21,6 +21,7 @@ import syncMessage from './syncMessage';
 import tableHeader from './tableHeaderMessage';
 import titleMessage from './titleMessage';
 import toDoMessage, { stepNames } from './toDoMessage';
+import trackingMessage from './trackingMessage';
 import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
 import profileMessage from './profileMessage';
@@ -53,10 +54,8 @@ const dictionary = {
     en: 'Installation, please wait...',
   },
   updateAvailable: {
-    fr:
-      "Une nouvelle version de l'application est disponible et sera utilisée lorsque tous les onglets de cette page seront fermés.",
-    en:
-      'New version of the application is available and will be used when all tabs for this page are closed.',
+    fr: "Une nouvelle version de l'application est disponible et sera utilisée lorsque tous les onglets de cette page seront fermés.",
+    en: 'New version of the application is available and will be used when all tabs for this page are closed.',
   },
   updateInstalled: {
     fr: "L'application a été mise à jour avec succès",
@@ -71,8 +70,7 @@ const dictionary = {
     en: 'Error during the installation of the application',
   },
   appReadyOffline: {
-    fr:
-      "L'application est prête à être utilisée hors ligne. (Pensez à synchroniser vos données avant)",
+    fr: "L'application est prête à être utilisée hors ligne. (Pensez à synchroniser vos données avant)",
     en: 'The application is ready to be used offline. (Remember to synchronize your data before)',
   },
   areYouSure: { fr: 'Êtes-vous sûr ?', en: 'Are you sure ?' },
@@ -106,6 +104,7 @@ const dictionary = {
   ...communicationMessage,
   ...profileMessage,
   ...stepNames,
+  ...trackingMessage,
 };
 
 export default dictionary;

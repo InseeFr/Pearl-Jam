@@ -3,6 +3,7 @@ import SyncIcon from '@mui/icons-material/Sync';
 import React, { useContext } from 'react';
 import { SyncContext } from '../Sync/SyncContextProvider';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
+import D from '../../i18n/build-dictionary';
 
 export function SynchronizeButton() {
   const isOnline = useNetworkOnline();
@@ -15,7 +16,7 @@ export function SynchronizeButton() {
       onClick={syncFunction}
       startIcon={<SyncIcon fontSize="small" />}
     >
-      Synchroniser
+      {D.synchronizeButton}
     </Button>
   );
 }

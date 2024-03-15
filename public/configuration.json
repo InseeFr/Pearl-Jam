@@ -6,5 +6,5 @@
   "_PEARL_API_URL_COMMENT_": "url of Pearl API",
 
   "PEARL_AUTHENTICATION_MODE": "anonymous",
-  "_PEARL_AUTHENTICATION_MODE_COMMENT": "The mode of authentication. Currently, App is supporting 'anonymous'"
+  "_PEARL_AUTHENTICATION_MODE_COMMENT": "The mode of authentication. Supported values 'anonymous' and 'keycloak' "
 }

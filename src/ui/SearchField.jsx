@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import { theme } from './PearlTheme';
+import { useTheme } from '@mui/material/styles';
 import React from 'react';
 
 /**
@@ -11,6 +11,7 @@ import React from 'react';
  * @constructor
  */
 export function SearchField({ onChange, value }) {
+  const theme = useTheme();
   return (
     <TextField
       value={value}

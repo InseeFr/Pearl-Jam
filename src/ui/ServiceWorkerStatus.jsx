@@ -1,11 +1,11 @@
-import { useServiceWorker } from '../utils/hooks/useServiceWorker';
-import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import D from '../i18n/build-dictionary';
-import { useState } from 'react';
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 import Slide from '@mui/material/Slide';
+import Snackbar from '@mui/material/Snackbar';
+import Stack from '@mui/material/Stack';
+import { useEffect, useState } from 'react';
+import D from '../i18n/build-dictionary';
+import { useServiceWorker } from '../utils/hooks/useServiceWorker';
 
 /**
  * @returns {string}
@@ -36,6 +36,14 @@ export function ServiceWorkerStatus({ authenticated }) {
   const severity = getSeverity(state);
   const [isOpen, setOpen] = useState(!!message);
 
+  /**
+   * Message can be null at start and can change asynchronously, we have to update "isOpen" state according to new message value
+   * isOpen is true if message is not a empty string
+   */
+  useEffect(() => {
+    setOpen(!!message);
+  }, [message]);
+
   const handleClose = () => {
     setOpen(false);
     if (state.isUpdateInstalled) {
@@ -54,7 +62,11 @@ export function ServiceWorkerStatus({ authenticated }) {
       <Alert variant="filled" sx={{ width: 1 }} severity={severity} onClose={handleClose}>
         <Stack gap={2} alignItems="flex-start">
           {message}
-          {canUpdate && <Button variant="contained">{D.updateNow}</Button>}
+          {canUpdate && (
+            <Button variant="contained" onClick={state.updateApp}>
+              {D.updateNow}
+            </Button>
+          )}
         </Stack>
       </Alert>
     </Snackbar>

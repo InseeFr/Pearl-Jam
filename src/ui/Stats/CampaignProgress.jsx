@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { Typography } from '../Typography';
 import Stack from '@mui/material/Stack';
 import { Row } from '../Row';
-import { theme } from '../PearlTheme';
+import { useTheme } from '@mui/material/styles';
 import { CenteredBox } from '../CenteredBox';
 import { daysLeftForSurveyUnit, getSuTodoState } from '../../utils/functions';
 import { groupBy } from '../../utils/functions/array';
@@ -20,6 +20,7 @@ import { StatusChip } from '../StatusChip';
  */
 export function CampaignProgress({ label, surveyUnits }) {
   const total = surveyUnits.length;
+  const theme = useTheme();
   const suByTodoState = groupBy(surveyUnits, su => getSuTodoState(su).order);
   const finished = suByTodoState[toDoEnum.TERMINATED.order]?.length ?? 0;
   const [isFlipped, toggleFlip] = useToggle(false);

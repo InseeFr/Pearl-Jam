@@ -35,15 +35,16 @@ export const gray = {
 
 const fontFamily = 'Montserrat, sans-serif';
 
-let theme = createTheme({});
-const colors = color => theme.palette.augmentColor({ color: { main: color } });
+const basicTheme = createTheme({});
+const colors = (theme, color) => theme.palette.augmentColor({ color: { main: color } });
 
-theme = createTheme({
+const coloredTheme = createTheme({
+  basicTheme,
   shadows: [
     'none',
     '0px 1px 4px 0px rgba(80, 76, 75, 0.80)',
     '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
-    ...theme.shadows.slice(3),
+    ...basicTheme.shadows.slice(3),
   ],
   typography: {
     fontFamily: fontFamily,
@@ -98,29 +99,29 @@ theme = createTheme({
     black: {
       main: '#000000',
     },
-    success: colors('#089616'),
-    green: colors('#35C758'),
-    danger: colors(red['500']),
-    red: colors(red['500']),
-    yellow: colors('#FFC700'),
-    separator: colors('#D7DBE1'),
-    surfacePrimary: colors('#F5F7FA'),
-    surfaceSecondary: colors('#FFF'),
-    surfaceTertiary: colors('#E6EAF0'),
-    primary: colors('#0A192E'),
-    secondary: colors('#797676'),
-    textPrimary: colors('#0A192E'),
-    textHint: colors('#797676'),
-    textTertiary: colors('#57677D'),
-    accent: colors(red['500']),
+    success: colors(basicTheme, '#089616'),
+    green: colors(basicTheme, '#35C758'),
+    danger: colors(basicTheme, red['500']),
+    red: colors(basicTheme, red['500']),
+    yellow: colors(basicTheme, '#FFC700'),
+    separator: colors(basicTheme, '#D7DBE1'),
+    surfacePrimary: colors(basicTheme, '#F5F7FA'),
+    surfaceSecondary: colors(basicTheme, '#FFF'),
+    surfaceTertiary: colors(basicTheme, '#E6EAF0'),
+    primary: colors(basicTheme, '#0A192E'),
+    secondary: colors(basicTheme, '#797676'),
+    textPrimary: colors(basicTheme, '#0A192E'),
+    textHint: colors(basicTheme, '#797676'),
+    textTertiary: colors(basicTheme, '#57677D'),
+    accent: colors(basicTheme, red['500']),
     iconLock: {
       main: '#323232',
     },
   },
 });
 
-theme = createTheme(
-  theme,
+const theme = createTheme(
+  coloredTheme,
   {
     components: {
       MuiButton: {
@@ -128,7 +129,7 @@ theme = createTheme(
           {
             props: { variant: 'contained' },
             style: {
-              padding: `${theme.spacing(1.25)} ${theme.spacing(2)}`,
+              padding: `${coloredTheme.spacing(1.25)} ${coloredTheme.spacing(2)}`,
             },
           },
           {
@@ -149,7 +150,7 @@ theme = createTheme(
         styleOverrides: {
           root: {
             position: 'relative',
-            borderRadius: theme.spacing(2),
+            borderRadius: coloredTheme.spacing(2),
           },
         },
         variants: [
@@ -165,7 +166,7 @@ theme = createTheme(
           },
           {
             props: { raised: true },
-            style: { background: theme.palette.surfacePrimary.main },
+            style: { background: coloredTheme.palette.surfacePrimary.main },
           },
         ],
       },
@@ -181,7 +182,7 @@ theme = createTheme(
       MuiDialogTitle: {
         styleOverrides: {
           root: {
-            ...theme.typography.xl,
+            ...coloredTheme.typography.xl,
             padding: '1.5rem',
             textAlign: 'center',
           },
@@ -199,8 +200,8 @@ theme = createTheme(
       MuiDialogContentText: {
         styleOverrides: {
           root: {
-            ...theme.typography.s,
-            color: theme.palette.textTertiary.main,
+            ...coloredTheme.typography.s,
+            color: coloredTheme.palette.textTertiary.main,
             fontWeight: 600,
             ['& svg']: {
               verticalAlign: 'middle',
@@ -210,7 +211,7 @@ theme = createTheme(
         variants: [
           {
             props: { variant: 'm' },
-            style: theme.typography.m,
+            style: coloredTheme.typography.m,
           },
         ],
       },
@@ -220,18 +221,18 @@ theme = createTheme(
             minHeight: 'auto',
           },
           indicator: {
-            backgroundColor: theme.palette.textPrimary.main,
+            backgroundColor: coloredTheme.palette.textPrimary.main,
           },
         },
         variants: [
           {
             props: { className: 'navigation' },
             style: {
-              padding: `0 ${theme.spacing(4)}`,
-              background: theme.palette.white.main,
+              padding: `0 ${coloredTheme.spacing(4)}`,
+              background: coloredTheme.palette.white.main,
               '.MuiTab-root': {
-                padding: theme.spacing(2),
-                ...theme.typography.m,
+                padding: coloredTheme.spacing(2),
+                ...coloredTheme.typography.m,
               },
             },
           },
@@ -247,14 +248,14 @@ theme = createTheme(
       MuiTab: {
         styleOverrides: {
           root: {
-            padding: `${theme.spacing(1)} 0`,
-            color: theme.palette.textHint.main,
+            padding: `${coloredTheme.spacing(1)} 0`,
+            color: coloredTheme.palette.textHint.main,
             minHeight: 'auto',
             '& ~ .MuiTab-root': {
               marginLeft: 20,
             },
             '&[aria-selected="true"]': {
-              color: theme.palette.textPrimary.main,
+              color: coloredTheme.palette.textPrimary.main,
             },
           },
         },
@@ -262,7 +263,7 @@ theme = createTheme(
       MuiCardContent: {
         styleOverrides: {
           root: {
-            padding: theme.spacing(3),
+            padding: coloredTheme.spacing(3),
           },
         },
       },
@@ -270,15 +271,15 @@ theme = createTheme(
         styleOverrides: {
           root: {
             marginLeft: 0,
-            gap: theme.spacing(1),
+            gap: coloredTheme.spacing(1),
           },
           label: {
-            ...theme.typography.s,
+            ...coloredTheme.typography.s,
             textOverflow: 'ellipsis',
             fontWeight: 600,
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            color: theme.palette.textTertiary.main,
+            color: coloredTheme.palette.textTertiary.main,
           },
         },
       },
@@ -289,7 +290,7 @@ theme = createTheme(
             height: 15,
             minWidth: 18,
             transform: 'scale(1) translate(50%, -10%)',
-            padding: `${theme.spacing(0.25)} ${theme.spacing(0.5)}`,
+            padding: `${coloredTheme.spacing(0.25)} ${coloredTheme.spacing(0.5)}`,
           },
         },
       },
@@ -330,7 +331,7 @@ theme = createTheme(
           slotProps: {
             paper: {
               sx: {
-                borderRadius: theme.spacing(2),
+                borderRadius: coloredTheme.spacing(2),
               },
             },
           },
@@ -354,7 +355,7 @@ theme = createTheme(
       MuiChip: {
         styleOverrides: {
           root: {
-            ...theme.typography.s,
+            ...coloredTheme.typography.s,
             fontWeight: 600,
           },
         },
@@ -362,7 +363,7 @@ theme = createTheme(
       MuiAlert: {
         styleOverrides: {
           root: {
-            ...theme.typography.s,
+            ...coloredTheme.typography.s,
             fontWeight: 600,
           },
         },
@@ -372,13 +373,13 @@ theme = createTheme(
           {
             props: { size: 'small' },
             style: {
-              ...theme.typography.s,
+              ...coloredTheme.typography.s,
               '& .MuiSelect-select': {
                 minHeight: 'auto',
-                padding: theme.spacing(1),
+                padding: coloredTheme.spacing(1),
               },
               '& .MuiSelect-select em': {
-                ...theme.typography.s,
+                ...coloredTheme.typography.s,
               },
             },
           },
@@ -386,15 +387,15 @@ theme = createTheme(
             props: { variant: 'standard' },
             style: {
               padding: 0,
-              backgroundColor: theme.palette.surfaceSecondary.main,
+              backgroundColor: coloredTheme.palette.surfaceSecondary.main,
               borderColor: 'transparent',
-              boxShadow: theme.shadows[2],
+              boxShadow: coloredTheme.shadows[2],
               width: '100%',
               '&::before': {
                 display: 'none',
               },
               em: {
-                color: theme.palette.textHint.main,
+                color: coloredTheme.palette.textHint.main,
                 fontStyle: 'normal',
               },
             },
@@ -408,8 +409,8 @@ theme = createTheme(
             style: {
               color: '#000',
               fontWeight: 700,
-              ...theme.typography.s,
-              backgroundColor: theme.palette.surfaceTertiary.main,
+              ...coloredTheme.typography.s,
+              backgroundColor: coloredTheme.palette.surfaceTertiary.main,
               border: 'solid 2px #FFFF',
               '&:last-child': {
                 borderTopRightRadius: '1rem',
@@ -422,9 +423,9 @@ theme = createTheme(
           {
             props: { variant: 'body' },
             style: {
-              ...theme.typography.s,
+              ...coloredTheme.typography.s,
               fontWeight: 500,
-              backgroundColor: theme.palette.surfacePrimary.main,
+              backgroundColor: coloredTheme.palette.surfacePrimary.main,
               border: 'solid 2px #FFFF',
             },
           },
@@ -432,15 +433,15 @@ theme = createTheme(
             props: { variant: 'standard' },
             style: {
               padding: 0,
-              backgroundColor: theme.palette.surfaceSecondary.main,
+              backgroundColor: coloredTheme.palette.surfaceSecondary.main,
               borderColor: 'transparent',
-              boxShadow: theme.shadows[2],
+              boxShadow: coloredTheme.shadows[2],
               width: '100%',
               '&::before': {
                 display: 'none',
               },
               em: {
-                color: theme.palette.textHint.main,
+                color: coloredTheme.palette.textHint.main,
                 fontStyle: 'normal',
               },
             },
@@ -451,7 +452,7 @@ theme = createTheme(
         styleOverrides: {
           root: {
             textarea: {
-              ...theme.typography.s,
+              ...coloredTheme.typography.s,
             },
             '&::before, &::after': {
               border: 'none',
@@ -462,7 +463,7 @@ theme = createTheme(
             '&.Mui-focused:after': {
               border: 'none',
             },
-            background: theme.palette.surfacePrimary.main,
+            background: coloredTheme.palette.surfacePrimary.main,
           },
         },
       },
@@ -477,9 +478,9 @@ theme = createTheme(
       MuiStepLabel: {
         styleOverrides: {
           iconContainer: {
-            ...theme.typography.s,
-            color: theme.palette.white.main,
-            background: theme.palette.textPrimary.main,
+            ...coloredTheme.typography.s,
+            color: coloredTheme.palette.white.main,
+            background: coloredTheme.palette.textPrimary.main,
             borderRadius: 30,
             fontWeight: 600,
             width: 30,
@@ -487,15 +488,15 @@ theme = createTheme(
             display: 'grid',
             placeItems: 'center',
             '&.Mui-disabled': {
-              background: theme.palette.textHint.main,
+              background: coloredTheme.palette.textHint.main,
             },
             '&.Mui-completed': {
-              color: theme.palette.white.main,
+              color: coloredTheme.palette.white.main,
               background: '#089616',
             },
           },
           label: {
-            ...theme.typography.xs,
+            ...coloredTheme.typography.xs,
             fontWeight: 600,
             whiteSpace: 'nowrap',
             '&.Mui-completed': {
@@ -510,8 +511,8 @@ theme = createTheme(
       MuiOutlinedInput: {
         styleOverrides: {
           input: {
-            ...theme.typography.s,
-            color: theme.palette.textPrimary.main,
+            ...coloredTheme.typography.s,
+            color: coloredTheme.palette.textPrimary.main,
             fontWeight: 600,
             padding: '5px 10px',
             height: '28px',

@@ -24,12 +24,10 @@ const style = {
 
 /**
  * @param {string} label
- * @param {boolean} checked
  * @param {boolean} disabled
- * @param {import('@mui/material').ButtonProps} props
  * @constructor
  */
-export function RadioLine({ value, disabled, label, checked, ...props }) {
+export function RadioLine({ value, disabled, label }) {
   return (
     <FormControlLabel
       disabled={disabled}
