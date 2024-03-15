@@ -21,6 +21,7 @@ const identificationMessage = {
   housingOccupant: { fr: "Identification de l'occupant", en: 'Occupant identification' },
   identification: { fr: 'Repérage', en: 'Identification' },
   move: { fr: 'Déplacement terrain', en: 'Onsite move' },
+  noLocation: { fr: 'Pas de repérage pour cette enquête', en: 'No location for this survey' },
   yes: { fr: 'Oui', en: 'Yes' },
   no: { fr: 'Non', en: 'No' },
 };
