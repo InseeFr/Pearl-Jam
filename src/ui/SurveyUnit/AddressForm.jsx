@@ -54,7 +54,6 @@ export function AddressForm({ onClose, surveyUnit }) {
         <DialogTitle>{D.surveyUnitAddressChange}</DialogTitle>
         <DialogContent>
           <Stack gap={2} style={{ minWidth: 600 }}>
-            <FieldRow label={D.addressDeliveryPoint} {...register('deliveryPoint')} />
             <FieldRow label={D.addressStreetName} required {...register('streetName')} />
             <FieldRow label={D.addressAdditionalAddress} {...register('additionalAddress')} />
             <FieldRow label={D.addressLocality} {...register('locality')} />
@@ -68,6 +67,7 @@ export function AddressForm({ onClose, surveyUnit }) {
               name="cityPriorityDistrict"
             />
             <FieldRow label={D.addressBuilding} {...register('building')} />
+            <FieldRow label={D.addressDeliveryPoint} {...register('deliveryPoint')} />
             <FieldRow label={D.addressFloor} {...register('floor')} />
             <FieldRow label={D.addressDoor} {...register('door')} />
             <FieldRow label={D.addressStaircase} {...register('staircase')} />

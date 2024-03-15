@@ -2,6 +2,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import IconButton from '@mui/material/IconButton';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import TextField from '@mui/material/TextField';
 import { Typography } from '../ui/Typography';
 import Box from '@mui/material/Box';
@@ -88,6 +90,11 @@ export function SuiviPage() {
                       placeholder="Sélectionnez..."
                       options={campaigns}
                     />
+                        {campaign && (
+      <IconButton aria-label="reset" onClick={() => setCampaign('')}>
+        <RestartAltIcon />
+      </IconButton>
+    )}
                     <TextField
                       label="Nom/prénom"
                       variant="outlined"

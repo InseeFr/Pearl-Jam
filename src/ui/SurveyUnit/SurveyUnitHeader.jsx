@@ -102,7 +102,7 @@ export function SurveyUnitHeader({ surveyUnit }) {
             />
             <Chip label={surveyUnit.sampleIdentifiers.ssech} />
             <Typography color="textPrimary" variant="s" noWrap>
-              &nbsp; | 223-1111-75
+              {surveyUnit.sampleIdentifiers.nograp}
             </Typography>
           </Row>
           <PrivilegedPerson surveyUnit={surveyUnit} />
