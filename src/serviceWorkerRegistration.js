@@ -48,10 +48,8 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
-      console.log('registring with ', { registration });
       if (registration.installing) {
         if (config && config.onInstalling) {
-          console.log('installing');
           config.onInstalling(registration.installing);
         }
       }
@@ -62,14 +60,12 @@ function registerValidSW(swUrl, config) {
       }
 
       registration.onupdatefound = () => {
-        console.log('Update found, gonna install');
         const installingWorker = registration.installing;
         if (installingWorker == null) {
           return;
         }
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
-            console.log('INSTALLED');
             if (navigator.serviceWorker.controller) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
@@ -81,7 +77,6 @@ function registerValidSW(swUrl, config) {
 
               // Execute callback
               if (config && config.onUpdate) {
-                console.log('UPDATE');
                 config.onUpdate(registration);
               }
             } else {
@@ -92,7 +87,6 @@ function registerValidSW(swUrl, config) {
 
               // Execute callback
               if (config && config.onSuccess) {
-                console.log('SUCCESS');
                 config.onSuccess(registration);
               }
             }
@@ -121,7 +115,6 @@ function checkValidServiceWorker(swUrl, config) {
         (contentType != null && contentType.indexOf('javascript') === -1)
       ) {
         if (config && config.onError) {
-          console.log('No SW found or no JS in response');
           config.onError();
         }
         // No service worker found. Probably a different app. Reload the page.
@@ -132,7 +125,6 @@ function checkValidServiceWorker(swUrl, config) {
         });
       } else {
         // Service worker found. Proceed as normal.
-        console.log('SW is valid => procede to install');
         registerValidSW(swUrl, config);
       }
     })
@@ -142,13 +134,11 @@ function checkValidServiceWorker(swUrl, config) {
 }
 
 export function unregister(config) {
-  console.log('Unregister SW');
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready
       .then(registration => {
         registration.unregister().then(unregistered => {
           if (config && config.onUnregister) {
-            console.log('Unregistered DONE');
             config.onUnregister(unregistered);
           }
         });

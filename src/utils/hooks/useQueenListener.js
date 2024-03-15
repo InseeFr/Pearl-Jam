@@ -52,7 +52,6 @@ const closeQueen = redirect => surveyUnitID => {
 
 // eslint-disable-next-line consistent-return
 const handleQueenEvent = redirect => async event => {
-  console.log({ event });
   const { type, command, ...other } = event.detail;
   if (type === 'QUEEN') {
     switch (command) {

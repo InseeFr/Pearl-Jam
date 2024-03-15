@@ -7,7 +7,7 @@ const trackingMessage = {
     fr: 'Sélectionnez une enquête dans la liste déroulante ci-dessus.',
     en: 'Miss',
   },
-  trackingLastContactAttempt: {},
+  trackingLastContactAttempt: { fr: 'Dernier essai de contact', en: 'Last contact attempt' },
   trackingSurveyUnitStatus: { fr: "Status de l'unité", en: 'Survey-unit status' },
   trackingUnit: { fr: 'Unité', en: 'Survey-unit' },
   trackingName: { fr: 'Nom/Prénom', en: 'Lastname/FirstName' },

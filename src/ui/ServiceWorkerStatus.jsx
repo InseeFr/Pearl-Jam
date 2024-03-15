@@ -11,7 +11,6 @@ import { useServiceWorker } from '../utils/hooks/useServiceWorker';
  * @returns {string}
  */
 const getMessageFromState = state => {
-  console.log({ method: 'getMessageFromState', state });
   if (state.isUpdating) return D.updating;
   else if (state.isUpdateInstalled) return D.updateInstalled;
   else if (state.isUpdateAvailable) return D.updateAvailable;
