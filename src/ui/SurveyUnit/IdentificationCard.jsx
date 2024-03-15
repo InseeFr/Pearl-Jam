@@ -27,6 +27,7 @@ import Box from '@mui/material/Box';
  * @param {SurveyUnit} surveyUnit
  */
 export function IdentificationCard({ surveyUnit }) {
+  console.log(surveyUnit.identificationConfiguration,"surveyUnit.identificationConfiguration")
   const { questions, setQuestion, answers, question, setAnswer } =
     useIdentificationQuestions(surveyUnit);
   return (
@@ -51,9 +52,9 @@ export function IdentificationCard({ surveyUnit }) {
                 />
               ))}
               {surveyUnit.identificationConfiguration ===
-              identificationConfigurationEnum.NOIDENT || identificationConfigurationEnum.IASCO ? (
+              identificationConfigurationEnum.NOIDENT ? (
                 <Box typography="s" color="textTertiary">
-                  Pas de repérage pour cette enquête
+                  {D.noLocation}
                 </Box>
               ) : (
                 <MoveQuestion surveyUnit={surveyUnit} />
