@@ -27,7 +27,6 @@ import Box from '@mui/material/Box';
  * @param {SurveyUnit} surveyUnit
  */
 export function IdentificationCard({ surveyUnit }) {
-  console.log(surveyUnit.identificationConfiguration,"surveyUnit.identificationConfiguration")
   const { questions, setQuestion, answers, question, setAnswer } =
     useIdentificationQuestions(surveyUnit);
   return (
