@@ -125,12 +125,6 @@ export function ContactAttemptForm({ onClose, surveyUnit }) {
     }
   }, [step, surveyUnit.contactAttemptConfiguration]);
   const isRadioStep = step !== 3;
-
-  console.log(surveyUnit);
-  console.log(medium);
-  console.log(status);
-  console.log(date);
-  console.log(step);
   return (
     <Dialog maxWidth="s" open={true} onClose={onClose}>
       <DialogTitle id="dialogtitle">{getTitle(step)}</DialogTitle>
