@@ -17,6 +17,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { QueenPage } from './pages/QueenPage';
 import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
 import { ResetData } from './pages/ResetData';
+import { enUS, fr } from 'date-fns/locale';
 
 const router = createBrowserRouter([
   {
@@ -67,10 +68,23 @@ export function App() {
 
 function AppWrapper() {
   const { authenticated } = useAuth();
+  const browserLanguage = navigator.language;
+  let dateFnsLocale;
+  switch (browserLanguage) {
+    case 'fr':
+    case 'fr-FR':
+      dateFnsLocale = fr;
+      break;
+    case 'en-US':
+    case 'en':
+    default:
+      dateFnsLocale = enUS;
+      break;
+  }
 
   return (
     <PearlTheme>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={dateFnsLocale}>
         <ServiceWorkerStatus authenticated={authenticated} />
         <div>
           {authenticated ? (
