@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import TextField from '@mui/material/TextField';
 import { Typography } from '../ui/Typography';
+import { daysLeftForSurveyUnit } from '../utils/functions';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
@@ -74,7 +75,6 @@ export function SuiviPage() {
       <Card elevation={2}>
         <CardContent>
           <Stack gap={4}>
-            {/* Header */}
             <Row justifyContent="space-between">
               <Row gap={2}>
                 <Typography sx={{ flex: 'none' }} variant="headingM" color="black" as="h1">
@@ -90,11 +90,11 @@ export function SuiviPage() {
                       placeholder="Sélectionnez..."
                       options={campaigns}
                     />
-                        {campaign && (
-      <IconButton aria-label="reset" onClick={() => setCampaign('')}>
-        <RestartAltIcon />
-      </IconButton>
-    )}
+                    {campaign && (
+                      <IconButton aria-label="reset" onClick={() => setCampaign('')}>
+                        <RestartAltIcon />
+                      </IconButton>
+                    )}
                     <TextField
                       label="Nom/prénom"
                       variant="outlined"
@@ -113,7 +113,6 @@ export function SuiviPage() {
                   </>
                 )}
               </Row>
-
               <Tabs
                 value={tab}
                 onChange={(_, tab) => setTab(tab)}
@@ -124,7 +123,6 @@ export function SuiviPage() {
                 <Tab label="Suivi des unités par enquête" value="table" />
               </Tabs>
             </Row>
-
             {tab === 'stats' ? (
               <SuiviStats surveyUnits={surveyUnits} />
             ) : (
@@ -141,33 +139,93 @@ export function SuiviPage() {
  * @param {SurveyUnit[]} surveyUnits
  */
 function SuiviStats({ surveyUnits }) {
+  const [sortDirection, setSortDirection] = useState('');
+  const handleSortChange = direction => {
+    setSortDirection(direction);
+  };
+
   const surveyUnitsPerCampaign = useMemo(
     () => groupBy(surveyUnits, su => su.campaign),
     [surveyUnits]
   );
-  return (
-    <Stack gap={2}>
-      <Typography variant="s" color="textTertiary" as="p">
-        {D.trackingAccessDetailedData}
-      </Typography>
 
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <ScrollableBox height="calc(100vh - 32px - 160px - 84px)">
+  const sortedCampaignLabels = useMemo(() => {
+    if (sortDirection.startsWith('deadline')) {
+      const labelsWithDeadline = Object.entries(surveyUnitsPerCampaign).map(([label, units]) => ({
+        label,
+        deadline: daysLeftForSurveyUnit(units),
+      }));
+
+      const sortedByDeadline = labelsWithDeadline.sort((a, b) => {
+        if (sortDirection === 'deadlineAsc') {
+          return a.deadline - b.deadline;
+        } else {
+          return b.deadline - a.deadline;
+        }
+      });
+
+      return sortedByDeadline.map(item => item.label);
+    } else {
+      const labels = Object.keys(surveyUnitsPerCampaign);
+      return labels.sort((a, b) => {
+        if (sortDirection === 'desc') {
+          return b.localeCompare(a);
+        } else {
+          // 'asc'
+          return a.localeCompare(b);
+        }
+      });
+    }
+  }, [surveyUnitsPerCampaign, sortDirection]);
+
+  const sortOptions = [
+    { value: 'asc', label: 'Nom de campagne [A - Z]' },
+    { value: 'desc', label: 'Nom de campagne [Z - A]' },
+    { value: 'deadlineAsc', label: 'Échéance Courte' },
+    { value: 'deadlineDesc', label: 'Échéance Longue' },
+  ];
+
+  return (
+    <Box m={2}>
+      <Card elevation={2}>
+        <CardContent>
+          <Stack gap={4}>
+            <Box display="flex" alignItems="center" flexWrap="wrap">
+              <Typography variant="body1" sx={{ flexGrow: 0, marginRight: 2 }}>
+                {D.trackingAccessDetailedData}
+              </Typography>
+              <Select
+                options={sortOptions}
+                value={sortDirection}
+                onChange={handleSortChange}
+                placeholder="Aucun tri"
+                allowEmpty
+                sx={{ width: '210px' }}
+              />
+            </Box>
             <Grid container spacing={2}>
-              {Object.entries(surveyUnitsPerCampaign).map(([name, units]) => (
-                <Grid item xs={6} key={name}>
-                  <CampaignProgress label={name} surveyUnits={units} />
-                </Grid>
-              ))}
+              <Grid item xs={6}>
+                <ScrollableBox height="calc(100vh - 32px - 160px - 84px)">
+                  <Grid container spacing={2}>
+                    {sortedCampaignLabels.map(label => (
+                      <Grid item xs={12} sm={6} key={label}>
+                        <CampaignProgress
+                          label={label}
+                          surveyUnits={surveyUnitsPerCampaign[label]}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </ScrollableBox>
+              </Grid>
+              <Grid item xs={6}>
+                <CampaignProgressPieChart surveyUnits={surveyUnits} />
+              </Grid>
             </Grid>
-          </ScrollableBox>
-        </Grid>
-        <Grid item xs={6}>
-          <CampaignProgressPieChart surveyUnits={surveyUnits} />
-        </Grid>
-      </Grid>
-    </Stack>
+          </Stack>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
 
@@ -254,7 +312,6 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
           compareA = getOutcomeIndex(a);
           compareB = getOutcomeIndex(b);
           if (!isAscending) {
-            // Inverse les valeurs pour le tri descendant
             compareA = compareA === Infinity ? -Infinity : compareA;
             compareB = compareB === Infinity ? -Infinity : compareB;
           }
