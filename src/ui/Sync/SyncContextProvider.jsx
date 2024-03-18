@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import * as api from 'utils/api';
 
 import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
