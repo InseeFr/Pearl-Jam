@@ -5,10 +5,10 @@ import {
   IASCO_SITUATION_FINISHING_VALUES,
   identificationIsFinished,
 } from './identificationFunctions';
-import { differenceInYears, formatDistanceStrict } from 'date-fns';
+import { differenceInYears } from 'date-fns';
 
 import D from 'i18n';
-import { contactOutcomeEnum, findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
+import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
@@ -364,14 +364,6 @@ export const applyFilters = (surveyUnits, filters) => {
 
   const filterByTerminated = su => {
     return !terminatedFilter || convertSUStateInToDo(getLastState(su).type) !== toDoEnum.TERMINATED;
-  };
-
-  const filterBySubSample = su => {
-    if (!subSampleFilter > 0) {
-      return campaignFilter.includes(su.campaign.toString());
-    }
-
-    return true;
   };
 
   const filteredSU = surveyUnits

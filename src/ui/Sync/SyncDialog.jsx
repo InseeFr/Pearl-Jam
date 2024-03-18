@@ -71,7 +71,7 @@ export function SyncDialog({ onClose, syncResult }) {
               </Typography>
             )}
             {messages?.map((message, index) => (
-              <DialogContentText key={index}>
+              <DialogContentText key={message}>
                 {message}
                 {state === 'warning' && index === messages.length - 1 && (
                   <Box ml={1} component="span">

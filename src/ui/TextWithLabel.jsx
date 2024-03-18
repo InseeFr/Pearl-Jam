@@ -1,4 +1,3 @@
-import { Row } from './Row';
 import { Typography } from './Typography';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import Box from '@mui/material/Box';

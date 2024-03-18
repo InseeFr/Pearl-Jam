@@ -2,7 +2,6 @@ import Card from '@mui/material/Card';
 import { Typography } from '../Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { PieChart } from './PieChart';
 import { daysLeftForSurveyUnit, getSuTodoState } from '../../utils/functions';
 import { generateColorInGradient } from '../../utils/functions/colors';

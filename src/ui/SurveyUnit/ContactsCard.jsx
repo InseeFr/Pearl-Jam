@@ -6,7 +6,7 @@ import { Typography } from '../Typography';
 import D from 'i18n';
 import { Row } from '../Row';
 import Stack from '@mui/material/Stack';
-import React, { Fragment } from 'react';
+import React from 'react';
 import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined';
 import Box from '@mui/material/Box';
 import { findContactOutcomeValueByType } from '../../utils/enum/ContactOutcomeEnum';

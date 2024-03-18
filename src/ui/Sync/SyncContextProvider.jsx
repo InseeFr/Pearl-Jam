@@ -108,7 +108,7 @@ export function SyncContextProvider({ children }) {
     PEARL_AUTHENTICATION_MODE,
   ]);
 
-  const context = { syncFunction, setSyncResult };
+  const context = useMemo(() => ({ syncFunction, setSyncResult }), [syncFunction, setSyncResult]);
 
   const syncMesssage = () => {
     if (loading && isSync) return D.synchronizationInProgress;

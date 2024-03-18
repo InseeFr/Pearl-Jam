@@ -67,6 +67,22 @@ const PersonList = ({
         const personOfLegalAge = isOfLegalAge(person);
         const colorByPersonAge = personOfLegalAge ? 'lightGrey' : 'inherit';
         const couldBeInterviewed = isHouseHoldFinished && personOfLegalAge;
+        const xsValues = couldBeInterviewed ? [2.5, 2.9, 2.9] : [3, 4.2, 4.2];
+        const currQuestProgres = questionnaireProgress[index];
+        const questionnaireProgressIcon =
+          currQuestProgres === 'terminé' ? (
+            <CircleIcon />
+          ) : currQuestProgres === 'en cours' ? (
+            <TimeIcon />
+          ) : (
+            <DisturbIcon />
+          );
+        const questionnaireProgressColor =
+          currQuestProgres === 'terminé'
+            ? 'green'
+            : currQuestProgres === 'en cours'
+              ? '#FD8A02'
+              : '#6C6E70';
 
         return (
           <React.Fragment key={index}>
@@ -79,23 +95,13 @@ const PersonList = ({
                   }}
                 />
               </Grid>
-              <Grid item xs={couldBeInterviewed ? 2.5 : 3} p={1} className={classes.gridBackground}>
+              <Grid item xs={xsValues[0]} p={1} className={classes.gridBackground}>
                 <Typography style={{ color: colorByPersonAge }}>{person.name}</Typography>
               </Grid>
-              <Grid
-                item
-                xs={couldBeInterviewed ? 2.9 : 4.2}
-                p={1}
-                className={classes.gridBackground}
-              >
+              <Grid item xs={xsValues[1]} p={1} className={classes.gridBackground}>
                 <Typography style={{ color: colorByPersonAge }}>{person.gender}</Typography>
               </Grid>
-              <Grid
-                item
-                xs={couldBeInterviewed ? 2.9 : 4.2}
-                p={1}
-                className={classes.gridBackground}
-              >
+              <Grid item xs={xsValues[2]} p={1} className={classes.gridBackground}>
                 <Typography style={{ color: colorByPersonAge }}>{person.age}</Typography>
               </Grid>
               {couldBeInterviewed && (
@@ -103,22 +109,8 @@ const PersonList = ({
                   <div className={classes.divFlex}>
                     <CustomChip
                       label={questionnaireProgress[index]}
-                      icon={
-                        questionnaireProgress[index] === 'terminé' ? (
-                          <CircleIcon />
-                        ) : questionnaireProgress[index] === 'en cours' ? (
-                          <TimeIcon />
-                        ) : (
-                          <DisturbIcon />
-                        )
-                      }
-                      color={
-                        questionnaireProgress[index] === 'terminé'
-                          ? 'green'
-                          : questionnaireProgress[index] === 'en cours'
-                            ? '#FD8A02'
-                            : '#6C6E70'
-                      }
+                      icon={questionnaireProgressIcon}
+                      color={questionnaireProgressColor}
                       shadow={true}
                     />
                   </div>
@@ -146,7 +138,7 @@ const PersonList = ({
                         Questionnaire
                       </Typography>
                     </Stack>
-                    {questionnaireProgress[index] === 'terminé' ? (
+                    {currQuestProgres === 'terminé' ? (
                       <Button
                         onClick={toggleModal}
                         color="surfaceSecondary"
@@ -163,7 +155,7 @@ const PersonList = ({
                         startIcon={<SlowMotionVideoIcon fontSize="small" />}
                         onClick={() => handleStartQuestionnaire(index)}
                       >
-                        {questionnaireProgress[index] === 'en cours' ? 'Reprendre' : 'Démarrer'}
+                        {currQuestProgres === 'en cours' ? 'Reprendre' : 'Démarrer'}
                       </Button>
                     )}
                   </Stack>

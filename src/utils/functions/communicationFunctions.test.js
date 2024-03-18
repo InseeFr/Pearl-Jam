@@ -1,5 +1,5 @@
 import { TITLES } from 'utils/constants';
-import { getRecipientInformation, isEmailValid, isValidTitle } from 'utils/functions/index';
+import { getRecipientInformation } from 'utils/functions/index';
 
 describe('getRecipientInformation', () => {
   const VALID_FIRSTNAME1 = 'Ada';

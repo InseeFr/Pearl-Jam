@@ -3,7 +3,6 @@ import { Children } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 export function SwipeableTab(props) {
