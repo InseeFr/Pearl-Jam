@@ -8,7 +8,7 @@ import { useCallback, useState } from 'react';
  * @param {number} max
  * @return {{value: number, increment: () => void, decrement: () => void}}
  */
-export function useIncrement(initial = 0, { min, max }) {
+export function useIncrement({ min, max }, initial = 0) {
   const [value, setValue] = useState(initial);
   return {
     value,
