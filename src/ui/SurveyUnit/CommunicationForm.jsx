@@ -33,10 +33,13 @@ export function CommunicationForm({ onClose, surveyUnit }) {
     value: currentIndex,
     decrement,
     increment,
-  } = useIncrement(0, {
-    min: 0,
-    max: max,
-  });
+  } = useIncrement(
+    {
+      min: 0,
+      max: max,
+    },
+    0
+  );
   const [isConfirmValid, setConfirmValid] = useState(false);
   const step = COMMUNICATION_REQUEST_FORM_STEPS[currentIndex];
   /** @var {SurveyUnitCommunicationRequest} communication */
