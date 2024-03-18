@@ -30,25 +30,23 @@ export function CommentCard({ surveyUnit }) {
   };
   const canSubmit = comment !== baseComment;
   return (
-    <>
-      <Card p={2} elevation={0}>
-        <CardContent>
-          <Stack gap={3} component="form" onSubmit={handleSubmit}>
-            <Row gap={1}>
-              <CommentIcon fontSize="large" />
-              <Typography as="h2" variant="xl" fontWeight={700}>
-                {D.goToCommentsPage}
-              </Typography>
-            </Row>
-            <Stack gap={2} alignItems="stretch">
-              <CommentField value={comment} onChange={setComment} />
-              <Button variant="contained" type="submit" disabled={!canSubmit}>
-                {D.saveButton}
-              </Button>
-            </Stack>
+    <Card p={2} elevation={0}>
+      <CardContent>
+        <Stack gap={3} component="form" onSubmit={handleSubmit}>
+          <Row gap={1}>
+            <CommentIcon fontSize="large" />
+            <Typography as="h2" variant="xl" fontWeight={700}>
+              {D.goToCommentsPage}
+            </Typography>
+          </Row>
+          <Stack gap={2} alignItems="stretch">
+            <CommentField value={comment} onChange={setComment} />
+            <Button variant="contained" type="submit" disabled={!canSubmit}>
+              {D.saveButton}
+            </Button>
           </Stack>
-        </CardContent>
-      </Card>
-    </>
+        </Stack>
+      </CardContent>
+    </Card>
   );
 }
