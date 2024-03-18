@@ -83,11 +83,11 @@ function GridHeader({ visibleCount, totalCount }) {
       <SearchField value={search} onChange={setSearch} />
       <Row justifyContent="space-between" mb={2.5}>
         <Typography size="m">
-          {visibleCount} unités sur {totalCount}
+          {visibleCount} {D.surveyUnits} {totalCount}
         </Typography>
         <Row gap={1}>
           <Typography as="label" id="sort-field" sx={{ flex: 'none' }}>
-            Trier par:
+            {`${D.sortBy} :`}
           </Typography>
           <Select
             sx={{ width: 200 }}
@@ -194,7 +194,7 @@ function Sidebar({ surveyUnits }) {
           />
         </Accordion>
         <Hr />
-        <Typography variant="m">Filtrer les unités par</Typography>
+        <Typography variant="m">{D.filterUnitsBy}</Typography>
         <Accordion variant="dense" title={D.sortSurvey} defaultOpen>
           <Stack gap={0.5}>
             {campaigns.map(campaign => (
@@ -235,7 +235,7 @@ function Sidebar({ surveyUnits }) {
         <div>
           <Button size="edge" color="textPrimary" variant="underlined" onClick={filter.reset}>
             <RestartAltIcon />
-            Réinitialiser les filtres
+           {D.resetFilters}
           </Button>
         </div>
       </Stack>
