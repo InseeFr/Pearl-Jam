@@ -21,6 +21,7 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import { ContactAttemptForm } from './ContactAttemptForm';
+import mediumMessage from '../../i18n/mediumMessage';
 
 /**
  * Display persons linked to a survey unit
@@ -129,13 +130,37 @@ function ContactOutcome({ contact }) {
  * @param {(a: SurveyUnitContactAttempt) => void} onDelete
  */
 function ContactAttempt({ attempt, onDelete }) {
+  function getMediumMessage(medium) {
+    const mediumMapping = {
+      FIELD: 'mediumFaceToFace',
+      TEL: 'mediumPhone',
+      MAIL: 'mediumEmail',
+    };
+
+    const browserLanguage = navigator.language.split('-')[0];
+
+    const language = ['fr', 'en'].includes(browserLanguage) ? browserLanguage : 'en';
+
+    const mediumKey = mediumMapping[medium];
+    if (mediumKey) {
+      return mediumMessage[mediumKey][language];
+    }
+
+    return mediumMessage.mediumQuestion[language];
+  }
+
   return (
     <Box px={2} py={1.5} borderRadius={1} bgcolor="surfacePrimary.main">
       <Row justifyContent="space-between">
         <div>
-          <Typography color="textPrimary" variant="s" as="div">
-            {findContactAttemptValueByType(attempt.status)}
-          </Typography>
+          <Row gap={1}>
+            <Typography color="textPrimary" variant="s" as="div">
+              {findContactAttemptValueByType(attempt.status)}
+            </Typography>
+            <Typography color="textSecondary" variant="s" as="div">
+              - {getMediumMessage(attempt.medium)}
+            </Typography>
+          </Row>
           <Typography color="textTertiary" variant="s" as="div">
             {formatDate(attempt.date, true)}
           </Typography>
