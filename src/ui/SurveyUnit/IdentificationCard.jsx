@@ -51,11 +51,12 @@ export function IdentificationCard({ surveyUnit }) {
                 />
               ))}
               {surveyUnit.identificationConfiguration ===
-              identificationConfigurationEnum.NOIDENT ? (
+                identificationConfigurationEnum.NOIDENT && (
                 <Box typography="s" color="textTertiary">
                   {D.noLocation}
                 </Box>
-              ) : (
+              )}
+              {surveyUnit.identificationConfiguration === identificationConfigurationEnum.TEL && (
                 <MoveQuestion surveyUnit={surveyUnit} />
               )}
             </Stack>
