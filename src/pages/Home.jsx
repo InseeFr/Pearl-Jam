@@ -160,7 +160,7 @@ function Sidebar({ surveyUnits }) {
                   onChange={() => filter.toggle('terminated')}
                 />
               }
-              label="Masquer les unités terminées"
+              label={D.HideFinishedUnits}
             />
 
             <Stack gap={0.5}>
@@ -190,7 +190,7 @@ function Sidebar({ surveyUnits }) {
                 sx={{ padding: 0 }}
               />
             }
-            label="Unités prioritaires"
+            label={D.PriorityUnits}
           />
         </Accordion>
         <Hr />

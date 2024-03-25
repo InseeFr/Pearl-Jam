@@ -17,5 +17,13 @@ const surveyUnitMessage = {
     fr: 'Revenir à la liste des unités à enquêter',
     en: 'Back to the survey-units list',
   },
+  HideFinishedUnits: {
+    fr:'Masquer les unités terminées',
+    en:'Hide finished units'
+  },
+  PriorityUnits: {
+    fr:'Unités prioritaires',
+    en:'Priority units'
+  }
 };
 export default surveyUnitMessage;
