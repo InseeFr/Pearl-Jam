@@ -4,6 +4,8 @@ import Stack from '@mui/material/Stack';
 import React, { useState } from 'react';
 import { getCommentByType } from '../../utils/functions';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import D from 'i18n';
+
 
 /**
  * @param {SurveyUnit} surveyUnit
@@ -52,7 +54,7 @@ export function CommentForm({ surveyUnit, wrapper: WrapperComponent }) {
             variant="filled"
             label="Commentaire"
             multiline
-            placeholder="Saisissez un commentaire..."
+            placeholder={D.enterComment}
           />
           <Typography variant="xs" color="textHint" textAlign="right">
             {comment.length}/{maxChar}

@@ -38,7 +38,7 @@ export function AddressCard({ surveyUnit }) {
                 variant="edge"
                 startIcon={<BorderColorOutlinedIcon fontSize="small" />}
               >
-                Modifier
+                {D.editButton}
               </Button>
             </Row>
             <Stack gap={0.5}>

@@ -145,7 +145,7 @@ const PersonList = ({
                         variant="edge"
                         startIcon={<BorderColorOutlinedIcon fontSize="small" />}
                       >
-                        Modifier
+                        {D.editButton}
                       </Button>
                     ) : (
                       <Button

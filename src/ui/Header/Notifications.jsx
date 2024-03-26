@@ -70,7 +70,7 @@ export function Notifications({ target, onClose }) {
       >
         <Stack gap={2} p={3}>
           <Row justifyContent="space-between">
-            <Typography variant="headingM">Notifications</Typography>
+            <Typography variant="headingM">{D.notifications}</Typography>
             <Row gap={1}>
               <IconButton
                 color="textPrimary"
@@ -90,9 +90,9 @@ export function Notifications({ target, onClose }) {
             aria-label="Type de notification"
             textColor="secondary"
           >
-            <Tab label="Toutes les notifications" value={null} />
-            <Tab label="Notification techniques" value={NOTIFICATION_TYPE_SYNC} />
-            <Tab label="Notifications Métiers" value={NOTIFICATION_TYPE_MANAGEMENT} />
+            <Tab label={D.allNotifications} value={null} />
+            <Tab label={D.technicalNotifications} value={NOTIFICATION_TYPE_SYNC} />
+            <Tab label={D.businessNotifications} value={NOTIFICATION_TYPE_MANAGEMENT} />
           </Tabs>
           <Stack gap={1}>
             {filteredNotifications.map(notification => (

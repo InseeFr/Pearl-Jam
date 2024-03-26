@@ -38,6 +38,7 @@ const dictionary = {
   welcome: { fr: 'Bienvenue', en: 'Welcome' },
   seeSurveyUnit: { fr: 'Voir UE', en: 'See SU' },
   openQuestionnaire: { fr: 'Questionnaire', en: 'Questionnaire' },
+  accessTheQuestionnaire: { fr: 'Accéder au questionnaire', en: 'Access the questionnaire' },
   organizationComment: {
     fr: "Commentaire lié à l'organisation de la collecte",
     en: 'Comment related to the organization of the collection',
@@ -49,6 +50,7 @@ const dictionary = {
   connexionOK: { fr: 'Connexion OK', en: 'Connection ok' },
   connexionKO: { fr: 'Pas de réseau', en: 'No network' },
   interviewer: { fr: 'Enquêteur', en: 'Interviewer' },
+  investigatorMessage: { fr: 'Commentaire enquêteur', en: 'Investigator comment' },
   appInstalling: {
     fr: 'Installation, veuillez patientez...',
     en: 'Installation, please wait...',
@@ -76,6 +78,7 @@ const dictionary = {
   areYouSure: { fr: 'Êtes-vous sûr ?', en: 'Are you sure ?' },
   delete: { fr: 'Supprimer', en: 'Delete' },
   other: { fr: 'Autre', en: 'Other' },
+  enterComment: { fr: 'Saisissez un commentaire...', en: 'Enter a comment...' },
 
   ...buttonMessage,
   ...navigationMessage,

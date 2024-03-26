@@ -43,7 +43,7 @@ export function CommentDialog({ surveyUnit, open, onClose }) {
   return (
     <Dialog open={open} onClose={close}>
       <form onSubmit={handleSubmit}>
-        <DialogTitle>Commentaire enquêteur</DialogTitle>
+        <DialogTitle>{D.investigatorMessage}</DialogTitle>
         <DialogContent>
           <Stack gap={2}>
             <PrivilegedPerson surveyUnit={surveyUnit} />

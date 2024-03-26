@@ -96,12 +96,12 @@ export function SuiviPage() {
                       </IconButton>
                     )}
                     <TextField
-                      label="Nom/prénom"
+                      label={D.trackingName}
                       variant="outlined"
                       size="small"
                       value={searchText}
                       onChange={handleSearchTextChange}
-                      sx={{ marginLeft: 0.5, marginRight: 2, width: '300px' }}
+                      sx={{ marginLeft: 0.5, marginRight: 2, width: '330px' }}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
@@ -119,8 +119,8 @@ export function SuiviPage() {
                 aria-label="Type de notification"
                 textColor="secondary"
               >
-                <Tab label="Toutes les enquêtes" value="stats" />
-                <Tab label="Suivi des unités par enquête" value="table" />
+                <Tab label={D.allSurveys} value="stats" />
+                <Tab label={D.unitsTrackingBySurvey} value="table" />
               </Tabs>
             </Row>
             {tab === 'stats' ? (
@@ -179,10 +179,10 @@ function SuiviStats({ surveyUnits }) {
   }, [surveyUnitsPerCampaign, sortDirection]);
 
   const sortOptions = [
-    { value: 'asc', label: 'Nom de campagne [A - Z]' },
-    { value: 'desc', label: 'Nom de campagne [Z - A]' },
-    { value: 'deadlineAsc', label: 'Échéance Courte' },
-    { value: 'deadlineDesc', label: 'Échéance Longue' },
+    { value: 'asc', label: `${D.campaignNameAsc}`},
+    { value: 'desc', label: `${D.campaignNameDesc}`},
+    { value: 'deadlineAsc', label: `${D.shortDeadline}` },
+    { value: 'deadlineDesc', label: `${D.longDeadline}` },
   ];
 
   return (
@@ -198,7 +198,7 @@ function SuiviStats({ surveyUnits }) {
                 options={sortOptions}
                 value={sortDirection}
                 onChange={handleSortChange}
-                placeholder="Aucun tri"
+                placeholder={D.noSorting}
                 allowEmpty
                 sx={{ width: '210px' }}
               />
@@ -416,7 +416,7 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
                 </Box>
               </Box>
             </TableCell>
-            <TableCell>Commentaire</TableCell>
+            <TableCell>{D.goToCommentsPage}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

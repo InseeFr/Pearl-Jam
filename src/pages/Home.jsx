@@ -213,19 +213,19 @@ function Sidebar({ surveyUnits }) {
           </Stack>
         </Accordion>
         <Hr />
-        <Accordion variant="dense" title="Sous-échantillon et grappe" defaultOpen>
+        <Accordion variant="dense" title={D.subSampleCluster} defaultOpen>
           <Stack gap={2} sx={{ width: '100%' }}>
             <Select
               value={filter.subSample}
               allowEmpty
-              placeholder="Sous-échantillon..."
+              placeholder={D.subSample}
               onChange={v => filter.setSubSample(v)}
               options={subSamples}
             />
             <Select
               value={filter.subGrappe}
               allowEmpty
-              placeholder="Grappe..."
+              placeholder={D.cluster}
               onChange={v => filter.setSubGrappe(v)}
               options={subGrappe}
             />

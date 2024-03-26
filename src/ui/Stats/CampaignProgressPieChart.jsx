@@ -8,6 +8,8 @@ import { generateColorInGradient } from '../../utils/functions/colors';
 import { Row } from '../Row';
 import { groupBy } from '../../utils/functions/array';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
+import D from 'i18n';
+
 
 const colorStart = '#D3DBE5';
 const colorEnd = '#3A4657';
@@ -46,9 +48,8 @@ export function CampaignProgressPieChart({ surveyUnits }) {
   return (
     <Card elevation={0} raised>
       <Stack gap={2} alignItems="center" p={2} sx={{ height: 646 }}>
-        <Typography fontWeight={700} align="center" variant="headingS" component="h2" color="black">
-          Nombre d’unités restantes à traiter
-          <br /> par enquête et échéance
+        <Typography sx={{width: 500}} fontWeight={700} align="center" variant="headingS" component="h2" color="black">
+          {D.numberOfUnitsRemaining}
         </Typography>
         <div>
           <PieChart size={240} parts={slices} paddingBlock={80} paddingInline={100} />
@@ -59,10 +60,10 @@ export function CampaignProgressPieChart({ surveyUnits }) {
           </Typography>
           <Row justifyContent="space-between" pb={0.5}>
             <Typography variant="s" color="black" as="div">
-              0 jours.
+              0 {D.days}.
             </Typography>
             <Typography variant="s" color="black" textAlign="right" as="div">
-              {maxDays} jours.
+              {maxDays} {D.days}.
             </Typography>
           </Row>
           <Box sx={legendBar}></Box>

@@ -47,7 +47,7 @@ const HousingResident = ({ startHousing, finishedHousing, toggleHousing, toggleM
           variant="edge"
           startIcon={<BorderColorOutlinedIcon fontSize="small" />}
         >
-          Modifier
+          {D.editButton}
         </Button>
       )}
     </Row>

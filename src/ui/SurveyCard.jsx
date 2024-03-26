@@ -17,6 +17,8 @@ import LockIcon from '@mui/icons-material/Lock';
 import { StatusChip } from './StatusChip';
 import { Row } from './Row';
 import { AbsoluteLink } from './AbsoluteLink';
+import D from '../i18n/build-dictionary';
+
 
 /**
  * @param {SurveyUnit} surveyUnit
@@ -92,7 +94,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
               <AccessTimeIcon color="textTertiary" />
               <Typography color="textTertiary" variant="s">{`${daysLeftForSurveyUnit(
                 surveyUnit
-              )} jours`}</Typography>
+              )} ${D.days}`}</Typography>
             </Row>
             <StatusChip status={state} />
           </Row>

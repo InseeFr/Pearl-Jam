@@ -12,6 +12,8 @@ import { groupBy } from '../../utils/functions/array';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
 import { useToggle } from '../../utils/hooks/useToggle';
 import { StatusChip } from '../StatusChip';
+import D from 'i18n';
+
 
 /**
  * @param {string} label
@@ -85,7 +87,7 @@ export function CampaignProgress({ label, surveyUnits }) {
                 </CenteredBox>
               </Box>
               <Typography variant="s" color="textHint" fontWeight={700}>
-                Échéance : {`${daysLeftForSurveyUnit(surveyUnits)} jours`}
+                Échéance : {`${daysLeftForSurveyUnit(surveyUnits)} ${D.days}`}
               </Typography>
             </>
           )}

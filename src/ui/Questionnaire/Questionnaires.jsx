@@ -7,6 +7,8 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
+import D from 'i18n';
+
 
 export function Questionnaires({ surveyUnit }) {
   const { id } = surveyUnit;
@@ -18,7 +20,7 @@ export function Questionnaires({ surveyUnit }) {
           <Row gap={1}>
             <StickyNote2Icon fontSize="large" />
             <Typography as="h2" variant="xl" fontWeight={700}>
-              Questionnaire
+              {D.openQuestionnaire}
             </Typography>
           </Row>
           <Button
@@ -27,7 +29,7 @@ export function Questionnaires({ surveyUnit }) {
             component="a"
             href={`/queen/survey-unit/${id}`}
           >
-            Accéder au questionnaire
+            {D.accessTheQuestionnaire}
           </Button>
         </Stack>
       </CardContent>

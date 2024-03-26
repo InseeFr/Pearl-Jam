@@ -3,6 +3,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTheme } from '@mui/material/styles';
 import React from 'react';
+import D from '../i18n/build-dictionary';
 
 /**
  * @param {(v: string) => void} onChange
@@ -16,7 +17,7 @@ export function SearchField({ onChange, value }) {
     <TextField
       value={value}
       onChange={e => onChange(e.target.value)}
-      placeholder="Nom, prénom, ville, enquête, ID..."
+      placeholder={D.placeholderSearchHome}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
