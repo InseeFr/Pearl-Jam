@@ -50,11 +50,11 @@ registerRoute(
   createHandlerBoundToURL(`/index.html`)
 );
 
-const getUrlRegexJson = function(url) {
+const getUrlRegexJson = function (url) {
   return url.replace('http', '^http').concat('/(.*)(.json)');
 };
 
-const getUrlRegexManifestFiles = function(url) {
+const getUrlRegexManifestFiles = function (url) {
   return url.replace('http', '^http').concat('/(.*)((.ico)|(.png))');
 };
 

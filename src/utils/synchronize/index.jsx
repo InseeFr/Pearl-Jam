@@ -6,7 +6,7 @@ import { useCallback, useState } from 'react';
 import surveyUnitDBService from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { TITLES, PEARL_USER_KEY } from 'utils/constants';
 import userIdbService from 'utils/indexeddb/services/user-idb-service';
 
@@ -15,7 +15,7 @@ export const useQueenSynchronisation = () => {
 
   const [queenError, setQueenError] = useState(false);
   const [queenReady, setQueenReady] = useState(true);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const checkQueen = () => {
     setQueenReady(null);
@@ -52,8 +52,8 @@ export const useQueenSynchronisation = () => {
   };
 
   const synchronizeQueen = useCallback(() => {
-    history.push(`/queen/synchronize`);
-  }, [history]);
+    navigate(`/queen/synchronize`);
+  }, [navigate]);
 
   return { checkQueen, synchronizeQueen, queenReady, queenError };
 };

@@ -13,16 +13,18 @@ const resetDataMessage = {
     en: 'Here you can empty the local database of your browser.',
   },
   firstBodyDialog: {
-    fr:
-      "Vous allez perdre l'ensemble de vos données. Assurez vous que vos données sont déjà sauvegardées (par une synchronisation ou autre). Êtes vous sûr(e) de vouloir tout supprimer ?",
-    en:
-      'You will lose all your data. Make sure your data is already backed up (by a synchronization or otherwise). Are you sure you want to delete everything ?',
+    fr: "Vous allez perdre l'ensemble de vos données. Assurez vous que vos données sont déjà sauvegardées (par une synchronisation ou autre). Êtes vous sûr(e) de vouloir tout supprimer ?",
+    en: 'You will lose all your data. Make sure your data is already backed up (by a synchronization or otherwise). Are you sure you want to delete everything ?',
   },
   mainTitle: { fr: 'Zone dangereuse', en: 'Danger zone' },
   confirmTitle: { fr: 'Confirmation', en: 'Confirmation' },
   confirmRandom: {
     fr: 'Veuillez entrer le texte ci dessous pour confirmer la suppression.',
     en: 'Please enter the text below to confirm the deletion.',
+  },
+  codeLabel: {
+    fr: 'Code de confirmation',
+    en: 'Confirmation code',
   },
   confirmId: {
     fr: "Plus qu'une étape, veuillez également saisir votre identifiant.",

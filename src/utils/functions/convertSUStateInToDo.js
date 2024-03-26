@@ -1,6 +1,11 @@
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import toDoEnum from 'utils/enum/SUToDoEnum';
+import { toDoEnum } from 'utils/enum/SUToDoEnum';
 
+/**
+ * @deprecated used internally but shouldn't be used outside of surveyUnitFunctions, use getSuTodoState() instead
+ * @param {string} suState - Survey unit state (type)
+ * @returns {{color: string, value: string, order: string}|boolean}
+ */
 export const convertSUStateInToDo = suState => {
   if (
     [

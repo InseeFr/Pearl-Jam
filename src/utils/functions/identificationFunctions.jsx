@@ -91,7 +91,6 @@ export const useIdentification = (identificationConfiguration, previousData) => 
       const filteredAnswers = typedAnswers.filter(ans => ans.value === value);
       return filteredAnswers?.[0];
     };
-
     const generateInitData = questions => {
       if (!questions) return { data: [], nextAnswers: undefined };
 

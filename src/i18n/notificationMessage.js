@@ -4,6 +4,9 @@ const notificationMessage = {
   noNotification: { fr: 'Aucune notification', en: 'No notification' },
   notificationsType: { fr: 'Type de notifications', en: 'Type of notifications' },
   allNotifs: { fr: 'Toutes', en: 'All' },
+  allNotifications: { fr: 'Toutes les notifications', en: 'All the notifications'},
+  technicalNotifications: { fr: 'Notifications techniques', en: 'Technical notifications'},
+  businessNotifications: { fr: 'Notifications métiers', en: 'Business notifications'},
 };
 
 export default notificationMessage;

@@ -1,46 +1,102 @@
-import { Route, useLocation } from 'react-router-dom';
-
-import CssBaseline from '@material-ui/core/CssBaseline';
-import D from 'i18n';
-import { DatabaseConsole } from 'components/panel-body/databaseConsole';
-import Home from 'components/panel-body/home';
-import Notification from 'components/common/Notification';
-import { NotificationWrapper } from 'components/notificationWrapper';
-import Palette from 'components/common/palette';
-import Preloader from 'components/common/loader';
 import React from 'react';
-import { ResetData } from 'components/panel-body/resetData';
-import SynchronizeWrapper from 'components/sychronizeWrapper';
-import { ThemeProvider } from '@material-ui/core/styles';
-import theme from './theme';
-import { useAuth } from 'utils/auth/initAuth';
-import { useServiceWorker } from 'utils/hooks/useServiceWorker';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { loadConfiguration, useConfiguration } from './utils/hooks/useConfiguration';
+import { PearlTheme } from './ui/PearlTheme';
+import { Header } from './ui/Header';
+import { Home } from './pages/Home';
+import { useAuth } from './utils/auth/initAuth';
+import { Preloader } from './ui/Preloader';
+import D from './i18n/build-dictionary';
+import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
+import { useEffectOnce } from './utils/hooks/useEffectOnce';
+import { SurveyUnitPage } from './pages/SurveyUnitPage';
+import './app.css';
+import { SuiviPage } from './pages/SuiviPage';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { QueenPage } from './pages/QueenPage';
+import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
+import { ResetData } from './pages/ResetData';
+import { enUS, fr } from 'date-fns/locale';
 
-function App() {
-  const { pathname } = useLocation();
-  const { authenticated } = useAuth();
-  const serviceWorkerInfo = useServiceWorker(authenticated);
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Notification serviceWorkerInfo={serviceWorkerInfo} />
-      <div>
-        {!authenticated && <Preloader message={D.pleaseWait} />}
-        {authenticated && (
-          <SynchronizeWrapper>
-            <NotificationWrapper>
-              {!pathname.startsWith('/support') && (
-                <Route path="/" render={routeProps => <Home {...routeProps} />} />
-              )}
-              <Route path="/support/palette" component={Palette} />
-              <Route path="/support/reset-data" component={ResetData} />
-              <Route path="/support/database" component={DatabaseConsole} />
-            </NotificationWrapper>
-          </SynchronizeWrapper>
-        )}
-      </div>
-    </ThemeProvider>
-  );
+const router = createBrowserRouter([
+  {
+    path: '/queen/*',
+    element: <QueenPage />,
+  },
+  {
+    path: '/',
+    element: <AppWrapper />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/suivi',
+        element: <SuiviPage />,
+      },
+      {
+        path: '/survey-unit/:id',
+        element: <Outlet />,
+        children: [
+          {
+            path: 'details',
+            element: <SurveyUnitPage />,
+          },
+        ],
+      },
+      {
+        path: '/support/reset-data',
+        element: <ResetData />,
+      },
+    ],
+  },
+]);
+
+export function App() {
+  const configuration = useConfiguration();
+
+  useEffectOnce(loadConfiguration, []);
+
+  if (!configuration) {
+    return null;
+  }
+
+  return <RouterProvider router={router} />;
 }
 
-export default App;
+function AppWrapper() {
+  const { authenticated } = useAuth();
+  const browserLanguage = navigator.language;
+  let dateFnsLocale;
+  switch (browserLanguage) {
+    case 'fr':
+    case 'fr-FR':
+      dateFnsLocale = fr;
+      break;
+    case 'en-US':
+    case 'en':
+    default:
+      dateFnsLocale = enUS;
+      break;
+  }
+
+  return (
+    <PearlTheme>
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={dateFnsLocale}>
+        <ServiceWorkerStatus authenticated={authenticated} />
+        <div>
+          {authenticated ? (
+            <SyncContextProvider>
+              <Header />
+              <Outlet />
+            </SyncContextProvider>
+          ) : (
+            <Preloader message={D.pleaseWait} />
+          )}
+        </div>
+      </LocalizationProvider>
+    </PearlTheme>
+  );
+}

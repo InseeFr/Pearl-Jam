@@ -6,8 +6,5 @@
   "_PEARL_API_URL_COMMENT_": "url of Pearl API",
 
   "PEARL_AUTHENTICATION_MODE": "${PEARL_AUTHENTICATION_MODE}",
-  "_PEARL_AUTHENTICATION_MODE_COMMENT": "The mode of authentication. Currently, App is supporting 'anonymous'",
-
-  "CHAT_URL": "${CHAT_URL}",
-  "_CHAT_URL_COMMENT_": "url of Pearl Chat"
+  "_PEARL_AUTHENTICATION_MODE_COMMENT": "The mode of authentication. Currently, App is supporting 'anonymous'"
 }
