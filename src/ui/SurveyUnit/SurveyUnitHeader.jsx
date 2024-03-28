@@ -129,6 +129,10 @@ export function SurveyUnitHeader({ surveyUnit }) {
           variant="contained"
           color="primary"
           className={classes.buttonFixed}
+          sx={{
+            width: '50px',
+            fontSize: "0.8rem"
+          }}
         >
           {D.transmissionHelpButton}
         </Button>

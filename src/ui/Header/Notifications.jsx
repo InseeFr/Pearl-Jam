@@ -185,7 +185,7 @@ function Notification({ notification, onExit }) {
           ))}
           <Button sx={{ alignSelf: 'flex-end' }} color="textPrimary" onClick={handleDelete}>
             <DeleteOutlineIcon />
-            Supprimer
+            {D.delete}
           </Button>
         </Stack>
       </AccordionDetails>
