@@ -8,7 +8,7 @@ const trackingMessage = {
     en: 'Select a campaign from the drop-down list above.',
   },
   trackingLastContactAttempt: { fr: 'Dernier essai de contact', en: 'Last contact attempt' },
-  trackingSurveyUnitStatus: { fr: "Status de l'unité", en: 'Survey-unit status' },
+  trackingSurveyUnitStatus: { fr: "Statut de l'unité", en: 'Survey-unit status' },
   trackingUnit: { fr: 'Unité', en: 'Survey-unit' },
   trackingName: { fr: 'Nom/Prénom', en: 'Lastname/FirstName' },
   noSorting: { fr: 'Aucun tri', en: 'No sorting' },
