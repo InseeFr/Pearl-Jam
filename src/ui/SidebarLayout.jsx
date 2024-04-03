@@ -18,6 +18,7 @@ export function SidebarLayout({ children }) {
         height: 'calc(100vh - 90px)',
       }}
       bgcolor="surfacePrimary.main"
+      data-testid="sidebar-layout"
     >
       {children}
     </Grid>
