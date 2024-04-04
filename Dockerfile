@@ -6,13 +6,12 @@ RUN rm etc/nginx/conf.d/default.conf
 COPY --chown=$NGINX_USER:$NGINX_USER nginx.conf etc/nginx/conf.d/
 
 COPY --chown=$NGINX_USER:$NGINX_USER build /usr/share/nginx/html
-USER root
-RUN rm /usr/share/nginx/html/configuration.json
-RUN rm /usr/share/nginx/html/keycloak.json
-USER $NGINX_USER
-RUN touch /usr/share/nginx/html/configuration.json
-RUN touch /usr/share/nginx/html/keycloak.json
-
+WORKDIR /usr/share/nginx/html
+RUN rm configuration.json
+RUN rm keycloak.json
+RUN touch configuration.json
+RUN touch keycloak.json
+WORKDIR /
 COPY --chown=$NGINX_USER:$NGINX_USER  entrypoint.sh /entrypoint.sh
 
 RUN chmod 755 /entrypoint.sh
