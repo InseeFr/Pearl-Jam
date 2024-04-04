@@ -7,6 +7,7 @@ ENV NGINX_USER=nginx
 
 COPY --chown=$NGINX_USER:$NGINX_USER build /usr/share/nginx/html
 COPY --chown=$NGINX_USER:$NGINX_USER  entrypoint.sh /docker-entrypoint.d/90-configuration-appli.sh
+RUN chmod 0555 /docker-entrypoint.d/90-configuration-appli.sh
 
 # USER $NGINX_USER_ID
 
