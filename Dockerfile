@@ -7,8 +7,7 @@ RUN rm etc/nginx/conf.d/default.conf
 COPY --chown=$NGINX_USER:$NGINX_USER nginx.conf etc/nginx/conf.d/
 
 COPY --chown=$NGINX_USER:$NGINX_USER build /usr/share/nginx/html
-
-
+RUN ls -alh /usr/share/nginx/html
 RUN rm /usr/share/nginx/html/configuration.json
 RUN rm /usr/share/nginx/html/keycloak.json
 
