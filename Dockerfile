@@ -2,22 +2,14 @@ FROM nginxinc/nginx-unprivileged:1.25-bookworm
 ENV NGINX_USER_ID=101
 ENV NGINX_GROUP_ID=101
 ENV NGINX_USER=nginx
-RUN rm etc/nginx/conf.d/default.conf
-COPY --chown=$NGINX_USER:$NGINX_USER nginx.conf etc/nginx/conf.d/
+# RUN rm etc/nginx/conf.d/default.conf
+# COPY --chown=$NGINX_USER:$NGINX_USER nginx.conf etc/nginx/conf.d/
 
 COPY --chown=$NGINX_USER:$NGINX_USER build /usr/share/nginx/html
-COPY --chown=$NGINX_USER:$NGINX_USER  entrypoint.sh /entrypoint.sh
+COPY --chown=$NGINX_USER:$NGINX_USER  entrypoint.sh /docker-entrypoint.d/90-configuration-appli.sh
 
-RUN chmod 755 /entrypoint.sh
-RUN id && ls -Alh /usr/share/nginx/html/
+# USER $NGINX_USER_ID
 
-EXPOSE 8080
-
-USER $NGINX_USER_ID
-RUN echo '' > /usr/share/nginx/html/configuration.json
-RUN echo '' > /usr/share/nginx/html/keycloak.json
-RUN ls -Alh /usr/share/nginx/html/
-
-ENTRYPOINT [ "/entrypoint.sh" ]
-CMD ["nginx", "-g", "daemon off;"]
+RUN echo '' > /usr/share/nginx/html/configuration.json && \
+  echo '' > /usr/share/nginx/html/keycloak.json
 
