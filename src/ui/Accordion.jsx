@@ -36,7 +36,11 @@ export function Accordion({ title, children, variant, defaultOpen, ...props }) {
             {title}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails pt={1} sx={isDense ? { margin: 0, padding: '.5rem 0 0 0' } : undefined}>
+        <AccordionDetails
+          data-testid="accordion-details"
+          pt={1}
+          sx={isDense ? { margin: 0, padding: '.5rem 0 0 0' } : undefined}
+        >
           {children}
         </AccordionDetails>
       </AccordionMaterial>
