@@ -320,16 +320,8 @@ export const applyFilters = (surveyUnits, filters) => {
       return (
         normalize(firstName).includes(normalizedSearchFilter) ||
         normalize(lastName).includes(normalizedSearchFilter) ||
-        su.id
-          .toString()
-          .toLowerCase()
-          .includes(normalizedSearchFilter) ||
-        normalize(
-          su.address.l6
-            .split(' ')
-            .slice(1)
-            .toString()
-        ).includes(normalizedSearchFilter) ||
+        su.id.toString().toLowerCase().includes(normalizedSearchFilter) ||
+        normalize(su.address.l6.split(' ').slice(1).toString()).includes(normalizedSearchFilter) ||
         convertSUStateInToDo(getLastState(su).type)
           .value.toLowerCase()
           .includes(normalizedSearchFilter) ||

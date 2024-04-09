@@ -69,10 +69,11 @@ const sendData = async (urlPearlApi, authenticationMode) => {
         ...surveyUnit,
         lastState,
       };
-      const { data: latestSurveyUnit, error, status } = await api.putDataSurveyUnitById(
-        urlPearlApi,
-        authenticationMode
-      )(id, body);
+      const {
+        data: latestSurveyUnit,
+        error,
+        status,
+      } = await api.putDataSurveyUnitById(urlPearlApi, authenticationMode)(id, body);
       if (!error) {
         await createStateIds(latestSurveyUnit);
         await createCommunicationRequestIds(latestSurveyUnit);
@@ -131,10 +132,11 @@ const validateSU = su => {
 const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
   const surveyUnitsSuccess = [];
   const surveyUnitsFailed = [];
-  const { data: surveyUnits, error, status } = await api.getSurveyUnits(
-    pearlApiUrl,
-    pearlAuthenticationMode
-  );
+  const {
+    data: surveyUnits,
+    error,
+    status,
+  } = await api.getSurveyUnits(pearlApiUrl, pearlAuthenticationMode);
 
   if (!error) {
     await Promise.all(
@@ -193,11 +195,11 @@ const getNewSurveyUnitsByCampaign = async (newSurveyUnits = [], oldSurveyUnits =
 };
 
 export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) => {
-  var transmittedSurveyUnits = {};
-  var loadedSurveyUnits = {};
+  let transmittedSurveyUnits = {};
+  let loadedSurveyUnits = {};
 
-  var surveyUnitsInTempZone;
-  var surveyUnitsSuccess;
+  let surveyUnitsInTempZone;
+  let surveyUnitsSuccess;
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
     await getUserData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
