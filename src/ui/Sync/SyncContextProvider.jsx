@@ -60,7 +60,6 @@ export function SyncContextProvider({ children }) {
       window.localStorage.removeItem('QUEEN_SYNC_RESULT');
       window.localStorage.setItem('SYNCHRONIZE', true);
       setLoading(true);
-      //checkQueen();
       await checkPearl();
     };
     if (online) launchSynchronize();
