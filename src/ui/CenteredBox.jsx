@@ -5,13 +5,13 @@ export function CenteredBox(props) {
     <Box
       {...props}
       sx={{
-        ...props.sx,
         display: 'grid',
         gridTemplateColumns: '1fr',
         gridTemplateRows: '1fr',
         justifyItems: 'center',
         alignItems: 'center',
         ['& > *']: { gridArea: '1 / 1 / 1 / 1', position: 'relative' },
+        ...props.sx,
       }}
     />
   );
