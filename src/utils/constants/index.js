@@ -25,6 +25,9 @@ export const GUEST_PEARL_USER = {
   id: 'Guest',
   roles: ['Guest'],
 };
+
+export const CONFIGURATION_FALLBACK = 'sw-fallback-configuration';
+
 export const JSON_UTF8_HEADER = 'application/json;charset=utf-8';
 
 export const PREVIOUS_STATES_TO_BE_KEEPED = [

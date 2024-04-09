@@ -1,12 +1,12 @@
 import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'utils/constants';
 import { getTokenInfo, keycloakAuthentication } from 'utils/keycloak';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { AppContext } from 'Root';
+import { useConfiguration } from '../hooks/useConfiguration';
 
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
-  const configuration = useContext(AppContext);
+  const configuration = useConfiguration();
 
   const interviewerRoles = ['pearl-interviewer', 'uma_authorization', 'Guest'];
 
