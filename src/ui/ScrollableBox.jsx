@@ -8,6 +8,7 @@ export function ScrollableBox({ height, ...props }) {
   return (
     <Box
       {...props}
+      data-testid="scrollable-box"
       sx={{
         height: height,
         overflow: 'auto',
