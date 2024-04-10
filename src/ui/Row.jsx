@@ -6,5 +6,5 @@ import Stack from '@mui/material/Stack';
  * @param {import('@mui/material').StackProps} props
  */
 export function Row(props) {
-  return <Stack direction="row" alignItems="center" {...props} />;
+  return <Stack direction="row" alignItems="center" {...props} data-testid="row" />;
 }
