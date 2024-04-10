@@ -10,9 +10,9 @@ import Box from '@mui/material/Box';
  */
 export function Preloader({ message }) {
   return (
-    <Backdrop open sx={{ color: '#FFF' }}>
+    <Backdrop open sx={{ color: '#FFF' }} data-testid="backdrop">
       <Stack gap={2} alignItems="center">
-        <CircularProgress color="white" size="6em" />
+        <CircularProgress color="white" size="6em" data-testid="circularProgress" />
         <Box component="h2" m={0} mt={2}>
           {D.pleaseWait}
         </Box>
