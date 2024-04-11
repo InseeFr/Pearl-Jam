@@ -5,7 +5,6 @@ import functions from 'utils/functions/index';
 
 vi.mock('utils/functions', async () => {
   const originalModule = await vi.importActual('utils/functions');
-  //Mock addNewState
   return {
     default: {
       ...originalModule,
@@ -13,8 +12,6 @@ vi.mock('utils/functions', async () => {
     addNewState: vi.fn(),
   };
 });
-
-// Mock for surveyUnitFunctions done here
 
 const {
   getContactAttemptNumber,

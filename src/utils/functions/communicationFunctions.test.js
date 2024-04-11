@@ -45,7 +45,6 @@ describe('getRecipientInformation', () => {
     },
   ];
 
-  // addresses
   const VALID_POSTCODE = '123456';
   const VALID_CITYNAME = 'Champagnole';
   const VALID_ADDRESS_INPUT = `${VALID_POSTCODE} ${VALID_CITYNAME}`;
