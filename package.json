@@ -102,7 +102,7 @@
     "jest-sonar-reporter": "^2.0.0",
     "jsdom": "^23.0.1",
     "prettier": "^3.1.1",
-    "vite": "^4.2.1",
+    "vite": "^4.5.3",
     "vite-plugin-pwa": "^0.19.2",
     "vite-tsconfig-paths": "^3.6.0",
     "vitest": "^0.29.7"
