@@ -1,11 +1,12 @@
 import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'utils/constants';
 import { getTokenInfo, keycloakAuthentication } from 'utils/keycloak';
-import { useContext, useEffect, useState } from 'react';
-import { AppContext } from 'Root';
+import { useEffect, useState } from 'react';
+
+import { useConfiguration } from '../hooks/useConfiguration';
 
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
-  const configuration = useContext(AppContext);
+  const configuration = useConfiguration();
 
   const interviewerRoles = ['pearl-interviewer', 'uma_authorization', 'Guest'];
 
@@ -21,7 +22,7 @@ export const useAuth = () => {
 
   const isLocalStorageTokenValid = () => {
     const interviewer = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY));
-    if (interviewer && interviewer.roles) {
+    if (interviewer?.roles) {
       const { roles } = interviewer;
       if (isAuthorized(roles)) {
         return true;
@@ -39,34 +40,32 @@ export const useAuth = () => {
         break;
 
       case 'keycloak':
-        if (!authenticated) {
-          keycloakAuthentication({
-            onLoad: 'login-required',
-            checkLoginIframe: false,
-          })
-            .then(auth => {
-              if (auth) {
-                const interviewerInfos = getTokenInfo();
-                const { roles } = interviewerInfos;
-                if (isAuthorized(roles)) {
-                  window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(interviewerInfos));
-                  accessAuthorized();
-                } else {
-                  accessDenied();
-                }
-                // offline mode
-              } else if (isLocalStorageTokenValid()) {
+        keycloakAuthentication({
+          onLoad: 'login-required',
+          checkLoginIframe: false,
+        })
+          .then(auth => {
+            if (auth) {
+              const interviewerInfos = getTokenInfo();
+              const { roles } = interviewerInfos;
+              if (isAuthorized(roles)) {
+                window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(interviewerInfos));
                 accessAuthorized();
               } else {
                 accessDenied();
               }
-            })
-            .catch(() => (isLocalStorageTokenValid() ? accessAuthorized() : accessDenied()));
-        }
+              // offline mode
+            } else if (isLocalStorageTokenValid()) {
+              accessAuthorized();
+            } else {
+              accessDenied();
+            }
+          })
+          .catch(() => (isLocalStorageTokenValid() ? accessAuthorized() : accessDenied()));
         break;
       default:
     }
-  });
+  }, []);
 
   return { authenticated };
 };

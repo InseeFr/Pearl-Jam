@@ -1,19 +1,21 @@
 import * as api from 'utils/api';
 
-import { createStateIds, getLastState } from 'utils/functions';
+import { createCommunicationRequestIds, createStateIds, getLastState } from 'utils/functions';
 import { useCallback, useState } from 'react';
 
 import surveyUnitDBService from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { TITLES, PEARL_USER_KEY } from 'utils/constants';
+import userIdbService from 'utils/indexeddb/services/user-idb-service';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
 
   const [queenError, setQueenError] = useState(false);
   const [queenReady, setQueenReady] = useState(true);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const checkQueen = () => {
     setQueenReady(null);
@@ -50,8 +52,8 @@ export const useQueenSynchronisation = () => {
   };
 
   const synchronizeQueen = useCallback(() => {
-    history.push(`/queen/synchronize`);
-  }, [history]);
+    navigate(`/queen/synchronize`);
+  }, [navigate]);
 
   return { checkQueen, synchronizeQueen, queenReady, queenError };
 };
@@ -67,12 +69,14 @@ const sendData = async (urlPearlApi, authenticationMode) => {
         ...surveyUnit,
         lastState,
       };
-      const { data: latestSurveyUnit, error, status } = await api.putDataSurveyUnitById(
-        urlPearlApi,
-        authenticationMode
-      )(id, body);
+      const {
+        data: latestSurveyUnit,
+        error,
+        status,
+      } = await api.putDataSurveyUnitById(urlPearlApi, authenticationMode)(id, body);
       if (!error) {
         await createStateIds(latestSurveyUnit);
+        await createCommunicationRequestIds(latestSurveyUnit);
       }
       if (error && [400, 403, 404, 500].includes(status)) {
         const { error: tempZoneError } = await api.putSurveyUnitToTempZone(
@@ -86,6 +90,19 @@ const sendData = async (urlPearlApi, authenticationMode) => {
     })
   );
   return surveyUnitsInTempZone;
+};
+
+const getUserData = async (urlPearlApi, authenticationMode) => {
+  const result = window.localStorage.getItem(PEARL_USER_KEY);
+  const jsonInterviewer = JSON.parse(result);
+  const { id } = jsonInterviewer;
+  const { data: interviewer } = await api.getUserData(
+    urlPearlApi,
+    authenticationMode
+  )(id.toUpperCase());
+  await userIdbService.deleteAll();
+  // prevent missing civility from crushing IDB inserts for schema-4
+  await userIdbService.addOrUpdate({ civility: TITLES.MISTER.type, ...interviewer });
 };
 
 const putSurveyUnitInDataBase = async su => {
@@ -115,10 +132,11 @@ const validateSU = su => {
 const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
   const surveyUnitsSuccess = [];
   const surveyUnitsFailed = [];
-  const { data: surveyUnits, error, status } = await api.getSurveyUnits(
-    pearlApiUrl,
-    pearlAuthenticationMode
-  );
+  const {
+    data: surveyUnits,
+    error,
+    status,
+  } = await api.getSurveyUnits(pearlApiUrl, pearlAuthenticationMode);
 
   if (!error) {
     await Promise.all(
@@ -177,13 +195,14 @@ const getNewSurveyUnitsByCampaign = async (newSurveyUnits = [], oldSurveyUnits =
 };
 
 export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) => {
-  var transmittedSurveyUnits = {};
-  var loadedSurveyUnits = {};
+  let transmittedSurveyUnits = {};
+  let loadedSurveyUnits = {};
 
-  var surveyUnitsInTempZone;
-  var surveyUnitsSuccess;
+  let surveyUnitsInTempZone;
+  let surveyUnitsSuccess;
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
+    await getUserData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
     surveyUnitsInTempZone = await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
     transmittedSurveyUnits = await getWFSSurveyUnitsSortByCampaign();
 
@@ -203,6 +222,7 @@ export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE)
       loadedSurveyUnits,
     };
   } catch (e) {
+    console.debug(e);
     return { error: true, surveyUnitsSuccess, surveyUnitsInTempZone };
   }
 };

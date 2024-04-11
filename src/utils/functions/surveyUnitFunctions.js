@@ -1,11 +1,11 @@
-import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'utils/constants';
+import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST, TITLES } from 'utils/constants';
 import {
   IASCO_CATEGORY_FINISHING_VALUES,
   IASCO_IDENTIFICATION_FINISHING_VALUES,
   IASCO_SITUATION_FINISHING_VALUES,
   identificationIsFinished,
 } from './identificationFunctions';
-import { differenceInYears, formatDistanceStrict } from 'date-fns';
+import { differenceInYears } from 'date-fns';
 
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
@@ -13,6 +13,8 @@ import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { toDoEnum } from '../enum/SUToDoEnum';
+import { normalize } from './string';
 
 export const getCommentByType = (type, su) => {
   if (Array.isArray(su.comments) && su.comments.length > 0) {
@@ -21,6 +23,21 @@ export const getCommentByType = (type, su) => {
   return '';
 };
 
+/**
+ * Extract the survey unit state
+ *
+ * @param {SurveyUnit} surveyUnit
+ * @returns {{ order: string, value: string, color: string }}
+ */
+export const getSuTodoState = surveyUnit => {
+  return convertSUStateInToDo(getLastState(surveyUnit).type);
+};
+
+/**
+ * @deprecated shouldn't be used outside of surveyUnitFunctions, use getSuTodoState() instead
+ * @param {SurveyUnit} su
+ * @returns {SurveyUnitState}
+ */
 export const getLastState = su => {
   if (Array.isArray(su.states) && su.states.length === 1) return su.states[0];
   if (Array.isArray(su.states) && su.states.length > 1) {
@@ -29,16 +46,22 @@ export const getLastState = su => {
   return false;
 };
 
-export const intervalInDays = su => {
-  const { collectionEndDate } = su;
-  if (new Date().getTime() > new Date(collectionEndDate).getTime()) return 0;
-  const remainingDays = formatDistanceStrict(new Date(), new Date(collectionEndDate), {
-    roundingMethod: 'ceil',
-    unit: 'day',
-    addSuffix: true,
-  });
+const DAY = 1000 * 24 * 60 * 60;
 
-  return remainingDays.split(' ')[0];
+/**
+ * Number of days left before the end of the collection for a surveyUnit
+ *
+ * @param {SurveyUnit|SurveyUnit[]} su
+ */
+export const daysLeftForSurveyUnit = su => {
+  // For multiple survey units find the min endDate
+  if (Array.isArray(su)) {
+    return Math.min(...su.map(daysLeftForSurveyUnit));
+  }
+  return Math.max(
+    0,
+    Math.ceil((new Date(su.collectionEndDate).getTime() - new Date().getTime()) / DAY)
+  );
 };
 
 const checkValidityForTransmissionNoident = su => {
@@ -92,15 +115,15 @@ export const isValidForTransmission = su => {
   }
 };
 
+/**
+ * Contact attempts sorted by date descending
+ *
+ * @param {SurveyUnit} surveyUnit
+ * @returns {SurveyUnitContactAttempt[]}
+ */
 export const getSortedContactAttempts = surveyUnit => {
   if (surveyUnit === undefined) return [];
-
-  const { contactAttempts } = surveyUnit;
-
-  if (contactAttempts === undefined || contactAttempts.length === 0) return [];
-
-  contactAttempts.sort((a, b) => b.date - a.date);
-  return contactAttempts;
+  return [...(surveyUnit?.contactAttempts ?? [])].sort((a, b) => b.date - a.date);
 };
 
 export const areCaEqual = (ca, anotherCa) => {
@@ -169,6 +192,13 @@ const addContactState = async (surveyUnit, newState) => {
   return surveyUnit;
 };
 
+/**
+ * Add a new state to a surveyUnit
+ *
+ * @param surveyUnit
+ * @param stateType
+ * @returns {Promise<SurveyUnit>}
+ */
 export const addNewState = async (surveyUnit, stateType) => {
   const lastStateType = getLastState(surveyUnit).type;
   const newState = { date: new Date().getTime(), type: stateType };
@@ -185,7 +215,7 @@ export const addNewState = async (surveyUnit, stateType) => {
 
     case surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type:
       if (surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type === stateType) {
-        if (await isContactAttemptOk(surveyUnit)) {
+        if (isContactAttemptOk(surveyUnit)) {
           addLatestState(newSu, {
             date: new Date().getTime(),
             type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
@@ -240,6 +270,7 @@ export const addNewState = async (surveyUnit, stateType) => {
   }
   newSu.selected = false;
   await surveyUnitIdbService.addOrUpdate(newSu);
+  return newSu;
 };
 
 export const updateStateWithDates = surveyUnit => {
@@ -265,19 +296,22 @@ export const isQuestionnaireAvailable = su => inaccessible => {
   return !inaccessible && now >= collectionStartDate && now <= collectionEndDate;
 };
 
+/**
+ * @deprecated used in the legacy code
+ * @template T
+ * @param {T[]} surveyUnits
+ * @param {{search: string, campaigns: string[], toDos: number[], priority: boolean, terminated: boolean, subSample: number}} filters
+ * @return {{matchingEchoes: *, totalEchoes: *, searchFilteredSU: *}}
+ */
 export const applyFilters = (surveyUnits, filters) => {
   const {
     search: searchFilter,
     campaigns: campaignFilter,
     toDos: toDoFilter,
     priority: priorityFilter,
+    terminated: terminatedFilter,
+    subSample: subSampleFilter,
   } = filters;
-
-  const normalize = string =>
-    string
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
 
   const filterBySearch = su => {
     const { firstName, lastName } = getprivilegedPerson(su);
@@ -286,16 +320,8 @@ export const applyFilters = (surveyUnits, filters) => {
       return (
         normalize(firstName).includes(normalizedSearchFilter) ||
         normalize(lastName).includes(normalizedSearchFilter) ||
-        su.id
-          .toString()
-          .toLowerCase()
-          .includes(normalizedSearchFilter) ||
-        normalize(
-          su.address.l6
-            .split(' ')
-            .slice(1)
-            .toString()
-        ).includes(normalizedSearchFilter) ||
+        su.id.toString().toLowerCase().includes(normalizedSearchFilter) ||
+        normalize(su.address.l6.split(' ').slice(1).toString()).includes(normalizedSearchFilter) ||
         convertSUStateInToDo(getLastState(su).type)
           .value.toLowerCase()
           .includes(normalizedSearchFilter) ||
@@ -320,6 +346,7 @@ export const applyFilters = (surveyUnits, filters) => {
     }
     return true;
   };
+
   const filterByPriority = su => {
     if (priorityFilter === true) {
       return su.priority;
@@ -327,10 +354,15 @@ export const applyFilters = (surveyUnits, filters) => {
     return true;
   };
 
+  const filterByTerminated = su => {
+    return !terminatedFilter || convertSUStateInToDo(getLastState(su).type) !== toDoEnum.TERMINATED;
+  };
+
   const filteredSU = surveyUnits
     .filter(unit => filterByPriority(unit))
     .filter(unit => filterByToDo(unit))
-    .filter(unit => filterByCampaign(unit));
+    .filter(unit => filterByCampaign(unit))
+    .filter(unit => filterByTerminated(unit));
 
   const totalEchoes = surveyUnits.length;
   const searchFilteredSU = filteredSU.filter(unit => filterBySearch(unit));
@@ -347,23 +379,26 @@ export const isSelectable = su => {
   return endTime > instantTime && instantTime > identificationPhaseStartTime;
 };
 
+/**
+ * Extract address info from surveyUni address
+ * @param {SurveyUnit["address"]} address
+ */
 export const getAddressData = address => {
   const [postCode, ...rest] = address.l6.split(' ');
-  const cityName = rest.join(' ');
 
   return {
-    deliveryPoint: address.l2 || '',
-    additionalAddress: address.l3 || '',
-    streetName: address.l4 || '',
-    locality: address.l5 || '',
-    postCode: postCode || '',
-    cityName: cityName || '',
-    building: address.building || '',
-    floor: address.floor || '',
-    door: address.door || '',
-    staircase: address.staircase || '',
-    elevator: address.elevator || '',
-    cityPriorityDistrict: address.cityPriorityDistrict || '',
+    deliveryPoint: address.l2,
+    additionalAddress: address.l3,
+    streetName: address.l4,
+    locality: address.l5,
+    postCode: postCode,
+    cityName: rest.join(' '),
+    building: address.building,
+    floor: address.floor,
+    door: address.door,
+    staircase: address.staircase,
+    elevator: address.elevator,
+    cityPriorityDistrict: address.cityPriorityDistrict,
   };
 };
 
@@ -394,7 +429,7 @@ export const getAge = birthdate => {
   return differenceInYears(new Date(), new Date(birthdate));
 };
 
-export const isTitleMister = title => title.toLowerCase() === 'mister';
+export const isTitleMister = title => title.toUpperCase() === TITLES.MISTER.type;
 
 export const displayAgeInYears = birthdate => `${getAge(birthdate) ?? '/'} ${D.years}`;
 
@@ -429,8 +464,9 @@ export const getMailData = person => [
   { label: D.surveyUnitEmail, value: person.email, favorite: person.favoriteEmail },
 ];
 
-export const getTitle = title => (isTitleMister(title) ? D.titleMister : D.titleMiss);
-export const getToggledTitle = title => (isTitleMister(title) ? 'MISS' : 'MISTER');
+export const getTitle = title => (isTitleMister(title) ? TITLES.MISTER.value : TITLES.MISS.value);
+export const getToggledTitle = title =>
+  isTitleMister(title) ? TITLES.MISS.type : TITLES.MISTER.type;
 
 export const getPhoneSource = type => {
   switch (type.toLowerCase()) {
@@ -446,7 +482,7 @@ export const getPhoneSource = type => {
 };
 
 export const personPlaceholder = {
-  title: 'MISTER',
+  title: TITLES.MISTER.type,
   firstName: '',
   lastName: '',
   email: '',
@@ -456,10 +492,16 @@ export const personPlaceholder = {
   phoneNumbers: [],
 };
 
+/**
+ * Person linked to the survey unit
+ *
+ * @param {SurveyUnit} surveyUnit
+ * @returns {SurveyUnitPerson}
+ */
 export const getprivilegedPerson = surveyUnit => {
   if (!surveyUnit) return personPlaceholder;
-  const { persons } = surveyUnit;
-  if (!persons || !persons.length || persons.length === 0) return personPlaceholder;
+  const { persons = [] } = surveyUnit;
+  if (!persons.length || persons.length === 0) return personPlaceholder;
 
   const privilegedPerson = persons.find(p => p.privileged);
   return privilegedPerson ?? persons[0];
@@ -469,6 +511,12 @@ export const createStateIds = async latestSurveyUnit => {
   const { id, states } = latestSurveyUnit;
   const previousSurveyUnit = await surveyUnitIdbService.getById(id);
   surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, states });
+};
+
+export const createCommunicationRequestIds = async latestSurveyUnit => {
+  const { id, communicationRequests } = latestSurveyUnit;
+  const previousSurveyUnit = await surveyUnitIdbService.getById(id);
+  surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, communicationRequests });
 };
 
 export const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => {

@@ -1,39 +1,33 @@
-import { intervalInDays } from 'utils/functions/surveyUnitFunctions';
+import { daysLeftForSurveyUnit } from 'utils/functions/surveyUnitFunctions';
 
-export const sortOnColumnCompareFunction = criteria => {
-  let compareFunction;
-
-  // eslint-disable-next-line no-unused-vars
-  const noSortFunction = (a, b) => 0;
-
-  const ssechSortFunction = (a, b) => a.sampleIdentifiers.ssech - b.sampleIdentifiers.ssech;
-
-  const prioritySortFunction = (a, b) => b.priority - a.priority;
-
-  const campaignSortFunction = (a, b) => a.campaign.localeCompare(b.campaign);
-
-  const remainingDaysSortFunction = (a, b) => intervalInDays(a) - intervalInDays(b);
-
-  switch (criteria) {
+/**
+ * Generate a comparison function based on a field / direction
+ *
+ * @deprecated Used for legacy
+ * @template T
+ * @param {'sampleIdentifiers' | 'priority' | 'campaign' | 'remainingDays'} field
+ * @param {'ASC' | 'DESC'} direction
+ * @return (a: T, b: T) => number
+ */
+export const sortOnColumnCompareFunction = (field, direction) => {
+  if (direction === 'DESC') {
+    const compareFn = sortOnColumnCompareFunction(field, 'ASC');
+    return (a, b) => compareFn(b, a);
+  }
+  switch (field) {
     case 'sampleIdentifiers':
-      compareFunction = ssechSortFunction;
-      break;
+      return (a, b) => a.sampleIdentifiers.ssech - b.sampleIdentifiers.ssech;
 
     case 'priority':
-      compareFunction = prioritySortFunction;
-      break;
+      return (a, b) => b.priority - a.priority;
 
     case 'campaign':
-      compareFunction = campaignSortFunction;
-      break;
+      return (a, b) => a.campaign.localeCompare(b.campaign);
 
     case 'remainingDays':
-      compareFunction = remainingDaysSortFunction;
-      break;
+      return (a, b) => daysLeftForSurveyUnit(a) - daysLeftForSurveyUnit(b);
 
     default:
-      compareFunction = noSortFunction;
-      break;
+      return (a, b) => 0;
   }
-  return compareFunction;
 };

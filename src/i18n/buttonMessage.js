@@ -1,9 +1,9 @@
 const buttonMessage = {
   questionnaireButton: { fr: 'Questionnaire', en: 'Survey' },
-  sendButton: { fr: 'Transmettre', en: 'Send' },
+  transmitButton: { fr: 'Transmettre', en: 'Send' },
   cancelButton: { fr: 'Annuler', en: 'Cancel' },
   saveButton: { fr: 'Enregistrer', en: 'Save' },
-  editButton: { fr: 'Editer', en: 'Edit' },
+  editButton: { fr: 'Modifier', en: 'Edit' },
   validateButton: { fr: 'Valider', en: 'Validate' },
   addPhoneNumberButton: { fr: 'Ajouter un numéro', en: 'Add a phone number' },
   addContactAttemptButton: { fr: 'Ajouter un essai', en: 'Add a contact attempt' },
@@ -22,6 +22,8 @@ const buttonMessage = {
   yesDeleteAll: { fr: 'Oui, je supprime tout', en: 'Yes, I delete all' },
   noImNotSure: { fr: 'Non, je ne suis pas sûr(e)', en: 'No, I am not sure' },
   confirmButton: { fr: 'Confirmer', en: 'Confirm' },
+  previousButton: { fr: 'Précédent', en: 'Previous' },
+  sendButton: { fr: 'Envoyer', en: 'Send' },
 };
 
 export default buttonMessage;

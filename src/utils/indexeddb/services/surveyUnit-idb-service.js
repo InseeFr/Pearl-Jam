@@ -5,6 +5,11 @@ class SurveyUnitIdbService extends AbstractIdbService {
     super('surveyUnit');
   }
 
+  /**
+   * Update or insert a surveyUnit if the ID is unknown
+   * @param {SurveyUnit} item
+   * @returns {Promise<void>}
+   */
   async addOrUpdateSU(item) {
     const { id, ...other } = item;
     const surveyUnit = await this.getById(id);
@@ -16,4 +21,9 @@ class SurveyUnitIdbService extends AbstractIdbService {
   }
 }
 
-export default new SurveyUnitIdbService();
+export const surveyUnitIDBService = new SurveyUnitIdbService();
+
+/**
+ * @deprecated use named import instead
+ */
+export default surveyUnitIDBService;

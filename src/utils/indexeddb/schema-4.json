@@ -1,0 +1,4 @@
+{
+  "user": "civility, firstName, lastName, email, phoneNumber",
+  "surveyUnit": "id,sampleIdentifiers,persons,address,comments,questionnaireState,campaign,campaignLabel,collectionStartDate,collectionEndDate,identificationPhaseStartDate,interviewerStartDate,managementStartDate,endDate,states,contactAttempts,contactOutcome,identification,move, communicationRequests"
+}

@@ -1,35 +1,28 @@
 {
   "name": "pearl",
-  "version": "1.0.2",
+  "version": "2.0.3",
   "private": true,
   "dependencies": {
-    "@date-io/date-fns": "1.x",
-    "@material-ui/core": "^4.11.2",
-    "@material-ui/icons": "^4.11.2",
-    "@material-ui/lab": "^4.0.0-alpha.57",
-    "@material-ui/pickers": "^3.3.10",
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^11.2.5",
-    "clsx": "^1.1.1",
-    "date-fns": "^2.18.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/montserrat": "^5.0.16",
+    "@maverick-js/signals": "^5.11.4",
+    "@mui/icons-material": "^5.15.10",
+    "@mui/material": "^5.15.10",
+    "@mui/styles": "^5.15.10",
+    "@mui/x-date-pickers": "^6.18.6",
+    "date-fns": "^2.30.0",
     "dexie": "^3.2.1",
     "dexie-export-import": "^1.0.3",
     "dexie-react-hooks": "^1.1.1",
-    "downloadjs": "^1.4.7",
-    "font-awesome": "^4.7.0",
     "keycloak-js": "^10.0.2",
-    "prop-types": "^15.7.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-modal": "^3.11.1",
-    "react-router-dom": "^5.2.0",
+    "postcss": "8.4.24",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.49.2",
+    "react-router-dom": "^6.21.0",
     "react-swipeable-views": "^0.14.0",
-    "workbox-cacheable-response": "^7.0.0",
-    "workbox-core": "^7.0.0",
-    "workbox-precaching": "^7.0.0",
-    "workbox-routing": "^7.0.0",
-    "workbox-strategies": "^7.0.0"
+    "zod": "^3.22.4"
   },
   "scripts": {
     "dev": "vite",
@@ -52,9 +45,6 @@
       "jsx-a11y"
     ],
     "rules": {
-      "react/prop-types": [
-        "off"
-      ],
       "prettier/prettier": [
         1,
         {
@@ -99,12 +89,9 @@
   },
   "devDependencies": {
     "@originjs/vite-plugin-federation": "^1.2.1",
-    "@types/react": "^16.9.23",
-    "@types/react-router-dom": "^5.1.3",
-    "@vitejs/plugin-react": "^3.1.0",
+    "@types/react": "^18.2.46",
+    "@vitejs/plugin-react": "^4.2.1",
     "copy-and-watch": "^0.1.4",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.15.1",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
@@ -113,12 +100,14 @@
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest-sonar-reporter": "^2.0.0",
-    "jsdom": "^21.1.1",
-    "prettier": "^1.19.1",
-    "react-test-renderer": "^17.0.2",
+    "jsdom": "^23.0.1",
+    "prettier": "^3.1.1",
     "vite": "^4.2.1",
-    "vite-plugin-pwa": "^0.14.7",
+    "vite-plugin-pwa": "^0.19.2",
     "vite-tsconfig-paths": "^3.6.0",
     "vitest": "^0.29.7"
+  },
+  "volta": {
+    "node": "20.10.0"
   }
 }
