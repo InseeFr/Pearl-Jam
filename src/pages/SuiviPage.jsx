@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import TextField from '@mui/material/TextField';
 import { Typography } from '../ui/Typography';
-import { daysLeftForSurveyUnit } from '../utils/functions';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
@@ -25,6 +24,7 @@ import {
   getprivilegedPerson,
   getSortedContactAttempts,
   getSuTodoState,
+  daysLeftForSurveyUnit,
   isSelectable,
 } from '../utils/functions';
 import { StatusChip } from '../ui/StatusChip';
@@ -70,6 +70,11 @@ export function SuiviPage() {
   const handleSearchTextChange = event => {
     setSearchText(event.target.value);
   };
+
+  const resetCampaignSelection = () => {
+    setCampaign('');
+    setTab('stats');
+  };
   return (
     <Box m={2}>
       <Card elevation={2}>
@@ -87,11 +92,11 @@ export function SuiviPage() {
                       onChange={setCampaign}
                       sx={{ minWidth: 210 }}
                       value={campaign}
-                      placeholder="Sélectionnez..."
+                      placeholder={D.trackingSelect}
                       options={campaigns}
                     />
                     {campaign && (
-                      <IconButton aria-label="reset" onClick={() => setCampaign('')}>
+                      <IconButton aria-label="reset" onClick={resetCampaignSelection}>
                         <RestartAltIcon />
                       </IconButton>
                     )}
@@ -116,7 +121,7 @@ export function SuiviPage() {
               <Tabs
                 value={tab}
                 onChange={(_, tab) => setTab(tab)}
-                aria-label="Type de notification"
+                aria-label="Choose one/all survey to view"
                 textColor="secondary"
               >
                 <Tab label={D.allSurveys} value="stats" />
@@ -179,8 +184,8 @@ function SuiviStats({ surveyUnits }) {
   }, [surveyUnitsPerCampaign, sortDirection]);
 
   const sortOptions = [
-    { value: 'asc', label: `${D.campaignNameAsc}`},
-    { value: 'desc', label: `${D.campaignNameDesc}`},
+    { value: 'asc', label: `${D.campaignNameAsc}` },
+    { value: 'desc', label: `${D.campaignNameDesc}` },
     { value: 'deadlineAsc', label: `${D.shortDeadline}` },
     { value: 'deadlineDesc', label: `${D.longDeadline}` },
   ];
@@ -205,7 +210,7 @@ function SuiviStats({ surveyUnits }) {
             </Box>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <ScrollableBox height="calc(100vh - 32px - 160px - 84px)">
+                <ScrollableBox height="646px">
                   <Grid container spacing={2}>
                     {sortedCampaignLabels.map(label => (
                       <Grid item xs={12} sm={6} key={label}>
@@ -238,10 +243,7 @@ function SuiviStats({ surveyUnits }) {
 function SuiviTable({ surveyUnits, campaign, searchText }) {
   const [sortConfig, setSortConfig] = useState({ key: 'unit', direction: 'asc' });
   const toggleSort = key => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
+    const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
     setSortConfig({ key, direction });
   };
   const maxHeight = 'calc(100vh - 230px)';
