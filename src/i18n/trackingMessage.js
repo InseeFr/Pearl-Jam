@@ -3,6 +3,7 @@ const trackingMessage = {
     fr: 'Pour accéder au détail, cliquez directement sur l’enquête souhaitée.',
     en: 'To access the details, click on a campaign',
   },
+  trackingSelect: { fr: 'Sélectionnez...', en: 'Select...' },
   trackingSelectCampaign: {
     fr: 'Sélectionnez une enquête dans la liste déroulante ci-dessus.',
     en: 'Select a campaign from the drop-down list above.',
@@ -16,10 +17,12 @@ const trackingMessage = {
   campaignNameDesc: { fr: 'Nom de campagne [Z - A]', en: 'Campaign name [Z - A]' },
   shortDeadline: { fr: 'Échéance courte', en: 'Short deadline' },
   longDeadline: { fr: 'Échéance longue', en: 'Long deadline' },
-  allSurveys: { fr: 'Toutes les enquêtes', en: 'All surveys'},
-  unitsTrackingBySurvey: { fr: 'Suivi des unités par enquête', en: 'Tracking units by survey'},
-  numberOfUnitsRemaining: { fr: 'Nombre d’unités restantes à traiter par enquête et échéance', en: 'Number of units remaining to be treated by survey and deadline'},
-
+  allSurveys: { fr: 'Toutes les enquêtes', en: 'All surveys' },
+  unitsTrackingBySurvey: { fr: 'Suivi des unités par enquête', en: 'Tracking units by survey' },
+  numberOfUnitsRemaining: {
+    fr: 'Nombre d’unités restantes à traiter par enquête et échéance',
+    en: 'Number of units remaining to be treated by survey and deadline',
+  },
 };
 
 export default trackingMessage;
