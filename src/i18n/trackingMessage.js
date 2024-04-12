@@ -4,6 +4,10 @@ const trackingMessage = {
     en: 'To access the details, click on a campaign',
   },
   trackingSelect: { fr: 'Sélectionnez...', en: 'Select...' },
+  trackingToggleAria: {
+    fr: 'Choisissez de voir une/toutes les enquêtes',
+    en: 'Choose one/all survey to view',
+  },
   trackingSelectCampaign: {
     fr: 'Sélectionnez une enquête dans la liste déroulante ci-dessus.',
     en: 'Select a campaign from the drop-down list above.',

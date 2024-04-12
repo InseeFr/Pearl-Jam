@@ -71,10 +71,6 @@ export function SuiviPage() {
     setSearchText(event.target.value);
   };
 
-  const resetCampaignSelection = () => {
-    setCampaign('');
-    setTab('stats');
-  };
   return (
     <Box m={2}>
       <Card elevation={2}>
@@ -96,7 +92,7 @@ export function SuiviPage() {
                       options={campaigns}
                     />
                     {campaign && (
-                      <IconButton aria-label="reset" onClick={resetCampaignSelection}>
+                      <IconButton aria-label="reset" onClick={() => setCampaign('')}>
                         <RestartAltIcon />
                       </IconButton>
                     )}
@@ -121,7 +117,7 @@ export function SuiviPage() {
               <Tabs
                 value={tab}
                 onChange={(_, tab) => setTab(tab)}
-                aria-label="Choose one/all survey to view"
+                aria-label={D.trackingToggleAria}
                 textColor="secondary"
               >
                 <Tab label={D.allSurveys} value="stats" />
@@ -247,20 +243,6 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
     setSortConfig({ key, direction });
   };
   const maxHeight = 'calc(100vh - 230px)';
-  if (!campaign) {
-    return (
-      <Row
-        borderRadius={4}
-        justifyContent="center"
-        bgcolor="surfacePrimary.main"
-        sx={{ height: maxHeight }}
-      >
-        <Typography variant="m" color="textHint">
-          {D.trackingSelectCampaign}
-        </Typography>
-      </Row>
-    );
-  }
   const compareValues = (a, b, isAscending) => {
     if (a < b) return isAscending ? -1 : 1;
     if (a > b) return isAscending ? 1 : -1;
@@ -291,8 +273,9 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
   const filteredSurveyUnits = surveyUnits
     .filter(su => {
       const person = getprivilegedPerson(su);
+      const filteredByCampaign = campaign === '' || su.campaign === campaign;
       return (
-        su.campaign === campaign &&
+        filteredByCampaign &&
         (searchText === '' ||
           person.lastName.toUpperCase().includes(searchText.toUpperCase()) ||
           person.firstName.toUpperCase().includes(searchText.toUpperCase()))
