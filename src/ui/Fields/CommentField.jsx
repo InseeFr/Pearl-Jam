@@ -4,7 +4,6 @@ import { Typography } from '../Typography';
 import React from 'react';
 import D from 'i18n';
 
-
 /**
  * @param {string} value
  * @param {(v: string) => void} onChange
@@ -22,6 +21,7 @@ export function CommentField({ value, onChange, ...props }) {
   return (
     <Stack gap={1}>
       <FilledInput
+        data-testid="comment-field"
         sx={{
           padding: '0rem',
           minWidth: 500,
@@ -30,6 +30,7 @@ export function CommentField({ value, onChange, ...props }) {
           sx: {
             padding: '1rem',
           },
+          'data-testid': 'comment-textarea',
         }}
         minRows={8}
         maxRows={8}
