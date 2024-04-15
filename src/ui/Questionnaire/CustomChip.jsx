@@ -7,6 +7,7 @@ const CustomChip = ({ label, icon, color, shadow }) => {
       label={label}
       variant="outlined"
       icon={icon}
+      data-testid="custom-chip"
       style={{
         fontSize: '12px',
         color: color,
@@ -20,4 +21,3 @@ const CustomChip = ({ label, icon, color, shadow }) => {
 };
 
 export default CustomChip;
-
