@@ -62,7 +62,7 @@ export function useIdentificationQuestions(surveyUnit) {
     const question = {
       ...q,
       disabled: concluded,
-      answer: concluded ? undefined : getAnswerFromValue(q.type, surveyUnit.identification[key]),
+      answer: concluded ? undefined : getAnswerFromValue(q.type, surveyUnit?.identification?.[key]),
     };
     if (question.answer?.concluding) {
       concluded = true;
@@ -86,7 +86,7 @@ export function useIdentificationQuestions(surveyUnit) {
     const identification = Object.fromEntries(
       questions.map(question => {
         const key = question.type.toLowerCase();
-        const previousAnswer = surveyUnit.identification[question.type.toLowerCase()];
+        const previousAnswer = surveyUnit?.identification?.[question.type.toLowerCase()];
         let newAnswer = question.type === answer.questionType ? answer.value : previousAnswer;
         // For a concluding answer, mark the questions as "concluded" for the next question
         if (question.type === answer.questionType && answer.concluding) {
