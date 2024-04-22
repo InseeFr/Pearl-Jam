@@ -15,9 +15,8 @@ import { getContactAttemptByConfiguration } from '../../utils/enum/ContactAttemp
 import { StaticDateTimePicker } from '@mui/x-date-pickers/StaticDateTimePicker';
 import { Typography } from '../Typography';
 import { formatDate } from '../../utils/functions/date';
-import { addNewState } from '../../utils/functions';
+import { addNewState, persistSurveyUnit } from '../../utils/functions';
 import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
-import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 
 /**
  * @param {number} step
@@ -65,11 +64,10 @@ export function ContactAttemptForm({ onClose, surveyUnit }) {
     decrement();
   };
 
-  const goNextStep = async e => {
+  const goNextStep = e => {
     e.preventDefault();
     if (step === 3) {
-      await addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
-      surveyUnitIDBService.addOrUpdateSU({
+      const updatedSu = {
         ...surveyUnit,
         contactAttempts: [
           ...surveyUnit.contactAttempts,
@@ -79,6 +77,11 @@ export function ContactAttemptForm({ onClose, surveyUnit }) {
             medium,
           },
         ],
+      };
+      const newStates = addNewState(updatedSu, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
+      persistSurveyUnit({
+        ...updatedSu,
+        states: newStates,
       });
       onClose();
       return;

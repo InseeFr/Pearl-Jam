@@ -1,5 +1,6 @@
 import { surveyUnitStateEnum } from '../enum/SUStateEnum';
 import { contactOutcomeEnum } from '../enum/ContactOutcomeEnum';
+import { contactAttemptEnum } from '../enum/ContactAttemptEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
 import userIdbService from '../indexeddb/services/user-idb-service';
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
@@ -179,12 +180,12 @@ export async function seedData() {
       states: states,
       contactAttempts: [
         {
-          status: contactOutcomeEnum.IMPOSSIBLE_TO_REACH.type,
+          status: contactAttemptEnum.TEMPORARY_UNAVAILABLE.type,
           date: new Date().getTime() - getRandomIntBetween(10, 100) * day,
           medium: 'FIELD',
         },
         {
-          status: contactOutcomeEnum.INTERVIEW_ACCEPTED.type,
+          status: contactAttemptEnum.INTERVIEW_ACCEPTED.type,
           date: new Date().getTime() - getRandomIntBetween(3, 9) * day,
           medium: 'FIELD',
         },
@@ -206,11 +207,10 @@ export async function seedData() {
       identificationConfiguration: 'IASCO',
       contactOutcomeConfiguration: 'F2F',
       contactAttemptConfiguration: 'F2F',
-      selected: false,
       contactOutcome: {
         date: new Date().getTime() - 2 * day,
         type: contactOutcomeEnum.INTERVIEW_ACCEPTED.type,
-        totalNumberOfContactAttempts: 1,
+        totalNumberOfContactAttempts: 2,
       },
     });
   }

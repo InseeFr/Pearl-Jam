@@ -5,9 +5,10 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 /**
  * @param {string} label
+ * @param {object} sx - cf. MUI system
  * @param {JSX.Element} children
  */
-export function TextWithLabel({ label, children }) {
+export function TextWithLabel({ label, children, sx }) {
   if (children === true) {
     children = (
       <IconWrapper>
@@ -23,11 +24,11 @@ export function TextWithLabel({ label, children }) {
   }
   return (
     <div>
-      <Typography as="span" color="textTertiary" variant="s">
+      <Typography as="span" color="textTertiary" variant="s" sx={sx}>
         {label} :
       </Typography>
       &nbsp; &nbsp;
-      <Typography as="span" color="textPrimary" variant="s">
+      <Typography as="span" color="textPrimary" variant="s" sx={sx}>
         {children || '-'}
       </Typography>
     </div>

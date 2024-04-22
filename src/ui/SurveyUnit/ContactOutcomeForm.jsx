@@ -5,11 +5,10 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import React, { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
-import { addNewState } from '../../utils/functions';
+import { addNewState, persistSurveyUnit } from '../../utils/functions';
 import D from 'i18n';
 import { FieldRow } from '../FieldRow';
 import { useForm } from 'react-hook-form';
-import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 import {
   contactOutcomeEnum,
   getContactOutcomeByConfiguration,
@@ -34,15 +33,16 @@ export function ContactOutcomeForm({ onClose, surveyUnit }) {
     defaultValues: surveyUnit.contactOutcome ?? defaultValue,
   });
 
-  const onSubmit = handleSubmit(async data => {
+  const onSubmit = handleSubmit(data => {
     // Update survey unit state
     let newState = surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
     if (data.type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type) {
       newState = surveyUnitStateEnum.APPOINTMENT_MADE.type;
     }
-    await addNewState(surveyUnit, newState);
-    surveyUnitIDBService.update({
+    const newStates = addNewState(surveyUnit, newState);
+    persistSurveyUnit({
       ...surveyUnit,
+      states: newStates,
       contactOutcome: data,
     });
     onClose();
