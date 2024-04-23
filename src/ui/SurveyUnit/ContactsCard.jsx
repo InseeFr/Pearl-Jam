@@ -77,13 +77,15 @@ export function ContactsCard({ surveyUnit }) {
               <ContactOutcome contact={surveyUnit.contactOutcome} />
               {showDivider && <Divider />}
               <Stack gap={2} width={1} alignItems="stretch">
-                {contactAttempts.map(attempt => (
-                  <ContactAttempt
-                    attempt={attempt}
-                    key={attempt.date}
-                    onDelete={handleDeleteAttempt}
-                  />
-                ))}
+                {contactAttempts
+                  .sort((a, b) => b.date - a.date)
+                  .map(attempt => (
+                    <ContactAttempt
+                      attempt={attempt}
+                      key={attempt.date}
+                      onDelete={handleDeleteAttempt}
+                    />
+                  ))}
               </Stack>
             </Stack>
           </Stack>
@@ -134,7 +136,7 @@ function ContactAttempt({ attempt, onDelete }) {
     const mediumMapping = {
       FIELD: 'mediumFaceToFace',
       TEL: 'mediumPhone',
-      MAIL: 'mediumEmail',
+      EMAIL: 'mediumEmail',
     };
 
     const browserLanguage = navigator.language.split('-')[0];

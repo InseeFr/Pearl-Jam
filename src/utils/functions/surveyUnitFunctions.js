@@ -30,21 +30,15 @@ export const getCommentByType = (type, su) => {
  * @returns {{ order: string, value: string, color: string }}
  */
 export const getSuTodoState = surveyUnit => {
-  return convertSUStateInToDo(getLastState(surveyUnit).type);
+  return convertSUStateInToDo(getLastState(surveyUnit?.states ?? [])?.type);
 };
 
 /**
  * @deprecated shouldn't be used outside of surveyUnitFunctions, use getSuTodoState() instead
- * @param {SurveyUnit} su
- * @returns {SurveyUnitState}
+ * @param {{ status: string, date: number, id?: string }[]} states
+ * @returns {SurveyUnitState} or undefined if no states
  */
-export const getLastState = su => {
-  if (Array.isArray(su.states) && su.states.length === 1) return su.states[0];
-  if (Array.isArray(su.states) && su.states.length > 1) {
-    return su.states.reduce((a, b) => (a.date > b.date ? a : b));
-  }
-  return false;
-};
+export const getLastState = states => states?.slice?.().sort((a, b) => b.date - a.date)?.[0];
 
 const DAY = 1000 * 24 * 60 * 60;
 
@@ -65,18 +59,18 @@ export const daysLeftForSurveyUnit = su => {
 };
 
 const checkValidityForTransmissionNoident = su => {
-  const { contactAttempts, contactOutcome } = su;
+  const { contactAttempts, contactOutcome, states = [] } = su;
   if (contactAttempts.length === 0) return false;
   if (!contactOutcome) return false;
   const { type, totalNumberOfContactAttempts } = contactOutcome;
   if (totalNumberOfContactAttempts === 0) return false;
   if (type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.type) return true;
-  if (getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) return true;
+  if (getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) return true;
   return false;
 };
 
 const checkValidityForTransmissionIasco = su => {
-  const { contactOutcome, identification, identificationConfiguration } = su;
+  const { contactOutcome, identification, identificationConfiguration, states = [] } = su;
 
   if (!identificationIsFinished(identificationConfiguration, identification)) return false;
   if (!contactOutcome) return false;
@@ -86,7 +80,7 @@ const checkValidityForTransmissionIasco = su => {
 
   if (
     type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type &&
-    !getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
+    !getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
   )
     return false;
 
@@ -101,7 +95,7 @@ const checkValidityForTransmissionIasco = su => {
     return false;
 
   // TO finish There
-  return getLastState(su).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
+  return getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
 };
 
 export const isValidForTransmission = su => {
@@ -134,7 +128,7 @@ export const areCaEqual = (ca, anotherCa) => {
 export const deleteContactAttempt = (surveyUnit, contactAttempt) => {
   const { contactAttempts } = surveyUnit;
   const newCA = contactAttempts.filter(ca => !areCaEqual(ca, contactAttempt));
-  surveyUnitIdbService.update({ ...surveyUnit, contactAttempts: newCA });
+  persistSurveyUnit({ ...surveyUnit, contactAttempts: newCA });
 };
 
 export const getContactAttemptNumber = surveyUnit =>
@@ -155,22 +149,36 @@ export const lastContactAttemptIsSuccessfull = surveyUnit => {
 
 const isContactAttemptOk = surveyUnit => lastContactAttemptIsSuccessfull(surveyUnit);
 
-const addLatestState = (surveyUnit, newState) => {
-  const previousLatestState = getLastState(surveyUnit);
-  const { date } = previousLatestState;
-  if (newState.date <= date) {
-    surveyUnit.states.push({ ...newState, date: date + 1 });
+const addLatestState = (states, newState) => {
+  const newStates = states?.slice?.() ?? [];
+  const previousLatestState = getLastState(newStates);
+
+  const date = previousLatestState?.date;
+  if (date && newState.date <= date) {
+    newStates.push({ ...newState, date: date + 1 });
   } else {
-    surveyUnit.states.push(newState);
+    newStates.push(newState);
   }
+  return newStates;
 };
 
-const addContactState = async (surveyUnit, newState) => {
+const copyStatesFromSurveyUnit = surveyUnit => surveyUnit?.states?.slice?.() ?? [];
+
+/**
+ * Add a contact-related state and ensures states cohesity
+ *  => e.g. could add another state after or before newState
+ * @param {*} surveyUnit
+ * @param {{String: type, String: value}} newState SUStateEnum entry
+ * @returns {Array.<{ type: string, value: string }>} updated states
+ */
+const addContactState = (surveyUnit, newState) => {
+  // shallow copy or new empty array
+  let newStates = copyStatesFromSurveyUnit(surveyUnit);
   switch (newState.type) {
     case surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type:
-      addLatestState(surveyUnit, newState);
+      newStates = addLatestState(newStates, newState);
       if (isContactAttemptOk(surveyUnit)) {
-        addLatestState(surveyUnit, {
+        newStates = addLatestState(newStates, {
           date: new Date().getTime(),
           type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
         });
@@ -179,44 +187,46 @@ const addContactState = async (surveyUnit, newState) => {
 
     case surveyUnitStateEnum.APPOINTMENT_MADE.type:
       if (getContactAttemptNumber(surveyUnit) === 0) {
-        addLatestState(surveyUnit, {
+        newStates = addLatestState(newStates, {
           date: new Date().getTime(),
           type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
         });
       }
-      addLatestState(surveyUnit, newState);
+      newStates = addLatestState(newStates, newState);
       break;
     default:
       break;
   }
-  return surveyUnit;
+  return newStates;
 };
 
 /**
- * Add a new state to a surveyUnit
+ * Add a new state to a surveyUnit, with state cohesion
  *
- * @param surveyUnit
- * @param stateType
- * @returns {Promise<SurveyUnit>}
+ * @param {SurveyUnit } surveyUnit
+ * @param {String }stateType
+ * @returns {Array.<{ type: string, value: string }>}
  */
-export const addNewState = async (surveyUnit, stateType) => {
-  const lastStateType = getLastState(surveyUnit).type;
+export const addNewState = (surveyUnit, stateType) => {
+  // init returned states : previous states or empty array
+  let newStates = copyStatesFromSurveyUnit(surveyUnit);
+
+  const lastStateType = getLastState(newStates)?.type;
   const newState = { date: new Date().getTime(), type: stateType };
-  let newSu = surveyUnit;
   switch (lastStateType) {
     case surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type:
       if (CONTACT_RELATED_STATES.includes(stateType)) {
-        newSu = await addContactState(newSu, newState);
-        addLatestState(newSu, { date: new Date().getTime(), type: lastStateType });
+        newStates = addContactState(surveyUnit, newState);
+        newStates = addLatestState(newStates, { date: new Date().getTime(), type: lastStateType });
       } else {
-        addLatestState(newSu, newState);
+        newStates = addLatestState(newStates, newState);
       }
       break;
 
     case surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type:
       if (surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type === stateType) {
         if (isContactAttemptOk(surveyUnit)) {
-          addLatestState(newSu, {
+          newStates = addLatestState(newStates, {
             date: new Date().getTime(),
             type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
           });
@@ -224,9 +234,9 @@ export const addNewState = async (surveyUnit, stateType) => {
         break;
       }
       if (surveyUnitStateEnum.APPOINTMENT_MADE.type === stateType) {
-        newSu = await addContactState(newSu, newState);
+        newStates = addContactState(surveyUnit, newState);
       } else {
-        addLatestState(newSu, newState);
+        newStates = addLatestState(newStates, newState);
       }
       break;
 
@@ -235,19 +245,9 @@ export const addNewState = async (surveyUnit, stateType) => {
         break;
       }
       if (surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type === stateType) {
-        newSu = await addContactState(newSu, newState);
+        newStates = addContactState(surveyUnit, newState);
       } else {
-        addLatestState(newSu, newState);
-      }
-      break;
-
-    case surveyUnitStateEnum.IN_PREPARATION.type:
-    case surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type:
-    case surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type:
-      if (CONTACT_RELATED_STATES.includes(stateType)) {
-        newSu = await addContactState(newSu, newState);
-      } else {
-        addLatestState(newSu, newState);
+        newStates = addLatestState(newStates, newState);
       }
       break;
 
@@ -256,37 +256,52 @@ export const addNewState = async (surveyUnit, stateType) => {
     case surveyUnitStateEnum.TO_BE_REVIEWED.type:
     case surveyUnitStateEnum.FINALIZED.type:
       if (CONTACT_RELATED_STATES.includes(stateType)) {
-        newSu = await addContactState(newSu, newState);
-        addLatestState(newSu, {
+        newStates = addContactState(surveyUnit, newState);
+        newStates = addLatestState(newStates, {
           date: new Date().getTime(),
           type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type,
         });
       } else {
-        addLatestState(newSu, newState);
+        newStates = addLatestState(newStates, newState);
       }
       break;
+
+    case surveyUnitStateEnum.IN_PREPARATION.type:
+    case surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type:
+    case surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type:
+    // if no previousState
     default:
+      if (CONTACT_RELATED_STATES.includes(stateType)) {
+        newStates = addContactState(surveyUnit, newState);
+      } else {
+        newStates = addLatestState(newStates, newState);
+      }
       break;
   }
-  newSu.selected = false;
-  await surveyUnitIdbService.addOrUpdate(newSu);
-  return newSu;
+
+  return newStates;
 };
 
+/**
+ * Check if a surveyUnit meets criteria to update state from
+ *  VIN to VIC (lastState is VIN and identificationStartDate has passed)
+ * @param {*} surveyUnit
+ * @returns {[]} newStates
+ */
 export const updateStateWithDates = surveyUnit => {
-  const lastState = getLastState(surveyUnit).type;
+  let newStates = copyStatesFromSurveyUnit(surveyUnit);
+  const lastState = getLastState(newStates)?.type;
   const currentDate = new Date().getTime();
   const { identificationPhaseStartDate } = surveyUnit;
-  let result = 0;
+
   if (
     lastState === surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type &&
     currentDate > identificationPhaseStartDate
   ) {
-    result = 1;
-    addNewState(surveyUnit, surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type);
+    newStates = addNewState(surveyUnit, surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type);
   }
 
-  return result;
+  return newStates;
 };
 
 export const isQuestionnaireAvailable = su => inaccessible => {
@@ -322,8 +337,8 @@ export const applyFilters = (surveyUnits, filters) => {
         normalize(lastName).includes(normalizedSearchFilter) ||
         su.id.toString().toLowerCase().includes(normalizedSearchFilter) ||
         normalize(su.address.l6.split(' ').slice(1).toString()).includes(normalizedSearchFilter) ||
-        convertSUStateInToDo(getLastState(su).type)
-          .value.toLowerCase()
+        convertSUStateInToDo(getLastState(su.states)?.type)
+          ?.value.toLowerCase()
           .includes(normalizedSearchFilter) ||
         normalize(su.campaign).includes(normalizedSearchFilter)
       );
@@ -342,7 +357,9 @@ export const applyFilters = (surveyUnits, filters) => {
 
   const filterByToDo = su => {
     if (toDoFilter.length > 0) {
-      return toDoFilter.includes(convertSUStateInToDo(getLastState(su).type).order.toString());
+      return toDoFilter.includes(
+        convertSUStateInToDo(getLastState(su.states)?.type)?.order?.toString?.()
+      );
     }
     return true;
   };
@@ -355,7 +372,10 @@ export const applyFilters = (surveyUnits, filters) => {
   };
 
   const filterByTerminated = su => {
-    return !terminatedFilter || convertSUStateInToDo(getLastState(su).type) !== toDoEnum.TERMINATED;
+    return (
+      !terminatedFilter ||
+      convertSUStateInToDo(getLastState(su.states)?.type) !== toDoEnum.TERMINATED
+    );
   };
 
   const filteredSU = surveyUnits
@@ -510,13 +530,13 @@ export const getprivilegedPerson = surveyUnit => {
 export const createStateIds = async latestSurveyUnit => {
   const { id, states } = latestSurveyUnit;
   const previousSurveyUnit = await surveyUnitIdbService.getById(id);
-  surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, states });
+  persistSurveyUnit({ ...previousSurveyUnit, states });
 };
 
 export const createCommunicationRequestIds = async latestSurveyUnit => {
   const { id, communicationRequests } = latestSurveyUnit;
   const previousSurveyUnit = await surveyUnitIdbService.getById(id);
-  surveyUnitIdbService.addOrUpdateSU({ ...previousSurveyUnit, communicationRequests });
+  persistSurveyUnit({ ...previousSurveyUnit, communicationRequests });
 };
 
 export const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => {
@@ -536,7 +556,7 @@ export const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => 
 
 export const toggleFavoritePhoneNumberAndPersist = (surveyUnit, personId, phoneNumber) => {
   const updatedSurveyUnit = toggleFavoritePhoneNumber(surveyUnit, personId, phoneNumber);
-  surveyUnitIdbService.addOrUpdateSU(updatedSurveyUnit);
+  persistSurveyUnit(updatedSurveyUnit);
 };
 
 export const toggleFavoriteEmail = (surveyUnit, personId) => {
@@ -549,5 +569,7 @@ export const toggleFavoriteEmail = (surveyUnit, personId) => {
 };
 export const toggleFavoriteEmailAndPersist = (surveyUnit, personId) => {
   const updatedSurveyUnit = toggleFavoriteEmail(surveyUnit, personId);
-  surveyUnitIdbService.addOrUpdateSU(updatedSurveyUnit);
+  persistSurveyUnit(updatedSurveyUnit);
 };
+
+export const persistSurveyUnit = surveyUnit => surveyUnitIdbService.addOrUpdateSU(surveyUnit);

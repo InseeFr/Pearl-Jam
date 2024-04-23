@@ -19,7 +19,6 @@ import { Row } from './Row';
 import { AbsoluteLink } from './AbsoluteLink';
 import D from '../i18n/build-dictionary';
 
-
 /**
  * @param {SurveyUnit} surveyUnit
  * @param {boolean} locked
@@ -71,7 +70,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
             <Row justifyContent="space-between">
               <Row gap={1}>
                 <PersonOutlinedIcon color="textPrimary" />
-                <AbsoluteLink to={isActive ? `/survey-unit/${id}/details?panel=0` : undefined}>
+                <AbsoluteLink to={isActive ? `/survey-unit/${id}/details` : undefined}>
                   <Typography fontWeight={700} color="black" variant="xl">
                     {lastName.toUpperCase()} {firstName}
                   </Typography>

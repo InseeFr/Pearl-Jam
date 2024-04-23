@@ -45,5 +45,5 @@ export const convertSUStateInToDo = suState => {
     return toDoEnum.TERMINATED;
   }
 
-  return false;
+  return undefined;
 };

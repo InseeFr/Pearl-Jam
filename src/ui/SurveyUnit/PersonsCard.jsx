@@ -8,6 +8,7 @@ import {
   displayAgeInYears,
   getTitle,
   personPlaceholder,
+  toggleFavoriteEmailAndPersist,
   toggleFavoritePhoneNumberAndPersist,
 } from '../../utils/functions';
 import React, { Fragment } from 'react';
@@ -45,6 +46,10 @@ export function PersonsCard({ surveyUnit }) {
     toggleFavoritePhoneNumberAndPersist(surveyUnit, personId, phoneNumber);
   };
 
+  const handleFavMailPerson = personId => {
+    toggleFavoriteEmailAndPersist(surveyUnit, personId);
+  };
+
   return (
     <>
       <Card p={2} elevation={0}>
@@ -70,7 +75,11 @@ export function PersonsCard({ surveyUnit }) {
               {persons.map((p, k) => (
                 <Fragment key={p.id}>
                   {k > 0 && <Divider orientation="vertical" flexItem />}
-                  <PersonInfo onPhoneFav={handleFavPhoneNumber} person={p} />
+                  <PersonInfo
+                    onPhoneFav={handleFavPhoneNumber}
+                    onMailFav={handleFavMailPerson}
+                    person={p}
+                  />
                 </Fragment>
               ))}
             </Row>
@@ -87,10 +96,12 @@ export function PersonsCard({ surveyUnit }) {
  *
  * @param {SurveyUnitPerson} person
  * @param {(personId: number, phoneNumber: SurveyUnitPhoneNumber) => void} onPhoneFav
+ * @param {(personId: number) => void} onMailFav
  */
-function PersonInfo({ person, onPhoneFav }) {
+function PersonInfo({ person, onPhoneFav, onMailFav }) {
   const phoneNumberForSource = source => person.phoneNumbers.find(n => n.source === source);
   const handleFavPhoneNumber = phoneNumber => onPhoneFav(person.id, phoneNumber);
+  const handleFavMail = () => onMailFav(person.id);
   return (
     <Stack gap={2} sx={{ width: '100%' }}>
       <Stack gap={0.5}>
@@ -100,7 +111,34 @@ function PersonInfo({ person, onPhoneFav }) {
         <TextWithLabel label={D.surveyUnitAge}>{displayAgeInYears(person.birthdate)}</TextWithLabel>
       </Stack>
 
-      <TextWithLabel label={D.surveyUnitEmail}>{person.email}</TextWithLabel>
+      {/* temporary feature, mail preference will be replaced by person preference */}
+      <Row
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'auto 20px',
+        }}
+      >
+        <TextWithLabel
+          label={D.surveyUnitEmail}
+          sx={{
+            maxWidth: '80%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: 'inline-block',
+          }}
+        >
+          {person.email}
+        </TextWithLabel>
+        {person.email && (
+          <IconButton sx={{ py: 0 }} onClick={handleFavMail}>
+            {person.favoriteEmail ? (
+              <StarIcon size="small" color="yellow" />
+            ) : (
+              <StarBorderIcon size="small" color="surfaceTertiary" />
+            )}
+          </IconButton>
+        )}
+      </Row>
 
       <Stack gap={0.5}>
         <Typography as="div" color="textTertiary" variant="s">
