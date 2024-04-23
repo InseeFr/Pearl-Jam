@@ -2,8 +2,7 @@ import { identificationConfigurationEnum } from '../enum/IdentificationConfigura
 import { identificationQuestionsEnum } from '../enum/IdentificationQuestionsEnum';
 import { identificationAnswersEnum } from '../enum/IdentificationAnswersEnum';
 import { useMemo, useState } from 'react';
-import { addNewState, persistSurveyUnit } from '../functions';
-import { surveyUnitStateEnum } from '../enum/SUStateEnum';
+import { persistSurveyUnit } from '../functions';
 
 const getQuestions = config => {
   switch (config) {
@@ -79,7 +78,7 @@ export function useIdentificationQuestions(surveyUnit) {
   /**
    * @param {Answer} answer
    */
-  const setAnswer = answer => {
+  const setAnswer = (surveyUnit, answer) => {
     // When an answer is marked as "concluded" it makes next answer undefined
     let concluded = false;
     // Build the identification object expected for the surveyUnit
@@ -107,14 +106,10 @@ export function useIdentificationQuestions(surveyUnit) {
       setQuestion(nextIndex ? questions[nextIndex] : undefined);
     }
 
-    const newStates = addNewState(
-      {
-        ...surveyUnit,
-        identification,
-      },
-      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
-    );
-    persistSurveyUnit({ ...newSu, states: newStates });
+    persistSurveyUnit({
+      ...surveyUnit,
+      identification,
+    });
   };
 
   return {

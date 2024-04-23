@@ -22,6 +22,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 import { identificationConfigurationEnum } from '../../utils/enum/IdentificationConfigurationEnum';
 import Box from '@mui/material/Box';
+import { addNewState } from '../../utils/functions';
+import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
 
 /**
  * @param {SurveyUnit} surveyUnit
@@ -29,6 +31,12 @@ import Box from '@mui/material/Box';
 export function IdentificationCard({ surveyUnit }) {
   const { questions, setQuestion, answers, question, setAnswer } =
     useIdentificationQuestions(surveyUnit);
+
+  const stateProofSetAnswer = answer => {
+    const newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
+    setAnswer({ ...surveyUnit, states: newStates }, answer);
+  };
+
   return (
     <>
       <Card p={2} elevation={0}>
@@ -68,7 +76,7 @@ export function IdentificationCard({ surveyUnit }) {
         key={question}
         answers={answers}
         question={question}
-        onSubmit={setAnswer}
+        onSubmit={stateProofSetAnswer}
         onClose={() => setQuestion(undefined)}
       />
     </>
