@@ -16,7 +16,7 @@ import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import Button from '@mui/material/Button';
 import { Typography } from '../ui/Typography';
 import { Questionnaires } from '../ui/Questionnaire/Questionnaires';
-import { addNewState, getLastState } from '../utils/functions';
+import { addNewState, getLastState, persistSurveyUnit } from '../utils/functions';
 import { useEffect } from 'react';
 import { surveyUnitStateEnum } from '../utils/enum/SUStateEnum';
 
@@ -26,9 +26,10 @@ export function SurveyUnitPage() {
 
   useEffect(() => {
     if (surveyUnit !== undefined) {
-      const lastState = getLastState(surveyUnit);
-      if (lastState.type === surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type) {
-        addNewState(surveyUnit, surveyUnitStateEnum.IN_PREPARATION.type);
+      const lastState = getLastState(surveyUnit.states);
+      if (lastState?.type === surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type) {
+        const newStates = addNewState(surveyUnit, surveyUnitStateEnum.IN_PREPARATION.type);
+        persistSurveyUnit({ ...surveyUnit, states: newStates });
       }
     }
   }, [surveyUnit]);
@@ -74,7 +75,7 @@ export function SurveyUnitPage() {
           </Box>
         </SwipeableTab>
         <SwipeableTab index={1} label={D.goToContactPage}>
-          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '2rem' }}>
             <PersonsCard surveyUnit={surveyUnit} />
             <ContactsCard surveyUnit={surveyUnit} />
           </Box>

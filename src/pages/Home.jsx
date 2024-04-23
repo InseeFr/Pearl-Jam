@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { SidebarLayout } from '../ui/SidebarLayout';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -24,11 +24,24 @@ import { SurveyCard } from '../ui/SurveyCard';
 import { Row } from '../ui/Row';
 import { Select } from '../ui/Select';
 import { seedData } from '../utils/functions/seeder';
+import { persistSurveyUnit, updateStateWithDates } from '../utils/functions';
 
 export function Home() {
   const surveyUnits = useSurveyUnits();
   const missingSurveyUnitIds = useMissingSurveyUnits().map(surveyUnit => surveyUnit.id);
   const filter = useSearchFilter();
+  const [shouldCheckState, setShouldCheckState] = useState(true);
+
+  useEffect(() => {
+    if (shouldCheckState && surveyUnits.length > 0) {
+      // persist state VIC when identificationStartDate is reached
+      setShouldCheckState(false);
+      surveyUnits.forEach(su => {
+        const newStates = updateStateWithDates(su);
+        persistSurveyUnit({ ...su, states: newStates });
+      });
+    }
+  }, [surveyUnits.length]);
 
   const filteredSurveyUnits = filterSurveyUnits(surveyUnits, filter);
   const isDev = filteredSurveyUnits.length === 0 && window.location.hostname === 'localhost';
@@ -235,7 +248,7 @@ function Sidebar({ surveyUnits }) {
         <div>
           <Button size="edge" color="textPrimary" variant="underlined" onClick={filter.reset}>
             <RestartAltIcon />
-           {D.resetFilters}
+            {D.resetFilters}
           </Button>
         </div>
       </Stack>

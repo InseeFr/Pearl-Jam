@@ -12,7 +12,12 @@ import { PrivilegedPerson } from './PrivilegedPerson';
 import Chip from '@mui/material/Chip';
 import { Typography } from '../Typography';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
-import { addNewState, getSuTodoState, isValidForTransmission } from '../../utils/functions';
+import {
+  addNewState,
+  getSuTodoState,
+  isValidForTransmission,
+  persistSurveyUnit,
+} from '../../utils/functions';
 import CheckIcon from '@mui/icons-material/Check';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
@@ -192,8 +197,9 @@ export function SurveyUnitHeader({ surveyUnit }) {
  */
 function SubmitButton({ surveyUnit }) {
   const canSubmit = isValidForTransmission(surveyUnit);
-  const handleSubmit = async () => {
-    await addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type);
+  const handleSubmit = () => {
+    const newStates = addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type);
+    persistSurveyUnit({ ...surveyUnit, states: newStates });
   };
 
   if (!canSubmit) {

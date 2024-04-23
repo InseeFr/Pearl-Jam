@@ -1,22 +1,7 @@
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
-import functions from 'utils/functions/index';
-
-vi.mock('utils/functions', async () => {
-  const originalModule = await vi.importActual('utils/functions');
-  //Mock addNewState
-  return {
-    default: {
-      ...originalModule,
-    },
-    addNewState: vi.fn(),
-  };
-});
-
-// Mock for surveyUnitFunctions done here
-
-const {
+import {
   getContactAttemptNumber,
   getLastState,
   isSelectable,
@@ -26,7 +11,7 @@ const {
   isValidForTransmission,
   lastContactAttemptIsSuccessfull,
   areCaEqual,
-} = functions;
+} from 'utils/functions/index';
 
 describe('getCommentByType', () => {
   const noCommentsSu = {};
@@ -51,22 +36,20 @@ describe('getCommentByType', () => {
 
 describe('getLastState', () => {
   it('should return the only state', () => {
-    expect(getLastState({ states: [{ id: 1, date: 1616070963000 }] })).toEqual({
+    expect(getLastState([{ id: 1, date: 1616070963000 }])).toEqual({
       id: 1,
       date: 1616070963000,
     });
   });
-  it('should return false if empty states', () => {
-    expect(getLastState({ states: [] })).toEqual(false);
+  it('should return undefined if empty states', () => {
+    expect(getLastState([])).toEqual(undefined);
   });
   it('should return state with latest date', () => {
     expect(
-      getLastState({
-        states: [
-          { id: 1, date: 1616070963000 },
-          { id: 2, date: 1616070000000 },
-        ],
-      })
+      getLastState([
+        { id: 1, date: 1616070963000 },
+        { id: 2, date: 1616070000000 },
+      ])
     ).toEqual({
       id: 1,
       date: 1616070963000,
@@ -169,31 +152,36 @@ describe('getContactAttemptNumber', () => {
   });
 });
 describe('updateStateWithDates', () => {
+  const NOW = new Date(2021, 2, 15).getTime();
   beforeAll(() => {
-    vi.useFakeTimers('modern').setSystemTime(new Date(2021, 2, 15).getTime());
+    vi.useFakeTimers('modern').setSystemTime(NOW);
   });
   afterAll(() => {
     vi.useRealTimers();
   });
   const beforeCurrent = new Date(2021, 2, 10).getTime();
   const afterCurrent = new Date(2021, 2, 20).getTime();
-  it('should return 0 if SU lastState is not VNC', () => {
+  it('should return initial states if lastState is not VNC', () => {
     const surveyUnit = {};
-    expect(updateStateWithDates(surveyUnit)).toEqual(0);
+    expect(updateStateWithDates(surveyUnit)).toEqual([]);
+    expect(updateStateWithDates({ states: [] })).toEqual([]);
   });
-  it('should return 0 if SU lastState is VNC and currentDate < identificationPhaseStart', async () => {
+  it('should return return initial states if SU lastState is VNC and currentDate < identificationPhaseStart', () => {
     const surveyUnit = {
       states: [surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE],
       identificationPhaseStartDate: afterCurrent,
     };
-    expect(updateStateWithDates(surveyUnit)).toEqual(0);
+    expect(updateStateWithDates(surveyUnit)).toEqual([surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE]);
   });
-  it('should return 1 if SU is VNC and currentDate > identificationPhaseStart', async () => {
+  it('should return 1 if SU is VNC and currentDate > identificationPhaseStart', () => {
     const surveyUnit = {
-      states: [surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE],
+      states: [{ type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent }],
       identificationPhaseStartDate: beforeCurrent,
     };
-    expect(updateStateWithDates(surveyUnit)).toEqual(1);
+    expect(updateStateWithDates(surveyUnit)).toEqual([
+      { type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent },
+      { type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type, date: NOW },
+    ]);
   });
 });
 
