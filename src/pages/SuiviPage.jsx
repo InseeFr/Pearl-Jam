@@ -429,7 +429,7 @@ function SurveyUnitRow({ surveyUnit }) {
       <TableRow>
         <TableCell align="center">
           {isActive ? (
-            <Link to={`/survey-unit/${surveyUnit.id}/details?panel=0`}>#{surveyUnit.id}</Link>
+            <Link to={`/survey-unit/${surveyUnit.id}/details`}>#{surveyUnit.id}</Link>
           ) : (
             `#${surveyUnit.id}`
           )}
