@@ -231,6 +231,20 @@ export async function seedData() {
     lastName: 'Absent',
     identificationConfiguration: identificationConfigurationEnum.NOIDENT,
   });
+  surverUnits.push({
+    ...surverUnits[0],
+    managementStartDate: new Date().getTime() - 10 * day,
+    interviewerStartDate: new Date().getTime() - 9 * day,
+    identificationPhaseStartDate: new Date().getTime() - 8 * day,
+    collectionStartDate: new Date().getTime() - 7 * day,
+    collectionEndDate: new Date().getTime() - 6 * day,
+    endDate: new Date().getTime() + 15 * day,
+    id: 'questNotAvailable',
+    identification: {},
+    firstName: 'Flin',
+    lastName: 'Ished',
+    identificationConfiguration: identificationConfigurationEnum.NOIDENT,
+  });
   await userIdbService.insert({
     id: 1,
     title: 'MISTER',
