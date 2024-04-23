@@ -3,6 +3,7 @@ import questionnaireEnum from 'utils/enum/QuestionnaireStateEnum';
 import surveyUnitDBService from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useEffect } from 'react';
+import { persistSurveyUnit } from '../functions';
 
 const computeSurveyUnitState = questionnaireState => {
   switch (questionnaireState) {
@@ -35,10 +36,8 @@ const updateSurveyUnit = (surveyUnitID, queenState) => {
     }
 
     const newStateType = computeSurveyUnitState(newQuestionnaireState);
-    const update = async () => {
-      await addNewState(su, newStateType);
-    };
-    update();
+    const newStates = addNewState(su, newStateType);
+    persistSurveyUnit({ ...su, states: newStates });
   });
 };
 

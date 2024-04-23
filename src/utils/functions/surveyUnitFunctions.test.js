@@ -1,22 +1,7 @@
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
-import functions from 'utils/functions/index';
-
-vi.mock('utils/functions', async () => {
-  const originalModule = await vi.importActual('utils/functions');
-  //Mock addNewState
-  return {
-    default: {
-      ...originalModule,
-    },
-    addNewState: vi.fn(),
-  };
-});
-
-// Mock for surveyUnitFunctions done here
-
-const {
+import {
   getContactAttemptNumber,
   getLastState,
   isSelectable,
@@ -26,7 +11,7 @@ const {
   isValidForTransmission,
   lastContactAttemptIsSuccessfull,
   areCaEqual,
-} = functions;
+} from 'utils/functions/index';
 
 describe('getCommentByType', () => {
   const noCommentsSu = {};
