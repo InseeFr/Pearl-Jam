@@ -171,5 +171,3 @@ const mailMessage = {
       },
   },
 };
-
-export default mailMessage;
