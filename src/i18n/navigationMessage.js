@@ -1,15 +1,59 @@
 const navigationMessage = {
-  goToHomePage: { fr: 'Accueil', en: 'Home' },
-  goToTrainingPage: { fr: 'Formation', en: 'Training' },
-  goToNotificationsPage: { fr: 'Mes notifications', en: 'My Notifications' },
-  goToContactDetailsPage: { fr: 'Coordonnées', en: 'Contact details' },
-  goToIdentificationPage: { fr: 'Logement & Repérage', en: 'Housing & identification' },
-  goToCommunicationPage: { fr: 'Communications', en: 'Communications' },
-  goToMailsPage: { fr: 'Courriers', en: 'Mails' },
-  goToContactPage: { fr: 'Contacts', en: 'Contacts' },
-  goToCommentsPage: { fr: 'Commentaire', en: 'Comment' },
-  goToQuestionnairesPage: { fr: 'Questionnaires', en: 'Questionnaires' },
-  goToMyTracking: { fr: 'Mon suivi', en: 'My tracking' },
+  goToHomePage: {
+    fr: 'Accueil',
+    en: 'Home',
+    sq: 'Faqja kryesore',
+  },
+  goToTrainingPage: {
+    fr: 'Formation',
+    en: 'Training',
+    sq: 'Trajnimi',
+  },
+  goToNotificationsPage: {
+    fr: 'Mes notifications',
+    en: 'My Notifications',
+    sq: 'Njoftimet e mia',
+  },
+  goToContactDetailsPage: {
+    fr: 'Coordonnées',
+    en: 'Contact details',
+    sq: 'Detajet e kontaktit',
+  },
+  goToIdentificationPage: {
+    fr: 'Logement & Repérage',
+    en: 'Housing & identification',
+    sq: 'Banimi & Identifikimi',
+  },
+  goToCommunicationPage: {
+    fr: 'Communications',
+    en: 'Communications',
+    sq: 'Komunikimet',
+  },
+  goToMailsPage: {
+    fr: 'Courriers',
+    en: 'Mails',
+    sq: 'Postat',
+  },
+  goToContactPage: {
+    fr: 'Contacts',
+    en: 'Contacts',
+    sq: 'Kontaktet',
+  },
+  goToCommentsPage: {
+    fr: 'Commentaire',
+    en: 'Comment',
+    sq: 'Komenti',
+  },
+  goToQuestionnairesPage: {
+    fr: 'Questionnaires',
+    en: 'Questionnaires',
+    sq: 'Pyetësorët',
+  },
+  goToMyTracking: {
+    fr: 'Mon suivi',
+    en: 'My tracking',
+    sq: 'Gjurmimi im',
+  },
 };
 
 export default navigationMessage;
