@@ -1,18 +1,26 @@
 const criteriaMessage = {
-  sortBy: { fr: 'Trier par', en: 'Sort by' },
-  remainingDays: { fr: 'Jours restants', en: 'Remaining days' },
-  days: { fr: 'Jours', en: 'Days' },
-  priority: { fr: 'Priorité', en: 'Priority' },
-  survey: { fr: 'Enquête', en: 'Campaign' },
-  subSample: { fr: 'Sous-échantillon', en: 'Sub-sample' },
-  subSampleCluster: { fr: 'Sous-échantillon et grappe', en: 'Sub-sample and cluster' },
-  cluster: { fr: 'Grappe', en: 'Cluster' },
-  sortSurvey: { fr: 'Enquêtes', en: 'Surveys' },
-  sortStatus: { fr: "Statut de l'unité", en: 'Unit status' },
-  sortCompleted: { fr: 'Terminées', en: 'Completed' },
-  filterUnitsBy: { fr: 'Filtrer les unités par', en: 'Filter unit by' },
-  resetFilters: { fr: 'Réinitialiser les filtres', en: 'Reset filters' },
-  placeholderSearchHome: {fr: 'Nom, prénom, ville, enquête, ID...', en: 'Last name, first name, city, survey, ID...'}
+  sortBy: { fr: 'Trier par', en: 'Sort by', sq: 'Rëndit sipas' },
+  remainingDays: { fr: 'Jours restants', en: 'Remaining days', sq: 'Ditët e mbetura' },
+  days: { fr: 'Jours', en: 'Days', sq: 'Ditët' },
+  priority: { fr: 'Priorité', en: 'Priority', sq: 'Prioriteti' },
+  survey: { fr: 'Enquête', en: 'Campaign', sq: 'Fushata' },
+  subSample: { fr: 'Sous-échantillon', en: 'Sub-sample', sq: 'Nën-mostër' },
+  subSampleCluster: {
+    fr: 'Sous-échantillon et grappe',
+    en: 'Sub-sample and cluster',
+    sq: 'Nën-mostër dhe grumbull',
+  },
+  cluster: { fr: 'Grappe', en: 'Cluster', sq: 'Grumbull' },
+  sortSurvey: { fr: 'Enquêtes', en: 'Surveys', sq: 'Sondazhet' },
+  sortStatus: { fr: "Statut de l'unité", en: 'Unit status', sq: 'Statusi i njësisë' },
+  sortCompleted: { fr: 'Terminées', en: 'Completed', sq: 'Përfunduar' },
+  filterUnitsBy: { fr: 'Filtrer les unités par', en: 'Filter unit by', sq: 'Filtro njësitë sipas' },
+  resetFilters: { fr: 'Réinitialiser les filtres', en: 'Reset filters', sq: 'Rivendos filtrat' },
+  placeholderSearchHome: {
+    fr: 'Nom, prénom, ville, enquête, ID...',
+    en: 'Last name, first name, city, survey, ID...',
+    sq: 'Mbiemri, emri, qyteti, sondazhi, ID...',
+  },
 };
 
 export default criteriaMessage;

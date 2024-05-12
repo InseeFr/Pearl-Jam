@@ -1,21 +1,25 @@
 const toDoMessage = {
-  toDoPrepare: { fr: 'A préparer', en: 'To prepare' },
-  toDoContact: { fr: 'A repérer/Contacter', en: 'To spotting/Contact' },
-  toDoSurvey: { fr: 'A enquêter', en: 'To investigate' },
-  toDoFinalize: { fr: 'A finaliser', en: 'To finalize' },
-  toDoTransmit: { fr: 'A transmettre', en: 'To be forwarded' },
-  toDoSynchronize: { fr: 'A synchroniser', en: 'To synchronize' },
-  toDoTerminated: { fr: 'Terminé', en: 'Terminated' },
+  toDoPrepare: { fr: 'A préparer', en: 'To prepare', sq: 'Për të përgatitur' },
+  toDoContact: {
+    fr: 'A repérer/Contacter',
+    en: 'To spotting/Contact',
+    sq: 'Për të gjetur/Kontaktuar',
+  },
+  toDoSurvey: { fr: 'A enquêter', en: 'To investigate', sq: 'Për të hetuar' },
+  toDoFinalize: { fr: 'A finaliser', en: 'To finalize', sq: 'Për të përfunduar' },
+  toDoTransmit: { fr: 'A transmettre', en: 'To be forwarded', sq: 'Për të transmetuar' },
+  toDoSynchronize: { fr: 'A synchroniser', en: 'To synchronize', sq: 'Për të sinkronizuar' },
+  toDoTerminated: { fr: 'Terminé', en: 'Terminated', sq: 'Përfunduar' },
 };
 
 export const stepNames = {
-  stepPrepared: { fr: 'Préparé', en: 'Prepared' },
-  stepContacted: { fr: 'Repéré / contacté', en: 'Spotted / Contacted' },
-  stepSurveyed: { fr: 'Enquêté', en: 'Investigated' },
-  stepFinalized: { fr: 'Finalisé', en: 'Finalized' },
-  stepTransmitted: { fr: 'Transmis', en: 'Forwarded' },
-  stepSynchronized: { fr: 'Synchronisé', en: 'Synchronize' },
-  stepTerminated: { fr: 'Terminé', en: 'Terminated' },
+  stepPrepared: { fr: 'Préparé', en: 'Prepared', sq: 'Përgatitur' },
+  stepContacted: { fr: 'Repéré / contacté', en: 'Spotted / Contacted', sq: 'Gjetur / Kontaktuar' },
+  stepSurveyed: { fr: 'Enquêté', en: 'Investigated', sq: 'Hetuar' },
+  stepFinalized: { fr: 'Finalisé', en: 'Finalized', sq: 'Përfunduar' },
+  stepTransmitted: { fr: 'Transmis', en: 'Forwarded', sq: 'Transmetuar' },
+  stepSynchronized: { fr: 'Synchronisé', en: 'Synchronize', sq: 'Sinkronizuar' },
+  stepTerminated: { fr: 'Terminé', en: 'Terminated', sq: 'Përfunduar' },
 };
 
 export default toDoMessage;
