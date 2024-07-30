@@ -25,7 +25,6 @@ export function QueenPage() {
     }
     unmountRef.current = mount({
       mountPoint: ref.current,
-      initialPathname: location.pathname.replace('', ''),
     });
     isFirstRunRef.current = false;
   }, [location]);
