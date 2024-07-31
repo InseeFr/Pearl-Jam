@@ -11,7 +11,7 @@ const queenPathname = '/queen';
  * @constructor
  */
 
-export function QueenPage() {
+export default function QueenPage() {
   const ref = useRef(null);
   const location = useLocation();
 

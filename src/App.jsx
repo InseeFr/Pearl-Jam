@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { loadConfiguration, useConfiguration } from './utils/hooks/useConfiguration';
 import { PearlTheme } from './ui/PearlTheme';
@@ -14,15 +14,20 @@ import './app.css';
 import { SuiviPage } from './pages/SuiviPage';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { QueenPage } from './pages/QueenPage';
 import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
 import { ResetData } from './pages/ResetData';
 import { enUS, fr } from 'date-fns/locale';
 
+const QueenPage = lazy(() => import('./pages/QueenPage'));
+
 const router = createBrowserRouter([
   {
     path: '/queen/*',
-    element: <QueenPage />,
+    element: (
+      <Suspense>
+        <QueenPage />
+      </Suspense>
+    ),
   },
   {
     path: '/',
