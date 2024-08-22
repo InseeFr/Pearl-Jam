@@ -3,18 +3,49 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { mount } from 'dramaQueen/DramaIndex';
 import { useQueenListener } from '../utils/hooks/useQueenListener';
 
+const queenPathname = '/queen';
+
 /**
  * Mount Queen to sync data
  * @returns {JSX.Element}
  * @constructor
  */
-export function QueenPage() {
-  /** @var {import('react').Ref<HTMLDivElement>} ref */
+
+export default function QueenPage() {
   const ref = useRef(null);
   const location = useLocation();
 
   const navigate = useNavigate();
+
   useQueenListener(navigate);
+
+  // Listen to navigation events dispatched inside Drama Queen mfe.
+  useEffect(() => {
+    const dramaQueenNavigationEventHandler = event => {
+      const pathname = event.detail;
+      const newPathname = `${queenPathname}${pathname}`;
+      if (newPathname === location.pathname) {
+        return;
+      }
+      navigate(newPathname);
+    };
+    window.addEventListener('[Drama Queen] navigated', dramaQueenNavigationEventHandler);
+
+    return () => {
+      window.removeEventListener('[Drama Queen] navigated', dramaQueenNavigationEventHandler);
+    };
+  }, [location]);
+
+  // Listen for Pearl location changes and dispatch a notification.
+  useEffect(() => {
+    if (location.pathname.startsWith(queenPathname)) {
+      window.dispatchEvent(
+        new CustomEvent('[Pearl] navigated', {
+          detail: location.pathname.replace(queenPathname, ''),
+        })
+      );
+    }
+  }, [location]);
 
   const isFirstRunRef = useRef(true);
   const unmountRef = useRef(() => {});
@@ -25,7 +56,7 @@ export function QueenPage() {
     }
     unmountRef.current = mount({
       mountPoint: ref.current,
-      initialPathname: location.pathname.replace('', ''),
+      initialPathname: location.pathname.replace(queenPathname, ''),
     });
     isFirstRunRef.current = false;
   }, [location]);
