@@ -21,7 +21,7 @@ export default function QueenPage() {
 
   // Listen to navigation events dispatched inside Drama Queen mfe.
   useEffect(() => {
-    const app1NavigationEventHandler = event => {
+    const dramaQueenNavigationEventHandler = event => {
       const pathname = event.detail;
       const newPathname = `${queenPathname}${pathname}`;
       if (newPathname === location.pathname) {
@@ -29,10 +29,10 @@ export default function QueenPage() {
       }
       navigate(newPathname);
     };
-    window.addEventListener('[Drama Queen] navigated', app1NavigationEventHandler);
+    window.addEventListener('[Drama Queen] navigated', dramaQueenNavigationEventHandler);
 
     return () => {
-      window.removeEventListener('[Drama Queen] navigated', app1NavigationEventHandler);
+      window.removeEventListener('[Drama Queen] navigated', dramaQueenNavigationEventHandler);
     };
   }, [location]);
 
