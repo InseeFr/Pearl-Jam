@@ -5,6 +5,8 @@ import { Row } from '../Row';
 import Stack from '@mui/material/Stack';
 import React from 'react';
 import Button from '@mui/material/Button';
+import { Link as RouterLink } from 'react-router-dom';
+
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import D from 'i18n';
@@ -28,8 +30,8 @@ export function Questionnaires({ surveyUnit }) {
             variant="contained"
             disabled={!isAvailable}
             startIcon={<LibraryBooksIcon />}
-            component="a"
-            href={`/queen/survey-unit/${id}`}
+            component={RouterLink}
+            to={`/queen/survey-unit/${id}`}
           >
             {D.accessTheQuestionnaire}
           </Button>
