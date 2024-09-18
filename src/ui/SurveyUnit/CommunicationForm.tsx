@@ -174,7 +174,7 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
   // }
 
   return (
-    <Dialog maxWidth="sm" open={true} onClose={onClose()}>
+    <Dialog maxWidth="sm" open={true} onClose={onClose}>
       {step == Steps.MEDIUM && (
         <CommunicationDialogContent
           title={D.selectCommunciationRequestMedium}
