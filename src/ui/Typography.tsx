@@ -1,5 +1,8 @@
+import { SxProps, Theme } from '@mui/material';
+import { Variant } from '@mui/material/styles/createTypography';
 import TypographyMaterial from '@mui/material/Typography';
-import { forwardRef } from 'react';
+import { forwardRef, ReactNode, Ref } from 'react';
+import { T } from 'vitest/dist/types-94cfe4b4';
 
 /**
  * Wrapper component to style text using design system tokens
@@ -10,19 +13,28 @@ import { forwardRef } from 'react';
  * @param {import('@mui/material').TypographyProps} props
  * @return {JSX.Element}
  */
-export const Typography = forwardRef(
-  ({ variant = 'm', color = 'textPrimary', fontWeight = 600, ...props }, ref) => {
+
+interface TypographyProps
+{
+  variant : string
+  color : string
+  fontWeight : number
+  noWrap : boolean
+  sx : SxProps<Theme>
+}
+
+export const Typography = 
+  forwardRef<TypographyProps, any>(({ variant = 'm', color = 'textPrimary', fontWeight = 600, ...props }, ref) => {
     if (props.noWrap) {
       props.sx = { maxWidth: '100%', minWidth: 0, ...props.sx };
     }
     return (
       <TypographyMaterial
         ref={ref}
-        variant={variant}
+        variant={variant as Variant}
         color={`${color}.main`}
         fontWeight={fontWeight}
         {...props}
       />
     );
-  }
-);
+  });

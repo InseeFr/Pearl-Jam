@@ -67,18 +67,18 @@ export const HEALTHY_COMMUNICATION_REQUEST_STATUS = [
 ];
 
 export const mediumRadioValues = [
-  { value: communicationMediumEnum.MEDIUM_MAIL.type, label: D.mediumMail, disabled: false },
-  { value: communicationMediumEnum.MEDIUM_EMAIL.type, label: D.mediumEmail, disabled: true },
+  { value: communicationMediumEnum.MEDIUM_MAIL.value, label: D.mediumMail, disabled: false },
+  { value: communicationMediumEnum.MEDIUM_EMAIL.value, label: D.mediumEmail, disabled: true },
 ];
 
 export const typeRadioValues = [
   {
-    value: communicationTypeEnum.COMMUNICATION_NOTICE.type,
+    value: communicationTypeEnum.COMMUNICATION_NOTICE.value,
     label: D.communicationNotification,
     disabled: true,
   },
   {
-    value: communicationTypeEnum.COMMUNICATION_REMINDER.type,
+    value: communicationTypeEnum.COMMUNICATION_REMINDER.value,
     label: D.communicationReminder,
     disabled: false,
   },
@@ -86,12 +86,12 @@ export const typeRadioValues = [
 
 export const reasonRadioValues = [
   {
-    value: communicationReasonEnum.UNREACHABLE.type,
+    value: communicationReasonEnum.UNREACHABLE.value,
     label: D.communicationMotiveUnreachable,
     disabled: false,
   },
   {
-    value: communicationReasonEnum.REFUSAL.type,
+    value: communicationReasonEnum.REFUSAL.value,
     label: D.communicationMotiveRefusal,
     disabled: false,
   },
@@ -101,7 +101,7 @@ export const EMPTY_COMMUNICATION_REQUEST = {
   medium: '',
   reason: '',
   emiter: communicationEmiterEnum.INTERVIEWER,
-  type: communicationTypeEnum.COMMUNICATION_REMINDER.type,
+  type: communicationTypeEnum.COMMUNICATION_REMINDER.value,
   status: [],
 };
 
@@ -113,14 +113,14 @@ export const TITLES = {
 export const COMMUNICATION_REQUEST_STUB = [
   {
     status: [{ date: 123456789000, status: communicationStatusEnum.FAILED.type }],
-    medium: communicationMediumEnum.MEDIUM_MAIL.type,
-    type: communicationTypeEnum.COMMUNICATION_REMINDER.type,
+    medium: communicationMediumEnum.MEDIUM_MAIL.value,
+    type: communicationTypeEnum.COMMUNICATION_REMINDER.value,
     emiter: communicationEmiterEnum.INTERVIEWER,
   },
   {
     status: [{ date: 123456000000, status: communicationStatusEnum.SUBMITTED.type }],
-    medium: communicationMediumEnum.MEDIUM_EMAIL.type,
-    type: communicationTypeEnum.COMMUNICATION_NOTICE.type,
+    medium: communicationMediumEnum.MEDIUM_EMAIL.value,
+    type: communicationTypeEnum.COMMUNICATION_NOTICE.value,
     emiter: communicationEmiterEnum.TOOL,
   },
 ];

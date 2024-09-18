@@ -22,12 +22,18 @@ const style = {
   },
 };
 
+export interface RadioLineProps 
+{
+  value : string
+  disabled : boolean
+  label : string
+}
 /**
  * @param {string} label
  * @param {boolean} disabled
  * @constructor
  */
-export function RadioLine({ value, disabled, label }) {
+export function RadioLine({ value, disabled, label } : RadioLineProps) {
   return (
     <FormControlLabel
       disabled={disabled}
@@ -37,7 +43,6 @@ export function RadioLine({ value, disabled, label }) {
       label={label}
       slotProps={{
         typography: {
-          variant: 's',
           fontWeight: 600,
         },
       }}
