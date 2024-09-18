@@ -30,3 +30,11 @@ const CommunicationConfirmation = ({
   const recipient = getprivilegedPerson(surveyUnit);
   const { user } = useUser();
 
+  const userError = userSchema.safeParse(user);
+  const recipientError = recipientSchema.safeParse({ ...address, ...recipient });
+  const communicationError = communicationSchema.safeParse(communication);
+
+  useEffect(() => {    
+    onValidationChange(userError.success && recipientError.success && communicationError.success);
+  }, []);
+
