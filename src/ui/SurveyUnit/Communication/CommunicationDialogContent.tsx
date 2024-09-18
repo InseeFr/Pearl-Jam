@@ -21,10 +21,6 @@ const CommunicationDialogContent = ({
   title,
   lastPickedPropValue,
 }: CommunicationDialogContentProps) => {
-  console.log(options);
-  console.log(options.find(o => !o.disabled)?.value);
-
-    
   const [value, setValue] = useState(
     options.find(o => o.value === lastPickedPropValue) ? lastPickedPropValue : (options.find(o => !o.disabled)?.value) ?? []
   );
