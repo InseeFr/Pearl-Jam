@@ -62,3 +62,67 @@ namespace Steps {
       setStep(Steps.before(step));
     }
   };
+  return (
+    <Dialog maxWidth="sm" open={true} onClose={onClose()}>
+      {step == Steps.MEDIUM && (
+        <CommunicationDialogContent
+          title={D.selectCommunciationRequestMedium}
+          step={'medium'}
+          options={mediums}
+          setCommunicationValue={setValue}
+          lastPickedPropValue={communicationRequest.medium}
+        ></CommunicationDialogContent>
+      )}
+      {step == Steps.TYPE && (
+        <CommunicationDialogContent
+          title={D.selectCommunciationRequestType}
+          step={'type'}
+          options={types}
+          setCommunicationValue={setValue}
+          lastPickedPropValue={communicationRequest.type}
+        ></CommunicationDialogContent>
+      )}
+      {step == Steps.REASON && (
+        <CommunicationDialogContent
+          title={D.selectCommunciationRequestReason}
+          step={'reason'}
+          options={reasons}
+          setCommunicationValue={setValue}
+          lastPickedPropValue={communicationRequest.reason}
+        ></CommunicationDialogContent>
+      )}
+      {step == Steps.VALIDATE && (
+        <>
+          <DialogTitle id="dialogtitle">{D.communicationRequestValidation}</DialogTitle>
+          <DialogContent>
+            <Box>
+              <CommunicationConfirmation
+                communication={communicationRequest}
+                surveyUnit={surveyUnit}
+                onValidationChange={setComRequestValidity}
+              />
+            </Box>
+          </DialogContent>
+        </>
+      )}
+      <DialogActions>
+        <Button
+          color="white"
+          variant="contained"
+          onClick={() => (isFirst ? onClose() : previousStep())}
+        >
+          {isFirst ? D.cancelButton : D.previousButton}
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() =>
+            step == Steps.VALIDATE && comRequestValidity ? saveCommunicationRequest() : nextStep()
+          }
+        >
+          {D.confirmButton}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+export default CommunicationDialogContent;
