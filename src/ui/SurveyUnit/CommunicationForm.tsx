@@ -43,6 +43,16 @@ namespace Steps {
       ),
     };
   });
+  // If reminder is not selected as a type, the user does not have to set a reason (therefore setting it automatically here)
+  if (
+    communicationRequest.type !== communicationTypeEnum.COMMUNICATION_REMINDER.value &&
+    communicationRequest.reason !== communicationReasonEnum.UNREACHABLE.value
+  )
+    setCommunicationRequest({
+      ...communicationRequest,
+      reason: communicationReasonEnum.UNREACHABLE.value,
+    });
+
   const nextStep = () => {
     if (step < Steps.VALIDATE) setStep(Steps.after(step));
   };
