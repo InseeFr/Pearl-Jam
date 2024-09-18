@@ -2,28 +2,29 @@ import D from 'i18n';
 
 // Communication Medium
 export const communicationMediumEnum = {
-  MEDIUM_MAIL: { type: 'MAIL', value: `${D.mediumMail}` },
-  MEDIUM_EMAIL: { type: 'EMAIL', value: `${D.mediumEmail}` },
+  MEDIUM_MAIL: { value: 'MAIL', label: `${D.mediumMail}` },
+  MEDIUM_EMAIL: { value: 'EMAIL', label: `${D.mediumEmail}` },
 };
 
-export const findCommunicationMediumValueByType = type =>
-  Object.values(communicationMediumEnum).filter(value => value.type === type)?.[0]?.value;
+export const findCommunicationMediumLabelByValue = value =>
+  Object.values(communicationMediumEnum).filter(comMedium => comMedium.value === value)?.[0]?.label;
 
 // Type of communication
 export const communicationTypeEnum = {
-  COMMUNICATION_NOTICE: { type: 'NOTICE', value: `${D.communicationNotification}` },
-  COMMUNICATION_REMINDER: { type: 'REMINDER', value: `${D.communicationReminder}` },
+  COMMUNICATION_NOTICE: { value: 'NOTICE', label: `${D.communicationNotification}` },
+  COMMUNICATION_REMINDER: { value: 'REMINDER', label: `${D.communicationReminder}` },
 };
-export const findCommunicationTypeValueByType = type =>
-  Object.values(communicationTypeEnum).filter(value => value.type === type)?.[0]?.value;
+
+export const findCommunicationTypeLabelByValue = value =>
+  Object.values(communicationTypeEnum).filter(comType => comType.value === value)?.[0]?.label;
 
 // Reason for sending
 export const communicationReasonEnum = {
-  UNREACHABLE: { type: 'UNREACHABLE', value: `${D.communicationMotiveUnreachable}` },
-  REFUSAL: { type: 'REFUSAL', value: `${D.communicationMotiveRefusal}` },
+  UNREACHABLE: { value: 'UNREACHABLE', label: `${D.communicationMotiveUnreachable}` },
+  REFUSAL: { value: 'REFUSAL', label: `${D.communicationMotiveRefusal}` },
 };
-export const findCommunicationReasonValueByType = type =>
-  Object.values(communicationReasonEnum).filter(value => value.type === type)?.[0]?.value;
+export const findCommunicationReasonLabelByValue = value =>
+  Object.values(communicationReasonEnum).filter(comReason => comReason.value === value)?.[0]?.label;
 
 // Communication status
 export const communicationStatusEnum = {
@@ -37,7 +38,7 @@ export const communicationStatusEnum = {
 export const findCommunicationStatusValueByType = type =>
   Object.values(communicationStatusEnum).filter(value => value.type === type)?.[0]?.value;
 
-// Emiter
+// emitter
 export const communicationEmiterEnum = {
   INTERVIEWER: 'INTERVIEWER',
   TOOL: 'TOOL',
