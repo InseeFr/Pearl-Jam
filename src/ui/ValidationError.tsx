@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import { Theme } from '@mui/material/styles';
 import { ZodError } from 'zod';
 
 export interface ValidationErrorProps

@@ -12,8 +12,9 @@ import {
 } from '../../utils/enum/CommunicationEnums';
 import CommunicationDialogContent from './Communication/CommunicationDialogContent';
 import CommunicationConfirmation from './Communication/CommunicationConfirmation';
-import { Box, DialogContent, DialogTitle, Step } from '@mui/material';
+import { Box, DialogContent, DialogTitle } from '@mui/material';
 import { mediumRadioValues, reasonRadioValues, typeRadioValues } from '../../utils/constants';
+
 enum Steps {
   MEDIUM,
   TYPE,
