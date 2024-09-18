@@ -12,3 +12,21 @@ import {
   findCommunicationReasonLabelByValue,
   findCommunicationTypeLabelByValue,
 } from '../../../utils/enum/CommunicationEnums';
+
+interface CommunicationConfirmationProps {
+  surveyUnit: SurveyUnit;
+  communication: CommunicationForm;
+  onValidationChange : React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const CommunicationConfirmation = ({
+  communication,
+  surveyUnit,
+  onValidationChange,
+}: CommunicationConfirmationProps) => {
+
+  const address = getAddressData(surveyUnit.address);
+  const addressLines = Object.values(address).filter(v => !!v);
+  const recipient = getprivilegedPerson(surveyUnit);
+  const { user } = useUser();
+
