@@ -1,3 +1,19 @@
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import { useState } from 'react';
+import D from '../../i18n/build-dictionary';
+import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import {
+  communicationMediumEnum,
+  communicationReasonEnum,
+  communicationStatusEnum,
+  communicationTypeEnum,
+} from '../../utils/enum/CommunicationEnums';
+import CommunicationDialogContent from './Communication/CommunicationDialogContent';
+import CommunicationConfirmation from './Communication/CommunicationConfirmation';
+import { Box, DialogContent, DialogTitle, Step } from '@mui/material';
+import { mediumRadioValues, reasonRadioValues, typeRadioValues } from '../../utils/constants';
 enum Steps {
   MEDIUM,
   TYPE,
