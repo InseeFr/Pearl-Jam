@@ -10,6 +10,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    port: 3000
+  },
   test: {
     globals: true,
     environment: 'jsdom',
@@ -70,6 +73,7 @@ export default defineConfig({
         display: 'standalone',
         theme_color: '#000000',
         background_color: '#ffffff',
+    
       },
     }),
   ],
