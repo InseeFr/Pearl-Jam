@@ -59,42 +59,25 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
     type: '',
   });
 
-  // const communicationTemplates = surveyUnit?.communicationTemplates ?? [];
-  let communicationTemplates = [
-    {
-      medium: communicationMediumEnum.MEDIUM_EMAIL,
-      type: communicationTypeEnum.COMMUNICATION_NOTICE,
-      id: 1,
-    },
-    {
-      medium: communicationMediumEnum.MEDIUM_MAIL,
-      type: communicationTypeEnum.COMMUNICATION_REMINDER,
-      id: 2,
-    },
-    {
-      medium: communicationMediumEnum.MEDIUM_EMAIL,
-      type: communicationTypeEnum.COMMUNICATION_NOTICE,
-      id: 3,
-    },
-  ];
+  let communicationTemplates = surveyUnit?.communicationTemplates ?? [];
 
   let mediums = mediumRadioValues.map(m => {
     return {
       value: m.value,
       label: m.label,
-      disabled: !communicationTemplates.some(c => c.medium.value === m.value),
+      disabled: !communicationTemplates.some(c => c.medium === m.value),
     };
   });
 
   communicationTemplates = communicationTemplates.filter(
-    item => item.medium.value === communicationRequest.medium
+    item => item.medium === communicationRequest.medium
   );
 
   let types = typeRadioValues.map(t => {
     return {
       value: t.value,
       label: t.label,
-      disabled: !communicationTemplates.some(c => c.type.value === t.value),
+      disabled: !communicationTemplates.some(c => c.type === t.value),
     };
   });
 
@@ -103,7 +86,7 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
       value: r.value,
       label: r.label,
       disabled: !communicationTemplates.some(
-        c => c.type.value === communicationTypeEnum.COMMUNICATION_REMINDER.value
+        c => c.type === communicationTypeEnum.COMMUNICATION_REMINDER.value
       ),
     };
   });
@@ -122,8 +105,8 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
     // Retrieveing communicationTemplatedId by using form's input from the user
     const communicationTemplatedId = communicationTemplates.find(
       communicationTemplate =>
-        communicationTemplate.type.value === communicationRequest.type &&
-        communicationTemplate.medium.value === communicationRequest.medium
+        communicationTemplate.type === communicationRequest.type &&
+        communicationTemplate.medium === communicationRequest.medium
     )?.id;
 
     const newCommunicationRequest = {
@@ -160,18 +143,6 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
       setStep(Steps.before(step));
     }
   };
-
-  // if (
-  //   step === Steps.REASON &&
-  //   communicationRequest.type != communicationTypeEnum.COMMUNICATION_REMINDER.value
-  // ) {
-  //   setCommunicationRequest({
-  //     ...communicationRequest,
-  //     reason: communicationReasonEnum.UNREACHABLE.value,
-  //   });
-  //   setUnreachableNotice(true);
-  //   nextStep();
-  // }
 
   return (
     <Dialog maxWidth="sm" open={true} onClose={onClose}>
