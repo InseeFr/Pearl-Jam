@@ -76,13 +76,13 @@ declare global {
 
   type SurveyUnitCommunicationRequest = {
     emitter: 'INTERVIEWER' | 'TOOL';
-    communicationTemplateId : number;
+    communicationTemplateId : string;
     reason: string;
     status: { date: number; status: string }[];
   };
 
   type SurveyUnitNewCommunicationRequest = {
-    communicationTemplateId : number;
+    communicationTemplateId : string;
     reason: string;
     creationDate : number
   };
@@ -90,6 +90,7 @@ declare global {
   type SurveyUnitCommunicationTemplate = {
     medium: string;
     reason: string;
+    type : string;
     id: string;
   };
 
