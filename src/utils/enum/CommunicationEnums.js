@@ -2,7 +2,7 @@ import D from 'i18n';
 
 // Communication Medium
 export const communicationMediumEnum = {
-  MEDIUM_MAIL: { value: 'MAIL', label: `${D.mediumMail}` },
+  MEDIUM_MAIL: { value: 'LETTER', label: `${D.mediumMail}` },
   MEDIUM_EMAIL: { value: 'EMAIL', label: `${D.mediumEmail}` },
 };
 
