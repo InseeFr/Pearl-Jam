@@ -60,7 +60,7 @@ export function CommunicationItem({ communication, surveyUnitCommunicationTempla
           </Typography>
           <Typography color="textPrimary" variant="s">
             &nbsp;| {findCommunicationMediumLabelByValue(surveyUnitCommunicationTemplate.medium)} -{' '}
-            {findCommunicationTypeLabelByValue(communication.reason)}
+            {findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type)}
             {communication.reason &&
               `, ${findCommunicationReasonLabelByValue(communication.reason)}`}
           </Typography>
