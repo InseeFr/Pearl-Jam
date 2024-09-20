@@ -42,8 +42,14 @@ export function CommunicationsCard({ surveyUnit }: CommunicationsCardProps) {
               {D.sendCommunication}
             </Button>
             <Stack gap={2}>
-              {surveyUnit.communicationRequests?.map(v => (
-                <CommunicationItem surveyUnitCommunicationTemplate={communicationTemplates.find(c => c.id === v.communicationTemplateId)} communication={v} key={v.status[0].date ?? 1} />
+              {surveyUnit.communicationRequests?.map(comReq => (
+                <CommunicationItem
+                  surveyUnitCommunicationTemplate={communicationTemplates.find(
+                    c => c.id === comReq.communicationTemplateId
+                  )}
+                  communication={comReq}
+                  key={comReq.status[0].date ?? 1}
+                />
               ))}
             </Stack>
           </Stack>
