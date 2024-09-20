@@ -9,7 +9,7 @@ import { HEALTHY_COMMUNICATION_REQUEST_STATUS } from '../../../utils/constants';
 import {
   findCommunicationMediumLabelByValue,
   findCommunicationReasonLabelByValue,
-  findCommunicationStatusValueByType,
+  findCommunicationStatusLabelByValue,
   findCommunicationTypeLabelByValue,
 } from '../../../utils/enum/CommunicationEnums';
 import { Row } from '../../Row';
@@ -44,7 +44,7 @@ export function CommunicationItem({
   const typeLabel = findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type);
   const reasonLabel = findCommunicationReasonLabelByValue(communication.reason);
 
-  const lastStatusLabel = findCommunicationStatusValueByType(lastStatus.status);
+  const lastStatusLabel = findCommunicationStatusLabelByValue(lastStatus.status);
   const formattedDate = formatDate(lastStatus.date);
 
   return (

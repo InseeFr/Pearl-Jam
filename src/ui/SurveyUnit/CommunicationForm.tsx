@@ -100,7 +100,7 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
       reason: communicationRequest.reason,
       emitter: 'INTERVIEWER',
       communicationTemplateId: communicationTemplatedId,
-      status: [{ date: new Date().getTime(), status: communicationStatusEnum.INITIATED.type }],
+      status: [{ date: new Date().getTime(), status: communicationStatusEnum.INITIATED.value }],
     } as SurveyUnitCommunicationRequest;
 
     surveyUnitIDBService.addOrUpdateSU({

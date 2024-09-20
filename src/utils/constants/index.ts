@@ -61,9 +61,9 @@ export const STATES_UPDATING_TO_WFT = [
 ];
 
 export const HEALTHY_COMMUNICATION_REQUEST_STATUS = [
-  communicationStatusEnum.INITIATED.type,
-  communicationStatusEnum.READY.type,
-  communicationStatusEnum.SUBMITTED.type,
+  communicationStatusEnum.INITIATED.value,
+  communicationStatusEnum.READY.value,
+  communicationStatusEnum.SUBMITTED.value,
 ];
 
 export const mediumRadioValues = [
@@ -112,13 +112,13 @@ export const TITLES = {
 
 export const COMMUNICATION_REQUEST_STUB = [
   {
-    status: [{ date: 123456789000, status: communicationStatusEnum.FAILED.type }],
+    status: [{ date: 123456789000, status: communicationStatusEnum.FAILED.value }],
     medium: communicationMediumEnum.MEDIUM_MAIL.value,
     type: communicationTypeEnum.COMMUNICATION_REMINDER.value,
     emiter: communicationEmiterEnum.INTERVIEWER,
   },
   {
-    status: [{ date: 123456000000, status: communicationStatusEnum.SUBMITTED.type }],
+    status: [{ date: 123456000000, status: communicationStatusEnum.SUBMITTED.value }],
     medium: communicationMediumEnum.MEDIUM_EMAIL.value,
     type: communicationTypeEnum.COMMUNICATION_NOTICE.value,
     emiter: communicationEmiterEnum.TOOL,
