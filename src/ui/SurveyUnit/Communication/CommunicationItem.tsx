@@ -40,6 +40,10 @@ export function CommunicationItem({
 
   if (surveyUnitCommunicationTemplate === undefined) return;
 
+  const mediumLabel = findCommunicationMediumLabelByValue(surveyUnitCommunicationTemplate.medium);
+  const typeLabel = findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type);
+  const reasonLabel = findCommunicationReasonLabelByValue(communication.reason);
+
   return (
     <Row
       bgcolor="surfacePrimary.main"
@@ -56,10 +60,7 @@ export function CommunicationItem({
             {formatDate(firstStatus.date, true)}
           </Typography>
           <Typography color="textPrimary" variant="s">
-            &nbsp;| {findCommunicationMediumLabelByValue(surveyUnitCommunicationTemplate.medium)} -{' '}
-            {findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type)}
-            {communication.reason &&
-              `, ${findCommunicationReasonLabelByValue(communication.reason)}`}
+            {` | ${mediumLabel} - ${typeLabel}, ${reasonLabel}`}
           </Typography>
         </div>
       </Row>
