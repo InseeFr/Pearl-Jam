@@ -34,7 +34,7 @@ export function CommunicationsCard({ surveyUnit }: CommunicationsCardProps) {
               </Typography>
             </Row>
             <Button
-              disabled={false}
+              disabled={communicationTemplates.length === 0}
               onClick={toggleModal}
               variant="contained"
               startIcon={<AddIcon />}
