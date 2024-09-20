@@ -1,6 +1,4 @@
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
 import { useState } from 'react';
 import D from '../../i18n/build-dictionary';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
@@ -11,8 +9,8 @@ import {
 } from '../../utils/enum/CommunicationEnums';
 import CommunicationDialogContent from './Communication/CommunicationDialogContent';
 import CommunicationConfirmation from './Communication/CommunicationConfirmation';
-import { Box, DialogContent, DialogTitle } from '@mui/material';
 import { mediumRadioValues, reasonRadioValues, typeRadioValues } from '../../utils/constants';
+import { validateDate } from '@mui/x-date-pickers/internals';
 
 enum Steps {
   MEDIUM,
@@ -80,25 +78,16 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
     };
   });
 
+  const bypassTypeValue = communicationTypeEnum.COMMUNICATION_NOTICE.value;
+  const bypassReasonValue = communicationReasonEnum.UNREACHABLE.value;
+
   const reasons = reasonRadioValues.map(r => {
     return {
       value: r.value,
       label: r.label,
-      disabled: !communicationTemplates.some(
-        c => c.type === communicationTypeEnum.COMMUNICATION_REMINDER.value
-      ),
+      disabled: !communicationTemplates.some(c => c.type !== bypassTypeValue),
     };
   });
-
-  // If reminder is not selected as a type, the user does not have to set a reason (therefore setting it automatically here)
-  if (
-    communicationRequest.type !== communicationTypeEnum.COMMUNICATION_REMINDER.value &&
-    communicationRequest.reason !== communicationReasonEnum.UNREACHABLE.value
-  )
-    setCommunicationRequest({
-      ...communicationRequest,
-      reason: communicationReasonEnum.UNREACHABLE.value,
-    });
 
   const saveCommunicationRequest = () => {
     // Retrieveing communicationTemplatedId by using form's input from the user
@@ -134,11 +123,26 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
     if (step < Steps.VALIDATE) setStep(Steps.after(step));
   };
 
+  const bypass = communicationRequest.type === bypassTypeValue && step === Steps.REASON;
+  const bypassed = communicationRequest.type === bypassTypeValue && step === Steps.VALIDATE;
+
   const previousStep = () => {
-    if (step !== Steps.MEDIUM) {
+    if (bypassed) {
+      setStep(Steps.before(Steps.before(step)));
+    } else if (step !== Steps.MEDIUM) {
       setStep(Steps.before(step));
     }
   };
+
+  // If reminder is not selected as a type, the user does not have to set a reason (therefore setting it automatically here)
+  if (bypass) {
+    setCommunicationRequest({
+      ...communicationRequest,
+      reason: bypassReasonValue,
+    });
+
+    nextStep();
+  }
 
   return (
     <Dialog maxWidth="sm" open={true} onClose={onClose}>
