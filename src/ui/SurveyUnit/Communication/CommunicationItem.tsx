@@ -28,9 +28,9 @@ interface CommunicationItemProps
 export function CommunicationItem({ communication, surveyUnitCommunicationTemplate } : CommunicationItemProps) {
   const IconComponent =
     communication.emitter.toUpperCase() === 'INTERVIEWER' ? DirectionsWalkIcon : BuildIcon;
-  const sortedStatus = [...communication.status].sort((s1, s2) => s1.date > s2.date);
-  const firstStatus = sortedStatus.at(0);
-  const lastStatus = sortedStatus.at(-1);
+  const sortedStatus = [...communication.status].sort((s1, s2) => s1.date - s2.date);
+  const firstStatus = sortedStatus[0];
+  const lastStatus = sortedStatus[sortedStatus.length - 1];
   const statusIcon = HEALTHY_COMMUNICATION_REQUEST_STATUS.includes(lastStatus.status) ? (
     <CheckIcon color="success" />
   ) : (
