@@ -48,7 +48,6 @@ const CommunicationDialogContent = ({
     setCommunicationValue(value, step);
   }, [value]);
 
-
   return (
     <>
       <DialogTitle id="dialogtitle">{title}</DialogTitle>
@@ -63,7 +62,7 @@ const CommunicationDialogContent = ({
           >
             <Stack gap={1} width={1}>
               {options.map(o => (
-                <RadioLine value={o.value} label={o.label} disabled={o.disabled} />
+                <RadioLine value={o.value} label={o.label} disabled={o.disabled} key={o.value} />
               ))}
             </Stack>
           </RadioGroup>
