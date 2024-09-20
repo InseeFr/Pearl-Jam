@@ -59,7 +59,7 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
 
   let communicationTemplates = surveyUnit?.communicationTemplates ?? [];
 
-  let mediums = mediumRadioValues.map(m => {
+  const mediums = mediumRadioValues.map(m => {
     return {
       value: m.value,
       label: m.label,
@@ -71,7 +71,7 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
     item => item.medium === communicationRequest.medium
   );
 
-  let types = typeRadioValues.map(t => {
+  const types = typeRadioValues.map(t => {
     return {
       value: t.value,
       label: t.label,
@@ -79,7 +79,7 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
     };
   });
 
-  let reasons = reasonRadioValues.map(r => {
+  const reasons = reasonRadioValues.map(r => {
     return {
       value: r.value,
       label: r.label,
