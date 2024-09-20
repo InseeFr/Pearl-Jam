@@ -37,11 +37,7 @@ export function CommunicationItem({ communication, surveyUnitCommunicationTempla
     <ClearIcon color="error" />
   );
 
-  console.log(communication);
-  console.log(surveyUnitCommunicationTemplate);
-  
-  if(surveyUnitCommunicationTemplate === undefined)
-    return
+  if (surveyUnitCommunicationTemplate === undefined) return;
 
   return (
     <Row
