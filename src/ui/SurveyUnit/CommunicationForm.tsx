@@ -10,7 +10,6 @@ import {
 import CommunicationDialogContent from './Communication/CommunicationDialogContent';
 import CommunicationConfirmation from './Communication/CommunicationConfirmation';
 import { mediumRadioValues, reasonRadioValues, typeRadioValues } from '../../utils/constants';
-import { validateDate } from '@mui/x-date-pickers/internals';
 
 enum Steps {
   MEDIUM,
@@ -112,7 +111,8 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
     onClose();
   };
 
-  const setValue = (value: string, prop: string) => {
+  const setValue = (value: string) => {
+    const prop = Steps[step].toLocaleLowerCase();
     setCommunicationRequest({
       ...communicationRequest,
       [prop]: value,
@@ -149,7 +149,6 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
       {step == Steps.MEDIUM && (
         <CommunicationDialogContent
           title={D.selectCommunciationRequestMedium}
-          step={'medium'}
           options={mediums}
           setCommunicationValue={setValue}
           lastPickedPropValue={communicationRequest.medium}
@@ -162,7 +161,6 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
       {step == Steps.TYPE && (
         <CommunicationDialogContent
           title={D.selectCommunciationRequestType}
-          step={'type'}
           options={types}
           setCommunicationValue={setValue}
           lastPickedPropValue={communicationRequest.type}
@@ -175,7 +173,6 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
       {step == Steps.REASON && (
         <CommunicationDialogContent
           title={D.selectCommunciationRequestReason}
-          step={'reason'}
           options={reasons}
           setCommunicationValue={setValue}
           lastPickedPropValue={communicationRequest.reason}

@@ -12,7 +12,6 @@ import { useEffect, useState } from 'react';
 import D from '../../../i18n/build-dictionary';
 
 interface CommunicationDialogContentProps {
-  step: string;
   options: {
     label: string;
     value: string;
@@ -28,7 +27,6 @@ interface CommunicationDialogContentProps {
 }
 
 const CommunicationDialogContent = ({
-  step,
   options,
   setCommunicationValue,
   title,
@@ -45,7 +43,7 @@ const CommunicationDialogContent = ({
   );
 
   useEffect(() => {
-    setCommunicationValue(value, step);
+    setCommunicationValue(value);
   }, [value]);
 
   return (
