@@ -39,7 +39,7 @@ export const findCommunicationStatusLabelByValue = value =>
   Object.values(communicationStatusEnum).filter(comStatus => comStatus.value === value)?.[0]?.label;
 
 // emitter
-export const communicationEmiterEnum = {
+export const communicationEmitterEnum = {
   INTERVIEWER: 'INTERVIEWER',
   TOOL: 'TOOL',
 };
