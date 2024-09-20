@@ -51,7 +51,6 @@ interface CommunicationFormProps {
  */
 export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProps) {
   const [step, setStep] = useState(Steps.MEDIUM);
-  const [comRequestValidity, setComRequestValidity] = useState(false);
   const [communicationRequest, setCommunicationRequest] = useState<CommunicationForm>({
     medium: '',
     reason: '',
