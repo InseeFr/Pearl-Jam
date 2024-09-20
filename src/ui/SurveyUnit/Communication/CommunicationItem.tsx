@@ -44,6 +44,9 @@ export function CommunicationItem({
   const typeLabel = findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type);
   const reasonLabel = findCommunicationReasonLabelByValue(communication.reason);
 
+  const lastStatusLabel = findCommunicationStatusValueByType(lastStatus.status);
+  const formattedDate = formatDate(lastStatus.date);
+
   return (
     <Row
       bgcolor="surfacePrimary.main"
@@ -65,9 +68,7 @@ export function CommunicationItem({
         </div>
       </Row>
       <Row gap={1.5} typography="s" color="textTertiary.main" fontWeight={600}>
-        {findCommunicationStatusValueByType(lastStatus.status)} {D.communicationStatusOn}{' '}
-        {formatDate(lastStatus.date)}
-        {statusIcon}
+        {`${lastStatusLabel} ${D.communicationStatusOn} ${formattedDate}`} {statusIcon}
       </Row>
     </Row>
   );
