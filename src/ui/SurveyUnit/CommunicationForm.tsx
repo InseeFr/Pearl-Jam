@@ -5,7 +5,6 @@ import { useState } from 'react';
 import D from '../../i18n/build-dictionary';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 import {
-  communicationMediumEnum,
   communicationReasonEnum,
   communicationStatusEnum,
   communicationTypeEnum,
@@ -122,7 +121,6 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
     });
 
     onClose();
-    setCommunicationRequest({ medium: '', reason: '', type: '' });
   };
 
   const setValue = (value: string, prop: string) => {
@@ -132,14 +130,12 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
     });
   };
 
-  const isFirst = step === Steps.MEDIUM;
-
   const nextStep = () => {
     if (step < Steps.VALIDATE) setStep(Steps.after(step));
   };
 
   const previousStep = () => {
-    if (!isFirst) {
+    if (step !== Steps.MEDIUM) {
       setStep(Steps.before(step));
     }
   };
@@ -153,6 +149,10 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
           options={mediums}
           setCommunicationValue={setValue}
           lastPickedPropValue={communicationRequest.medium}
+          isFirst={true}
+          nextStep={nextStep}
+          onClose={onClose}
+          previousStep={previousStep}
         ></CommunicationDialogContent>
       )}
       {step == Steps.TYPE && (
@@ -162,6 +162,10 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
           options={types}
           setCommunicationValue={setValue}
           lastPickedPropValue={communicationRequest.type}
+          nextStep={nextStep}
+          onClose={onClose}
+          previousStep={previousStep}
+          isFirst={false}
         ></CommunicationDialogContent>
       )}
       {step == Steps.REASON && (
@@ -171,39 +175,20 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
           options={reasons}
           setCommunicationValue={setValue}
           lastPickedPropValue={communicationRequest.reason}
+          nextStep={nextStep}
+          onClose={onClose}
+          previousStep={previousStep}
+          isFirst={false}
         ></CommunicationDialogContent>
       )}
       {step == Steps.VALIDATE && (
-        <>
-          <DialogTitle id="dialogtitle">{D.communicationRequestValidation}</DialogTitle>
-          <DialogContent>
-            <Box>
-              <CommunicationConfirmation
-                communication={communicationRequest}
-                surveyUnit={surveyUnit}
-                onValidationChange={setComRequestValidity}
-              />
-            </Box>
-          </DialogContent>
-        </>
+        <CommunicationConfirmation
+          communication={communicationRequest}
+          surveyUnit={surveyUnit}
+          previousStep={previousStep}
+          saveCommunicationRequest={saveCommunicationRequest}
+        />
       )}
-      <DialogActions>
-        <Button
-          color="white"
-          variant="contained"
-          onClick={() => (isFirst ? onClose() : previousStep())}
-        >
-          {isFirst ? D.cancelButton : D.previousButton}
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() =>
-            step == Steps.VALIDATE && comRequestValidity ? saveCommunicationRequest() : nextStep()
-          }
-        >
-          {D.confirmButton}
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 }
