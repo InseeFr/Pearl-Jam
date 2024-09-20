@@ -5,8 +5,10 @@ import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import Divider from '@mui/material/Divider';
 import D from 'i18n';
 import { formatDate } from '../../../utils/functions/date';
-import { HEALTHY_COMMUNICATION_REQUEST_STATUS } from '../../../utils/constants';
+import { HEALTHY_COMMUNICATION_REQUEST_STATUS, reasonRadioValues } from '../../../utils/constants';
 import {
+  communicationReasonEnum,
+  communicationTypeEnum,
   findCommunicationMediumLabelByValue,
   findCommunicationReasonLabelByValue,
   findCommunicationStatusLabelByValue,
@@ -42,7 +44,10 @@ export function CommunicationItem({
 
   const mediumLabel = findCommunicationMediumLabelByValue(surveyUnitCommunicationTemplate.medium);
   const typeLabel = findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type);
-  const reasonLabel = findCommunicationReasonLabelByValue(communication.reason);
+  const reasonLabel =
+    surveyUnitCommunicationTemplate.type !== communicationTypeEnum.COMMUNICATION_NOTICE.value
+      ? `, ${findCommunicationReasonLabelByValue(communication.reason)}`
+      : '';
 
   const lastStatusLabel = findCommunicationStatusLabelByValue(lastStatus.status);
   const formattedDate = formatDate(lastStatus.date);
@@ -63,7 +68,7 @@ export function CommunicationItem({
             {formatDate(firstStatus.date, true)}
           </Typography>
           <Typography color="textPrimary" variant="s">
-            {` | ${mediumLabel} - ${typeLabel}, ${reasonLabel}`}
+            {` | ${mediumLabel} - ${typeLabel}${reasonLabel}`}
           </Typography>
         </div>
       </Row>
