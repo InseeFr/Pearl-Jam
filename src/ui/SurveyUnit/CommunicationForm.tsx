@@ -67,6 +67,7 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
     };
   });
 
+  // Will allow the user to pick only the types found in communicationTemplates with the same medium as the one picked by the user (communicationRequest.medium)
   communicationTemplates = communicationTemplates.filter(
     item => item.medium === communicationRequest.medium
   );
