@@ -18,6 +18,7 @@ interface CommunicationConfirmationProps {
   communication: CommunicationForm;
   previousStep: Function;
   saveCommunicationRequest: Function;
+  bypassReasonLabel: boolean;
 }
 
 const CommunicationConfirmation = ({
@@ -25,6 +26,7 @@ const CommunicationConfirmation = ({
   surveyUnit,
   previousStep,
   saveCommunicationRequest,
+  bypassReasonLabel,
 }: CommunicationConfirmationProps) => {
   const address = getAddressData(surveyUnit.address);
   const addressLines = Object.values(address).filter(v => !!v);
@@ -54,9 +56,15 @@ const CommunicationConfirmation = ({
                 <Typography variant="s" as="li" color={communicationError ? 'red' : 'textPrimary'}>
                   {findCommunicationTypeLabelByValue(communication.type)}{' '}
                 </Typography>
-                <Typography variant="s" as="li" color={communicationError ? 'red' : 'textPrimary'}>
-                  {findCommunicationReasonLabelByValue(communication.reason)}
-                </Typography>
+                {bypassReasonLabel && (
+                  <Typography
+                    variant="s"
+                    as="li"
+                    color={communicationError ? 'red' : 'textPrimary'}
+                  >
+                    {findCommunicationReasonLabelByValue(communication.reason)}
+                  </Typography>
+                )}
               </Box>
               {!communicationError.success && (
                 <ValidationError error={communicationError.error} mt={1} />

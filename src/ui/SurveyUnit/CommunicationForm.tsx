@@ -188,6 +188,7 @@ export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProp
           surveyUnit={surveyUnit}
           previousStep={previousStep}
           saveCommunicationRequest={saveCommunicationRequest}
+          bypassReasonLabel={bypass}
         />
       )}
     </Dialog>
