@@ -11,17 +11,16 @@ import { CommunicationForm } from '../CommunicationForm';
 import { CommunicationItem } from './CommunicationItem';
 import Card from '@mui/material/Card/Card';
 
-interface CommunicationsCardProps
-{
-  surveyUnit : SurveyUnit
+interface CommunicationsCardProps {
+  surveyUnit: SurveyUnit;
 }
 
 /**
  * @param {SurveyUnit} surveyUnit
  */
-export function CommunicationsCard({ surveyUnit } : CommunicationsCardProps) {
+export function CommunicationsCard({ surveyUnit }: CommunicationsCardProps) {
   const [showModal, toggleModal] = useToggle(false);
-  const communicationTemplates = surveyUnit.communicationTemplates
+  const communicationTemplates = surveyUnit.communicationTemplates;
 
   return (
     <>
