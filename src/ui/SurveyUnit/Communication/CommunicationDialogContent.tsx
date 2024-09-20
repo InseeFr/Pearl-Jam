@@ -50,6 +50,18 @@ const CommunicationDialogContent = ({
           </RadioGroup>
         </Box>
       </DialogContent>
+      <DialogActions>
+        <Button
+          color="white"
+          variant="contained"
+          onClick={() => (isFirst ? onClose() : previousStep())}
+        >
+          {isFirst ? D.cancelButton : D.previousButton}
+        </Button>
+        <Button variant="contained" onClick={() => nextStep()}>
+          {D.confirmButton}
+        </Button>
+      </DialogActions>
     </>
   );
 };
