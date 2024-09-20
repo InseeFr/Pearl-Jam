@@ -1,5 +1,5 @@
 import { Fragment, useEffect } from 'react';
-import { Box, Stack } from '@mui/material';
+import { Box, Button, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material';
 import { Typography } from '../../Typography';
 import { ValidationError } from '../../ValidationError';
 import { communicationSchema, recipientSchema, userSchema } from '../../../utils/schemas';
