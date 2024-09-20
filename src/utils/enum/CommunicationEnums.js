@@ -28,15 +28,15 @@ export const findCommunicationReasonLabelByValue = value =>
 
 // Communication status
 export const communicationStatusEnum = {
-  INITIATED: { type: 'INITIATED', value: `${D.communicationStatusInit}` },
-  READY: { type: 'READY', value: `${D.communicationStatusReady}` },
-  SUBMITTED: { type: 'SUBMITTED', value: `${D.communicationStatusSubmitted}` },
-  FAILED: { type: 'FAILED', value: `${D.communicationStatusFailed}` },
-  UNDELIVERED: { type: 'UNDELIVERED', value: `${D.communicationStatusUndelivered}` },
-  CANCELLED: { type: 'CANCELLED', value: `${D.communicationStatusCancelled}` },
+  INITIATED: { value: 'INITIATED', label: `${D.communicationStatusInit}` },
+  READY: { value: 'READY', label: `${D.communicationStatusReady}` },
+  SUBMITTED: { value: 'SUBMITTED', label: `${D.communicationStatusSubmitted}` },
+  FAILED: { value: 'FAILED', label: `${D.communicationStatusFailed}` },
+  UNDELIVERED: { value: 'UNDELIVERED', label: `${D.communicationStatusUndelivered}` },
+  CANCELLED: { value: 'CANCELLED', label: `${D.communicationStatusCancelled}` },
 };
-export const findCommunicationStatusValueByType = type =>
-  Object.values(communicationStatusEnum).filter(value => value.type === type)?.[0]?.value;
+export const findCommunicationStatusLabelByValue = value =>
+  Object.values(communicationStatusEnum).filter(comStatus => comStatus.value === value)?.[0]?.label;
 
 // emitter
 export const communicationEmiterEnum = {
