@@ -56,7 +56,7 @@ const CommunicationConfirmation = ({
                 <Typography variant="s" as="li" color={communicationError ? 'red' : 'textPrimary'}>
                   {findCommunicationTypeLabelByValue(communication.type)}{' '}
                 </Typography>
-                {bypassReasonLabel && (
+                {!bypassReasonLabel && (
                   <Typography
                     variant="s"
                     as="li"
