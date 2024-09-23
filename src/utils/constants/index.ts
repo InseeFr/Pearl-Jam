@@ -100,7 +100,7 @@ export const reasonRadioValues = [
 export const EMPTY_COMMUNICATION_REQUEST = {
   medium: '',
   reason: '',
-  emiter: communicationEmitterEnum.INTERVIEWER,
+  emitter: communicationEmitterEnum.INTERVIEWER,
   type: communicationTypeEnum.COMMUNICATION_REMINDER.value,
   status: [],
 };
@@ -115,13 +115,13 @@ export const COMMUNICATION_REQUEST_STUB = [
     status: [{ date: 123456789000, status: communicationStatusEnum.FAILED.value }],
     medium: communicationMediumEnum.MEDIUM_MAIL.value,
     type: communicationTypeEnum.COMMUNICATION_REMINDER.value,
-    emiter: communicationEmitterEnum.INTERVIEWER,
+    emitter: communicationEmitterEnum.INTERVIEWER,
   },
   {
     status: [{ date: 123456000000, status: communicationStatusEnum.SUBMITTED.value }],
     medium: communicationMediumEnum.MEDIUM_EMAIL.value,
     type: communicationTypeEnum.COMMUNICATION_NOTICE.value,
-    emiter: communicationEmitterEnum.TOOL,
+    emitter: communicationEmitterEnum.TOOL,
   },
 ];
 
