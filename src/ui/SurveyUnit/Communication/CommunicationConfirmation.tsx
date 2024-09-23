@@ -50,17 +50,25 @@ const CommunicationConfirmation = ({
                 {D.communicationSummaryContent}
               </Typography>
               <Box component="ul" p={0} pl={3} m={0}>
-                <Typography variant="s" as="li" color={communicationError ? 'red' : 'textPrimary'}>
+                <Typography
+                  variant="s"
+                  as="li"
+                  color={communicationError.success ? 'textPrimary' : 'error'}
+                >
                   {findCommunicationMediumLabelByValue(communication.medium)}{' '}
                 </Typography>
-                <Typography variant="s" as="li" color={communicationError ? 'red' : 'textPrimary'}>
+                <Typography
+                  variant="s"
+                  as="li"
+                  color={communicationError.success ? 'textPrimary' : 'error'}
+                >
                   {findCommunicationTypeLabelByValue(communication.type)}{' '}
                 </Typography>
                 {!bypassReasonLabel && (
                   <Typography
                     variant="s"
                     as="li"
-                    color={communicationError ? 'red' : 'textPrimary'}
+                    color={communicationError.success ? 'textPrimary' : 'error'}
                   >
                     {findCommunicationReasonLabelByValue(communication.reason)}
                   </Typography>
@@ -74,7 +82,11 @@ const CommunicationConfirmation = ({
               <Typography variant="s" color="textTertiary" as="h3">
                 {D.communicationSummaryRecipientAddress}
               </Typography>
-              <Typography variant="s" as="p" color={recipientError ? 'red' : 'textPrimary'}>
+              <Typography
+                variant="s"
+                as="p"
+                color={recipientError.success ? 'textPrimary' : 'error'}
+              >
                 {getTitle(recipient.title)} {recipient.firstName} {recipient.lastName}
                 <br />
                 {addressLines.map(line => (
@@ -90,7 +102,7 @@ const CommunicationConfirmation = ({
               <Typography variant="s" color="textTertiary" as="h3">
                 {D.communicationSummaryInterviewerAddress}
               </Typography>
-              <Typography variant="s" as="p" color={userError ? 'red' : 'textPrimary'}>
+              <Typography variant="s" as="p" color={userError.success ? 'textPrimary' : 'error'}>
                 {user.firstName} {user.lastName}
                 <br />
                 {user.email}
@@ -103,7 +115,7 @@ const CommunicationConfirmation = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button color="white" variant="contained" onClick={() => previousStep()}>
+        <Button color="secondary" variant="contained" onClick={() => previousStep()}>
           {D.previousButton}
         </Button>
         <Button variant="contained" onClick={() => saveCommunicationRequest()} disabled={!isValid}>
