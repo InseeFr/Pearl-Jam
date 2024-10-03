@@ -15,7 +15,7 @@ export default defineConfig({
     environment: 'jsdom',
     coverage: {
       reporter: ['text', 'html'],
-      exclude: ['node_modules/', 'src/setupTests.js'],
+      exclude: ['node_modules/', 'src/setupTests.js', 'src/**/*.spec.js'],
     },
   },
   resolve: {
