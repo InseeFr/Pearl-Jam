@@ -14,6 +14,15 @@ import { RadioLine } from './RadioLine';
 import IconButton from '@mui/material/IconButton';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+interface FieldRowProps {
+  label: string; // Label displayed alongside the field
+  maxWidth?: string | number; // Optional max width for the field
+  checkbox?: boolean; // Determines if the field is a checkbox
+  control?: React.ReactNode; // Any control element passed in (React children)
+  children?: React.ReactNode; // Nested elements or other components
+  [key: string]: any; // Spread operator for any additional props
+}
+
 /**
  * Displays a field with the label on the side
  *
@@ -25,7 +34,7 @@ import AddIcon from '@mui/icons-material/Add';
  * @returns {JSX.Element}
  */
 export const FieldRow = forwardRef(
-  ({ label, maxWidth, checkbox, control, children, ...props }, ref) => {
+  ({ label, maxWidth, checkbox, control, children, ...props }: FieldRowProps, ref) => {
     const isControlled = !!props.type;
 
     if (isControlled && !control) {
