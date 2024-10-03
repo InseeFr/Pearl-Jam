@@ -1,9 +1,7 @@
-import Stack from '@mui/material/Stack';
 import { FilledInput } from '@mui/material';
-import { Typography } from '../Typography';
-import React from 'react';
+import Stack from '@mui/material/Stack';
 import D from 'i18n';
-
+import { Typography } from '../Typography';
 
 /**
  * @param {string} value

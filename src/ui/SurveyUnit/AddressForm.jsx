@@ -1,15 +1,14 @@
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
-import { getAddressData } from '../../utils/functions';
 import D from 'i18n';
-import { FieldRow } from '../FieldRow';
 import { useForm } from 'react-hook-form';
+import { getAddressData } from '../../utils/functions';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { FieldRow } from '../FieldRow';
 
 /**
  *

@@ -1,17 +1,16 @@
-import React from 'react';
-import { Grid, IconButton, Stack, Button } from '@mui/material';
-import { Typography } from '../Typography';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
-import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
-import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
+import { Button, Grid, IconButton, Stack } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Typography } from '../Typography';
 import CustomChip from './CustomChip';
 import CircleIcon from './Icons/CircleIcon';
-import TimeIcon from './Icons/TimeIcon';
 import DisturbIcon from './Icons/DisturbIcon';
 import EditIcon from './Icons/EditIcon';
-import { makeStyles } from '@mui/styles';
+import TimeIcon from './Icons/TimeIcon';
 
 const useStyles = makeStyles({
   stackBackground: {
@@ -85,7 +84,7 @@ const PersonList = ({
               : '#6C6E70';
 
         return (
-          <React.Fragment key={index}>
+          <Fragment key={index}>
             <Grid container spacing={1} gap={1} alignItems="center">
               <Grid item>
                 <PersonOutlineOutlinedIcon
@@ -162,7 +161,7 @@ const PersonList = ({
                 </Grid>
               )}
             </Grid>
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </Stack>

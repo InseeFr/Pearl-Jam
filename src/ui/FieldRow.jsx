@@ -1,19 +1,19 @@
-import { Row } from './Row';
-import { Typography } from './Typography';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import Box from '@mui/material/Box';
-import React, { forwardRef } from 'react';
-import Switch from '@mui/material/Switch';
-import { Controller } from 'react-hook-form';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { forwardRef } from 'react';
+import { Controller } from 'react-hook-form';
 import { RadioLine } from './RadioLine';
-import IconButton from '@mui/material/IconButton';
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
+import { Row } from './Row';
+import { Typography } from './Typography';
 /**
  * Displays a field with the label on the side
  *

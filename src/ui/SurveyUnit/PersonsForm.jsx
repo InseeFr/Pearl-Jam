@@ -1,26 +1,26 @@
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import React, { Fragment } from 'react';
-import Stack from '@mui/material/Stack';
-import D from '../../i18n/build-dictionary';
-import { FieldRow } from '../FieldRow';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
-import { Row } from '../Row';
-import Divider from '@mui/material/Divider';
-import { TITLES } from '../../utils/constants';
-import { Typography } from '../Typography';
-import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { PaperIconButton } from '../PaperIconButton';
-import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Stack from '@mui/material/Stack';
+import { Fragment } from 'react';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import D from '../../i18n/build-dictionary';
+import { TITLES } from '../../utils/constants';
+import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { FieldRow } from '../FieldRow';
+import { PaperIconButton } from '../PaperIconButton';
+import { Row } from '../Row';
+import { Typography } from '../Typography';
 
 /**
  * Form to edit multiple persons attached to a surveyUnit
@@ -59,12 +59,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }) {
             {persons.map((p, k) => (
               <Fragment key={p.id}>
                 {k > 0 && <Divider orientation="vertical" flexItem />}
-                <PersonFields
-                  index={k}
-                  person={p}
-                  register={register}
-                  control={control}
-                />
+                <PersonFields index={k} person={p} register={register} control={control} />
               </Fragment>
             ))}
           </Row>
@@ -102,7 +97,11 @@ function PersonFields({ person, register, control, index }) {
   const phoneIndexFiscal = phoneNumberIndexForSource('FISCAL');
   const phoneIndexDirectory = phoneNumberIndexForSource('DIRECTORY');
 
-  const { fields: phoneNumbers, remove, append } = useFieldArray({
+  const {
+    fields: phoneNumbers,
+    remove,
+    append,
+  } = useFieldArray({
     name: `persons.${index}.phoneNumbers`,
     control: control,
   });
@@ -162,7 +161,7 @@ function PersonFields({ person, register, control, index }) {
               onRemove={() => remove(k)}
             />
           )
-        )}
+      )}
       <Box ml="110px">
         <Button
           onClick={addPhoneNumber}

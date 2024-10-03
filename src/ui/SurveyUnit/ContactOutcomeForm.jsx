@@ -1,19 +1,19 @@
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useMemo } from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
-import { addNewState, persistSurveyUnit } from '../../utils/functions';
 import D from 'i18n';
-import { FieldRow } from '../FieldRow';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   contactOutcomeEnum,
   getContactOutcomeByConfiguration,
 } from '../../utils/enum/ContactOutcomeEnum';
 import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
+import { addNewState, persistSurveyUnit } from '../../utils/functions';
+import { FieldRow } from '../FieldRow';
 
 const defaultValue = {
   date: new Date().getTime(),

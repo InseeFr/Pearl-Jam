@@ -1,21 +1,21 @@
-import Stack from '@mui/material/Stack';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import React, { useEffect, useState } from 'react';
-import { Typography } from './Typography';
-import { version } from '../../package.json';
-import Button from '@mui/material/Button';
-import Badge from '@mui/material/Badge';
-import Paper from '@mui/material/Paper';
-import { SynchronizeButton } from './Header/SynchronizeButton';
-import { NetworkStatus } from './Header/NetworkStatus';
-import D from '../i18n/build-dictionary';
-import { UserButton } from './Header/UserButton';
-import { useTheme } from '@mui/material/styles';
-import { Row } from './Row';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import { loadNotifications, useUnreadNotificationsCount } from '../utils/hooks/useNotifications';
-import { Notifications } from './Header/Notifications';
+import Badge from '@mui/material/Badge';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { version } from '../../package.json';
+import D from '../i18n/build-dictionary';
+import { loadNotifications, useUnreadNotificationsCount } from '../utils/hooks/useNotifications';
+import { NetworkStatus } from './Header/NetworkStatus';
+import { Notifications } from './Header/Notifications';
+import { SynchronizeButton } from './Header/SynchronizeButton';
+import { UserButton } from './Header/UserButton';
+import { Row } from './Row';
+import { Typography } from './Typography';
 
 export function Header() {
   const notificationsCount = useUnreadNotificationsCount();

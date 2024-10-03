@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Typography } from '../Typography';
-import { Row } from '../Row';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import CustomChip from './CustomChip';
-import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
 import Divider from '@mui/material/Divider';
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import Stack from '@mui/material/Stack';
 import { makeStyles } from '@mui/styles';
-import TimeIcon from './Icons/TimeIcon';
+import { useState } from 'react';
+import { Row } from '../Row';
+import { Typography } from '../Typography';
+import CustomChip from './CustomChip';
+import HousingResident from './HousingResident';
 import CircleIcon from './Icons/CircleIcon';
 import DisturbIcon from './Icons/DisturbIcon';
-import HousingResident from './HousingResident';
+import TimeIcon from './Icons/TimeIcon';
 import PersonList from './PersonList';
 
 const useStyles = makeStyles({

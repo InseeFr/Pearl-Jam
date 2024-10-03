@@ -1,15 +1,15 @@
+import CommentIcon from '@mui/icons-material/Comment';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Typography } from '../Typography';
-import D from 'i18n';
-import { Row } from '../Row';
 import Stack from '@mui/material/Stack';
+import D from 'i18n';
+import { useState } from 'react';
 import { getCommentByType } from '../../utils/functions';
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import CommentIcon from '@mui/icons-material/Comment';
-import { CommentField } from '../Fields/CommentField';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { CommentField } from '../Fields/CommentField';
+import { Row } from '../Row';
+import { Typography } from '../Typography';
 
 /**
  * @param {SurveyUnit} surveyUnit

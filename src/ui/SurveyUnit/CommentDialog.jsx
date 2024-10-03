@@ -1,15 +1,15 @@
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useState } from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
-import { PrivilegedPerson } from './PrivilegedPerson';
+import D from 'i18n';
+import { useState } from 'react';
 import { getCommentByType } from '../../utils/functions';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
-import D from 'i18n';
 import { CommentField } from '../Fields/CommentField';
+import { PrivilegedPerson } from './PrivilegedPerson';
 
 /**
  * Dialog to add a new comment to a survey unit

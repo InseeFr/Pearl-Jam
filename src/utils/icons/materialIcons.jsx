@@ -1,24 +1,23 @@
+import { makeStyles } from '@material-ui/core';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import BugReportIcon from '@material-ui/icons/BugReport';
-import CheckCircleOutline from '@material-ui/icons/CheckCircleOutline';
 import CheckIcon from '@material-ui/icons/Check';
+import CheckCircleOutline from '@material-ui/icons/CheckCircleOutline';
 import ClearIcon from '@material-ui/icons/Clear';
 import CommentIcon from '@material-ui/icons/Comment';
 import DeleteIcon from '@material-ui/icons/Delete';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import PhoneIcon from '@material-ui/icons/Phone';
-import PropTypes from 'prop-types';
-import React from 'react';
 import RemoveIcon from '@material-ui/icons/Remove';
 import SearchIcon from '@material-ui/icons/Search';
 import StarIcon from '@material-ui/icons/Star';
-import SyncIcon from './SyncIcon';
 import Warning from '@material-ui/icons/Warning';
-import { makeStyles } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import SyncIcon from './SyncIcon';
 
 const useStyles = makeStyles(theme => ({
   infoIcon: {

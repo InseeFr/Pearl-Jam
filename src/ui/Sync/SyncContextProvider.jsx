@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 import * as api from 'utils/api';
 
-import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
-import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
 import D from 'i18n';
+import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
+import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
+import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
+import { useConfiguration } from '../../utils/hooks/useConfiguration';
+import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
-import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
-import { useNetworkOnline } from '../../utils/hooks/useOnline';
-import { useConfiguration } from '../../utils/hooks/useConfiguration';
 
-export const SyncContext = React.createContext();
+export const SyncContext = createContext();
 
 export function SyncContextProvider({ children }) {
   const online = useNetworkOnline();

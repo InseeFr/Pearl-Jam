@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { mount } from 'dramaQueen/DramaIndex';
+import { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueenListener } from '../utils/hooks/useQueenListener';
 
 const queenPathname = '/queen';

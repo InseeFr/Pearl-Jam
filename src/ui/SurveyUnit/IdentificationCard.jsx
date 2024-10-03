@@ -1,29 +1,29 @@
+import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Typography } from '../Typography';
-import D from 'i18n';
-import { Row } from '../Row';
 import Stack from '@mui/material/Stack';
-import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
-import { ButtonLine } from '../ButtonLine';
+import D from 'i18n';
 import { useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
+import { ButtonLine } from '../ButtonLine';
+import { Row } from '../Row';
+import { Typography } from '../Typography';
 
-import DialogTitle from '@mui/material/DialogTitle';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import React, { useState } from 'react';
-import { RadioLine } from '../RadioLine';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
 import RadioGroup from '@mui/material/RadioGroup';
-import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { useState } from 'react';
 import { identificationConfigurationEnum } from '../../utils/enum/IdentificationConfigurationEnum';
-import Box from '@mui/material/Box';
-import { addNewState } from '../../utils/functions';
 import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
+import { addNewState } from '../../utils/functions';
+import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { RadioLine } from '../RadioLine';
 
 /**
  * @param {SurveyUnit} surveyUnit

@@ -1,27 +1,26 @@
-import Card from '@mui/material/Card';
+import AddIcon from '@mui/icons-material/Add';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import CardContent from '@mui/material/CardContent';
-import { Typography } from '../Typography';
-import D from 'i18n';
-import { Row } from '../Row';
-import Stack from '@mui/material/Stack';
-import React from 'react';
+import EditIcon from '@mui/icons-material/Edit';
 import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined';
 import Box from '@mui/material/Box';
-import { findContactOutcomeValueByType } from '../../utils/enum/ContactOutcomeEnum';
-import { formatDate } from '../../utils/functions/date';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import { findContactAttemptValueByType } from '../../utils/enum/ContactAttemptEnum';
-import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
-import { ContactOutcomeForm } from './ContactOutcomeForm';
-import { useToggle } from '../../utils/hooks/useToggle';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import { ContactAttemptForm } from './ContactAttemptForm';
+import Stack from '@mui/material/Stack';
+import D from 'i18n';
 import mediumMessage from '../../i18n/mediumMessage';
+import { findContactAttemptValueByType } from '../../utils/enum/ContactAttemptEnum';
+import { findContactOutcomeValueByType } from '../../utils/enum/ContactOutcomeEnum';
+import { formatDate } from '../../utils/functions/date';
+import { useToggle } from '../../utils/hooks/useToggle';
+import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { Row } from '../Row';
+import { Typography } from '../Typography';
+import { ContactAttemptForm } from './ContactAttemptForm';
+import { ContactOutcomeForm } from './ContactOutcomeForm';
 
 /**
  * Display persons linked to a survey unit

@@ -1,51 +1,51 @@
+import AddIcon from '@mui/icons-material/Add';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import InputAdornment from '@mui/material/InputAdornment';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import IconButton from '@mui/material/IconButton';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import TextField from '@mui/material/TextField';
-import { Typography } from '../ui/Typography';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
-import { useSurveyUnits } from '../utils/hooks/database';
-import { CampaignProgress } from '../ui/Stats/CampaignProgress';
-import React, { useMemo, useState, useEffect } from 'react';
-import { groupBy } from '../utils/functions/array';
-import { CampaignProgressPieChart } from '../ui/Stats/CampaignProgressPieChart';
-import { ScrollableBox } from '../ui/ScrollableBox';
-import { Row } from '../ui/Row';
-import Tabs from '@mui/material/Tabs';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
-import AddIcon from '@mui/icons-material/Add';
-import {
-  getCommentByType,
-  getprivilegedPerson,
-  getSortedContactAttempts,
-  getSuTodoState,
-  daysLeftForSurveyUnit,
-  isSelectable,
-} from '../utils/functions';
-import { StatusChip } from '../ui/StatusChip';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Link } from '../ui/Link';
-import { findContactOutcomeValueByType } from '../utils/enum/ContactOutcomeEnum';
-import { formatDate } from '../utils/functions/date';
-import { findMediumValueByType } from '../utils/enum/MediumEnum';
-import { findContactAttemptValueByType } from '../utils/enum/ContactAttemptEnum';
-import { Select } from '../ui/Select';
-import { CommentDialog } from '../ui/SurveyUnit/CommentDialog';
-import { useToggle } from '../utils/hooks/useToggle';
-import { PaperIconButton } from '../ui/PaperIconButton';
-import { IconDesc } from '../ui/Icons/IconDesc';
-import { IconAsc } from '../ui/Icons/IconAsc';
+import Tabs from '@mui/material/Tabs';
+import TextField from '@mui/material/TextField';
 import D from 'i18n';
+import { useEffect, useMemo, useState } from 'react';
+import { IconAsc } from '../ui/Icons/IconAsc';
+import { IconDesc } from '../ui/Icons/IconDesc';
+import { Link } from '../ui/Link';
+import { PaperIconButton } from '../ui/PaperIconButton';
+import { Row } from '../ui/Row';
+import { ScrollableBox } from '../ui/ScrollableBox';
+import { Select } from '../ui/Select';
+import { CampaignProgress } from '../ui/Stats/CampaignProgress';
+import { CampaignProgressPieChart } from '../ui/Stats/CampaignProgressPieChart';
+import { StatusChip } from '../ui/StatusChip';
+import { CommentDialog } from '../ui/SurveyUnit/CommentDialog';
+import { Typography } from '../ui/Typography';
+import { findContactAttemptValueByType } from '../utils/enum/ContactAttemptEnum';
+import { findContactOutcomeValueByType } from '../utils/enum/ContactOutcomeEnum';
+import { findMediumValueByType } from '../utils/enum/MediumEnum';
+import {
+  daysLeftForSurveyUnit,
+  getCommentByType,
+  getprivilegedPerson,
+  getSortedContactAttempts,
+  getSuTodoState,
+  isSelectable,
+} from '../utils/functions';
+import { groupBy } from '../utils/functions/array';
+import { formatDate } from '../utils/functions/date';
+import { useSurveyUnits } from '../utils/hooks/database';
+import { useToggle } from '../utils/hooks/useToggle';
 
 export function SuiviPage() {
   const surveyUnits = useSurveyUnits();

@@ -1,6 +1,5 @@
-import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import React from 'react';
+import Radio from '@mui/material/Radio';
 
 const style = {
   bgcolor: 'surfacePrimary.main',

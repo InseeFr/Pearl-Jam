@@ -1,16 +1,15 @@
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Typography } from '../Typography';
-import D from 'i18n';
-import { Row } from '../Row';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import Stack from '@mui/material/Stack';
+import D from 'i18n';
 import { getAddressData } from '../../utils/functions';
-import React from 'react';
-import { TextWithLabel } from '../TextWithLabel';
-import Button from '@mui/material/Button';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { useToggle } from '../../utils/hooks/useToggle';
+import { Row } from '../Row';
+import { TextWithLabel } from '../TextWithLabel';
+import { Typography } from '../Typography';
 import { AddressForm } from './AddressForm';
 
 /**

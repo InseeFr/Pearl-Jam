@@ -1,20 +1,20 @@
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import DialogContentText from '@mui/material/DialogContentText';
-import D from 'i18n';
-import React, { useMemo } from 'react';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import WarningIcon from '@mui/icons-material/Warning';
+import { useTheme } from '@emotion/react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import WarningIcon from '@mui/icons-material/Warning';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Stack from '@mui/material/Stack';
+import D from 'i18n';
+import { useMemo } from 'react';
 import { Accordion } from '../Accordion';
 import { Typography } from '../Typography';
-import ErrorIcon from '@mui/icons-material/Error';
-import { useTheme } from '@emotion/react';
 
 /**
  * Dialog that summarize synchronization results

@@ -1,14 +1,13 @@
-import React from 'react';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import DoorFrontOutlinedIcon from '@mui/icons-material/DoorFrontOutlined';
+import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
 import { Button } from '@mui/material';
 import { Row } from '../Row';
 import { Typography } from '../Typography';
-import DoorFrontOutlinedIcon from '@mui/icons-material/DoorFrontOutlined';
-import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import TimeIcon from './Icons/TimeIcon';
-import DisturbIcon from './Icons/DisturbIcon';
-import CircleIcon from './Icons/CircleIcon';
 import CustomChip from './CustomChip';
+import CircleIcon from './Icons/CircleIcon';
+import DisturbIcon from './Icons/DisturbIcon';
+import TimeIcon from './Icons/TimeIcon';
 
 const HousingResident = ({ startHousing, finishedHousing, toggleHousing, toggleModal }) => {
   return (
