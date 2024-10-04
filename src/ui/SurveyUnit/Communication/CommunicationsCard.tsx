@@ -10,6 +10,11 @@ import AddIcon from '@mui/icons-material/Add';
 import { CommunicationForm } from '../CommunicationForm';
 import { CommunicationItem } from './CommunicationItem';
 import Card from '@mui/material/Card/Card';
+import { mediumEnum } from 'utils/enum/MediumEnum';
+import {
+  communicationMediumEnum,
+  findCommunicationMediumLabelByValue,
+} from 'utils/enum/CommunicationEnums';
 
 interface CommunicationsCardProps {
   surveyUnit: SurveyUnit;
