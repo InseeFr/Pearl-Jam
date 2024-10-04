@@ -4,17 +4,21 @@ import { Row } from '../Row';
 import { getprivilegedPerson } from '../../utils/functions';
 import { Typography } from '../Typography';
 
+interface PrivilegedPersonProps {
+  surveyUnit: SurveyUnit;
+}
+
 /**
  * Display the privileged personn attached to a survey unit
  *
  * @param {SurveyUnit} surveyUnit
  */
-export function PrivilegedPerson({ surveyUnit }) {
+export function PrivilegedPerson({ surveyUnit }: PrivilegedPersonProps) {
   const person = getprivilegedPerson(surveyUnit);
   return (
     <Stack gap={0.5}>
       <Row gap={1}>
-        <PersonOutlineIcon color="textPrimary" />
+        <PersonOutlineIcon sx={{ color: 'textPrimary' }} />
         <Typography color="textPrimary" variant="xl" fontWeight={700}>
           {person.lastName.toUpperCase()} {person.firstName}
         </Typography>

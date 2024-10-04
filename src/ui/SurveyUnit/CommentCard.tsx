@@ -5,19 +5,23 @@ import D from 'i18n';
 import { Row } from '../Row';
 import Stack from '@mui/material/Stack';
 import { getCommentByType } from '../../utils/functions';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import CommentIcon from '@mui/icons-material/Comment';
 import { CommentField } from '../Fields/CommentField';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 
+interface CommentCardProps {
+  surveyUnit: SurveyUnit;
+}
+
 /**
  * @param {SurveyUnit} surveyUnit
  */
-export function CommentCard({ surveyUnit }) {
+export function CommentCard({ surveyUnit }: CommentCardProps) {
   const baseComment = getCommentByType('INTERVIEWER', surveyUnit);
   const [comment, setComment] = useState(baseComment);
-  const handleSubmit = e => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const comments = [
       { type: 'MANAGEMENT', value: getCommentByType('MANAGEMENT', surveyUnit) },

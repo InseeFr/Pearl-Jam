@@ -1,9 +1,12 @@
 import Stack from '@mui/material/Stack';
 import { FilledInput } from '@mui/material';
 import { Typography } from '../Typography';
-import React from 'react';
 import D from 'i18n';
 
+interface CommentFieldProps {
+  value: string;
+  onChange: (v: string) => void;
+}
 
 /**
  * @param {string} value
@@ -11,9 +14,9 @@ import D from 'i18n';
  * @param {import('@mui/material').FilledInputProps} props
  * @constructor
  */
-export function CommentField({ value, onChange, ...props }) {
+export function CommentField({ value, onChange, ...props }: CommentFieldProps) {
   const maxChar = 999;
-  const handleChange = e => {
+  const handleChange = (e: { target: { value: string } }) => {
     if (e.target.value.length > maxChar) {
       return;
     }
@@ -29,14 +32,14 @@ export function CommentField({ value, onChange, ...props }) {
         inputProps={{
           sx: {
             padding: '1rem',
+            variant: 'filled',
+            label: 'Commentaire',
           },
         }}
         minRows={8}
         maxRows={8}
         value={value}
         onChange={handleChange}
-        variant="filled"
-        label="Commentaire"
         multiline
         placeholder={D.enterComment}
         {...props}
