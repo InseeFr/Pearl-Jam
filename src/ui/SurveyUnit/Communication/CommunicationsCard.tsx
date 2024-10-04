@@ -25,7 +25,11 @@ interface CommunicationsCardProps {
  */
 export function CommunicationsCard({ surveyUnit }: CommunicationsCardProps) {
   const [showModal, toggleModal] = useToggle(false);
-  const communicationTemplates = surveyUnit.communicationTemplates;
+  const communicationTemplates = surveyUnit.useLetterCommunication
+    ? surveyUnit.communicationTemplates
+    : surveyUnit.communicationTemplates.filter(
+        template => template.medium !== communicationMediumEnum.MEDIUM_MAIL.value
+      );
 
   return (
     <>
