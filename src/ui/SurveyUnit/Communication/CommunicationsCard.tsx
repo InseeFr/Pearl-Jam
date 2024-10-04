@@ -36,7 +36,7 @@ export function CommunicationsCard({ surveyUnit }: CommunicationsCardProps) {
       <Card>
         <CardContent>
           <Stack gap={3}>
-            <Row gap={1}>
+            <Row gap={1} key={surveyUnit.id}>
               <CampaignIcon fontSize="large" />
               <Typography as="h2" variant="xl" fontWeight={700}>
                 {D.surveyUnitCommunications}
