@@ -28,7 +28,11 @@ export const authentication = (mode: string) => {
 };
 export const formatSurveyUnitForPut = async (su: SurveyUnit) => {
   const newFormattedCommunicationRequests = su.communicationRequests
-    .filter(comReq => comReq.status.find(s => s.status === communicationStatusEnum.INITIATED.value))
+    .filter(
+      comReq =>
+        comReq.status.length === 1 &&
+        comReq.status.find(s => s.status === communicationStatusEnum.INITIATED.value)
+    )
     .map(
       comReq =>
         <SurveyUnitNewCommunicationRequest>{
