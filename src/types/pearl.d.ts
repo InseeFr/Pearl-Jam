@@ -84,7 +84,7 @@ declare global {
   type SurveyUnitNewCommunicationRequest = {
     communicationTemplateId: string;
     reason: string;
-    creationDate : number
+    creationTimestamp: number;
   };
 
   type SurveyUnitCommunicationTemplate = {
