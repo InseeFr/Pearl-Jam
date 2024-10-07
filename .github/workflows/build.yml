@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v3
       - run: yarn
       - run: yarn test --coverage
-      - run: yarn build --coverage
+      - run: yarn build
       - name: Upload build
         uses: actions/upload-artifact@v3
         with:
