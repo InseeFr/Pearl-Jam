@@ -46,7 +46,7 @@ interface CommunicationFormProps {
  * @param {SurveyUnit} surveyUnit
  * @returns {TSX.Element}
  */
-export function CommunicationForm({ onClose, surveyUnit }: CommunicationFormProps) {
+export function CommunicationForm({ onClose, surveyUnit }: Readonly<CommunicationFormProps>) {
   const [step, setStep] = useState(Steps.MEDIUM);
   const [communicationRequest, setCommunicationRequest] = useState<CommunicationForm>({
     medium: '',

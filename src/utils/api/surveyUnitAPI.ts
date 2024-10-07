@@ -1,7 +1,5 @@
-import { authentication, formatSurveyUnitForPut, getToken } from './utils';
 import { API } from './requests';
-import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
-import { communicationStatusEnum } from 'utils/enum/CommunicationEnums';
+import { authentication, formatSurveyUnitForPut, getToken } from './utils';
 
 export const getSurveyUnits = async (urlPearApi: string, authenticationMode: string) => {
   try {

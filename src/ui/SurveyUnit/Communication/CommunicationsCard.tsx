@@ -1,35 +1,44 @@
-import CardContent from '@mui/material/CardContent';
-import { Typography } from '../../Typography';
-import D from 'i18n';
-import { Row } from '../../Row';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import { useToggle } from '../../../utils/hooks/useToggle';
-import CampaignIcon from '@mui/icons-material/Campaign';
 import AddIcon from '@mui/icons-material/Add';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card/Card';
+import CardContent from '@mui/material/CardContent';
+import Stack from '@mui/material/Stack';
+import D from 'i18n';
+import { communicationMediumEnum } from 'utils/enum/CommunicationEnums';
+import { useToggle } from '../../../utils/hooks/useToggle';
+import { Row } from '../../Row';
+import { Typography } from '../../Typography';
 import { CommunicationForm } from '../CommunicationForm';
 import { CommunicationItem } from './CommunicationItem';
-import Card from '@mui/material/Card/Card';
-import { mediumEnum } from 'utils/enum/MediumEnum';
-import {
-  communicationMediumEnum,
-  findCommunicationMediumLabelByValue,
-} from 'utils/enum/CommunicationEnums';
 
 interface CommunicationsCardProps {
   surveyUnit: SurveyUnit;
 }
 
-/**
- * @param {SurveyUnit} surveyUnit
- */
+const getCommunicationTemplates = (
+  communicationTemplates?: SurveyUnitCommunicationTemplate[]
+): ((useLetterCommunication: boolean) => SurveyUnitCommunicationTemplate[]) => {
+  return (useLetterCommunication: boolean) => {
+    if (!communicationTemplates) {
+      return [];
+    }
+
+    if (useLetterCommunication) {
+      return communicationTemplates;
+    }
+
+    return communicationTemplates.filter(
+      template => template.medium !== communicationMediumEnum.MEDIUM_MAIL.value
+    );
+  };
+};
+
 export function CommunicationsCard({ surveyUnit }: CommunicationsCardProps) {
   const [showModal, toggleModal] = useToggle(false);
-  const communicationTemplates = surveyUnit.useLetterCommunication
-    ? surveyUnit.communicationTemplates
-    : surveyUnit.communicationTemplates.filter(
-        template => template.medium !== communicationMediumEnum.MEDIUM_MAIL.value
-      );
+  const communicationTemplates = getCommunicationTemplates(surveyUnit.communicationTemplates)(
+    surveyUnit.useLetterCommunication
+  );
 
   return (
     <>

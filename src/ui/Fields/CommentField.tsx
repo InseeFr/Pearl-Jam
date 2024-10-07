@@ -8,15 +8,9 @@ interface CommentFieldProps {
   onChange: (v: string) => void;
 }
 
-/**
- * @param {string} value
- * @param {(v: string) => void} onChange
- * @param {import('@mui/material').FilledInputProps} props
- * @constructor
- */
-export function CommentField({ value, onChange, ...props }: CommentFieldProps) {
+export function CommentField({ value, onChange, ...props }: Readonly<CommentFieldProps>) {
   const maxChar = 999;
-  const handleChange = (e: { target: { value: string } }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.target.value.length > maxChar) {
       return;
     }

@@ -4,16 +4,15 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import Divider from '@mui/material/Divider';
 import D from 'i18n';
-import { formatDate } from '../../../utils/functions/date';
-import { HEALTHY_COMMUNICATION_REQUEST_STATUS, reasonRadioValues } from '../../../utils/constants';
+import { HEALTHY_COMMUNICATION_REQUEST_STATUS } from '../../../utils/constants';
 import {
-  communicationReasonEnum,
   communicationTypeEnum,
   findCommunicationMediumLabelByValue,
   findCommunicationReasonLabelByValue,
   findCommunicationStatusLabelByValue,
   findCommunicationTypeLabelByValue,
 } from '../../../utils/enum/CommunicationEnums';
+import { formatDate } from '../../../utils/functions/date';
 import { Row } from '../../Row';
 import { Typography } from '../../Typography';
 
@@ -28,7 +27,7 @@ interface CommunicationItemProps {
 export function CommunicationItem({
   communication,
   surveyUnitCommunicationTemplate,
-}: CommunicationItemProps) {
+}: Readonly<CommunicationItemProps>) {
   const IconComponent =
     communication.emitter.toUpperCase() === 'INTERVIEWER' ? DirectionsWalkIcon : BuildIcon;
   const sortedStatus = [...communication.status].sort((s1, s2) => s1.date - s2.date);

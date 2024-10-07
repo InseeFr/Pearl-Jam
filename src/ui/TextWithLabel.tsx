@@ -1,10 +1,9 @@
-import { Typography } from './Typography';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
-import Box from '@mui/material/Box';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { SxProps } from '@mui/material';
-import { JsxElement } from 'typescript';
-import React, { ReactNode } from 'react';
+import Box from '@mui/material/Box';
+import { ReactNode } from 'react';
+import { Typography } from './Typography';
 
 interface TextWithLabelProps {
   label: string;
@@ -17,7 +16,7 @@ interface TextWithLabelProps {
  * @param {SxProps} sx - cf. MUI system
  * @param {JSX.Element} children
  */
-export function TextWithLabel({ label, children, sx }: TextWithLabelProps) {
+export function TextWithLabel({ label, children, sx }: Readonly<TextWithLabelProps>) {
   if (children === true) {
     children = (
       <IconWrapper>

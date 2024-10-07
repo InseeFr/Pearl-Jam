@@ -1,30 +1,25 @@
 import { FilledInput } from '@mui/material';
-import { Typography } from '../Typography';
 import Stack from '@mui/material/Stack';
-import React, { FunctionComponent, useState } from 'react';
+import D from 'i18n';
+import { ChangeEvent, FormEvent, FunctionComponent, useState } from 'react';
 import { getCommentByType } from '../../utils/functions';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
-import D from 'i18n';
+import { Typography } from '../Typography';
 
 interface CommentFormProps {
   surveyUnit: SurveyUnit;
   wrapper: FunctionComponent;
 }
 
-/**
- * @param {SurveyUnit} surveyUnit
- * @param {FunctionComponent} wrapper
- */
-export function CommentForm({ surveyUnit, wrapper: WrapperComponent }: CommentFormProps) {
+export function CommentForm({ surveyUnit, wrapper: WrapperComponent }: Readonly<CommentFormProps>) {
   const baseComment = getCommentByType('INTERVIEWER', surveyUnit);
   const [comment, setComment] = useState(baseComment);
   const maxChar = 999;
-
-  const handleChange = (e: { target: { value: string | any[] } }) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setComment(e.target.value.slice(0, maxChar));
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const comments = [
       { type: 'MANAGEMENT', value: getCommentByType('MANAGEMENT', surveyUnit) },

@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import { PrivilegedPerson } from './PrivilegedPerson';
 import { getCommentByType } from '../../utils/functions';
@@ -19,12 +19,8 @@ interface CommentDialogProps {
 
 /**
  * Dialog to add a new comment to a survey unit
- *
- * @param {SurveyUnit} surveyUnit
- * @param {boolean} open
- * @param {() => void} onClose
  */
-export function CommentDialog({ surveyUnit, open, onClose }: CommentDialogProps) {
+export function CommentDialog({ surveyUnit, open, onClose }: Readonly<CommentDialogProps>) {
   const baseComment = getCommentByType('INTERVIEWER', surveyUnit);
   const [comment, setComment] = useState(baseComment);
 
@@ -33,7 +29,7 @@ export function CommentDialog({ surveyUnit, open, onClose }: CommentDialogProps)
     onClose();
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const comments = [
       { type: 'MANAGEMENT', value: getCommentByType('MANAGEMENT', surveyUnit) },

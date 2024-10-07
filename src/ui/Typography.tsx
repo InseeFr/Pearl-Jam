@@ -1,5 +1,4 @@
 import { SxProps, Theme } from '@mui/material';
-import { Variant } from '@mui/material/styles/createTypography';
 import TypographyMaterial from '@mui/material/Typography';
 import { forwardRef } from 'react';
 

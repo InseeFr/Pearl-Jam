@@ -1,10 +1,9 @@
 import Box from '@mui/material/Box';
 import { ZodError } from 'zod';
 
-export interface ValidationErrorProps
-{
-  error : ZodError
-  mt : number
+export interface ValidationErrorProps {
+  error: ZodError;
+  mt: number;
 }
 
 /**
@@ -12,7 +11,7 @@ export interface ValidationErrorProps
  * @param {ZodError} error
  * @param {import('@mui/material').BoxProps} props
  */
-export function ValidationError({ error, ...props } : ValidationErrorProps) {
+export function ValidationError({ error, ...props }: Readonly<ValidationErrorProps>) {
   if (!error || !(error instanceof ZodError)) {
     return null;
   }

@@ -22,18 +22,13 @@ const style = {
   },
 };
 
-export interface RadioLineProps 
-{
-  value : string
-  disabled : boolean
-  label : string
+export interface RadioLineProps {
+  value: string;
+  disabled: boolean;
+  label: string;
 }
-/**
- * @param {string} label
- * @param {boolean} disabled
- * @constructor
- */
-export function RadioLine({ value, disabled, label } : RadioLineProps) {
+
+export function RadioLine({ value, disabled, label }: Readonly<RadioLineProps>) {
   return (
     <FormControlLabel
       disabled={disabled}
