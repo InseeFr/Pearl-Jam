@@ -34,7 +34,7 @@ const getCommunicationTemplates = (
   };
 };
 
-export function CommunicationsCard({ surveyUnit }: CommunicationsCardProps) {
+export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardProps>) {
   const [showModal, toggleModal] = useToggle(false);
   const communicationTemplates = getCommunicationTemplates(surveyUnit.communicationTemplates)(
     surveyUnit.useLetterCommunication

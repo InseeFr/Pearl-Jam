@@ -47,7 +47,7 @@ interface IconWrapperProps {
   children: ReactNode;
 }
 
-function IconWrapper({ children }: IconWrapperProps) {
+function IconWrapper({ children }: Readonly<IconWrapperProps>) {
   return (
     <Box position="relative" display="inline-block">
       <Box position="absolute" sx={{ top: -15, left: -5 }}>

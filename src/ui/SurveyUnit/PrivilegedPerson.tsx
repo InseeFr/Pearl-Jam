@@ -13,7 +13,7 @@ interface PrivilegedPersonProps {
  *
  * @param {SurveyUnit} surveyUnit
  */
-export function PrivilegedPerson({ surveyUnit }: PrivilegedPersonProps) {
+export function PrivilegedPerson({ surveyUnit }: Readonly<PrivilegedPersonProps>) {
   const person = getprivilegedPerson(surveyUnit);
   return (
     <Stack gap={0.5}>
