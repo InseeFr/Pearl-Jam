@@ -31,11 +31,7 @@
     "format": "prettier --write .",
     "test": "vitest",
     "lint:fix": "prettier --write  \"**/*.{js,jsx,ts,tsx,css,scss,html,json}\" && eslint --fix \"src/**/*.{js,ts,jsx,tsx}\"",
-    "lint": "prettier -l  \"**/*.{js,jsx,ts,tsx,css,scss,html,json}\" && eslint \"src/**/*.{js,ts,jsx,tsx}\"",
-    "_preplaywright": "npm run build",
-    "_runapp": "npx serve -p 3000 -C build/ & npx @radically-straightforward/caddy run -c ./tests/config/Caddyfile &",
-    "playwright:run": "npm run _preplaywright && npm run _runapp && npx playwright test && npm run _postplaywright",
-    "_postplaywright": "npx kill-port 3000 && npx @radically-straightforward/caddy stop -c ./tests/config/Caddyfile"
+    "lint": "prettier -l  \"**/*.{js,jsx,ts,tsx,css,scss,html,json}\" && eslint \"src/**/*.{js,ts,jsx,tsx}\""
   },
   "prettier": {
     "printWidth": 100,
