@@ -18,8 +18,8 @@ yarn test --coverage
 We can also run end-to-end test thank to **Playwright**.
 
 ```
-yarn playwright
-yarn playwright --ui
+npx playwright test
+npx playwright test --ui
 ```
 
 Before executing the test, we will :
