@@ -77,8 +77,8 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  /*webServer: {
-    url: 'https://pearl.localhost',
+  webServer: {
+    url: 'https://pearl.localhost:4443',
     reuseExistingServer: false,
-  },*/
+  },
 });

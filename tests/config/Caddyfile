@@ -1,4 +1,9 @@
-pearl.localhost:4443 {
+{
+    http_port 8888
+    https_port 4443
+}
+
+pearl.localhost {
     tls ./tests/config/pearl.localhost.pem ./tests/config/pearl.localhost-key.pem
 	reverse_proxy localhost:3000
         
