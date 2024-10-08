@@ -1,0 +1,4 @@
+pearl.localhost {
+    tls ./tests/config/pearl.localhost.pem ./tests/config/pearl.localhost-key.pem
+	reverse_proxy localhost:3000
+}
