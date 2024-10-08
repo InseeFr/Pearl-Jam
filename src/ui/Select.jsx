@@ -1,6 +1,5 @@
 import MenuItem from '@mui/material/MenuItem';
 import SelectMaterial from '@mui/material/Select';
-import React from 'react';
 
 /**
  * Select menu
@@ -30,7 +29,7 @@ export function Select({ options, placeholder, allowEmpty, ...props }) {
           {placeholder}
         </MenuItem>
       )}
-            {options?.map(o =>
+      {options?.map(o =>
         typeof o === 'object' ? (
           <MenuItem key={o.value} dense value={o.value}>
             {o.label}

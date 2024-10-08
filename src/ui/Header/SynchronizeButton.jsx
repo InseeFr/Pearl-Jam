@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import SyncIcon from '@mui/icons-material/Sync';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { SyncContext } from '../Sync/SyncContextProvider';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import D from '../../i18n/build-dictionary';

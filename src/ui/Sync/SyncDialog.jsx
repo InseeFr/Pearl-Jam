@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import DialogContentText from '@mui/material/DialogContentText';
 import D from 'i18n';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';

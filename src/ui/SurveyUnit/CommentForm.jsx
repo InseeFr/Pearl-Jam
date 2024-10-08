@@ -1,11 +1,10 @@
 import { FilledInput } from '@mui/material';
 import { Typography } from '../Typography';
 import Stack from '@mui/material/Stack';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { getCommentByType } from '../../utils/functions';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 import D from 'i18n';
-
 
 /**
  * @param {SurveyUnit} surveyUnit

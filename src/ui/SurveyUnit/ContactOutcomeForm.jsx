@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import { addNewState, persistSurveyUnit } from '../../utils/functions';
 import D from 'i18n';
