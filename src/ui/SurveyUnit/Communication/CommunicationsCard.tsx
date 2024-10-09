@@ -9,7 +9,7 @@ import { communicationMediumEnum } from 'utils/enum/CommunicationEnums';
 import { useToggle } from '../../../utils/hooks/useToggle';
 import { Row } from '../../Row';
 import { Typography } from '../../Typography';
-import { CommunicationForm } from '../CommunicationForm';
+import { CommunicationForm } from './CommunicationForm';
 import { CommunicationItem } from './CommunicationItem';
 
 interface CommunicationsCardProps {

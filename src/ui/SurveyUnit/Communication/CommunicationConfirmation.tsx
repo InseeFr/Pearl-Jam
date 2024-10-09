@@ -10,7 +10,7 @@ import { useUser } from '../../../utils/hooks/useUser';
 import { communicationSchema, recipientSchema, userSchema } from '../../../utils/schemas';
 import { Typography } from '../../Typography';
 import { ValidationError } from '../../ValidationError';
-import { CommunicationRequestForm } from '../CommunicationForm';
+import { CommunicationRequestForm } from './CommunicationForm';
 import D from './../../../i18n';
 
 interface CommunicationConfirmationProps {
