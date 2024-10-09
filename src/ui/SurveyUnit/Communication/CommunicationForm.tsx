@@ -1,15 +1,15 @@
 import Dialog from '@mui/material/Dialog';
 import { useEffect, useMemo, useState } from 'react';
-import D from '../../i18n/build-dictionary';
-import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import D from '../../../i18n/build-dictionary';
+import { surveyUnitIDBService } from '../../../utils/indexeddb/services/surveyUnit-idb-service';
 import {
   communicationReasonEnum,
   communicationStatusEnum,
   communicationTypeEnum,
-} from '../../utils/enum/CommunicationEnums';
-import CommunicationDialogContent from './Communication/CommunicationDialogContent';
-import CommunicationConfirmation from './Communication/CommunicationConfirmation';
-import { mediumRadioValues, reasonRadioValues, typeRadioValues } from '../../utils/constants';
+} from '../../../utils/enum/CommunicationEnums';
+import CommunicationDialogContent from './CommunicationDialogContent';
+import CommunicationConfirmation from './CommunicationConfirmation';
+import { mediumRadioValues, reasonRadioValues, typeRadioValues } from '../../../utils/constants';
 
 enum Steps {
   MEDIUM,
