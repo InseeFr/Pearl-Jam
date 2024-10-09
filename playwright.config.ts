@@ -26,7 +26,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'https://localhost:3000',
+    baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -79,9 +79,9 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     ignoreHTTPSErrors: true,
-    url: 'https://localhost:3000',
+    url: 'http://localhost:3000',
     command:
-      'yarn build && npx kill-port 3000 && npx serve -C -p 3000 --ssl-cert ./tests/config/pearl.localhost.pem --ssl-key ./tests/config/pearl.localhost-key.pem build/',
+      '(yarn --cwd ../Drama-Queen build && yarn build) && (npx kill-port 3001 && npx kill-port 3000) && ((npx serve -C -p 3001 ../Drama-Queen/drama-queen/dist/) & (npx serve -C -p 3000 build/))',
     reuseExistingServer: false,
   },
 });
