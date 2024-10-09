@@ -10,12 +10,12 @@ import { useUser } from '../../../utils/hooks/useUser';
 import { communicationSchema, recipientSchema, userSchema } from '../../../utils/schemas';
 import { Typography } from '../../Typography';
 import { ValidationError } from '../../ValidationError';
-import { CommunicationForm } from '../CommunicationForm';
+import { CommunicationRequestForm } from '../CommunicationForm';
 import D from './../../../i18n';
 
 interface CommunicationConfirmationProps {
   surveyUnit: SurveyUnit;
-  communication: CommunicationForm;
+  communication: CommunicationRequestForm;
   previousStep: Function;
   saveCommunicationRequest: Function;
   bypassReasonLabel: boolean;
@@ -104,9 +104,9 @@ const CommunicationConfirmation = ({
               </Typography>
               <Typography variant="s" as="p" color={userError.success ? 'textPrimary' : 'error'}>
                 {user.firstName} {user.lastName}
-                <br />
+                <ol />
                 {user.email}
-                <br />
+                <ol />
                 {user.phoneNumber}
               </Typography>
               {!userError.success && <ValidationError error={userError.error} mt={1} />}
