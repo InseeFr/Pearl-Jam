@@ -137,6 +137,8 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
   };
 
   useMemo(() => {
+    if (bypassed) return;
+
     // If reminder is not selected as a type, the user does not have to set a reason (therefore setting it automatically here)
     if (bypass) {
       setCommunicationRequest({

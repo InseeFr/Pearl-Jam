@@ -17,7 +17,7 @@ export const communicationSchema = z.object({
   reason: z.enum(
     reasonRadioValues.map(v => v.value),
     { required_error: 'Requis' }
-  ).optional(),
+  ),
 });
 
 export const userSchema = z.object({
