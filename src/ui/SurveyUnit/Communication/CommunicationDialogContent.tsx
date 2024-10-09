@@ -8,7 +8,6 @@ import {
   Button,
 } from '@mui/material';
 import { RadioLine } from '../../RadioLine';
-import { useEffect, useState } from 'react';
 import D from '../../../i18n/build-dictionary';
 
 interface CommunicationDialogContentProps {
@@ -17,46 +16,36 @@ interface CommunicationDialogContentProps {
     value: string;
     disabled: boolean;
   }[];
-  setCommunicationValue: Function;
   title: string;
-  lastPickedPropValue: string;
+  radioValue: string | undefined;
   isFirst: boolean;
   nextStep: Function;
   onClose: Function;
   previousStep: Function;
+  onChange: Function;
 }
 
 const CommunicationDialogContent = ({
   options,
-  setCommunicationValue,
   title,
-  lastPickedPropValue,
+  radioValue,
   isFirst,
   nextStep,
   onClose,
   previousStep,
+  onChange,
 }: CommunicationDialogContentProps) => {
-  const [value, setValue] = useState(
-    options.find(o => o.value === lastPickedPropValue && !o.disabled)
-      ? lastPickedPropValue
-      : options.find(o => !o.disabled)?.value ?? []
-  );
-
-  useEffect(() => {
-    setCommunicationValue(value);
-  }, [value]);
-
   return (
     <>
       <DialogTitle id="dialogtitle">{title}</DialogTitle>
       <DialogContent>
         <Box>
           <RadioGroup
-            onChange={e => setValue(e.target.value)}
+            onChange={e => onChange(e.target.value)}
             row
             aria-labelledby="dialogtitle"
             name="communication-radio-group"
-            value={value}
+            value={radioValue}
           >
             <Stack gap={1} width={1}>
               {options.map(o => (
