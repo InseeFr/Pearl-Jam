@@ -1,4 +1,3 @@
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Typography } from '../Typography';
 import D from 'i18n';
@@ -6,17 +5,21 @@ import { Row } from '../Row';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import Stack from '@mui/material/Stack';
 import { getAddressData } from '../../utils/functions';
-import React from 'react';
 import { TextWithLabel } from '../TextWithLabel';
 import Button from '@mui/material/Button';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { useToggle } from '../../utils/hooks/useToggle';
 import { AddressForm } from './AddressForm';
+import Card from '@mui/material/Card';
+
+interface AddressCardProps {
+  surveyUnit: SurveyUnit;
+}
 
 /**
  * @param {SurveyUnit} surveyUnit
  */
-export function AddressCard({ surveyUnit }) {
+export function AddressCard({ surveyUnit }: Readonly<AddressCardProps>) {
   const address = getAddressData(surveyUnit.address);
   const [showModal, toggleModal] = useToggle(false);
 
@@ -34,8 +37,7 @@ export function AddressCard({ surveyUnit }) {
               </Row>
               <Button
                 onClick={toggleModal}
-                color="surfaceSecondary"
-                variant="edge"
+                sx={{ color: 'surfaceSecondary', variant: 'edge' }}
                 startIcon={<BorderColorOutlinedIcon fontSize="small" />}
               >
                 {D.editButton}

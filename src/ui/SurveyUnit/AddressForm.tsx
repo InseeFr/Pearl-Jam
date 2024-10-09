@@ -1,23 +1,22 @@
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
-import { getAddressData } from '../../utils/functions';
 import D from 'i18n';
-import { FieldRow } from '../FieldRow';
+import { MouseEvent } from 'react';
 import { useForm } from 'react-hook-form';
+import { getAddressData } from '../../utils/functions';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { FieldRow } from '../FieldRow';
 
-/**
- *
- * @param {() => void} onClose
- * @param {SurveyUnit} surveyUnit
- * @returns {JSX.Element}
- */
-export function AddressForm({ onClose, surveyUnit }) {
+interface AddressFormProps {
+  onClose: () => void;
+  surveyUnit: SurveyUnit;
+}
+
+export function AddressForm({ onClose, surveyUnit }: Readonly<AddressFormProps>) {
   const { register, handleSubmit, control } = useForm({
     defaultValues: getAddressData(surveyUnit.address),
   });
@@ -43,7 +42,7 @@ export function AddressForm({ onClose, surveyUnit }) {
     onClose();
   });
 
-  const handleCancel = e => {
+  const handleCancel = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     onClose();
   };
@@ -74,7 +73,7 @@ export function AddressForm({ onClose, surveyUnit }) {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button type="button" color="white" variant="contained" onClick={handleCancel}>
+          <Button type="button" sx={{ color: 'white' }} variant="contained" onClick={handleCancel}>
             {D.cancelButton}
           </Button>
           <Button variant="contained" type="submit">
