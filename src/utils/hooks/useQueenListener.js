@@ -49,7 +49,6 @@ const closeQueen = redirect => surveyUnitID => {
   redirect(`/survey-unit/${surveyUnitID}/details`);
 };
 
-// eslint-disable-next-line consistent-return
 const handleQueenEvent = redirect => async event => {
   const { type, command, ...other } = event.detail;
   if (type === 'QUEEN') {

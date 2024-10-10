@@ -14,7 +14,6 @@ import { useToggle } from '../../utils/hooks/useToggle';
 import { StatusChip } from '../StatusChip';
 import D from 'i18n';
 
-
 /**
  * @param {string} label
  * @param {SurveyUnit[]} surveyUnits

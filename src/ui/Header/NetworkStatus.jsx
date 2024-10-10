@@ -5,7 +5,7 @@ import { useNetworkOnline } from '../../utils/hooks/useOnline';
 /**
  * Displays an icon that indicates if the browser is online or offline
  */
-export function NetworkStatus () {
+export function NetworkStatus() {
   const isOnline = useNetworkOnline();
-  return isOnline ? <WifiIcon color='success' /> : <WifiOffIcon color='error' />;
+  return isOnline ? <WifiIcon color="success" /> : <WifiOffIcon color="error" />;
 }

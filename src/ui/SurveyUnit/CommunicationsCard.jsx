@@ -4,7 +4,6 @@ import { Typography } from '../Typography';
 import D from 'i18n';
 import { Row } from '../Row';
 import Stack from '@mui/material/Stack';
-import React from 'react';
 import Button from '@mui/material/Button';
 import { useToggle } from '../../utils/hooks/useToggle';
 import CampaignIcon from '@mui/icons-material/Campaign';

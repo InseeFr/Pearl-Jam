@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import { useSurveyUnits } from '../utils/hooks/database';
 import { CampaignProgress } from '../ui/Stats/CampaignProgress';
-import React, { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { groupBy } from '../utils/functions/array';
 import { CampaignProgressPieChart } from '../ui/Stats/CampaignProgressPieChart';
 import { ScrollableBox } from '../ui/ScrollableBox';

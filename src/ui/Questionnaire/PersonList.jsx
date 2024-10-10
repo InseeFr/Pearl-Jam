@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { Grid, IconButton, Stack, Button } from '@mui/material';
 import { Typography } from '../Typography';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -85,7 +85,7 @@ const PersonList = ({
               : '#6C6E70';
 
         return (
-          <React.Fragment key={index}>
+          <Fragment key={index}>
             <Grid container spacing={1} gap={1} alignItems="center">
               <Grid item>
                 <PersonOutlineOutlinedIcon
@@ -162,7 +162,7 @@ const PersonList = ({
                 </Grid>
               )}
             </Grid>
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </Stack>

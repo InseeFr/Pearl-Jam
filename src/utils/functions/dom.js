@@ -5,9 +5,9 @@
  * @param {() => void} listener
  * @return {() => void}
  */
-export function addListener (target, event, listener) {
-  target.addEventListener(event, listener)
+export function addListener(target, event, listener) {
+  target.addEventListener(event, listener);
   return () => {
-    target.removeEventListener(event, listener)
-  }
+    target.removeEventListener(event, listener);
+  };
 }

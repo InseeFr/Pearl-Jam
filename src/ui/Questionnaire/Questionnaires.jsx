@@ -3,7 +3,6 @@ import CardContent from '@mui/material/CardContent';
 import { Typography } from '../Typography';
 import { Row } from '../Row';
 import Stack from '@mui/material/Stack';
-import React from 'react';
 import Button from '@mui/material/Button';
 import { Link as RouterLink } from 'react-router-dom';
 

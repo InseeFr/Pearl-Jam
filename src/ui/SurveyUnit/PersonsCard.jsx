@@ -11,7 +11,7 @@ import {
   toggleFavoriteEmailAndPersist,
   toggleFavoritePhoneNumberAndPersist,
 } from '../../utils/functions';
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { TextWithLabel } from '../TextWithLabel';
 import Button from '@mui/material/Button';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { loadConfiguration, useConfiguration } from './utils/hooks/useConfiguration';
 import { PearlTheme } from './ui/PearlTheme';

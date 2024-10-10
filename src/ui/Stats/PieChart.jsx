@@ -73,8 +73,9 @@ export function PieChart({ parts, size, paddingInline = 0, paddingBlock = 0 }) {
   return (
     <div>
       <svg
-        viewBox={`${radius * -1 - paddingInline} ${radius * -1 - paddingBlock} ${size +
-          2 * paddingInline} ${size + 2 * paddingBlock}`}
+        viewBox={`${radius * -1 - paddingInline} ${radius * -1 - paddingBlock} ${
+          size + 2 * paddingInline
+        } ${size + 2 * paddingBlock}`}
         style={{ width: size + 5 * paddingInline, height: size + 1.5 * paddingBlock }}
       >
         <g mask="url(#pieMask)">

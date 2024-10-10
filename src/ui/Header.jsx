@@ -1,6 +1,6 @@
 import Stack from '@mui/material/Stack';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Typography } from './Typography';
 import { version } from '../../package.json';
 import Button from '@mui/material/Button';

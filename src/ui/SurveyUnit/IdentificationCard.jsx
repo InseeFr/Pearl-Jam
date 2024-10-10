@@ -16,7 +16,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { RadioLine } from '../RadioLine';
 import RadioGroup from '@mui/material/RadioGroup';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';

@@ -16,7 +16,7 @@
       "src": "static/images/logo-insee-header.png",
       "sizes": "270x274",
       "type": "image/png"
-    } 
+    }
   ],
   "start_url": ".",
   "display": "standalone",

@@ -2,7 +2,7 @@ import { Row } from './Row';
 import { Typography } from './Typography';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from '@mui/material/Box';
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import Switch from '@mui/material/Switch';
 import { Controller } from 'react-hook-form';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
