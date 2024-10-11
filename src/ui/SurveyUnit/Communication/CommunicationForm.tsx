@@ -46,8 +46,7 @@ interface CommunicationFormProps {
 }
 
 /**
- * Form to add a new contact attempt to a survey unit
- *
+ * Form to add a new communication request to a survey unit *
  * @param {() => void} onClose
  * @param {SurveyUnit} surveyUnit
  * @returns {TSX.Element}
