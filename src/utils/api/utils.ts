@@ -21,9 +21,7 @@ export const authentication = (mode: string) => {
     case ANONYMOUS:
       return new Promise<void>(resolve => resolve());
     default:
-      return new Promise((resolve, reject) =>
-        reject(new Error(`App doesn't support "${mode}" for authentication`))
-      );
+      return Promise.reject(new Error(`App doesn't support "${mode}" for authentication`));
   }
 };
 export const formatSurveyUnitForPut = async (su: SurveyUnit) => {
