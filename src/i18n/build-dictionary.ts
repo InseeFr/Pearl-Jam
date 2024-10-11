@@ -37,7 +37,7 @@ export const createDictionary = (lang: SupportedLocales) => {
  * @param {string} lang the lang of the user
  */
 export const getLang = (defaultLang?: string) => {
-  const lang = (defaultLang || navigator.language).split('-')[0];
+  const lang = (defaultLang ?? navigator.language).split('-')[0];
   return lang === 'fr' || lang === 'sq' ? lang : 'en';
 };
 
