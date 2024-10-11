@@ -1,5 +1,5 @@
 import Dialog from '@mui/material/Dialog';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import D from '../../../i18n/build-dictionary';
 import { surveyUnitIDBService } from '../../../utils/indexeddb/services/surveyUnit-idb-service';
 import {
