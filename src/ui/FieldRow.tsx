@@ -69,7 +69,7 @@ export const FieldRow = forwardRef(
               inputRef={ref}
               fullWidth={!maxWidth}
               sx={{ maxWidth: maxWidth ? `${maxWidth}em` : undefined }}
-              id={name}
+              id={props.name}
             />
           )}
         </Box>
