@@ -57,20 +57,19 @@ export const formatSurveyUnitForPut = async (su: SurveyUnit) => {
 };
 
 export const getHeader = (mode: string) => {
-  switch (mode) {
-    case KEYCLOAK:
-      if (!navigator.onLine) {
-        return {
-          Accept: JSON_UTF8_HEADER,
-        };
-      }
-      return {
-        ...getSecureHeader(getToken()),
-        Accept: JSON_UTF8_HEADER,
-      };
-    default:
+  if (mode === KEYCLOAK) {
+    if (!navigator.onLine) {
       return {
         Accept: JSON_UTF8_HEADER,
       };
+    }
+
+    return {
+      ...getSecureHeader(getToken()),
+      Accept: JSON_UTF8_HEADER,
+    };
   }
+  return {
+    Accept: JSON_UTF8_HEADER,
+  };
 };
