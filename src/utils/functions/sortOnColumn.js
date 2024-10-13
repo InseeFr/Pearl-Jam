@@ -28,6 +28,6 @@ export const sortOnColumnCompareFunction = (field, direction) => {
       return (a, b) => daysLeftForSurveyUnit(a) - daysLeftForSurveyUnit(b);
 
     default:
-      return (a, b) => 0;
+      return () => 0;
   }
 };

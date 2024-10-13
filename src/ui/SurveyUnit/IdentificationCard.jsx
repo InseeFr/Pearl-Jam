@@ -49,7 +49,7 @@ export function IdentificationCard({ surveyUnit }) {
               </Typography>
             </Row>
             <Stack gap={1}>
-              {questions.map((question, k) => (
+              {questions.map(question => (
                 <ButtonLine
                   key={question.type}
                   label={question.answer?.label ?? question.value}

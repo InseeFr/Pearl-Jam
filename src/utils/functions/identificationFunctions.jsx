@@ -209,7 +209,7 @@ export const identificationIsValidIasco = identificationToCheck => {
   if (IASCO_OCCUPANT_FINISHING_VALUES.includes(occupant)) return true;
   return false;
 };
-const identifiationIsValidNoident = identificationToCheck => {
+const identifiationIsValidNoident = () => {
   return true;
 };
 

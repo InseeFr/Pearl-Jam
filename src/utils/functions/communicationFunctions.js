@@ -16,7 +16,7 @@ export const getRecipientInformation = surveyUnit => {
   const { title, firstName, lastName } = recipient;
 
   const { address } = surveyUnit;
-  const { postCode, cityName, elevator, cityPriorityDistrict, ...rest } = getAddressData(address);
+  const { postCode, cityName, ...rest } = getAddressData(address);
 
   return {
     title: title,

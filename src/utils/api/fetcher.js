@@ -2,7 +2,7 @@
 const readJsonResponse = async response => {
   try {
     return await response.json();
-  } catch (e) {
+  } catch {
     return {};
   }
 };

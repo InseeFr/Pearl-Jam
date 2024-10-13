@@ -24,57 +24,55 @@ import AddIcon from '@mui/icons-material/Add';
  * @param {{type?: string}} props
  * @returns {JSX.Element}
  */
-export const FieldRow = forwardRef(
-  ({ label, maxWidth, checkbox, control, children, ...props }, ref) => {
-    const isControlled = !!props.type;
+export const FieldRow = forwardRef(({ label, maxWidth, control, ...props }, ref) => {
+  const isControlled = !!props.type;
 
-    if (isControlled && !control) {
-      return `You must add 'control' props to use a ${props.type} field`;
-    }
-
-    return (
-      <Row gap={3}>
-        {label && (
-          <Box sx={{ flex: 'none', minWidth: 90 }}>
-            <Typography
-              as="label"
-              id={`label-${props.name}`}
-              htmlFor={props.name}
-              variant="s"
-              color="textTertiary"
-              sx={{ whiteSpace: 'noWrap' }}
-            >
-              {label}
-              {props.required && (
-                <Typography as="span" color="red" variant="s">
-                  {' *'}
-                </Typography>
-              )}
-            </Typography>
-          </Box>
-        )}
-        <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
-          {isControlled && (
-            <Controller
-              name={props.name}
-              control={control}
-              render={({ field }) => controlledField(props, field)}
-            />
-          )}
-          {!isControlled && (
-            <OutlinedInput
-              inputProps={props}
-              inputRef={ref}
-              fullWidth={!maxWidth}
-              sx={{ maxWidth: maxWidth ? `${maxWidth}em` : undefined }}
-              id={name}
-            />
-          )}
-        </Box>
-      </Row>
-    );
+  if (isControlled && !control) {
+    return `You must add 'control' props to use a ${props.type} field`;
   }
-);
+
+  return (
+    <Row gap={3}>
+      {label && (
+        <Box sx={{ flex: 'none', minWidth: 90 }}>
+          <Typography
+            as="label"
+            id={`label-${props.name}`}
+            htmlFor={props.name}
+            variant="s"
+            color="textTertiary"
+            sx={{ whiteSpace: 'noWrap' }}
+          >
+            {label}
+            {props.required && (
+              <Typography as="span" color="red" variant="s">
+                {' *'}
+              </Typography>
+            )}
+          </Typography>
+        </Box>
+      )}
+      <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+        {isControlled && (
+          <Controller
+            name={props.name}
+            control={control}
+            render={({ field }) => controlledField(props, field)}
+          />
+        )}
+        {!isControlled && (
+          <OutlinedInput
+            inputProps={props}
+            inputRef={ref}
+            fullWidth={!maxWidth}
+            sx={{ maxWidth: maxWidth ? `${maxWidth}em` : undefined }}
+            id={name}
+          />
+        )}
+      </Box>
+    </Row>
+  );
+});
 
 /**
  * Select the right field to display

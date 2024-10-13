@@ -9,6 +9,7 @@ import { getCommentByType } from '../../utils/functions';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 import D from 'i18n';
 import { CommentField } from '../Fields/CommentField';
+import { useState } from 'react';
 
 /**
  * Dialog to add a new comment to a survey unit

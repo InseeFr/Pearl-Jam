@@ -15,11 +15,8 @@ export default [
     settings: { react: { version: '18.3' } },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-      'no-console': 'off',
       'no-undef': 'off',
       'no-fallthrough': 'off',
-      'no-use-before-define': 'off',
     },
     languageOptions: {
       globals: {
