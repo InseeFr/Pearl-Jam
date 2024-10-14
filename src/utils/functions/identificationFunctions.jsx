@@ -209,7 +209,7 @@ export const identificationIsValidIasco = identificationToCheck => {
   if (IASCO_OCCUPANT_FINISHING_VALUES.includes(occupant)) return true;
   return false;
 };
-const identifiationIsValidNoident = identificationToCheck => {
+const identifiationIsValidNoident = () => {
   return true;
 };
 
@@ -219,6 +219,6 @@ export const identificationIsFinished = (identificationConfiguration, identifica
       return identificationIsValidIasco(identification);
     case identificationConfigurationEnum.NOIDENT:
     default:
-      return identifiationIsValidNoident(identification);
+      return identifiationIsValidNoident();
   }
 };

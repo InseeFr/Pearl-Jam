@@ -325,7 +325,6 @@ export const applyFilters = (surveyUnits, filters) => {
     toDos: toDoFilter,
     priority: priorityFilter,
     terminated: terminatedFilter,
-    subSample: subSampleFilter,
   } = filters;
 
   const filterBySearch = su => {

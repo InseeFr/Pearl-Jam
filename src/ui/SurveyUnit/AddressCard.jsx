@@ -6,7 +6,6 @@ import { Row } from '../Row';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import Stack from '@mui/material/Stack';
 import { getAddressData } from '../../utils/functions';
-import React from 'react';
 import { TextWithLabel } from '../TextWithLabel';
 import Button from '@mui/material/Button';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';

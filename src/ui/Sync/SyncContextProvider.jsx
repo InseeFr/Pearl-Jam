@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, createContext } from 'react';
 import * as api from 'utils/api';
 
 import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
@@ -10,7 +10,7 @@ import notificationIdbService from 'utils/indexeddb/services/notification-idb-se
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { useConfiguration } from '../../utils/hooks/useConfiguration';
 
-export const SyncContext = React.createContext();
+export const SyncContext = createContext();
 
 export function SyncContextProvider({ children }) {
   const online = useNetworkOnline();

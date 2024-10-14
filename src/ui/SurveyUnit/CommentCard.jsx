@@ -5,7 +5,7 @@ import D from 'i18n';
 import { Row } from '../Row';
 import Stack from '@mui/material/Stack';
 import { getCommentByType } from '../../utils/functions';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import CommentIcon from '@mui/icons-material/Comment';
 import { CommentField } from '../Fields/CommentField';

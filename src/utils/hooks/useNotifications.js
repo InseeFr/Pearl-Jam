@@ -18,7 +18,7 @@ export async function deleteNotification(notification) {
   $notifications.set($notifications().filter(n => n !== notification));
 }
 
-export async function deleteNotifications(notification) {
+export async function deleteNotifications() {
   const ids = $notifications().map(n => n.id);
   if (ids.length === 0) {
     return;

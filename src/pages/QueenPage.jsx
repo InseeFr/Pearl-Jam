@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { mount } from 'dramaQueen/DramaIndex';
 import { useQueenListener } from '../utils/hooks/useQueenListener';

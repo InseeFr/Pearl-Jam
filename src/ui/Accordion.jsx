@@ -2,7 +2,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import { Typography } from './Typography';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionMaterial from '@mui/material/Accordion';
-import React from 'react';
 import { useToggle } from '../utils/hooks/useToggle';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 

@@ -1,23 +1,23 @@
-import Box from '@mui/material/Box';
-import D from 'i18n';
-import Alert from '@mui/material/Alert';
-import WarningIcon from '@mui/icons-material/Warning';
-import React, { useMemo, useState } from 'react';
-import Button from '@mui/material/Button';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import { Row } from '../ui/Row';
-import Stack from '@mui/material/Stack';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useToggle } from 'utils/hooks/useToggle';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import WarningIcon from '@mui/icons-material/Warning';
+import { FormHelperText } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import { FormHelperText } from '@mui/material';
-import { PEARL_USER_KEY } from 'utils/constants';
+import Stack from '@mui/material/Stack';
 import Dexie from 'dexie';
+import D from 'i18n';
+import { useMemo, useState } from 'react';
+import { PEARL_USER_KEY } from 'utils/constants';
+import { useToggle } from 'utils/hooks/useToggle';
 import { unregister } from '../serviceWorkerRegistration';
+import { Row } from '../ui/Row';
 import { generateRandomInt } from '../utils/functions/random';
 
 export function ResetData() {
