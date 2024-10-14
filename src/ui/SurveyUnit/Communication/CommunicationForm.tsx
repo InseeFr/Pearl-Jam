@@ -35,9 +35,9 @@ export interface CommunicationRequestRadioData {
 }
 
 export interface CommunicationRequestForm {
-  medium: string | undefined;
-  reason: string | undefined;
-  type: string | undefined;
+  medium?: string;
+  reason?: string;
+  type?: string;
 }
 
 interface CommunicationFormProps {
@@ -53,72 +53,19 @@ interface CommunicationFormProps {
  */
 export function CommunicationForm({ onClose, surveyUnit }: Readonly<CommunicationFormProps>) {
   const [step, setStep] = useState(Steps.MEDIUM);
-  const [communicationRequest, setCommunicationRequest] = useState({
+  const [communicationRequest, setCommunicationRequest] = useState<CommunicationRequestForm>({
     medium: '',
     reason: '',
     type: '',
-  } as CommunicationRequestForm);
+  });
 
   const setCommunicationRequestPropValue = (value: string) => {
     const prop = Steps[step].toLocaleLowerCase();
     setCommunicationRequest({ ...communicationRequest, [prop]: value });
   };
 
-  let communicationTemplates = surveyUnit?.communicationTemplates ?? [];
-  const mediums = mediumRadioValues.map(m => {
-    return {
-      value: m.value,
-      label: m.label,
-      disabled: !communicationTemplates.some(c => c.medium === m.value),
-    } as CommunicationRequestRadioData;
-  });
-
-  // Will allow the user to pick only the types found in communicationTemplates with the same medium as the one picked by the user (communicationRequest.medium)
-  communicationTemplates = communicationTemplates.filter(
-    item => item.medium === communicationRequest.medium
-  );
-
-  const types = typeRadioValues.map(t => {
-    return {
-      value: t.value,
-      label: t.label,
-      disabled: !communicationTemplates.some(c => c.type === t.value),
-    } as CommunicationRequestRadioData;
-  });
-
   const bypassTypeValue = communicationTypeEnum.COMMUNICATION_NOTICE.value;
   const bypassReasonValue = communicationReasonEnum.UNREACHABLE.value;
-
-  const reasons = reasonRadioValues.map(r => {
-    return {
-      value: r.value,
-      label: r.label,
-      disabled: !communicationTemplates.some(c => c.type !== bypassTypeValue),
-    } as CommunicationRequestRadioData;
-  });
-
-  const saveCommunicationRequest = () => {
-    // Retrieveing communicationTemplatedId by using form's input from the user
-    const communicationTemplatedId = communicationTemplates.find(
-      communicationTemplate =>
-        communicationTemplate.type === communicationRequest.type &&
-        communicationTemplate.medium === communicationRequest.medium
-    )?.id;
-
-    const newCommunicationRequest = {
-      reason: communicationRequest.reason,
-      emitter: 'INTERVIEWER',
-      communicationTemplateId: communicationTemplatedId,
-      status: [{ date: new Date().getTime(), status: communicationStatusEnum.INITIATED.value }],
-    } as SurveyUnitCommunicationRequest;
-
-    surveyUnitIDBService.addOrUpdateSU({
-      ...surveyUnit,
-      communicationRequests: [...(surveyUnit.communicationRequests ?? []), newCommunicationRequest],
-    });
-
-    onClose();
-  };
 
   const nextStep = () => {
     if (step < Steps.VALIDATE) setStep(Steps.after(step));
@@ -135,7 +82,7 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
     }
   };
 
-  useMemo(() => {
+  const options = useMemo(() => {
     if (bypassed) return;
 
     // If reminder is not selected as a type, the user does not have to set a reason (therefore setting it automatically here)
@@ -157,19 +104,71 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
         : options.find(o => !o.disabled)?.value ?? undefined;
     };
 
+    let communicationTemplates = surveyUnit?.communicationTemplates ?? [];
+    const mediums: CommunicationRequestRadioData[] = mediumRadioValues.map(m => {
+      return {
+        value: m.value,
+        label: m.label,
+        disabled: !communicationTemplates.some(c => c.medium === m.value),
+      };
+    });
+
+    // Will allow the user to pick only the types found in communicationTemplates with the same medium as the one picked by the user (communicationRequest.medium)
+    communicationTemplates = communicationTemplates.filter(
+      item => item.medium === communicationRequest.medium
+    );
+
+    const types: CommunicationRequestRadioData[] = typeRadioValues.map(t => {
+      return {
+        value: t.value,
+        label: t.label,
+        disabled: !communicationTemplates.some(c => c.type === t.value),
+      };
+    });
+    const reasons: CommunicationRequestRadioData[] = reasonRadioValues.map(r => {
+      return {
+        value: r.value,
+        label: r.label,
+        disabled: !communicationTemplates.some(c => c.type !== bypassTypeValue),
+      };
+    });
     const mediumValue = setRadioValue('medium', mediums);
     const typeValue = setRadioValue('type', types);
     const reasonValue = setRadioValue('reason', reasons);
 
     setCommunicationRequest({ medium: mediumValue, reason: reasonValue, type: typeValue });
+    return { mediums, types, reasons };
   }, [step]);
+
+  const saveCommunicationRequest = () => {
+    // Retrieveing communicationTemplatedId by using form's input from the user
+    const communicationTemplatedId = surveyUnit?.communicationTemplates.find(
+      communicationTemplate =>
+        communicationTemplate.type === communicationRequest.type &&
+        communicationTemplate.medium === communicationRequest.medium
+    )?.id;
+
+    const newCommunicationRequest: SurveyUnitCommunicationRequest = {
+      reason: communicationRequest.reason,
+      emitter: 'INTERVIEWER',
+      communicationTemplateId: communicationTemplatedId,
+      status: [{ date: new Date().getTime(), status: communicationStatusEnum.INITIATED.value }],
+    };
+
+    surveyUnitIDBService.addOrUpdateSU({
+      ...surveyUnit,
+      communicationRequests: [...(surveyUnit.communicationRequests ?? []), newCommunicationRequest],
+    });
+
+    onClose();
+  };
 
   return (
     <Dialog maxWidth="sm" open={true} onClose={onClose}>
       {step == Steps.MEDIUM && (
         <CommunicationDialogContent
           title={D.selectCommunciationRequestMedium}
-          options={mediums}
+          options={options?.mediums}
           radioValue={communicationRequest.medium}
           isFirst={true}
           nextStep={nextStep}
@@ -181,7 +180,7 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
       {step == Steps.TYPE && (
         <CommunicationDialogContent
           title={D.selectCommunciationRequestType}
-          options={types}
+          options={options?.types}
           radioValue={communicationRequest.type}
           nextStep={nextStep}
           onClose={onClose}
@@ -193,7 +192,7 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
       {step == Steps.REASON && (
         <CommunicationDialogContent
           title={D.selectCommunciationRequestReason}
-          options={reasons}
+          options={options?.reasons}
           radioValue={communicationRequest.reason}
           nextStep={nextStep}
           onClose={onClose}
