@@ -1,31 +1,33 @@
-import { Row } from './Row';
-import { Typography } from './Typography';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import Box from '@mui/material/Box';
-import React, { forwardRef } from 'react';
-import Switch from '@mui/material/Switch';
-import { Controller } from 'react-hook-form';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { forwardRef, PropsWithChildren, ReactNode } from 'react';
+import { Controller } from 'react-hook-form';
 import { RadioLine } from './RadioLine';
-import IconButton from '@mui/material/IconButton';
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
-/**
- * Displays a field with the label on the side
- *
- * @param {boolean} required
- * @param {string} defaultValue
- * @param {string} label
- * @param {boolean} checkbox
- * @param {{type?: string}} props
- * @returns {JSX.Element}
- */
+import { Row } from './Row';
+import { Typography } from './Typography';
+
+interface FieldRowProps {
+  label: string; // Label displayed alongside the field
+  maxWidth?: string | number; // Optional max width for the field
+  checkbox?: boolean; // Determines if the field is a checkbox
+  control?: ReactNode; // Any control element passed in (React children)
+  [key: string]: any; // Spread operator for any additional props
+}
+
 export const FieldRow = forwardRef(
-  ({ label, maxWidth, checkbox, control, children, ...props }, ref) => {
+  (
+    { label, maxWidth, checkbox, control, children, ...props }: PropsWithChildren<FieldRowProps>,
+    ref
+  ) => {
     const isControlled = !!props.type;
 
     if (isControlled && !control) {
@@ -67,7 +69,7 @@ export const FieldRow = forwardRef(
               inputRef={ref}
               fullWidth={!maxWidth}
               sx={{ maxWidth: maxWidth ? `${maxWidth}em` : undefined }}
-              id={name}
+              id={props.name}
             />
           )}
         </Box>

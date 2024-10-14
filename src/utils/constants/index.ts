@@ -1,5 +1,5 @@
 import {
-  communicationEmiterEnum,
+  communicationEmitterEnum,
   communicationMediumEnum,
   communicationReasonEnum,
   communicationStatusEnum,
@@ -17,7 +17,7 @@ export const KEYCLOAK = 'keycloak';
 export const ANONYMOUS = 'anonymous';
 export const AUTHENTICATION_MODE_ENUM = [ANONYMOUS, KEYCLOAK];
 
-export const PEARL_URL = window.localStorage.getItem('PEARL_URL') || '';
+export const PEARL_URL = window.localStorage.getItem('PEARL_URL') ?? '';
 export const PEARL_USER_KEY = 'pearl-user';
 export const GUEST_PEARL_USER = {
   lastName: 'Guest',
@@ -61,24 +61,24 @@ export const STATES_UPDATING_TO_WFT = [
 ];
 
 export const HEALTHY_COMMUNICATION_REQUEST_STATUS = [
-  communicationStatusEnum.INITIATED.type,
-  communicationStatusEnum.READY.type,
-  communicationStatusEnum.SUBMITTED.type,
+  communicationStatusEnum.INITIATED.value,
+  communicationStatusEnum.READY.value,
+  communicationStatusEnum.SUBMITTED.value,
 ];
 
 export const mediumRadioValues = [
-  { value: communicationMediumEnum.MEDIUM_MAIL.type, label: D.mediumMail, disabled: false },
-  { value: communicationMediumEnum.MEDIUM_EMAIL.type, label: D.mediumEmail, disabled: true },
+  { value: communicationMediumEnum.MEDIUM_MAIL.value, label: D.mediumMail, disabled: false },
+  { value: communicationMediumEnum.MEDIUM_EMAIL.value, label: D.mediumEmail, disabled: true },
 ];
 
 export const typeRadioValues = [
   {
-    value: communicationTypeEnum.COMMUNICATION_NOTICE.type,
+    value: communicationTypeEnum.COMMUNICATION_NOTICE.value,
     label: D.communicationNotification,
     disabled: true,
   },
   {
-    value: communicationTypeEnum.COMMUNICATION_REMINDER.type,
+    value: communicationTypeEnum.COMMUNICATION_REMINDER.value,
     label: D.communicationReminder,
     disabled: false,
   },
@@ -86,12 +86,12 @@ export const typeRadioValues = [
 
 export const reasonRadioValues = [
   {
-    value: communicationReasonEnum.UNREACHABLE.type,
+    value: communicationReasonEnum.UNREACHABLE.value,
     label: D.communicationMotiveUnreachable,
     disabled: false,
   },
   {
-    value: communicationReasonEnum.REFUSAL.type,
+    value: communicationReasonEnum.REFUSAL.value,
     label: D.communicationMotiveRefusal,
     disabled: false,
   },
@@ -100,8 +100,8 @@ export const reasonRadioValues = [
 export const EMPTY_COMMUNICATION_REQUEST = {
   medium: '',
   reason: '',
-  emiter: communicationEmiterEnum.INTERVIEWER,
-  type: communicationTypeEnum.COMMUNICATION_REMINDER.type,
+  emitter: communicationEmitterEnum.INTERVIEWER,
+  type: communicationTypeEnum.COMMUNICATION_REMINDER.value,
   status: [],
 };
 
@@ -112,16 +112,16 @@ export const TITLES = {
 
 export const COMMUNICATION_REQUEST_STUB = [
   {
-    status: [{ date: 123456789000, status: communicationStatusEnum.FAILED.type }],
-    medium: communicationMediumEnum.MEDIUM_MAIL.type,
-    type: communicationTypeEnum.COMMUNICATION_REMINDER.type,
-    emiter: communicationEmiterEnum.INTERVIEWER,
+    status: [{ date: 123456789000, status: communicationStatusEnum.FAILED.value }],
+    medium: communicationMediumEnum.MEDIUM_MAIL.value,
+    type: communicationTypeEnum.COMMUNICATION_REMINDER.value,
+    emitter: communicationEmitterEnum.INTERVIEWER,
   },
   {
-    status: [{ date: 123456000000, status: communicationStatusEnum.SUBMITTED.type }],
-    medium: communicationMediumEnum.MEDIUM_EMAIL.type,
-    type: communicationTypeEnum.COMMUNICATION_NOTICE.type,
-    emiter: communicationEmiterEnum.TOOL,
+    status: [{ date: 123456000000, status: communicationStatusEnum.SUBMITTED.value }],
+    medium: communicationMediumEnum.MEDIUM_EMAIL.value,
+    type: communicationTypeEnum.COMMUNICATION_NOTICE.value,
+    emitter: communicationEmitterEnum.TOOL,
   },
 ];
 

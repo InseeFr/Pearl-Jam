@@ -3,13 +3,17 @@ import dictionary from './dictionary';
 import { fr, sq } from 'date-fns/locale';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 
+type DictionaryKey = keyof typeof dictionary;
+type SupportedLocales = 'fr' | 'sq' | 'en';
+type DictionaryValue = Record<SupportedLocales, any>;
+type Dictionary = Record<DictionaryKey, DictionaryValue>;
 /**
  * Based on the locale passed as a parameter, this function will return
  * the corresponding dictionary.
  *
  * @param {string} lang the lang of the user
  */
-export const createDictionary = lang => {
+export const createDictionary = (lang: SupportedLocales) => {
   // Set date-fns lang for French and Albanian
   if (lang === 'fr') {
     setDefaultOptions({ locale: fr });
@@ -17,9 +21,11 @@ export const createDictionary = lang => {
     setDefaultOptions({ locale: sq }); // Supposant que `sq` est le locale pour l'albanais
   }
 
-  return Object.keys(dictionary).reduce((acc, key) => {
-    acc[key] = dictionary[key][lang];
-    return acc;
+  return Object.entries(dictionary as Dictionary).reduce((acc, [key, value]) => {
+    return {
+      ...acc,
+      [key]: value[lang],
+    };
   }, {});
 };
 
@@ -30,9 +36,9 @@ export const createDictionary = lang => {
  * Now also checks for Albanian (sq)
  * @param {string} lang the lang of the user
  */
-export const getLang = defaultLang => {
-  const lang = (defaultLang || navigator.language || navigator.browserLanguage).split('-')[0];
+export const getLang = (defaultLang?: string) => {
+  const lang = (defaultLang ?? navigator.language).split('-')[0];
   return lang === 'fr' || lang === 'sq' ? lang : 'en';
 };
 
-export default createDictionary(getLang());
+export default createDictionary(getLang()) as any;

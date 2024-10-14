@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import { PrivilegedPerson } from './PrivilegedPerson';
 import { getCommentByType } from '../../utils/functions';
@@ -11,14 +11,16 @@ import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-
 import D from 'i18n';
 import { CommentField } from '../Fields/CommentField';
 
+interface CommentDialogProps {
+  surveyUnit: SurveyUnit;
+  open: boolean;
+  onClose: () => void;
+}
+
 /**
  * Dialog to add a new comment to a survey unit
- *
- * @param {SurveyUnit} surveyUnit
- * @param {boolean} open
- * @param {() => void} onClose
  */
-export function CommentDialog({ surveyUnit, open, onClose }) {
+export function CommentDialog({ surveyUnit, open, onClose }: Readonly<CommentDialogProps>) {
   const baseComment = getCommentByType('INTERVIEWER', surveyUnit);
   const [comment, setComment] = useState(baseComment);
 
@@ -27,7 +29,7 @@ export function CommentDialog({ surveyUnit, open, onClose }) {
     onClose();
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const comments = [
       { type: 'MANAGEMENT', value: getCommentByType('MANAGEMENT', surveyUnit) },
@@ -51,7 +53,7 @@ export function CommentDialog({ surveyUnit, open, onClose }) {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button color="white" variant="contained" type="button" onClick={handleCancel}>
+          <Button sx={{ color: 'white' }} variant="contained" type="button" onClick={handleCancel}>
             {D.cancelButton}
           </Button>
           <Button variant="contained" type="submit">
