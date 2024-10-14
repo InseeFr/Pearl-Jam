@@ -11,13 +11,13 @@ import { RadioLine } from '../../RadioLine';
 import D from '../../../i18n/build-dictionary';
 
 interface CommunicationDialogContentProps {
-  options: {
+  options?: {
     label: string;
     value: string;
     disabled: boolean;
   }[];
   title: string;
-  radioValue: string | undefined;
+  radioValue?: string;
   isFirst: boolean;
   nextStep: Function;
   onClose: Function;
@@ -35,6 +35,8 @@ const CommunicationDialogContent = ({
   previousStep,
   onChange,
 }: CommunicationDialogContentProps) => {
+  console.log(radioValue);
+
   return (
     <>
       <DialogTitle id="dialogtitle">{title}</DialogTitle>
@@ -48,7 +50,7 @@ const CommunicationDialogContent = ({
             value={radioValue}
           >
             <Stack gap={1} width={1}>
-              {options.map(o => (
+              {options?.map(o => (
                 <RadioLine value={o.value} label={o.label} disabled={o.disabled} key={o.value} />
               ))}
             </Stack>

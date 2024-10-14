@@ -76,8 +76,8 @@ declare global {
 
   type SurveyUnitCommunicationRequest = {
     emitter: 'INTERVIEWER' | 'TOOL';
-    communicationTemplateId: string;
-    reason: string;
+    communicationTemplateId?: string;
+    reason?: string;
     status: { date: number; status: string }[];
   };
 
