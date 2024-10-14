@@ -219,6 +219,6 @@ export const identificationIsFinished = (identificationConfiguration, identifica
       return identificationIsValidIasco(identification);
     case identificationConfigurationEnum.NOIDENT:
     default:
-      return identifiationIsValidNoident(identification);
+      return identifiationIsValidNoident();
   }
 };
