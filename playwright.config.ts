@@ -35,7 +35,7 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    {
+    /*{
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
@@ -43,12 +43,12 @@ export default defineConfig({
           args: ['--disable-web-security'],
         },
       },
-    },
+    },*/
 
-    /*{
+    {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
-    },*/
+    },
 
     /*{
       name: 'webkit',
