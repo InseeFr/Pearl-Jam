@@ -1,12 +1,10 @@
-import { describe, it } from 'vitest';
-import { communicationSchema, recipientSchema, userSchema } from './schemas';
 import {
-  communicationEmiterEnum,
   communicationMediumEnum,
   communicationReasonEnum,
-  communicationStatusEnum,
   communicationTypeEnum,
 } from 'utils/enum/CommunicationEnums';
+import { describe, it } from 'vitest';
+import { communicationSchema, recipientSchema, userSchema } from './schemas';
 
 describe('schemas', () => {
   describe('recipientSchema', () => {
