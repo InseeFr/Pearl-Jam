@@ -1,6 +1,78 @@
 import { describe, it } from 'vitest';
-import { userSchema } from './schemas';
+import { communicationSchema, recipientSchema, userSchema } from './schemas';
+import {
+  communicationEmiterEnum,
+  communicationMediumEnum,
+  communicationReasonEnum,
+  communicationStatusEnum,
+  communicationTypeEnum,
+} from 'utils/enum/CommunicationEnums';
+
 describe('schemas', () => {
+  describe('recipientSchema', () => {
+    test.each([
+      [{}, false],
+      [{ title: 'MISS' }, false],
+      [{ title: 'MISS', firstName: 'firstName' }, false],
+      [{ title: 'MISS', firstName: 'firstName', lastName: 'lastName' }, false],
+      [
+        { title: 'MISS', firstName: 'firstName', lastName: 'lastName', postCode: 'postCode' },
+        false,
+      ],
+      [
+        {
+          title: 'MISS',
+          firstName: 'firstName',
+          lastName: 'lastName',
+          postCode: 'postCode',
+          cityName: 'cityName',
+        },
+        true,
+      ],
+    ])('expect %o validity -> %s', (data, isValid) => {
+      const expectation = expect(() => recipientSchema.parse({ ...data }));
+      if (isValid) {
+        expectation.not.toThrow();
+      } else {
+        expectation.toThrow();
+      }
+    });
+  });
+
+  describe('communicationSchema', () => {
+    test.each([
+      [{}, false],
+      [
+        {
+          medium: communicationMediumEnum.MEDIUM_MAIL.type,
+        },
+        false,
+      ],
+      [
+        {
+          medium: communicationMediumEnum.MEDIUM_MAIL.type,
+          type: communicationTypeEnum.COMMUNICATION_NOTICE.type,
+        },
+        false,
+      ],
+      [
+        {
+          medium: communicationMediumEnum.MEDIUM_MAIL.type,
+          type: communicationTypeEnum.COMMUNICATION_NOTICE.type,
+          reason: communicationReasonEnum.UNREACHABLE.type,
+        },
+        true,
+      ],
+    ])('expect %o validity -> %s', (data, isValid) => {
+      const expectation = expect(() => communicationSchema.parse({ ...data }));
+      if (isValid) {
+        expectation.not.toThrow();
+      } else {
+        expectation.toThrow();
+      }
+    });
+  });
+
   describe('userSchema', () => {
     const validUser = {
       title: 'MISTER',
