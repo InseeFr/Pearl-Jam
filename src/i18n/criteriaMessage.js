@@ -17,9 +17,9 @@ const criteriaMessage = {
   filterUnitsBy: { fr: 'Filtrer les unités par', en: 'Filter unit by', sq: 'Filtro njësitë sipas' },
   resetFilters: { fr: 'Réinitialiser les filtres', en: 'Reset filters', sq: 'Rivendos filtrat' },
   placeholderSearchHome: {
-    fr: 'Nom, prénom, ville, enquête, ID...',
-    en: 'Last name, first name, city, survey, ID...',
-    sq: 'Mbiemri, emri, qyteti, sondazhi, ID...',
+    fr: 'Nom, prénom, ville, enquête, ID, ID métier...',
+    en: 'Last name, first name, city, survey, ID, business ID...',
+    sq: 'Mbiemri, emri, qyteti, sondazhi, ID,...',
   },
 };
 
