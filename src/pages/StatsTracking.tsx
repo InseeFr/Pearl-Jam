@@ -5,6 +5,7 @@ import { CampaignProgress } from 'ui/Stats/CampaignProgress';
 import { CampaignProgressPieChart } from 'ui/Stats/CampaignProgressPieChart';
 import { daysLeftForSurveyUnit } from 'utils/functions';
 import { groupBy } from 'utils/functions/array';
+import D from 'i18n';
 
 interface StatsTrackingProps {
   surveyUnits: SurveyUnit[];

@@ -27,6 +27,8 @@ import {
 } from 'utils/functions';
 import { formatDate } from 'utils/functions/date';
 import { useToggle } from 'utils/hooks/useToggle';
+import D from 'i18n';
+import AddIcon from '@mui/icons-material/Add';
 
 interface TableTrackingProps {
   campaign: string;
@@ -218,10 +220,14 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
   );
 }
 
+interface SurveyUnitRowProps {
+  surveyUnit: SurveyUnit;
+}
+
 /**
  * @param {SurveyUnit} surveyUnit
  */
-function SurveyUnitRow({ surveyUnit }) {
+function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
   const person = getprivilegedPerson(surveyUnit);
   const state = getSuTodoState(surveyUnit);
   const isActive = isSelectable(surveyUnit);
