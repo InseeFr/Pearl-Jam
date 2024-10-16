@@ -86,14 +86,19 @@ const CommunicationConfirmation = ({
               >
                 {getTitle(recipient.title)} {recipient.firstName} {recipient.lastName}
                 <br />
-                <Fragment>
-                  {address.streetName} <br />
-                </Fragment>
+                {address.deliveryPoint.length > 0 && (
+                  <Fragment>
+                    {address.deliveryPoint} <br />
+                  </Fragment>
+                )}
                 {address.additionalAddress.length > 0 && (
                   <Fragment>
                     {address.additionalAddress} <br />
                   </Fragment>
                 )}
+                <Fragment>
+                  {address.streetName} <br />
+                </Fragment>
                 {address.locality.length > 0 && (
                   <Fragment>
                     {address.locality} <br />
