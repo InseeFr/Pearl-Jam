@@ -49,14 +49,14 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
     setSortConfig({ key, direction });
   };
   const maxHeight = 'calc(100vh - 230px)';
-  const compareValues = (a, b, isAscending) => {
+  const compareValues = (a: number, b: number, isAscending: boolean) => {
     if (a < b) return isAscending ? -1 : 1;
     if (a > b) return isAscending ? 1 : -1;
     return 0;
   };
 
-  const getLastName = su => getprivilegedPerson(su).lastName.toUpperCase();
-  const getOrder = su => parseInt(getSuTodoState(su).order, 10);
+  const getLastName = (su: SurveyUnit) => getprivilegedPerson(su).lastName.toUpperCase();
+  const getOrder = (su: SurveyUnit) => parseInt(getSuTodoState(su).order, 10);
   const contactOutcomeOrder = [
     'INA',
     'REF',
