@@ -29,14 +29,11 @@ const CommunicationConfirmation = ({
   bypassReasonLabel,
 }: CommunicationConfirmationProps) => {
   const address = getAddressData(surveyUnit.address);
-  const addressLines = Object.values(address).filter(v => !!v);
   const recipient = getprivilegedPerson(surveyUnit);
   const { user } = useUser();
-
   const userError = userSchema.safeParse(user);
   const recipientError = recipientSchema.safeParse({ ...address, ...recipient });
   const communicationError = communicationSchema.safeParse(communication);
-
   const isValid = userError.success && recipientError.success && communicationError.success;
 
   return (
@@ -89,12 +86,22 @@ const CommunicationConfirmation = ({
               >
                 {getTitle(recipient.title)} {recipient.firstName} {recipient.lastName}
                 <br />
-                {addressLines.map(line => (
-                  <Fragment key={line.toString()}>
-                    {line}
-                    <br />
+                <Fragment>
+                  {address.streetName} <br />
+                </Fragment>
+                {address.additionalAddress.length > 0 && (
+                  <Fragment>
+                    {address.additionalAddress} <br />
                   </Fragment>
-                ))}
+                )}
+                {address.locality.length > 0 && (
+                  <Fragment>
+                    {address.locality} <br />
+                  </Fragment>
+                )}
+                <Fragment>
+                  {address.postCode}, {address.cityName}
+                </Fragment>
               </Typography>
               {!recipientError.success && <ValidationError error={recipientError.error} mt={1} />}
             </div>
