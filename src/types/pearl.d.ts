@@ -95,6 +95,7 @@ declare global {
   };
 
   type SurveyUnit = {
+    businessId?: string;
     id: string;
     persons: SurveyUnitPerson[];
     address: SurveyUnitAddress;
