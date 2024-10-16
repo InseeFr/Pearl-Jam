@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "typeRoots": ["./src/types"],
-    "lib": ["es6", "dom"],
+    "lib": ["es6", "dom", "ES2016"],
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true
