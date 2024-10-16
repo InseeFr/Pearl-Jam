@@ -40,6 +40,21 @@ export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardPr
     surveyUnit.useLetterCommunication
   );
 
+  // Sort com request by most recent status
+  const surveyUnitCommunicationRequests = surveyUnit.communicationRequests
+    ?.map(comReq => {
+      const template = communicationTemplates.find(c => c.id === comReq.communicationTemplateId);
+      return { ...comReq, template };
+    })
+    .sort((a, b) => {
+      const dateA = Math.min(...a.status.map(s => s.date));
+      const dateB = Math.min(...b.status.map(s => s.date));
+
+      return dateB - dateA;
+    });
+
+  console.log(surveyUnitCommunicationRequests);
+
   return (
     <>
       <Card>
@@ -60,11 +75,9 @@ export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardPr
               {D.sendCommunication}
             </Button>
             <Stack gap={2}>
-              {surveyUnit.communicationRequests?.map(comReq => (
+              {surveyUnitCommunicationRequests?.map(comReq => (
                 <CommunicationItem
-                  surveyUnitCommunicationTemplate={communicationTemplates.find(
-                    c => c.id === comReq.communicationTemplateId
-                  )}
+                  surveyUnitCommunicationTemplate={comReq.template}
                   communication={comReq}
                   key={comReq.status[0].date ?? 1}
                 />
