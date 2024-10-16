@@ -1,233 +1,37 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import InputAdornment from '@mui/material/InputAdornment';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import IconButton from '@mui/material/IconButton';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import TextField from '@mui/material/TextField';
-import { Typography } from '../ui/Typography';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Grid from '@mui/material/Grid';
-import { useSurveyUnits } from '../utils/hooks/database';
-import { CampaignProgress } from '../ui/Stats/CampaignProgress';
-import React, { useMemo, useState, useEffect } from 'react';
-import { groupBy } from '../utils/functions/array';
-import { CampaignProgressPieChart } from '../ui/Stats/CampaignProgressPieChart';
-import { ScrollableBox } from '../ui/ScrollableBox';
-import { Row } from '../ui/Row';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import AddIcon from '@mui/icons-material/Add';
 import {
-  getCommentByType,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  Box,
+  TableBody,
+  Typography,
+} from '@mui/material';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { IconAsc } from 'ui/Icons/IconAsc';
+import { IconDesc } from 'ui/Icons/IconDesc';
+import { PaperIconButton } from 'ui/PaperIconButton';
+import { StatusChip } from 'ui/StatusChip';
+import { CommentDialog } from 'ui/SurveyUnit/CommentDialog';
+import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
+import { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
+import { findMediumValueByType } from 'utils/enum/MediumEnum';
+import {
   getprivilegedPerson,
-  getSortedContactAttempts,
   getSuTodoState,
-  daysLeftForSurveyUnit,
   isSelectable,
-} from '../utils/functions';
-import { StatusChip } from '../ui/StatusChip';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { Link } from '../ui/Link';
-import { findContactOutcomeValueByType } from '../utils/enum/ContactOutcomeEnum';
-import { formatDate } from '../utils/functions/date';
-import { findMediumValueByType } from '../utils/enum/MediumEnum';
-import { findContactAttemptValueByType } from '../utils/enum/ContactAttemptEnum';
-import { Select } from '../ui/Select';
-import { CommentDialog } from '../ui/SurveyUnit/CommentDialog';
-import { useToggle } from '../utils/hooks/useToggle';
-import { PaperIconButton } from '../ui/PaperIconButton';
-import { IconDesc } from '../ui/Icons/IconDesc';
-import { IconAsc } from '../ui/Icons/IconAsc';
-import D from 'i18n';
+  getSortedContactAttempts,
+  getCommentByType,
+} from 'utils/functions';
+import { formatDate } from 'utils/functions/date';
+import { useToggle } from 'utils/hooks/useToggle';
 
-export function SuiviPage() {
-  const surveyUnits = useSurveyUnits();
-  const [campaign, setCampaign] = useState(() => {
-    return localStorage.getItem('selectedCampaign') || '';
-  });
-  const [searchText, setSearchText] = useState('');
-  const campaigns = useMemo(
-    () =>
-      Array.from(new Set(surveyUnits.map(su => su.campaign))).map(c => ({
-        label: c.toLowerCase(),
-        value: c,
-      })),
-    [surveyUnits]
-  );
-
-  useEffect(() => {
-    localStorage.setItem('selectedCampaign', campaign);
-  }, [campaign]);
-
-  const [tab, setTab] = useState('stats');
-  const handleSearchTextChange = event => {
-    setSearchText(event.target.value);
-  };
-
-  return (
-    <Box m={2}>
-      <Card elevation={2}>
-        <CardContent>
-          <Stack gap={4}>
-            <Row justifyContent="space-between">
-              <Row gap={2}>
-                <Typography sx={{ flex: 'none' }} variant="headingM" color="black" as="h1">
-                  {D.goToMyTracking}
-                </Typography>
-                {tab === 'table' && (
-                  <>
-                    {' | '}
-                    <Select
-                      onChange={setCampaign}
-                      sx={{ minWidth: 210 }}
-                      value={campaign}
-                      placeholder={D.trackingSelect}
-                      options={campaigns}
-                    />
-                    {campaign && (
-                      <IconButton aria-label="reset" onClick={() => setCampaign('')}>
-                        <RestartAltIcon />
-                      </IconButton>
-                    )}
-                    <TextField
-                      label={D.trackingName}
-                      variant="outlined"
-                      size="small"
-                      value={searchText}
-                      onChange={handleSearchTextChange}
-                      sx={{ marginLeft: 0.5, marginRight: 2, width: '330px' }}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <SearchOutlinedIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </>
-                )}
-              </Row>
-              <Tabs
-                value={tab}
-                onChange={(_, tab) => setTab(tab)}
-                aria-label={D.trackingToggleAria}
-                textColor="secondary"
-              >
-                <Tab label={D.allSurveys} value="stats" />
-                <Tab label={D.unitsTrackingBySurvey} value="table" />
-              </Tabs>
-            </Row>
-            {tab === 'stats' ? (
-              <SuiviStats surveyUnits={surveyUnits} />
-            ) : (
-              <SuiviTable surveyUnits={surveyUnits} campaign={campaign} searchText={searchText} />
-            )}
-          </Stack>
-        </CardContent>
-      </Card>
-    </Box>
-  );
-}
-
-/**
- * @param {SurveyUnit[]} surveyUnits
- */
-function SuiviStats({ surveyUnits }) {
-  const [sortDirection, setSortDirection] = useState('');
-  const handleSortChange = direction => {
-    setSortDirection(direction);
-  };
-
-  const surveyUnitsPerCampaign = useMemo(
-    () => groupBy(surveyUnits, su => su.campaign),
-    [surveyUnits]
-  );
-
-  const sortedCampaignLabels = useMemo(() => {
-    if (sortDirection.startsWith('deadline')) {
-      const labelsWithDeadline = Object.entries(surveyUnitsPerCampaign).map(([label, units]) => ({
-        label,
-        deadline: daysLeftForSurveyUnit(units),
-      }));
-
-      const sortedByDeadline = labelsWithDeadline.sort((a, b) => {
-        if (sortDirection === 'deadlineAsc') {
-          return a.deadline - b.deadline;
-        } else {
-          return b.deadline - a.deadline;
-        }
-      });
-
-      return sortedByDeadline.map(item => item.label);
-    } else {
-      const labels = Object.keys(surveyUnitsPerCampaign);
-      return labels.sort((a, b) => {
-        if (sortDirection === 'desc') {
-          return b.localeCompare(a);
-        } else {
-          // 'asc'
-          return a.localeCompare(b);
-        }
-      });
-    }
-  }, [surveyUnitsPerCampaign, sortDirection]);
-
-  const sortOptions = [
-    { value: 'asc', label: `${D.campaignNameAsc}` },
-    { value: 'desc', label: `${D.campaignNameDesc}` },
-    { value: 'deadlineAsc', label: `${D.shortDeadline}` },
-    { value: 'deadlineDesc', label: `${D.longDeadline}` },
-  ];
-
-  return (
-    <Box m={2}>
-      <Card elevation={2}>
-        <CardContent>
-          <Stack gap={4}>
-            <Box display="flex" alignItems="center" flexWrap="wrap">
-              <Typography variant="body1" sx={{ flexGrow: 0, marginRight: 2 }}>
-                {D.trackingAccessDetailedData}
-              </Typography>
-              <Select
-                options={sortOptions}
-                value={sortDirection}
-                onChange={handleSortChange}
-                placeholder={D.noSorting}
-                allowEmpty
-                sx={{ width: '210px' }}
-              />
-            </Box>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <ScrollableBox height="646px">
-                  <Grid container spacing={2}>
-                    {sortedCampaignLabels.map(label => (
-                      <Grid item xs={12} sm={6} key={label}>
-                        <CampaignProgress
-                          label={label}
-                          surveyUnits={surveyUnitsPerCampaign[label]}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </ScrollableBox>
-              </Grid>
-              <Grid item xs={6}>
-                <CampaignProgressPieChart surveyUnits={surveyUnits} />
-              </Grid>
-            </Grid>
-          </Stack>
-        </CardContent>
-      </Card>
-    </Box>
-  );
+interface TableTrackingProps {
+  campaign: string;
+  surveyUnits: SurveyUnit[];
+  searchText: string;
 }
 
 /**
@@ -236,9 +40,9 @@ function SuiviStats({ surveyUnits }) {
  * @param {string} campaign
  * @param {SurveyUnit[]} surveyUnits
  */
-function SuiviTable({ surveyUnits, campaign, searchText }) {
+export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<TableTrackingProps>) {
   const [sortConfig, setSortConfig] = useState({ key: 'unit', direction: 'asc' });
-  const toggleSort = key => {
+  const toggleSort = (key: string) => {
     const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
     setSortConfig({ key, direction });
   };
@@ -265,7 +69,7 @@ function SuiviTable({ surveyUnits, campaign, searchText }) {
     'NUH',
     'NOA',
   ];
-  const getOutcomeIndex = su => {
+  const getOutcomeIndex = (su: SurveyUnit) => {
     const index = contactOutcomeOrder.indexOf(su.contactOutcome?.type);
     return index === -1 ? Infinity : index;
   };
@@ -446,6 +250,7 @@ function SurveyUnitRow({ surveyUnit }) {
               <Typography as="span" variant="s" color="textPrimary">
                 {findContactAttemptValueByType(lastContact.status)}
                 <br />
+                eeeee
                 {findMediumValueByType(lastContact.medium)}
               </Typography>
               {' | '}
