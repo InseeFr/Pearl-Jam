@@ -24,7 +24,6 @@ import D from '../i18n/build-dictionary';
  * @param {boolean} locked
  * @returns {JSX.Element}
  */
-export function SurveyCard({ surveyUnit, locked = false }) {
   const {
     id,
     address: { l6 },
@@ -79,7 +78,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
               {locked && <LockIcon color="iconLock" />}
             </Row>
             <Typography variant="s" color="textHint" as="div">
-              #{surveyUnit.id}
+              #{surveyUnit.businessId ? surveyUnit.businessId : surveyUnit.id}
             </Typography>
           </Stack>
           <Row gap={1}>
