@@ -53,8 +53,6 @@ export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardPr
       return dateB - dateA;
     });
 
-  console.log(surveyUnitCommunicationRequests);
-
   return (
     <>
       <Card>
