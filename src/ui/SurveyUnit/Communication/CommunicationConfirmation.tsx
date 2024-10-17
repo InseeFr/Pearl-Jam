@@ -28,15 +28,12 @@ const CommunicationConfirmation = ({
   saveCommunicationRequest,
   bypassReasonLabel,
 }: CommunicationConfirmationProps) => {
-  const address = getAddressData(surveyUnit.address);
-  const addressLines = Object.values(address).filter(v => !!v);
+  let address = getAddressData(surveyUnit.address);
   const recipient = getprivilegedPerson(surveyUnit);
   const { user } = useUser();
-
   const userError = userSchema.safeParse(user);
   const recipientError = recipientSchema.safeParse({ ...address, ...recipient });
   const communicationError = communicationSchema.safeParse(communication);
-
   const isValid = userError.success && recipientError.success && communicationError.success;
 
   return (
@@ -89,12 +86,29 @@ const CommunicationConfirmation = ({
               >
                 {getTitle(recipient.title)} {recipient.firstName} {recipient.lastName}
                 <br />
-                {addressLines.map(line => (
-                  <Fragment key={line.toString()}>
-                    {line}
-                    <br />
-                  </Fragment>
-                ))}
+                <Fragment>
+                  {address.deliveryPoint.length > 0 && (
+                    <>
+                      {address.deliveryPoint} <br />
+                    </>
+                  )}
+                  {address.additionalAddress.length > 0 && (
+                    <>
+                      {address.additionalAddress} <br />
+                    </>
+                  )}
+                  <>
+                    {address.streetName} <br />
+                  </>
+                  {address.locality.length > 0 && (
+                    <>
+                      {address.locality} <br />
+                    </>
+                  )}
+                  <>
+                    {address.postCode}, {address.cityName}
+                  </>
+                </Fragment>
               </Typography>
               {!recipientError.success && <ValidationError error={recipientError.error} mt={1} />}
             </div>
@@ -115,7 +129,7 @@ const CommunicationConfirmation = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" variant="contained" onClick={() => previousStep()}>
+        <Button color="white" variant="contained" onClick={() => previousStep()}>
           {D.previousButton}
         </Button>
         <Button variant="contained" onClick={() => saveCommunicationRequest()} disabled={!isValid}>

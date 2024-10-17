@@ -5,7 +5,7 @@ import Card from '@mui/material/Card/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
-import { communicationMediumEnum } from 'utils/enum/CommunicationEnums';
+import { communicationMediumEnum, communicationStatusEnum } from 'utils/enum/CommunicationEnums';
 import { useToggle } from '../../../utils/hooks/useToggle';
 import { Row } from '../../Row';
 import { Typography } from '../../Typography';
@@ -40,6 +40,21 @@ export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardPr
     surveyUnit.useLetterCommunication
   );
 
+  // Sorting com requests by initialization date
+  const surveyUnitCommunicationRequests = surveyUnit.communicationRequests
+    ?.map(comReq => {
+      const template = communicationTemplates.find(c => c.id === comReq.communicationTemplateId);
+      return { ...comReq, template };
+    })
+    .sort((a, b) => {
+      const dateA =
+        a.status.find(s => s.status === communicationStatusEnum.INITIATED.value)?.date ?? 0;
+      const dateB =
+        b.status.find(s => s.status === communicationStatusEnum.INITIATED.value)?.date ?? 0;
+
+      return dateB - dateA;
+    });
+
   return (
     <>
       <Card>
@@ -60,11 +75,9 @@ export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardPr
               {D.sendCommunication}
             </Button>
             <Stack gap={2}>
-              {surveyUnit.communicationRequests?.map(comReq => (
+              {surveyUnitCommunicationRequests?.map(comReq => (
                 <CommunicationItem
-                  surveyUnitCommunicationTemplate={communicationTemplates.find(
-                    c => c.id === comReq.communicationTemplateId
-                  )}
+                  surveyUnitCommunicationTemplate={comReq.template}
                   communication={comReq}
                   key={comReq.status[0].date ?? 1}
                 />

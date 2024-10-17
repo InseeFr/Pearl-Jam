@@ -35,7 +35,7 @@ export const formatSurveyUnitForPut = async (su: SurveyUnit) => {
       comReq =>
         <SurveyUnitNewCommunicationRequest>{
           communicationTemplateId: comReq.communicationTemplateId,
-          creationTimestamp: new Date().getTime(),
+          creationTimestamp: comReq.status[0].date,
           reason: comReq.reason,
         }
     );
