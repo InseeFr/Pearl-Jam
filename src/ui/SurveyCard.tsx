@@ -85,7 +85,7 @@ export function SurveyCard({ surveyUnit, locked = false }: Readonly<SurveyCardPr
               {locked && <LockIcon color="iconLock" />}
             </Row>
             <Typography variant="s" color="textHint" as="div">
-              #{surveyUnit.businessId ? surveyUnit.businessId : surveyUnit.id}
+              #{surveyUnit.displayName ? surveyUnit.displayName : surveyUnit.id}
             </Typography>
           </Stack>
           <Row gap={1}>
