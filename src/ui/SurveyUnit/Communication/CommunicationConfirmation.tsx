@@ -28,7 +28,7 @@ const CommunicationConfirmation = ({
   saveCommunicationRequest,
   bypassReasonLabel,
 }: CommunicationConfirmationProps) => {
-  const address = getAddressData(surveyUnit.address);
+  let address = getAddressData(surveyUnit.address);
   const recipient = getprivilegedPerson(surveyUnit);
   const { user } = useUser();
   const userError = userSchema.safeParse(user);
@@ -86,26 +86,28 @@ const CommunicationConfirmation = ({
               >
                 {getTitle(recipient.title)} {recipient.firstName} {recipient.lastName}
                 <br />
-                {address.deliveryPoint.length > 0 && (
-                  <Fragment>
-                    {address.deliveryPoint} <br />
-                  </Fragment>
-                )}
-                {address.additionalAddress.length > 0 && (
-                  <Fragment>
-                    {address.additionalAddress} <br />
-                  </Fragment>
-                )}
                 <Fragment>
-                  {address.streetName} <br />
-                </Fragment>
-                {address.locality.length > 0 && (
-                  <Fragment>
-                    {address.locality} <br />
-                  </Fragment>
-                )}
-                <Fragment>
-                  {address.postCode}, {address.cityName}
+                  {address.deliveryPoint.length > 0 && (
+                    <>
+                      {address.deliveryPoint} <br />
+                    </>
+                  )}
+                  {address.additionalAddress.length > 0 && (
+                    <>
+                      {address.additionalAddress} <br />
+                    </>
+                  )}
+                  <>
+                    {address.streetName} <br />
+                  </>
+                  {address.locality.length > 0 && (
+                    <>
+                      {address.locality} <br />
+                    </>
+                  )}
+                  <>
+                    {address.postCode}, {address.cityName}
+                  </>
                 </Fragment>
               </Typography>
               {!recipientError.success && <ValidationError error={recipientError.error} mt={1} />}
