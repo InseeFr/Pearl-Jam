@@ -129,7 +129,7 @@ const CommunicationConfirmation = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" variant="contained" onClick={() => previousStep()}>
+        <Button color="white" variant="contained" onClick={() => previousStep()}>
           {D.previousButton}
         </Button>
         <Button variant="contained" onClick={() => saveCommunicationRequest()} disabled={!isValid}>

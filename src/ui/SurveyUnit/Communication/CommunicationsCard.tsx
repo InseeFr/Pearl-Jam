@@ -5,7 +5,7 @@ import Card from '@mui/material/Card/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
-import { communicationMediumEnum } from 'utils/enum/CommunicationEnums';
+import { communicationMediumEnum, communicationStatusEnum } from 'utils/enum/CommunicationEnums';
 import { useToggle } from '../../../utils/hooks/useToggle';
 import { Row } from '../../Row';
 import { Typography } from '../../Typography';
@@ -40,15 +40,17 @@ export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardPr
     surveyUnit.useLetterCommunication
   );
 
-  // Sort com request by most recent status
+  // Sorting com requests by initialization date
   const surveyUnitCommunicationRequests = surveyUnit.communicationRequests
     ?.map(comReq => {
       const template = communicationTemplates.find(c => c.id === comReq.communicationTemplateId);
       return { ...comReq, template };
     })
     .sort((a, b) => {
-      const dateA = Math.min(...a.status.map(s => s.date));
-      const dateB = Math.min(...b.status.map(s => s.date));
+      const dateA =
+        a.status.find(s => s.status === communicationStatusEnum.INITIATED.value)?.date ?? 0;
+      const dateB =
+        b.status.find(s => s.status === communicationStatusEnum.INITIATED.value)?.date ?? 0;
 
       return dateB - dateA;
     });
