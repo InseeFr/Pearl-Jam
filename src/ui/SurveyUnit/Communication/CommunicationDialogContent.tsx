@@ -35,8 +35,6 @@ const CommunicationDialogContent = ({
   previousStep,
   onChange,
 }: CommunicationDialogContentProps) => {
-  console.log(radioValue);
-
   return (
     <>
       <DialogTitle id="dialogtitle">{title}</DialogTitle>

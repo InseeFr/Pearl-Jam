@@ -10,10 +10,9 @@ import { groupBy } from '../../utils/functions/array';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
 import D from 'i18n';
 
-
 const colorStart = '#D3DBE5';
 const colorEnd = '#3A4657';
-const getColorForRate = rate => generateColorInGradient(colorStart, colorEnd, rate);
+const getColorForRate = (rate: number) => generateColorInGradient(colorStart, colorEnd, rate);
 
 const legendBar = {
   width: 330,
@@ -22,13 +21,17 @@ const legendBar = {
   background: `linear-gradient(to right, ${colorStart}, ${colorEnd})`,
 };
 
+interface CampaignProgressPieChartProps {
+  surveyUnits: SurveyUnit[];
+}
+
 /**
  * Card with a pie chart that show surveyUnits in progress
  *
  * @param {SurveyUnit[]} surveyUnits
  * @return {JSX.Element}
  */
-export function CampaignProgressPieChart({ surveyUnits }) {
+export function CampaignProgressPieChart({ surveyUnits }: Readonly<CampaignProgressPieChartProps>) {
   // Only keep survey units that are not finished
   surveyUnits = surveyUnits.filter(su => getSuTodoState(su).order !== toDoEnum.TERMINATED.order);
   const total = surveyUnits.length;
@@ -48,7 +51,14 @@ export function CampaignProgressPieChart({ surveyUnits }) {
   return (
     <Card elevation={0} raised>
       <Stack gap={2} alignItems="center" p={2} sx={{ height: 646 }}>
-        <Typography sx={{width: 500}} fontWeight={700} align="center" variant="headingS" component="h2" color="black">
+        <Typography
+          sx={{ width: 500 }}
+          fontWeight={700}
+          align="center"
+          variant="headingS"
+          component="h2"
+          color="black"
+        >
           {D.numberOfUnitsRemaining}
         </Typography>
         <div>
