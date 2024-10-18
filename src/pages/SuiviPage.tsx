@@ -68,12 +68,12 @@ export function SuiviPage() {
                       </IconButton>
                     )}
                     <TextField
-                      label={D.trackingName}
+                      label={D.trackingSearchField}
                       variant="outlined"
                       size="small"
                       value={searchText}
                       onChange={handleSearchTextChange}
-                      sx={{ marginLeft: 0.5, marginRight: 2, width: '330px' }}
+                      sx={{ marginLeft: 0.5, marginRight: 2, width: '500px' }}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
