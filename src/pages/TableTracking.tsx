@@ -77,6 +77,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
   };
 
   const filteredSurveyUnits = surveyUnits
+
     .filter(su => {
       const person = getprivilegedPerson(su);
       const filteredByCampaign = campaign === '' || su.campaign === campaign;
@@ -84,7 +85,8 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
         filteredByCampaign &&
         (searchText === '' ||
           person.lastName.toUpperCase().includes(searchText.toUpperCase()) ||
-          person.firstName.toUpperCase().includes(searchText.toUpperCase()))
+          person.firstName.toUpperCase().includes(searchText.toUpperCase()) ||
+          su.displayName.toUpperCase().includes(searchText.toUpperCase()))
       );
     })
     .sort((a, b) => {
