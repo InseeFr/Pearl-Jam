@@ -243,10 +243,10 @@ function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
         <TableCell align="center">
           {isActive ? (
             <Link to={`/survey-unit/${surveyUnit.id}/details`}>
-              #{surveyUnit.displayName ? surveyUnit.displayName : surveyUnit.id}
+              #{surveyUnit.displayName ?? surveyUnit.id}
             </Link>
           ) : (
-            `#${surveyUnit.displayName ? surveyUnit.displayName : surveyUnit.id}`
+            `#${surveyUnit.displayName ?? surveyUnit.id}`
           )}
         </TableCell>
         <TableCell align="center">
