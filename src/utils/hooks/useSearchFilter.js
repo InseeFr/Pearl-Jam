@@ -163,7 +163,7 @@ export function filterSurveyUnits(surveyUnits, criteria) {
     if (criteria.search) {
       const person = getprivilegedPerson(surveyUnit);
       const searchString = normalize(
-        `${person.firstName} ${person.lastName} ${surveyUnit.id} ${surveyUnit.address.l6} ${getSuTodoState(surveyUnit).value}`
+        `${person.firstName} ${person.lastName} ${surveyUnit.id} ${surveyUnit.address.l6} ${surveyUnit.displayName} ${getSuTodoState(surveyUnit).value}`
       );
       
       if (!searchString.includes(searchNormalized) && !campaignNormalized.includes(searchNormalized)) return false;

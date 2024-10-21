@@ -29,6 +29,11 @@ const trackingMessage = {
     en: 'Lastname/FirstName',
     sq: 'Mbiemri/Emri',
   },
+  trackingSearchField: {
+    fr: 'Nom/Prénom, Id, Id Métier',
+    en: 'Lastname/FirstName, Id, Business Id',
+    sq: 'Mbiemri/Emri, Id, Id i njësisë',
+  },
   noSorting: {
     fr: 'Aucun tri',
     en: 'No sorting',

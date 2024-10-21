@@ -19,12 +19,18 @@ import { Row } from './Row';
 import { AbsoluteLink } from './AbsoluteLink';
 import D from '../i18n/build-dictionary';
 
+interface SurveyCardProps {
+  surveyUnit: SurveyUnit;
+  locked: boolean;
+}
+
 /**
  * @param {SurveyUnit} surveyUnit
  * @param {boolean} locked
  * @returns {JSX.Element}
  */
-export function SurveyCard({ surveyUnit, locked = false }) {
+
+export function SurveyCard({ surveyUnit, locked = false }: Readonly<SurveyCardProps>) {
   const {
     id,
     address: { l6 },
@@ -79,7 +85,7 @@ export function SurveyCard({ surveyUnit, locked = false }) {
               {locked && <LockIcon color="iconLock" />}
             </Row>
             <Typography variant="s" color="textHint" as="div">
-              #{surveyUnit.id}
+              #{surveyUnit.displayName ?? surveyUnit.id}
             </Typography>
           </Stack>
           <Row gap={1}>
