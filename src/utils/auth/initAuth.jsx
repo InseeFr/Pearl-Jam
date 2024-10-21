@@ -1,12 +1,13 @@
 import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'utils/constants';
 import { getTokenInfo, keycloakAuthentication } from 'utils/keycloak';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useConfiguration } from '../hooks/useConfiguration';
 
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const configuration = useConfiguration();
+  const init = useRef(false);
 
   const interviewerRoles = ['pearl-interviewer', 'uma_authorization', 'Guest'];
 
@@ -32,6 +33,11 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
+    if (init.current) {
+      console.log('alreadyInit');
+      return;
+    }
+
     const { PEARL_AUTHENTICATION_MODE } = configuration;
     switch (PEARL_AUTHENTICATION_MODE) {
       case 'anonymous':
@@ -65,6 +71,7 @@ export const useAuth = () => {
         break;
       default:
     }
+    init.current = true;
   }, []);
 
   return { authenticated };
