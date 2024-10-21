@@ -261,7 +261,6 @@ function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
               <Typography as="span" variant="s" color="textPrimary">
                 {findContactAttemptValueByType(lastContact.status)}
                 <br />
-                eeeee
                 {findMediumValueByType(lastContact.medium)}
               </Typography>
               {' | '}
