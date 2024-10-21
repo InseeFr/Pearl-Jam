@@ -1,6 +1,6 @@
 {
-  "realm": "agents-insee-interne",
-  "auth-server-url": "https://auth.insee.test/auth",
+  "realm": "my-realm",
+  "auth-server-url": "https://my.nice.server/auth",
   "ssl-required": "none",
   "resource": "localhost-frontend",
   "public-client": true,
