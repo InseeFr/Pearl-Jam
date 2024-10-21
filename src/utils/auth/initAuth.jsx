@@ -1,3 +1,4 @@
+import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'utils/constants';
 import { getTokenInfo, keycloakAuthentication } from 'utils/keycloak';
 import { useEffect, useState } from 'react';
 
