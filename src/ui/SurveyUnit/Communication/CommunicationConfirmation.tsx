@@ -87,27 +87,21 @@ const CommunicationConfirmation = ({
                 {getTitle(recipient.title)} {recipient.firstName} {recipient.lastName}
                 <br />
                 <Fragment>
-                  {address.deliveryPoint.length > 0 && (
-                    <>
-                      {address.deliveryPoint} <br />
-                    </>
+                  {address.deliveryPoint && (
+                    <>{address.deliveryPoint} <br /></>
                   )}
-                  {address.additionalAddress.length > 0 && (
-                    <>
-                      {address.additionalAddress} <br />
-                    </>
+                  {address.additionalAddress && (
+                    <>{address.additionalAddress} <br /></>
                   )}
-                  <>
-                    {address.streetName} <br />
-                  </>
-                  {address.locality.length > 0 && (
-                    <>
-                      {address.locality} <br />
-                    </>
+                  {address.streetName && (
+                    <>{address.streetName} <br /></>
                   )}
-                  <>
-                    {address.postCode}, {address.cityName}
-                  </>
+                  {address.locality && (
+                    <>{address.locality} <br /></>
+                  )}
+                  {address.postCode && address.cityName && (
+                    <>{address.postCode}, {address.cityName}</>
+                  )}
                 </Fragment>
               </Typography>
               {!recipientError.success && <ValidationError error={recipientError.error} mt={1} />}
