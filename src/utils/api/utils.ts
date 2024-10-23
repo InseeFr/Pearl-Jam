@@ -25,20 +25,21 @@ export const authentication = (mode: string) => {
   }
 };
 export const formatSurveyUnitForPut = async (su: SurveyUnit) => {
-  const newFormattedCommunicationRequests = su.communicationRequests
-    .filter(
-      comReq =>
-        comReq.status.length === 1 &&
-        comReq.status.find(s => s.status === communicationStatusEnum.INITIATED.value)
-    )
-    .map(
-      comReq =>
-        <SurveyUnitNewCommunicationRequest>{
-          communicationTemplateId: comReq.communicationTemplateId,
-          creationTimestamp: comReq.status[0].date,
-          reason: comReq.reason,
-        }
-    );
+  const newFormattedCommunicationRequests =
+    su.communicationRequests
+      ?.filter(
+        comReq =>
+          comReq.status.length === 1 &&
+          comReq.status.find(s => s.status === communicationStatusEnum.INITIATED.value)
+      )
+      .map(
+        comReq =>
+          <SurveyUnitNewCommunicationRequest>{
+            communicationTemplateId: comReq.communicationTemplateId,
+            creationTimestamp: comReq.status[0].date,
+            reason: comReq.reason,
+          }
+      ) ?? [];
 
   const formattedSurveyUnit = {
     id: su.id,
