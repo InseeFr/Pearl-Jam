@@ -89,6 +89,8 @@
   },
   "devDependencies": {
     "@originjs/vite-plugin-federation": "^1.2.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.0.1",
     "@types/react": "^18.2.46",
     "@vitejs/plugin-react": "^4.2.1",
     "copy-and-watch": "^0.1.4",
