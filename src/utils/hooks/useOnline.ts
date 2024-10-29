@@ -5,14 +5,14 @@ import { addListener } from '../functions/dom';
  * Detect if the network is online or offline
  */
 export function useNetworkOnline() {
-  const [isOnline, setOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
     const clear: Array<() => void> = [];
-    clear.push(addListener(window, 'online', () => setOnline(true)));
-    clear.push(addListener(window, 'offline', () => setOnline(false)));
+    clear.push(addListener(window, 'online', () => setIsOnline(true)));
+    clear.push(addListener(window, 'offline', () => setIsOnline(false)));
     return () => {
-      clear.map(c => c());
+      clear.forEach(c => c());
     };
   }, []);
 
