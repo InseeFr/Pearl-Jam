@@ -14,12 +14,8 @@ export function toggleItem(arr, item) {
 
 /**
  * Group an array into a record indexed by the ky
- * @template T
- * @param {string[]} items
- * @param {(item: T) => string} cb
- * @returns {Record<string, T[]>}
  */
-export function groupBy(items, cb) {
+export function groupBy<T>(items: T[], cb: (item: T) => string): Record<string, T[]> {
   return items.reduce((acc, item) => {
     const key = cb(item);
     acc[key] = acc[key] ? [...acc[key], item] : [item];
