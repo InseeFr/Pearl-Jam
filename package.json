@@ -29,7 +29,8 @@
     "build": "vite build && copy-and-watch configuration/configuration.json build",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "test": "vitest"
+    "test": "vitest",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": [
@@ -92,6 +93,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
     "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.2.1",
     "copy-and-watch": "^0.1.4",
     "eslint-config-airbnb": "^18.0.1",
