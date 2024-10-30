@@ -1,9 +1,9 @@
-import Button from '@mui/material/Button';
 import SyncIcon from '@mui/icons-material/Sync';
-import React, { useContext } from 'react';
-import { SyncContext } from '../Sync/SyncContextProvider';
-import { useNetworkOnline } from '../../utils/hooks/useOnline';
+import Button from '@mui/material/Button';
+import { useContext } from 'react';
 import D from '../../i18n/build-dictionary';
+import { useNetworkOnline } from '../../utils/hooks/useOnline';
+import { SyncContext } from '../Sync/SyncContextProvider';
 
 export function SynchronizeButton() {
   const isOnline = useNetworkOnline();
