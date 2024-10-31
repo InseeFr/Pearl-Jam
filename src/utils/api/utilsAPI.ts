@@ -1,7 +1,7 @@
 import { authentication, getToken } from './utils';
 import { API } from './requests';
 
-export const sendMail = (urlPearApi, authenticationMode) => async (subject, content) => {
+export const sendMail = (urlPearApi: string, authenticationMode: string) => async (subject: string, content: string) => {
   try {
     await authentication(authenticationMode);
     const token = getToken();
@@ -11,7 +11,7 @@ export const sendMail = (urlPearApi, authenticationMode) => async (subject, cont
   }
 };
 
-export const healthCheck = async (urlPearApi, authenticationMode) => {
+export const healthCheck = async (urlPearApi: string, authenticationMode: string) => {
   try {
     await authentication(authenticationMode);
     const token = getToken();
@@ -20,7 +20,7 @@ export const healthCheck = async (urlPearApi, authenticationMode) => {
     throw new Error(`Error during refreshToken : ${e}`);
   }
 };
-export const getUserData = (urlPearApi, authenticationMode) => async id => {
+export const getUserData = (urlPearApi: string, authenticationMode: string) => async (id: string) => {
   try {
     await authentication(authenticationMode);
     const token = getToken();
