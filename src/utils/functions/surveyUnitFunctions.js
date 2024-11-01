@@ -124,12 +124,6 @@ export const areCaEqual = (ca, anotherCa) => {
   return ca.date === anotherCa.date && ca.status === anotherCa.status;
 };
 
-export const deleteContactAttempt = (surveyUnit, contactAttempt) => {
-  const { contactAttempts } = surveyUnit;
-  const newCA = contactAttempts.filter(ca => !areCaEqual(ca, contactAttempt));
-  persistSurveyUnit({ ...surveyUnit, contactAttempts: newCA });
-};
-
 export const getContactAttemptNumber = surveyUnit =>
   surveyUnit.states.filter(state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
     .length;
@@ -341,84 +335,16 @@ export const getAddressData = address => {
   };
 };
 
-export const getIdentificationData = surveyUnit => {
-  const { identification, move } = surveyUnit;
-  if (!identification) {
-    return [
-      { label: 'identification', value: '' },
-      { label: 'access', value: '' },
-      { label: 'situation', value: '' },
-      { label: 'category', value: '' },
-      { label: 'occupant', value: '' },
-      { label: 'move', value: move || false },
-    ];
-  }
-  return [
-    { label: 'identification', value: identification.identification || '' },
-    { label: 'access', value: identification.access || '' },
-    { label: 'situation', value: identification.situation || '' },
-    { label: 'category', value: identification.category || '' },
-    { label: 'occupant', value: identification.occupant || '' },
-    { label: 'move', value: surveyUnit.move || false },
-  ];
-};
-
-export const getAge = birthdate => {
+const getAge = birthdate => {
   if (birthdate === '' || !birthdate) return undefined;
   return differenceInYears(new Date(), new Date(birthdate));
 };
 
-export const isTitleMister = title => title.toUpperCase() === TITLES.MISTER.type;
+const isTitleMister = title => title.toUpperCase() === TITLES.MISTER.type;
 
 export const displayAgeInYears = birthdate => `${getAge(birthdate) ?? '/'} ${D.years}`;
 
-export const getPhoneData = person => person.phoneNumbers;
-
-export const sortPhoneNumbers = phoneNumbers => {
-  let fiscalPhoneNumbers = [];
-  let directoryPhoneNumbers = [];
-  let interviewerPhoneNumbers = [];
-
-  phoneNumbers.forEach(num => {
-    const copiedNum = JSON.parse(JSON.stringify(num));
-    switch (num.source.toLowerCase()) {
-      case 'fiscal':
-        fiscalPhoneNumbers = [...fiscalPhoneNumbers, copiedNum];
-        break;
-      case 'directory':
-        directoryPhoneNumbers = [...directoryPhoneNumbers, copiedNum];
-        break;
-      case 'interviewer':
-        interviewerPhoneNumbers = [...interviewerPhoneNumbers, copiedNum];
-        break;
-
-      default:
-        break;
-    }
-  });
-  return { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers };
-};
-
-export const getMailData = person => [
-  { label: D.surveyUnitEmail, value: person.email, favorite: person.favoriteEmail },
-];
-
 export const getTitle = title => (isTitleMister(title) ? TITLES.MISTER.value : TITLES.MISS.value);
-export const getToggledTitle = title =>
-  isTitleMister(title) ? TITLES.MISS.type : TITLES.MISTER.type;
-
-export const getPhoneSource = type => {
-  switch (type.toLowerCase()) {
-    case 'fiscal':
-      return D.fiscalSource;
-    case 'directory':
-      return D.directorySource;
-    case 'interviewer':
-      return D.interviewerSource;
-    default:
-      return '';
-  }
-};
 
 export const personPlaceholder = {
   title: TITLES.MISTER.type,
@@ -458,7 +384,7 @@ export const createCommunicationRequestIds = async latestSurveyUnit => {
   persistSurveyUnit({ ...previousSurveyUnit, communicationRequests });
 };
 
-export const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => {
+const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => {
   const { number, source } = phoneNumber;
   const updatedPersons = surveyUnit.persons.map(person => {
     if (person.id !== personId) return person;
@@ -478,7 +404,7 @@ export const toggleFavoritePhoneNumberAndPersist = (surveyUnit, personId, phoneN
   persistSurveyUnit(updatedSurveyUnit);
 };
 
-export const toggleFavoriteEmail = (surveyUnit, personId) => {
+const toggleFavoriteEmail = (surveyUnit, personId) => {
   const updatedPersons = surveyUnit.persons.map(person => {
     if (person.id !== personId) return person;
 
