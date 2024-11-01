@@ -12,6 +12,7 @@ export const getSecureHeader = (token: string | undefined) =>
     : {};
 
 export const authentication = (mode: string) => {
+  console.log(mode, window.localStorage.getItem(PEARL_USER_KEY));
   switch (mode) {
     case KEYCLOAK:
       if (window.localStorage.getItem(PEARL_USER_KEY) === undefined) {
