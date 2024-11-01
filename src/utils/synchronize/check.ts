@@ -4,7 +4,7 @@ import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 
 import D from 'i18n';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
-import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
+import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
 
@@ -25,7 +25,10 @@ export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) 
   return {};
 };
 
-export const getNotifFromResult = (result: { state: unknown, messages: unknown }, nowDate: number) => {
+export const getNotifFromResult = (
+  result: { state: unknown; messages: unknown },
+  nowDate: number
+) => {
   const { state, messages } = result;
   return {
     date: nowDate || new Date().getTime(),
@@ -38,7 +41,13 @@ export const getNotifFromResult = (result: { state: unknown, messages: unknown }
   };
 };
 
-export const getReportFromResult = (result: { details?: { transmittedSurveyUnits: unknown, loadedSurveyUnits: unknown }, state: unknown}, nowDate = 0) => {
+export const getReportFromResult = (
+  result: {
+    details?: { transmittedSurveyUnits: unknown; loadedSurveyUnits: unknown };
+    state: unknown;
+  },
+  nowDate = 0
+) => {
   const { details, state } = result;
   if (state !== 'error') {
     const { transmittedSurveyUnits, loadedSurveyUnits } = details!;
@@ -96,8 +105,8 @@ const getResult = (
 };
 
 export const analyseResult = async (PEARL_API_URL: string, PEARL_AUTHENTICATION_MODE: unknown) => {
-  const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY)  || '{}' );
-  const pearlSus = await surveyUnitIdbService.getAll();
+  const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
+  const pearlSus = await surveyUnitIDBService.getAll();
   const pearlSurveyUnitsArray = pearlSus.map(({ id }: { id: string }) => id);
   const {
     error: pearlError,

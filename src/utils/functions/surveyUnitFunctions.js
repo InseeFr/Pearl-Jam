@@ -11,7 +11,7 @@ import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
-import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
+import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { toDoEnum } from '../enum/SUToDoEnum';
 import { normalize } from './string';
@@ -34,7 +34,6 @@ export const getSuTodoState = surveyUnit => {
 };
 
 /**
- * @deprecated shouldn't be used outside of surveyUnitFunctions, use getSuTodoState() instead
  * @param {{ status: string, date: number, id?: string }[]} states
  * @returns {SurveyUnitState} or undefined if no states
  */
@@ -311,86 +310,6 @@ export const isQuestionnaireAvailable = su => inaccessible => {
   return !inaccessible && now >= collectionStartDate && now <= collectionEndDate;
 };
 
-/**
- * @deprecated used in the legacy code
- * @template T
- * @param {T[]} surveyUnits
- * @param {{search: string, campaigns: string[], toDos: number[], priority: boolean, terminated: boolean, subSample: number}} filters
- * @return {{matchingEchoes: *, totalEchoes: *, searchFilteredSU: *}}
- */
-export const applyFilters = (surveyUnits, filters) => {
-  const {
-    search: searchFilter,
-    campaigns: campaignFilter,
-    toDos: toDoFilter,
-    priority: priorityFilter,
-    terminated: terminatedFilter,
-    subSample: subSampleFilter,
-  } = filters;
-
-  const filterBySearch = su => {
-    const { firstName, lastName } = getprivilegedPerson(su);
-    if (searchFilter !== '') {
-      const normalizedSearchFilter = normalize(searchFilter);
-      return (
-        normalize(firstName).includes(normalizedSearchFilter) ||
-        normalize(lastName).includes(normalizedSearchFilter) ||
-        su.id.toString().toLowerCase().includes(normalizedSearchFilter) ||
-        normalize(su.address.l6.split(' ').slice(1).toString()).includes(normalizedSearchFilter) ||
-        convertSUStateInToDo(getLastState(su.states)?.type)
-          ?.value.toLowerCase()
-          .includes(normalizedSearchFilter) ||
-        normalize(su.campaign).includes(normalizedSearchFilter)
-      );
-    }
-
-    return true;
-  };
-
-  const filterByCampaign = su => {
-    if (campaignFilter.length > 0) {
-      return campaignFilter.includes(su.campaign.toString());
-    }
-
-    return true;
-  };
-
-  const filterByToDo = su => {
-    if (toDoFilter.length > 0) {
-      return toDoFilter.includes(
-        convertSUStateInToDo(getLastState(su.states)?.type)?.order?.toString?.()
-      );
-    }
-    return true;
-  };
-
-  const filterByPriority = su => {
-    if (priorityFilter === true) {
-      return su.priority;
-    }
-    return true;
-  };
-
-  const filterByTerminated = su => {
-    return (
-      !terminatedFilter ||
-      convertSUStateInToDo(getLastState(su.states)?.type) !== toDoEnum.TERMINATED
-    );
-  };
-
-  const filteredSU = surveyUnits
-    .filter(unit => filterByPriority(unit))
-    .filter(unit => filterByToDo(unit))
-    .filter(unit => filterByCampaign(unit))
-    .filter(unit => filterByTerminated(unit));
-
-  const totalEchoes = surveyUnits.length;
-  const searchFilteredSU = filteredSU.filter(unit => filterBySearch(unit));
-  const matchingEchoes = searchFilteredSU.length;
-
-  return { searchFilteredSU, totalEchoes, matchingEchoes };
-};
-
 export const isSelectable = su => {
   const { identificationPhaseStartDate, endDate } = su;
   const endTime = new Date(endDate).getTime();
@@ -529,13 +448,13 @@ export const getprivilegedPerson = surveyUnit => {
 
 export const createStateIds = async latestSurveyUnit => {
   const { id, states } = latestSurveyUnit;
-  const previousSurveyUnit = await surveyUnitIdbService.getById(id);
+  const previousSurveyUnit = await surveyUnitIDBService.getById(id);
   persistSurveyUnit({ ...previousSurveyUnit, states });
 };
 
 export const createCommunicationRequestIds = async latestSurveyUnit => {
   const { id, communicationRequests } = latestSurveyUnit;
-  const previousSurveyUnit = await surveyUnitIdbService.getById(id);
+  const previousSurveyUnit = await surveyUnitIDBService.getById(id);
   persistSurveyUnit({ ...previousSurveyUnit, communicationRequests });
 };
 
@@ -572,4 +491,4 @@ export const toggleFavoriteEmailAndPersist = (surveyUnit, personId) => {
   persistSurveyUnit(updatedSurveyUnit);
 };
 
-export const persistSurveyUnit = surveyUnit => surveyUnitIdbService.addOrUpdateSU(surveyUnit);
+export const persistSurveyUnit = surveyUnit => surveyUnitIDBService.addOrUpdateSU(surveyUnit);
