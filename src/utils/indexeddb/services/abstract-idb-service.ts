@@ -1,15 +1,20 @@
+import { type Table } from 'dexie';
 import { db } from '../idb-config';
 
-export default class AbstractIdbService {
-  constructor(store) {
-    this.store = db[store];
+export type ID = string | number;
+
+export default class AbstractIdbService<T extends { id: ID }> {
+  private store;
+
+  constructor(store: keyof typeof db) {
+    this.store = db[store] as Table;
   }
 
-  get(id) {
+  get(id: ID) {
     return this.store.get({ id: Number(id) });
   }
 
-  getById(id) {
+  getById(id: ID) {
     return this.store.get(id);
   }
 
@@ -17,19 +22,19 @@ export default class AbstractIdbService {
     return this.store.toArray();
   }
 
-  getAllSortedBy(indexedVariable) {
+  getAllSortedBy(indexedVariable: string | string[]) {
     return this.store.orderBy(indexedVariable).toArray();
   }
 
-  insert(item) {
+  insert(item: T) {
     return this.store.add(item);
   }
 
-  update(item) {
+  update(item: T) {
     return this.store.put(item);
   }
 
-  delete(id) {
+  delete(id: ID) {
     return this.store.delete(id);
   }
 
@@ -37,7 +42,7 @@ export default class AbstractIdbService {
     return this.store.clear();
   }
 
-  async addOrUpdate(item) {
+  async addOrUpdate(item: T) {
     if (item.id) {
       if ((await this.store.get(item.id)) === undefined) {
         return this.insert(item);
@@ -47,11 +52,11 @@ export default class AbstractIdbService {
     return 0;
   }
 
-  addAll(items) {
+  addAll(items: T[]) {
     return this.store.bulkPut(items);
   }
 
-  deleteByIds(ids) {
+  deleteByIds(ids: string[]) {
     return this.store.bulkDelete(ids);
   }
 }

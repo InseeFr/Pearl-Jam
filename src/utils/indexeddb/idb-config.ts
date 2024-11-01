@@ -1,11 +1,23 @@
-import Dexie from 'dexie';
+import Dexie, { type EntityTable } from 'dexie';
 import schema from './schema.json';
 import schema2 from './schema-2.json';
 import schema3 from './schema-3.json';
 import schema4 from './schema-4.json';
 import schema5 from './schema-5.json';
+import { User } from './model/user';
+import { SyncReport } from './model/syncReport';
+import { SurveyUnitMissing } from './model/surveyUnitMissing';
+import type { SurveyUnit, Notification } from '../../types/pearl';
 
-export const db = new Dexie('Pearl');
+export const db = new Dexie('Pearl') as Dexie & {
+  notification: EntityTable<Notification, 'id'>;
+  user: EntityTable<User, 'id'>;
+  syncReport: EntityTable<SyncReport, 'id'>;
+  surveyUnitMissing: EntityTable<SurveyUnitMissing, 'id'>;
+  surveyUnit: EntityTable<SurveyUnit, 'id'>;
+};
+
+export type { User, SyncReport, Notification, SurveyUnitMissing, SurveyUnit };
 
 db.version(1).stores(schema);
 // upgrade dataBase (please see https://dexie.org/docs/Tutorial/Design#database-versioning)
