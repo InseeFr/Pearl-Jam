@@ -15,7 +15,7 @@ export function toggleItem(arr, item) {
 /**
  * Group an array into a record indexed by the ky
  * @template T
- * @param {string[]} items
+ * @param {T[]} items
  * @param {(item: T) => string} cb
  * @returns {Record<string, T[]>}
  */

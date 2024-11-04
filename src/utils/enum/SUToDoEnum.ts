@@ -21,4 +21,4 @@ export const toDoEnum = {
     stepName: D.stepTerminated,
     color: '#35C75880',
   },
-};
+} as const;

@@ -5,7 +5,7 @@
  * @param {T[]} array - The input array.
  * @returns {T[]} - A randomly selected item from the array.
  */
-export function getRandomItemFromArray(array) {
+export function getRandomItemFromArray(array: unknown[]) {
   // Check if the array is empty
   if (array.length === 0) {
     throw new Error('Array is empty, cannot pick a random item.');
@@ -21,7 +21,7 @@ export function getRandomItemFromArray(array) {
  * @param {number} max - The maximum value of the range.
  * @returns {number} A random integer between min and max (inclusive).
  */
-export function getRandomIntBetween(min, max) {
+export function getRandomIntBetween(min: number, max: number) {
   min = Math.ceil(min);
   max = Math.floor(max);
 

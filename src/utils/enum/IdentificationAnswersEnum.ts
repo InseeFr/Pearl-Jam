@@ -6,7 +6,7 @@ export const identificationAnswerTypeEnum = {
   SITUATION: 'SITUATION',
   CATEGORY: 'CATEGORY',
   OCCUPANT: 'OCCUPANT',
-};
+} as const;
 
 export const identificationAnswersEnum = {
   IDENTIFICATION_IDENTIFIED: {
@@ -107,7 +107,7 @@ export const identificationAnswersEnum = {
     label: `${D.occupantUnidentified}`,
     concluding: true,
   },
-};
+} as const;
 
-export const findIdentificationAnswerValueByType = type =>
+export const findIdentificationAnswerValueByType = (type: string) =>
   Object.values(identificationAnswersEnum).filter(value => value.type === type)?.[0]?.value;

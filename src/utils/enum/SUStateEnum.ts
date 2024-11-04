@@ -30,7 +30,7 @@ export const surveyUnitStateEnum = {
   },
   FINALIZED: { type: 'FIN', value: `${D.suStateFinalized}` },
   CLOSED: { type: 'CLO', value: `${D.suStateClosedSurveyUnit}` },
-};
+} as const;
 
-export const findSuStateValueByType = type =>
+export const findSuStateValueByType = (type: string) =>
   Object.values(surveyUnitStateEnum).filter(value => value.type === type)?.[0]?.value;

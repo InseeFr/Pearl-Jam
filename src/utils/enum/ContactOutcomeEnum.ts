@@ -18,14 +18,9 @@ export const contactOutcomeEnum = {
   },
   NO_LONGER_USED_FOR_HABITATION: { type: 'NUH', value: `${D.noLongerUsedForHabitation}` },
   NOT_APPLICABLE: { type: 'NOA', value: `${D.notApplicable}` },
-};
+} as const;
 
-/**
- * Extract contact outcome from a type
- * @param {string} type
- * @returns {{type: string, value: string} | undefined}
- */
-export const findContactOutcomeValueByType = type =>
+export const findContactOutcomeValueByType = (type: string) =>
   Object.values(contactOutcomeEnum).find(value => value.type === type)?.value;
 
 const commonContactOutcomes = {
@@ -39,9 +34,9 @@ const commonContactOutcomes = {
   DEFINITLY_UNAVAILABLE_FOR_KNOWN_REASON: contactOutcomeEnum.DEFINITLY_UNAVAILABLE_FOR_KNOWN_REASON,
   DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON:
     contactOutcomeEnum.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON,
-};
+} as const;
 
-export const getContactOutcomeByConfiguration = configuration => {
+export const getContactOutcomeByConfiguration = (configuration: string) => {
   switch (configuration) {
     case 'F2F':
       return {
