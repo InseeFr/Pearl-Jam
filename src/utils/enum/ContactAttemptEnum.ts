@@ -14,7 +14,7 @@ export const contactAttemptEnum = {
     type: 'NLH',
     value: `${D.notificationLetterHandDelivered}`,
   },
-};
+} as const;
 
 export const findContactAttemptValueByType = (type: string) =>
   Object.values(contactAttemptEnum).filter(value => value.type === type)?.[0]?.value;
@@ -27,14 +27,14 @@ const commonPhoneContactAttemptEnum = {
   NO_CONTACT: contactAttemptEnum.NO_CONTACT,
   UNUSABLE_CONTACT_DATA: contactAttemptEnum.UNUSABLE_CONTACT_DATA,
   PERMANENTLY_UNAVAILABLE: contactAttemptEnum.PERMANENTLY_UNAVAILABLE,
-};
+} as const;
 const mailContactAttemptEnum = {
   APPOINTMENT_MADE: contactAttemptEnum.APPOINTMENT_MADE,
   MESSAGE_SENT: contactAttemptEnum.MESSAGE_SENT,
   REFUSAL: contactAttemptEnum.REFUSAL,
   UNUSABLE_CONTACT_DATA: contactAttemptEnum.UNUSABLE_CONTACT_DATA,
   PERMANENTLY_UNAVAILABLE: contactAttemptEnum.PERMANENTLY_UNAVAILABLE,
-};
+} as const;
 const fieldContactAttemptEnum = {
   INTERVIEW_ACCEPTED: contactAttemptEnum.INTERVIEW_ACCEPTED,
   APPOINTMENT_MADE: contactAttemptEnum.APPOINTMENT_MADE,
@@ -44,7 +44,7 @@ const fieldContactAttemptEnum = {
   TEMPORARY_UNAVAILABLE: contactAttemptEnum.TEMPORARY_UNAVAILABLE,
   NO_CONTACT: contactAttemptEnum.NO_CONTACT,
   PERMANENTLY_UNAVAILABLE: contactAttemptEnum.PERMANENTLY_UNAVAILABLE,
-};
+} as const;
 
 export const getContactAttemptByConfiguration = (configuration: string, medium: string) => {
   switch (medium) {
