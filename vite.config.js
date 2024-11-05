@@ -20,7 +20,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      i18n: resolve(__dirname, 'src/i18n/index.js'),
+      i18n: resolve(__dirname, 'src/i18n/index.ts'),
       utils: resolve(__dirname, 'src/utils'),
     },
   },
@@ -70,7 +70,6 @@ export default defineConfig({
         display: 'standalone',
         theme_color: '#000000',
         background_color: '#ffffff',
-    
       },
     }),
   ],
