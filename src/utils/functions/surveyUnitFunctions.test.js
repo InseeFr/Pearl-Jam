@@ -8,10 +8,36 @@ import {
   updateStateWithDates,
   isQuestionnaireAvailable,
   getCommentByType,
+  getAge,
   isValidForTransmission,
   lastContactAttemptIsSuccessfull,
   areCaEqual,
 } from 'utils/functions/index';
+
+describe('getAge', () => {
+  it('devrait retourner undefined pour une date de naissance vide ou invalide', () => {
+    expect(getAge('')).toBeUndefined();
+    expect(getAge(null)).toBeUndefined();
+    expect(getAge(undefined)).toBeUndefined();
+  });
+
+  it('devrait retourner l\'âge correct pour une date de naissance valide', () => {
+    const birthdate = new Date();
+    birthdate.setFullYear(birthdate.getFullYear() - 30);
+    expect(getAge(birthdate.toISOString())).toBe(30);
+  });
+
+  it('devrait gérer correctement les dates de naissance au format ISO', () => {
+    const birthdate = new Date();
+    birthdate.setFullYear(birthdate.getFullYear() - 25);
+    expect(getAge(birthdate.toISOString())).toBe(25);
+  });
+
+  it('devrait retourner 0 si la date de naissance est aujourd\'hui', () => {
+    const today = new Date().toISOString().split('T')[0];
+    expect(getAge(today)).toBe(0);
+  });
+});
 
 describe('getCommentByType', () => {
   const noCommentsSu = {};
