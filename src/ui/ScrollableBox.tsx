@@ -1,10 +1,7 @@
 import Box from '@mui/material/Box';
+import { ComponentPropsWithoutRef } from 'react';
 
-/**
- * @param {number|string} height
- * @param {import("@mui/material").BoxProps} props
- */
-export function ScrollableBox({ height, ...props }) {
+export function ScrollableBox({ height, ...props }: Readonly<{ height: number | string } & ComponentPropsWithoutRef<typeof Box>>) {
   return (
     <Box
       {...props}
