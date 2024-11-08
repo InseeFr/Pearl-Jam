@@ -4,10 +4,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
-type PreloaderTypes = {
-  message: string;
-}
-export function Preloader({ message }: Readonly<PreloaderTypes>) {
+/**
+ * @param {string} message
+ * @constructor
+ */
+export function Preloader({ message }) {
   return (
     <Backdrop open sx={{ color: '#FFF' }}>
       <Stack gap={2} alignItems="center">
