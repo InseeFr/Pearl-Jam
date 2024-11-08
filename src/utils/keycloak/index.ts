@@ -1,4 +1,4 @@
-import Keycloak from 'keycloak-js';
+import Keycloak, { KeycloakInitOptions } from 'keycloak-js';
 import { PEARL_URL } from 'utils/constants';
 
 export const kc = new Keycloak(`${PEARL_URL}/keycloak.json`);
@@ -18,7 +18,7 @@ export const keycloakAuthentication = params =>
   });
 
 export const refreshToken = (minValidity = 5) =>
-  new Promise((resolve, reject) => {
+  new Promise<void>((resolve, reject) => {
     if (navigator.onLine) {
       kc.updateToken(minValidity)
         .then(() => resolve())
@@ -29,9 +29,15 @@ export const refreshToken = (minValidity = 5) =>
   });
 
 export const getTokenInfo = () => {
-  const lastName = (kc && kc.tokenParsed && kc.tokenParsed.family_name) || '';
-  const firstName = (kc && kc.tokenParsed && kc.tokenParsed.given_name) || '';
-  const id = (kc && kc.tokenParsed && kc.tokenParsed.preferred_username) || '';
+  const tokenParsed = kc?.tokenParsed as {
+    family_name: string;
+    given_name: string;
+    preferred_username: string;
+  };
+
+  const lastName = tokenParsed?.family_name || '';
+  const firstName = tokenParsed?.given_name || '';
+  const id = tokenParsed?.preferred_username || '';
   const roles =
     (kc && kc.tokenParsed && kc.tokenParsed.realm_access && kc.tokenParsed.realm_access.roles) ||
     [];
