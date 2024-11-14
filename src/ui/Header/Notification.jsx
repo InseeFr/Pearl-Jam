@@ -20,6 +20,7 @@ import syncReportIdbService from '../../utils/indexeddb/services/syncReport-idb-
 import { Row } from '../Row';
 import { SyncContext } from '../Sync/SyncContextProvider';
 import { Typography } from '../Typography';
+import D from 'i18n';
 
 export function Notification({ notification, onExit }) {
   const theme = useTheme();
@@ -99,7 +100,7 @@ export function Notification({ notification, onExit }) {
           ))}
           <Button sx={{ alignSelf: 'flex-end' }} color="textPrimary" onClick={handleDelete}>
             <DeleteOutlineIcon />
-            Supprimer
+            {D.delete}
           </Button>
         </Stack>
       </AccordionDetails>
