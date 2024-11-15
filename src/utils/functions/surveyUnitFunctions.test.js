@@ -8,10 +8,36 @@ import {
   updateStateWithDates,
   isQuestionnaireAvailable,
   getCommentByType,
+  getAge,
   isValidForTransmission,
   lastContactAttemptIsSuccessfull,
   areCaEqual,
 } from 'utils/functions/index';
+
+describe('getAge', () => {
+  it('should return undefined for an empty or invalid birthdate', () => {
+    expect(getAge('')).toBeUndefined();
+    expect(getAge(null)).toBeUndefined();
+    expect(getAge(undefined)).toBeUndefined();
+  });
+
+  it('should return the correct age for a valid birthdate', () => {
+    const birthdate = new Date();
+    birthdate.setFullYear(birthdate.getFullYear() - 30);
+    expect(getAge(birthdate.toISOString())).toBe(30);
+  });
+
+  it('should correctly handle birthdates in ISO format', () => {
+    const birthdate = new Date();
+    birthdate.setFullYear(birthdate.getFullYear() - 25);
+    expect(getAge(birthdate.toISOString())).toBe(25);
+  });
+
+  it('should return 0 if the birthdate is today', () => {
+    const today = new Date().toISOString().split('T')[0];
+    expect(getAge(today)).toBe(0);
+  });
+});
 
 describe('getCommentByType', () => {
   const noCommentsSu = {};
@@ -67,7 +93,7 @@ describe('isValidForTransmission', () => {
     expect(isValidForTransmission({ contactAttempts: cas })).toEqual(false);
   });
 
-  it('should retur false if contactOuctome totalNumberOfContactAttempts = 0', () => {
+  it('should return false if contactOutcome totalNumberOfContactAttempts = 0', () => {
     expect(
       isValidForTransmission({
         contactAttempts: cas,
@@ -166,7 +192,7 @@ describe('updateStateWithDates', () => {
     expect(updateStateWithDates(surveyUnit)).toEqual([]);
     expect(updateStateWithDates({ states: [] })).toEqual([]);
   });
-  it('should return return initial states if SU lastState is VNC and currentDate < identificationPhaseStart', () => {
+  it('should return initial states if SU lastState is VNC and currentDate < identificationPhaseStart', () => {
     const surveyUnit = {
       states: [surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE],
       identificationPhaseStartDate: afterCurrent,
