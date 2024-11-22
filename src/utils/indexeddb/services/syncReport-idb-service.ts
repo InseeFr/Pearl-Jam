@@ -1,11 +1,12 @@
 import AbstractIdbService from './abstract-idb-service';
+import { type SyncReport } from '../idb-config';
 
-class SyncReportIdbService extends AbstractIdbService {
+class SyncReportIdbService extends AbstractIdbService<SyncReport> {
   constructor() {
     super('syncReport');
   }
 
-  async addOrUpdateReport(item) {
+  async addOrUpdateReport(item: SyncReport) {
     const { id, ...other } = item;
     const report = await this.getById(id);
     if (report) {

@@ -1,6 +1,7 @@
+import { type SurveyUnitMissing } from '../idb-config';
 import AbstractIdbService from './abstract-idb-service';
 
-class SurveyUnitMissingIdbService extends AbstractIdbService {
+class SurveyUnitMissingIdbService extends AbstractIdbService<SurveyUnitMissing> {
   constructor() {
     super('surveyUnitMissing');
   }

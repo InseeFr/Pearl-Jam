@@ -1,11 +1,12 @@
 import AbstractIdbService from './abstract-idb-service';
+import { type Notification } from '../idb-config';
 
-class NotificationIdbService extends AbstractIdbService {
+class NotificationIdbService extends AbstractIdbService<Notification> {
   constructor() {
     super('notification');
   }
 
-  async addOrUpdateNotif(item) {
+  async addOrUpdateNotif(item: Notification) {
     const { id } = item;
     /* prevent duplicated survey-unit */
     if (id) {
