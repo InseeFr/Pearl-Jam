@@ -1,15 +1,15 @@
-import Keycloak, { KeycloakInitOptions } from 'keycloak-js';
+import Keycloak from 'keycloak-js';
 import { PEARL_URL } from 'utils/constants';
 
 export const kc = new Keycloak(`${PEARL_URL}/keycloak.json`);
-export const keycloakAuthentication = params =>
-  new Promise((resolve, reject) => {
+export const keycloakAuthentication = (params: unknown) =>
+  new Promise<void | boolean>((resolve, reject) => {
     if (navigator.onLine) {
       kc.init(params)
-        .then(authenticated => {
+        .then((authenticated: boolean) => {
           resolve(authenticated);
         })
-        .catch(e => {
+        .catch((e: Error) => {
           reject(e);
         });
     } else {
@@ -22,7 +22,7 @@ export const refreshToken = (minValidity = 5) =>
     if (navigator.onLine) {
       kc.updateToken(minValidity)
         .then(() => resolve())
-        .catch(error => reject(error));
+        .catch((error: Error) => reject(error));
     } else {
       resolve();
     }
