@@ -1,7 +1,7 @@
 import Keycloak from 'keycloak-js';
 import { PEARL_URL } from 'utils/constants';
 
-export const kc = Keycloak(`${PEARL_URL}/keycloak.json`);
+export const kc = new Keycloak(`${PEARL_URL}/keycloak.json`);
 export const keycloakAuthentication = params =>
   new Promise((resolve, reject) => {
     if (navigator.onLine) {
