@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { expect, it } from 'vitest';
 import mailMessage from './mailMessage';
 
 it('should define bodyTempZonePearl', () => {
