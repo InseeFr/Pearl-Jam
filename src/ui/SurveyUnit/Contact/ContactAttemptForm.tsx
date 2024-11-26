@@ -17,11 +17,12 @@ import { Typography } from '../../Typography';
 import { formatDate } from '../../../utils/functions/date';
 import { addNewState, persistSurveyUnit } from '../../../utils/functions';
 import { surveyUnitStateEnum } from '../../../utils/enum/SUStateEnum';
+import { SurveyUnit } from 'types/pearl';
 
 /**
  * @param {number} step
  */
-const getTitle = step => {
+const getTitle = (step: number) => {
   switch (step) {
     case 1:
       return D.selectCommunciationRequestMedium;
@@ -32,14 +33,14 @@ const getTitle = step => {
   }
 };
 
+interface ContactAttemptFormProps {
+  onClose: () => void;
+  surveyUnit: SurveyUnit;
+}
 /**
  * Form to add a new contact attempt to a survey unit
- *
- * @param {() => void} onClose
- * @param {SurveyUnit} surveyUnit
- * @returns {JSX.Element}
  */
-export function ContactAttemptForm({ onClose, surveyUnit }) {
+export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAttemptFormProps>) {
   const {
     value: step,
     increment,
@@ -143,7 +144,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }) {
             >
               <Stack gap={1} width={1}>
                 {options.map(o => (
-                  <RadioLine value={o.type} key={o.type} label={o.value} />
+                  <RadioLine value={o.type} key={o.type} label={o.value} disabled={false} />
                 ))}
               </Stack>
             </RadioGroup>
