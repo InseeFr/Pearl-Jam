@@ -16,10 +16,12 @@ const mediumMapping: Record<string, MediumMessageKey> = {
 
 export type MediumMappingKey = keyof typeof mediumMapping;
 
-export function ContactAttempt(
-  attempt: SurveyUnitContactAttempt,
-  onDelete: (a: SurveyUnitContactAttempt) => void
-) {
+interface ContactAttemptProps {
+  attempt: SurveyUnitContactAttempt;
+  onDelete: (a: SurveyUnitContactAttempt) => void;
+}
+
+export function ContactAttempt({ attempt, onDelete }: Readonly<ContactAttemptProps>) {
   function getMediumMessage(medium: MediumMappingKey) {
     const browserLanguage = navigator.language.split('-')[0] as SupportedLocales;
 

@@ -18,6 +18,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { ContactAttemptForm } from './ContactAttemptForm';
 import { ContactOutcome, SurveyUnit, SurveyUnitContactAttempt } from 'types/pearl';
 import Card from '@mui/material/Card';
+import { ContactAttempt } from './ContactOutcomeDisplay';
 
 interface ContactsCardProps {
   surveyUnit: SurveyUnit;
@@ -44,7 +45,7 @@ export function ContactsCard({ surveyUnit }: Readonly<ContactsCardProps>) {
 
   return (
     <>
-      <Card p={2} elevation={0}>
+      <Card elevation={0}>
         <CardContent>
           <Stack gap={3}>
             <Row gap={1}>

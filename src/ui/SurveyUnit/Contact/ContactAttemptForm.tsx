@@ -1,9 +1,8 @@
 import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
 import { useIncrement } from '../../../utils/hooks/useIncrement';
@@ -18,6 +17,7 @@ import { formatDate } from '../../../utils/functions/date';
 import { addNewState, persistSurveyUnit } from '../../../utils/functions';
 import { surveyUnitStateEnum } from '../../../utils/enum/SUStateEnum';
 import { SurveyUnit } from 'types/pearl';
+import Dialog from '@mui/material/Dialog';
 
 /**
  * @param {number} step

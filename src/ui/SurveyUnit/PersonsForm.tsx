@@ -22,6 +22,7 @@ import { PaperIconButton } from '../PaperIconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import { InputProps } from '@mui/material';
+import { SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
 
 interface PersonsFormProps {
   onClose: () => void;
@@ -51,7 +52,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }: PersonsFormProps) 
     onClose();
   });
 
-  const handleCancel = (e: MouseEventHandler<HTMLAnchorElement>) => {
+  const handleCancel = (e: MouseEventHandler<HTMLAnchorElement, HTMLMouse>) => {
     onClose();
   };
 
@@ -70,7 +71,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }: PersonsFormProps) 
           </Row>
         </DialogContent>
         <DialogActions>
-          <Button type="button" color="primary" variant="contained" onClick={handleCancel}>
+          <Button type="button" color="primary" variant="contained" onClick={e => handleCancel(e)}>
             {D.cancelButton}
           </Button>
           <Button variant="contained" type="submit">
@@ -90,11 +91,6 @@ interface PersonFieldsProps {
 }
 /**
  * Fields for a specific Person
- *
- * @param {SurveyUnitPerson} person
- * @param {Control} control
- * @param {(s: string) => InputProps | UseFormRegister} register
- * @param {number} index
  */
 function PersonFields({ person, register, control, index }: PersonFieldsProps) {
   const titles = [
@@ -197,16 +193,9 @@ interface PhoneLineProps {
   editable?: boolean;
   onRemove?: () => void;
 }
+
 /**
  * Displays a phone number with a star button
- *
- * @param {SurveyUnitPhoneNumber | undefined} phoneNumber
- * @param {string} label
- * @param {string} name
- * @param {unknown} control
- * @param {boolean | undefined} editable
- * @param {() => void } onRemove
- * @constructor
  */
 function PhoneLine({ control, label, name, phoneNumber, editable, onRemove }: PhoneLineProps) {
   if (!phoneNumber) {

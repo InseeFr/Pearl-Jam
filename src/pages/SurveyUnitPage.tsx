@@ -18,6 +18,7 @@ import { Questionnaires } from '../ui/Questionnaire/Questionnaires';
 import { addNewState, getLastState, persistSurveyUnit } from '../utils/functions';
 import { useEffect } from 'react';
 import { surveyUnitStateEnum } from '../utils/enum/SUStateEnum';
+import { ContactsCard } from 'ui/SurveyUnit/Contact/ContactsCard';
 
 export function SurveyUnitPage() {
   const { id } = useParams();

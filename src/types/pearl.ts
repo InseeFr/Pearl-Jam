@@ -1,10 +1,11 @@
-type SurveyUnitPhoneNumber = {
+export type SurveyUnitPhoneNumber = {
   source: string;
   favorite: boolean;
   number: string;
+  id: string;
 };
 
-type SurveyUnitPerson = {
+export type SurveyUnitPerson = {
   id: number;
   title: string;
   firstName: string;
@@ -71,14 +72,14 @@ export type SurveyUnitContactAttempt = {
   medium: string;
 };
 
-type SurveyUnitCommunicationRequest = {
+export type SurveyUnitCommunicationRequest = {
   emitter: 'INTERVIEWER' | 'TOOL';
   communicationTemplateId?: string;
   reason?: string;
   status: { date: number; status: string }[];
 };
 
-type SurveyUnitCommunicationTemplate = {
+export type SurveyUnitCommunicationTemplate = {
   medium: string;
   reason: string;
   type: string;
