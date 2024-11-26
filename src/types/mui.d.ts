@@ -12,7 +12,7 @@ declare module '@mui/material/Card' {
 
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
-    disabled: true;
+    s: true;
   }
 }
 

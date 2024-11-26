@@ -1,13 +1,9 @@
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CardContent from '@mui/material/CardContent';
 import { Typography } from '../../Typography';
 import D from 'i18n';
 import { Row } from '../../Row';
 import Stack from '@mui/material/Stack';
 import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined';
-import Box from '@mui/material/Box';
-import { findContactOutcomeLabelByValue } from '../../../utils/enum/ContactOutcomeEnum';
-import { formatDate } from '../../../utils/functions/date';
 import Divider from '@mui/material/Divider';
 import { surveyUnitIDBService } from '../../../utils/indexeddb/services/surveyUnit-idb-service';
 import { ContactOutcomeForm } from './ContactOutcomeForm';
@@ -16,9 +12,10 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import { ContactAttemptForm } from './ContactAttemptForm';
-import { ContactOutcome, SurveyUnit, SurveyUnitContactAttempt } from 'types/pearl';
+import { SurveyUnit, SurveyUnitContactAttempt } from 'types/pearl';
 import Card from '@mui/material/Card';
-import { ContactAttempt } from './ContactOutcomeDisplay';
+import { ContactAttemptDisplay } from './ContactAttemptDisplay';
+import { ContactOutcomeDisplay } from './ContactOutcomeDisplay';
 
 interface ContactsCardProps {
   surveyUnit: SurveyUnit;
@@ -80,7 +77,7 @@ export function ContactsCard({ surveyUnit }: Readonly<ContactsCardProps>) {
                 {contactAttempts
                   .sort((a, b) => b.date - a.date)
                   .map(attempt => (
-                    <ContactAttempt
+                    <ContactAttemptDisplay
                       attempt={attempt}
                       key={attempt.date}
                       onDelete={handleDeleteAttempt}
@@ -98,30 +95,5 @@ export function ContactsCard({ surveyUnit }: Readonly<ContactsCardProps>) {
         <ContactAttemptForm surveyUnit={surveyUnit} onClose={toggleAttemptForm} />
       )}
     </>
-  );
-}
-
-/**
- * Display the contact outcome
- * @param {ContactOutcome} contact
- */
-function ContactOutcomeDisplay(contact: ContactOutcome) {
-  if (!contact?.type) {
-    return null;
-  }
-  return (
-    <Box px={2} py={1.5} borderRadius={1} bgcolor="surfacePrimary.main">
-      <Row justifyContent="space-between">
-        <div>
-          <Typography color="textPrimary" variant="s" as="div">
-            {findContactOutcomeLabelByValue(contact.type)}
-          </Typography>
-          <Typography color="textTertiary" variant="s" as="div">
-            {formatDate(contact.date)}
-          </Typography>
-        </div>
-        <CheckCircleIcon color="success" />
-      </Row>
-    </Box>
   );
 }

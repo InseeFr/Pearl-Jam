@@ -1,59 +1,35 @@
-import { Box, IconButton } from '@mui/material';
-import { SupportedLocales } from 'i18n/build-dictionary';
-import mediumMessage, { MediumMessageKey } from 'i18n/mediumMessage';
-import { SurveyUnitContactAttempt } from 'types/pearl';
+import { Box } from '@mui/material';
+import { ContactOutcome } from 'types/pearl';
 import { Row } from 'ui/Row';
-import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
+import { findContactOutcomeLabelByValue } from 'utils/enum/ContactOutcomeEnum';
 import { formatDate } from 'utils/functions/date';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Typography } from 'ui/Typography';
 
-const mediumMapping: Record<string, MediumMessageKey> = {
-  FIELD: 'mediumFaceToFace',
-  TEL: 'mediumPhone',
-  EMAIL: 'mediumEmail',
-} as const;
-
-export type MediumMappingKey = keyof typeof mediumMapping;
-
-interface ContactAttemptProps {
-  attempt: SurveyUnitContactAttempt;
-  onDelete: (a: SurveyUnitContactAttempt) => void;
+interface ContactOutcomeProps {
+  contact?: ContactOutcome;
 }
 
-export function ContactAttempt({ attempt, onDelete }: Readonly<ContactAttemptProps>) {
-  function getMediumMessage(medium: MediumMappingKey) {
-    const browserLanguage = navigator.language.split('-')[0] as SupportedLocales;
-
-    const language = ['fr', 'en'].includes(browserLanguage) ? browserLanguage : 'en';
-
-    const mediumKey = mediumMapping[medium];
-    if (mediumKey) {
-      return mediumMessage[mediumKey][language];
-    }
-
-    return mediumMessage.mediumQuestion[language];
+/**
+ * Display the contact outcome
+ * @param {ContactOutcome} contact
+ */
+export function ContactOutcomeDisplay({ contact }: Readonly<ContactOutcomeProps>) {
+  if (!contact?.type) {
+    return null;
   }
-
   return (
     <Box px={2} py={1.5} borderRadius={1} bgcolor="surfacePrimary.main">
       <Row justifyContent="space-between">
         <div>
-          <Row gap={1}>
-            <Typography color="textPrimary" variant="s" as="div">
-              {findContactAttemptValueByType(attempt.status)}
-            </Typography>
-            <Typography color="textSecondary" variant="s" as="div">
-              - {getMediumMessage(attempt.medium)}
-            </Typography>
-          </Row>
+          <Typography color="textPrimary" variant="s" as="div">
+            {findContactOutcomeLabelByValue(contact.type)}
+          </Typography>
           <Typography color="textTertiary" variant="s" as="div">
-            {formatDate(attempt.date, true)}
+            {formatDate(contact.date)}
           </Typography>
         </div>
-        <IconButton edge="end" onClick={() => onDelete(attempt)}>
-          <DeleteOutlineIcon color="textPrimary" />
-        </IconButton>
+        <CheckCircleIcon color="success" />
       </Row>
     </Box>
   );

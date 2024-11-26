@@ -1,4 +1,4 @@
-const mediumMessage = {
+export const mediumMessage = {
   mediumPhone: {
     fr: 'Téléphone',
     en: 'Phone',
