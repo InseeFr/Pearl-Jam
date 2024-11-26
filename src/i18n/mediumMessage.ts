@@ -21,4 +21,5 @@ const mediumMessage = {
   },
 };
 
+export type MediumMessageKey = keyof typeof mediumMessage;
 export default mediumMessage;
