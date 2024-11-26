@@ -14,7 +14,6 @@ export function ScrollableBox({ height, ...props }: Readonly<ScrollableBoxProps>
         overflow: 'auto',
         marginRight: '-.5rem',
         paddingRight: '.5rem',
-        ...props.props.sx,
       }}
     />
   );
