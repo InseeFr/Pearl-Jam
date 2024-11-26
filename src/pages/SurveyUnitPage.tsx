@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import { AddressCard } from '../ui/SurveyUnit/AddressCard';
 import { IdentificationCard } from '../ui/SurveyUnit/IdentificationCard';
 import { PersonsCard } from '../ui/SurveyUnit/PersonsCard';
-import { ContactsCard } from '../ui/SurveyUnit/ContactsCard';
+import { ContactsCard } from '../ui/SurveyUnit/Contact/ContactsCard';
 import { CommentCard } from '../ui/SurveyUnit/CommentCard';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';

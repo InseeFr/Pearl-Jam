@@ -5,16 +5,16 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
-import { addNewState, persistSurveyUnit } from '../../utils/functions';
 import D from 'i18n';
-import { FieldRow } from '../FieldRow';
 import { useForm } from 'react-hook-form';
+import { SurveyUnit } from 'types/pearl';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { FieldRow } from 'ui/FieldRow';
 import {
   contactOutcomeEnum,
   getContactOutcomeByConfiguration,
-} from '../../utils/enum/ContactOutcomeEnum';
-import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
-import { SurveyUnit } from 'types/pearl';
+} from 'utils/enum/ContactOutcomeEnum';
+import { addNewState, persistSurveyUnit } from 'utils/functions';
 
 const defaultValue = {
   date: new Date().getTime(),
