@@ -1,5 +1,4 @@
 import { CircularProgressProps } from '@mui/material/CircularProgress';
-//import { BoxProps } from '@mui/material/Box';
 
 // Update the Card's variant prop options
 declare module '@mui/material/Card' {
