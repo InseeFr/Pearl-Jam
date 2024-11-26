@@ -6,10 +6,10 @@ export const mediumEnum = {
   FIELD: { type: 'FIELD', value: `${D.mediumFaceToFace}` },
 };
 
-export const findMediumValueByType = type =>
+export const findMediumValueByType = (type: string) =>
   Object.values(mediumEnum).filter(value => value.type === type)?.[0]?.value;
 
-export const getMediumByConfiguration = configuration => {
+export const getMediumByConfiguration = (configuration: string) => {
   switch (configuration) {
     case 'F2F':
       return {

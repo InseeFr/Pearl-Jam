@@ -3,6 +3,7 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { Row } from '../Row';
 import { getprivilegedPerson } from '../../utils/functions';
 import { Typography } from '../Typography';
+import { SurveyUnit } from 'types/pearl';
 
 interface PrivilegedPersonProps {
   surveyUnit: SurveyUnit;
@@ -24,7 +25,7 @@ export function PrivilegedPerson({ surveyUnit }: Readonly<PrivilegedPersonProps>
         </Typography>
       </Row>
       <Typography color="textHint" variant="s">
-        #{surveyUnit.id}
+        #{surveyUnit.displayName ?? surveyUnit.id}
       </Typography>
     </Stack>
   );

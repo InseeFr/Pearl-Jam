@@ -7,7 +7,7 @@ export const canSendCommunication = surveyUnit => {
   // #2 contactOutcome should be different from INTERVIEW_ACCEPTED
   return (
     communicationRequestConfiguration &&
-    contactOutcome?.type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.type
+    contactOutcome?.type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.value
   );
 };
 

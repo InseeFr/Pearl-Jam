@@ -1,4 +1,5 @@
 import D from 'i18n';
+import { string } from 'zod';
 
 /**
  * List available status for a survey unit
@@ -22,3 +23,10 @@ export const toDoEnum = {
     color: '#35C75880',
   },
 };
+
+export interface ToDoEnumValues {
+  order: string;
+  value: string;
+  stepName?: string;
+  color: string;
+}

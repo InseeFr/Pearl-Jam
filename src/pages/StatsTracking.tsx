@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Stack, Typography, Select, Grid } from '@mui/material';
+import { Box, Card, CardContent, Stack, Typography, Grid, SelectChangeEvent } from '@mui/material';
 import { useState, useMemo, SetStateAction } from 'react';
 import { ScrollableBox } from 'ui/ScrollableBox';
 import { CampaignProgress } from 'ui/Stats/CampaignProgress';
@@ -6,6 +6,8 @@ import { CampaignProgressPieChart } from 'ui/Stats/CampaignProgressPieChart';
 import { daysLeftForSurveyUnit } from 'utils/functions';
 import { groupBy } from 'utils/functions/array';
 import D from 'i18n';
+import { SurveyUnit } from 'types/pearl';
+import { Select } from 'ui/Select';
 
 type SortDirection = 'asc' | 'desc' | 'deadlineDesc' | 'deadlineAsc';
 
@@ -75,7 +77,9 @@ export function StatsTracking({ surveyUnits }: Readonly<StatsTrackingProps>) {
               <Select
                 options={sortOptions}
                 value={sortDirection}
-                onChange={handleSortChange}
+                onChange={(e: SelectChangeEvent<SetStateAction<SortDirection>>) =>
+                  handleSortChange(e.target.value as SortDirection)
+                }
                 placeholder={D.noSorting}
                 allowEmpty
                 sx={{ width: '210px' }}

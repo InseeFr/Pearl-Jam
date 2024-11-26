@@ -34,6 +34,11 @@ const trackingMessage = {
     en: 'Lastname/FirstName, Id, Business Id',
     sq: 'Mbiemri/Emri, Id, Id i njësisë',
   },
+  allCampaigns: {
+    fr: 'Toutes les campagnes',
+    en: 'Every campaigns',
+    sq: 'Të gjitha fushatat',
+  },
   noSorting: {
     fr: 'Aucun tri',
     en: 'No sorting',

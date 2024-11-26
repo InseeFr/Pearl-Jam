@@ -1,4 +1,5 @@
 import Grid from '@mui/material/Grid';
+import { PropsWithChildren } from 'react';
 
 /**
  * Global layout for the app with 3 sections (header, sidebar and main content)
@@ -6,7 +7,7 @@ import Grid from '@mui/material/Grid';
  * @param {ReactNode} children
  * @return {JSX.Element}
  */
-export function SidebarLayout({ children }) {
+export function SidebarLayout({ children }: PropsWithChildren) {
   return (
     <Grid
       gap={4}

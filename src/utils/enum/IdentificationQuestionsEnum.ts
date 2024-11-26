@@ -12,5 +12,5 @@ export const identificationQuestionsEnum = {
   OCCUPANT: { type: identificationAnswerTypeEnum.OCCUPANT, value: `${D.housingOccupant}` },
 };
 
-export const findIdentificationQuestionValueByType = type =>
+export const findIdentificationQuestionValueByType = (type: string) =>
   Object.values(identificationQuestionsEnum).filter(value => value.type === type)?.[0]?.value;

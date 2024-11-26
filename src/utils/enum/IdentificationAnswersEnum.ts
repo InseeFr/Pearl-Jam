@@ -109,5 +109,5 @@ export const identificationAnswersEnum = {
   },
 };
 
-export const findIdentificationAnswerValueByType = type =>
+export const findIdentificationAnswerValueByType = (type: string) =>
   Object.values(identificationAnswersEnum).filter(value => value.type === type)?.[0]?.value;

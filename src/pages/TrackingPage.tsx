@@ -9,7 +9,7 @@ import { Typography } from '../ui/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { useSurveyUnits } from '../utils/hooks/database';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, SetStateAction, ChangeEventHandler } from 'react';
 import { Row } from '../ui/Row';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -17,8 +17,10 @@ import { Select } from '../ui/Select';
 import D from 'i18n';
 import { StatsTracking } from './StatsTracking';
 import { TableTracking } from './TableTracking';
+import { SelectChangeEvent } from '@mui/material';
+import { SurveyUnit } from 'types/pearl';
 
-export function SuiviPage() {
+export function TrackingPage() {
   const surveyUnits: SurveyUnit[] = useSurveyUnits();
   const [campaign, setCampaign] = useState(() => {
     return localStorage.getItem('selectedCampaign') || '';
@@ -38,8 +40,8 @@ export function SuiviPage() {
   }, [campaign]);
 
   const [tab, setTab] = useState('stats');
-  const handleSearchTextChange = event => {
-    setSearchText(event.target.value);
+  const handleSearchTextChange = (text: string) => {
+    setSearchText(text);
   };
 
   return (
@@ -56,11 +58,14 @@ export function SuiviPage() {
                   <>
                     {' | '}
                     <Select
-                      onChange={setCampaign}
+                      onChange={(e: SelectChangeEvent<SetStateAction<any>>) =>
+                        setCampaign(e.target.value)
+                      }
                       sx={{ minWidth: 210 }}
                       value={campaign}
                       placeholder={D.trackingSelect}
                       options={campaigns}
+                      allowEmpty={false}
                     />
                     {campaign && (
                       <IconButton aria-label="reset" onClick={() => setCampaign('')}>
@@ -72,7 +77,7 @@ export function SuiviPage() {
                       variant="outlined"
                       size="small"
                       value={searchText}
-                      onChange={handleSearchTextChange}
+                      onChange={e => handleSearchTextChange(e.currentTarget.value)}
                       sx={{ marginLeft: 0.5, marginRight: 2, width: '500px' }}
                       InputProps={{
                         startAdornment: (

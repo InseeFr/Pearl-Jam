@@ -1,7 +1,8 @@
 const criteriaMessage = {
   sortBy: { fr: 'Trier par', en: 'Sort by', sq: 'Rëndit sipas' },
   remainingDays: { fr: 'Jours restants', en: 'Remaining days', sq: 'Ditët e mbetura' },
-  days: { fr: 'Jours', en: 'Days', sq: 'Ditët' },
+  days: { fr: 'Echéance', en: 'Due date', sq: 'Ditët' },
+  dueDate: { fr: 'Jours', en: 'Days', sq: 'Data e duhur' },
   priority: { fr: 'Priorité', en: 'Priority', sq: 'Prioriteti' },
   survey: { fr: 'Enquête', en: 'Campaign', sq: 'Fushata' },
   subSample: { fr: 'Sous-échantillon', en: 'Sub-sample', sq: 'Nën-mostër' },

@@ -2,14 +2,21 @@ import MenuItem from '@mui/material/MenuItem';
 import SelectMaterial from '@mui/material/Select';
 import React from 'react';
 
-/**
- * Select menu
- * @param {{value: string | number, label: string}[]} options
- * @param {string} placeholder
- * @param {bool} allowEmpty
- * @param {import('react').ComponentProps<typeof SelectMaterial>} props
- */
-export function Select({ options, placeholder, allowEmpty, ...props }) {
+interface SelectProps extends React.ComponentProps<typeof SelectMaterial> {
+  options: { value: string | number; label: string }[];
+  placeholder: string;
+  allowEmpty: boolean;
+
+  /**
+   * Select menu
+   * @param {{value: string | number, label: string}[]} options
+   * @param {string} placeholder
+   * @param {bool} allowEmpty
+   * @param {import('react').ComponentProps<typeof SelectMaterial>} props
+   */
+}
+
+export function Select({ options, placeholder, allowEmpty, ...props }: Readonly<SelectProps>) {
   return (
     <SelectMaterial
       variant="standard"
@@ -20,17 +27,19 @@ export function Select({ options, placeholder, allowEmpty, ...props }) {
           return <em>{placeholder}</em>;
         }
 
-        return options.find(o => o.value === selected)?.label ?? selected;
+        return options.find(o => o.value === selected)?.label ?? <>{selected}</>;
       }}
       {...props}
-      onChange={e => props?.onChange(e.target.value)}
+      onChange={(e, child) => {
+        if (props.onChange) props.onChange(e, child);
+      }}
     >
       {allowEmpty && (
         <MenuItem dense value="">
           {placeholder}
         </MenuItem>
       )}
-            {options?.map(o =>
+      {options?.map(o =>
         typeof o === 'object' ? (
           <MenuItem key={o.value} dense value={o.value}>
             {o.label}

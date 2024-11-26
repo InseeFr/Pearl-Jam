@@ -9,8 +9,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { forwardRef, PropsWithChildren, ReactNode } from 'react';
-import { Controller } from 'react-hook-form';
+import { forwardRef, PropsWithChildren } from 'react';
+import { Control, Controller, ControllerRenderProps, FieldValues } from 'react-hook-form';
 import { RadioLine } from './RadioLine';
 import { Row } from './Row';
 import { Typography } from './Typography';
@@ -19,7 +19,10 @@ interface FieldRowProps {
   label: string; // Label displayed alongside the field
   maxWidth?: string | number; // Optional max width for the field
   checkbox?: boolean; // Determines if the field is a checkbox
-  control?: ReactNode; // Any control element passed in (React children)
+  control?: Control; // Any control element passed in (React children)
+  type?: string;
+  name?: string;
+  options: { label: string; value: unknown }[];
   [key: string]: any; // Spread operator for any additional props
 }
 
@@ -58,9 +61,16 @@ export const FieldRow = forwardRef(
         <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
           {isControlled && (
             <Controller
-              name={props.name}
+              name={props.name ?? ''}
               control={control}
-              render={({ field }) => controlledField(props, field)}
+              render={({ field }) => (
+                <ControlledField
+                  field={field}
+                  name={props.name}
+                  options={props.options}
+                  type={props.type}
+                />
+              )}
             />
           )}
           {!isControlled && (
@@ -78,6 +88,12 @@ export const FieldRow = forwardRef(
   }
 );
 
+interface ControlledFieldProps {
+  type?: string;
+  name?: string;
+  options: { label: string; value: unknown }[];
+  field: ControllerRenderProps<FieldValues, string>;
+}
 /**
  * Select the right field to display
  *
@@ -87,7 +103,7 @@ export const FieldRow = forwardRef(
  * @param field
  * @returns {JSX.Element|null}
  */
-export function controlledField({ type, name, options }, field) {
+export function ControlledField({ type, name, options, field }: ControlledFieldProps) {
   if (type === 'switch') {
     return <Switch checked={field.value} color="green" {...field} />;
   }
@@ -103,12 +119,12 @@ export function controlledField({ type, name, options }, field) {
         aria-labelledby={`label-${name}`}
         name={name}
       >
-        {options.map(o => (
+        {options.map((o: { value: unknown; label: string }) => (
           <FormControlLabel
-            key={o.value}
             value={o.value}
             control={<Radio sx={{ p: 0 }} />}
             label={o.label}
+            key={o.label}
           />
         ))}
       </RadioGroup>
@@ -125,7 +141,7 @@ export function controlledField({ type, name, options }, field) {
       >
         <Stack gap={1}>
           {options.map(o => (
-            <RadioLine value={o.value} key={o.value} label={o.label} />
+            <RadioLine value={o.value} label={o.label} disabled={false} key={o.label} />
           ))}
         </Stack>
       </RadioGroup>

@@ -13,14 +13,19 @@ import { toDoEnum } from '../../utils/enum/SUToDoEnum';
 import { useToggle } from '../../utils/hooks/useToggle';
 import { StatusChip } from '../StatusChip';
 import D from 'i18n';
+import { SurveyUnit } from 'types/pearl';
 
+interface CampaignProgressProps {
+  label: string;
+  surveyUnits: SurveyUnit[];
+}
 
 /**
  * @param {string} label
  * @param {SurveyUnit[]} surveyUnits
  * @return {JSX.Element}
  */
-export function CampaignProgress({ label, surveyUnits }) {
+export function CampaignProgress({ label, surveyUnits }: Readonly<CampaignProgressProps>) {
   const total = surveyUnits.length;
   const theme = useTheme();
   const suByTodoState = groupBy(surveyUnits, su => getSuTodoState(su).order);
@@ -67,7 +72,7 @@ export function CampaignProgress({ label, surveyUnits }) {
                     variant="determinate"
                     value={100}
                     thickness={2}
-                    sx={{ backgroundColor: theme.palette.white.main, borderRadius: 150 }}
+                    sx={{ backgroundColor: theme.palette.primary, borderRadius: 150 }}
                   />
                   <CircularProgress
                     color="green"
@@ -87,7 +92,7 @@ export function CampaignProgress({ label, surveyUnits }) {
                 </CenteredBox>
               </Box>
               <Typography variant="s" color="textHint" fontWeight={700}>
-                Échéance : {`${daysLeftForSurveyUnit(surveyUnits)} ${D.days}`}
+                {`${D.dueDate}: ${daysLeftForSurveyUnit(surveyUnits)} ${D.days}`}
               </Typography>
             </>
           )}

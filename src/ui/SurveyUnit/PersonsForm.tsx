@@ -3,11 +3,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { Fragment } from 'react';
+import { Fragment, MouseEventHandler } from 'react';
 import Stack from '@mui/material/Stack';
 import D from '../../i18n/build-dictionary';
 import { FieldRow } from '../FieldRow';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { Control, Controller, useFieldArray, useForm, UseFormRegister } from 'react-hook-form';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 import { Row } from '../Row';
 import Divider from '@mui/material/Divider';
@@ -21,7 +21,13 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { PaperIconButton } from '../PaperIconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
+import { InputProps } from '@mui/material';
 
+interface PersonsFormProps {
+  onClose: () => void;
+  surveyUnit: SurveyUnit;
+  persons: SurveyUnitPerson[];
+}
 /**
  * Form to edit multiple persons attached to a surveyUnit
  *
@@ -30,7 +36,7 @@ import Box from '@mui/material/Box';
  * @param {SurveyUnitPerson[]} persons
  * @returns {JSX.Element}
  */
-export function PersonsForm({ onClose, surveyUnit, persons }) {
+export function PersonsForm({ onClose, surveyUnit, persons }: PersonsFormProps) {
   const { register, handleSubmit, control } = useForm({
     // input persons is sorted and its order could be different from surveyUnit.persons used by useForm
     // => force the same order of persons in surveyUnit
@@ -45,8 +51,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }) {
     onClose();
   });
 
-  const handleCancel = e => {
-    e.preventDefault();
+  const handleCancel = (e: MouseEventHandler<HTMLAnchorElement>) => {
     onClose();
   };
 
@@ -59,18 +64,13 @@ export function PersonsForm({ onClose, surveyUnit, persons }) {
             {persons.map((p, k) => (
               <Fragment key={p.id}>
                 {k > 0 && <Divider orientation="vertical" flexItem />}
-                <PersonFields
-                  index={k}
-                  person={p}
-                  register={register}
-                  control={control}
-                />
+                <PersonFields index={k} person={p} register={register} control={control} />
               </Fragment>
             ))}
           </Row>
         </DialogContent>
         <DialogActions>
-          <Button type="button" color="white" variant="contained" onClick={handleCancel}>
+          <Button type="button" color="primary" variant="contained" onClick={handleCancel}>
             {D.cancelButton}
           </Button>
           <Button variant="contained" type="submit">
@@ -82,27 +82,35 @@ export function PersonsForm({ onClose, surveyUnit, persons }) {
   );
 }
 
+interface PersonFieldsProps {
+  person: SurveyUnitPerson;
+  register: (s: string) => InputProps | UseFormRegister<any>;
+  control: Control<any>;
+  index: number;
+}
 /**
  * Fields for a specific Person
  *
  * @param {SurveyUnitPerson} person
- * @param {unknown} control
- * @param {(s: string) => InputProps} register
- * @param {(name: string, v: unknown) => void} setValue
- * @param {(name: string) => unknown} getValues
+ * @param {Control} control
+ * @param {(s: string) => InputProps | UseFormRegister} register
  * @param {number} index
  */
-function PersonFields({ person, register, control, index }) {
+function PersonFields({ person, register, control, index }: PersonFieldsProps) {
   const titles = [
     { label: TITLES.MISS.value, value: TITLES.MISS.type },
     { label: TITLES.MISTER.value, value: TITLES.MISTER.type },
   ];
-  const phoneNumberIndexForSource = source =>
+  const phoneNumberIndexForSource = (source: string) =>
     person.phoneNumbers.findIndex(n => n.source === source);
   const phoneIndexFiscal = phoneNumberIndexForSource('FISCAL');
   const phoneIndexDirectory = phoneNumberIndexForSource('DIRECTORY');
 
-  const { fields: phoneNumbers, remove, append } = useFieldArray({
+  const {
+    fields: phoneNumbers,
+    remove,
+    append,
+  } = useFieldArray({
     name: `persons.${index}.phoneNumbers`,
     control: control,
   });
@@ -142,6 +150,7 @@ function PersonFields({ person, register, control, index }) {
         label={D.fiscalSource}
         name={`persons.${index}.phoneNumbers.${phoneIndexFiscal}`}
         phoneNumber={person.phoneNumbers[phoneIndexFiscal]}
+        editable={undefined}
       />
       <PhoneLine
         control={control}
@@ -162,7 +171,7 @@ function PersonFields({ person, register, control, index }) {
               onRemove={() => remove(k)}
             />
           )
-        )}
+      )}
       <Box ml="110px">
         <Button
           onClick={addPhoneNumber}
@@ -180,6 +189,14 @@ function PersonFields({ person, register, control, index }) {
   );
 }
 
+interface PhoneLineProps {
+  phoneNumber?: SurveyUnitPhoneNumber;
+  label: string;
+  name: string;
+  control: Control;
+  editable?: boolean;
+  onRemove?: () => void;
+}
 /**
  * Displays a phone number with a star button
  *
@@ -187,11 +204,11 @@ function PersonFields({ person, register, control, index }) {
  * @param {string} label
  * @param {string} name
  * @param {unknown} control
- * @param {boolean} editable
- * @param {() => void} onRemove
+ * @param {boolean | undefined} editable
+ * @param {() => void } onRemove
  * @constructor
  */
-function PhoneLine({ control, label, name, phoneNumber, editable, onRemove }) {
+function PhoneLine({ control, label, name, phoneNumber, editable, onRemove }: PhoneLineProps) {
   if (!phoneNumber) {
     return null;
   }

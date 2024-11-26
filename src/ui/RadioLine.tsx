@@ -1,6 +1,5 @@
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import React from 'react';
 
 const style = {
   bgcolor: 'surfacePrimary.main',
@@ -23,7 +22,7 @@ const style = {
 };
 
 export interface RadioLineProps {
-  value: string;
+  value: unknown;
   disabled: boolean;
   label: string;
 }

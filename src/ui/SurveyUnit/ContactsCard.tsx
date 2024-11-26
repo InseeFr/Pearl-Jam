@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import React from 'react';
 import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined';
 import Box from '@mui/material/Box';
-import { findContactOutcomeValueByType } from '../../utils/enum/ContactOutcomeEnum';
+import { findContactOutcomeLabelByValue } from '../../utils/enum/ContactOutcomeEnum';
 import { formatDate } from '../../utils/functions/date';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -22,20 +22,24 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import { ContactAttemptForm } from './ContactAttemptForm';
 import mediumMessage from '../../i18n/mediumMessage';
+import { ContactOutcome, SurveyUnit, SurveyUnitContactAttempt } from 'types/pearl';
+
+interface ContactsCardProps {
+  surveyUnit: SurveyUnit;
+}
 
 /**
  * Display persons linked to a survey unit
  *
  * @param {SurveyUnit} surveyUnit
  */
-export function ContactsCard({ surveyUnit }) {
+export function ContactsCard({ surveyUnit }: Readonly<ContactsCardProps>) {
   const contactAttempts = surveyUnit.contactAttempts ?? [];
   const showDivider = surveyUnit.contactOutcome?.type && contactAttempts.length > 0;
   const [showOutcomeForm, toggleOutcomeForm] = useToggle(false);
   const [showAttemptForm, toggleAttemptForm] = useToggle(false);
 
-  /** @type {(a: SurveyUnitContactAttempt) => void}} */
-  const handleDeleteAttempt = attempt => {
+  const handleDeleteAttempt = (attempt: SurveyUnitContactAttempt) => {
     surveyUnitIDBService.update({
       ...surveyUnit,
       contactAttempts: contactAttempts.filter(a => a !== attempt),
@@ -103,9 +107,9 @@ export function ContactsCard({ surveyUnit }) {
 
 /**
  * Display the contact outcome
- * @param {SurveyUnit["contactOutcome"]|undefined} contact
+ * @param {ContactOutcome} contact
  */
-function ContactOutcome({ contact }) {
+function ContactOutcome(contact: ContactOutcome) {
   if (!contact?.type) {
     return null;
   }
@@ -114,7 +118,7 @@ function ContactOutcome({ contact }) {
       <Row justifyContent="space-between">
         <div>
           <Typography color="textPrimary" variant="s" as="div">
-            {findContactOutcomeValueByType(contact.type)}
+            {findContactOutcomeLabelByValue(contact.type)}
           </Typography>
           <Typography color="textTertiary" variant="s" as="div">
             {formatDate(contact.date)}
@@ -131,8 +135,11 @@ function ContactOutcome({ contact }) {
  * @param {SurveyUnitContactAttempt} attempt
  * @param {(a: SurveyUnitContactAttempt) => void} onDelete
  */
-function ContactAttempt({ attempt, onDelete }) {
-  function getMediumMessage(medium) {
+function ContactAttempt(
+  attempt: SurveyUnitContactAttempt,
+  onDelete: (a: SurveyUnitContactAttempt) => void
+) {
+  function getMediumMessage(medium: string) {
     const mediumMapping = {
       FIELD: 'mediumFaceToFace',
       TEL: 'mediumPhone',

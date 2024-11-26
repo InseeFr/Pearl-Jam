@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import { addNewState, persistSurveyUnit } from '../../utils/functions';
 import D from 'i18n';
@@ -14,12 +14,18 @@ import {
   getContactOutcomeByConfiguration,
 } from '../../utils/enum/ContactOutcomeEnum';
 import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
+import { SurveyUnit } from 'types/pearl';
 
 const defaultValue = {
   date: new Date().getTime(),
   type: undefined,
   totalNumberOfContactAttempts: 0,
 };
+
+interface ContactOutcomeFormProps {
+  onClose: () => void;
+  surveyUnit: SurveyUnit;
+}
 
 /**
  * Form to update or create a new contact outcome
@@ -28,7 +34,7 @@ const defaultValue = {
  * @param {SurveyUnit} surveyUnit
  * @returns {JSX.Element}
  */
-export function ContactOutcomeForm({ onClose, surveyUnit }) {
+export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutcomeFormProps>) {
   const { handleSubmit, control, watch } = useForm({
     defaultValues: surveyUnit.contactOutcome ?? defaultValue,
   });
@@ -36,7 +42,7 @@ export function ContactOutcomeForm({ onClose, surveyUnit }) {
   const onSubmit = handleSubmit(data => {
     // Update survey unit state
     let newState = surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
-    if (data.type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type) {
+    if (data.type === contactOutcomeEnum.INTERVIEW_ACCEPTED.value) {
       newState = surveyUnitStateEnum.APPOINTMENT_MADE.type;
     }
     const newStates = addNewState(surveyUnit, newState);
@@ -48,22 +54,24 @@ export function ContactOutcomeForm({ onClose, surveyUnit }) {
     onClose();
   });
 
-  const handleCancel = e => {
-    e.preventDefault();
+  const handleCancel = () => {
     onClose();
   };
 
   const contactOutcomes = useMemo(() => {
     return Object.values(
-      getContactOutcomeByConfiguration(surveyUnit.contactOutcomeConfiguration)
+      getContactOutcomeByConfiguration(
+        surveyUnit.contactOutcomeConfiguration,
+        surveyUnit.contactOutcome?.type
+      )
     ).map(o => ({
-      label: o.value,
-      value: o.type,
+      label: o.label,
+      value: o.value,
     }));
   }, [surveyUnit.contactOutcomeConfiguration]);
 
-  const [count, type] = watch(['totalNumberOfContactAttempts', 'type']);
-  const isInvalid = count <= 0 || Number.isNaN(count) || !type;
+  const [count] = watch(['totalNumberOfContactAttempts']);
+  const isInvalid = count <= 0 || Number.isNaN(count);
 
   return (
     <Dialog maxWidth="s" open={true} onClose={onClose}>
@@ -82,7 +90,7 @@ export function ContactOutcomeForm({ onClose, surveyUnit }) {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button type="button" color="white" variant="contained" onClick={handleCancel}>
+          <Button type="button" color="primary" variant="contained" onClick={handleCancel}>
             {D.cancelButton}
           </Button>
           <Button disabled={isInvalid} variant="contained" type="submit">

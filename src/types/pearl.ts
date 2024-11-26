@@ -65,7 +65,7 @@ type SurveyUnitIdentification = {
   occupant: unknown;
 };
 
-type SurveyUnitContactAttempt = {
+export type SurveyUnitContactAttempt = {
   status: string;
   date: number;
   medium: string;
@@ -78,18 +78,14 @@ type SurveyUnitCommunicationRequest = {
   status: { date: number; status: string }[];
 };
 
-type SurveyUnitNewCommunicationRequest = {
-  communicationTemplateId: string;
-  reason: string;
-  creationTimestamp: number;
-};
-
 type SurveyUnitCommunicationTemplate = {
   medium: string;
   reason: string;
   type: string;
   id: string;
 };
+
+export type ContactOutcome = { date: number; totalNumberOfContactAttempts: number; type?: string };
 
 export type SurveyUnit = {
   displayName: string;
@@ -103,7 +99,7 @@ export type SurveyUnit = {
   sampleIdentifiers: SurveyUnitSampleIdentifiers;
   states: SurveyUnitState[];
   contactAttempts: SurveyUnitContactAttempt[];
-  contactOutcome?: { date: number; totalNumberOfContactAttempts: number; type: string };
+  contactOutcome?: ContactOutcome;
   identification: SurveyUnitIdentification;
   campaignLabel: string;
   managementStartDate: number;

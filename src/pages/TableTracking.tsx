@@ -16,7 +16,7 @@ import { PaperIconButton } from 'ui/PaperIconButton';
 import { StatusChip } from 'ui/StatusChip';
 import { CommentDialog } from 'ui/SurveyUnit/CommentDialog';
 import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
-import { findContactOutcomeValueByType } from 'utils/enum/ContactOutcomeEnum';
+import { findContactOutcomeLabelByValue } from 'utils/enum/ContactOutcomeEnum';
 import { findMediumValueByType } from 'utils/enum/MediumEnum';
 import {
   getprivilegedPerson,
@@ -29,6 +29,7 @@ import { formatDate } from 'utils/functions/date';
 import { useToggle } from 'utils/hooks/useToggle';
 import D from 'i18n';
 import AddIcon from '@mui/icons-material/Add';
+import { SurveyUnit } from 'types/pearl';
 
 interface TableTrackingProps {
   campaign: string;
@@ -72,12 +73,15 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
     'NOA',
   ];
   const getOutcomeIndex = (su: SurveyUnit) => {
-    const index = contactOutcomeOrder.indexOf(su.contactOutcome?.type);
-    return index === -1 ? Infinity : index;
+    if (su.contactOutcome?.type) {
+      const index = contactOutcomeOrder.indexOf(su.contactOutcome.type);
+      return index === -1 ? Infinity : index;
+    }
+
+    return Infinity;
   };
 
   const filteredSurveyUnits = surveyUnits
-
     .filter(su => {
       const person = getprivilegedPerson(su);
       const filteredByCampaign = campaign === '' || su.campaign === campaign;
@@ -274,7 +278,7 @@ function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
           {surveyUnit.contactOutcome && (
             <>
               <Typography as="span" variant="s" color="textPrimary">
-                {findContactOutcomeValueByType(surveyUnit.contactOutcome.type)}
+                {findContactOutcomeLabelByValue(surveyUnit.contactOutcome.type)}
               </Typography>
               <br />
               <Typography as="span" variant="s" color="textTertiary">
