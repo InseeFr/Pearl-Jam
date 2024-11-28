@@ -1,5 +1,4 @@
 import D from 'i18n';
-import { string } from 'zod';
 
 /**
  * List available status for a survey unit

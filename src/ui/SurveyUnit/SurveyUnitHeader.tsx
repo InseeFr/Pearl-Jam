@@ -1,4 +1,4 @@
-import { useState, useEffect, MouseEventHandler } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -52,7 +52,7 @@ interface SurveyUnitHeaderProps {
   surveyUnit: SurveyUnit;
 }
 
-export function SurveyUnitHeader({ surveyUnit }: SurveyUnitHeaderProps) {
+export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>) {
   const theme = useTheme();
   const classes = useStyles();
   const [isContactOutcomeValid, setIsContactOutcomeValid] = useState(false);
@@ -204,7 +204,7 @@ interface SubmitButtonProp {
  * @returns {JSX.Element}
  * @constructor
  */
-function SubmitButton({ surveyUnit }: SubmitButtonProp) {
+function SubmitButton({ surveyUnit }: Readonly<SubmitButtonProp>) {
   const canSubmit = isValidForTransmission(surveyUnit);
   const handleSubmit = () => {
     const newStates = addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type);

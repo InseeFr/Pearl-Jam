@@ -103,7 +103,7 @@ interface ControlledFieldProps {
  * @param field
  * @returns {JSX.Element|null}
  */
-export function ControlledField({ type, name, options, field }: ControlledFieldProps) {
+export function ControlledField({ type, name, options, field }: Readonly<ControlledFieldProps>) {
   if (type === 'switch') {
     return <Switch checked={field.value} color="green" {...field} />;
   }

@@ -23,7 +23,7 @@ import { SurveyUnit } from 'types/pearl';
 export function TrackingPage() {
   const surveyUnits: SurveyUnit[] = useSurveyUnits();
   const [campaign, setCampaign] = useState(() => {
-    return localStorage.getItem('selectedCampaign') || '';
+    return localStorage.getItem('selectedCampaign') ?? '';
   });
   const [searchText, setSearchText] = useState('');
   const campaigns = useMemo(

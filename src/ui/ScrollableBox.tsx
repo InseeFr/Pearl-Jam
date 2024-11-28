@@ -1,7 +1,7 @@
 import Box, { BoxProps } from '@mui/material/Box';
 
 interface ScrollableBoxProps {
-  height: string | string;
+  height: string;
   props: BoxProps;
 }
 

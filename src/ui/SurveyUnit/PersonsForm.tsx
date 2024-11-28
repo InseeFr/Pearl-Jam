@@ -92,7 +92,7 @@ interface PersonFieldsProps {
 /**
  * Fields for a specific Person
  */
-function PersonFields({ person, register, control, index }: PersonFieldsProps) {
+function PersonFields({ person, register, control, index }: Readonly<PersonFieldsProps>) {
   const titles = [
     { label: TITLES.MISS.value, value: TITLES.MISS.type },
     { label: TITLES.MISTER.value, value: TITLES.MISTER.type },
@@ -197,7 +197,14 @@ interface PhoneLineProps {
 /**
  * Displays a phone number with a star button
  */
-function PhoneLine({ control, label, name, phoneNumber, editable, onRemove }: PhoneLineProps) {
+function PhoneLine({
+  control,
+  label,
+  name,
+  phoneNumber,
+  editable,
+  onRemove,
+}: Readonly<PhoneLineProps>) {
   if (!phoneNumber) {
     return null;
   }
