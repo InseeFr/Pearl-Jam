@@ -22,7 +22,7 @@ import { PaperIconButton } from '../PaperIconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import { InputProps } from '@mui/material';
-import { SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
+import { SurveyUnit, SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
 
 interface PersonsFormProps {
   onClose: () => void;
@@ -37,7 +37,7 @@ interface PersonsFormProps {
  * @param {SurveyUnitPerson[]} persons
  * @returns {JSX.Element}
  */
-export function PersonsForm({ onClose, surveyUnit, persons }: PersonsFormProps) {
+export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFormProps>) {
   const { register, handleSubmit, control } = useForm({
     // input persons is sorted and its order could be different from surveyUnit.persons used by useForm
     // => force the same order of persons in surveyUnit

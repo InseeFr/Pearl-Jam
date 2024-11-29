@@ -15,7 +15,7 @@ import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import Button from '@mui/material/Button';
 import { Typography } from '../ui/Typography';
 import { Questionnaires } from '../ui/Questionnaire/Questionnaires';
-import { addNewState, getLastState, persistSurveyUnit } from '../utils/functions';
+import { addNewState, getSuTodoState, persistSurveyUnit } from '../utils/functions';
 import { useEffect } from 'react';
 import { surveyUnitStateEnum } from '../utils/enum/SUStateEnum';
 import { ContactsCard } from 'ui/SurveyUnit/Contact/ContactsCard';
@@ -26,8 +26,8 @@ export function SurveyUnitPage() {
 
   useEffect(() => {
     if (surveyUnit !== undefined) {
-      const lastState = getLastState(surveyUnit.states);
-      if (lastState?.type === surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type) {
+      const lastState = getSuTodoState(surveyUnit);
+      if (lastState?.value === surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type) {
         const newStates = addNewState(surveyUnit, surveyUnitStateEnum.IN_PREPARATION.type);
         persistSurveyUnit({ ...surveyUnit, states: newStates });
       }
