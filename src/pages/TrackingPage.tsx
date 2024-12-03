@@ -20,9 +20,9 @@ import { TableTracking } from './TableTracking';
 import { SelectChangeEvent } from '@mui/material';
 import { SurveyUnit } from 'types/pearl';
 
-export function TrackingPage() {
+export const Component = () => {
   const surveyUnits: SurveyUnit[] = useSurveyUnits();
-  const [campaign, setCampaign] = useState(() => {
+  const [campaign, setCampaign] = useState<string>(() => {
     return localStorage.getItem('selectedCampaign') ?? '';
   });
   const [searchText, setSearchText] = useState('');
