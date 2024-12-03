@@ -11,6 +11,47 @@ const commonMailMessage = {
   },
 };
 
+const bodyTempZoneFactory = ({ fr, en, sq }: { fr: string; en: string; sq: string }) => {
+  return {
+    fr:
+      (userId: string) =>
+      (tempZoneUnits = []) => {
+        return (
+          `Bonjour Madame, Monsieur. \n\n` +
+          `Pour information, l'utilisateur d'identifant "${userId}" n'a pas pu sauvegardé correctement certaines unités enquêtées pour un problème de droit.\n` +
+          `${fr}\n` +
+          `Les unités concernées sont : ${tempZoneUnits.join(', ')}.\n` +
+          `Ces unités ont donc été sauvegardées dans une zone tampon en attendant un éventuel traitement.\n\n` +
+          `Merci de bien en prendre notes, afin de vérifier qu'il ne s'agît pas d'une erreur.\n\n ${commonMailMessage.autoMail.fr}`
+        );
+      },
+    en:
+      (userId: string) =>
+      (tempZoneUnits = []) => {
+        return (
+          `Hello. \n\n` +
+          `For information, the user of identifier "${userId}" was not able to correctly save some of the survey-units due to a rights issue.\n` +
+          `${en}\n` +
+          `The survey-units are : ${tempZoneUnits.join(', ')}.\n` +
+          `These units were therefore saved in a buffer zone pending possible treatment.\n\n` +
+          `Please take note of it, to make sure it is not a mistake.\n\n ${commonMailMessage.autoMail.en}`
+        );
+      },
+    sq:
+      (userId: string) =>
+      (tempZoneUnits = []) => {
+        return (
+          `Përshëndetje. \n\n` +
+          `Për informacion, përdoruesi me identifikatorin "${userId}" nuk ka mundur të ruajë saktësisht disa nga njësitë hetimore për shkak të një çështje të drejtave.\n` +
+          `${sq}\n` +
+          `Njësitë hetimore janë : ${tempZoneUnits.join(', ')}.\n` +
+          `Këto njësi janë kështu që ruajtur në një zonë buffer deri në trajtim të mundshëm.\n\n` +
+          `Ju lutemi bëni shënime për këtë, për të siguruar që nuk është një gabim.\n\n ${commonMailMessage.autoMail.sq}`
+        );
+      },
+  };
+};
+
 const mailMessage = {
   subjectPearlMissingUnits: {
     fr: `${commonMailMessage.subjectTitle.fr} : Trop d'unités enquêtées`,
@@ -29,7 +70,7 @@ const mailMessage = {
   },
   bodyPearlMissingUnits: {
     fr:
-      userId =>
+      (userId: string) =>
       (pearlMissing = []) => {
         return (
           `Bonjour Madame, Monsieur. \n\n ` +
@@ -39,7 +80,7 @@ const mailMessage = {
         );
       },
     en:
-      userId =>
+      (userId: string) =>
       (pearlMissing = []) => {
         return (
           `Hello. \n\n ` +
@@ -49,7 +90,7 @@ const mailMessage = {
         );
       },
     sq:
-      userId =>
+      (userId: string) =>
       (pearlMissing = []) => {
         return (
           `Përshëndetje. \n\n ` +
@@ -61,7 +102,7 @@ const mailMessage = {
   },
   bodyQueenMissingUnits: {
     fr:
-      userId =>
+      (userId: string) =>
       (queenMissing = []) => {
         return (
           `Bonjour Madame, Monsieur. \n\n ` +
@@ -72,7 +113,7 @@ const mailMessage = {
         );
       },
     en:
-      userId =>
+      (userId: string) =>
       (queenMissing = []) => {
         return (
           `Hello. \n\n ` +
@@ -83,7 +124,7 @@ const mailMessage = {
         );
       },
     sq:
-      userId =>
+      (userId: string) =>
       (queenMissing = []) => {
         return (
           `Përshëndetje. \n\n ` +
@@ -94,82 +135,16 @@ const mailMessage = {
         );
       },
   },
-  bodyTempZonePearl: {
-    fr:
-      userId =>
-      (tempZoneUnits = []) => {
-        return (
-          `Bonjour Madame, Monsieur. \n\n` +
-          `Pour information, l'utilisateur d'identifant "${userId}" n'a pas pu sauvegardé correctement certaines unités enquêtées pour un problème de droit.\n` +
-          `Les données sont de nature organisationnelle.\n` +
-          `Les unités concernées sont : ${tempZoneUnits.join(', ')}.\n` +
-          `Ces unités ont donc été sauvegardées dans une zone tampon en attendant un éventuel traitement.\n\n` +
-          `Merci de bien en prendre notes, afin de vérifier qu'il ne s'agît pas d'une erreur.\n\n ${commonMailMessage.autoMail.fr}`
-        );
-      },
-    en:
-      userId =>
-      (tempZoneUnits = []) => {
-        return (
-          `Hello. \n\n` +
-          `For information, the user of identifier "${userId}" was not able to correctly save some of the survey-units due to a rights issue.\n` +
-          `The data is organizational.\n` +
-          `The survey-units are : ${tempZoneUnits.join(', ')}.\n` +
-          `These units were therefore saved in a buffer zone pending possible treatment.\n\n` +
-          `Please take note of it, to make sure it is not a mistake.\n\n ${commonMailMessage.autoMail.en}`
-        );
-      },
-    sq:
-      userId =>
-      (tempZoneUnits = []) => {
-        return (
-          `Përshëndetje. \n\n` +
-          `Për informacion, përdoruesi me identifikatorin "${userId}" nuk ka mundur të ruajë saktësisht disa nga njësitë hetimore për shkak të një çështje të drejtave.\n` +
-          `Të dhënat janë organizative.\n` +
-          `Njësitë hetimore janë : ${tempZoneUnits.join(', ')}.\n` +
-          `Këto njësi janë kështu që ruajtur në një zonë buffer deri në trajtim të mundshëm.\n\n` +
-          `Ju lutemi bëni shënime për këtë, për të siguruar që nuk është një gabim.\n\n ${commonMailMessage.autoMail.sq}`
-        );
-      },
-  },
-  bodyTempZoneQueen: {
-    fr:
-      userId =>
-      (tempZoneUnits = []) => {
-        return (
-          `Bonjour Madame, Monsieur. \n\n` +
-          `Pour information, l'utilisateur d'identifant "${userId}" n'a pas pu sauvegardé correctement certaines unités enquêtées pour un problème de droit.\n` +
-          `Les données sont de nature questionnaire.\n` +
-          `Les unités concernées sont : ${tempZoneUnits.join(', ')}.\n` +
-          `Ces unités ont donc été sauvegardées dans une zone tampon en attendant un éventuel traitement.\n\n` +
-          `Merci de bien en prendre notes, afin de vérifier qu'il ne s'agît pas d'une erreur.\n\n ${commonMailMessage.autoMail.fr}`
-        );
-      },
-    en:
-      userId =>
-      (tempZoneUnits = []) => {
-        return (
-          `Hello. \n\n` +
-          `For information, the user of identifier "${userId}" was not able to correctly save some of the survey-units due to a rights issue.\n` +
-          `These are questionnaire data.\n` +
-          `The survey-units are : ${tempZoneUnits.join(', ')}.\n` +
-          `These units were therefore saved in a buffer zone pending possible treatment.\n\n` +
-          `Please take note of it, to make sure it is not a mistake.\n\n ${commonMailMessage.autoMail.en}`
-        );
-      },
-    sq:
-      userId =>
-      (tempZoneUnits = []) => {
-        return (
-          `Përshëndetje. \n\n` +
-          `Për informacion, përdoruesi me identifikatorin "${userId}" nuk ka mundur të ruajë saktësisht disa nga njësitë hetimore për shkak të një çështje të drejtave.\n` +
-          `Këto janë të dhënat e pyetësorit.\n` +
-          `Njësitë hetimore janë : ${tempZoneUnits.join(', ')}.\n` +
-          `Këto njësi janë kështu që ruajtur në një zonë buffer deri në trajtim të mundshëm.\n\n` +
-          `Ju lutemi bëni shënime për këtë, për të siguruar që nuk është një gabim.\n\n ${commonMailMessage.autoMail.sq}`
-        );
-      },
-  },
+  bodyTempZonePearl: bodyTempZoneFactory({
+    fr: 'Les données sont de nature organisationnelle.',
+    en: 'The data is organizational.',
+    sq: 'Të dhënat janë organizative.',
+  }),
+  bodyTempZoneQueen: bodyTempZoneFactory({
+    fr: 'Les données sont de nature questionnaire.',
+    en: 'These are questionnaire data.',
+    sq: 'Këto janë të dhënat e pyetësorit.',
+  }),
 };
 
 export default mailMessage;

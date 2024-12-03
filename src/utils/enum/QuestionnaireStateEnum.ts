@@ -7,6 +7,6 @@ const questionnaireState = {
     value: `${D.questionnaireStateAtLeastOneVariableEntered}`,
   },
   VALIDATED: { type: 'VALIDATED', value: `${D.questionnaireStateValidated}` },
-};
+} as const;
 
 export default questionnaireState;

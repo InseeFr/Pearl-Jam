@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
+import { ComponentPropsWithoutRef } from 'react';
 
-export function CenteredBox(props) {
+export function CenteredBox(props: Readonly<ComponentPropsWithoutRef<typeof Box>>) {
   return (
     <Box
       {...props}

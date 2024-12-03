@@ -1,5 +1,4 @@
 import Box, { BoxProps } from '@mui/material/Box';
-import { ComponentProps } from 'react';
 
 type ScrollableBoxProps = {
   height: string;
@@ -14,6 +13,7 @@ export function ScrollableBox({ height, ...props }: Readonly<ScrollableBoxProps>
         overflow: 'auto',
         marginRight: '-.5rem',
         paddingRight: '.5rem',
+        ...props.sx,
       }}
     />
   );

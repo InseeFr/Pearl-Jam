@@ -8,5 +8,5 @@ const formEnum = {
   MAIL: 'mail',
   PHONE: 'phone',
   USER: 'user',
-};
+} as const;
 export default formEnum;

@@ -20,11 +20,6 @@ export const contactOutcomeEnum = {
   },
 };
 
-/**
- * Extract contact outcome from a type
- * @param {string} type
- * @returns {{type: string, value: string} | undefined}
- */
 export const findContactOutcomeLabelByValue = (value?: string) =>
   Object.values(contactOutcomeEnum).find(co => co.value === value)?.label;
 
