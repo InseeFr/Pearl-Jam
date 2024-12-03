@@ -1,13 +1,10 @@
 import MenuItem from '@mui/material/MenuItem';
-import SelectMaterial, { SelectChangeEvent } from '@mui/material/Select';
-import React, { ReactNode } from 'react';
+import SelectMaterial, { SelectProps as MaterialSelectProps } from '@mui/material/Select';
 
-// extends React.ComponentProps<typeof SelectMaterial>
-interface SelectProps extends React.ComponentProps<typeof SelectMaterial> {
+interface SelectProps extends MaterialSelectProps {
   options: { value: string | number; label: string }[];
   placeholder: string;
   allowEmpty: boolean;
-  onChange: (e: SelectChangeEvent<any>, child: ReactNode) => void;
 }
 
 export function Select({ options, placeholder, allowEmpty, ...props }: Readonly<SelectProps>) {
