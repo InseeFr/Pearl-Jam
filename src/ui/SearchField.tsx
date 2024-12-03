@@ -2,8 +2,12 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTheme } from '@mui/material/styles';
-import React from 'react';
 import D from '../i18n/build-dictionary';
+
+interface SearchFieldProps {
+  onChange: (v: string) => void;
+  value: string;
+}
 
 /**
  * @param {(v: string) => void} onChange
@@ -11,7 +15,7 @@ import D from '../i18n/build-dictionary';
  * @return {JSX.Element}
  * @constructor
  */
-export function SearchField({ onChange, value }) {
+export function SearchField({ onChange, value }: Readonly<SearchFieldProps>) {
   const theme = useTheme();
   return (
     <TextField

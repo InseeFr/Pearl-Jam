@@ -17,11 +17,13 @@ import { Select } from '../ui/Select';
 import D from 'i18n';
 import { StatsTracking } from './StatsTracking';
 import { TableTracking } from './TableTracking';
+import { SelectChangeEvent } from '@mui/material';
+import { SurveyUnit } from 'types/pearl';
 
-export function SuiviPage() {
+export const Component = () => {
   const surveyUnits: SurveyUnit[] = useSurveyUnits();
-  const [campaign, setCampaign] = useState(() => {
-    return localStorage.getItem('selectedCampaign') || '';
+  const [campaign, setCampaign] = useState<string>(() => {
+    return localStorage.getItem('selectedCampaign') ?? '';
   });
   const [searchText, setSearchText] = useState('');
   const campaigns = useMemo(
@@ -38,8 +40,8 @@ export function SuiviPage() {
   }, [campaign]);
 
   const [tab, setTab] = useState('stats');
-  const handleSearchTextChange = event => {
-    setSearchText(event.target.value);
+  const handleSearchTextChange = (text: string) => {
+    setSearchText(text);
   };
 
   return (
@@ -56,11 +58,14 @@ export function SuiviPage() {
                   <>
                     {' | '}
                     <Select
-                      onChange={setCampaign}
+                      onChange={(e: SelectChangeEvent<unknown>) =>
+                        setCampaign(e.target.value as string)
+                      }
                       sx={{ minWidth: 210 }}
                       value={campaign}
                       placeholder={D.trackingSelect}
                       options={campaigns}
+                      allowEmpty={false}
                     />
                     {campaign && (
                       <IconButton aria-label="reset" onClick={() => setCampaign('')}>
@@ -72,7 +77,7 @@ export function SuiviPage() {
                       variant="outlined"
                       size="small"
                       value={searchText}
-                      onChange={handleSearchTextChange}
+                      onChange={e => handleSearchTextChange(e.currentTarget.value)}
                       sx={{ marginLeft: 0.5, marginRight: 2, width: '500px' }}
                       InputProps={{
                         startAdornment: (
@@ -109,4 +114,4 @@ export function SuiviPage() {
       </Card>
     </Box>
   );
-}
+};

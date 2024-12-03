@@ -3,8 +3,8 @@ import dictionary from './dictionary';
 import { fr, sq } from 'date-fns/locale';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 
+export type SupportedLocales = 'fr' | 'sq' | 'en';
 type DictionaryKey = keyof typeof dictionary;
-type SupportedLocales = 'fr' | 'sq' | 'en';
 type DictionaryValue = Record<SupportedLocales, any>;
 type Dictionary = Record<DictionaryKey, DictionaryValue>;
 /**

@@ -1,11 +1,13 @@
-import { Box, Card, CardContent, Stack, Typography, Select, Grid } from '@mui/material';
+import { Box, Card, CardContent, Stack, Typography, Grid, SelectChangeEvent } from '@mui/material';
 import { useState, useMemo, SetStateAction } from 'react';
-import { ScrollableBox } from 'ui/ScrollableBox';
 import { CampaignProgress } from 'ui/Stats/CampaignProgress';
 import { CampaignProgressPieChart } from 'ui/Stats/CampaignProgressPieChart';
 import { daysLeftForSurveyUnit } from 'utils/functions';
 import { groupBy } from 'utils/functions/array';
 import D from 'i18n';
+import { SurveyUnit } from 'types/pearl';
+import { Select } from 'ui/Select';
+import { ScrollableBox } from 'ui/ScrollableBox';
 
 type SortDirection = 'asc' | 'desc' | 'deadlineDesc' | 'deadlineAsc';
 
@@ -18,10 +20,6 @@ interface StatsTrackingProps {
  */
 export function StatsTracking({ surveyUnits }: Readonly<StatsTrackingProps>) {
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
-  const handleSortChange = (direction: SetStateAction<SortDirection>) => {
-    setSortDirection(direction);
-  };
-
   const surveyUnitsPerCampaign = useMemo<Record<string, SurveyUnit[]>>(
     () => groupBy(surveyUnits, su => su.campaign),
     [surveyUnits]
@@ -56,11 +54,16 @@ export function StatsTracking({ surveyUnits }: Readonly<StatsTrackingProps>) {
     }
   }, [surveyUnitsPerCampaign, sortDirection]);
 
-  const sortOptions = [
-    { value: 'asc' as SortDirection, label: `${D.campaignNameAsc}` },
-    { value: 'desc' as SortDirection, label: `${D.campaignNameDesc}` },
-    { value: 'deadlineAsc' as SortDirection, label: `${D.shortDeadline}` },
-    { value: 'deadlineDesc' as SortDirection, label: `${D.longDeadline}` },
+  type SortOption = {
+    value: SortDirection;
+    label: string;
+  };
+
+  const sortOptions: SortOption[] = [
+    { value: 'asc', label: `${D.campaignNameAsc}` },
+    { value: 'desc', label: `${D.campaignNameDesc}` },
+    { value: 'deadlineAsc', label: `${D.shortDeadline}` },
+    { value: 'deadlineDesc', label: `${D.longDeadline}` },
   ];
 
   return (
@@ -75,7 +78,9 @@ export function StatsTracking({ surveyUnits }: Readonly<StatsTrackingProps>) {
               <Select
                 options={sortOptions}
                 value={sortDirection}
-                onChange={handleSortChange}
+                onChange={(e: SelectChangeEvent<SortDirection>) =>
+                  setSortDirection(e.target.value as SortDirection)
+                }
                 placeholder={D.noSorting}
                 allowEmpty
                 sx={{ width: '210px' }}

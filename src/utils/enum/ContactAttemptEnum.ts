@@ -16,7 +16,7 @@ export const contactAttemptEnum = {
   },
 };
 
-export const findContactAttemptValueByType = type =>
+export const findContactAttemptValueByType = (type: string) =>
   Object.values(contactAttemptEnum).filter(value => value.type === type)?.[0]?.value;
 
 const commonPhoneContactAttemptEnum = {
@@ -46,7 +46,7 @@ const fieldContactAttemptEnum = {
   PERMANENTLY_UNAVAILABLE: contactAttemptEnum.PERMANENTLY_UNAVAILABLE,
 };
 
-export const getContactAttemptByConfiguration = (configuration, medium) => {
+export const getContactAttemptByConfiguration = (configuration: string, medium: string) => {
   switch (medium) {
     case 'FIELD':
       return fieldContactAttemptEnum;

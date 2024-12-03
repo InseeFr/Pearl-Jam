@@ -22,3 +22,10 @@ export const toDoEnum = {
     color: '#35C75880',
   },
 };
+
+export interface ToDoEnumValues {
+  order: string;
+  value: string;
+  stepName?: string;
+  color: string;
+}

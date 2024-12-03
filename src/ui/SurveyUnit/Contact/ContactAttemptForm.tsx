@@ -1,27 +1,28 @@
 import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
-import { useIncrement } from '../../utils/hooks/useIncrement';
-import { getMediumByConfiguration } from '../../utils/enum/MediumEnum';
+import { useIncrement } from '../../../utils/hooks/useIncrement';
+import { getMediumByConfiguration } from '../../../utils/enum/MediumEnum';
 import RadioGroup from '@mui/material/RadioGroup';
-import { RadioLine } from '../RadioLine';
+import { RadioLine } from '../../RadioLine';
 import Box from '@mui/material/Box';
-import { getContactAttemptByConfiguration } from '../../utils/enum/ContactAttemptEnum';
+import { getContactAttemptByConfiguration } from '../../../utils/enum/ContactAttemptEnum';
 import { StaticDateTimePicker } from '@mui/x-date-pickers/StaticDateTimePicker';
-import { Typography } from '../Typography';
-import { formatDate } from '../../utils/functions/date';
-import { addNewState, persistSurveyUnit } from '../../utils/functions';
-import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
+import { Typography } from '../../Typography';
+import { formatDate } from '../../../utils/functions/date';
+import { addNewState, persistSurveyUnit } from '../../../utils/functions';
+import { surveyUnitStateEnum } from '../../../utils/enum/SUStateEnum';
+import { SurveyUnit } from 'types/pearl';
+import Dialog from '@mui/material/Dialog';
 
 /**
  * @param {number} step
  */
-const getTitle = step => {
+const getTitle = (step: number) => {
   switch (step) {
     case 1:
       return D.selectCommunciationRequestMedium;
@@ -32,14 +33,14 @@ const getTitle = step => {
   }
 };
 
+interface ContactAttemptFormProps {
+  onClose: () => void;
+  surveyUnit: SurveyUnit;
+}
 /**
  * Form to add a new contact attempt to a survey unit
- *
- * @param {() => void} onClose
- * @param {SurveyUnit} surveyUnit
- * @returns {JSX.Element}
  */
-export function ContactAttemptForm({ onClose, surveyUnit }) {
+export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAttemptFormProps>) {
   const {
     value: step,
     increment,
@@ -143,7 +144,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }) {
             >
               <Stack gap={1} width={1}>
                 {options.map(o => (
-                  <RadioLine value={o.type} key={o.type} label={o.value} />
+                  <RadioLine value={o.type} key={o.type} label={o.value} disabled={false} />
                 ))}
               </Stack>
             </RadioGroup>

@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { getAddressData } from '../../utils/functions';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 import { FieldRow } from '../FieldRow';
+import { SurveyUnit } from 'types/pearl';
 
 interface AddressFormProps {
   onClose: () => void;

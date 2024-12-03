@@ -209,7 +209,7 @@ export async function seedData() {
       contactAttemptConfiguration: 'F2F',
       contactOutcome: {
         date: new Date().getTime() - 2 * day,
-        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.type,
+        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
         totalNumberOfContactAttempts: 2,
       },
     });

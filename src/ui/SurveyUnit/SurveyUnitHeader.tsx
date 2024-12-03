@@ -28,6 +28,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
 import { makeStyles, useTheme } from '@mui/styles';
 import D from '../../i18n/build-dictionary';
+import { SurveyUnit } from 'types/pearl';
 
 /**
  * @param {SurveyUnit} surveyUnit
@@ -47,7 +48,11 @@ const useStyles = makeStyles({
   },
 });
 
-export function SurveyUnitHeader({ surveyUnit }) {
+interface SurveyUnitHeaderProps {
+  surveyUnit: SurveyUnit;
+}
+
+export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>) {
   const theme = useTheme();
   const classes = useStyles();
   const [isContactOutcomeValid, setIsContactOutcomeValid] = useState(false);
@@ -67,20 +72,20 @@ export function SurveyUnitHeader({ surveyUnit }) {
     setIsContactOutcomeValid(checkContactOutcomeValidity());
   }, [surveyUnit.contactOutcome]);
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElement, setAnchorElement] = useState<HTMLElement>();
 
-  const handleOpen = event => {
-    setAnchorEl(event.currentTarget);
+  const handleOpen = (e: HTMLButtonElement) => {
+    setAnchorElement(e);
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorElement(undefined);
   };
 
-  const open = Boolean(anchorEl);
+  const open = Boolean(anchorElement);
   const id = open ? 'simple-popover' : undefined;
-  const states = Object.values(toDoEnum).filter(toDo => toDo.order < 6);
-  const currentState = getSuTodoState(surveyUnit).order;
+  const states = Object.values(toDoEnum).filter(toDo => Number(toDo.order) < 6);
+  const currentState = Number(getSuTodoState(surveyUnit).order);
 
   return (
     <Box
@@ -120,7 +125,7 @@ export function SurveyUnitHeader({ surveyUnit }) {
           return (
             <Step key={state.order}>
               <StepLabel StepIconComponent={StepIcon}>
-                {state.order < currentState ? state.stepName : state.value}
+                {Number(state.order) < currentState ? state.stepName : state.value}
               </StepLabel>
               {state.order === '4' && <SubmitButton surveyUnit={surveyUnit} />}
             </Step>
@@ -130,7 +135,7 @@ export function SurveyUnitHeader({ surveyUnit }) {
       {/* Right Side */}
       <Box className={classes.rotateBox} sx={{ justifySelf: 'end' }}>
         <Button
-          onClick={handleOpen}
+          onClick={e => handleOpen(e.currentTarget)}
           variant="contained"
           color="primary"
           className={classes.buttonFixed}
@@ -141,7 +146,7 @@ export function SurveyUnitHeader({ surveyUnit }) {
       <Popover
         id={id}
         open={open}
-        anchorEl={anchorEl}
+        anchorEl={anchorElement}
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'top',
@@ -188,6 +193,10 @@ export function SurveyUnitHeader({ surveyUnit }) {
   );
 }
 
+interface SubmitButtonProp {
+  surveyUnit: SurveyUnit;
+}
+
 /**
  * Transmit button to sync a surveyUnit
  *
@@ -195,7 +204,7 @@ export function SurveyUnitHeader({ surveyUnit }) {
  * @returns {JSX.Element}
  * @constructor
  */
-function SubmitButton({ surveyUnit }) {
+function SubmitButton({ surveyUnit }: Readonly<SubmitButtonProp>) {
   const canSubmit = isValidForTransmission(surveyUnit);
   const handleSubmit = () => {
     const newStates = addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type);
@@ -203,7 +212,7 @@ function SubmitButton({ surveyUnit }) {
   };
 
   if (!canSubmit) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -225,7 +234,7 @@ function SubmitButton({ surveyUnit }) {
       <Box position="absolute" sx={{ left: '50%', transform: 'translateX(-50%)' }}>
         <Button
           onClick={handleSubmit}
-          color="surfaceSecondary"
+          color="secondary"
           variant="contained"
           size="small"
           sx={{ width: 82, height: 30, margin: '10px auto 0 auto', display: 'flex' }}
@@ -243,9 +252,9 @@ function SubmitButton({ surveyUnit }) {
  * @param {boolean} completed
  * @param {string} icon
  */
-function StepIcon({ completed, icon }) {
+const StepIcon = (completed: boolean, icon: string) => {
   if (completed) {
-    return <CheckIcon fontSize="inherit" color="white" />;
+    return <CheckIcon fontSize="inherit" color="primary" />;
   }
   return <>{icon}</>;
-}
+};

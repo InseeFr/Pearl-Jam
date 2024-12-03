@@ -1,4 +1,4 @@
-const mediumMessage = {
+export const mediumMessage = {
   mediumPhone: {
     fr: 'Téléphone',
     en: 'Phone',
@@ -21,4 +21,5 @@ const mediumMessage = {
   },
 };
 
+export type MediumMessageKey = keyof typeof mediumMessage;
 export default mediumMessage;
