@@ -58,8 +58,8 @@ export const Component = () => {
                   <>
                     {' | '}
                     <Select
-                      onChange={(e: SelectChangeEvent<SetStateAction<any>>) =>
-                        setCampaign(e.target.value)
+                      onChange={(e: SelectChangeEvent<unknown>) =>
+                        setCampaign(e.target.value as string)
                       }
                       sx={{ minWidth: 210 }}
                       value={campaign}

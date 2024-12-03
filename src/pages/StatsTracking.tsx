@@ -20,10 +20,6 @@ interface StatsTrackingProps {
  */
 export function StatsTracking({ surveyUnits }: Readonly<StatsTrackingProps>) {
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
-  const handleSortChange = (direction: SetStateAction<SortDirection>) => {
-    setSortDirection(direction);
-  };
-
   const surveyUnitsPerCampaign = useMemo<Record<string, SurveyUnit[]>>(
     () => groupBy(surveyUnits, su => su.campaign),
     [surveyUnits]
@@ -82,8 +78,8 @@ export function StatsTracking({ surveyUnits }: Readonly<StatsTrackingProps>) {
               <Select
                 options={sortOptions}
                 value={sortDirection}
-                onChange={(e: SelectChangeEvent<SetStateAction<SortDirection>>) =>
-                  handleSortChange(e.target.value as SortDirection)
+                onChange={(e: SelectChangeEvent<SortDirection>) =>
+                  setSortDirection(e.target.value as SortDirection)
                 }
                 placeholder={D.noSorting}
                 allowEmpty
