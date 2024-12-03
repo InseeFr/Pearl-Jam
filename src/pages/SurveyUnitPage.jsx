@@ -6,7 +6,7 @@ import D from 'i18n';
 import { CommunicationsCard } from 'ui/SurveyUnit/Communication/CommunicationsCard';
 import Box from '@mui/material/Box';
 import { AddressCard } from '../ui/SurveyUnit/AddressCard';
-import { IdentificationCard } from '../ui/SurveyUnit/IdentificationCard';
+import { IdentificationByTelCard } from '../ui/SurveyUnit/IdentificationByTelCard';
 import { PersonsCard } from '../ui/SurveyUnit/PersonsCard';
 import { ContactsCard } from '../ui/SurveyUnit/ContactsCard';
 import { CommentCard } from '../ui/SurveyUnit/CommentCard';
@@ -71,7 +71,7 @@ export function SurveyUnitPage() {
         <SwipeableTab index={0} label={D.goToIdentificationPage}>
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
             <AddressCard surveyUnit={surveyUnit} />
-            <IdentificationCard surveyUnit={surveyUnit} />
+            <IdentificationByTelCard surveyUnit={surveyUnit} />
           </Box>
         </SwipeableTab>
         <SwipeableTab index={1} label={D.goToContactPage}>
