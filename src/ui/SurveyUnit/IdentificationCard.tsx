@@ -1,4 +1,3 @@
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Typography } from '../Typography';
 import D from 'i18n';
@@ -6,8 +5,7 @@ import { Row } from '../Row';
 import Stack from '@mui/material/Stack';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import { ButtonLine } from '../ButtonLine';
-import { useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
-
+import { Answer, useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -16,7 +14,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useState } from 'react';
+import { Key, useState } from 'react';
 import { RadioLine } from '../RadioLine';
 import RadioGroup from '@mui/material/RadioGroup';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
@@ -24,22 +22,26 @@ import { identificationConfigurationEnum } from '../../utils/enum/Identification
 import Box from '@mui/material/Box';
 import { addNewState } from '../../utils/functions';
 import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
+import { SurveyUnit } from 'types/pearl';
+import { Card } from '@mui/material';
 
-/**
- * @param {SurveyUnit} surveyUnit
- */
-export function IdentificationCard({ surveyUnit }) {
+interface IdentificationCardProps {
+  surveyUnit: SurveyUnit;
+}
+export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardProps>) {
   const { questions, setQuestion, answers, question, setAnswer } =
     useIdentificationQuestions(surveyUnit);
 
-  const stateProofSetAnswer = answer => {
-    const newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
-    setAnswer({ ...surveyUnit, states: newStates }, answer);
+  const stateProofSetAnswer = (answer?: Answer) => {
+    if (answer) {
+      const newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
+      setAnswer({ ...surveyUnit, states: newStates }, answer);
+    }
   };
 
   return (
     <>
-      <Card p={2} elevation={0}>
+      <Card elevation={0}>
         <CardContent>
           <Stack gap={3}>
             <Row gap={1}>
@@ -83,19 +85,20 @@ export function IdentificationCard({ surveyUnit }) {
   );
 }
 
-/**
- * @param {SurveyUnit} surveyUnit
- */
-function MoveQuestion({ surveyUnit }) {
+interface MoveQuestionProps {
+  surveyUnit: SurveyUnit;
+}
+
+function MoveQuestion({ surveyUnit }: Readonly<MoveQuestionProps>) {
   const options = [
     { label: D.yes, value: true },
     { label: D.no, value: false },
   ];
   const value = surveyUnit.move;
-  const handleChange = e => {
+  const handleChange = (e: { target: { checked: any; value: string } }) => {
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
-      move: e.target.checked ? e.target.value === 'true' : null,
+      move: e.target.checked ? e.target.value === 'true' : false,
     });
   };
   return (
@@ -124,15 +127,27 @@ function MoveQuestion({ surveyUnit }) {
   );
 }
 
-function IdentificationDialog({ answers, question, onClose, onSubmit }) {
+interface IdentificationDialogProps {
+  answers: Answer[];
+  question: any;
+  onClose: () => void;
+  onSubmit: (a?: Answer) => void;
+}
+
+function IdentificationDialog({
+  answers,
+  question,
+  onClose,
+  onSubmit,
+}: Readonly<IdentificationDialogProps>) {
   const [localAnswer, setLocalAnswer] = useState(question?.answer?.value);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    onSubmit(answers.find(a => a.value === localAnswer));
+    onSubmit(answers.find((a: { value: any }) => a.value === localAnswer));
   };
 
-  const handleChange = (e, v) => {
+  const handleChange = (e: any, v: any) => {
     setLocalAnswer(v);
   };
 
@@ -148,14 +163,19 @@ function IdentificationDialog({ answers, question, onClose, onSubmit }) {
             name="identification-radio-group"
           >
             <Stack gap={1}>
-              {answers.map(answer => (
-                <RadioLine value={answer.value} key={answer.value} label={answer.label} />
+              {answers.map((answer: Answer) => (
+                <RadioLine
+                  value={answer.value}
+                  key={answer.value}
+                  label={answer.label}
+                  disabled={false}
+                />
               ))}
             </Stack>
           </RadioGroup>
         </DialogContent>
         <DialogActions>
-          <Button type="button" color="white" variant="contained" onClick={onClose}>
+          <Button type="button" color="primary" variant="contained" onClick={onClose}>
             {D.cancelButton}
           </Button>
           <Button variant="contained" type="submit" disabled={!localAnswer}>

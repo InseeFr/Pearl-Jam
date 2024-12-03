@@ -3,15 +3,15 @@ import { Typography } from './Typography';
 import { Row } from './Row';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { ButtonProps } from '@mui/material';
 
-/**
- * @param {string} label
- * @param {boolean} checked
- * @param {boolean} disabled
- * @param {import('@mui/material').ButtonProps} props
- * @constructor
- */
-export function ButtonLine({ disabled, label, checked, ...props }) {
+interface ButtonLineProps extends ButtonProps {
+  label?: string;
+  checked: boolean;
+  disabled: boolean;
+}
+
+export function ButtonLine({ disabled, label, checked, ...props }: Readonly<ButtonLineProps>) {
   const textColor = disabled ? 'textHint' : 'textPrimary';
   const background = disabled ? 'surfacePrimary.light' : 'surfacePrimary.main';
   return (
