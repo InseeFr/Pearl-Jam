@@ -9,7 +9,7 @@ import { Typography } from '../ui/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { useSurveyUnits } from '../utils/hooks/database';
-import { useMemo, useState, useEffect, SetStateAction } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Row } from '../ui/Row';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -114,4 +114,4 @@ export const Component = () => {
       </Card>
     </Box>
   );
-}
+};
