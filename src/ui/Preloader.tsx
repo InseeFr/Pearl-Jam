@@ -4,11 +4,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
-/**
- * @param {string} message
- * @constructor
- */
-export function Preloader({ message }) {
+type PreloaderTypes = {
+  message: string;
+};
+
+export function Preloader({ message }: Readonly<PreloaderTypes>) {
   return (
     <Backdrop open sx={{ color: '#FFF' }}>
       <Stack gap={2} alignItems="center">
@@ -16,7 +16,7 @@ export function Preloader({ message }) {
         <Box component="h2" m={0} mt={2}>
           {D.pleaseWait}
         </Box>
-        <Box component="h3" m={0} sx={{ opacity: 0.75 }} variant="m" color="textTertiary">
+        <Box component="h3" m={0} sx={{ opacity: 0.75 }} color="textTertiary">
           {message}
         </Box>
       </Stack>
