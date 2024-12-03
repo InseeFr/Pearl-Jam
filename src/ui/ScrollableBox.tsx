@@ -1,9 +1,9 @@
 import Box, { BoxProps } from '@mui/material/Box';
+import { ComponentProps } from 'react';
 
-interface ScrollableBoxProps {
+type ScrollableBoxProps = {
   height: string;
-  props: BoxProps;
-}
+} & BoxProps;
 
 export function ScrollableBox({ height, ...props }: Readonly<ScrollableBoxProps>) {
   return (
