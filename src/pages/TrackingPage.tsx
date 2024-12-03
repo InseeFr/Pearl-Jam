@@ -58,9 +58,7 @@ export const Component = () => {
                   <>
                     {' | '}
                     <Select
-                      onChange={(e: SelectChangeEvent<unknown>) =>
-                        setCampaign(e.target.value as string)
-                      }
+                      onChange={e => setCampaign(e.target.value as string)}
                       sx={{ minWidth: 210 }}
                       value={campaign}
                       placeholder={D.trackingSelect}
