@@ -6,9 +6,17 @@ export const identificationAnswerTypeEnum = {
   SITUATION: 'SITUATION',
   CATEGORY: 'CATEGORY',
   OCCUPANT: 'OCCUPANT',
+} as const;
+
+export type Question = {
+  questionType: string;
+  type: string;
+  value: string;
+  label: string;
+  concluding: boolean;
 };
 
-export const identificationAnswersEnum = {
+export const identificationAnswersEnum: Record<string, Question> = {
   IDENTIFICATION_IDENTIFIED: {
     questionType: identificationAnswerTypeEnum.IDENTIFICATION,
     type: 'IDENTIFICATION_IDENTIFIED',
@@ -107,4 +115,4 @@ export const identificationAnswersEnum = {
     label: `${D.occupantUnidentified}`,
     concluding: true,
   },
-};
+} as const;

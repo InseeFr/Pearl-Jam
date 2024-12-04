@@ -1,17 +1,19 @@
+import { Identification, IdentificationConfiguration } from 'types/IdentificationConfiguration';
 import {
   identificationAnswersEnum as answers,
   identificationAnswerTypeEnum,
+  Question,
 } from 'utils/enum/IdentificationAnswersEnum';
 
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 
-const getIascoAnswersByQuestionType = type =>
+const getIascoAnswersByQuestionType = (type: string) =>
   Object.values(answers).filter(({ questionType }) => questionType === type);
 
-const filterByQuestionType = (answersArray, type) =>
+const filterByQuestionType = (answersArray: Question[], type: string) =>
   answersArray.filter(answer => answer?.questionType === type)?.[0]?.value;
 
-export const formatToSave = data => {
+export const formatToSave = (data: { selectedAnswer: Question }[]) => {
   // TODO : use identificationConfiguration to adapt to later data formats
   const reducedAnswers = data.map(question => question.selectedAnswer);
   return {
@@ -26,7 +28,7 @@ export const formatToSave = data => {
   };
 };
 
-const getFinishingAnswersByType = targetType =>
+const getFinishingAnswersByType = (targetType: string) =>
   getIascoAnswersByQuestionType(targetType).filter(({ concluding }) => concluding);
 
 export const IASCO_IDENTIFICATION_FINISHING_VALUES = getFinishingAnswersByType(
@@ -45,7 +47,7 @@ export const IASCO_OCCUPANT_FINISHING_VALUES = getFinishingAnswersByType(
   identificationAnswerTypeEnum.OCCUPANT
 ).map(({ value }) => value);
 
-export const identificationIsValidIasco = identificationToCheck => {
+export const identificationIsValidIasco = (identificationToCheck: Identification) => {
   if (!identificationToCheck) return false;
   const { identification, access, situation, category, occupant } = identificationToCheck;
   if (identification === undefined) return false;
@@ -60,11 +62,14 @@ export const identificationIsValidIasco = identificationToCheck => {
   if (IASCO_OCCUPANT_FINISHING_VALUES.includes(occupant)) return true;
   return false;
 };
-const identifiationIsValidNoident = identificationToCheck => {
+const identifiationIsValidNoident = (identificationToCheck: Identification) => {
   return true;
 };
 
-export const identificationIsFinished = (identificationConfiguration, identification) => {
+export const identificationIsFinished = (
+  identificationConfiguration: IdentificationConfiguration,
+  identification: Identification
+) => {
   switch (identificationConfiguration) {
     case identificationConfigurationEnum.IASCO:
       return identificationIsValidIasco(identification);

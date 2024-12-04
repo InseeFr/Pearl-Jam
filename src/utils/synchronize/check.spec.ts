@@ -95,12 +95,10 @@ describe('check.ts', () => {
     const PEARL_AUTHENTICATION_MODE = 'token';
 
     beforeEach(() => {
-      // Réinitialiser les mocks avant chaque test
       vi.clearAllMocks();
     });
 
     it('should handle errors and not send notifications', async () => {
-      // Mock des données de retour
       const pearlData = {
         error: 'pearlError',
         surveyUnitsInTempZone: [],
@@ -113,7 +111,6 @@ describe('check.ts', () => {
         surveyUnitsInTempZone: [],
       };
 
-      // Mock des fonctions
       window.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(queenData));
       saveSyncPearlData(pearlData);
       vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([{ id: '1' }]);
