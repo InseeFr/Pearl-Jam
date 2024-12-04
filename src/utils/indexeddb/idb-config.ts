@@ -61,7 +61,7 @@ db.version(7)
       .table('surveyUnit')
       .toCollection()
       .modify(su => {
-        if (su.contactOutcome.type)
+        if (su.contactOutcome?.type)
           su.contactOutcome.type = convertDeprecatedContactOutcomeType(su.contactOutcome.type);
       });
   });
