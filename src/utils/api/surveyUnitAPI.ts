@@ -1,3 +1,4 @@
+import { SurveyUnit } from 'types/pearl';
 import { API } from './requests';
 import { authentication, formatSurveyUnitForPut, getToken } from './utils';
 

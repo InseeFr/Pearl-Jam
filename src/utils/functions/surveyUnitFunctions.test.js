@@ -98,7 +98,7 @@ describe('isValidForTransmission', () => {
       isValidForTransmission({
         contactAttempts: cas,
         contactOutcome: {
-          type: contactOutcomeEnum.INTERVIEW_ACCEPTED.type,
+          type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
           totalNumberOfContactAttempts: 0,
         },
       })
@@ -109,7 +109,7 @@ describe('isValidForTransmission', () => {
       isValidForTransmission({
         contactAttempts: cas,
         contactOutcome: {
-          type: contactOutcomeEnum.INTERVIEW_ACCEPTED.type,
+          type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
           totalNumberOfContactAttempts: 2,
         },
         states: [
@@ -134,7 +134,7 @@ describe('isValidForTransmission', () => {
       isValidForTransmission({
         contactAttempts: cas,
         contactOutcome: {
-          type: contactOutcomeEnum.INTERVIEW_ACCEPTED.type,
+          type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
           totalNumberOfContactAttempts: 2,
         },
         states: [

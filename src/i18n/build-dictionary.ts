@@ -3,8 +3,8 @@ import dictionary from './dictionary';
 import { fr, sq } from 'date-fns/locale';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 
+export type SupportedLocales = 'fr' | 'sq' | 'en';
 type DictionaryKey = keyof typeof dictionary;
-type SupportedLocales = 'fr' | 'sq' | 'en';
 type DictionaryValue = Record<SupportedLocales, any>;
 type Dictionary = Record<DictionaryKey, DictionaryValue>;
 /**
@@ -13,7 +13,7 @@ type Dictionary = Record<DictionaryKey, DictionaryValue>;
  *
  * @param {string} lang the lang of the user
  */
-export const createDictionary = (lang: SupportedLocales) => {
+export const createDictionary = (lang: SupportedLocales): Record<string, string> => {
   // Set date-fns lang for French and Albanian
   if (lang === 'fr') {
     setDefaultOptions({ locale: fr });
@@ -34,7 +34,6 @@ export const createDictionary = (lang: SupportedLocales) => {
  * For example, with fr-FR, will return fr
  * If the lang is not recognized, will return en
  * Now also checks for Albanian (sq)
- * @param {string} lang the lang of the user
  */
 export const getLang = (defaultLang?: string) => {
   const lang = (defaultLang ?? navigator.language).split('-')[0];

@@ -15,6 +15,7 @@ import {
 import { formatDate } from '../../../utils/functions/date';
 import { Row } from '../../Row';
 import { Typography } from '../../Typography';
+import { SurveyUnitCommunicationRequest, SurveyUnitCommunicationTemplate } from 'types/pearl';
 
 interface CommunicationItemProps {
   communication: SurveyUnitCommunicationRequest;
