@@ -335,7 +335,7 @@ export const getAddressData = address => {
   };
 };
 
-const getAge = birthdate => {
+export const getAge = birthdate => {
   if (birthdate === '' || !birthdate) return undefined;
   return differenceInYears(new Date(), new Date(birthdate));
 };
