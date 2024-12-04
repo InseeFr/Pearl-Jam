@@ -63,7 +63,7 @@ const checkValidityForTransmissionNoident = su => {
   if (!contactOutcome) return false;
   const { type, totalNumberOfContactAttempts } = contactOutcome;
   if (totalNumberOfContactAttempts === 0) return false;
-  if (type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.type) return true;
+  if (type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.value) return true;
   if (getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) return true;
   return false;
 };
@@ -78,7 +78,7 @@ const checkValidityForTransmissionIasco = su => {
   // INA contactOutcome + no questionnaire
 
   if (
-    type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type &&
+    type === contactOutcomeEnum.INTERVIEW_ACCEPTED.value &&
     !getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
   )
     return false;

@@ -12,6 +12,7 @@ import { Typography } from '../../Typography';
 import { ValidationError } from '../../ValidationError';
 import { CommunicationRequestForm } from './CommunicationForm';
 import D from './../../../i18n';
+import { SurveyUnit } from 'types/pearl';
 
 interface CommunicationConfirmationProps {
   surveyUnit: SurveyUnit;
@@ -88,19 +89,29 @@ const CommunicationConfirmation = ({
                 <br />
                 <Fragment>
                   {address.deliveryPoint && (
-                    <>{address.deliveryPoint} <br /></>
+                    <>
+                      {address.deliveryPoint} <br />
+                    </>
                   )}
                   {address.additionalAddress && (
-                    <>{address.additionalAddress} <br /></>
+                    <>
+                      {address.additionalAddress} <br />
+                    </>
                   )}
                   {address.streetName && (
-                    <>{address.streetName} <br /></>
+                    <>
+                      {address.streetName} <br />
+                    </>
                   )}
                   {address.locality && (
-                    <>{address.locality} <br /></>
+                    <>
+                      {address.locality} <br />
+                    </>
                   )}
                   {address.postCode && address.cityName && (
-                    <>{address.postCode}, {address.cityName}</>
+                    <>
+                      {address.postCode}, {address.cityName}
+                    </>
                   )}
                 </Fragment>
               </Typography>

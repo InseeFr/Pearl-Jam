@@ -11,6 +11,7 @@ import { Row } from '../../Row';
 import { Typography } from '../../Typography';
 import { CommunicationForm } from './CommunicationForm';
 import { CommunicationItem } from './CommunicationItem';
+import { SurveyUnit, SurveyUnitCommunicationTemplate } from 'types/pearl';
 
 interface CommunicationsCardProps {
   surveyUnit: SurveyUnit;

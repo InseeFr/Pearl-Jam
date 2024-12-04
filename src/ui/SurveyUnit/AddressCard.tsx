@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { useToggle } from '../../utils/hooks/useToggle';
 import { AddressForm } from './AddressForm';
+import { SurveyUnit } from 'types/pearl';
 import Card from '@mui/material/Card';
 
 interface AddressCardProps {
@@ -25,7 +26,7 @@ export function AddressCard({ surveyUnit }: Readonly<AddressCardProps>) {
 
   return (
     <>
-      <Card p={2} elevation={0}>
+      <Card elevation={0}>
         <CardContent>
           <Stack gap={3}>
             <Row justifyContent="space-between">

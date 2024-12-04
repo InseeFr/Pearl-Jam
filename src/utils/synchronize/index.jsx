@@ -1,6 +1,6 @@
 import * as api from 'utils/api';
 
-import { createCommunicationRequestIds, createStateIds, getLastState } from 'utils/functions';
+import { createCommunicationRequestIds, createStateIds, getSuTodoState } from 'utils/functions';
 import { useCallback, useState } from 'react';
 
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
@@ -63,7 +63,7 @@ const sendData = async (urlPearlApi, authenticationMode) => {
   const surveyUnits = await surveyUnitIDBService.getAll();
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
-      const lastState = getLastState(surveyUnit);
+      const lastState = getSuTodoState(surveyUnit);
       const { id } = surveyUnit;
       const body = {
         ...surveyUnit,
@@ -163,7 +163,7 @@ const getWFSSurveyUnitsSortByCampaign = async () => {
   const allSurveyUnits = await surveyUnitIDBService.getAll();
   return allSurveyUnits.reduce((wfs, su) => {
     const { campaign, id } = su;
-    const lastState = getLastState(su);
+    const lastState = getSuTodoState(su);
     if (lastState?.type === surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type)
       return { ...wfs, [campaign]: [...(wfs[campaign] || []), id] };
     return wfs;

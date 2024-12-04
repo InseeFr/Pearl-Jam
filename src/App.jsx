@@ -11,7 +11,6 @@ import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
 import { useEffectOnce } from './utils/hooks/useEffectOnce';
 import { SurveyUnitPage } from './pages/SurveyUnitPage';
 import './app.css';
-import { SuiviPage } from './pages/SuiviPage';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
@@ -39,7 +38,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/suivi',
-        element: <SuiviPage />,
+        lazy: () => import('./pages/TrackingPage'),
       },
       {
         path: '/survey-unit/:id',
