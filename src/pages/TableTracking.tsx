@@ -90,7 +90,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
         (searchText === '' ||
           person.lastName.toUpperCase().includes(searchText.toUpperCase()) ||
           person.firstName.toUpperCase().includes(searchText.toUpperCase()) ||
-          su.displayName.toUpperCase().includes(searchText.toUpperCase()) ||
+          su?.displayName?.toUpperCase().includes(searchText.toUpperCase()) ||
           su.id.toUpperCase().includes(searchText.toUpperCase()))
       );
     })

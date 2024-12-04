@@ -20,8 +20,3 @@ class SurveyUnitIdbService extends AbstractIdbService<SurveyUnit> {
 }
 
 export const surveyUnitIDBService = new SurveyUnitIdbService();
-
-/**
- * @deprecated use named import instead
- */
-export default surveyUnitIDBService;

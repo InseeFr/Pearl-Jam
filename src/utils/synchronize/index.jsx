@@ -3,7 +3,7 @@ import * as api from 'utils/api';
 import { createCommunicationRequestIds, createStateIds, getSuTodoState } from 'utils/functions';
 import { useCallback, useState } from 'react';
 
-import surveyUnitDBService from 'utils/indexeddb/services/surveyUnit-idb-service';
+import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useNavigate } from 'react-router-dom';
@@ -60,7 +60,7 @@ export const useQueenSynchronisation = () => {
 
 const sendData = async (urlPearlApi, authenticationMode) => {
   const surveyUnitsInTempZone = [];
-  const surveyUnits = await surveyUnitDBService.getAll();
+  const surveyUnits = await surveyUnitIDBService.getAll();
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
       const lastState = getSuTodoState(surveyUnit);
@@ -106,11 +106,11 @@ const getUserData = async (urlPearlApi, authenticationMode) => {
 };
 
 const putSurveyUnitInDataBase = async su => {
-  await surveyUnitDBService.addOrUpdate(su);
+  await surveyUnitIDBService.addOrUpdate(su);
 };
 
 const clean = async () => {
-  await surveyUnitDBService.deleteAll();
+  await surveyUnitIDBService.deleteAll();
   await surveyUnitMissingIdbService.deleteAll();
 };
 
@@ -160,7 +160,7 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
 };
 
 const getWFSSurveyUnitsSortByCampaign = async () => {
-  const allSurveyUnits = await surveyUnitDBService.getAll();
+  const allSurveyUnits = await surveyUnitIDBService.getAll();
   return allSurveyUnits.reduce((wfs, su) => {
     const { campaign, id } = su;
     const lastState = getSuTodoState(su);
@@ -171,7 +171,7 @@ const getWFSSurveyUnitsSortByCampaign = async () => {
 };
 
 const getAllSurveyUnitsByCampaign = async () => {
-  const allSurveyUnits = await surveyUnitDBService.getAll();
+  const allSurveyUnits = await surveyUnitIDBService.getAll();
   return allSurveyUnits.reduce((wfs, su) => {
     const { campaign, id } = su;
     return { ...wfs, [campaign]: [...(wfs[campaign] || []), id] };

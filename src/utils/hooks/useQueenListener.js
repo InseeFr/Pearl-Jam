@@ -1,6 +1,6 @@
 import { addNewState } from 'utils/functions/surveyUnitFunctions';
 import questionnaireEnum from 'utils/enum/QuestionnaireStateEnum';
-import surveyUnitDBService from 'utils/indexeddb/services/surveyUnit-idb-service';
+import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useEffect } from 'react';
 import { persistSurveyUnit } from '../functions';
@@ -19,7 +19,7 @@ const computeSurveyUnitState = questionnaireState => {
 };
 
 const updateSurveyUnit = (surveyUnitID, queenState) => {
-  surveyUnitDBService.getById(surveyUnitID).then(su => {
+  surveyUnitIDBService.getById(surveyUnitID).then(su => {
     let newQuestionnaireState = '';
     switch (queenState) {
       case 'COMPLETED':
