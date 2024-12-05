@@ -27,6 +27,17 @@ declare module '@mui/material/Button' {
   }
 }
 
+declare module '@mui/material/SvgIcon' {
+  interface SvgIconPropsColorOverrides {
+    iconLock: true;
+    textTertiary: true;
+    textPrimary: true;
+    textPrimary: true;
+    surfaceTertiary: true;
+    yellow: true;
+  }
+}
+
 declare module '@mui/material/ScrollableBox' {
   interface ScrollableBoxPropsHeightOverrides {
     height: true;

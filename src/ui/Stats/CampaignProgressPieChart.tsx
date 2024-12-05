@@ -9,6 +9,7 @@ import { Row } from '../Row';
 import { groupBy } from '../../utils/functions/array';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
 import D from 'i18n';
+import { SurveyUnit } from 'types/pearl';
 
 const colorStart = '#D3DBE5';
 const colorEnd = '#3A4657';
@@ -25,12 +26,6 @@ interface CampaignProgressPieChartProps {
   surveyUnits: SurveyUnit[];
 }
 
-/**
- * Card with a pie chart that show surveyUnits in progress
- *
- * @param {SurveyUnit[]} surveyUnits
- * @return {JSX.Element}
- */
 export function CampaignProgressPieChart({ surveyUnits }: Readonly<CampaignProgressPieChartProps>) {
   // Only keep survey units that are not finished
   surveyUnits = surveyUnits.filter(su => getSuTodoState(su).order !== toDoEnum.TERMINATED.order);

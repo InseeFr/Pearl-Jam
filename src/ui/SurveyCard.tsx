@@ -1,23 +1,23 @@
-import React from 'react';
-import {
-  getprivilegedPerson,
-  daysLeftForSurveyUnit,
-  isSelectable,
-  getSuTodoState,
-} from 'utils/functions';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import LockIcon from '@mui/icons-material/Lock';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Stack from '@mui/material/Stack';
-import { Typography } from './Typography';
 import Chip from '@mui/material/Chip';
-import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
-import FmdGoodIcon from '@mui/icons-material/FmdGood';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LockIcon from '@mui/icons-material/Lock';
-import { StatusChip } from './StatusChip';
-import { Row } from './Row';
-import { AbsoluteLink } from './AbsoluteLink';
+import Stack from '@mui/material/Stack';
+import { SurveyUnit } from 'types/pearl';
+import {
+  daysLeftForSurveyUnit,
+  getprivilegedPerson,
+  getSuTodoState,
+  isSelectable,
+} from 'utils/functions';
 import D from '../i18n/build-dictionary';
+import { AbsoluteLink } from './AbsoluteLink';
+import { Row } from './Row';
+import { StatusChip } from './StatusChip';
+import { Typography } from './Typography';
 
 interface SurveyCardProps {
   surveyUnit: SurveyUnit;

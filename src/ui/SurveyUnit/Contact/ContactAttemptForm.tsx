@@ -19,9 +19,6 @@ import { surveyUnitStateEnum } from '../../../utils/enum/SUStateEnum';
 import { SurveyUnit } from 'types/pearl';
 import Dialog from '@mui/material/Dialog';
 
-/**
- * @param {number} step
- */
 const getTitle = (step: number) => {
   switch (step) {
     case 1:
@@ -56,7 +53,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
   const [status, setStatus] = useState('');
   const [date, setDate] = useState(new Date());
 
-  const goPreviousStep = e => {
+  const goPreviousStep = (e: MouseEvent) => {
     e.preventDefault();
     if (step === 1) {
       onClose();
@@ -65,7 +62,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     decrement();
   };
 
-  const goNextStep = e => {
+  const goNextStep = (e: MouseEvent) => {
     e.preventDefault();
     if (step === 3) {
       const updatedSu = {
@@ -103,7 +100,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     return false;
   };
 
-  const setValue = value => {
+  const setValue = (value: string) => {
     if (step === 1) {
       setMedium(value);
       setStatus('');

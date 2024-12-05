@@ -41,7 +41,7 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
 
   const onSubmit = handleSubmit(data => {
     // Update survey unit state
-    let newState = surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
+    let newState: string = surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
     if (data.type === contactOutcomeEnum.INTERVIEW_ACCEPTED.value) {
       newState = surveyUnitStateEnum.APPOINTMENT_MADE.type;
     }

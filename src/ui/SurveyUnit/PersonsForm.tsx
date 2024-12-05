@@ -52,7 +52,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
     onClose();
   });
 
-  const handleCancel = (e: MouseEventHandler<HTMLAnchorElement, HTMLMouse>) => {
+  const handleCancel = (e: MouseEventHandler<HTMLAnchorElement>) => {
     onClose();
   };
 

@@ -10,6 +10,7 @@ import {
 import CommunicationDialogContent from './CommunicationDialogContent';
 import CommunicationConfirmation from './CommunicationConfirmation';
 import { mediumRadioValues, reasonRadioValues, typeRadioValues } from '../../../utils/constants';
+import { SurveyUnit, SurveyUnitCommunicationRequest } from 'types/pearl';
 
 enum Steps {
   MEDIUM,

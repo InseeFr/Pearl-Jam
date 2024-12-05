@@ -13,7 +13,7 @@ export const getSurveyUnits = async (urlPearApi: string, authenticationMode: str
 };
 
 export const getSurveyUnitById =
-  (urlPearApi: string, authenticationMode: string) => async (id: number) => {
+  (urlPearApi: string, authenticationMode: string) => async (id: string) => {
     try {
       await authentication(authenticationMode);
       const token = getToken();
@@ -24,7 +24,7 @@ export const getSurveyUnitById =
   };
 
 export const putDataSurveyUnitById =
-  (urlPearApi: string, authenticationMode: string) => async (id: number, su: SurveyUnit) => {
+  (urlPearApi: string, authenticationMode: string) => async (id: string, su: SurveyUnit) => {
     try {
       await authentication(authenticationMode);
       const token = getToken();
@@ -35,7 +35,7 @@ export const putDataSurveyUnitById =
   };
 
 export const putSurveyUnitToTempZone =
-  (urlPearApi: string, authenticationMode: string) => async (id: number, su: SurveyUnit) => {
+  (urlPearApi: string, authenticationMode: string) => async (id: string, su: SurveyUnit) => {
     try {
       await authentication(authenticationMode);
       const token = getToken();
