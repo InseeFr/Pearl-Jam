@@ -104,7 +104,7 @@ const getResult = (
   };
 };
 
-export const analyseResult = async (PEARL_API_URL: string, PEARL_AUTHENTICATION_MODE: unknown) => {
+export const analyseResult = async (PEARL_API_URL: string, PEARL_AUTHENTICATION_MODE: string) => {
   const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
   const pearlSus = await surveyUnitIDBService.getAll();
   const pearlSurveyUnitsArray = pearlSus.map(({ id }: { id: string }) => id);

@@ -14,15 +14,16 @@ export function toggleItem(arr: any[], item: any) {
 
 /**
  * Group an array into a record indexed by the key
- * @template any
- * @param {string[]} items
- * @param {(item: any) => string} cb
- * @returns {Record<string, any[]>}
  */
-export function groupBy(items: any[], cb: (item: any) => string) {
-  return items.reduce((acc, item) => {
+export function groupBy<T extends object>(
+  items: T[],
+  cb: (item: T) => string
+): Record<string, T[]> {
+  return items.reduce((acc: Record<string, T[]>, item: T) => {
     const key = cb(item);
-    acc[key] = acc[key] ? [...acc[key], item] : [item];
-    return acc;
+    return {
+      ...acc,
+      [key]: acc[key] ? [...acc[key], item] : [item],
+    };
   }, {});
 }

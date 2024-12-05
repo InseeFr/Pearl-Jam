@@ -1,4 +1,4 @@
-export const formatDate = (time: number, withTime: boolean) => {
+export const formatDate = (time: number, withTime?: boolean) => {
   if (!time) {
     return '';
   }

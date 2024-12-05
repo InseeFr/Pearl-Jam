@@ -1,4 +1,5 @@
 import Link from '@mui/material/Link';
+import { PropsWithChildren } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 const style = {
@@ -15,7 +16,7 @@ const style = {
  * @param {import('react').ReactNode} children
  * @return {JSX.Element}
  */
-export function AbsoluteLink({ to, children }) {
+export function AbsoluteLink({ to, children }: Readonly<PropsWithChildren<{ to?: string }>>) {
   if (!to) {
     return <>{children}</>;
   }

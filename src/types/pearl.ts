@@ -117,12 +117,13 @@ export type SurveyUnit = {
   communicationTemplates: SurveyUnitCommunicationTemplate[];
 };
 
+export type NotificationState = 'warning' | 'success' | 'error';
 export type Notification = {
   date: number;
   type: string;
   title: string;
   messages: string[];
-  state: 'warning' | 'success' | 'error';
+  state: NotificationState;
   read: boolean;
   detail: string;
   id: number;

@@ -10,6 +10,7 @@ import { getCommentByType } from '../../utils/functions';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 import D from 'i18n';
 import { CommentField } from '../Fields/CommentField';
+import { SurveyUnit } from 'types/pearl';
 
 interface CommentDialogProps {
   surveyUnit: SurveyUnit;

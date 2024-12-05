@@ -6,10 +6,6 @@ interface StatusChipProps {
   status: ToDoEnumValues;
 }
 
-/**
- * @param {ToDoEnumValues} status
- * @return {JSX.Element}
- */
 export function StatusChip({ status }: Readonly<StatusChipProps>) {
   const theme = useTheme();
   return (

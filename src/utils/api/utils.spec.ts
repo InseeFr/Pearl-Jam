@@ -1,14 +1,14 @@
-import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from 'vitest';
+import { ANONYMOUS, KEYCLOAK, PEARL_USER_KEY } from 'utils/constants';
+import { refreshToken } from 'utils/keycloak';
+import { createSurveyUnit } from 'utils/testing/createFakeData';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  getToken,
-  getSecureHeader,
   authentication,
   formatSurveyUnitForPut,
   getHeader,
+  getSecureHeader,
+  getToken,
 } from './utils';
-import { ANONYMOUS, KEYCLOAK, PEARL_USER_KEY } from 'utils/constants';
-import { communicationStatusEnum } from 'utils/enum/CommunicationEnums';
-import { kc, keycloakAuthentication, refreshToken } from 'utils/keycloak';
 
 vi.mock('utils/keycloak', () => ({
   kc: { token: 'mocked_token' },
@@ -66,46 +66,84 @@ describe('Utils tests', () => {
   });
 
   it('should format survey unit', async () => {
-    const surveyUnit = {
-      id: '1',
-      persons: [],
-      address: {},
-      move: {},
-      comments: '',
-      states: [],
-      contactAttempts: [],
-      contactOutcome: {},
-      identification: {},
-      communicationRequests: [
+    const surveyUnit = createSurveyUnit();
+
+    const formatted = await formatSurveyUnitForPut(surveyUnit);
+    expect(formatted).toEqual({
+      id: 'SU12345',
+      identification: {
+        access: null,
+        category: null,
+        identification: null,
+        occupant: null,
+        situation: null,
+      },
+      move: false,
+      persons: [
         {
-          communicationTemplateId: 'template_1',
-          status: [{ status: communicationStatusEnum.INITIATED.value, date: new Date() }],
-          reason: 'reason_1',
-        },
-        {
-          communicationTemplateId: 'template_2',
-          status: [{ status: 'OTHER_STATUS', date: new Date() }],
-          reason: 'reason_2',
+          id: 1,
+          title: 'Mr',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.doe@example.com',
+          birthdate: 631152000000, // Correspond à une date en timestamp (1er Janvier 1990)
+          favoriteEmail: true,
+          privileged: false,
+          phoneNumbers: [
+            {
+              source: 'Home',
+              favorite: true,
+              number: '1234567890',
+              id: 'PN1',
+            },
+            {
+              source: 'Work',
+              favorite: false,
+              number: '0987654321',
+              id: 'PN2',
+            },
+          ],
         },
       ],
-    };
-
-    const formatted = await formatSurveyUnitForPut(surveyUnit as unknown as SurveyUnit);
-    expect(formatted).toEqual({
-      id: '1',
-      persons: [],
-      address: {},
-      move: {},
-      comments: '',
-      states: [],
-      contactAttempts: [],
-      contactOutcome: {},
-      identification: {},
-      communicationRequests: [
+      address: {
+        l1: '123 Main Street',
+        l2: 'Apartment 4B',
+        l3: '',
+        l4: '',
+        l5: '',
+        l6: '',
+        l7: '',
+        elevator: true,
+        building: 'A',
+        floor: '4',
+        door: 'B',
+        staircase: '1',
+        cityPriorityDistrict: false,
+      },
+      comments: [
         {
-          communicationTemplateId: 'template_1',
-          creationTimestamp: expect.any(Date),
-          reason: 'reason_1',
+          type: 'Note',
+          value: 'Respondent prefers contact in the evening.',
+        },
+      ],
+      communicationRequests: [],
+      contactAttempts: [
+        {
+          date: 1700000000000,
+          medium: 'Phone',
+          status: 'SUCCESS',
+        },
+      ],
+      contactOutcome: {
+        date: 1700000000000,
+        totalNumberOfContactAttempts: 3,
+        type: 'COMPLETED',
+      },
+      states: [
+        {
+          date: 1700000000000,
+          id: 1,
+          type: 'INITIALIZED',
         },
       ],
     });

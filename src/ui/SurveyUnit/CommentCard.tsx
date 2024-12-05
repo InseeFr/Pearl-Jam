@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import CommentIcon from '@mui/icons-material/Comment';
 import { CommentField } from '../Fields/CommentField';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { SurveyUnit } from 'types/pearl';
 
 interface CommentCardProps {
   surveyUnit: SurveyUnit;
