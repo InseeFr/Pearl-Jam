@@ -1,7 +1,8 @@
 import { db } from 'utils/indexeddb/idb-config';
 import { useLiveQuery } from 'dexie-react-hooks';
 
-export const useSurveyUnit = id => useLiveQuery(async () => (await db.surveyUnit.get(id)) ?? false);
+export const useSurveyUnit = (id: string) =>
+  useLiveQuery(async () => (await db.surveyUnit.get(id)) ?? false);
 
 /**
  * @return SurveyUnit[]
