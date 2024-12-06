@@ -1,8 +1,8 @@
-import Keycloak from 'keycloak-js';
+import Keycloak, { KeycloakInitOptions } from 'keycloak-js';
 import { PEARL_URL } from 'utils/constants';
 
 export const kc = new Keycloak(`${PEARL_URL}/keycloak.json`);
-export const keycloakAuthentication = (params: unknown) =>
+export const keycloakAuthentication = (params: KeycloakInitOptions) =>
   new Promise<void | boolean>((resolve, reject) => {
     if (navigator.onLine) {
       kc.init(params)

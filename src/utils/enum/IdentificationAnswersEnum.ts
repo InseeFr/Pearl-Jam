@@ -8,7 +8,15 @@ export const identificationAnswerTypeEnum = {
   OCCUPANT: 'OCCUPANT',
 } as const;
 
-export const identificationAnswersEnum = {
+export type Question = {
+  questionType: string;
+  type: string;
+  value: string;
+  label: string;
+  concluding: boolean;
+};
+
+export const identificationAnswersEnum: Record<string, Question> = {
   IDENTIFICATION_IDENTIFIED: {
     questionType: identificationAnswerTypeEnum.IDENTIFICATION,
     type: 'IDENTIFICATION_IDENTIFIED',
@@ -108,6 +116,3 @@ export const identificationAnswersEnum = {
     concluding: true,
   },
 } as const;
-
-export const findIdentificationAnswerValueByType = (type: string) =>
-  Object.values(identificationAnswersEnum).filter(value => value.type === type)?.[0]?.value;

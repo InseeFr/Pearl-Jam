@@ -4,18 +4,18 @@ import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 
 import D from 'i18n';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
-import surveyUnitIdbService from 'utils/indexeddb/services/surveyUnit-idb-service';
+import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
 
-export const checkSyncResult = (pearlSuccess, queenSuccess) => {
+export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) => {
   if (pearlSuccess && queenSuccess) {
-    const queenMissing = pearlSuccess.reduce((_, pearlSU) => {
+    const queenMissing = pearlSuccess.reduce((_: string[], pearlSU: string) => {
       if (!queenSuccess.includes(pearlSU)) return [..._, pearlSU];
       return _;
     }, []);
 
-    const pearlMissing = queenSuccess.reduce((_, queenSU) => {
+    const pearlMissing = queenSuccess.reduce((_: string[], queenSU: string) => {
       if (!pearlSuccess.includes(queenSU)) return [..._, queenSU];
       return _;
     }, []);
@@ -25,7 +25,10 @@ export const checkSyncResult = (pearlSuccess, queenSuccess) => {
   return {};
 };
 
-export const getNotifFromResult = (result, nowDate) => {
+export const getNotifFromResult = (
+  result: { state: unknown; messages: unknown },
+  nowDate: number
+) => {
   const { state, messages } = result;
   return {
     date: nowDate || new Date().getTime(),
@@ -38,10 +41,16 @@ export const getNotifFromResult = (result, nowDate) => {
   };
 };
 
-export const getReportFromResult = (result, nowDate = 0) => {
+export const getReportFromResult = (
+  result: {
+    details?: { transmittedSurveyUnits: unknown; loadedSurveyUnits: unknown };
+    state: unknown;
+  },
+  nowDate = 0
+) => {
   const { details, state } = result;
   if (state !== 'error') {
-    const { transmittedSurveyUnits, loadedSurveyUnits } = details;
+    const { transmittedSurveyUnits, loadedSurveyUnits } = details!;
     return {
       id: `report-${nowDate}`,
       transmittedSurveyUnits,
@@ -52,10 +61,10 @@ export const getReportFromResult = (result, nowDate = 0) => {
 };
 
 const getResult = (
-  pearlError,
-  queenError,
-  pearlMissing = [],
-  queenMissing = [],
+  pearlError: string,
+  queenError: string,
+  pearlMissing: string[] = [],
+  queenMissing: string[] = [],
   pearlSurveyUnits = [],
   pearlTempZone = [],
   queenTempZone = [],
@@ -95,10 +104,10 @@ const getResult = (
   };
 };
 
-export const analyseResult = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) => {
-  const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY)) || {};
-  const pearlSus = await surveyUnitIdbService.getAll();
-  const pearlSurveyUnitsArray = pearlSus.map(({ id }) => id);
+export const analyseResult = async (PEARL_API_URL: string, PEARL_AUTHENTICATION_MODE: string) => {
+  const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
+  const pearlSus = await surveyUnitIDBService.getAll();
+  const pearlSurveyUnitsArray = pearlSus.map(({ id }: { id: string }) => id);
   const {
     error: pearlError,
     surveyUnitsInTempZone: pearlTempZone,
@@ -142,12 +151,11 @@ export const analyseResult = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) =>
     await api.sendMail(PEARL_API_URL, PEARL_AUTHENTICATION_MODE)(mailSubject, mailContent);
     // save missing (exist in Pearl, not in Queen) units in database
     await surveyUnitMissingIdbService.addAll(
-      queenMissing.map(id => {
+      queenMissing.map((id: string) => {
         return { id };
       })
     );
   }
-
   const result = getResult(
     pearlError,
     queenError,
@@ -169,7 +177,7 @@ export const analyseResult = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) =>
   return result;
 };
 
-export const saveSyncPearlData = data =>
+export const saveSyncPearlData = (data: unknown) =>
   window.localStorage.setItem('PEARL_SYNC_RESULT', JSON.stringify(data));
 export const getSavedSyncPearlData = () =>
   JSON.parse(window.localStorage.getItem('PEARL_SYNC_RESULT') || '{}');

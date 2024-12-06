@@ -1,3 +1,5 @@
+import { NotificationState } from 'types/pearl';
+
 const syncMessage = {
   simpleSync: { fr: 'Synchronisation', en: 'Synchronization', sq: 'Sinkronizimi' },
   syncResult: {
@@ -37,19 +39,19 @@ const syncMessage = {
     sq: `Sinkronizimi nuk filloi, sepse serveri nuk përgjigjet.`,
   },
   titleSync: {
-    fr: type => {
+    fr: (type: NotificationState) => {
       if (type === 'success') return `La synchronisation a réussi.`;
       if (type === 'warning') return `Oups, il y a eu quelques soucis lors de la synchronisation.`;
       if (type === 'error') return `La synchronisation a échoué.`;
       return '';
     },
-    en: type => {
+    en: (type: NotificationState) => {
       if (type === 'success') return `The synchronization was successful.`;
       if (type === 'warning') return `Oops, there were some problems during the synchronization`;
       if (type === 'error') return `Synchronization has failed.`;
       return '';
     },
-    sq: type => {
+    sq: (type: NotificationState) => {
       if (type === 'success') return `Sinkronizimi u realizua me sukses.`;
       if (type === 'warning') return `Oops, pati disa probleme gjatë sinkronizimit.`;
       if (type === 'error') return `Sinkronizimi dështoi.`;
@@ -108,14 +110,17 @@ const syncMessage = {
     sq: 'Detajet : Raporti i Sinkronizimit',
   },
   transmittedSurveyUnits: {
-    fr: n => (n > 1 ? `${n} unités enquêtées transmises` : `${n} unité enquêtée transmise`),
-    en: n => (n > 1 ? `${n} transmitted survey-units` : `${n} transmitted survey-unit`),
-    sq: n => (n > 1 ? `${n} njësi anketimi të transmetuara` : `${n} njësi anketimi e transmetuar`),
+    fr: (n: number) =>
+      n > 1 ? `${n} unités enquêtées transmises` : `${n} unité enquêtée transmise`,
+    en: (n: number) => (n > 1 ? `${n} transmitted survey-units` : `${n} transmitted survey-unit`),
+    sq: (n: number) =>
+      n > 1 ? `${n} njësi anketimi të transmetuara` : `${n} njësi anketimi e transmetuar`,
   },
   loadedSurveyUnits: {
-    fr: n => (n > 1 ? `${n} unités enquêtées chargées` : `${n} unité enquêtée chargée`),
-    en: n => (n > 1 ? `${n} loaded survey-units` : `${n} loaded survey-unit`),
-    sq: n => (n > 1 ? `${n} njësi anketimi të ngarkuara` : `${n} njësi anketimi e ngarkuar`),
+    fr: (n: number) => (n > 1 ? `${n} unités enquêtées chargées` : `${n} unité enquêtée chargée`),
+    en: (n: number) => (n > 1 ? `${n} loaded survey-units` : `${n} loaded survey-unit`),
+    sq: (n: number) =>
+      n > 1 ? `${n} njësi anketimi të ngarkuara` : `${n} njësi anketimi e ngarkuar`,
   },
   nothingToDisplay: {
     fr: 'Rien à afficher',
