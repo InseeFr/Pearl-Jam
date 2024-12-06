@@ -36,7 +36,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], locale: 'fr-FR' },
     },
 
     /* Test against mobile viewports. */
@@ -61,4 +61,8 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
+  webServer: {
+    command: 'yarn dev',
+    url: 'http://localhost:5173',
+  },
 });
