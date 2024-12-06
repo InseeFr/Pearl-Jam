@@ -24,17 +24,18 @@ function convertToHex(rgb: RGB) {
  * Trims a string representing a color code by removing the '#' symbol if present.
  */
 function trim(s: string) {
-  return s.charAt(0) == '#' ? s.substring(1, 7) : s;
+  return s.startsWith('#') ? s.substring(1, 7) : s;
 }
 
 /**
  * Convert a hex color into RGB triplet
  */
 function convertToRGB(hex: string): RGB {
+  const trimHexa = trim(hex);
   return [
-    parseInt(trim(hex).substring(0, 2), 16),
-    parseInt(trim(hex).substring(2, 4), 16),
-    parseInt(trim(hex).substring(4, 6), 16),
+    parseInt(trimHexa.substring(0, 2), 16),
+    parseInt(trimHexa.substring(2, 4), 16),
+    parseInt(trimHexa.substring(4, 6), 16),
   ];
 }
 
