@@ -21,8 +21,8 @@ import { surveyUnitStateEnum } from '../utils/enum/SUStateEnum';
 import { ContactsCard } from 'ui/SurveyUnit/Contact/ContactsCard';
 
 export function SurveyUnitPage() {
-  const { id } = useParams();
-  const surveyUnit = useSurveyUnit(id);
+  const { id } = useParams<{ id: string }>();
+  const surveyUnit = useSurveyUnit(id!);
 
   useEffect(() => {
     if (surveyUnit !== undefined) {
