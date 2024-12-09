@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -124,7 +124,7 @@ export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>
         {states.map(state => {
           return (
             <Step key={state.order}>
-              <StepLabel StepIconComponent={StepIcon}>
+              <StepLabel icon={StepIcon(Number(state.order) < currentState, state.order)}>
                 {Number(state.order) < currentState ? state.stepName : state.value}
               </StepLabel>
               {state.order === '4' && <SubmitButton surveyUnit={surveyUnit} />}
@@ -252,7 +252,7 @@ function SubmitButton({ surveyUnit }: Readonly<SubmitButtonProp>) {
  * @param {boolean} completed
  * @param {string} icon
  */
-const StepIcon = (completed: boolean, icon: string) => {
+const StepIcon = (completed: boolean, icon: string): ReactNode => {
   if (completed) {
     return <CheckIcon fontSize="inherit" color="primary" />;
   }
