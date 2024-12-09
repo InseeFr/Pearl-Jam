@@ -1,11 +1,12 @@
 import { addNewState } from 'utils/functions/surveyUnitFunctions';
-import questionnaireEnum from 'utils/enum/QuestionnaireStateEnum';
+import questionnaireEnum, { QuestionnaireStateType } from 'utils/enum/QuestionnaireStateEnum';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useEffect } from 'react';
 import { persistSurveyUnit } from '../functions';
+import { ID } from 'utils/indexeddb/services/abstract-idb-service';
 
-const computeSurveyUnitState = questionnaireState => {
+const computeSurveyUnitState = (questionnaireState: QuestionnaireStateType) => {
   switch (questionnaireState) {
     case questionnaireEnum.COMPLETED.type:
       return surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
@@ -18,9 +19,9 @@ const computeSurveyUnitState = questionnaireState => {
   }
 };
 
-const updateSurveyUnit = (surveyUnitID, queenState) => {
+const updateSurveyUnit = (surveyUnitID: ID, queenState: QuestionnaireStateType) => {
   surveyUnitIDBService.getById(surveyUnitID).then(su => {
-    let newQuestionnaireState = '';
+    let newQuestionnaireState: QuestionnaireStateType | '' = '';
     switch (queenState) {
       case 'COMPLETED':
         newQuestionnaireState = questionnaireEnum.COMPLETED.type;
@@ -35,22 +36,20 @@ const updateSurveyUnit = (surveyUnitID, queenState) => {
         break;
     }
 
-    const newStateType = computeSurveyUnitState(newQuestionnaireState);
-    const newStates = addNewState(su, newStateType);
-    persistSurveyUnit({ ...su, states: newStates });
+    if (newQuestionnaireState !== '') {
+      const newStateType = computeSurveyUnitState(newQuestionnaireState);
+      const newStates = addNewState(su, newStateType);
+      persistSurveyUnit({ ...su, states: newStates });
+    }
   });
 };
 
-/**
- @param {(s: string) => void} redirect
- * @return {(s: string) => void}
- */
-const closeQueen = redirect => surveyUnitID => {
+const closeQueen = (redirect: (url: string) => void) => (surveyUnitID: string) => {
   redirect(`/survey-unit/${surveyUnitID}/details`);
 };
 
 // eslint-disable-next-line consistent-return
-const handleQueenEvent = redirect => async event => {
+const handleQueenEvent = (redirect: (url: string) => void) => async (event: QueenEvent) => {
   const { type, command, ...other } = event.detail;
   if (type === 'QUEEN') {
     switch (command) {
@@ -72,10 +71,21 @@ const handleQueenEvent = redirect => async event => {
   }
 };
 
-/**
- * @param {(s: string) => void} redirect
- */
-export function useQueenListener(redirect) {
+declare global {
+  interface WindowEventMap {
+    QUEEN: QueenEvent;
+  }
+}
+
+type QueenEventDetail = {
+  type: string;
+  command: string;
+  surveyUnit: string;
+  state: QuestionnaireStateType;
+};
+interface QueenEvent extends CustomEvent<QueenEventDetail> {}
+
+export function useQueenListener(redirect: (url: string) => void) {
   useEffect(() => {
     const listener = handleQueenEvent(redirect);
     window.addEventListener('QUEEN', listener);
