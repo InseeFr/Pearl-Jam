@@ -16,7 +16,7 @@ import {
   IdentificationQuestion,
   questions,
   hasDependency,
-} from '../../utils/functions/identificationQuestionsByTelephone';
+} from '../../utils/functions/identifications/identificationQuestionsByTelephone';
 import { Card, CardContent } from '@mui/material';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import { ButtonLine } from 'ui/ButtonLine';
@@ -28,28 +28,41 @@ type ResponseState = { [key: string]: IdentificationQuestionOption | undefined }
 interface IdentificationCardProps {
   surveyUnit: SurveyUnit;
 }
+
 export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationCardProps>) {
   const [responses, setResponses] = useState<ResponseState>({});
-
+  const [availableQuestions, setAvailableQuestions] = useState<{ [key: string]: boolean }>({});
   const [selectedDialogId, setSelectedDialogId] = useState<string | null>(null);
+
+  useState(() => {
+    const initialAvailability: { [key: string]: boolean } = questions.reduce(
+      (acc, question) => ({ ...acc, [question.id]: true }),
+      {}
+    );
+    setAvailableQuestions(initialAvailability);
+  });
 
   const handleResponse = (questionId: string, option: IdentificationQuestionOption) => {
     setResponses(prev => {
       const updatedResponses = { ...prev, [questionId]: option };
 
-      // Peut être enlevé ?
-      questions.forEach(q => {
-        if (q.dependsOn && q.dependsOn.questionId === questionId) {
-          if (!q.dependsOn.values.indexOf(option.value)) {
-            updatedResponses[q.id] = undefined;
-          }
-        }
-      });
+      const updatedAvailability = questions.reduce(
+        (acc, question) => {
+          acc[question.id] = hasDependency(
+            question,
+            updatedResponses[question.dependsOn?.questionId as keyof ResponseState]
+          );
+          return acc;
+        },
+        {} as { [key: string]: boolean }
+      );
 
+      setAvailableQuestions(updatedAvailability);
+
+      // Persist state if concluding question is answered
       if (questions.find(q => q.id === questionId && q.concluding)) {
         const newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
         persistSurveyUnit({ ...surveyUnit, states: newStates });
-        // TO DO, persister le réperage dans la SU
       }
 
       return updatedResponses;
@@ -70,18 +83,17 @@ export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationC
             <Stack gap={1}>
               {questions.map(question => (
                 <>
-                  <ButtonLine
-                    key={question.id}
-                    onClick={() => setSelectedDialogId(question.id)}
-                    label={responses[question.id] ? responses[question.id]?.label : question.text}
-                    checked={responses[question.id] ? true : false}
-                    disabled={
-                      !hasDependency(
-                        question,
-                        responses[question.dependsOn?.questionId as keyof ResponseState]
-                      )
-                    }
-                  ></ButtonLine>
+                  {
+                    <ButtonLine
+                      key={question.id}
+                      onClick={() => setSelectedDialogId(question.id)}
+                      label={responses[question.id] ? responses[question.id]?.label : question.text}
+                      checked={
+                        responses[question.id] && availableQuestions[question.id] ? true : false
+                      }
+                      disabled={!availableQuestions[question.id]}
+                    ></ButtonLine>
+                  }
                   {selectedDialogId == question.id && (
                     <IdentificationDialog
                       key={'question'}

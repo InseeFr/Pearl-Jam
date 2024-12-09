@@ -3,9 +3,9 @@ import {
   identificationAnswersEnum as answers,
   identificationAnswerTypeEnum,
   Question,
-} from 'utils/enum/IdentificationAnswersEnum';
+} from 'utils/enum/identifications/IdentificationAnswersEnum';
 
-import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
+import { identificationConfigurationEnum } from 'utils/enum/identifications/IdentificationConfigurationEnum';
 
 const getIascoAnswersByQuestionType = (type: string) =>
   Object.values(answers).filter(({ questionType }) => questionType === type);

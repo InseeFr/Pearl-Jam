@@ -18,7 +18,7 @@ import { Key, useState } from 'react';
 import { RadioLine } from '../RadioLine';
 import RadioGroup from '@mui/material/RadioGroup';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
-import { identificationConfigurationEnum } from '../../utils/enum/IdentificationConfigurationEnum';
+import { identificationConfigurationEnum } from '../../utils/enum/identifications/IdentificationConfigurationEnum';
 import Box from '@mui/material/Box';
 import { addNewState } from '../../utils/functions';
 import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';

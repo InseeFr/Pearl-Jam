@@ -1,6 +1,6 @@
-import { identificationConfigurationEnum } from '../enum/IdentificationConfigurationEnum';
-import { identificationQuestionsEnum } from '../enum/IdentificationQuestionsEnum';
-import { identificationAnswersEnum } from '../enum/IdentificationAnswersEnum';
+import { identificationConfigurationEnum } from '../enum/identifications/IdentificationConfigurationEnum';
+import { identificationQuestionsEnum } from '../enum/identifications/IdentificationQuestionsEnum';
+import { identificationAnswersEnum } from '../enum/identifications/IdentificationAnswersEnum';
 import { useMemo, useState } from 'react';
 import { persistSurveyUnit } from '../functions';
 

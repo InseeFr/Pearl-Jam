@@ -1,3 +1,8 @@
+import {
+  IdentificationPersonOption,
+  IdentificationSituationOption,
+} from 'utils/enum/identifications/IdenitifcationsByTelQuestions';
+
 export type IdentificationQuestionOption = { value: string; label?: string };
 
 export type IdentificationQuestion = {
@@ -14,14 +19,11 @@ export const questions: IdentificationQuestion[] = [
     text: 'Individu retrouvé',
     concluding: false,
     options: [
-      { label: "Oui, à l'adresse indiquée", value: 'SAMEADRESS' },
-      {
-        label: 'Oui, mais à une autre adresse située dans le champs géographique',
-        value: 'OTHERADRESS',
-      },
-      { label: 'Oui, mais hors du champs géographique', value: 'NOFIELD' },
-      { label: 'Non', value: 'NOIDENT' },
-      { label: 'Décédé', value: 'DCD' },
+      { label: IdentificationPersonOption.SAMEADRESS, value: 'SAMEADRESS' },
+      { label: IdentificationPersonOption.OTHERADRESS, value: 'OTHERADRESS' },
+      { label: IdentificationPersonOption.NOFIELD, value: 'NOFIELD' },
+      { label: IdentificationPersonOption.NOIDENT, value: 'NOIDENT' },
+      { label: IdentificationPersonOption.DCD, value: 'DCD' },
     ],
   },
   {
@@ -29,8 +31,8 @@ export const questions: IdentificationQuestion[] = [
     text: 'Situation du logement',
     concluding: true,
     options: [
-      { label: 'Non Ordinaire', value: 'NOORDINARY' },
-      { label: 'Ordinaire', value: 'ORDINARY' },
+      { label: IdentificationSituationOption.NOORDINARY, value: 'NOORDINARY' },
+      { label: IdentificationSituationOption.ORDINARY, value: 'ORDINARY' },
     ],
     dependsOn: { questionId: 'identification.individu', values: ['SAMEADRESS', 'OTHERADRESS'] },
   },

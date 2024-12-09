@@ -5,11 +5,11 @@ import {
   IASCO_IDENTIFICATION_FINISHING_VALUES,
   IASCO_SITUATION_FINISHING_VALUES,
   identificationIsFinished,
-} from './identificationFunctions';
+} from './identifications/identificationFunctions';
 
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
-import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
+import { identificationConfigurationEnum } from 'utils/enum/identifications/IdentificationConfigurationEnum';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';

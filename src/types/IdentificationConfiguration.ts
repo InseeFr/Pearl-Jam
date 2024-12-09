@@ -1,4 +1,4 @@
-import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
+import { identificationConfigurationEnum } from 'utils/enum/identifications/IdentificationConfigurationEnum';
 
 export type IdentificationConfiguration = keyof typeof identificationConfigurationEnum;
 
