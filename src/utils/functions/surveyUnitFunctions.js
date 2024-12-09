@@ -1,3 +1,4 @@
+import { differenceInYears } from 'date-fns';
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST, TITLES } from 'utils/constants';
 import {
   IASCO_CATEGORY_FINISHING_VALUES,
@@ -5,14 +6,13 @@ import {
   IASCO_SITUATION_FINISHING_VALUES,
   identificationIsFinished,
 } from './identificationFunctions';
-import { differenceInYears } from 'date-fns';
 
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
-import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
-import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
+import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 
 export const getCommentByType = (type, su) => {
   if (Array.isArray(su.comments) && su.comments.length > 0) {
