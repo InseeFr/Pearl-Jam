@@ -12,6 +12,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   test: {
     globals: true,
+    include: ['src/**/*.spec.*'],
     environment: 'jsdom',
     coverage: {
       reporter: ['text', 'html'],
