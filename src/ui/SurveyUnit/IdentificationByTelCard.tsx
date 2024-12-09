@@ -15,12 +15,13 @@ import {
   IdentificationQuestionOption,
   IdentificationQuestion,
   questions,
+  hasDependency,
 } from '../../utils/functions/identificationQuestionsByTelephone';
 import { Card, CardContent } from '@mui/material';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import { ButtonLine } from 'ui/ButtonLine';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { addNewState, getLastState, persistSurveyUnit } from 'utils/functions/surveyUnitFunctions';
+import { addNewState, persistSurveyUnit } from 'utils/functions/surveyUnitFunctions';
 
 type ResponseState = { [key: string]: IdentificationQuestionOption | undefined };
 
@@ -29,15 +30,17 @@ interface IdentificationCardProps {
 }
 export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationCardProps>) {
   const [responses, setResponses] = useState<ResponseState>({});
+
   const [selectedDialogId, setSelectedDialogId] = useState<string | null>(null);
 
   const handleResponse = (questionId: string, option: IdentificationQuestionOption) => {
     setResponses(prev => {
       const updatedResponses = { ...prev, [questionId]: option };
 
+      // Peut être enlevé ?
       questions.forEach(q => {
         if (q.dependsOn && q.dependsOn.questionId === questionId) {
-          if (!q.dependsOn.values.includes(option.value)) {
+          if (!q.dependsOn.values.indexOf(option.value)) {
             updatedResponses[q.id] = undefined;
           }
         }
@@ -53,14 +56,6 @@ export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationC
     });
   };
 
-  const isQuestionVisible = (question: IdentificationQuestion): boolean => {
-    if (!question.dependsOn) return true;
-    const dependencyOption = responses[question.dependsOn.questionId];
-    return dependencyOption ? question.dependsOn.values.includes(dependencyOption.value) : false;
-  };
-
-  console.log(responses);
-
   return (
     <>
       <Card elevation={0}>
@@ -73,31 +68,31 @@ export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationC
               </Typography>
             </Row>
             <Stack gap={1}>
-              {questions.map(
-                question =>
-                  isQuestionVisible(question) && (
-                    <>
-                      <ButtonLine
-                        key={question.id}
-                        onClick={() => setSelectedDialogId(question.id)}
-                        label={
-                          responses[question.id] ? responses[question.id]?.label : question.text
-                        }
-                        checked={responses[question.id] ? true : false}
-                        disabled={false}
-                      ></ButtonLine>
-                      {selectedDialogId == question.id && (
-                        <IdentificationDialog
-                          key={'question'}
-                          question={question}
-                          defaultOption={responses[question.id] ?? question.options[0]}
-                          onSubmit={handleResponse}
-                          onClose={() => setSelectedDialogId(null)}
-                        />
-                      )}
-                    </>
-                  )
-              )}
+              {questions.map(question => (
+                <>
+                  <ButtonLine
+                    key={question.id}
+                    onClick={() => setSelectedDialogId(question.id)}
+                    label={responses[question.id] ? responses[question.id]?.label : question.text}
+                    checked={responses[question.id] ? true : false}
+                    disabled={
+                      !hasDependency(
+                        question,
+                        responses[question.dependsOn?.questionId as keyof ResponseState]
+                      )
+                    }
+                  ></ButtonLine>
+                  {selectedDialogId == question.id && (
+                    <IdentificationDialog
+                      key={'question'}
+                      question={question}
+                      defaultOption={responses[question.id] ?? question.options[0]}
+                      onSubmit={handleResponse}
+                      onClose={() => setSelectedDialogId(null)}
+                    />
+                  )}
+                </>
+              ))}
             </Stack>
           </Stack>
         </CardContent>

@@ -35,3 +35,17 @@ export const questions: IdentificationQuestion[] = [
     dependsOn: { questionId: 'identification.individu', values: ['SAMEADRESS', 'OTHERADRESS'] },
   },
 ];
+
+export function hasDependency(
+  question: IdentificationQuestion,
+  dependancyOption?: IdentificationQuestionOption
+): boolean {
+  console.log(question.text);
+  console.log(question);
+  console.log(dependancyOption);
+
+  if (!question.dependsOn) return true;
+  if (!dependancyOption) return false;
+
+  return question.dependsOn.values.some(v => v === dependancyOption.value) ?? false;
+}
