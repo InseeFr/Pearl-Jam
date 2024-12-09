@@ -9,4 +9,6 @@ const questionnaireState = {
   VALIDATED: { type: 'VALIDATED', value: `${D.questionnaireStateValidated}` },
 } as const;
 
+export type QuestionnaireState = typeof questionnaireState;
+export type QuestionnaireStateType = keyof QuestionnaireState;
 export default questionnaireState;
