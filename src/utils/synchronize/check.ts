@@ -65,7 +65,7 @@ const getResult = (
   queenError: string,
   pearlMissing: string[] = [],
   queenMissing: string[] = [],
-  pearlSurveyUnits = [],
+  pearlSurveyUnits: string[] = [],
   pearlTempZone = [],
   queenTempZone = [],
   transmittedSurveyUnits = {},
