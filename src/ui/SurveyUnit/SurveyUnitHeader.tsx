@@ -30,10 +30,6 @@ import { makeStyles, useTheme } from '@mui/styles';
 import D from '../../i18n/build-dictionary';
 import { SurveyUnit } from 'types/pearl';
 
-/**
- * @param {SurveyUnit} surveyUnit
- */
-
 const useStyles = makeStyles({
   rotateBox: {
     transform: 'rotate(-90deg)',
@@ -199,10 +195,6 @@ interface SubmitButtonProp {
 
 /**
  * Transmit button to sync a surveyUnit
- *
- * @param {SurveyUnit} surveyUnit
- * @returns {JSX.Element}
- * @constructor
  */
 function SubmitButton({ surveyUnit }: Readonly<SubmitButtonProp>) {
   const canSubmit = isValidForTransmission(surveyUnit);
@@ -248,9 +240,6 @@ function SubmitButton({ surveyUnit }: Readonly<SubmitButtonProp>) {
 
 /**
  * Custom icon for the stepper
- *
- * @param {boolean} completed
- * @param {string} icon
  */
 const StepIcon = (completed: boolean, icon: string): ReactNode => {
   if (completed) {
