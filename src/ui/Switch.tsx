@@ -1,7 +1,7 @@
-import Switch from '@mui/material/Switch';
+import Switch, { SwitchProps } from '@mui/material/Switch';
 import { useTheme } from '@mui/material/styles';
 
-export const SwitchIOS = props => {
+export const SwitchIOS = (props: Readonly<SwitchProps>) => {
   const theme = useTheme();
   return (
     <Switch

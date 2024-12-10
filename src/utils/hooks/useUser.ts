@@ -8,7 +8,7 @@ const user = signal({
   lastName: 'Interviewer',
   phoneNumber: '0123456789',
   email: 'no.data@y.et',
-  title: 'MISTER'
+  title: 'MISTER',
 });
 
 // Watch change to update the signal when user info changes
@@ -21,9 +21,6 @@ liveQuery(() => db.user.limit(1).toArray()).subscribe({
   error: error => console.error(error),
 });
 
-/**
- * @returns {{user: {firstName: string, lastName: string, phoneNumber: string, email: string, title : 'MISTER' | 'MISS'}}}
- */
 export function useUser() {
   return {
     user: useSignalValue(user),

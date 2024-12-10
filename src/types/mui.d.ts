@@ -20,6 +20,7 @@ declare module '@mui/material/Typography' {
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     white: true;
+    surfaceSecondary: true;
   }
 
   interface ButtonPropsVariantOverrides {
