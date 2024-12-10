@@ -1,4 +1,34 @@
 const identificationMessage = {
+  sameAddress: {
+    fr: "Oui, à l'adresse indiquée",
+    en: 'Yes, at the specified address',
+    sq: 'Po, në adresën e specifikuar',
+  },
+  otherAddress: {
+    fr: 'Oui, mais à une autre adresse située dans le champs géographique',
+    en: 'Yes, but at another address within the geographical area',
+    sq: 'Po, por në një adresë tjetër brenda zonës gjeografike',
+  },
+  noField: {
+    fr: 'Oui, mais hors du champs géographique',
+    en: 'Yes, but outside the geographical area',
+    sq: 'Po, por jashtë zonës gjeografike',
+  },
+  noIdent: {
+    fr: 'Non',
+    en: 'No',
+    sq: 'Jo',
+  },
+  deceased: {
+    fr: 'Décédé',
+    en: 'Deceased',
+    sq: 'I ndjerë',
+  },
+  situationNonOrdinary: {
+    fr: 'Non Ordinaire',
+    en: 'Not Ordinary',
+    sq: 'Jo i zakonshëm',
+  },
   identificationIdentified: {
     fr: 'Logement identifié',
     en: 'Identified housing',

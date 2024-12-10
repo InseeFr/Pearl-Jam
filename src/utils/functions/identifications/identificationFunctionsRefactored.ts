@@ -22,18 +22,18 @@ export const questions: IdentificationQuestions = {
   [IdentificationQuestionsId.ID_PERSON]: {
     text: `${D.housingIdentification}`,
     options: [
-      { label: IdentificationPersonOption.SAMEADRESS, value: 'SAMEADRESS', concluding: false },
-      { label: IdentificationPersonOption.OTHERADRESS, value: 'OTHERADRESS', concluding: false },
-      { label: IdentificationPersonOption.NOFIELD, value: 'NOFIELD', concluding: true },
-      { label: IdentificationPersonOption.NOIDENT, value: 'NOIDENT', concluding: true },
-      { label: IdentificationPersonOption.DCD, value: 'DCD', concluding: true },
+      { label: `${D.sameAddress}`, value: 'SAMEADRESS', concluding: false },
+      { label: `${D.otherAddress}`, value: 'OTHERADRESS', concluding: false },
+      { label: `${D.noField}`, value: 'NOFIELD', concluding: true },
+      { label: `${D.noIdent}`, value: 'NOIDENT', concluding: true },
+      { label: `${D.deceased}`, value: 'DCD', concluding: true },
     ],
   },
   [IdentificationQuestionsId.ID_SITUATION]: {
     text: `${D.housingSituation}`,
     options: [
-      { label: IdentificationSituationOption.NOORDINARY, value: 'NOORDINARY', concluding: true },
-      { label: IdentificationSituationOption.ORDINARY, value: 'ORDINARY', concluding: true },
+      { label: `${D.situationNonOrdinary}`, value: 'NOORDINARY', concluding: true },
+      { label: `${D.identificationIdentified}`, value: 'ORDINARY', concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.ID_PERSON,
