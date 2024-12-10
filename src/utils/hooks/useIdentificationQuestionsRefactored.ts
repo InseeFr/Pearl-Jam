@@ -31,7 +31,7 @@ export function useIdentification(
     questionId: IdentificationQuestionsId,
     option: IdentificationQuestionOption
   ) => {
-    // TO DO : Recontruistre le reperage à partir d'idb
+    // TODO : Recontruistre le reperage à partir d'idb
     setResponses(prev => {
       const updatedResponses = { ...prev, [questionId]: option };
       const updatedAvailability = Object.fromEntries(
