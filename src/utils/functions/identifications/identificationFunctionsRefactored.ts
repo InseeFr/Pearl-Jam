@@ -1,14 +1,14 @@
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
 import D from 'i18n';
 
-export type IdentificationQuestionValueOption = {
+export type IdentificationQuestionOption = {
   value: string;
   label: string;
   concluding: boolean;
 };
 export type IdentificationQuestionValue = {
   text: string;
-  options: IdentificationQuestionValueOption[];
+  options: IdentificationQuestionOption[];
   dependsOn?: { questionId: IdentificationQuestionsId; values: string[] };
 };
 
@@ -42,7 +42,7 @@ export const questions: IdentificationQuestions = {
   },
 } as const;
 
-export type ResponseState = Record<IdentificationQuestionsId, IdentificationQuestionValueOption>;
+export type ResponseState = Record<IdentificationQuestionsId, IdentificationQuestionOption>;
 
 export function checkAvailability(
   question: IdentificationQuestionValue,

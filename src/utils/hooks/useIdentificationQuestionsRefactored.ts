@@ -5,7 +5,7 @@ import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { addNewState, persistSurveyUnit } from 'utils/functions';
 import {
   checkAvailability,
-  IdentificationQuestionValueOption,
+  IdentificationQuestionOption,
   questions,
 } from 'utils/functions/identifications/identificationFunctionsRefactored';
 
@@ -22,7 +22,7 @@ export function useIdentification(surveyUnit: SurveyUnit) {
 
   const handleResponse = (
     questionId: IdentificationQuestionsId,
-    option: IdentificationQuestionValueOption
+    option: IdentificationQuestionOption
   ) => {
     setResponses(prev => {
       const updatedResponses = { ...prev, [questionId]: option };

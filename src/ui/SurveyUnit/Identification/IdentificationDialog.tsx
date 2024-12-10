@@ -12,19 +12,16 @@ import { RadioLine } from 'ui/RadioLine';
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
 import {
   IdentificationQuestionValue,
-  IdentificationQuestionValueOption,
+  IdentificationQuestionOption,
 } from 'utils/functions/identifications/identificationFunctionsRefactored';
 import D from 'i18n';
 
 interface IdentificationDialogProps {
   question: IdentificationQuestionValue;
   questionId: IdentificationQuestionsId;
-  defaultOption: IdentificationQuestionValueOption;
+  defaultOption: IdentificationQuestionOption;
   onClose: () => void;
-  onSubmit: (
-    questionId: IdentificationQuestionsId,
-    option: IdentificationQuestionValueOption
-  ) => void;
+  onSubmit: (questionId: IdentificationQuestionsId, option: IdentificationQuestionOption) => void;
 }
 
 export function IdentificationDialog({
@@ -37,7 +34,7 @@ export function IdentificationDialog({
   const options = question.options;
   const [selectedOption, setSelectedOption] = useState(defaultOption);
 
-  const handleChange = (newOption: IdentificationQuestionValueOption) => {
+  const handleChange = (newOption: IdentificationQuestionOption) => {
     setSelectedOption(newOption);
   };
 
@@ -58,7 +55,7 @@ export function IdentificationDialog({
           name="identification-radio-group"
         >
           <Stack gap={1}>
-            {options.map((option: IdentificationQuestionValueOption) => (
+            {options.map((option: IdentificationQuestionOption) => (
               <RadioLine
                 value={option.value}
                 key={option.value}

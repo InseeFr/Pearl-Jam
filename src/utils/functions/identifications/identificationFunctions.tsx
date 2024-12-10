@@ -9,7 +9,7 @@ import { identificationConfigurationEnum } from 'utils/enum/identifications/Iden
 import {
   IdentificationQuestions,
   IdentificationQuestionValue,
-  IdentificationQuestionValueOption,
+  IdentificationQuestionOption,
 } from './identificationFunctionsRefactored';
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
 

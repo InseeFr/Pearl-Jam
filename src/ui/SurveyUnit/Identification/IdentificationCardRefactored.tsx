@@ -13,7 +13,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import { SurveyUnit } from 'types/pearl';
 import {
   IdentificationQuestionValue,
-  IdentificationQuestionValueOption,
+  IdentificationQuestionOption,
   questions,
 } from '../../../utils/functions/identifications/identificationFunctionsRefactored';
 import { Card, CardContent } from '@mui/material';
