@@ -19,7 +19,7 @@ export type IdentificationQuestions = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionValue>
 >;
 
-// TODO : déplacer identificationQuestionsTel dans un notre fichier ?
+// TODO : déplacer identificationQuestionsTel dans un autre fichier ?
 export const identificationQuestionsTel: IdentificationQuestions = {
   [IdentificationQuestionsId.IDENTIFICATION]: {
     text: `${D.housingIdentification}`,
