@@ -1,22 +1,29 @@
 import { useState } from 'react';
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+import {
+  IdentificationConfiguration,
+  IdentificationQuestionsId,
+} from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
 import { SurveyUnit } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { addNewState, persistSurveyUnit } from 'utils/functions';
 import {
   checkAvailability,
   IdentificationQuestionOption,
-  questions,
+  identificationQuestions,
+  ResponseState,
 } from 'utils/functions/identifications/identificationFunctionsRefactored';
 
-export function useIdentification(surveyUnit: SurveyUnit) {
+export function useIdentification(
+  surveyUnit: SurveyUnit,
+  configuration: IdentificationConfiguration
+) {
+  const questions = identificationQuestions[configuration];
   const initialResponses = Object.fromEntries(Object.values(questions).map(id => [id, undefined]));
 
-  const initialAvailability = Object.fromEntries(
-    Object.keys(questions).map(id => [id, true])
-  ) as Record<IdentificationQuestionsId, boolean>;
+  const initialAvailability: Partial<Record<IdentificationQuestionsId, boolean>> =
+    Object.fromEntries(Object.keys(questions).map(id => [id, true]));
 
-  const [responses, setResponses] = useState(initialResponses);
+  const [responses, setResponses] = useState<ResponseState>(initialResponses);
   const [selectedDialogId, setSelectedDialogId] = useState<IdentificationQuestionsId | null>(null);
   const [availableQuestions, setAvailableQuestions] = useState(initialAvailability);
 
@@ -24,6 +31,7 @@ export function useIdentification(surveyUnit: SurveyUnit) {
     questionId: IdentificationQuestionsId,
     option: IdentificationQuestionOption
   ) => {
+    // TO DO : Recontruistre le reperage à partir d'idb
     setResponses(prev => {
       const updatedResponses = { ...prev, [questionId]: option };
       const updatedAvailability = Object.fromEntries(
@@ -37,13 +45,6 @@ export function useIdentification(surveyUnit: SurveyUnit) {
       if (option.concluding) {
         const newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
         persistSurveyUnit({ ...surveyUnit, states: newStates });
-
-        // TO DO : Persister le nouveau reperage
-        // TO DO : Recontruistre le reperage à partir d'idb
-        // persistSurveyUnit({
-        //   ...surveyUnit,
-        //   identification,
-        // });
       }
 
       return updatedResponses;
@@ -51,6 +52,7 @@ export function useIdentification(surveyUnit: SurveyUnit) {
   };
 
   return {
+    questions,
     responses,
     selectedDialogId,
     availableQuestions,

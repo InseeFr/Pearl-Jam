@@ -14,12 +14,14 @@ import { SurveyUnit } from 'types/pearl';
 import {
   IdentificationQuestionValue,
   IdentificationQuestionOption,
-  questions,
 } from '../../../utils/functions/identifications/identificationFunctionsRefactored';
 import { Card, CardContent } from '@mui/material';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import { ButtonLine } from 'ui/ButtonLine';
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+import {
+  IdentificationConfiguration,
+  IdentificationQuestionsId,
+} from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
 import { useIdentification } from 'utils/hooks/useIdentificationQuestionsRefactored';
 import { IdentificationDialog } from './IdentificationDialog';
 
@@ -28,8 +30,14 @@ interface IdentificationCardProps {
 }
 
 export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationCardProps>) {
-  const { responses, selectedDialogId, availableQuestions, setSelectedDialogId, handleResponse } =
-    useIdentification(surveyUnit);
+  const {
+    questions,
+    responses,
+    selectedDialogId,
+    availableQuestions,
+    setSelectedDialogId,
+    handleResponse,
+  } = useIdentification(surveyUnit, IdentificationConfiguration.TEL);
 
   return (
     <>
@@ -49,7 +57,7 @@ export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationC
                     <ButtonLine
                       key={questionId}
                       onClick={() => setSelectedDialogId(questionId)}
-                      label={responses[questionId]?.label ?? questions[questionId].text}
+                      label={responses[questionId]?.label ?? questions[questionId]?.text}
                       checked={
                         responses[questionId] && availableQuestions[questionId] ? true : false
                       }
@@ -61,7 +69,7 @@ export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationC
                         questionId={questionId}
                         key={`dialog-${questionId}`}
                         question={questions[questionId]}
-                        defaultOption={responses[questionId] ?? questions[questionId].options[0]}
+                        defaultOption={responses[questionId] ?? questions[questionId]?.options[0]}
                         onSubmit={handleResponse}
                         onClose={() => setSelectedDialogId(null)}
                       />

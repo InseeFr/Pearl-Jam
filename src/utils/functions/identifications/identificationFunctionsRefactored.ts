@@ -1,4 +1,7 @@
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+import {
+  IdentificationConfiguration,
+  IdentificationQuestionsId,
+} from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
 import D from 'i18n';
 
 export type IdentificationQuestionOption = {
@@ -12,14 +15,13 @@ export type IdentificationQuestionValue = {
   dependsOn?: { questionId: IdentificationQuestionsId; values: string[] };
 };
 
-export type IdentificationQuestions = Record<
-  IdentificationQuestionsId,
-  IdentificationQuestionValue
+export type IdentificationQuestions = Partial<
+  Record<IdentificationQuestionsId, IdentificationQuestionValue>
 >;
 
-// TO DO : IdentificationQuestionsTel, IdentificationQuestionsIASCO, IdentificationQuestionsSRCV
-export const questions: IdentificationQuestions = {
-  [IdentificationQuestionsId.ID_PERSON]: {
+// TO DO : déplacer identificationQuestionsTel dans un notre fichier ?
+export const identificationQuestionsTel: IdentificationQuestions = {
+  [IdentificationQuestionsId.IDENTIFICATION]: {
     text: `${D.housingIdentification}`,
     options: [
       { label: `${D.sameAddress}`, value: 'SAMEADRESS', concluding: false },
@@ -29,18 +31,29 @@ export const questions: IdentificationQuestions = {
       { label: `${D.deceased}`, value: 'DCD', concluding: true },
     ],
   },
-  [IdentificationQuestionsId.ID_SITUATION]: {
+  [IdentificationQuestionsId.SITUATION]: {
     text: `${D.housingSituation}`,
     options: [
       { label: `${D.situationNonOrdinary}`, value: 'NOORDINARY', concluding: true },
       { label: `${D.identificationIdentified}`, value: 'ORDINARY', concluding: true },
     ],
     dependsOn: {
-      questionId: IdentificationQuestionsId.ID_PERSON,
+      questionId: IdentificationQuestionsId.IDENTIFICATION,
       values: ['SAMEADRESS', 'OTHERADRESS'],
     },
   },
 } as const;
+
+// TO DO : Construire identificationQuestionsIASCO, identificationQuestionsNoident
+export const identificationQuestionsIASCO = {};
+export const identificationQuestionsNoIdent = {};
+
+export const identificationQuestions: Record<IdentificationConfiguration, IdentificationQuestions> =
+  {
+    [IdentificationConfiguration.TEL]: identificationQuestionsTel,
+    [IdentificationConfiguration.IASCO]: identificationQuestionsIASCO,
+    [IdentificationConfiguration.NOIDENT]: identificationQuestionsNoIdent,
+  };
 
 export type ResponseState = Record<IdentificationQuestionsId, IdentificationQuestionOption>;
 

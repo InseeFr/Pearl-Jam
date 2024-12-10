@@ -1,4 +1,13 @@
 export enum IdentificationQuestionsId {
-  ID_PERSON,
-  ID_SITUATION,
+  IDENTIFICATION,
+  SITUATION,
+  OCCUPANT,
+  ACCES,
+  CATEGORY,
+}
+
+export enum IdentificationConfiguration {
+  NOIDENT,
+  IASCO,
+  TEL,
 }

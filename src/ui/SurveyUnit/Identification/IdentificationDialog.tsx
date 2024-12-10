@@ -17,7 +17,7 @@ import {
 import D from 'i18n';
 
 interface IdentificationDialogProps {
-  question: IdentificationQuestionValue;
+  question?: IdentificationQuestionValue;
   questionId: IdentificationQuestionsId;
   defaultOption: IdentificationQuestionOption;
   onClose: () => void;
@@ -31,7 +31,7 @@ export function IdentificationDialog({
   onClose,
   onSubmit,
 }: Readonly<IdentificationDialogProps>) {
-  const options = question.options;
+  const options = question?.options;
   const [selectedOption, setSelectedOption] = useState(defaultOption);
 
   const handleChange = (newOption: IdentificationQuestionOption) => {
@@ -39,15 +39,15 @@ export function IdentificationDialog({
   };
 
   return (
-    <Dialog maxWidth="sm" open={question.text.length > 0} onClose={onClose}>
-      <DialogTitle id="identification-title">{question.text}</DialogTitle>
+    <Dialog maxWidth="sm" open={question ? question.text.length > 0 : false} onClose={onClose}>
+      <DialogTitle id="identification-title">{question?.text}</DialogTitle>
       <DialogContent>
         <RadioGroup
           onChange={e =>
             handleChange({
               value: e.target.value,
-              label: options.find(o => o.value === e.target.value)?.label ?? 'Missing label',
-              concluding: options.find(o => o.value === e.target.value)?.concluding ?? false,
+              label: options?.find(o => o.value === e.target.value)?.label ?? 'Missing label',
+              concluding: options?.find(o => o.value === e.target.value)?.concluding ?? false,
             })
           }
           value={selectedOption.value}
@@ -55,7 +55,7 @@ export function IdentificationDialog({
           name="identification-radio-group"
         >
           <Stack gap={1}>
-            {options.map((option: IdentificationQuestionOption) => (
+            {options?.map((option: IdentificationQuestionOption) => (
               <RadioLine
                 value={option.value}
                 key={option.value}
