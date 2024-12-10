@@ -24,6 +24,11 @@ const identificationMessage = {
     en: 'Deceased',
     sq: 'I ndjerë',
   },
+  situationOrdinary: {
+    fr: 'Ordinaire',
+    en: 'Ordinary',
+    sq: 'Zakonshëm',
+  },
   situationNonOrdinary: {
     fr: 'Non Ordinaire',
     en: 'Not Ordinary',

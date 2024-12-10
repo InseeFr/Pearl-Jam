@@ -3,7 +3,7 @@ import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
-import { SurveyUnit } from 'types/pearl';
+import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { addNewState, persistSurveyUnit } from 'utils/functions';
 import {
@@ -46,6 +46,10 @@ export function useIdentification(
         const newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
         persistSurveyUnit({ ...surveyUnit, states: newStates });
       }
+
+      // TODO : continuer la persistance
+      // const identification: SurveyUnitIdentification = { ...surveyUnit, IdentificationConfiguration };
+      // persistSurveyUnit({ ...surveyUnit, identification });
 
       return updatedResponses;
     });

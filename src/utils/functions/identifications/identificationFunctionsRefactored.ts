@@ -34,8 +34,8 @@ export const identificationQuestionsTel: IdentificationQuestions = {
   [IdentificationQuestionsId.SITUATION]: {
     text: `${D.housingSituation}`,
     options: [
+      { label: `${D.situationOrdinary}`, value: 'ORDINARY', concluding: true },
       { label: `${D.situationNonOrdinary}`, value: 'NOORDINARY', concluding: true },
-      { label: `${D.identificationIdentified}`, value: 'ORDINARY', concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.IDENTIFICATION,

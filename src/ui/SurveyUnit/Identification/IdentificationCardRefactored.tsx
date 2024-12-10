@@ -2,19 +2,7 @@ import { Typography } from '../../Typography';
 import D from 'i18n';
 import { Row } from '../../Row';
 import Stack from '@mui/material/Stack';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import { useState } from 'react';
-import { RadioLine } from '../../RadioLine';
-import RadioGroup from '@mui/material/RadioGroup';
 import { SurveyUnit } from 'types/pearl';
-import {
-  IdentificationQuestionValue,
-  IdentificationQuestionOption,
-} from '../../../utils/functions/identifications/identificationFunctionsRefactored';
 import { Card, CardContent } from '@mui/material';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import { ButtonLine } from 'ui/ButtonLine';
@@ -25,9 +13,9 @@ import {
 import { useIdentification } from 'utils/hooks/useIdentificationQuestionsRefactored';
 import { IdentificationDialog } from './IdentificationDialog';
 
-interface IdentificationCardProps {
+type IdentificationCardProps = {
   surveyUnit: SurveyUnit;
-}
+};
 
 export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationCardProps>) {
   const {
