@@ -58,12 +58,12 @@ type SurveyUnitSampleIdentifiers = {
   nograp: string;
 };
 
-type SurveyUnitIdentification = {
-  identification: unknown;
-  access: unknown;
-  situation: unknown;
-  category: unknown;
-  occupant: unknown;
+export type SurveyUnitIdentification = {
+  identification: string;
+  situation: string;
+  occupant?: string;
+  access?: string;
+  category?: string;
 };
 
 export type SurveyUnitContactAttempt = {

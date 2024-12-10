@@ -28,6 +28,8 @@ import { Card } from '@mui/material';
 interface IdentificationCardProps {
   surveyUnit: SurveyUnit;
 }
+
+/** @deprecated */
 export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardProps>) {
   const { questions, setQuestion, answers, question, setAnswer } =
     useIdentificationQuestions(surveyUnit);
