@@ -1,24 +1,16 @@
-import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { surveyUnitStateEnum, TypeValues } from 'utils/enum/SUStateEnum';
 import { toDoEnum } from 'utils/enum/SUToDoEnum';
 
-/**
- * @param {string} suState - Survey unit state (type)
- * @returns {{color: string, value: string, order: string}|boolean}
- */
-export const convertSUStateInToDo = suState => {
+export const convertSUStateInToDo = (suState: TypeValues) => {
   if (
-    [
-      surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type,
-      surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type,
-    ].includes(suState)
+    surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type === suState ||
+    surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type === suState
   ) {
     return toDoEnum.NOT_STARTED;
   }
   if (
-    [
-      surveyUnitStateEnum.IN_PREPARATION.type,
-      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
-    ].includes(suState)
+    surveyUnitStateEnum.IN_PREPARATION.type === suState ||
+    surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type === suState
   ) {
     return toDoEnum.CONTACT;
   }

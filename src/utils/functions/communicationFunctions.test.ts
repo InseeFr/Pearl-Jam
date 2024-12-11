@@ -1,5 +1,7 @@
+import { SurveyUnit } from 'types/pearl';
 import { TITLES } from 'utils/constants';
 import { getRecipientInformation } from 'utils/functions/index';
+import { describe, expect, it } from 'vitest';
 
 describe('getRecipientInformation', () => {
   const VALID_FIRSTNAME1 = 'Ada';
@@ -55,20 +57,20 @@ describe('getRecipientInformation', () => {
   const minimalValidSurveyUnit = {
     persons: onePersonvalidPersons,
     address: validAddress,
-  };
+  } as unknown as SurveyUnit;
   const firstPersonValidSurveyUnit = {
     persons: validPrivilegedFirstPersons,
     address: validAddress,
-  };
+  } as unknown as SurveyUnit;
   const secondPersonValidSurveyUnit = {
     persons: validPrivilegedSecondPersons,
     address: validAddress,
-  };
+  } as unknown as SurveyUnit;
 
   const richAddressValidSurveyUnit = {
     persons: onePersonvalidPersons,
     address: richValidAddress,
-  };
+  } as unknown as SurveyUnit;
 
   it('accepts single person and the simplest address', () => {
     expect(getRecipientInformation(minimalValidSurveyUnit)).toEqual(
@@ -91,7 +93,11 @@ describe('getRecipientInformation', () => {
       generateExpectedOutput(ADA, VALID_CITYNAME, VALID_POSTCODE)
     );
   });
-  const generateExpectedOutput = (person, cityName, postCode) => ({
+  const generateExpectedOutput = (
+    person: { title: string; firstName: string; lastName: string },
+    cityName: string,
+    postCode: string
+  ) => ({
     title: person.title,
     recipientFirstName: person.firstName,
     recipientLastName: person.lastName,
