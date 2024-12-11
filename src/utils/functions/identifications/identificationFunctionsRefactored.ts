@@ -1,6 +1,7 @@
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
+  IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
 import D from 'i18n';
 
@@ -10,6 +11,7 @@ export type IdentificationQuestionOption = {
   concluding: boolean;
 };
 export type IdentificationQuestionValue = {
+  id: IdentificationQuestionsId;
   text: string;
   options: IdentificationQuestionOption[];
   dependsOn?: { questionId: IdentificationQuestionsId; values: string[] };
@@ -22,6 +24,7 @@ export type IdentificationQuestions = Partial<
 // TODO : déplacer identificationQuestionsTel dans un autre fichier ?
 export const identificationQuestionsTel: IdentificationQuestions = {
   [IdentificationQuestionsId.IDENTIFICATION]: {
+    id: IdentificationQuestionsId.IDENTIFICATION,
     text: `${D.housingIdentification}`,
     options: [
       { label: `${D.sameAddress}`, value: 'SAMEADRESS', concluding: false },
@@ -32,6 +35,7 @@ export const identificationQuestionsTel: IdentificationQuestions = {
     ],
   },
   [IdentificationQuestionsId.SITUATION]: {
+    id: IdentificationQuestionsId.SITUATION,
     text: `${D.housingSituation}`,
     options: [
       { label: `${D.situationOrdinary}`, value: 'ORDINARY', concluding: true },
@@ -55,7 +59,9 @@ export const identificationQuestions: Record<IdentificationConfiguration, Identi
     [IdentificationConfiguration.NOIDENT]: identificationQuestionsNoIdent,
   };
 
-export type ResponseState = Record<IdentificationQuestionsId, IdentificationQuestionOption>;
+export type ResponseState = Partial<
+  Record<IdentificationQuestionsId, IdentificationQuestionOption>
+>;
 
 export function checkAvailability(
   question: IdentificationQuestionValue,
@@ -67,5 +73,5 @@ export function checkAvailability(
   const questionId = question.dependsOn.questionId;
   if (!dependancyOption[questionId]) return true;
 
-  return question.dependsOn.values.some(v => v === dependancyOption[questionId].value) ?? false;
+  return question.dependsOn.values.some(v => v === dependancyOption[questionId].value);
 }

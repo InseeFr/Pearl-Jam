@@ -12,13 +12,17 @@ import {
   identificationQuestions,
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctionsRefactored';
+import { LocalHospital } from '@mui/icons-material';
 
-export function useIdentification(
-  surveyUnit: SurveyUnit,
-  configuration: IdentificationConfiguration
-) {
-  const questions = identificationQuestions[configuration];
-  const initialResponses = Object.fromEntries(Object.values(questions).map(id => [id, undefined]));
+export function useIdentification(surveyUnit: SurveyUnit) {
+  const questions =
+    identificationQuestions[IdentificationConfiguration[surveyUnit.identificationConfiguration]];
+  const initialResponses: ResponseState = Object.fromEntries(
+    Object.keys(questions).map(id => [
+      id,
+      surveyUnit.identification[id as IdentificationQuestionsId],
+    ])
+  );
 
   const initialAvailability: Partial<Record<IdentificationQuestionsId, boolean>> =
     Object.fromEntries(Object.keys(questions).map(id => [id, true]));
@@ -31,25 +35,50 @@ export function useIdentification(
     questionId: IdentificationQuestionsId,
     option: IdentificationQuestionOption
   ) => {
-    // TODO : Recontruistre le reperage à partir d'idb
     setResponses(prev => {
       const updatedResponses = { ...prev, [questionId]: option };
       const updatedAvailability = Object.fromEntries(
         Object.entries(questions).map(([questionId, question]) => {
-          return [questionId, checkAvailability(question, updatedResponses)];
-        })
-      ) as Record<IdentificationQuestionsId, boolean>;
+          const available = checkAvailability(question, updatedResponses);
 
-      setAvailableQuestions(updatedAvailability);
+          let updateState = true;
+          if (!updatedResponses[question.id] && available) {
+            updateState = false;
+          }
+
+          let identification: SurveyUnitIdentification = surveyUnit.identification;
+          if (!available) {
+            identification[question.id] = undefined;
+          } else if (question.options.find(o => o.value === option.value)) {
+            identification[question.id] = option.value;
+          }
+
+          console.log(option.concluding);
+          console.log(updateState);
+
+          // TODO : make sure all previous responses are valid
+          if (option.concluding && updateState) {
+            const newStates = addNewState(
+              surveyUnit,
+              surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
+            );
+            console.log(newStates);
+
+            persistSurveyUnit({ ...surveyUnit, states: newStates });
+          }
+
+          persistSurveyUnit({ ...surveyUnit, identification: identification });
+          return [questionId, available];
+        })
+      );
 
       if (option.concluding) {
         const newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
+        console.log(newStates);
+
         persistSurveyUnit({ ...surveyUnit, states: newStates });
       }
-
-      // TODO : continuer la persistance
-      // const identification: SurveyUnitIdentification = { ...surveyUnit, IdentificationConfiguration };
-      // persistSurveyUnit({ ...surveyUnit, identification });
+      setAvailableQuestions(updatedAvailability);
 
       return updatedResponses;
     });

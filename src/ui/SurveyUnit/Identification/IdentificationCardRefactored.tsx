@@ -25,7 +25,7 @@ export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationC
     availableQuestions,
     setSelectedDialogId,
     handleResponse,
-  } = useIdentification(surveyUnit, IdentificationConfiguration.TEL);
+  } = useIdentification(surveyUnit);
 
   return (
     <>

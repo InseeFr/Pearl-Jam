@@ -55,7 +55,6 @@ const identificationMessage = {
     en: 'Not accessible housing',
     sq: 'Banimi jo i qasshëm',
   },
-  situationOrdinary: { fr: 'Logement ordinaire', en: 'Ordinary housing', sq: 'Banimi i zakonshëm' },
   situationNotOrdinary: {
     fr: 'Logement non ordinaire',
     en: 'Not ordinary housing',

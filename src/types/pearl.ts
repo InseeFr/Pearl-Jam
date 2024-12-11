@@ -1,3 +1,5 @@
+import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+
 export type SurveyUnitPhoneNumber = {
   source: string;
   favorite: boolean;
@@ -59,8 +61,8 @@ type SurveyUnitSampleIdentifiers = {
 };
 
 export type SurveyUnitIdentification = {
-  identification: string;
-  situation: string;
+  identification?: string;
+  situation?: string;
   occupant?: string;
   access?: string;
   category?: string;
@@ -109,7 +111,7 @@ export type SurveyUnit = {
   collectionStartDate: number;
   collectionEndDate: number;
   endDate: number;
-  identificationConfiguration: string;
+  identificationConfiguration: IdentificationConfiguration;
   contactOutcomeConfiguration: string;
   contactAttemptConfiguration: string;
   useLetterCommunication: boolean;
