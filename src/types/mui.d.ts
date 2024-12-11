@@ -36,6 +36,7 @@ declare module '@mui/material/SvgIcon' {
     textPrimary: true;
     surfaceTertiary: true;
     yellow: true;
+    textHint: true;
   }
 }
 
