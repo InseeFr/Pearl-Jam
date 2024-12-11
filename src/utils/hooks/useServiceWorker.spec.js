@@ -26,7 +26,7 @@ describe('useServiceWorker', () => {
     const { result } = renderHook(() => useServiceWorker(true));
 
     expect(result.current.isUpdating).toBe(false);
-    expect(result.current.isUpdateInstalled).toBeNull();
+    expect(result.current.isUpdateInstalled).toBeFalsy();
     expect(result.current.isInstallingServiceWorker).toBe(false);
     expect(result.current.isUpdateAvailable).toBe(false);
     expect(result.current.isServiceWorkerInstalled).toBe(false);
