@@ -56,7 +56,7 @@ export default class AbstractIdbService<T extends { id: ID }> {
     return this.store.bulkPut(items);
   }
 
-  deleteByIds(ids: string[]) {
+  deleteByIds(ids: number[]) {
     return this.store.bulkDelete(ids);
   }
 }

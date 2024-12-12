@@ -1,11 +1,9 @@
 import { computed, signal } from '@maverick-js/signals';
 import notificationIdbService from '../indexeddb/services/notification-idb-service';
 import { useSignalValue } from './useSignalValue';
+import { Notification } from 'types/pearl';
 
-/**
- * @type {import('@maverick-js/signals').WriteSignal<Notification[]>}
- */
-const $notifications = signal([]);
+const $notifications = signal<Notification[]>([]);
 const $unreadCount = computed(() => $notifications().filter(v => !v.read).length);
 
 export async function loadNotifications() {
@@ -13,12 +11,12 @@ export async function loadNotifications() {
   $notifications.set(notifications.sort((a, b) => b.date - a.date));
 }
 
-export async function deleteNotification(notification) {
+export async function deleteNotification(notification: Notification) {
   await notificationIdbService.delete(notification.id);
   $notifications.set($notifications().filter(n => n !== notification));
 }
 
-export async function deleteNotifications(notification) {
+export async function deleteNotifications() {
   const ids = $notifications().map(n => n.id);
   if (ids.length === 0) {
     return;
@@ -27,11 +25,7 @@ export async function deleteNotifications(notification) {
   $notifications.set([]);
 }
 
-/**
- * @param {Notification} notification
- * @returns {Promise<Notification>}
- */
-export async function markNotificationAsRead(notification) {
+export async function markNotificationAsRead(notification: Notification) {
   const updatedNotification = { ...notification, read: true };
   await notificationIdbService.addOrUpdateNotif(updatedNotification);
   $notifications.set($notifications().map(n => (n === notification ? updatedNotification : n)));
