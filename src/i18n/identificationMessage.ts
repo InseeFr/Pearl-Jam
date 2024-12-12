@@ -49,8 +49,12 @@ const identificationMessage = {
     en: 'Destroyed housing',
     sq: 'Banimi i shkatërruar',
   },
-  accessAccessible: { fr: 'Logement accessible', en: 'Accessible housing', sq: 'Banimi i qasshëm' },
-  accessNotAccessible: {
+  accessibleHousing: {
+    fr: 'Logement accessible',
+    en: 'Accessible housing',
+    sq: 'Banimi i qasshëm',
+  },
+  notAccessibleHousing: {
     fr: 'Logement non accessible',
     en: 'Not accessible housing',
     sq: 'Banimi jo i qasshëm',

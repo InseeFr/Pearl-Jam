@@ -2,7 +2,8 @@ import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
-import D from 'i18n';
+import { identificationQuestionsTel } from './questionings/questioningByTel';
+import { identificationQuestionsIASCO } from './questionings/questioningByIASCO';
 
 export type IdentificationQuestionOption = {
   value: string;
@@ -11,6 +12,7 @@ export type IdentificationQuestionOption = {
 };
 export type IdentificationQuestionValue = {
   id: IdentificationQuestionsId;
+  nextId?: IdentificationQuestionsId;
   text: string;
   options: IdentificationQuestionOption[];
   dependsOn?: { questionId: IdentificationQuestionsId; values: string[] };
@@ -20,35 +22,7 @@ export type IdentificationQuestions = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionValue>
 >;
 
-// TODO : déplacer identificationQuestionsTel dans un autre fichier ?
-export const identificationQuestionsTel: IdentificationQuestions = {
-  [IdentificationQuestionsId.IDENTIFICATION]: {
-    id: IdentificationQuestionsId.IDENTIFICATION,
-    text: `${D.housingIdentification}`,
-    options: [
-      { label: `${D.sameAddress}`, value: 'SAMEADRESS', concluding: false },
-      { label: `${D.otherAddress}`, value: 'OTHERADRESS', concluding: false },
-      { label: `${D.noField}`, value: 'NOFIELD', concluding: true },
-      { label: `${D.noIdent}`, value: 'NOIDENT', concluding: true },
-      { label: `${D.deceased}`, value: 'DCD', concluding: true },
-    ],
-  },
-  [IdentificationQuestionsId.SITUATION]: {
-    id: IdentificationQuestionsId.SITUATION,
-    text: `${D.housingSituation}`,
-    options: [
-      { label: `${D.situationOrdinary}`, value: 'ORDINARY', concluding: true },
-      { label: `${D.situationNonOrdinary}`, value: 'NOORDINARY', concluding: true },
-    ],
-    dependsOn: {
-      questionId: IdentificationQuestionsId.IDENTIFICATION,
-      values: ['SAMEADRESS', 'OTHERADRESS'],
-    },
-  },
-} as const;
-
 // TODO : Construire identificationQuestionsIASCO, identificationQuestionsNoident
-export const identificationQuestionsIASCO = {};
 export const identificationQuestionsNoIdent = {};
 
 export const identificationQuestions: Record<IdentificationConfiguration, IdentificationQuestions> =
@@ -63,14 +37,24 @@ export type ResponseState = Partial<
 >;
 
 export function checkAvailability(
+  questions: IdentificationQuestions,
   question: IdentificationQuestionValue,
-  dependancyOption?: ResponseState
+  responses?: ResponseState
 ): boolean {
-  if (!question.dependsOn) return true;
-  if (!dependancyOption) return true;
+  if (!responses) return true;
+  const dependency = question?.dependsOn;
+  if (!dependency) return true;
+  if (responses[dependency.questionId]?.concluding) return false;
 
-  const questionId = question.dependsOn.questionId;
-  if (!dependancyOption[questionId]) return true;
+  // Lookup node availabilty by checking if parent is itself available in case it has a response
+  const parentResponseQuestion = questions[dependency.questionId];
+  if (parentResponseQuestion)
+    return checkAvailability(questions, parentResponseQuestion, responses);
 
-  return question.dependsOn.values.some(v => v === dependancyOption[questionId]?.value);
+  // If parent has no response, we need to check if its option match our dependancy
+  // If not, then this node should be disabled
+  const parentResponse = responses[dependency.questionId];
+  if (parentResponse) return dependency.values.includes(parentResponse.value);
+
+  return true;
 }

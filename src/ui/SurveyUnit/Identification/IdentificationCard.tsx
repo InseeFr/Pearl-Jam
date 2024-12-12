@@ -1,11 +1,14 @@
 import CardContent from '@mui/material/CardContent';
-import { Typography } from '../Typography';
+import { Typography } from '../../Typography';
 import D from 'i18n';
-import { Row } from '../Row';
+import { Row } from '../../Row';
 import Stack from '@mui/material/Stack';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
-import { ButtonLine } from '../ButtonLine';
-import { Answer, useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
+import { ButtonLine } from '../../ButtonLine';
+import {
+  Answer,
+  useIdentificationQuestions,
+} from '../../../utils/hooks/useIdentificationQuestions';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -15,13 +18,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { Key, useState } from 'react';
-import { RadioLine } from '../RadioLine';
+import { RadioLine } from '../../RadioLine';
 import RadioGroup from '@mui/material/RadioGroup';
-import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
-import { identificationConfigurationEnum } from '../../utils/enum/identifications/IdentificationConfigurationEnum';
+import { surveyUnitIDBService } from '../../../utils/indexeddb/services/surveyUnit-idb-service';
+import { identificationConfigurationEnum } from '../../../utils/enum/identifications/IdentificationConfigurationEnum';
 import Box from '@mui/material/Box';
-import { addNewState } from '../../utils/functions';
-import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
+import { addNewState } from '../../../utils/functions';
+import { surveyUnitStateEnum } from '../../../utils/enum/SUStateEnum';
 import { SurveyUnit } from 'types/pearl';
 import { Card } from '@mui/material';
 

@@ -6,10 +6,7 @@ import { SurveyUnit } from 'types/pearl';
 import { Card, CardContent } from '@mui/material';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import { ButtonLine } from 'ui/ButtonLine';
-import {
-  IdentificationConfiguration,
-  IdentificationQuestionsId,
-} from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
 import { useIdentification } from 'utils/hooks/useIdentificationQuestionsRefactored';
 import { IdentificationDialog } from './IdentificationDialog';
 
@@ -40,30 +37,29 @@ export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationC
             </Row>
             <Stack gap={1}>
               {(Object.keys(questions) as IdentificationQuestionsId[]).map(questionId => (
-                <>
-                  <ButtonLine
-                    key={questionId}
-                    onClick={() => setSelectedDialogId(questionId)}
-                    label={responses[questionId]?.label ?? questions[questionId]?.text}
-                    checked={responses[questionId] && availableQuestions[questionId] ? true : false}
-                    disabled={!availableQuestions[questionId]}
-                  ></ButtonLine>
-
-                  {selectedDialogId === questionId && (
-                    <IdentificationDialog
-                      questionId={questionId}
-                      key={`dialog-${questionId}`}
-                      question={questions[questionId]}
-                      defaultOption={responses[questionId] ?? questions[questionId]?.options[0]}
-                      onSubmit={handleResponse}
-                      onClose={() => setSelectedDialogId(null)}
-                    />
-                  )}
-                </>
+                <ButtonLine
+                  key={questionId}
+                  onClick={() => setSelectedDialogId(questionId)}
+                  label={responses[questionId]?.label ?? questions[questionId]?.text}
+                  checked={responses[questionId] && availableQuestions[questionId] ? true : false}
+                  disabled={!availableQuestions[questionId]}
+                ></ButtonLine>
               ))}
             </Stack>
           </Stack>
         </CardContent>
+        {selectedDialogId && (
+          <IdentificationDialog
+            questionId={selectedDialogId}
+            key={`dialog-${selectedDialogId}`}
+            question={questions[selectedDialogId]}
+            defaultOption={responses[selectedDialogId] ?? questions[selectedDialogId]?.options[0]}
+            onSubmit={handleResponse}
+            onClose={() => {
+              setSelectedDialogId(undefined);
+            }}
+          />
+        )}
       </Card>
     </>
   );

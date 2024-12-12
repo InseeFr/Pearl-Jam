@@ -50,7 +50,7 @@ export function IdentificationDialog({
               concluding: options?.find(o => o.value === e.target.value)?.concluding ?? false,
             })
           }
-          value={selectedOption?.value}
+          defaultValue={selectedOption?.value}
           aria-labelledby="identification-title"
           name="identification-radio-group"
         >

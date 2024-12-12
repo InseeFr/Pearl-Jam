@@ -4,6 +4,7 @@ export enum IdentificationQuestionsId {
   OCCUPANT = 'occupant',
   ACCES = 'access',
   CATEGORY = 'category',
+  PERSON = 'person',
 }
 
 export enum IdentificationConfiguration {

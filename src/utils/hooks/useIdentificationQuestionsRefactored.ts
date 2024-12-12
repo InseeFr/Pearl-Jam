@@ -29,23 +29,31 @@ export function useIdentification(surveyUnit: SurveyUnit) {
     Object.fromEntries(
       Object.entries(questions).map(([questionId, question]) => [
         questionId,
-        checkAvailability(question, initialResponses),
+        checkAvailability(question, initialResponses, undefined),
       ])
     );
 
   const [responses, setResponses] = useState<ResponseState>(initialResponses);
-  const [selectedDialogId, setSelectedDialogId] = useState<IdentificationQuestionsId | null>(null);
+  const [selectedDialogId, setSelectedDialogId] = useState<IdentificationQuestionsId | undefined>(
+    undefined
+  );
   const [availableQuestions, setAvailableQuestions] = useState(initialAvailability);
 
   const handleResponse = (
-    questionId: IdentificationQuestionsId,
+    selectedQuestionId: IdentificationQuestionsId,
     option: IdentificationQuestionOption
   ) => {
     setResponses(prev => {
-      const updatedResponses = { ...prev, [questionId]: option };
+      let updatedResponses = { ...prev, [selectedQuestionId]: option };
       const updatedAvailability = Object.fromEntries(
         Object.entries(questions).map(([questionId, question]) => {
-          const available = checkAvailability(question, updatedResponses);
+          console.log(question);
+          console.log(updatedResponses);
+
+          const available = checkAvailability(questions, question, updatedResponses);
+
+          console.log(available);
+          console.log('--------------');
 
           let updateState = true;
           if (!updatedResponses[question.id] && available) {
@@ -55,33 +63,35 @@ export function useIdentification(surveyUnit: SurveyUnit) {
           let identification: SurveyUnitIdentification = surveyUnit.identification;
           if (!available) {
             identification[question.id] = undefined;
+            updatedResponses[question.id] = undefined;
           } else if (question.options.find(o => o.value === option.value)) {
             identification[question.id] = option.value;
           }
 
-          if (option.concluding && updateState) {
-            const newStates = addNewState(
-              surveyUnit,
-              surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
-            );
-            console.log(newStates);
+          if (option.concluding) {
+            if (updateState) {
+              const newStates = addNewState(
+                surveyUnit,
+                surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
+              );
 
-            persistSurveyUnit({ ...surveyUnit, states: newStates });
+              persistSurveyUnit({
+                ...surveyUnit,
+                states: newStates,
+                identification: identification,
+              });
+            } else {
+              persistSurveyUnit({ ...surveyUnit, identification: identification });
+            }
+          } else if (selectedQuestionId === question.id) {
+            setSelectedDialogId(question.nextId);
           }
 
-          persistSurveyUnit({ ...surveyUnit, identification: identification });
           return [questionId, available];
         })
       );
 
-      if (option.concluding) {
-        const newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
-        console.log(newStates);
-
-        persistSurveyUnit({ ...surveyUnit, states: newStates });
-      }
       setAvailableQuestions(updatedAvailability);
-
       return updatedResponses;
     });
   };
