@@ -39,32 +39,28 @@ export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationC
               </Typography>
             </Row>
             <Stack gap={1}>
-              {(Object.keys(questions) as unknown as IdentificationQuestionsId[]).map(
-                questionId => (
-                  <>
-                    <ButtonLine
-                      key={questionId}
-                      onClick={() => setSelectedDialogId(questionId)}
-                      label={responses[questionId]?.label ?? questions[questionId]?.text}
-                      checked={
-                        responses[questionId] && availableQuestions[questionId] ? true : false
-                      }
-                      disabled={!availableQuestions[questionId]}
-                    ></ButtonLine>
+              {(Object.keys(questions) as IdentificationQuestionsId[]).map(questionId => (
+                <>
+                  <ButtonLine
+                    key={questionId}
+                    onClick={() => setSelectedDialogId(questionId)}
+                    label={responses[questionId]?.label ?? questions[questionId]?.text}
+                    checked={responses[questionId] && availableQuestions[questionId] ? true : false}
+                    disabled={!availableQuestions[questionId]}
+                  ></ButtonLine>
 
-                    {selectedDialogId === questionId && (
-                      <IdentificationDialog
-                        questionId={questionId}
-                        key={`dialog-${questionId}`}
-                        question={questions[questionId]}
-                        defaultOption={responses[questionId] ?? questions[questionId]?.options[0]}
-                        onSubmit={handleResponse}
-                        onClose={() => setSelectedDialogId(null)}
-                      />
-                    )}
-                  </>
-                )
-              )}
+                  {selectedDialogId === questionId && (
+                    <IdentificationDialog
+                      questionId={questionId}
+                      key={`dialog-${questionId}`}
+                      question={questions[questionId]}
+                      defaultOption={responses[questionId] ?? questions[questionId]?.options[0]}
+                      onSubmit={handleResponse}
+                      onClose={() => setSelectedDialogId(null)}
+                    />
+                  )}
+                </>
+              ))}
             </Stack>
           </Stack>
         </CardContent>

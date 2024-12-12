@@ -1,7 +1,6 @@
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
-  IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
 import D from 'i18n';
 
@@ -73,5 +72,5 @@ export function checkAvailability(
   const questionId = question.dependsOn.questionId;
   if (!dependancyOption[questionId]) return true;
 
-  return question.dependsOn.values.some(v => v === dependancyOption[questionId].value);
+  return question.dependsOn.values.some(v => v === dependancyOption[questionId]?.value);
 }

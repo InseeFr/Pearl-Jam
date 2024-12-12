@@ -1,4 +1,7 @@
-import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+import {
+  IdentificationConfiguration,
+  IdentificationQuestionsId,
+} from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
 
 export type SurveyUnitPhoneNumber = {
   source: string;
@@ -60,13 +63,7 @@ type SurveyUnitSampleIdentifiers = {
   nograp: string;
 };
 
-export type SurveyUnitIdentification = {
-  identification?: string;
-  situation?: string;
-  occupant?: string;
-  access?: string;
-  category?: string;
-};
+export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId, string>>;
 
 export type SurveyUnitContactAttempt = {
   status: string;

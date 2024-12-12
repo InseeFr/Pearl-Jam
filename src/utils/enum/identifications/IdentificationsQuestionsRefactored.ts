@@ -1,4 +1,3 @@
-// All values correspond to SurveyUnitIdentification properties in IDB
 export enum IdentificationQuestionsId {
   IDENTIFICATION = 'identification',
   SITUATION = 'situation',

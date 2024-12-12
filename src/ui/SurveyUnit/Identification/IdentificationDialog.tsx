@@ -19,7 +19,7 @@ import D from 'i18n';
 interface IdentificationDialogProps {
   question?: IdentificationQuestionValue;
   questionId: IdentificationQuestionsId;
-  defaultOption: IdentificationQuestionOption;
+  defaultOption?: IdentificationQuestionOption;
   onClose: () => void;
   onSubmit: (questionId: IdentificationQuestionsId, option: IdentificationQuestionOption) => void;
 }
@@ -50,7 +50,7 @@ export function IdentificationDialog({
               concluding: options?.find(o => o.value === e.target.value)?.concluding ?? false,
             })
           }
-          value={selectedOption.value}
+          value={selectedOption?.value}
           aria-labelledby="identification-title"
           name="identification-radio-group"
         >
@@ -70,16 +70,18 @@ export function IdentificationDialog({
         <Button type="button" color="primary" variant="contained" onClick={onClose}>
           {D.cancelButton}
         </Button>
-        <Button
-          variant="contained"
-          type="button"
-          disabled={!selectedOption}
-          onClick={() => {
-            onClose(), onSubmit(questionId, selectedOption);
-          }}
-        >
-          {D.confirmButton}
-        </Button>
+        {selectedOption && (
+          <Button
+            variant="contained"
+            type="button"
+            disabled={!selectedOption}
+            onClick={() => {
+              onClose(), onSubmit(questionId, selectedOption);
+            }}
+          >
+            {D.confirmButton}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

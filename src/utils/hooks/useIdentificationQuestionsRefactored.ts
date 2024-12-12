@@ -12,7 +12,6 @@ import {
   identificationQuestions,
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctionsRefactored';
-import { LocalHospital } from '@mui/icons-material';
 
 export function useIdentification(surveyUnit: SurveyUnit) {
   const questions =
@@ -20,12 +19,19 @@ export function useIdentification(surveyUnit: SurveyUnit) {
   const initialResponses: ResponseState = Object.fromEntries(
     Object.keys(questions).map(id => [
       id,
-      surveyUnit.identification[id as IdentificationQuestionsId],
+      questions[id as IdentificationQuestionsId]?.options.find(
+        o => o.value === surveyUnit.identification[id as IdentificationQuestionsId]
+      ),
     ])
   );
 
   const initialAvailability: Partial<Record<IdentificationQuestionsId, boolean>> =
-    Object.fromEntries(Object.keys(questions).map(id => [id, true]));
+    Object.fromEntries(
+      Object.entries(questions).map(([questionId, question]) => [
+        questionId,
+        checkAvailability(question, initialResponses),
+      ])
+    );
 
   const [responses, setResponses] = useState<ResponseState>(initialResponses);
   const [selectedDialogId, setSelectedDialogId] = useState<IdentificationQuestionsId | null>(null);
@@ -53,10 +59,6 @@ export function useIdentification(surveyUnit: SurveyUnit) {
             identification[question.id] = option.value;
           }
 
-          console.log(option.concluding);
-          console.log(updateState);
-
-          // TODO : make sure all previous responses are valid
           if (option.concluding && updateState) {
             const newStates = addNewState(
               surveyUnit,
