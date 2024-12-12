@@ -29,7 +29,7 @@ export function useIdentification(surveyUnit: SurveyUnit) {
     Object.fromEntries(
       Object.entries(questions).map(([questionId, question]) => [
         questionId,
-        checkAvailability(question, initialResponses, undefined),
+        checkAvailability(questions, question, initialResponses),
       ])
     );
 
