@@ -47,14 +47,7 @@ export function useIdentification(surveyUnit: SurveyUnit) {
       let updatedResponses = { ...prev, [selectedQuestionId]: option };
       const updatedAvailability = Object.fromEntries(
         Object.entries(questions).map(([questionId, question]) => {
-          console.log(question);
-          console.log(updatedResponses);
-
           const available = checkAvailability(questions, question, updatedResponses);
-
-          console.log(available);
-          console.log('--------------');
-
           let updateState = true;
           if (!updatedResponses[question.id] && available) {
             updateState = false;
