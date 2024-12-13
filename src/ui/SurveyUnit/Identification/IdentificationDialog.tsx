@@ -13,7 +13,7 @@ import { IdentificationQuestionsId } from 'utils/enum/identifications/Identifica
 import {
   IdentificationQuestionValue,
   IdentificationQuestionOption,
-} from 'utils/functions/identifications/identificationFunctionsRefactored';
+} from 'utils/functions/identifications/identificationFunctions';
 import D from 'i18n';
 
 interface IdentificationDialogProps {

@@ -46,7 +46,7 @@ export function checkAvailability(
   if (!dependency) return true;
   if (responses[dependency.questionId]?.concluding) return false;
 
-  // Lookup node availabilty by checking if parent is itself available in case it has a response
+  // Lookup node availabilty by checking if parent is itself available
   const parentResponseQuestion = questions[dependency.questionId];
   if (parentResponseQuestion)
     return checkAvailability(questions, parentResponseQuestion, responses);

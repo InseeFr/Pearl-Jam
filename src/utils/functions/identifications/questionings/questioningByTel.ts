@@ -1,5 +1,5 @@
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
-import { IdentificationQuestions } from '../identificationFunctionsRefactored';
+import { IdentificationQuestions } from '../identificationFunctions';
 import D from 'i18n';
 
 export const identificationQuestionsTel: IdentificationQuestions = {

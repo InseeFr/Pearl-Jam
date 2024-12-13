@@ -11,7 +11,7 @@ import {
   IdentificationQuestionOption,
   identificationQuestions,
   ResponseState,
-} from 'utils/functions/identifications/identificationFunctionsRefactored';
+} from 'utils/functions/identifications/identificationFunctions';
 
 export function useIdentification(surveyUnit: SurveyUnit) {
   const questions =
