@@ -7,7 +7,7 @@ import { ButtonProps } from '@mui/material';
 
 type ButtonLineProps = {
   disabled: boolean;
-  label: string;
+  label?: string;
   checked: boolean;
 } & Omit<ButtonProps, 'disabled'>;
 
