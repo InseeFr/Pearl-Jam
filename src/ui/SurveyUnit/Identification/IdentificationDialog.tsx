@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { RadioLine } from 'ui/RadioLine';
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
 import {
   IdentificationQuestionValue,
   IdentificationQuestionOption,

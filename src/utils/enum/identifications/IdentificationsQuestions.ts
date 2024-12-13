@@ -10,5 +10,5 @@ export enum IdentificationQuestionsId {
 export enum IdentificationConfiguration {
   NOIDENT = 'NOIDENT',
   IASCO = 'IASCO',
-  TEL = 'TEL',
+  INDTEL = 'INDTEL',
 }

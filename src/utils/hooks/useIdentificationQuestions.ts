@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
-} from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+} from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { addNewState, persistSurveyUnit } from 'utils/functions';

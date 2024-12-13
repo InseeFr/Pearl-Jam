@@ -6,8 +6,8 @@ import { SurveyUnit } from 'types/pearl';
 import { Card, CardContent } from '@mui/material';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import { ButtonLine } from 'ui/ButtonLine';
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
-import { useIdentification } from 'utils/hooks/useIdentificationQuestionsRefactored';
+import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
+import { useIdentification } from 'utils/hooks/useIdentificationQuestions';
 import { IdentificationDialog } from './IdentificationDialog';
 
 type IdentificationCardProps = {

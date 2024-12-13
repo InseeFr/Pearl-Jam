@@ -1,7 +1,7 @@
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
-} from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+} from 'utils/enum/identifications/IdentificationsQuestions';
 
 export type SurveyUnitPhoneNumber = {
   source: string;

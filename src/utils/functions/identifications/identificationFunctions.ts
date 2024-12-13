@@ -1,7 +1,7 @@
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
-} from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+} from 'utils/enum/identifications/IdentificationsQuestions';
 import { identificationQuestionsTel } from './questionings/questioningByTel';
 import { identificationQuestionsIASCO } from './questionings/questioningByIASCO';
 
@@ -27,7 +27,7 @@ export const identificationQuestionsNoIdent = {};
 
 export const identificationQuestions: Record<IdentificationConfiguration, IdentificationQuestions> =
   {
-    [IdentificationConfiguration.TEL]: identificationQuestionsTel,
+    [IdentificationConfiguration.INDTEL]: identificationQuestionsTel,
     [IdentificationConfiguration.IASCO]: identificationQuestionsIASCO,
     [IdentificationConfiguration.NOIDENT]: identificationQuestionsNoIdent,
   };

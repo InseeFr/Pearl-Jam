@@ -1,4 +1,4 @@
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
+import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
 import { IdentificationQuestions } from '../identificationFunctions';
 import D from 'i18n';
 
