@@ -12,12 +12,7 @@ import { PrivilegedPerson } from './PrivilegedPerson';
 import Chip from '@mui/material/Chip';
 import { Typography } from '../Typography';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
-import {
-  addNewState,
-  getSuTodoState,
-  isValidForTransmission,
-  persistSurveyUnit,
-} from '../../utils/functions';
+import { addNewState, getSuTodoState, persistSurveyUnit } from '../../utils/functions';
 import CheckIcon from '@mui/icons-material/Check';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
@@ -25,10 +20,11 @@ import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
 import { Popover, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import FiberManualRecordOutlinedIcon from '@mui/icons-material/FiberManualRecordOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import { useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
 import { makeStyles, useTheme } from '@mui/styles';
 import D from '../../i18n/build-dictionary';
 import { SurveyUnit } from 'types/pearl';
+import { useIdentification } from 'utils/hooks/useIdentificationQuestions';
+import { isValidForTransmission } from 'utils/functions/identifications/identificationFunctions';
 
 const useStyles = makeStyles({
   rotateBox: {
@@ -52,13 +48,16 @@ export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>
   const theme = useTheme();
   const classes = useStyles();
   const [isContactOutcomeValid, setIsContactOutcomeValid] = useState(false);
-  const { questions } = useIdentificationQuestions(surveyUnit);
+  const { responses } = useIdentification(surveyUnit);
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
-    const allQuestionsAnswered = questions.every(q => !!q.answer);
+    const allQuestionsAnswered = Object.values(responses).every(
+      value => value !== null && value !== undefined
+    );
+
     setIsCompleted(allQuestionsAnswered);
-  }, [questions]);
+  }, [responses]);
 
   useEffect(() => {
     const checkContactOutcomeValidity = () => {
