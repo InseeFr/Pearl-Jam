@@ -4,35 +4,30 @@ import { useConfiguration } from './useConfiguration';
 
 const SW_UPDATE_KEY = 'installing-update';
 
-/**
- * @typedef {{
- *  isUpdating: boolean,
- *  isUpdateInstalled: boolean,
- *  isInstallingServiceWorker: boolean,
- *  isUpdateAvailable: boolean,
- *  isServiceWorkerInstalled: boolean,
- *  isInstallationFailed: boolean,
- *  updateApp: () => void,
- *  clearUpdating: () => void,
- *  uninstall: () => void,
- * }} ServiceWorkerState
- */
+export type ServiceWorkerState = {
+  isUpdating: boolean;
+  isUpdateInstalled: boolean;
+  isInstallingServiceWorker: boolean;
+  isUpdateAvailable: boolean;
+  isServiceWorkerInstalled: boolean;
+  isInstallationFailed: boolean;
+  updateApp: () => void;
+  clearUpdating: () => void;
+  uninstall: () => void;
+};
 
 /**
  * Resolve the state of the service worker
- *
- * @param {boolean} authenticated
- * @returns {ServiceWorkerState}
  */
-export const useServiceWorker = authenticated => {
-  const { QUEEN_URL } = useConfiguration();
+export const useServiceWorker = (authenticated: boolean): ServiceWorkerState => {
+  const { QUEEN_URL } = useConfiguration()!;
   const [isInstallingServiceWorker, setIsInstallingServiceWorker] = useState(false);
-  const [waitingServiceWorker, setWaitingServiceWorker] = useState(null);
+  const [waitingServiceWorker, setWaitingServiceWorker] = useState<ServiceWorker | null>(null);
   const [isUpdateAvailable, setUpdateAvailable] = useState(false);
   const [isServiceWorkerInstalled, setServiceWorkerInstalled] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUpdateInstalled, setIsUpdateInstalled] = useState(
-    window.localStorage.getItem(SW_UPDATE_KEY)
+    window.localStorage.getItem(SW_UPDATE_KEY) === 'true'
   );
   const [isInstallationFailed, setIsInstallationFailed] = useState(false);
 
@@ -46,18 +41,18 @@ export const useServiceWorker = authenticated => {
     if (authenticated && QUEEN_URL) {
       serviceWorker.register({
         QUEEN_URL,
-        onInstalling: installing => {
+        onInstalling: (installing: boolean) => {
           setIsInstallingServiceWorker(installing);
         },
-        onUpdate: registration => {
+        onUpdate: (registration: ServiceWorkerRegistration) => {
           setWaitingServiceWorker(registration.waiting);
           setUpdateAvailable(true);
         },
-        onWaiting: waiting => {
+        onWaiting: (waiting: ServiceWorker) => {
           setWaitingServiceWorker(waiting);
           setUpdateAvailable(true);
         },
-        onSuccess: registration => {
+        onSuccess: (registration: ServiceWorkerRegistration) => {
           setIsInstallingServiceWorker(false);
           setServiceWorkerInstalled(!!registration);
         },
@@ -75,7 +70,7 @@ export const useServiceWorker = authenticated => {
   };
 
   const updateApp = () => {
-    window.localStorage.setItem(SW_UPDATE_KEY, true);
+    window.localStorage.setItem(SW_UPDATE_KEY, 'true');
     setIsUpdating(true);
     updateAssets();
   };
@@ -88,8 +83,10 @@ export const useServiceWorker = authenticated => {
   useEffect(() => {
     if (waitingServiceWorker) {
       waitingServiceWorker.addEventListener('statechange', event => {
-        if (event.target.state === 'activated') {
-          window.location.reload();
+        if (event.target instanceof ServiceWorker) {
+          if (event.target.state === 'activated') {
+            window.location.reload();
+          }
         }
       });
     }

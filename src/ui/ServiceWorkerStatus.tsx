@@ -1,16 +1,13 @@
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import Slide from '@mui/material/Slide';
+import Slide, { SlideProps } from '@mui/material/Slide';
 import Snackbar from '@mui/material/Snackbar';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import D from '../i18n/build-dictionary';
-import { useServiceWorker } from '../utils/hooks/useServiceWorker';
+import { ServiceWorkerState, useServiceWorker } from '../utils/hooks/useServiceWorker';
 
-/**
- * @returns {string}
- */
-const getMessageFromState = state => {
+const getMessageFromState = (state: ServiceWorkerState): string => {
   if (state.isUpdating) return D.updating;
   else if (state.isUpdateInstalled) return D.updateInstalled;
   else if (state.isUpdateAvailable) return D.updateAvailable;
@@ -20,7 +17,7 @@ const getMessageFromState = state => {
   return '';
 };
 
-const getSeverity = state => {
+const getSeverity = (state: ServiceWorkerState) => {
   if (state.isInstallationFailed) return 'error';
   if (state.isUpdateInstalled || state.isServiceWorkerInstalled) return 'success';
   return 'info';
@@ -28,9 +25,8 @@ const getSeverity = state => {
 
 /**
  * Display an alert depending of service worker loading state
- * @param {boolean} authenticated
  */
-export function ServiceWorkerStatus({ authenticated }) {
+export function ServiceWorkerStatus({ authenticated }: Readonly<{ authenticated: boolean }>) {
   const state = useServiceWorker(authenticated);
   const message = getMessageFromState(state);
   const severity = getSeverity(state);
@@ -73,6 +69,6 @@ export function ServiceWorkerStatus({ authenticated }) {
   );
 }
 
-function SlideTransition(props) {
+function SlideTransition(props: Omit<SlideProps, 'direction'>) {
   return <Slide direction="down" {...props} />;
 }

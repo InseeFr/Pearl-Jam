@@ -1,15 +1,36 @@
-import { signal, effect } from '@maverick-js/signals';
-import { useSignalValue } from './useSignalValue';
-import { toggleItem } from '../functions/array';
-import { daysLeftForSurveyUnit, getprivilegedPerson, getSuTodoState } from '../functions';
-import { normalize } from '../functions/string';
+import { effect, signal } from '@maverick-js/signals';
+import { SurveyUnit } from 'types/pearl';
 import { toDoEnum } from '../enum/SUToDoEnum';
+import { daysLeftForSurveyUnit, getprivilegedPerson, getSuTodoState } from '../functions';
+import { toggleItem } from '../functions/array';
+import { normalize } from '../functions/string';
+import { useSignalValue } from './useSignalValue';
+
+type SearchCriteria = {
+  sortField:
+    | keyof Pick<SurveyUnit, 'sampleIdentifiers' | 'priority' | 'campaign'>
+    | 'remainingDays';
+  sortDirection: 'ASC' | 'DESC';
+  search?: string;
+  campaigns: string[];
+  states: string[];
+  priority: boolean;
+  subSample: number;
+  subGrappe: string;
+  terminated: number;
+};
+
+type SearchFilterValue = {
+  toggle: (key: string, value: string) => void;
+  setSortField: (s: string) => void;
+  setSubSample: (s: number | null) => void;
+  setSubGrappe: (s: number | null) => void;
+  setSearch: (s: string) => void;
+  toggleSortDirection: () => void;
+  reset: () => void;
+} & SearchCriteria;
 
 const storageKey = 'pearl-search-filter';
-
-/**
- * @typedef {{search: string, campaigns: string[], states: number[], priority: boolean, terminated: boolean, subSample: number, sortField: string, sortDirection: 'ASC' | 'DESC'}} SearchCriteria
- */
 
 const emptyFilter = {
   campaigns: [],
@@ -34,26 +55,11 @@ effect(() => {
   }
 });
 
-/**
- *
- * @returns {{
- *   toggle: (key: string, value: string) => void,
- *   setSortField: (s: string) => void,
- *   setSubSample: (s: number | null) => void,
- *   setSubGrappe: (s: number | null) => void,
- *   setSearch: (s: string) => void,
- *   toggleSortDirection: () => void,
- *   reset: () => void,
- *  } & SearchCriteria}
- */
-export function useSearchFilter() {
+export const useSearchFilter = (): SearchFilterValue => {
   /**
    * Toggle a value for a specific filter key
-   *
-   * @param {"campaigns" | "priority" | "terminated" | "statuses"} key
-   * @param {string} [value]
    */
-  const toggle = (key, value) => {
+  const toggle = (key: 'campaigns' | 'priority' | 'terminated' | 'statuses', value: string) => {
     const filter = $filter();
     // Boolean filter
     if (['priority', 'terminated'].includes(key)) {
@@ -84,24 +90,10 @@ export function useSearchFilter() {
       }),
     reset: () => $filter.set(emptyFilter),
   };
-}
+};
 
-/**
- * Filter and order survey unit based on search criteria
- *
- * @param {SurveyUnit[]} surveyUnits
- * @param {SearchCriteria} criteria
- * @param {string} sortField
- * @param {'ASC' | 'DESC'} sortDirection
- * @return {SurveyUnit[]}
- */
-export function filterSurveyUnits(surveyUnits, criteria) {
-  /**
-   * @param {SurveyUnit} a
-   * @param {SurveyUnit} b
-   * @returns {number}
-   */
-  const sortFn = (a, b) => {
+export function filterSurveyUnits(surveyUnits: SurveyUnit[], criteria: SearchCriteria) {
+  const sortFn = (a: SurveyUnit, b: SurveyUnit): number => {
     if (criteria.sortDirection === 'DESC') {
       const c = a;
       a = b;
@@ -126,11 +118,7 @@ export function filterSurveyUnits(surveyUnits, criteria) {
     }
   };
 
-  /**
-   * @param {SurveyUnit} surveyUnit
-   * @returns {boolean}
-   */
-  const filterFn = surveyUnit => {
+  const filterFn = (surveyUnit: SurveyUnit): boolean => {
     const searchNormalized = criteria.search ? normalize(criteria.search) : '';
     const campaignNormalized = normalize(surveyUnit.campaign);
     if (
