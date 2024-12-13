@@ -2,8 +2,16 @@ import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
-import { identificationQuestionsTel } from './questionings/questioningByTel';
+import {
+  identificationQuestionsTel,
+  transmissionRulesByTel,
+  TransmissionsRulesByTel,
+} from './questionings/questioningByTel';
 import { identificationQuestionsIASCO } from './questionings/questioningByIASCO';
+import { SurveyUnit } from 'types/pearl';
+import { checkValidityForTransmissionNoident, getLastState } from '../surveyUnitFunctions';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 
 export type IdentificationQuestionOption = {
   value: string;
@@ -22,14 +30,11 @@ export type IdentificationQuestions = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionValue>
 >;
 
-// TODO : Construire identificationQuestionsIASCO, identificationQuestionsNoident
-export const identificationQuestionsNoIdent = {};
-
 export const identificationQuestions: Record<IdentificationConfiguration, IdentificationQuestions> =
   {
     [IdentificationConfiguration.INDTEL]: identificationQuestionsTel,
     [IdentificationConfiguration.IASCO]: identificationQuestionsIASCO,
-    [IdentificationConfiguration.NOIDENT]: identificationQuestionsNoIdent,
+    [IdentificationConfiguration.NOIDENT]: {},
   };
 
 export type ResponseState = Partial<
@@ -56,4 +61,89 @@ export function checkAvailability(
   if (parentResponse) return dependency.values.includes(parentResponse.value);
 
   return true;
+}
+
+export function identificationIsFinished(
+  identificationConfiguration: IdentificationConfiguration,
+  identification: Partial<Record<IdentificationQuestionsId, string>>
+): boolean {
+  const questions = identificationQuestions[identificationConfiguration];
+  if (!questions) {
+    return false;
+  }
+
+  for (const questionId in questions) {
+    const question = questions[questionId as IdentificationQuestionsId];
+    if (!question) continue;
+
+    const response = identification[question.id];
+    if (!response) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// TODO : must be replaced by validateTransmissionArray (as we're doing for INDTEL)
+export const checkValidityForTransmissionIasco = (su: SurveyUnit) => {
+  const { contactOutcome, identification, identificationConfiguration, states = [] } = su;
+
+  if (!identificationIsFinished(identificationConfiguration, identification)) return false;
+
+  if (!contactOutcome) return false;
+
+  // INA contactOutcome + no questionnaire
+  const type = contactOutcome.type;
+  if (
+    type === contactOutcomeEnum.INTERVIEW_ACCEPTED.value &&
+    !getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
+  )
+    return false;
+
+  // issue NOA + identification.avi
+  const { identification: identificationValue, category, situation } = identification;
+  if (
+    type === contactOutcomeEnum.NOT_APPLICABLE.value
+    // &&
+    // !IASCO_IDENTIFICATION_FINISHING_VALUES.includes(identificationValue) &&
+    // !IASCO_SITUATION_FINISHING_VALUES.includes(situation) &&
+    // !IASCO_CATEGORY_FINISHING_VALUES.includes(category)
+  )
+    return false;
+
+  return getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
+};
+
+export const isValidForTransmission = (su: SurveyUnit) => {
+  const { identificationConfiguration } = su;
+  switch (identificationConfiguration) {
+    case IdentificationConfiguration.IASCO:
+      return checkValidityForTransmissionIasco(su);
+    case IdentificationConfiguration.INDTEL:
+      return validateTransmissionArray(transmissionRulesByTel, su);
+    case IdentificationConfiguration.NOIDENT:
+    default:
+      return checkValidityForTransmissionNoident(su);
+  }
+};
+
+// Must be extentedfor IASCO
+export function validateTransmissionArray(
+  // TODO : extend TransmissionsRulesByTel to TransmissionsRules for any identification method
+  transmissionRules: TransmissionsRulesByTel,
+  su: SurveyUnit
+): boolean {
+  const outcome = su.contactOutcome?.type;
+  const situation = su.identification.situation;
+  const person = su.identification.person;
+  const lastState = getLastState(su.states);
+
+  // If there is no questionnaire, then there is no transmission
+  if (lastState?.type !== surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) {
+    return false;
+  }
+  const rule = transmissionRules.find(
+    r => r.person === person && (r.situation === situation || r.situation) && r.outcome === outcome
+  );
+  return rule?.isValid ?? false;
 }
