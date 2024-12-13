@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { checkAvailability, IdentificationQuestions } from './identificationFunctions';
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
 
-// Mock data for testing
+// TODO : Missing tests for other functions
 const mockQuestions: IdentificationQuestions = {
   [IdentificationQuestionsId.PERSON]: {
     id: IdentificationQuestionsId.PERSON,
