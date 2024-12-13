@@ -38,7 +38,7 @@ export type ResponseState = Partial<
 
 export function checkAvailability(
   questions: IdentificationQuestions,
-  question: IdentificationQuestionValue,
+  question?: IdentificationQuestionValue,
   responses?: ResponseState
 ): boolean {
   if (!responses) return true;
