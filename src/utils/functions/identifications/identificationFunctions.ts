@@ -46,13 +46,12 @@ export function checkAvailability(
   if (!dependency) return true;
   if (responses[dependency.questionId]?.concluding) return false;
 
-  // Lookup node availabilty by checking if parent is itself available
+  // Recursively check if the parent question is itself available
   const parentResponseQuestion = questions[dependency.questionId];
   if (parentResponseQuestion)
     return checkAvailability(questions, parentResponseQuestion, responses);
 
-  // If parent has no response, we need to check if its option match our dependancy
-  // If not, then this node should be disabled
+  // If the parent question has a response, check if its value satisfies the dependency condition
   const parentResponse = responses[dependency.questionId];
   if (parentResponse) return dependency.values.includes(parentResponse.value);
 
