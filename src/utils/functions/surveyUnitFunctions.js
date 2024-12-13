@@ -9,10 +9,10 @@ import {
 
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
-import { identificationConfigurationEnum } from 'utils/enum/identifications/IdentificationConfigurationEnum';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
+import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 
 export const getCommentByType = (type, su) => {
   if (Array.isArray(su.comments) && su.comments.length > 0) {
@@ -98,9 +98,9 @@ const checkValidityForTransmissionIasco = su => {
 export const isValidForTransmission = su => {
   const { identificationConfiguration } = su;
   switch (identificationConfiguration) {
-    case identificationConfigurationEnum.IASCO:
+    case IdentificationConfiguration.IASCO:
       return checkValidityForTransmissionIasco(su);
-    case identificationConfigurationEnum.NOIDENT:
+    case IdentificationConfiguration.NOIDENT:
     default:
       return checkValidityForTransmissionNoident(su);
   }
