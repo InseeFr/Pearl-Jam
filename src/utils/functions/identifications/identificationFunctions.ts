@@ -7,6 +7,7 @@ import {
   transmissionRulesByTel,
 } from './questionsTree/indtelQuestionsTree';
 import { houseF2FIdentificationQuestionsTree } from './questionsTree/houseF2FQuestionsTree';
+import { identificationQuestionsHousetel } from './questionings/questioningByHOUSETEL';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { checkValidityForTransmissionNoident, getLastState } from '../surveyUnitFunctions';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
@@ -37,8 +38,8 @@ export const identificationQuestionsTree: Record<
   [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
   [IdentificationConfiguration.NOIDENT]: {},
   [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
-  [IdentificationConfiguration.HOUSETEL]: {},
-  [IdentificationConfiguration.HOUSETELWSR]: {},
+  [IdentificationConfiguration.HOUSETEL]: {identificationQuestionsHousetel},
+  [IdentificationConfiguration.HOUSETELWSR]: {identificationQuestionsHousetel},
   [IdentificationConfiguration.INDTELNOR]: {},
   [IdentificationConfiguration.INDF2F]: {},
   [IdentificationConfiguration.SRCVREINT]: {},
