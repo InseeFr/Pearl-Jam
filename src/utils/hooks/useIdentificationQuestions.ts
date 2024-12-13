@@ -5,9 +5,10 @@ import {
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { addNewState, persistSurveyUnit } from 'utils/functions';
+import { addNewState, getLastState, persistSurveyUnit } from 'utils/functions';
 import {
   checkAvailability,
+  identificationIsFinished,
   IdentificationQuestionOption,
   identificationQuestions,
   ResponseState,
@@ -58,10 +59,9 @@ export function useIdentification(surveyUnit: SurveyUnit) {
             identification[question.id] = option.value;
           }
 
-          if (
-            Object.values(responses).some(response => response?.concluding === true) ||
-            option.concluding
-          ) {
+          let states = undefined;
+
+          if (identificationIsFinished(surveyUnit.identificationConfiguration, identification)) {
             let concludingQuestionIndex = orderedQuestions.findIndex(
               question => responses[question.id]?.concluding === true
             );
@@ -72,21 +72,16 @@ export function useIdentification(surveyUnit: SurveyUnit) {
             }
 
             const previousQuestions = orderedQuestions.slice(0, concludingQuestionIndex + 1);
-
             const allAnswered = previousQuestions.every(q => !!updatedResponses[q.id]);
-
             if (allAnswered) {
-              const newStates = addNewState(
-                surveyUnit,
-                surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
-              );
-              persistSurveyUnit({
-                ...surveyUnit,
-                states: newStates,
-                identification: identification,
-              });
+              states = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
             }
           }
+          persistSurveyUnit({
+            ...surveyUnit,
+            states: states ?? surveyUnit.states,
+            identification: identification,
+          });
 
           if (!option.concluding && selectedQuestionId === question.id) {
             setSelectedDialogId(question.nextId);
