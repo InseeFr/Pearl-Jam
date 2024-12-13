@@ -46,21 +46,11 @@ export function useIdentification(surveyUnit: SurveyUnit) {
     setResponses(prev => {
       let updatedResponses = { ...prev, [selectedQuestionId]: option };
       const updatedAvailability = Object.fromEntries(
-        Object.entries(questions).map(([questionId, question]) => {
-          console.log(question);
-          console.log(updatedResponses);
-
+        Object.entries(questions).map(([questionId, question]) => { 
           const available = checkAvailability(questions, question, updatedResponses);
-
-          console.log(available);
-          console.log('--------------');
-
-          let updateState = true;
-          if (!updatedResponses[question.id] && available) {
-            updateState = false;
-          }
-
+          const orderedQuestions = Object.values(questions);
           let identification: SurveyUnitIdentification = surveyUnit.identification;
+
           if (!available) {
             identification[question.id] = undefined;
             updatedResponses[question.id] = undefined;
@@ -68,22 +58,37 @@ export function useIdentification(surveyUnit: SurveyUnit) {
             identification[question.id] = option.value;
           }
 
-          if (option.concluding) {
-            if (updateState) {
+          if (
+            Object.values(responses).some(response => response?.concluding === true) ||
+            option.concluding
+          ) {
+            let concludingQuestionIndex = orderedQuestions.findIndex(
+              question => responses[question.id]?.concluding === true
+            );
+            if (option.concluding) {
+              concludingQuestionIndex = orderedQuestions.findIndex(
+                q => q.id === selectedQuestionId
+              );
+            }
+
+            const previousQuestions = orderedQuestions.slice(0, concludingQuestionIndex + 1);
+
+            const allAnswered = previousQuestions.every(q => !!updatedResponses[q.id]);
+
+            if (allAnswered) {
               const newStates = addNewState(
                 surveyUnit,
                 surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
               );
-
               persistSurveyUnit({
                 ...surveyUnit,
                 states: newStates,
                 identification: identification,
               });
-            } else {
-              persistSurveyUnit({ ...surveyUnit, identification: identification });
             }
-          } else if (selectedQuestionId === question.id) {
+          }
+
+          if (!option.concluding && selectedQuestionId === question.id) {
             setSelectedDialogId(question.nextId);
           }
 

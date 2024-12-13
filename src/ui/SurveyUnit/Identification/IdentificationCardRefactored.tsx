@@ -25,42 +25,40 @@ export function IdentificationByTelCard({ surveyUnit }: Readonly<IdentificationC
   } = useIdentification(surveyUnit);
 
   return (
-    <>
-      <Card elevation={0}>
-        <CardContent>
-          <Stack gap={3}>
-            <Row gap={1}>
-              <AssignmentIndOutlinedIcon fontSize="large" />
-              <Typography as="h2" variant="xl" fontWeight={700}>
-                {D.identification}
-              </Typography>
-            </Row>
-            <Stack gap={1}>
-              {(Object.keys(questions) as IdentificationQuestionsId[]).map(questionId => (
-                <ButtonLine
-                  key={questionId}
-                  onClick={() => setSelectedDialogId(questionId)}
-                  label={responses[questionId]?.label ?? questions[questionId]?.text}
-                  checked={responses[questionId] && availableQuestions[questionId] ? true : false}
-                  disabled={!availableQuestions[questionId]}
-                ></ButtonLine>
-              ))}
-            </Stack>
+    <Card elevation={0}>
+      <CardContent>
+        <Stack gap={3}>
+          <Row gap={1}>
+            <AssignmentIndOutlinedIcon fontSize="large" />
+            <Typography as="h2" variant="xl" fontWeight={700}>
+              {D.identification}
+            </Typography>
+          </Row>
+          <Stack gap={1}>
+            {(Object.keys(questions) as IdentificationQuestionsId[]).map(questionId => (
+              <ButtonLine
+                key={questionId}
+                onClick={() => setSelectedDialogId(questionId)}
+                label={responses[questionId]?.label ?? questions[questionId]?.text}
+                checked={responses[questionId] && availableQuestions[questionId] ? true : false}
+                disabled={!availableQuestions[questionId]}
+              ></ButtonLine>
+            ))}
           </Stack>
-        </CardContent>
-        {selectedDialogId && (
-          <IdentificationDialog
-            questionId={selectedDialogId}
-            key={`dialog-${selectedDialogId}`}
-            question={questions[selectedDialogId]}
-            defaultOption={responses[selectedDialogId] ?? questions[selectedDialogId]?.options[0]}
-            onSubmit={handleResponse}
-            onClose={() => {
-              setSelectedDialogId(undefined);
-            }}
-          />
-        )}
-      </Card>
-    </>
+        </Stack>
+      </CardContent>
+      {selectedDialogId && (
+        <IdentificationDialog
+          questionId={selectedDialogId}
+          key={`dialog-${selectedDialogId}`}
+          question={questions[selectedDialogId]}
+          defaultOption={responses[selectedDialogId] ?? questions[selectedDialogId]?.options[0]}
+          onSubmit={handleResponse}
+          onClose={() => {
+            setSelectedDialogId(undefined);
+          }}
+        />
+      )}
+    </Card>
   );
 }
