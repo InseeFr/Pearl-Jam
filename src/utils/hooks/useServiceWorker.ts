@@ -4,7 +4,7 @@ import { useConfiguration } from './useConfiguration';
 
 const SW_UPDATE_KEY = 'installing-update';
 
-type ServiceWorkerState = {
+export type ServiceWorkerState = {
   isUpdating: boolean;
   isUpdateInstalled: boolean;
   isInstallingServiceWorker: boolean;

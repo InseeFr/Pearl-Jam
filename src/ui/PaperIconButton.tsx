@@ -1,4 +1,4 @@
-import Paper from '@mui/material/Paper';
+import Paper, { PaperProps } from '@mui/material/Paper';
 
 const style = {
   width: 24,
@@ -18,7 +18,7 @@ const style = {
   },
 };
 
-export function PaperIconButton(props) {
+export function PaperIconButton(props: Readonly<PaperProps>) {
   return (
     <Paper
       component="button"

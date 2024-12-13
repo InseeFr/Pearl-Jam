@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, beforeEach, expect, vi } from 'vitest';
+import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 import { ServiceWorkerStatus } from './ServiceWorkerStatus';
 import { useServiceWorker } from '../utils/hooks/useServiceWorker';
 import D from '../i18n/build-dictionary';
@@ -8,7 +8,7 @@ vi.mock('../utils/hooks/useServiceWorker');
 
 describe('ServiceWorkerStatus', () => {
   beforeEach(() => {
-    useServiceWorker.mockReturnValue({
+    (useServiceWorker as Mock).mockReturnValue({
       isUpdating: false,
       isUpdateInstalled: false,
       isUpdateAvailable: false,
@@ -21,7 +21,7 @@ describe('ServiceWorkerStatus', () => {
   });
 
   it(`Display ${D.updating}`, () => {
-    useServiceWorker.mockReturnValueOnce({
+    (useServiceWorker as Mock).mockReturnValueOnce({
       isServiceWorkerInstalled: false,
       isUpdateInstalled: false,
       isUpdateAvailable: false,
@@ -38,7 +38,7 @@ describe('ServiceWorkerStatus', () => {
   });
 
   it(`Display ${D.updateInstalled}`, () => {
-    useServiceWorker.mockReturnValueOnce({
+    (useServiceWorker as Mock).mockReturnValueOnce({
       isServiceWorkerInstalled: false,
       isUpdateInstalled: true,
       isUpdateAvailable: false,
@@ -56,7 +56,7 @@ describe('ServiceWorkerStatus', () => {
 
   it(`Display ${D.updateAvailable}`, () => {
     const updateApp = vi.fn();
-    useServiceWorker.mockReturnValueOnce({
+    (useServiceWorker as Mock).mockReturnValueOnce({
       isServiceWorkerInstalled: false,
       isUpdateInstalled: false,
       isUpdateAvailable: true,
@@ -75,7 +75,7 @@ describe('ServiceWorkerStatus', () => {
   });
 
   it(`Display ${D.appReadyOffline}`, () => {
-    useServiceWorker.mockReturnValueOnce({
+    (useServiceWorker as Mock).mockReturnValueOnce({
       isServiceWorkerInstalled: true,
       isUpdateInstalled: false,
       isUpdateAvailable: false,
@@ -92,7 +92,7 @@ describe('ServiceWorkerStatus', () => {
   });
 
   it(`Display ${D.appInstalling}`, () => {
-    useServiceWorker.mockReturnValueOnce({
+    (useServiceWorker as Mock).mockReturnValueOnce({
       isServiceWorkerInstalled: false,
       isUpdateInstalled: false,
       isUpdateAvailable: false,
@@ -109,7 +109,7 @@ describe('ServiceWorkerStatus', () => {
   });
 
   it(`Display ${D.installError}`, () => {
-    useServiceWorker.mockReturnValueOnce({
+    (useServiceWorker as Mock).mockReturnValueOnce({
       isServiceWorkerInstalled: false,
       isUpdateInstalled: false,
       isUpdateAvailable: false,
@@ -126,7 +126,7 @@ describe('ServiceWorkerStatus', () => {
   });
 
   it('should close the Snackbar', () => {
-    useServiceWorker.mockReturnValueOnce({
+    (useServiceWorker as Mock).mockReturnValueOnce({
       isServiceWorkerInstalled: false,
       isUpdateInstalled: false,
       isUpdateAvailable: false,
@@ -147,7 +147,7 @@ describe('ServiceWorkerStatus', () => {
 
   it('should close the Snackbar and call clearUpdating', () => {
     const clearUpdating = vi.fn();
-    useServiceWorker.mockReturnValueOnce({
+    (useServiceWorker as Mock).mockReturnValueOnce({
       isServiceWorkerInstalled: false,
       isUpdateInstalled: true,
       isUpdateAvailable: false,
