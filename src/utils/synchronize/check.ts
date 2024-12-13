@@ -7,6 +7,8 @@ import notificationIdbService from 'utils/indexeddb/services/notification-idb-se
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
+import { Notification, SyncReport } from 'utils/indexeddb/idb-config';
+import { NotificationState } from 'types/pearl';
 
 export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) => {
   if (pearlSuccess && queenSuccess) {
@@ -26,9 +28,9 @@ export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) 
 };
 
 export const getNotifFromResult = (
-  result: { state: unknown; messages: unknown },
+  result: { state: NotificationState; messages: string[] },
   nowDate: number
-) => {
+): Notification => {
   const { state, messages } = result;
   return {
     date: nowDate || new Date().getTime(),
@@ -43,11 +45,14 @@ export const getNotifFromResult = (
 
 export const getReportFromResult = (
   result: {
-    details?: { transmittedSurveyUnits: unknown; loadedSurveyUnits: unknown };
+    details?: {
+      transmittedSurveyUnits: Record<string, string[]>;
+      loadedSurveyUnits: Record<string, string[]>;
+    };
     state: unknown;
   },
   nowDate = 0
-) => {
+): Partial<SyncReport> => {
   const { details, state } = result;
   if (state !== 'error') {
     const { transmittedSurveyUnits, loadedSurveyUnits } = details!;
@@ -70,7 +75,14 @@ const getResult = (
   queenTempZone = [],
   transmittedSurveyUnits = {},
   loadedSurveyUnits = {}
-) => {
+): {
+  state: NotificationState;
+  messages: string[];
+  details?: {
+    transmittedSurveyUnits: Record<string, string[]>;
+    loadedSurveyUnits: Record<string, string[]>;
+  };
+} => {
   const messages = [];
   if (pearlError || queenError) {
     return {

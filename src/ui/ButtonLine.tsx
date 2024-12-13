@@ -5,11 +5,11 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { ButtonProps } from '@mui/material';
 
-interface ButtonLineProps extends ButtonProps {
-  label?: string;
-  checked: boolean;
+type ButtonLineProps = {
   disabled: boolean;
-}
+  label: string;
+  checked: boolean;
+} & Omit<ButtonProps, 'disabled'>;
 
 export function ButtonLine({ disabled, label, checked, ...props }: Readonly<ButtonLineProps>) {
   const textColor = disabled ? 'textHint' : 'textPrimary';

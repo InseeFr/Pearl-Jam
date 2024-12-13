@@ -20,6 +20,7 @@ declare module '@mui/material/Typography' {
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     white: true;
+    surfaceSecondary: true;
   }
 
   interface ButtonPropsVariantOverrides {
@@ -35,6 +36,7 @@ declare module '@mui/material/SvgIcon' {
     textPrimary: true;
     surfaceTertiary: true;
     yellow: true;
+    textHint: true;
   }
 }
 

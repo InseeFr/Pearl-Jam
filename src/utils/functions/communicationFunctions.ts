@@ -1,6 +1,7 @@
+import { SurveyUnit } from 'types/pearl';
 import { getAddressData, getprivilegedPerson } from './surveyUnitFunctions';
 
-export const getRecipientInformation = surveyUnit => {
+export const getRecipientInformation = (surveyUnit: SurveyUnit) => {
   const recipient = getprivilegedPerson(surveyUnit);
   const { title, firstName, lastName } = recipient;
 
