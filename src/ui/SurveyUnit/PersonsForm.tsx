@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import { Fragment, MouseEventHandler } from 'react';
+import { Fragment, MouseEvent, MouseEventHandler } from 'react';
 import Stack from '@mui/material/Stack';
 import D from '../../i18n/build-dictionary';
 import { FieldRow } from '../FieldRow';
@@ -52,7 +52,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
     onClose();
   });
 
-  const handleCancel = (e: MouseEventHandler<HTMLAnchorElement>) => {
+  const handleCancel = (e: MouseEvent<HTMLButtonElement>) => {
     onClose();
   };
 
