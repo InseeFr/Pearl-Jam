@@ -31,7 +31,8 @@
     "format": "prettier --write .",
     "test": "vitest",
     "prepare": "husky",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "pre-push": "stylelint \"src/**/*.css\"  && yarn test  --watch=false"
   },
   "eslintConfig": {
     "extends": [
@@ -109,6 +110,8 @@
     "husky": "^9.1.6",
     "jsdom": "^23.0.1",
     "prettier": "^3.1.1",
+    "stylelint": "^16.11.0",
+    "stylelint-config-standard": "^36.0.1",
     "vite": "^4.2.1",
     "vite-plugin-pwa": "^0.19.2",
     "vite-tsconfig-paths": "^3.6.0",
