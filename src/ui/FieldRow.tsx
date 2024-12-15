@@ -96,12 +96,6 @@ interface ControlledFieldProps {
 }
 /**
  * Select the right field to display
- *
- * @param {string} type
- * @param {string} name
- * @param {{label: string, value: unknown}[]} options
- * @param field
- * @returns {JSX.Element|null}
  */
 export function ControlledField({ type, name, options, field }: Readonly<ControlledFieldProps>) {
   if (type === 'switch') {

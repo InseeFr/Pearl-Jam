@@ -57,3 +57,9 @@ declare module '@mui/material/CircularProgress' {
     white: true;
   }
 }
+
+declare module '@mui/material/Switch' {
+  interface SwitchPropsColorOverrides {
+    green: true;
+  }
+}
