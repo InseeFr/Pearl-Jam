@@ -8,8 +8,8 @@ import { ButtonProps } from '@mui/material';
 type ButtonLineProps = {
   disabled: boolean;
   label: string;
-  checked: boolean
-} & Omit<ButtonProps, 'disabled'>
+  checked: boolean;
+} & Omit<ButtonProps, 'disabled'>;
 
 export function ButtonLine({ disabled, label, checked, ...props }: Readonly<ButtonLineProps>) {
   const textColor = disabled ? 'textHint' : 'textPrimary';
