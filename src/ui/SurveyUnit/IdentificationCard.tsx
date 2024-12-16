@@ -6,7 +6,7 @@ import { Row } from '../Row';
 import Stack from '@mui/material/Stack';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import { ButtonLine } from '../ButtonLine';
-import { useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
+import { Answer, useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
 
 import DialogTitle from '@mui/material/DialogTitle';
 import FormGroup from '@mui/material/FormGroup';
@@ -16,7 +16,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import React, { useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { RadioLine } from '../RadioLine';
 import RadioGroup from '@mui/material/RadioGroup';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
@@ -24,22 +24,20 @@ import { identificationConfigurationEnum } from '../../utils/enum/Identification
 import Box from '@mui/material/Box';
 import { addNewState } from '../../utils/functions';
 import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
+import { Question, type SurveyUnit } from 'types/pearl';
 
-/**
- * @param {SurveyUnit} surveyUnit
- */
-export function IdentificationCard({ surveyUnit }) {
+export function IdentificationCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>) {
   const { questions, setQuestion, answers, question, setAnswer } =
     useIdentificationQuestions(surveyUnit);
 
-  const stateProofSetAnswer = answer => {
+  const stateProofSetAnswer = (answer?: Answer) => {
     const newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
     setAnswer({ ...surveyUnit, states: newStates }, answer);
   };
 
   return (
     <>
-      <Card p={2} elevation={0}>
+      <Card elevation={0}>
         <CardContent>
           <Stack gap={3}>
             <Row gap={1}>
@@ -75,7 +73,7 @@ export function IdentificationCard({ surveyUnit }) {
         // We want a new state for each question
         key={question}
         answers={answers}
-        question={question}
+        question={question as unknown as Question}
         onSubmit={stateProofSetAnswer}
         onClose={() => setQuestion(undefined)}
       />
@@ -83,16 +81,13 @@ export function IdentificationCard({ surveyUnit }) {
   );
 }
 
-/**
- * @param {SurveyUnit} surveyUnit
- */
-function MoveQuestion({ surveyUnit }) {
+function MoveQuestion({ surveyUnit }: { surveyUnit: SurveyUnit }) {
   const options = [
     { label: D.yes, value: true },
     { label: D.no, value: false },
   ];
   const value = surveyUnit.move;
-  const handleChange = e => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
       move: e.target.checked ? e.target.value === 'true' : null,
@@ -124,15 +119,25 @@ function MoveQuestion({ surveyUnit }) {
   );
 }
 
-function IdentificationDialog({ answers, question, onClose, onSubmit }) {
+function IdentificationDialog({
+  answers,
+  question,
+  onClose,
+  onSubmit,
+}: Readonly<{
+  answers: Answer[];
+  question: Question;
+  onClose: () => void;
+  onSubmit: (answer?: Answer) => void;
+}>) {
   const [localAnswer, setLocalAnswer] = useState(question?.answer?.value);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSubmit(answers.find(a => a.value === localAnswer));
   };
 
-  const handleChange = (e, v) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, v: string) => {
     setLocalAnswer(v);
   };
 

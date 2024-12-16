@@ -26,11 +26,8 @@ interface FieldRowProps {
   [key: string]: any; // Spread operator for any additional props
 }
 
-export const FieldRow = forwardRef(
-  (
-    { label, maxWidth, checkbox, control, children, ...props }: PropsWithChildren<FieldRowProps>,
-    ref
-  ) => {
+export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
+  ({ label, maxWidth, checkbox, control, children, ...props }, ref) => {
     const isControlled = !!props.type;
 
     if (isControlled && !control) {

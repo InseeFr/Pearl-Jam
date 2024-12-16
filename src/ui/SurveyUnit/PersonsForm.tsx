@@ -131,6 +131,7 @@ function PersonFields({ person, register, control, index }: Readonly<PersonField
         label={D.surveyUnitFirstName}
         {...register(`persons.${index}.firstName`)}
       />
+
       <FieldRow
         label={D.surveyUnitDateOfBirth}
         name={`persons.${index}.birthdate`}

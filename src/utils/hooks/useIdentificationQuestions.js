@@ -75,9 +75,6 @@ export function useIdentificationQuestions(surveyUnit) {
     [question, config]
   );
 
-  /**
-   * @param {Answer} answer
-   */
   const setAnswer = (surveyUnit, answer) => {
     // When an answer is marked as "concluded" it makes next answer undefined
     let concluded = false;

@@ -1,3 +1,10 @@
+import { Answer } from 'utils/hooks/useIdentificationQuestions';
+
+export type Question = {
+  answer: Answer;
+  value: string;
+};
+
 export type SurveyUnitPhoneNumber = {
   source: string;
   favorite: boolean;
@@ -94,7 +101,7 @@ export type SurveyUnit = {
   persons: SurveyUnitPerson[];
   address: SurveyUnitAddress;
   priority: boolean;
-  move: boolean;
+  move: boolean | null;
   campaign: string;
   comments: SurveyUnitComment[];
   sampleIdentifiers: SurveyUnitSampleIdentifiers;
