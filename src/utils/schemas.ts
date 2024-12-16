@@ -6,22 +6,19 @@ const stringRequired = z
   .min(1, { message: 'Vous devez entrer une valeur' });
 
 export const communicationSchema = z.object({
-  medium: z.enum(
-    mediumRadioValues.map(v => v.value),
-    { required_error: 'Requis' }
-  ),
-  type: z.enum(
-    typeRadioValues.map(v => v.value),
-    { required_error: 'Requis' }
-  ),
-  reason: z.enum(
-    reasonRadioValues.map(v => v.value),
-    { required_error: 'Requis' }
-  ),
+  medium: z.enum(mediumRadioValues.map(v => v.value) as [string, ...string[]], {
+    required_error: 'Requis',
+  }),
+  type: z.enum(typeRadioValues.map(v => v.value) as [string, ...string[]], {
+    required_error: 'Requis',
+  }),
+  reason: z.enum(reasonRadioValues.map(v => v.value) as [string, ...string[]], {
+    required_error: 'Requis',
+  }),
 });
 
 export const userSchema = z.object({
-  title: z.enum(Object.keys(TITLES)),
+  title: z.enum(Object.keys(TITLES) as [string, ...string[]]),
   firstName: stringRequired,
   lastName: stringRequired,
   email: stringRequired.email({ message: 'Cet email ne semble pas être valide' }),
@@ -29,7 +26,7 @@ export const userSchema = z.object({
 });
 
 export const recipientSchema = z.object({
-  title: z.enum(Object.keys(TITLES), { required_error: 'Requis' }),
+  title: z.enum(Object.keys(TITLES) as [string, ...string[]], { required_error: 'Requis' }),
   firstName: stringRequired,
   lastName: stringRequired,
   postCode: stringRequired,

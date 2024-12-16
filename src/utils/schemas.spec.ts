@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest';
+import { describe, expect, it, test } from 'vitest';
 import { recipientSchema, userSchema } from './schemas';
 describe('schemas', () => {
   describe('userSchema', () => {
@@ -33,6 +33,7 @@ describe('schemas', () => {
       }
     });
   });
+
   describe('recipientSchema', () => {
     const validRecipient = {
       title: 'MISTER',
