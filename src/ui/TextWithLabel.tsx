@@ -11,11 +11,6 @@ interface TextWithLabelProps {
   children: JSX.Element | boolean | string;
 }
 
-/**
- * @param {string} label
- * @param {SxProps} sx - cf. MUI system
- * @param {JSX.Element} children
- */
 export function TextWithLabel({ label, children, sx }: Readonly<TextWithLabelProps>) {
   if (children === true) {
     children = (
