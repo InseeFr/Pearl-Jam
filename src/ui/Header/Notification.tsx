@@ -12,7 +12,9 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 import { formatDistance } from 'date-fns';
-import { useContext } from 'react';
+import D from 'i18n';
+import { MouseEvent, useContext } from 'react';
+import { Notification as NotificationType } from 'types/pearl';
 import { dateFnsLocal } from '../../utils';
 import { NOTIFICATION_TYPE_SYNC } from '../../utils/constants';
 import { deleteNotification, markNotificationAsRead } from '../../utils/hooks/useNotifications';
@@ -20,16 +22,20 @@ import syncReportIdbService from '../../utils/indexeddb/services/syncReport-idb-
 import { Row } from '../Row';
 import { SyncContext } from '../Sync/SyncContextProvider';
 import { Typography } from '../Typography';
-import D from 'i18n';
 
-export function Notification({ notification, onExit }) {
+interface NotificationProps {
+  notification: NotificationType;
+  onExit: () => void;
+}
+
+export function Notification({ notification, onExit }: Readonly<NotificationProps>) {
   const theme = useTheme();
   const date = `${formatDistance(notification.date || 0, new Date(), {
     addSuffix: true,
     locale: dateFnsLocal,
   })}`;
   const { setSyncResult } = useContext(SyncContext);
-  const handleOpen = async e => {
+  const handleOpen = async (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     e.stopPropagation();
     if (notification.type === NOTIFICATION_TYPE_SYNC) {
@@ -44,7 +50,7 @@ export function Notification({ notification, onExit }) {
     }
   };
 
-  const handleExpand = (_, expanded) => {
+  const handleExpand = (_: unknown, expanded: NotificationType) => {
     if (!notification.read && expanded) {
       markNotificationAsRead(notification);
     }

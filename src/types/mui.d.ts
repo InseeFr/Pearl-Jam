@@ -21,6 +21,7 @@ declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     white: true;
     surfaceSecondary: true;
+    textPrimary: true;
   }
 
   interface ButtonPropsVariantOverrides {
@@ -37,6 +38,18 @@ declare module '@mui/material/SvgIcon' {
     surfaceTertiary: true;
     yellow: true;
     textHint: true;
+  }
+}
+
+declare module '@mui/material/IconButton' {
+  interface IconButtonPropsColorOverrides {
+    textPrimary: true;
+  }
+}
+
+declare module '@mui/material/Badge' {
+  interface BadgePropsColorOverrides {
+    accent: true;
   }
 }
 

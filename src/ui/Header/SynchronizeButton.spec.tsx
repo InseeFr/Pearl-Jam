@@ -3,6 +3,9 @@ import { SynchronizeButton } from './SynchronizeButton';
 import { SyncContext } from '../Sync/SyncContextProvider';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import D from '../../i18n/build-dictionary';
+import { describe, expect, it, Mock, MockContext, vi } from 'vitest';
+import { beforeEach } from 'node:test';
+import { ComponentPropsWithoutRef } from 'react';
 
 vi.mock('../../utils/hooks/useOnline', () => ({
   useNetworkOnline: vi.fn(),
@@ -10,7 +13,7 @@ vi.mock('../../utils/hooks/useOnline', () => ({
 
 vi.mock('@mui/material/Button', () => {
   return {
-    default: ({ children, disabled, onClick }) => (
+    default: ({ children, disabled, onClick }: ComponentPropsWithoutRef<'button'>) => (
       <button disabled={disabled} onClick={onClick}>
         {children}
       </button>
@@ -26,7 +29,7 @@ describe('SynchronizeButton', () => {
   });
 
   it('renders the button with correct text', () => {
-    useNetworkOnline.mockReturnValue(true);
+    (useNetworkOnline as Mock).mockReturnValue(true);
     render(
       <SyncContext.Provider value={{ syncFunction: mockSyncFunction }}>
         <SynchronizeButton />
@@ -37,18 +40,20 @@ describe('SynchronizeButton', () => {
   });
 
   it('disables the button when offline', () => {
-    useNetworkOnline.mockReturnValue(false);
+    (useNetworkOnline as Mock).mockReturnValue(false);
     render(
       <SyncContext.Provider value={{ syncFunction: mockSyncFunction }}>
         <SynchronizeButton />
       </SyncContext.Provider>
     );
 
-    screen.getByRole('button', { name: D.synchronizeButton, disabled: true });
+    expect(
+      screen.getByRole('button', { name: D.synchronizeButton }).getAttribute('disabled')
+    ).toBeDefined();
   });
 
   it('calls syncFunction when clicked', () => {
-    useNetworkOnline.mockReturnValue(true);
+    (useNetworkOnline as Mock).mockReturnValue(true);
     render(
       <SyncContext.Provider value={{ syncFunction: mockSyncFunction }}>
         <SynchronizeButton />

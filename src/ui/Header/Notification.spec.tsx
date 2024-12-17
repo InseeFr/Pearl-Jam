@@ -2,15 +2,18 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { SyncContext } from 'ui/Sync/SyncContextProvider';
 import { Notification } from './Notification';
 import D from 'i18n';
+import { describe, it, vi } from 'vitest';
+import { Notification as NotificationType } from 'types/pearl';
+import { ComponentPropsWithRef } from 'react';
 
 vi.mock('@mui/material/Button', () => ({
-  default: props => <button {...props}>{props.children}</button>,
+  default: (props: ComponentPropsWithRef<'button'>) => <button {...props}>{props.children}</button>,
 }));
 
-const renderWithContext = notification => {
+const renderWithContext = (notification: NotificationType) => {
   return render(
     <SyncContext.Provider value={{}}>
-      <Notification notification={notification} />
+      <Notification notification={notification} onExit={vi.fn()} />
     </SyncContext.Provider>
   );
 };
@@ -25,7 +28,7 @@ describe('Notification Component', () => {
       date: mockDate,
       messages: ['New message'],
       read: true,
-    };
+    } as unknown as NotificationType;
 
     renderWithContext(notification);
 

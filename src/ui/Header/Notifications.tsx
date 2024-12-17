@@ -19,7 +19,12 @@ import { Typography } from '../Typography';
 import { HeaderBackdrop } from './HeaderBackdrop';
 import { Notification } from './Notification';
 
-export function Notifications({ target, onClose }) {
+interface NotificationsTypes {
+  target: HTMLElement;
+  onClose: () => void;
+}
+
+export function Notifications({ target, onClose }: Readonly<NotificationsTypes>) {
   const open = !!target;
   const { notifications } = useNotifications();
   const theme = useTheme();
