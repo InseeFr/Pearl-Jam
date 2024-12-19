@@ -5,7 +5,7 @@ import {
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { addNewState, getLastState, persistSurveyUnit } from 'utils/functions';
+import { addNewState, persistSurveyUnit } from 'utils/functions';
 import {
   checkAvailability,
   identificationIsFinished,

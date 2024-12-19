@@ -1,6 +1,5 @@
 import { differenceInYears } from 'date-fns';
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST, TITLES } from 'utils/constants';
-import { identificationIsFinished } from './identifications/identificationFunctions';
 
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
@@ -26,7 +25,7 @@ export const getSuTodoState = surveyUnit => {
 };
 
 /**
- * @param {{ status: string, date: number, id?: string }[]} states
+ * @param {SurveyUnitState} states
  * @returns {SurveyUnitState} or undefined if no states
  */
 export const getLastState = states => states?.slice?.().sort((a, b) => b.date - a.date)?.[0];

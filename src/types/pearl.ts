@@ -44,7 +44,7 @@ type SurveyUnitComment = {
 };
 
 type SurveyUnitState = {
-  id: number;
+  id?: number;
   date: number;
   type: string;
 };

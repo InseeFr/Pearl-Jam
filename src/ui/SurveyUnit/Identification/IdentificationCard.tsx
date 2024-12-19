@@ -40,7 +40,7 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
                 key={questionId}
                 onClick={() => setSelectedDialogId(questionId)}
                 label={responses[questionId]?.label ?? questions[questionId]?.text}
-                checked={responses[questionId] && availableQuestions[questionId] ? true : false}
+                checked={!!(responses[questionId] && availableQuestions[questionId])}
                 disabled={!availableQuestions[questionId]}
               ></ButtonLine>
             ))}

@@ -96,7 +96,7 @@ export const checkValidityForTransmissionIasco = (su: SurveyUnit) => {
   const type = contactOutcome.type;
   if (
     type === contactOutcomeEnum.INTERVIEW_ACCEPTED.value &&
-    !getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
+    getLastState(states)?.type !== surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
   )
     return false;
 
