@@ -4,8 +4,8 @@ import { IdentificationQuestionsId } from 'utils/enum/identifications/Identifica
 
 // TODO : Missing tests for other functions
 const mockQuestions: IdentificationQuestions = {
-  [IdentificationQuestionsId.PERSON]: {
-    id: IdentificationQuestionsId.PERSON,
+  [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
+    id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
     text: 'Person Question',
     options: [
       { value: 'YES', label: 'Yes', concluding: false },
@@ -20,7 +20,7 @@ const mockQuestions: IdentificationQuestions = {
       { value: 'INACTIVE', label: 'Inactive', concluding: true },
     ],
     dependsOn: {
-      questionId: IdentificationQuestionsId.PERSON,
+      questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
       values: ['YES'],
     },
   },
@@ -30,7 +30,7 @@ describe('checkAvailability', () => {
   it('should return true if there are no responses', () => {
     const result = checkAvailability(
       mockQuestions,
-      mockQuestions[IdentificationQuestionsId.PERSON]
+      mockQuestions[IdentificationQuestionsId.INDIVIDUAL_STATUS]
     );
     expect(result).toBe(true);
   });
@@ -38,7 +38,7 @@ describe('checkAvailability', () => {
   it('should return true if the question has no dependencies', () => {
     const result = checkAvailability(
       mockQuestions,
-      mockQuestions[IdentificationQuestionsId.PERSON],
+      mockQuestions[IdentificationQuestionsId.INDIVIDUAL_STATUS],
       {}
     );
     expect(result).toBe(true);
@@ -46,7 +46,7 @@ describe('checkAvailability', () => {
 
   it('should return true if dependency values match', () => {
     const responses = {
-      [IdentificationQuestionsId.PERSON]: { value: 'YES', label: 'Yes', concluding: false },
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'YES', label: 'Yes', concluding: false },
     };
     const result = checkAvailability(
       mockQuestions,
@@ -58,7 +58,7 @@ describe('checkAvailability', () => {
 
   it('should return false if dependency values do not match', () => {
     const responses = {
-      [IdentificationQuestionsId.PERSON]: { value: 'NO', label: 'No', concluding: true },
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'NO', label: 'No', concluding: true },
     };
     const result = checkAvailability(
       mockQuestions,
@@ -70,7 +70,7 @@ describe('checkAvailability', () => {
 
   it('should return false if the dependency question is concluding', () => {
     const responses = {
-      [IdentificationQuestionsId.PERSON]: { value: 'NO', label: 'No', concluding: true },
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'NO', label: 'No', concluding: true },
     };
     const result = checkAvailability(
       mockQuestions,
@@ -82,7 +82,7 @@ describe('checkAvailability', () => {
 
   it('should return true if parent question is available and non-concluding', () => {
     const responses = {
-      [IdentificationQuestionsId.PERSON]: { value: 'YES', label: 'Yes', concluding: false },
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'YES', label: 'Yes', concluding: false },
     };
     const result = checkAvailability(
       mockQuestions,
@@ -110,7 +110,7 @@ describe('checkAvailability', () => {
     };
 
     const responses = {
-      [IdentificationQuestionsId.PERSON]: { value: 'YES', label: 'Yes', concluding: false },
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'YES', label: 'Yes', concluding: false },
       [IdentificationQuestionsId.SITUATION]: {
         value: 'ACTIVE',
         label: 'Active',
@@ -144,7 +144,7 @@ describe('checkAvailability', () => {
     };
 
     const responses = {
-      [IdentificationQuestionsId.PERSON]: { value: 'NO', label: 'No', concluding: true },
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'NO', label: 'No', concluding: true },
       [IdentificationQuestionsId.SITUATION]: {
         value: 'INACTIVE',
         label: 'Inactive',

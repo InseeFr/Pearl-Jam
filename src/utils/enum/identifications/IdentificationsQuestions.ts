@@ -1,10 +1,15 @@
 export enum IdentificationQuestionsId {
   IDENTIFICATION = 'identification',
+  ACCESS = 'access',
   SITUATION = 'situation',
-  OCCUPANT = 'occupant',
-  ACCES = 'access',
   CATEGORY = 'category',
-  PERSON = 'person',
+  OCCUPANT = 'occupant',
+  INDIVIDUAL_STATUS = 'individualStatus',
+  INTERVIEWER_CAN_PROCESS = 'interviewerCanProcess',
+  NUMBER_OF_RESPONDENTS = 'numberOfRespondents',
+  PRESENT_IN_PREVIOUS_HOME = 'presentInPreviousHome',
+  HOUSEHOLD_COMPOSITION = 'householdComposition',
+
 }
 
 export enum IdentificationConfiguration {

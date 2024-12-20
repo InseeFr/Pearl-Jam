@@ -10,13 +10,13 @@ import {
   checkAvailability,
   identificationIsFinished,
   IdentificationQuestionOption,
-  identificationQuestions,
+  identificationQuestionsTree,
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctions';
 
 export function useIdentification(surveyUnit: SurveyUnit) {
   const questions =
-    identificationQuestions[IdentificationConfiguration[surveyUnit.identificationConfiguration]];
+    identificationQuestionsTree[IdentificationConfiguration[surveyUnit.identificationConfiguration]];
   const initialResponses: ResponseState = Object.fromEntries(
     Object.keys(questions).map(id => [
       id,

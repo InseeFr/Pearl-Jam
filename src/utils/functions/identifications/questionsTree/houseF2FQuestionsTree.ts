@@ -2,10 +2,10 @@ import { IdentificationQuestionsId } from 'utils/enum/identifications/Identifica
 import { IdentificationQuestions } from '../identificationFunctions';
 import D from 'i18n';
 
-export const identificationQuestionsIASCO: IdentificationQuestions = {
+export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
   [IdentificationQuestionsId.IDENTIFICATION]: {
     id: IdentificationQuestionsId.IDENTIFICATION,
-    nextId: IdentificationQuestionsId.ACCES,
+    nextId: IdentificationQuestionsId.ACCESS,
     text: `${D.housingIdentification}`,
     options: [
       { label: `${D.identificationIdentified}`, value: 'IDENTIFIED', concluding: false },
@@ -13,8 +13,8 @@ export const identificationQuestionsIASCO: IdentificationQuestions = {
       { label: `${D.identificationDestroy}`, value: 'DESTROY', concluding: true },
     ],
   },
-  [IdentificationQuestionsId.ACCES]: {
-    id: IdentificationQuestionsId.ACCES,
+  [IdentificationQuestionsId.ACCESS]: {
+    id: IdentificationQuestionsId.ACCESS,
     nextId: IdentificationQuestionsId.SITUATION,
     text: `${D.housingAccess}`,
     options: [
@@ -36,7 +36,7 @@ export const identificationQuestionsIASCO: IdentificationQuestions = {
       { label: `${D.situationAbsorbed}`, value: 'ABSORBED', concluding: true },
     ],
     dependsOn: {
-      questionId: IdentificationQuestionsId.ACCES,
+      questionId: IdentificationQuestionsId.ACCESS,
       values: ['ACC', 'NACC'],
     },
   },

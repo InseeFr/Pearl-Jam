@@ -3,11 +3,11 @@ import {
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import {
-  identificationQuestionsTel,
+  indtelIdentificationQuestionsTree,
   transmissionRulesByTel,
   TransmissionsRulesByTel,
-} from './questionings/questioningByTel';
-import { identificationQuestionsIASCO } from './questionings/questioningByIASCO';
+} from './questionsTree/indtelQuestionsTree';
+import { houseF2FIdentificationQuestionsTree } from './questionsTree/houseF2FQuestionsTree';
 import { SurveyUnit } from 'types/pearl';
 import { checkValidityForTransmissionNoident, getLastState } from '../surveyUnitFunctions';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
@@ -30,10 +30,10 @@ export type IdentificationQuestions = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionValue>
 >;
 
-export const identificationQuestions: Record<IdentificationConfiguration, IdentificationQuestions> =
+export const identificationQuestionsTree: Record<IdentificationConfiguration, IdentificationQuestions> =
   {
-    [IdentificationConfiguration.INDTEL]: identificationQuestionsTel,
-    [IdentificationConfiguration.IASCO]: identificationQuestionsIASCO,
+    [IdentificationConfiguration.INDTEL]: indtelIdentificationQuestionsTree,
+    [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
     [IdentificationConfiguration.NOIDENT]: {},
   };
 
@@ -67,13 +67,13 @@ export function identificationIsFinished(
   identificationConfiguration: IdentificationConfiguration,
   identification: Partial<Record<IdentificationQuestionsId, string>>
 ): boolean {
-  const questions = identificationQuestions[identificationConfiguration];
-  if (!questions) {
+  const questionsTree = identificationQuestionsTree[identificationConfiguration];
+  if (!questionsTree) {
     return false;
   }
 
-  for (const questionId in questions) {
-    const question = questions[questionId as IdentificationQuestionsId];
+  for (const questionId in questionsTree) {
+    const question = questionsTree[questionId as IdentificationQuestionsId];
     if (!question) continue;
 
     const response = identification[question.id];
@@ -135,7 +135,7 @@ export function validateTransmissionArray(
 ): boolean {
   const outcome = su.contactOutcome?.type;
   const situation = su.identification.situation;
-  const person = su.identification.person;
+  const individualStatus = su.identification.individualStatus;
   const lastState = getLastState(su.states);
 
   // If there is no questionnaire, then there is no transmission
@@ -143,7 +143,7 @@ export function validateTransmissionArray(
     return false;
   }
   const rule = transmissionRules.find(
-    r => r.person === person && (r.situation === situation || r.situation) && r.outcome === outcome
+    r => r.individualStatus === individualStatus && (r.situation === situation || r.situation) && r.outcome === outcome
   );
   return rule?.isValid ?? false;
 }
