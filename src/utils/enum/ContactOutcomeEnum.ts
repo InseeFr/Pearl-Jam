@@ -13,11 +13,11 @@ export const contactOutcomeEnum = {
     label: `${D.definitlyUnavailableForUnknownReason}`,
   },
   NO_LONGER_USED_FOR_HABITATION: { value: 'NUH', label: `${D.noLongerUsedForHabitation}` },
-  NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
   DEFINITLY_UNAVAILABLE: {
     value: 'DUK',
     label: `${D.definitlyUnavailable}`,
   },
+  NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
 };
 
 export const findContactOutcomeLabelByValue = (value?: string) =>
