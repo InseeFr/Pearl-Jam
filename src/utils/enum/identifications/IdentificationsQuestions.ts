@@ -9,11 +9,16 @@ export enum IdentificationQuestionsId {
   NUMBER_OF_RESPONDENTS = 'numberOfRespondents',
   PRESENT_IN_PREVIOUS_HOME = 'presentInPreviousHome',
   HOUSEHOLD_COMPOSITION = 'householdComposition',
-
 }
 
 export enum IdentificationConfiguration {
   NOIDENT = 'NOIDENT',
   IASCO = 'IASCO',
+  HOUSEF2F = 'HOUSEF2F',
+  HOUSETEL = 'HOUSETEL',
+  HOUSETELWSR = 'HOUSETELWSR',
   INDTEL = 'INDTEL',
+  INDTELNOR = 'INDTELNOR',
+  INDF2F = 'INDF2F',
+  SRCVREINT = 'SRCVREINT',
 }
