@@ -2,27 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Typography } from '../Typography';
 
 /**
- * @typedef {{start: number, end: number}} AngleSlice
- * @typedef {[x: number, y: number]} Point
- */
-
-/**
  * Convert an angle into a tuple representing x, y
- *
- * @param {number} angle
- * @param {number} radius
- * @return {[x: number, y: number]}
  */
-const angleToPoint = (angle, radius = 1) => {
+const angleToPoint = (angle: number, radius = 1) => {
   return [Math.cos(angle) * radius, Math.sin(angle) * radius];
 };
 
-/**
- * @param {AngleSlice} slice
- * @param {number} radius
- * @return {string}
- */
-const sliceToPath = (slice, radius) => {
+const sliceToPath = (slice: { start: number; end: number }, radius: number) => {
   const isLargeArc = slice.end - slice.start > Math.PI;
   const startPoint = angleToPoint(slice.start, radius)
     .map(v => v.toFixed(2))
@@ -37,12 +23,11 @@ const sliceToPath = (slice, radius) => {
 
 /**
  * Helper to place the text correctly, choose between 3 value starting with negative one
- *
- * @param {number} value
- * @param {[string, string, string]} options
- * @return {string}
  */
-const selectAlignment = (value, options) => {
+const selectAlignment = (
+  value: number,
+  options: [number | string, number | string, number | string]
+) => {
   const middle = 0.7;
   if (value < middle && value > middle * -1) {
     return options[1];
@@ -50,13 +35,19 @@ const selectAlignment = (value, options) => {
   return value < 0 ? options[0] : options[2];
 };
 
-/**
- * @param {{label: string, value: number, color: string}[]} parts
- * @param {number} paddingInline
- * @param {number} paddingBlock
- * @param {number} size
- */
-export function PieChart({ parts, size, paddingInline = 0, paddingBlock = 0 }) {
+interface PieChartProps {
+  parts: { label: string; value: number; color: string }[];
+  size: number;
+  paddingInline: number;
+  paddingBlock: number;
+}
+
+export function PieChart({
+  parts,
+  size,
+  paddingInline = 0,
+  paddingBlock = 0,
+}: Readonly<PieChartProps>) {
   const radius = size / 2;
   let angle = Math.PI / -2;
   /** @type {{start: number, end: number}} */
@@ -112,15 +103,16 @@ export function PieChart({ parts, size, paddingInline = 0, paddingBlock = 0 }) {
 
 /**
  * Generate a label (point, line and text) as a svg group element
- *
- * @param {AngleSlice} slice
- * @param {number} radius
- * @param {string} label
  */
-function PieChartLabel({ slice, radius, label }) {
+
+interface PieChartLabelProps {
+  slice: { start: number; end: number };
+  radius: number;
+  label: string;
+}
+function PieChartLabel({ slice, radius, label }: Readonly<PieChartLabelProps>) {
   const [textSize, setTextSize] = useState([0, 0]);
-  /** @type {{current: HTMLDivElement}} */
-  const textRef = useRef(null);
+  const textRef = useRef<HTMLDivElement>(null);
   const endPoint = angleToPoint(slice.start + (slice.end - slice.start) * 0.5, radius);
   const inside = 0.85;
   const outside = 1.1;
@@ -161,7 +153,7 @@ function PieChartLabel({ slice, radius, label }) {
         height="100%"
         style={{ transform: `translate(${translateX}px, ${translateY}px)` }}
       >
-        <div xmlns="http://www.w3.org/1999/xhtml">
+        <div>
           <Typography
             variant="xs"
             color="textTertiary"

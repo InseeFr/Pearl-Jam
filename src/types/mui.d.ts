@@ -68,6 +68,8 @@ declare module '@mui/material/Dialog' {
 declare module '@mui/material/CircularProgress' {
   interface CircularProgressPropsColorOverrides {
     white: true;
+    green: true;
+    surfaceTertiary: true;
   }
 }
 

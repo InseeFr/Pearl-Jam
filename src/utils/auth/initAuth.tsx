@@ -18,10 +18,15 @@ export const useAuth = () => {
     setAuthenticated(false);
   };
 
-  const isAuthorized = roles => roles.filter(r => interviewerRoles.includes(r)).length > 0;
+  const isAuthorized = (roles: string[]) =>
+    roles.filter(r => interviewerRoles.includes(r)).length > 0;
 
   const isLocalStorageTokenValid = () => {
-    const interviewer = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY));
+    const pearlUserKey = window.localStorage.getItem(PEARL_USER_KEY);
+    if (!pearlUserKey) {
+      return false;
+    }
+    const interviewer = JSON.parse(pearlUserKey);
     if (interviewer?.roles) {
       const { roles } = interviewer;
       if (isAuthorized(roles)) {
@@ -32,7 +37,7 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    const { PEARL_AUTHENTICATION_MODE } = configuration;
+    const { PEARL_AUTHENTICATION_MODE } = configuration!;
     switch (PEARL_AUTHENTICATION_MODE) {
       case 'anonymous':
         window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(GUEST_PEARL_USER));

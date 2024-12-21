@@ -1,9 +1,15 @@
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Typography } from '../Typography';
-import D from 'i18n';
-import { Row } from '../Row';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
+import D from 'i18n';
+import { Fragment } from 'react';
 import {
   displayAgeInYears,
   getTitle,
@@ -11,16 +17,10 @@ import {
   toggleFavoriteEmailAndPersist,
   toggleFavoritePhoneNumberAndPersist,
 } from '../../utils/functions';
-import React, { Fragment } from 'react';
-import { TextWithLabel } from '../TextWithLabel';
-import Button from '@mui/material/Button';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { useToggle } from '../../utils/hooks/useToggle';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import Divider from '@mui/material/Divider';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import IconButton from '@mui/material/IconButton';
-import StarIcon from '@mui/icons-material/Star';
+import { Row } from '../Row';
+import { TextWithLabel } from '../TextWithLabel';
+import { Typography } from '../Typography';
 import { PersonsForm } from './PersonsForm';
 
 /**

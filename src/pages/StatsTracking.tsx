@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Grid, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import D from 'i18n';
-import { useMemo, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { SurveyUnit } from 'types/pearl';
 import { ScrollableBox } from 'ui/ScrollableBox';
 import { Select } from 'ui/Select';
@@ -78,7 +78,9 @@ export function StatsTracking({ surveyUnits }: Readonly<StatsTrackingProps>) {
               <Select
                 options={sortOptions}
                 value={sortDirection}
-                onChange={e => setSortDirection(e.target.value as SortDirection)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setSortDirection(e.target.value as SortDirection)
+                }
                 placeholder={D.noSorting}
                 allowEmpty
                 sx={{ width: '210px' }}
