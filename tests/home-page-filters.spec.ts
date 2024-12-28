@@ -113,5 +113,11 @@ test('check if the reset feature is working properly', async ({ page }) => {
   await homePage.checkNumberOfDisplayedItems(13, 13);
 });
 
-test('check if the search input is working properly', () => {});
+test('check if the search input is working properly', async ({ page }) => {
+  const homePage = new HomePage(page);
+  await homePage.checkNumberOfDisplayedItems(13, 13);
+  await page.getByPlaceholder('Nom, prénom, ville, enquête,').fill('graham');
+  await homePage.checkNumberOfDisplayedItems(4, 13);
+});
+
 test('check if the order input is working properly', () => {});
