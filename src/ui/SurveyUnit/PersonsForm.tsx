@@ -238,9 +238,9 @@ function PhoneLine({
           render={({ field }) => (
             <IconButton sx={{ py: 0 }} onClick={() => field.onChange(!field.value)}>
               {field.value ? (
-                <StarIcon size="small" color="yellow" />
+                <StarIcon color="yellow" />
               ) : (
-                <StarBorderIcon size="small" color="surfaceTertiary" />
+                <StarBorderIcon color="surfaceTertiary" />
               )}
             </IconButton>
           )}

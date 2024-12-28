@@ -1,16 +1,27 @@
-import React from 'react';
-import { Button } from '@mui/material';
-import { Row } from '../Row';
-import { Typography } from '../Typography';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import DoorFrontOutlinedIcon from '@mui/icons-material/DoorFrontOutlined';
 import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import TimeIcon from './Icons/TimeIcon';
-import DisturbIcon from './Icons/DisturbIcon';
-import CircleIcon from './Icons/CircleIcon';
+import { Button } from '@mui/material';
+import { MouseEvent } from 'react';
+import { Row } from '../Row';
+import { Typography } from '../Typography';
 import CustomChip from './CustomChip';
+import CircleIcon from './Icons/CircleIcon';
+import DisturbIcon from './Icons/DisturbIcon';
+import TimeIcon from './Icons/TimeIcon';
+import D from 'i18n';
 
-const HousingResident = ({ startHousing, finishedHousing, toggleHousing, toggleModal }) => {
+const HousingResident = ({
+  startHousing,
+  finishedHousing,
+  toggleHousing,
+  toggleModal,
+}: Readonly<{
+  startHousing: boolean;
+  finishedHousing: boolean;
+  toggleHousing: (value: MouseEvent<HTMLButtonElement>) => void;
+  toggleModal: () => void;
+}>) => {
   return (
     <Row justifyContent="space-between">
       <Row gap={2}>

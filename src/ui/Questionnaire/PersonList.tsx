@@ -12,6 +12,7 @@ import TimeIcon from './Icons/TimeIcon';
 import DisturbIcon from './Icons/DisturbIcon';
 import EditIcon from './Icons/EditIcon';
 import { makeStyles } from '@mui/styles';
+import D from 'i18n';
 
 const useStyles = makeStyles({
   stackBackground: {
@@ -58,7 +59,16 @@ const PersonList = ({
   handleStartQuestionnaire,
   isHouseHoldFinished,
   toggleModal,
-}) => {
+}: Readonly<{
+  data: { name: string; gender: string; age: string }[];
+  isOfLegalAge: (p: { name: string; gender: string; age: string }) => boolean;
+  questionnaireProgress: Record<number, string>;
+  questionnairesVisible: Record<number, boolean>;
+  toggleQuestionnaire: (index: number) => void;
+  handleStartQuestionnaire: (index: number) => void;
+  toggleModal: () => void;
+  isHouseHoldFinished: boolean;
+}>) => {
   const classes = useStyles();
 
   return (
@@ -138,6 +148,7 @@ const PersonList = ({
                         Questionnaire
                       </Typography>
                     </Stack>
+
                     {currQuestProgres === 'terminé' ? (
                       <Button
                         onClick={toggleModal}

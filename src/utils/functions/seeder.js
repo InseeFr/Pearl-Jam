@@ -171,11 +171,11 @@ export async function seedData() {
         noi: 0,
         numfa: 32,
         rges: 15,
-        ssech: 1,
+        ssech: user.id % 2 === 0 ? 1 : 2,
         nolog: 0,
         nole: 0,
         autre: '',
-        nograp: '',
+        nograp: user.id % 2 === 0 ? '1' : '2',
       },
       states: states,
       contactAttempts: [

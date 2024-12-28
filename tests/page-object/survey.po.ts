@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 
 export class SurveyPage {
-  constructor(private page: Page) {}
+  constructor(private readonly page: Page) {}
 
   selectSurvey() {
     return this.page

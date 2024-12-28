@@ -1,7 +1,8 @@
 import { renderHook, act } from '@testing-library/react';
 import { useServiceWorker } from './useServiceWorker';
 import * as serviceWorker from '../../serviceWorkerRegistration';
-import { vi } from 'vitest';
+import { describe, expect, it, Mock, vi } from 'vitest';
+import { beforeEach } from 'node:test';
 const QUEEN_URL = 'http://example.com';
 
 vi.mock('../../serviceWorkerRegistration');
@@ -18,8 +19,8 @@ vi.mock('./useConfiguration', () => {
 describe('useServiceWorker', () => {
   beforeEach(() => {
     window.localStorage.clear();
-    serviceWorker.register.mockClear();
-    serviceWorker.unregister.mockClear();
+    (serviceWorker.register as Mock).mockClear();
+    (serviceWorker.unregister as Mock).mockClear();
   });
 
   it('should initialize with default values', () => {
@@ -50,7 +51,7 @@ describe('useServiceWorker', () => {
     const { result } = renderHook(() => useServiceWorker(true));
 
     act(() => {
-      const onInstalling = serviceWorker.register.mock.calls[0][0].onInstalling;
+      const onInstalling = (serviceWorker.register as Mock).mock.calls[0][0].onInstalling;
       onInstalling(true);
     });
 
@@ -61,7 +62,7 @@ describe('useServiceWorker', () => {
     const { result } = renderHook(() => useServiceWorker(true));
 
     act(() => {
-      const onSuccess = serviceWorker.register.mock.calls[0][0].onSuccess;
+      const onSuccess = (serviceWorker.register as Mock).mock.calls[0][0].onSuccess;
       onSuccess({});
     });
 
@@ -73,7 +74,7 @@ describe('useServiceWorker', () => {
     const { result } = renderHook(() => useServiceWorker(true));
 
     act(() => {
-      const onError = serviceWorker.register.mock.calls[0][0].onError;
+      const onError = (serviceWorker.register as Mock).mock.calls[0][0].onError;
       onError();
     });
 

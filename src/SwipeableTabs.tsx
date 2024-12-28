@@ -1,12 +1,12 @@
-import * as React from 'react';
+import { PropsWithChildren, PropsWithoutRef, useState } from 'react';
 import { Children } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
-export function SwipeableTab(props) {
-  const { children, value, index, ...other } = props;
+export function SwipeableTab(props: Readonly<PropsWithChildren<{ index: number; label: string }>>) {
+  const { children, index, ...other } = props;
 
   return (
     <div
@@ -20,21 +20,23 @@ export function SwipeableTab(props) {
   );
 }
 
-function a11yProps(index) {
+function a11yProps(index: number) {
   return {
     id: `full-width-tab-${index}`,
     'aria-controls': `full-width-tabpanel-${index}`,
   };
 }
 
-export function SwipeableTabs({ children }) {
-  const [value, setValue] = React.useState(0);
+export function SwipeableTabs({
+  children,
+}: Readonly<{ children: { props: { label: string } }[] }>) {
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (event: unknown, newValue: number) => {
     setValue(newValue);
   };
 
-  const handleChangeIndex = index => {
+  const handleChangeIndex = (index: number) => {
     setValue(index);
   };
   const tabs = Children.map(children, child => child.props.label);

@@ -9,12 +9,14 @@ import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useNavigate } from 'react-router-dom';
 import { TITLES, PEARL_USER_KEY } from 'utils/constants';
 import userIdbService from 'utils/indexeddb/services/user-idb-service';
+import { QueenEvent } from 'types/events';
+import { SurveyUnit } from 'types/pearl';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
 
   const [queenError, setQueenError] = useState(false);
-  const [queenReady, setQueenReady] = useState(true);
+  const [queenReady, setQueenReady] = useState<boolean | null>(true);
   const navigate = useNavigate();
 
   const checkQueen = () => {
@@ -24,7 +26,7 @@ export const useQueenSynchronisation = () => {
       setQueenReady(true);
     }, waitTime);
 
-    const handleQueenEvent = async event => {
+    const handleQueenEvent = async (event: QueenEvent) => {
       const { type, command, state } = event.detail;
       if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
         clearTimeout(tooLateErrorThrower);
@@ -58,8 +60,8 @@ export const useQueenSynchronisation = () => {
   return { checkQueen, synchronizeQueen, queenReady, queenError };
 };
 
-const sendData = async (urlPearlApi, authenticationMode) => {
-  const surveyUnitsInTempZone = [];
+const sendData = async (urlPearlApi: string, authenticationMode: string) => {
+  const surveyUnitsInTempZone: string[] = [];
   const surveyUnits = await surveyUnitIDBService.getAll();
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
@@ -78,22 +80,26 @@ const sendData = async (urlPearlApi, authenticationMode) => {
         await createStateIds(latestSurveyUnit);
         await createCommunicationRequestIds(latestSurveyUnit);
       }
-      if (error && [400, 403, 404, 500].includes(status)) {
+      if (error && status && [400, 403, 404, 500].includes(status)) {
         const { error: tempZoneError } = await api.putSurveyUnitToTempZone(
           urlPearlApi,
           authenticationMode
         )(id, body);
         if (!tempZoneError) surveyUnitsInTempZone.push(id);
         else throw new Error('Server is not responding');
-      } else if (error && ![400, 403, 404, 500].includes(status))
+      } else if (error && status && ![400, 403, 404, 500].includes(status))
         throw new Error('Server is not responding');
     })
   );
   return surveyUnitsInTempZone;
 };
 
-const getUserData = async (urlPearlApi, authenticationMode) => {
+const getUserData = async (urlPearlApi: string, authenticationMode: string) => {
   const result = window.localStorage.getItem(PEARL_USER_KEY);
+
+  if (!result) {
+    return;
+  }
   const jsonInterviewer = JSON.parse(result);
   const { id } = jsonInterviewer;
   const { data: interviewer } = await api.getUserData(
@@ -105,7 +111,7 @@ const getUserData = async (urlPearlApi, authenticationMode) => {
   await userIdbService.addOrUpdate({ civility: TITLES.MISTER.type, ...interviewer });
 };
 
-const putSurveyUnitInDataBase = async su => {
+const putSurveyUnitInDataBase = async (su: SurveyUnit) => {
   await surveyUnitIDBService.addOrUpdate(su);
 };
 
@@ -114,7 +120,7 @@ const clean = async () => {
   await surveyUnitMissingIdbService.deleteAll();
 };
 
-const validateSU = su => {
+const validateSU = (su: SurveyUnit) => {
   const { states, comments } = su;
   if (Array.isArray(states) && states.length === 0) {
     su.states.push(su.lastState);
@@ -129,9 +135,9 @@ const validateSU = su => {
   return su;
 };
 
-const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
-  const surveyUnitsSuccess = [];
-  const surveyUnitsFailed = [];
+const getData = async (pearlApiUrl: string, pearlAuthenticationMode: string) => {
+  const surveyUnitsSuccess: { id: string; campaign: string }[] = [];
+  const surveyUnitsFailed: string[] = [];
   const {
     data: surveyUnits,
     error,
@@ -140,21 +146,22 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
 
   if (!error) {
     await Promise.all(
-      surveyUnits.map(async su => {
+      surveyUnits.map(async (su: SurveyUnit) => {
         const { data: surveyUnit, error: getSuError } = await api.getSurveyUnitById(
           pearlApiUrl,
           pearlAuthenticationMode
         )(su.id);
         if (!getSuError) {
-          const mergedSurveyUnit = { ...surveyUnit, ...su };
+          const mergedSurveyUnit: SurveyUnit = { ...surveyUnit, ...su };
           const validSurveyUnit = validateSU(mergedSurveyUnit);
           await putSurveyUnitInDataBase(validSurveyUnit);
           surveyUnitsSuccess.push({ id: mergedSurveyUnit.id, campaign: mergedSurveyUnit.campaign });
-        } else if ([400, 403, 404, 500].includes(status)) surveyUnitsFailed.push(su.id);
+        } else if (status && [400, 403, 404, 500].includes(status)) surveyUnitsFailed.push(su.id);
         else throw new Error('Server is not responding');
       })
     );
-  } else if (![400, 403, 404, 500].includes(status)) throw new Error('Server is not responding');
+  } else if (status && ![400, 403, 404, 500].includes(status))
+    throw new Error('Server is not responding');
 
   return { surveyUnitsSuccess, surveyUnitsFailed };
 };
@@ -178,23 +185,35 @@ const getAllSurveyUnitsByCampaign = async () => {
   }, {});
 };
 
-const getNewSurveyUnitsByCampaign = async (newSurveyUnits = [], oldSurveyUnits = {}) => {
-  const newSurveyUnitsByCampaign = newSurveyUnits.reduce((_, su) => {
-    const { campaign, id } = su;
-    return { ..._, [campaign]: [...(_[campaign] || []), id] };
-  }, {});
+const getNewSurveyUnitsByCampaign = async (
+  newSurveyUnits: {
+    id: string;
+    campaign: string;
+  }[] = [],
+  oldSurveyUnits: Record<string, string[]> = {}
+) => {
+  const newSurveyUnitsByCampaign = newSurveyUnits.reduce(
+    (_, su) => {
+      const { campaign, id } = su;
+      return { ..._, [campaign]: [...(_[campaign] || []), id] };
+    },
+    {} as Record<string, string[]>
+  );
 
   return Object.entries(newSurveyUnitsByCampaign).reduce((_, [campaign, surveyUnitIds]) => {
     const newIds = surveyUnitIds.reduce((_, id) => {
       const oldSus = oldSurveyUnits[campaign] || [];
       if (!oldSus.includes(id)) return [..._, id];
       return _;
-    }, []);
+    }, [] as string[]);
     return { ..._, [campaign]: newIds };
   }, {});
 };
 
-export const synchronizePearl = async (PEARL_API_URL, PEARL_AUTHENTICATION_MODE) => {
+export const synchronizePearl = async (
+  PEARL_API_URL: string,
+  PEARL_AUTHENTICATION_MODE: string
+) => {
   let transmittedSurveyUnits = {};
   let loadedSurveyUnits = {};
 

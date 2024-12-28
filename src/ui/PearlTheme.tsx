@@ -4,10 +4,11 @@ import '@fontsource/montserrat/700.css';
 import '@fontsource/montserrat/600.css';
 import '@fontsource/montserrat/500.css';
 import '@fontsource/montserrat/400.css';
-import { ThemeProvider } from '@mui/material';
+import { Theme, ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { frFR as DatepickerfrFR } from '@mui/x-date-pickers/locales';
 import { frFR } from '@mui/material/locale';
+import { PropsWithChildren } from 'react';
 
 export const red = {
   100: '#FFB7C6',
@@ -36,7 +37,8 @@ export const gray = {
 const fontFamily = 'Montserrat, sans-serif';
 
 const basicTheme = createTheme({});
-const colors = (theme, color) => theme.palette.augmentColor({ color: { main: color } });
+const colors = (theme: Theme, color: string) =>
+  theme.palette.augmentColor({ color: { main: color } });
 
 const coloredTheme = createTheme({
   basicTheme,
@@ -530,7 +532,7 @@ export { theme };
 /**
  * Material theme provider embedded in a component
  */
-export function PearlTheme({ children }) {
+export function PearlTheme({ children }: Readonly<PropsWithChildren<unknown>>) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

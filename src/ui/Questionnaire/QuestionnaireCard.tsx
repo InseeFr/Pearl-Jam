@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Typography } from '../Typography';
-import { Row } from '../Row';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import CustomChip from './CustomChip';
-import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
 import Divider from '@mui/material/Divider';
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import Stack from '@mui/material/Stack';
 import { makeStyles } from '@mui/styles';
-import TimeIcon from './Icons/TimeIcon';
+import { useState } from 'react';
+import { Row } from '../Row';
+import { Typography } from '../Typography';
+import CustomChip from './CustomChip';
+import HousingResident from './HousingResident';
 import CircleIcon from './Icons/CircleIcon';
 import DisturbIcon from './Icons/DisturbIcon';
-import HousingResident from './HousingResident';
+import TimeIcon from './Icons/TimeIcon';
 import PersonList from './PersonList';
+import D from 'i18n';
 
 const useStyles = makeStyles({
   stackBackground: {
@@ -39,18 +40,18 @@ export function QuestionnaireCard() {
   const [finishedHousing, setFinishedHousing] = useState(false);
   const [isHouseHoldInProgress, setIsHouseHoldInProgress] = useState(false);
   const [isHouseHoldFinished, setIsHouseHoldFinished] = useState(false);
-  const [questionnairesVisible, setQuestionnairesVisible] = useState({});
-  const [questionnaireProgress, setQuestionnaireProgress] = useState(
+  const [questionnairesVisible, setQuestionnairesVisible] = useState<Record<number, boolean>>({});
+  const [questionnaireProgress, setQuestionnaireProgress] = useState<Record<number, string>>(
     data.reduce((acc, _, index) => ({ ...acc, [index]: 'non commencé' }), {})
   );
 
-  const toggleQuestionnaire = index => {
+  const toggleQuestionnaire = (index: number) => {
     setQuestionnairesVisible(prev => ({
       ...prev,
       [index]: !prev[index],
     }));
   };
-  const handleStartQuestionnaire = index => {
+  const handleStartQuestionnaire = (index: number) => {
     setQuestionnaireProgress(prev => {
       const currentState = prev[index];
       let newState;
@@ -95,7 +96,7 @@ export function QuestionnaireCard() {
     // Logique pour le bouton Modifier
   };
 
-  const isOfLegalAge = person => {
+  const isOfLegalAge = (person: { name: string; gender: string; age: string }) => {
     // handle missing age -> can't be interviewed
     const { age = '10 ans' } = person;
     const ageNumber = parseInt(age.split(' ')[0]);
@@ -166,6 +167,7 @@ export function QuestionnaireCard() {
                 />
               </Stack>
               <Stack>
+                {' '}
                 {isHouseHoldFinished ? (
                   <Button
                     onClick={toggleModal}

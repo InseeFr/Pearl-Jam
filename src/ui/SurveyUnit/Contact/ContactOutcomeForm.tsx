@@ -74,7 +74,7 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
   const isInvalid = count <= 0 || Number.isNaN(count);
 
   return (
-    <Dialog maxWidth="s" open={true} onClose={onClose}>
+    <Dialog open={true} onClose={onClose}>
       <form action="" onSubmit={onSubmit}>
         <DialogTitle>{D.contactOutcome}</DialogTitle>
         <DialogContent>

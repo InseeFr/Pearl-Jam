@@ -1,11 +1,11 @@
 import MenuItem from '@mui/material/MenuItem';
 import SelectMaterial, { SelectProps as MaterialSelectProps } from '@mui/material/Select';
 
-interface SelectProps extends MaterialSelectProps {
+type SelectProps = {
   options: { value: string | number; label: string }[];
   placeholder: string;
   allowEmpty: boolean;
-}
+} & MaterialSelectProps;
 
 export function Select({ options, placeholder, allowEmpty, ...props }: Readonly<SelectProps>) {
   return (

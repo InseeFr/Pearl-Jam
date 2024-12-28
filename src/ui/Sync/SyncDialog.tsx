@@ -15,14 +15,15 @@ import { Accordion } from '../Accordion';
 import { Typography } from '../Typography';
 import ErrorIcon from '@mui/icons-material/Error';
 import { useTheme } from '@emotion/react';
+import { SyncResult } from 'types/pearl';
 
 /**
  * Dialog that summarize synchronization results
- *
- * @param {() => void} onClose
- * @param {SyncResult} syncResult
  */
-export function SyncDialog({ onClose, syncResult }) {
+export function SyncDialog({
+  onClose,
+  syncResult,
+}: Readonly<{ onClose: () => void; syncResult: SyncResult }>) {
   const { state, details, messages } = syncResult;
   const campaigns = useMemo(() => {
     if (!details) {
@@ -70,7 +71,7 @@ export function SyncDialog({ onClose, syncResult }) {
                 {D.titleSync(state)}
               </Typography>
             )}
-            {messages?.map((message, index) => (
+            {(messages as string[])?.map((message: string, index: number) => (
               <DialogContentText key={message}>
                 {message}
                 {state === 'warning' && index === messages.length - 1 && (
@@ -96,11 +97,12 @@ export function SyncDialog({ onClose, syncResult }) {
 
 /**
  * Detail results of a synchronization campaign per campaign
- * @param {{name: string, transmitted: number, loaded: number, total: number}[]} campaigns
- * @returns {JSX.Element}
- * @constructor
  */
-function SyncDetail({ campaigns }) {
+function SyncDetail({
+  campaigns,
+}: Readonly<{
+  campaigns: { name: string; transmitted: number; loaded: number; total: number }[];
+}>) {
   const theme = useTheme();
   return (
     <Accordion
@@ -135,10 +137,7 @@ function SyncDetail({ campaigns }) {
   );
 }
 
-/**
- * @param {string} state
- */
-function SyncIcon({ state, ...props }) {
+function SyncIcon({ state, ...props }: Readonly<{ state: string }>) {
   switch (state) {
     case 'error':
       return <ErrorIcon {...props} color="error" />;

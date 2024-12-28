@@ -85,8 +85,8 @@ export function PieChart({
               key={k}
               stroke="#000"
               strokeWidth="5"
-              x1={x * 0.005}
-              y1={y * 0.005}
+              x1={Number(x) * 0.005}
+              y1={Number(y) * 0.005}
               x2={x}
               y2={y}
               strokeLinecap="round"
@@ -157,7 +157,7 @@ function PieChartLabel({ slice, radius, label }: Readonly<PieChartLabelProps>) {
           <Typography
             variant="xs"
             color="textTertiary"
-            as="div"
+            component="div"
             textAlign={textAlign}
             ref={textRef}
           >

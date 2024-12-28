@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import D from 'i18n';
 import Alert from '@mui/material/Alert';
 import WarningIcon from '@mui/icons-material/Warning';
-import React, { useMemo, useState } from 'react';
+import React, { FormEvent, useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import { Row } from '../ui/Row';
@@ -73,16 +73,20 @@ export function ResetData() {
   );
 }
 
-function ConfirmDialog({ open, onConfirm, onCancel }) {
+function ConfirmDialog({
+  open,
+  onConfirm,
+  onCancel,
+}: Readonly<{ open: boolean; onConfirm: () => void; onCancel: () => void }>) {
   const randomText = useMemo(
     () => generateRandomInt().toString(36).substring(2, 10).toUpperCase(),
     []
   );
   const [step, setStep] = useState(0);
   const [error, setError] = useState('');
-  const handleSubmit = e => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.target as HTMLFormElement);
     if (step === 0) {
       setStep(1);
       return;

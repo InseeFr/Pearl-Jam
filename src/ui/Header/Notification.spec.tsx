@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { SyncContext } from 'ui/Sync/SyncContextProvider';
+import { SyncContext, SyncContextValue } from 'ui/Sync/SyncContextProvider';
 import { Notification } from './Notification';
 import D from 'i18n';
 import { describe, it, vi } from 'vitest';
@@ -12,7 +12,7 @@ vi.mock('@mui/material/Button', () => ({
 
 const renderWithContext = (notification: NotificationType) => {
   return render(
-    <SyncContext.Provider value={{}}>
+    <SyncContext.Provider value={{} as SyncContextValue}>
       <Notification notification={notification} onExit={vi.fn()} />
     </SyncContext.Provider>
   );

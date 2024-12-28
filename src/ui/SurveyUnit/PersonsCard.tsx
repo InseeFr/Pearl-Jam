@@ -22,31 +22,32 @@ import { Row } from '../Row';
 import { TextWithLabel } from '../TextWithLabel';
 import { Typography } from '../Typography';
 import { PersonsForm } from './PersonsForm';
+import { SurveyUnit, SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
 
 /**
  * Display persons linked to a survey unit
- *
- * @param {SurveyUnit} surveyUnit
  */
-export function PersonsCard({ surveyUnit }) {
-  const persons = [...surveyUnit.persons].sort((a, b) => b.privileged - a.privileged);
+export function PersonsCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>) {
+  const persons = [...surveyUnit.persons].sort((a, b) => {
+    if (a.privileged === b.privileged) {
+      return 0;
+    }
+    return a.privileged ? -1 : 1;
+  });
   const [showModal, toggleModal] = useToggle(false);
 
   if (persons.length === 0) {
-    persons.push(personPlaceholder);
+    persons.push(personPlaceholder as unknown as SurveyUnitPerson);
   }
 
   /**
    * Toggle favorite status for a phone number
-   *
-   * @param {number} personId
-   * @param {SurveyUnitPhoneNumber} phoneNumber
    */
-  const handleFavPhoneNumber = (personId, phoneNumber) => {
+  const handleFavPhoneNumber = (personId: number, phoneNumber: SurveyUnitPhoneNumber) => {
     toggleFavoritePhoneNumberAndPersist(surveyUnit, personId, phoneNumber);
   };
 
-  const handleFavMailPerson = personId => {
+  const handleFavMailPerson = (personId: number) => {
     toggleFavoriteEmailAndPersist(surveyUnit, personId);
   };
 
@@ -71,7 +72,7 @@ export function PersonsCard({ surveyUnit }) {
                 {D.editButton}
               </Button>
             </Row>
-            <Row gap={4} alignItems="start">
+            <Row gap={4}>
               {persons.map((p, k) => (
                 <Fragment key={p.id}>
                   {k > 0 && <Divider orientation="vertical" flexItem />}
@@ -93,14 +94,20 @@ export function PersonsCard({ surveyUnit }) {
 
 /**
  * Display person information as a list
- *
- * @param {SurveyUnitPerson} person
- * @param {(personId: number, phoneNumber: SurveyUnitPhoneNumber) => void} onPhoneFav
- * @param {(personId: number) => void} onMailFav
  */
-function PersonInfo({ person, onPhoneFav, onMailFav }) {
-  const phoneNumberForSource = source => person.phoneNumbers.find(n => n.source === source);
-  const handleFavPhoneNumber = phoneNumber => onPhoneFav(person.id, phoneNumber);
+function PersonInfo({
+  person,
+  onPhoneFav,
+  onMailFav,
+}: Readonly<{
+  person: SurveyUnitPerson;
+  onPhoneFav: (personId: number, phoneNumber: SurveyUnitPhoneNumber) => void;
+  onMailFav: (personId: number) => void;
+}>) {
+  const phoneNumberForSource = (source: string) =>
+    person.phoneNumbers.find(n => n.source === source);
+  const handleFavPhoneNumber = (phoneNumber: SurveyUnitPhoneNumber) =>
+    onPhoneFav(person.id, phoneNumber);
   const handleFavMail = () => onMailFav(person.id);
   return (
     <Stack gap={2} sx={{ width: '100%' }}>
@@ -132,9 +139,9 @@ function PersonInfo({ person, onPhoneFav, onMailFav }) {
         {person.email && (
           <IconButton sx={{ py: 0 }} onClick={handleFavMail}>
             {person.favoriteEmail ? (
-              <StarIcon size="small" color="yellow" />
+              <StarIcon color="yellow" />
             ) : (
-              <StarBorderIcon size="small" color="surfaceTertiary" />
+              <StarBorderIcon color="surfaceTertiary" />
             )}
           </IconButton>
         )}
@@ -171,13 +178,16 @@ function PersonInfo({ person, onPhoneFav, onMailFav }) {
 
 /**
  * Displays a phone number with a star button
- *
- * @param {SurveyUnitPhoneNumber | undefined} phoneNumber
- * @param {string} label
- * @param {(p: SurveyUnitPhoneNumber) => void} onFavorite
- * @constructor
  */
-function PhoneLine({ label, phoneNumber, onFavorite }) {
+function PhoneLine({
+  label,
+  phoneNumber,
+  onFavorite,
+}: Readonly<{
+  label: string;
+  phoneNumber?: SurveyUnitPhoneNumber;
+  onFavorite: (p: SurveyUnitPhoneNumber) => void;
+}>) {
   return (
     <Row
       sx={{ display: 'grid', gridTemplateColumns: '110px 110px 20px', gap: '1rem', minHeight: 24 }}
@@ -191,9 +201,9 @@ function PhoneLine({ label, phoneNumber, onFavorite }) {
       {phoneNumber && (
         <IconButton sx={{ py: 0 }} onClick={() => onFavorite(phoneNumber)}>
           {phoneNumber.favorite ? (
-            <StarIcon size="small" color="yellow" />
+            <StarIcon color="yellow" />
           ) : (
-            <StarBorderIcon size="small" color="surfaceTertiary" />
+            <StarBorderIcon color="surfaceTertiary" />
           )}
         </IconButton>
       )}

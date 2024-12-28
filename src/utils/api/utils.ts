@@ -33,14 +33,11 @@ export const formatSurveyUnitForPut = async (su: SurveyUnit) => {
           comReq.status.length === 1 &&
           comReq.status.find(s => s.status === communicationStatusEnum.INITIATED.value)
       )
-      .map(
-        comReq =>
-          <SurveyUnitNewCommunicationRequest>{
-            communicationTemplateId: comReq.communicationTemplateId,
-            creationTimestamp: comReq.status[0].date,
-            reason: comReq.reason,
-          }
-      ) ?? [];
+      .map(comReq => ({
+        communicationTemplateId: comReq.communicationTemplateId,
+        creationTimestamp: comReq.status[0].date,
+        reason: comReq.reason,
+      })) ?? [];
 
   const formattedSurveyUnit = {
     id: su.id,

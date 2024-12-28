@@ -130,6 +130,7 @@ export type Notification = {
   type: string;
   title: string;
   messages: string[];
+  message?: string;
   state: NotificationState;
   read: boolean;
   detail: string;
@@ -138,8 +139,8 @@ export type Notification = {
 
 export type SyncResult = {
   state: string;
-  messages: string[];
-  details: {
+  messages: string[] | string;
+  details?: {
     transmittedSurveyUnits: Record<string, string[]>;
     loadedSurveyUnits: Record<string, string[]>;
   };

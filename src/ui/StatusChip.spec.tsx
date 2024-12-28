@@ -1,4 +1,4 @@
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Palette, ThemeProvider, createTheme } from '@mui/material/styles';
 import { render, screen } from '@testing-library/react';
 import { describe, it } from 'vitest';
 import { ToDoEnumValues } from '../utils/enum/SUToDoEnum';
@@ -11,7 +11,7 @@ describe('StatusChip', () => {
         primary: {
           main: '#123456',
         },
-      },
+      } as Palette,
     });
 
     // Mock status

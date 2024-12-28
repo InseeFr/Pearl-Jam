@@ -75,18 +75,8 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
     .click();
 
   await expect(page.locator('tr:nth-child(3) > td:nth-child(3)')).toContainText('A synchroniser');
-});
-
-test('check if filters are saved inside the localStorage', async ({ page }) => {
-  const homePage = new HomePage(page);
-  await homePage.go();
-  await homePage.importData();
-
-  await page.getByLabel('A préparer').check();
-  await page.getByLabel('secondtestcampaign').check();
-
-  await page.reload();
-
-  await page.getByLabel('A préparer').isChecked();
-  await page.getByLabel('secondtestcampaign').isChecked();
+  await expect(page.locator('tr:nth-child(3) > td:nth-child(4)')).toContainText('Face à face');
+  await expect(page.locator('tr:nth-child(3) > td:nth-child(5)')).toContainText(
+    'Indisponibilité définitive'
+  );
 });

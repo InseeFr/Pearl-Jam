@@ -1,30 +1,42 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { PropsWithChildren, useEffect, useMemo, useState, createContext } from 'react';
 import * as api from 'utils/api';
 
-import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
-import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
 import D from 'i18n';
+import { NotificationState } from 'types/pearl';
+import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
+import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
+import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
+import { useConfiguration } from '../../utils/hooks/useConfiguration';
+import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
-import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
-import { useNetworkOnline } from '../../utils/hooks/useOnline';
-import { useConfiguration } from '../../utils/hooks/useConfiguration';
 
-export const SyncContext = React.createContext();
+export type SyncContextValue = {
+  setSyncResult: (value: {
+    date: string;
+    state: NotificationState;
+    messages: string[] | string;
+    details: any;
+  }) => void;
+  syncFunction: (event: any) => void;
+};
+export const SyncContext = createContext<SyncContextValue | undefined>(undefined);
 
-export function SyncContextProvider({ children }) {
+export function SyncContextProvider({ children }: PropsWithChildren<unknown>) {
   const online = useNetworkOnline();
-  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = useConfiguration();
+  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = useConfiguration()!;
   const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
   const [isSync, setIsSync] = useState(() => {
     return window.localStorage.getItem('SYNCHRONIZE') === 'true';
   });
   const [loading, setLoading] = useState(false);
-  const [syncResult, setSyncResult] = useState(undefined);
+  const [syncResult, setSyncResult] = useState<
+    undefined | null | { state: NotificationState; messages: string | string[] }
+  >(undefined);
   const [componentReady, setComponentReady] = useState(false);
 
-  const [pearlReady, setPearlReady] = useState(null);
+  const [pearlReady, setPearlReady] = useState<boolean | null>(null);
   const [pearlError, setPearlError] = useState(false);
 
   const checkPearl = async () => {
@@ -58,7 +70,7 @@ export function SyncContextProvider({ children }) {
     const launchSynchronize = async () => {
       window.localStorage.removeItem('PEARL_SYNC_RESULT');
       window.localStorage.removeItem('QUEEN_SYNC_RESULT');
-      window.localStorage.setItem('SYNCHRONIZE', true);
+      window.localStorage.setItem('SYNCHRONIZE', 'true');
       setLoading(true);
       await checkPearl();
     };
@@ -83,7 +95,7 @@ export function SyncContextProvider({ children }) {
 
     const failedSync = async () => {
       const result = {
-        state: 'error',
+        state: 'error' as NotificationState,
         messages: [D.syncNotStarted, D.syncPleaseTryAgain, D.warningOrErrorEndMessage],
       };
       const notif = getNotifFromResult(result);

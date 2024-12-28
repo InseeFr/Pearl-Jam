@@ -12,7 +12,7 @@ import { useEffectOnce } from './utils/hooks/useEffectOnce';
 import { SurveyUnitPage } from './pages/SurveyUnitPage';
 import './app.css';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
 import { ResetData } from './pages/ResetData';
 import { enUS, fr } from 'date-fns/locale';

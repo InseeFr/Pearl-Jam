@@ -25,6 +25,7 @@ import { Row } from '../ui/Row';
 import { Select } from '../ui/Select';
 import { seedData } from '../utils/functions/seeder';
 import { persistSurveyUnit, updateStateWithDates } from '../utils/functions';
+import { SurveyUnit } from 'types/pearl';
 
 export function Home() {
   const surveyUnits = useSurveyUnits();
@@ -88,7 +89,10 @@ export function Home() {
   );
 }
 
-function GridHeader({ visibleCount, totalCount }) {
+function GridHeader({
+  visibleCount,
+  totalCount,
+}: Readonly<{ visibleCount: number; totalCount: Number }>) {
   const { setSortField, sortField, sortDirection, toggleSortDirection, setSearch, search } =
     useSearchFilter();
   return (
@@ -123,7 +127,7 @@ function GridHeader({ visibleCount, totalCount }) {
   );
 }
 
-function Sidebar({ surveyUnits }) {
+function Sidebar({ surveyUnits }: Readonly<{ surveyUnits: SurveyUnit[] }>) {
   const campaigns = useMemo(() => [...new Set(surveyUnits.map(u => u.campaign))], [surveyUnits]);
 
   const filter = useSearchFilter();
@@ -232,14 +236,18 @@ function Sidebar({ surveyUnits }) {
               value={filter.subSample}
               allowEmpty
               placeholder={D.subSample}
-              onChange={v => filter.setSubSample(v)}
+              onChange={v => {
+                filter.setSubSample(v.target.value as number);
+              }}
               options={subSamples}
             />
             <Select
               value={filter.subGrappe}
               allowEmpty
               placeholder={D.cluster}
-              onChange={v => filter.setSubGrappe(v)}
+              onChange={v => {
+                filter.setSubGrappe(v.target.value as number);
+              }}
               options={subGrappe}
             />
           </Stack>

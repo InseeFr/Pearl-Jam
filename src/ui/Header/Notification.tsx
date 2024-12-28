@@ -34,7 +34,7 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
     addSuffix: true,
     locale: dateFnsLocal,
   })}`;
-  const { setSyncResult } = useContext(SyncContext);
+  const { setSyncResult } = useContext(SyncContext)!;
   const handleOpen = async (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -43,14 +43,14 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
       setSyncResult({
         date: date,
         state: notification.state,
-        messages: notification.message,
+        messages: notification.message!,
         details: report,
       });
       onExit();
     }
   };
 
-  const handleExpand = (_: unknown, expanded: NotificationType) => {
+  const handleExpand = (_: unknown, expanded: boolean) => {
     if (!notification.read && expanded) {
       markNotificationAsRead(notification);
     }
