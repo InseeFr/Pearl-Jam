@@ -1,8 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { useServiceWorker } from './useServiceWorker';
 import * as serviceWorker from '../../serviceWorkerRegistration';
-import { describe, expect, it, Mock, vi } from 'vitest';
-import { beforeEach } from 'node:test';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 const QUEEN_URL = 'http://example.com';
 
 vi.mock('../../serviceWorkerRegistration');
