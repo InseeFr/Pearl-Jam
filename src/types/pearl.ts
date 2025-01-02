@@ -100,7 +100,7 @@ export type SurveyUnit = {
   states: SurveyUnitState[];
   contactAttempts: SurveyUnitContactAttempt[];
   contactOutcome?: ContactOutcome;
-  identification: SurveyUnitIdentification;
+  identification?: SurveyUnitIdentification;
   campaignLabel: string;
   managementStartDate: number;
   interviewerStartDate: number;

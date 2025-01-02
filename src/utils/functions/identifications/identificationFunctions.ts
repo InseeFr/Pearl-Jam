@@ -101,9 +101,8 @@ export function identificationIsFinished(
 export const checkValidityForTransmissionIasco = (su: SurveyUnit) => {
   const { contactOutcome, identification, identificationConfiguration, states = [] } = su;
 
+  if (!identification || !contactOutcome) return false;
   if (!identificationIsFinished(identificationConfiguration, identification)) return false;
-
-  if (!contactOutcome) return false;
 
   // INA contactOutcome + no questionnaire
   const type = contactOutcome.type;
@@ -153,6 +152,9 @@ export function validateTransmissionArray(
   su: SurveyUnit
 ): boolean {
   const outcome = su.contactOutcome?.type;
+
+  if (!su.identification) return false;
+
   const situation = su.identification.situation;
   const individualStatus = su.identification.individualStatus;
   const lastState = getLastState(su.states);

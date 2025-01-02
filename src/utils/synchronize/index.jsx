@@ -126,8 +126,6 @@ const validateSU = su => {
     su.comments.push(managementComment);
   }
 
-  if (!su.identification) su.identification = {};
-
   return su;
 };
 

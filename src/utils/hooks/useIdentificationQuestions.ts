@@ -15,7 +15,7 @@ import {
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctions';
 
-const updateState = (
+const persistSU = (
   surveyUnit: SurveyUnit,
   identification: Partial<Record<IdentificationQuestionsId, string>>,
   orderedQuestions: IdentificationQuestionValue[],
@@ -52,11 +52,16 @@ export function useIdentification(surveyUnit: SurveyUnit) {
     identificationQuestionsTree[
       IdentificationConfiguration[surveyUnit.identificationConfiguration]
     ];
+
   const initialResponses: ResponseState = Object.fromEntries(
     Object.keys(questions).map(id => [
       id,
       questions[id as IdentificationQuestionsId]?.options.find(
-        o => o.value === surveyUnit.identification[id as IdentificationQuestionsId]
+        o =>
+          o.value ===
+          (surveyUnit.identification
+            ? surveyUnit.identification[id as IdentificationQuestionsId]
+            : undefined)
       ),
     ])
   );
@@ -85,7 +90,7 @@ export function useIdentification(surveyUnit: SurveyUnit) {
         Object.entries(questions).map(([questionId, question]) => {
           const available = checkAvailability(questions, question, updatedResponses);
           const orderedQuestions = Object.values(questions);
-          let identification: SurveyUnitIdentification = surveyUnit.identification;
+          let identification: SurveyUnitIdentification = surveyUnit.identification ?? {};
 
           if (!available) {
             identification[question.id] = undefined;
@@ -94,7 +99,7 @@ export function useIdentification(surveyUnit: SurveyUnit) {
             identification[question.id] = option.value;
           }
 
-          updateState(
+          persistSU(
             surveyUnit,
             identification,
             orderedQuestions,
