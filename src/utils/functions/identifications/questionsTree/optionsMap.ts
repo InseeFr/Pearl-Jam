@@ -33,4 +33,14 @@ export const optionsMap = {
   ACC: { label: `${D.accessibleHousing}`, value: IdentificationQuestionOptionValues.ACC },
   NACC: { label: `${D.notAccessibleHousing}`, value: IdentificationQuestionOptionValues.NACC },
   ABSORBED: { label: `${D.situationAbsorbed}`, value: IdentificationQuestionOptionValues.ABSORBED },
+  PRIMARY: { label: `${D.categoryPrimary}`, value: IdentificationQuestionOptionValues.PRIMARY },
+  SECONDARY: {
+    label: `${D.categorySecondary}`,
+    value: IdentificationQuestionOptionValues.SECONDARY,
+  },
+  OCCASIONAL: {
+    label: `${D.categoryOccasional}`,
+    value: IdentificationQuestionOptionValues.OCCASIONAL,
+  },
+  VACANT: { label: `${D.categoryVacant}`, value: IdentificationQuestionOptionValues.VACANT },
 };

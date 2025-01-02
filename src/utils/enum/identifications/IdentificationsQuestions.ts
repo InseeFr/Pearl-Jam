@@ -37,4 +37,8 @@ export enum IdentificationQuestionOptionValues {
   ACC = 'ACC',
   NACC = 'NACC',
   ABSORBED = 'ABSORBED',
+  PRIMARY = 'PRIMARY',
+  SECONDARY = 'SECONDARY',
+  OCCASIONAL = 'OCCASIONAL',
+  VACANT = 'VACANT',
 }

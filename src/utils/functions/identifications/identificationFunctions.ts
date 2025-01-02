@@ -36,7 +36,7 @@ export const identificationQuestionsTree: Record<
   [IdentificationConfiguration.INDTEL]: indtelIdentificationQuestionsTree,
   [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
   [IdentificationConfiguration.NOIDENT]: {},
-  [IdentificationConfiguration.HOUSEF2F]: {},
+  [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
   [IdentificationConfiguration.HOUSETEL]: {},
   [IdentificationConfiguration.HOUSETELWSR]: {},
   [IdentificationConfiguration.INDTELNOR]: {},
@@ -140,7 +140,7 @@ export const isValidForTransmission = (su: SurveyUnit) => {
   }
 };
 
-// Must be extentedfor IASCO
+// Must be extented for IASCO
 export function validateTransmissionArray(
   // TODO : extend TransmissionsRulesByTel to TransmissionsRules for any identification method
   transmissionRules: TransmissionsRules,

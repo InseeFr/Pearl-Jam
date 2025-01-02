@@ -1,6 +1,41 @@
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
-import { IdentificationQuestions } from '../identificationFunctions';
+import {
+  IdentificationQuestionOptionValues,
+  IdentificationQuestionsId,
+} from 'utils/enum/identifications/IdentificationsQuestions';
+import { IdentificationQuestions, TransmissionsRules } from '../identificationFunctions';
 import D from 'i18n';
+import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
+import { optionsMap } from './optionsMap';
+
+export const indtelIdentificationQuestionsTree: IdentificationQuestions = {
+  [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
+    id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+    nextId: IdentificationQuestionsId.SITUATION,
+    text: `${D.housingIdentification}`,
+    options: [
+      { ...optionsMap.SAME_ADDRESS, concluding: false },
+      { ...optionsMap.OTHER_ADDRESS, concluding: false },
+      { ...optionsMap.NOFIELD, concluding: true },
+      { ...optionsMap.NOIDENT, concluding: true },
+      { ...optionsMap.DCD, concluding: true },
+    ],
+  },
+  [IdentificationQuestionsId.SITUATION]: {
+    id: IdentificationQuestionsId.SITUATION,
+    text: `${D.housingSituation}`,
+    options: [
+      { ...optionsMap.ORDINARY, concluding: true },
+      { ...optionsMap.NOORDINARY, concluding: true },
+    ],
+    dependsOn: {
+      questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+      values: [
+        IdentificationQuestionOptionValues.SAME_ADDRESS,
+        IdentificationQuestionOptionValues.OTHER_ADDRESS,
+      ],
+    },
+  },
+} as const;
 
 export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
   [IdentificationQuestionsId.IDENTIFICATION]: {
@@ -8,9 +43,9 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
     nextId: IdentificationQuestionsId.ACCESS,
     text: `${D.housingIdentification}`,
     options: [
-      { label: `${D.identificationIdentified}`, value: 'IDENTIFIED', concluding: false },
-      { label: `${D.identificationUnidentified}`, value: 'UNIDENTIFIED', concluding: false },
-      { label: `${D.identificationDestroy}`, value: 'DESTROY', concluding: true },
+      { ...optionsMap.IDENTIFIED, concluding: false },
+      { ...optionsMap.UNIDENTIFIED, concluding: false },
+      { ...optionsMap.DESTROY, concluding: true },
     ],
   },
   [IdentificationQuestionsId.ACCESS]: {
@@ -18,12 +53,15 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
     nextId: IdentificationQuestionsId.SITUATION,
     text: `${D.housingAccess}`,
     options: [
-      { label: `${D.accessibleHousing}`, value: 'ACC', concluding: false },
-      { label: `${D.notAccessibleHousing}`, value: 'NACC', concluding: false },
+      { ...optionsMap.ACC, concluding: false },
+      { ...optionsMap.NACC, concluding: false },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.IDENTIFICATION,
-      values: ['IDENTIFIED', 'UNIDENTIFIED'],
+      values: [
+        IdentificationQuestionOptionValues.IDENTIFIED,
+        IdentificationQuestionOptionValues.UNIDENTIFIED,
+      ],
     },
   },
   [IdentificationQuestionsId.SITUATION]: {
@@ -31,13 +69,13 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
     nextId: IdentificationQuestionsId.CATEGORY,
     text: `${D.housingSituation}`,
     options: [
-      { label: `${D.situationOrdinary}`, value: 'ORDINARY', concluding: false },
-      { label: `${D.situationNotOrdinary}`, value: 'NOORDINARY', concluding: true },
-      { label: `${D.situationAbsorbed}`, value: 'ABSORBED', concluding: true },
+      { ...optionsMap.ORDINARY, concluding: false },
+      { ...optionsMap.NOORDINARY, concluding: true },
+      { ...optionsMap.ABSORBED, concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.ACCESS,
-      values: ['ACC', 'NACC'],
+      values: [IdentificationQuestionOptionValues.ACC, IdentificationQuestionOptionValues.NACC],
     },
   },
 
@@ -46,26 +84,74 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
     nextId: IdentificationQuestionsId.OCCUPANT,
     text: `${D.housingCategory}`,
     options: [
-      { label: `${D.categoryPrimary}`, value: 'PRIMARY', concluding: false },
-      { label: `${D.categorySecondary}`, value: 'SECONDARY', concluding: true },
-      { label: `${D.categoryOccasional}`, value: 'OCCASIONAL', concluding: false },
-      { label: `${D.categoryVacant}`, value: 'VACANT', concluding: true },
+      { ...optionsMap.PRIMARY, concluding: false },
+      { ...optionsMap.SECONDARY, concluding: true },
+      { ...optionsMap.OCCASIONAL, concluding: false },
+      { ...optionsMap.VACANT, concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.SITUATION,
-      values: ['ORDINARY'],
+      values: [IdentificationQuestionOptionValues.ORDINARY],
     },
   },
   [IdentificationQuestionsId.OCCUPANT]: {
     id: IdentificationQuestionsId.OCCUPANT,
     text: `${D.housingOccupant}`,
     options: [
-      { label: `${D.occupantIdentified}`, value: 'IDENTIFIED', concluding: true },
-      { label: `${D.occupantUnidentified}`, value: 'UNIDENTIFIED', concluding: true },
+      { ...optionsMap.IDENTIFIED, concluding: true },
+      { ...optionsMap.UNIDENTIFIED, concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.CATEGORY,
-      values: ['PRIMARY', 'OCCASIONAL'],
+      values: [
+        IdentificationQuestionOptionValues.PRIMARY,
+        IdentificationQuestionOptionValues.OCCASIONAL,
+      ],
     },
   },
 } as const;
+
+export const transmissionRulesByTel: TransmissionsRules = [
+  {
+    identification: {
+      individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
+      situation: IdentificationQuestionOptionValues.ORDINARY,
+    },
+    outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+    isValid: true,
+  },
+  {
+    identification: {
+      individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
+      situation: IdentificationQuestionOptionValues.ORDINARY,
+    },
+    outcome: contactOutcomeEnum.REFUSAL.value,
+    isValid: true,
+  },
+  {
+    identification: {
+      individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
+      situation: IdentificationQuestionOptionValues.ORDINARY,
+    },
+    outcome: contactOutcomeEnum.IMPOSSIBLE_TO_REACH.value,
+    isValid: false,
+  },
+  {
+    identification: {
+      individualStatus: IdentificationQuestionOptionValues.OTHER_ADDRESS,
+      situation: IdentificationQuestionOptionValues.NOORDINARY,
+    },
+    outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+    isValid: true,
+  },
+  {
+    identification: { individualStatus: IdentificationQuestionOptionValues.NOIDENT },
+    outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+    isValid: false,
+  },
+  {
+    identification: { individualStatus: IdentificationQuestionOptionValues.DCD },
+    outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+    isValid: false,
+  },
+];
