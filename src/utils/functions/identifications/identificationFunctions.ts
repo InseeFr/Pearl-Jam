@@ -130,7 +130,7 @@ export const checkValidityForTransmissionIasco = (su: SurveyUnit) => {
 export const isValidForTransmission = (su: SurveyUnit) => {
   const { identificationConfiguration } = su;
   switch (identificationConfiguration) {
-    case IdentificationConfiguration.IASCO:
+    case IdentificationConfiguration.IASCO || IdentificationConfiguration.HOUSEF2F:
       return checkValidityForTransmissionIasco(su);
     case IdentificationConfiguration.INDTEL:
       return validateTransmissionArray(transmissionRulesByTel, su);
