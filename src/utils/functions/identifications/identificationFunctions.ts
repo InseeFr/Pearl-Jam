@@ -5,10 +5,9 @@ import {
 import {
   indtelIdentificationQuestionsTree,
   transmissionRulesByTel,
-  TransmissionsRulesByTel,
 } from './questionsTree/indtelQuestionsTree';
 import { houseF2FIdentificationQuestionsTree } from './questionsTree/houseF2FQuestionsTree';
-import { SurveyUnit } from 'types/pearl';
+import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { checkValidityForTransmissionNoident, getLastState } from '../surveyUnitFunctions';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
@@ -30,16 +29,30 @@ export type IdentificationQuestions = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionValue>
 >;
 
-export const identificationQuestionsTree: Record<IdentificationConfiguration, IdentificationQuestions> =
-  {
-    [IdentificationConfiguration.INDTEL]: indtelIdentificationQuestionsTree,
-    [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
-    [IdentificationConfiguration.NOIDENT]: {},
-  };
+export const identificationQuestionsTree: Record<
+  IdentificationConfiguration,
+  IdentificationQuestions
+> = {
+  [IdentificationConfiguration.INDTEL]: indtelIdentificationQuestionsTree,
+  [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
+  [IdentificationConfiguration.NOIDENT]: {},
+  [IdentificationConfiguration.HOUSEF2F]: {},
+  [IdentificationConfiguration.HOUSETEL]: {},
+  [IdentificationConfiguration.HOUSETELWSR]: {},
+  [IdentificationConfiguration.INDTELNOR]: {},
+  [IdentificationConfiguration.INDF2F]: {},
+  [IdentificationConfiguration.SRCVREINT]: {},
+};
 
 export type ResponseState = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionOption>
 >;
+
+export type TransmissionsRules = {
+  identification: SurveyUnitIdentification;
+  outcome?: string;
+  isValid: boolean;
+}[];
 
 export function checkAvailability(
   questions: IdentificationQuestions,
@@ -130,7 +143,7 @@ export const isValidForTransmission = (su: SurveyUnit) => {
 // Must be extentedfor IASCO
 export function validateTransmissionArray(
   // TODO : extend TransmissionsRulesByTel to TransmissionsRules for any identification method
-  transmissionRules: TransmissionsRulesByTel,
+  transmissionRules: TransmissionsRules,
   su: SurveyUnit
 ): boolean {
   const outcome = su.contactOutcome?.type;
@@ -143,7 +156,10 @@ export function validateTransmissionArray(
     return false;
   }
   const rule = transmissionRules.find(
-    r => r.individualStatus === individualStatus && (r.situation === situation || r.situation) && r.outcome === outcome
+    r =>
+      r.identification.individualStatus === individualStatus &&
+      (r.identification.situation === situation || r.identification.situation) &&
+      r.outcome === outcome
   );
   return rule?.isValid ?? false;
 }

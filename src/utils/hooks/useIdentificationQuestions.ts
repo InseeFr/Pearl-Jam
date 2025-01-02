@@ -16,7 +16,9 @@ import {
 
 export function useIdentification(surveyUnit: SurveyUnit) {
   const questions =
-    identificationQuestionsTree[IdentificationConfiguration[surveyUnit.identificationConfiguration]];
+    identificationQuestionsTree[
+      IdentificationConfiguration[surveyUnit.identificationConfiguration]
+    ];
   const initialResponses: ResponseState = Object.fromEntries(
     Object.keys(questions).map(id => [
       id,

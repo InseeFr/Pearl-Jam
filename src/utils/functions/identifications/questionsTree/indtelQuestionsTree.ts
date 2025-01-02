@@ -1,72 +1,82 @@
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
-import { IdentificationQuestions } from '../identificationFunctions';
+import {
+  IdentificationQuestionsId,
+  IdentificationQuestionOptionValues,
+} from 'utils/enum/identifications/IdentificationsQuestions';
+import { IdentificationQuestions, TransmissionsRules } from '../identificationFunctions';
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
+import { optionsMap } from './optionsMap';
 
-// TODO: refactorer toutes les paires  label: `${D.sameAddress}`, value: 'SAME_ADDRESS' ? (commun pour les autres methodes de reperages)
 export const indtelIdentificationQuestionsTree: IdentificationQuestions = {
   [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
     id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
     nextId: IdentificationQuestionsId.SITUATION,
     text: `${D.housingIdentification}`,
     options: [
-      { label: `${D.sameAddress}`, value: 'SAME_ADDRESS', concluding: false },
-      { label: `${D.otherAddress}`, value: 'OTHER_ADDRESS', concluding: false },
-      { label: `${D.noField}`, value: 'NOFIELD', concluding: true },
-      { label: `${D.noIdent}`, value: 'NOIDENT', concluding: true },
-      { label: `${D.deceased}`, value: 'DCD', concluding: true },
+      { ...optionsMap.SAME_ADDRESS, concluding: false },
+      { ...optionsMap.OTHER_ADDRESS, concluding: false },
+      { ...optionsMap.NOFIELD, concluding: true },
+      { ...optionsMap.NOIDENT, concluding: true },
+      { ...optionsMap.DCD, concluding: true },
     ],
   },
   [IdentificationQuestionsId.SITUATION]: {
     id: IdentificationQuestionsId.SITUATION,
     text: `${D.housingSituation}`,
     options: [
-      { label: `${D.situationOrdinary}`, value: 'ORDINARY', concluding: true },
-      { label: `${D.situationNonOrdinary}`, value: 'NOORDINARY', concluding: true },
+      { ...optionsMap.ORDINARY, concluding: true },
+      { ...optionsMap.NOORDINARY, concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-      values: ['SAME_ADDRESS', 'OTHER_ADDRESS'],
+      values: [
+        IdentificationQuestionOptionValues.SAME_ADDRESS,
+        IdentificationQuestionOptionValues.OTHER_ADDRESS,
+      ],
     },
   },
 } as const;
 
-export type TransmissionsRulesByTel = {
-  individualStatus: string;
-  situation?: string;
-  outcome?: string;
-  isValid: boolean;
-}[];
-
-// TODO: voir TODO au dessus
-export const transmissionRulesByTel: TransmissionsRulesByTel = [
+export const transmissionRulesByTel: TransmissionsRules = [
   {
-    individualStatus: 'SAME_ADDRESS',
-    situation: 'ORDINARY',
+    identification: {
+      individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
+      situation: IdentificationQuestionOptionValues.ORDINARY,
+    },
     outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
     isValid: true,
   },
   {
-    individualStatus: 'SAME_ADDRESS',
-    situation: 'ORDINARY',
+    identification: {
+      individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
+      situation: IdentificationQuestionOptionValues.ORDINARY,
+    },
     outcome: contactOutcomeEnum.REFUSAL.value,
     isValid: true,
   },
   {
-    individualStatus: 'SAME_ADDRESS',
-    situation: 'ORDINARY',
+    identification: {
+      individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
+      situation: IdentificationQuestionOptionValues.ORDINARY,
+    },
     outcome: contactOutcomeEnum.IMPOSSIBLE_TO_REACH.value,
     isValid: false,
   },
   {
-    individualStatus: 'OTHER_ADDRESS',
-    situation: 'NOORDINARY',
+    identification: {
+      individualStatus: IdentificationQuestionOptionValues.OTHER_ADDRESS,
+      situation: IdentificationQuestionOptionValues.NOORDINARY,
+    },
     outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
     isValid: true,
   },
-  { individualStatus: 'NOIDENT', outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value, isValid: false },
   {
-    individualStatus: 'DCD',
+    identification: { individualStatus: IdentificationQuestionOptionValues.NOIDENT },
+    outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+    isValid: false,
+  },
+  {
+    identification: { individualStatus: IdentificationQuestionOptionValues.DCD },
     outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
     isValid: false,
   },

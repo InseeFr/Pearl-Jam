@@ -22,3 +22,19 @@ export enum IdentificationConfiguration {
   INDF2F = 'INDF2F',
   SRCVREINT = 'SRCVREINT',
 }
+
+export enum IdentificationQuestionOptionValues {
+  SAME_ADDRESS = 'SAME_ADDRESS',
+  OTHER_ADDRESS = 'OTHER_ADDRESS',
+  NOFIELD = 'NOFIELD',
+  NOIDENT = 'NOIDENT',
+  DCD = 'DCD',
+  ORDINARY = 'ORDINARY',
+  NOORDINARY = 'NOORDINARY',
+  IDENTIFIED = 'IDENTIFIED',
+  UNIDENTIFIED = 'UNIDENTIFIED',
+  DESTROY = 'DESTROY',
+  ACC = 'ACC',
+  NACC = 'NACC',
+  ABSORBED = 'ABSORBED',
+}
