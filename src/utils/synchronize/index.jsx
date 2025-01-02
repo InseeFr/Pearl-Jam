@@ -143,8 +143,6 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
   if (!error) {
     await Promise.all(
       surveyUnits.map(async su => {
-        console.log(su);
-
         const { data: surveyUnit, error: getSuError } = await api.getSurveyUnitById(
           pearlApiUrl,
           pearlAuthenticationMode
