@@ -126,6 +126,8 @@ const validateSU = su => {
     su.comments.push(managementComment);
   }
 
+  if (!su.identification) su.identification = {};
+
   return su;
 };
 
@@ -141,6 +143,8 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
   if (!error) {
     await Promise.all(
       surveyUnits.map(async su => {
+        console.log(su);
+
         const { data: surveyUnit, error: getSuError } = await api.getSurveyUnitById(
           pearlApiUrl,
           pearlAuthenticationMode
