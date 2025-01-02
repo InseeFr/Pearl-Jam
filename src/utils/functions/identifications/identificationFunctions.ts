@@ -116,11 +116,16 @@ export const checkValidityForTransmissionIasco = (su: SurveyUnit) => {
   // issue NOA + identification.avi
   const { identification: identificationValue, category, situation } = identification;
   if (
-    type === contactOutcomeEnum.NOT_APPLICABLE.value
-    // &&
-    // !IASCO_IDENTIFICATION_FINISHING_VALUES.includes(identificationValue) &&
-    // !IASCO_SITUATION_FINISHING_VALUES.includes(situation) &&
-    // !IASCO_CATEGORY_FINISHING_VALUES.includes(category)
+    type === contactOutcomeEnum.NOT_APPLICABLE.value &&
+    identificationQuestionsTree[IdentificationConfiguration.IASCO].identification?.options.find(
+      o => o.value === identificationValue && o.concluding
+    ) &&
+    identificationQuestionsTree[IdentificationConfiguration.IASCO].situation?.options.find(
+      o => o.value === situation && o.concluding
+    ) &&
+    identificationQuestionsTree[IdentificationConfiguration.IASCO].category?.options.find(
+      o => o.value === category && o.concluding
+    )
   )
     return false;
 
@@ -142,7 +147,6 @@ export const isValidForTransmission = (su: SurveyUnit) => {
 
 // Must be extented for IASCO
 export function validateTransmissionArray(
-  // TODO : extend TransmissionsRulesByTel to TransmissionsRules for any identification method
   transmissionRules: TransmissionsRules,
   su: SurveyUnit
 ): boolean {
