@@ -93,6 +93,7 @@ export function useIdentification(surveyUnit: SurveyUnit) {
           } else if (question.options.find(o => o.value === option.value)) {
             identification[question.id] = option.value;
           }
+
           updateState(
             surveyUnit,
             identification,
