@@ -78,9 +78,12 @@ export function checkAvailability(
 
 export function identificationIsFinished(
   identificationConfiguration: IdentificationConfiguration,
-  identification: Partial<Record<IdentificationQuestionsId, string>>
+  identification?: Partial<Record<IdentificationQuestionsId, string>>
 ): boolean {
   const questionsTree = identificationQuestionsTree[identificationConfiguration];
+
+  if (!identification) return false;
+
   if (!questionsTree) {
     return false;
   }
