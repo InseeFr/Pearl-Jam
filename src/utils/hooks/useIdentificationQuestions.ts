@@ -15,12 +15,19 @@ import {
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctions';
 
-const updateStates = (
+const allQuestionsAnswered = (
   surveyUnit: SurveyUnit,
+  identification: any,
   questions: Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>,
-  selectedQuestionId: IdentificationQuestionsId,
+  selectedQuestionId: IdentificationQuestionsId | undefined,
   updatedResponses: Partial<Record<IdentificationQuestionsId, IdentificationQuestionOption>>
 ) => {
+  if (
+    !identificationIsFinished(surveyUnit.identificationConfiguration, identification) ||
+    !selectedQuestionId
+  )
+    return false;
+
   const orderedQuestions = Object.values(questions);
 
   let concludingQuestionIndex = orderedQuestions.findIndex(
@@ -32,9 +39,7 @@ const updateStates = (
 
   const previousQuestions = orderedQuestions.slice(0, concludingQuestionIndex + 1);
   const allAnswered = previousQuestions.every(q => !!surveyUnit.identification?.[q.id]);
-  return allAnswered
-    ? addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
-    : undefined;
+  return allAnswered;
 };
 
 const persistStates = (surveyUnit: SurveyUnit, states: any) => {
@@ -114,13 +119,21 @@ export function useIdentification(surveyUnit: SurveyUnit) {
 
       persistIdentification(surveyUnit, identification);
 
-      if (
-        selectedDialogId &&
-        identificationIsFinished(surveyUnit.identificationConfiguration, identification)
-      ) {
-        const states = updateStates(surveyUnit, questions, selectedDialogId, updatedResponses);
-        persistStates(surveyUnit, states ?? surveyUnit.states);
+      // States must be updated if identification is fully done and conluding
+      const allAnswered = allQuestionsAnswered(
+        surveyUnit,
+        identification,
+        questions,
+        selectedDialogId,
+        updatedResponses
+      );
+      if (allAnswered) {
+        persistStates(
+          surveyUnit,
+          addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
+        );
       }
+
       return updatedResponses;
     });
   };
