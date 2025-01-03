@@ -23,20 +23,18 @@ const updateStates = (
 ) => {
   const orderedQuestions = Object.values(questions);
 
-  if (identificationIsFinished(surveyUnit.identificationConfiguration, surveyUnit.identification)) {
-    let concludingQuestionIndex = orderedQuestions.findIndex(
-      question => updatedResponses[question.id]?.concluding === true
-    );
-    if (updatedResponses[selectedQuestionId]?.concluding) {
-      concludingQuestionIndex = orderedQuestions.findIndex(q => q.id === selectedQuestionId);
-    }
-
-    const previousQuestions = orderedQuestions.slice(0, concludingQuestionIndex + 1);
-    const allAnswered = previousQuestions.every(q => !!surveyUnit.identification?.[q.id]);
-    return allAnswered
-      ? addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
-      : undefined;
+  let concludingQuestionIndex = orderedQuestions.findIndex(
+    question => updatedResponses[question.id]?.concluding === true
+  );
+  if (updatedResponses[selectedQuestionId]?.concluding) {
+    concludingQuestionIndex = orderedQuestions.findIndex(q => q.id === selectedQuestionId);
   }
+
+  const previousQuestions = orderedQuestions.slice(0, concludingQuestionIndex + 1);
+  const allAnswered = previousQuestions.every(q => !!surveyUnit.identification?.[q.id]);
+  return allAnswered
+    ? addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
+    : undefined;
 };
 
 const persistStates = (surveyUnit: SurveyUnit, states: any) => {
@@ -89,10 +87,9 @@ export function useIdentification(surveyUnit: SurveyUnit) {
     selectedQuestionId: IdentificationQuestionsId,
     option: IdentificationQuestionOption
   ) => {
+    let updatedResponses: ResponseState = { ...responses, [selectedQuestionId]: option };
     let identification: SurveyUnitIdentification = surveyUnit.identification ?? {};
-    setResponses(prev => {
-      let updatedResponses: ResponseState = { ...prev, [selectedQuestionId]: option };
-
+    setResponses(() => {
       const updatedAvailability = Object.fromEntries(
         Object.entries(questions).map(([questionId, question]) => {
           const available = checkAvailability(questions, question, updatedResponses);
@@ -117,7 +114,10 @@ export function useIdentification(surveyUnit: SurveyUnit) {
 
       persistIdentification(surveyUnit, identification);
 
-      if (selectedDialogId) {
+      if (
+        selectedDialogId &&
+        identificationIsFinished(surveyUnit.identificationConfiguration, identification)
+      ) {
         const states = updateStates(surveyUnit, questions, selectedDialogId, updatedResponses);
         persistStates(surveyUnit, states ?? surveyUnit.states);
       }
