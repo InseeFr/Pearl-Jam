@@ -105,14 +105,14 @@ export function useIdentification(surveyUnit: SurveyUnit) {
             updatedResponses[question.id] = option;
           }
 
-          if (!option.concluding && selectedQuestionId === question.id) {
-            setSelectedDialogId(question.nextId);
-          }
-
           identification[question.id] = updatedResponses[question.id]?.value;
           return [questionId, available];
         })
       );
+
+      if (questions[selectedQuestionId] && !updatedResponses[selectedQuestionId]?.concluding) {
+        setSelectedDialogId(questions[selectedQuestionId]?.nextId);
+      }
 
       // Prevent rerender
       if (updatedAvailability != availableQuestions) setAvailableQuestions(updatedAvailability);
