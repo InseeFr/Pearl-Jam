@@ -76,7 +76,8 @@ export function IdentificationDialog({
             type="button"
             disabled={!selectedOption}
             onClick={() => {
-              onClose(); onSubmit(questionId, selectedOption);
+              onClose();
+              onSubmit(questionId, selectedOption);
             }}
           >
             {D.confirmButton}
