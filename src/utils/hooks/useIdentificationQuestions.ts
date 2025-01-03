@@ -15,34 +15,43 @@ import {
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctions';
 
-const persistSU = (
+const updateStates = (
   surveyUnit: SurveyUnit,
-  identification: Partial<Record<IdentificationQuestionsId, string>>,
-  orderedQuestions: IdentificationQuestionValue[],
+  questions: Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>,
   selectedQuestionId: IdentificationQuestionsId,
-  option: IdentificationQuestionOption,
-  responses: Partial<Record<IdentificationQuestionsId, IdentificationQuestionOption>>,
-  updatedResponses: ResponseState
+  updatedResponses: Partial<Record<IdentificationQuestionsId, IdentificationQuestionOption>>
 ) => {
-  let states = undefined;
+  const orderedQuestions = Object.values(questions);
 
-  if (identificationIsFinished(surveyUnit.identificationConfiguration, identification)) {
+  if (identificationIsFinished(surveyUnit.identificationConfiguration, surveyUnit.identification)) {
     let concludingQuestionIndex = orderedQuestions.findIndex(
-      question => responses[question.id]?.concluding === true
+      question => updatedResponses[question.id]?.concluding === true
     );
-    if (option.concluding) {
+    if (updatedResponses[selectedQuestionId]?.concluding) {
       concludingQuestionIndex = orderedQuestions.findIndex(q => q.id === selectedQuestionId);
     }
 
     const previousQuestions = orderedQuestions.slice(0, concludingQuestionIndex + 1);
-    const allAnswered = previousQuestions.every(q => !!updatedResponses[q.id]);
-    if (allAnswered) {
-      states = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
-    }
+    const allAnswered = previousQuestions.every(q => !!surveyUnit.identification?.[q.id]);
+    return allAnswered
+      ? addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
+      : undefined;
   }
+};
+
+const persistStates = (surveyUnit: SurveyUnit, states: any) => {
   persistSurveyUnit({
     ...surveyUnit,
-    states: states ?? surveyUnit.states,
+    states: states,
+  });
+};
+
+const persistIdentification = (
+  surveyUnit: SurveyUnit,
+  identification: Partial<Record<IdentificationQuestionsId, string>>
+) => {
+  persistSurveyUnit({
+    ...surveyUnit,
     identification: identification,
   });
 };
@@ -80,40 +89,38 @@ export function useIdentification(surveyUnit: SurveyUnit) {
     selectedQuestionId: IdentificationQuestionsId,
     option: IdentificationQuestionOption
   ) => {
+    let identification: SurveyUnitIdentification = surveyUnit.identification ?? {};
     setResponses(prev => {
       let updatedResponses: ResponseState = { ...prev, [selectedQuestionId]: option };
+
       const updatedAvailability = Object.fromEntries(
         Object.entries(questions).map(([questionId, question]) => {
           const available = checkAvailability(questions, question, updatedResponses);
-          const orderedQuestions = Object.values(questions);
-          let identification: SurveyUnitIdentification = surveyUnit.identification ?? {};
 
           if (!available) {
-            identification[question.id] = undefined;
             updatedResponses[question.id] = undefined;
           } else if (question.options.find(o => o.value === option.value)) {
-            identification[question.id] = option.value;
+            updatedResponses[question.id] = option;
           }
-
-          persistSU(
-            surveyUnit,
-            identification,
-            orderedQuestions,
-            selectedQuestionId,
-            option,
-            responses,
-            updatedResponses
-          );
 
           if (!option.concluding && selectedQuestionId === question.id) {
             setSelectedDialogId(question.nextId);
           }
 
+          identification[question.id] = updatedResponses[question.id]?.value;
           return [questionId, available];
         })
       );
 
-      setAvailableQuestions(updatedAvailability);
+      // Prevent rerender
+      if (updatedAvailability != availableQuestions) setAvailableQuestions(updatedAvailability);
+
+      persistIdentification(surveyUnit, identification);
+
+      if (selectedDialogId) {
+        const states = updateStates(surveyUnit, questions, selectedDialogId, updatedResponses);
+        persistStates(surveyUnit, states ?? surveyUnit.states);
+      }
       return updatedResponses;
     });
   };
