@@ -212,7 +212,7 @@ export async function seedData() {
   surverUnits.push({
     ...surverUnits[0],
     id: 'sutel',
-    identification: {},
+    identification: null,
     firstName: 'ET',
     lastName: 'Telephone',
     identificationConfiguration: IdentificationConfiguration.INDTEL,

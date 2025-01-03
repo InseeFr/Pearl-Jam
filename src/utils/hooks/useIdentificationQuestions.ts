@@ -57,11 +57,7 @@ export function useIdentification(surveyUnit: SurveyUnit) {
     Object.keys(questions).map(id => [
       id,
       questions[id as IdentificationQuestionsId]?.options.find(
-        o =>
-          o.value ===
-          (surveyUnit.identification
-            ? surveyUnit.identification[id as IdentificationQuestionsId]
-            : undefined)
+        o => o.value === surveyUnit?.identification?.[id as IdentificationQuestionsId]
       ),
     ])
   );
