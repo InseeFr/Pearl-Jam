@@ -2,9 +2,8 @@ import {
   IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
-import { IdentificationQuestions, TransmissionsRules } from '../identificationFunctions';
+import { IdentificationQuestions } from '../identificationFunctions';
 import D from 'i18n';
-import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 import { optionsMap } from './optionsMap';
 
 export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
