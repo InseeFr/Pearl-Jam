@@ -26,6 +26,7 @@ import { Select } from '../ui/Select';
 import { seedData } from '../utils/functions/seeder';
 import { persistSurveyUnit, updateStateWithDates } from '../utils/functions';
 import { SurveyUnit } from 'types/pearl';
+import { SelectChangeEvent } from '@mui/material';
 
 export function Home() {
   const surveyUnits = useSurveyUnits();
@@ -74,7 +75,7 @@ export function Home() {
             </div>
           ))}
           {isDev && (
-            <Stack gap={2} py={5} alignItems="center" w={1} sx={{ gridColumn: '1 / -1' }}>
+            <Stack gap={2} py={5} alignItems="center" sx={{ gridColumn: '1 / -1' }}>
               <Typography variant="m" color="textTertiary" as="p">
                 Vous êtes en mode développement
               </Typography>
@@ -110,7 +111,7 @@ function GridHeader({
             sx={{ width: 200 }}
             labelId="sort-field"
             value={sortField}
-            onChange={setSortField}
+            onChange={(e: SelectChangeEvent<any>) => setSortField(e.target.value.toString())}
             options={[
               { label: D.remainingDays, value: 'remainingDays' },
               { label: D.priority, value: 'priority' },
@@ -239,7 +240,7 @@ function Sidebar({ surveyUnits }: Readonly<{ surveyUnits: SurveyUnit[] }>) {
               onChange={v => {
                 filter.setSubSample(v.target.value as number);
               }}
-              options={subSamples}
+              options={subSamples.map(s => ({ label: s.toString(), value: s }))}
             />
             <Select
               value={filter.subGrappe}
@@ -248,13 +249,13 @@ function Sidebar({ surveyUnits }: Readonly<{ surveyUnits: SurveyUnit[] }>) {
               onChange={v => {
                 filter.setSubGrappe(v.target.value as number);
               }}
-              options={subGrappe}
+              options={subGrappe.map(s => ({ label: s.toString(), value: s }))}
             />
           </Stack>
         </Accordion>
         <Hr />
         <div>
-          <Button size="edge" color="textPrimary" variant="underlined" onClick={filter.reset}>
+          <Button color="textPrimary" onClick={filter.reset}>
             <RestartAltIcon />
             {D.resetFilters}
           </Button>

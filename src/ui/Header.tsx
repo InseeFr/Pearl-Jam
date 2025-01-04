@@ -114,7 +114,7 @@ function HeaderNavLink({
           <Stack
             alignItems="center"
             justifyContent="center"
-            as={Paper}
+            component={Paper}
             sx={{ width: 28, height: 28, borderRadius: 28 }}
             elevation={2}
           >

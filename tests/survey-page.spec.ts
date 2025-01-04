@@ -79,4 +79,14 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
   await expect(page.locator('tr:nth-child(3) > td:nth-child(5)')).toContainText(
     'Indisponibilité définitive'
   );
+
+  await page
+    .getByRole('row', { name: '#su10 DUBUQUE-2 Clementina-2' })
+    .getByLabel('delete')
+    .click();
+  await page.getByPlaceholder('Saisissez un commentaire...').click();
+  await page.getByPlaceholder('Saisissez un commentaire...').fill('Test commentaire');
+  await page.getByRole('button', { name: 'Enregistrer' }).click();
+  await page.getByRole('link', { name: '#su10' }).click();
+  await expect(page.locator('#root')).toContainText('DUBUQUE-2 Clementina-2');
 });

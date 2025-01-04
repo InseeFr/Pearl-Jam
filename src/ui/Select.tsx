@@ -3,8 +3,8 @@ import SelectMaterial, { SelectProps as MaterialSelectProps } from '@mui/materia
 
 type SelectProps = {
   options: { value: string | number; label: string }[];
-  placeholder: string;
-  allowEmpty: boolean;
+  placeholder?: string;
+  allowEmpty?: boolean;
 } & MaterialSelectProps;
 
 export function Select({ options, placeholder, allowEmpty, ...props }: Readonly<SelectProps>) {

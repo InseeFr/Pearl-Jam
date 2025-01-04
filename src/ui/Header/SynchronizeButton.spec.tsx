@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { SynchronizeButton } from './SynchronizeButton';
-import { SyncContext } from '../Sync/SyncContextProvider';
+import { SyncContext, SyncContextValue } from '../Sync/SyncContextProvider';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import D from '../../i18n/build-dictionary';
 import { describe, expect, it, Mock, MockContext, vi } from 'vitest';
@@ -31,7 +31,9 @@ describe('SynchronizeButton', () => {
   it('renders the button with correct text', () => {
     (useNetworkOnline as Mock).mockReturnValue(true);
     render(
-      <SyncContext.Provider value={{ syncFunction: mockSyncFunction }}>
+      <SyncContext.Provider
+        value={{ syncFunction: mockSyncFunction } as unknown as SyncContextValue}
+      >
         <SynchronizeButton />
       </SyncContext.Provider>
     );
@@ -42,7 +44,9 @@ describe('SynchronizeButton', () => {
   it('disables the button when offline', () => {
     (useNetworkOnline as Mock).mockReturnValue(false);
     render(
-      <SyncContext.Provider value={{ syncFunction: mockSyncFunction }}>
+      <SyncContext.Provider
+        value={{ syncFunction: mockSyncFunction } as unknown as SyncContextValue}
+      >
         <SynchronizeButton />
       </SyncContext.Provider>
     );
@@ -55,7 +59,9 @@ describe('SynchronizeButton', () => {
   it('calls syncFunction when clicked', () => {
     (useNetworkOnline as Mock).mockReturnValue(true);
     render(
-      <SyncContext.Provider value={{ syncFunction: mockSyncFunction }}>
+      <SyncContext.Provider
+        value={{ syncFunction: mockSyncFunction } as unknown as SyncContextValue}
+      >
         <SynchronizeButton />
       </SyncContext.Provider>
     );

@@ -90,7 +90,16 @@ test('check if the Survey filter is working properly', async ({ page }) => {
   await homePage.resetAllFilters();
 });
 
-test('check if the cluster filter is working properly', () => {});
+test('check if the cluster filter is working properly', async ({ page }) => {
+  const homePage = new HomePage(page);
+  await page.getByRole('combobox').first().click();
+  await page.getByRole('option', { name: '2' }).click();
+  await homePage.checkNumberOfDisplayedItems(8, 13);
+  await page.getByRole('combobox').nth(1).click();
+  await page.getByRole('option', { name: '1' }).click();
+  await page.getByText('unités sur 13').click();
+  await homePage.checkNumberOfDisplayedItems(0, 13);
+});
 
 test('check if the reset feature is working properly', async ({ page }) => {
   const homePage = new HomePage(page);
@@ -120,4 +129,10 @@ test('check if the search input is working properly', async ({ page }) => {
   await homePage.checkNumberOfDisplayedItems(4, 13);
 });
 
-test('check if the order input is working properly', () => {});
+test('check if the order input is working properly', async ({ page }) => {
+  await page.getByLabel('Trier par :').click();
+  await page.getByRole('option', { name: 'Priorité' }).click();
+  await page.getByLabel('delete').click();
+  const first = await page.$('.MuiCardContent-root');
+  expect(await first?.innerText()).toContain('DUBUQUE-2 Clementina-2');
+});

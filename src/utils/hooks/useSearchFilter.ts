@@ -17,7 +17,7 @@ type SearchCriteria = {
   priority: boolean;
   subSample: number;
   subGrappe: string;
-  terminated: number;
+  terminated: boolean;
 };
 
 type SearchFilterValue = {

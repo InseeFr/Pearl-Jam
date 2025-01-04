@@ -1,16 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { mount } from 'dramaQueen/DramaIndex';
+import { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueenListener } from '../utils/hooks/useQueenListener';
 
 const queenPathname = '/queen';
 
 /**
  * Mount Queen to sync data
- * @returns {JSX.Element}
- * @constructor
  */
-
 export default function QueenPage() {
   const ref = useRef(null);
   const location = useLocation();
@@ -21,7 +18,7 @@ export default function QueenPage() {
 
   // Listen to navigation events dispatched inside Drama Queen mfe.
   useEffect(() => {
-    const dramaQueenNavigationEventHandler = event => {
+    const dramaQueenNavigationEventHandler = (event: CustomEvent<unknown>) => {
       const pathname = event.detail;
       const newPathname = `${queenPathname}${pathname}`;
       if (newPathname === location.pathname) {
