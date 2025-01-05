@@ -16,7 +16,6 @@ import { SynchronizeButton } from './Header/SynchronizeButton';
 import { UserButton } from './Header/UserButton';
 import { Row } from './Row';
 import { Typography } from './Typography';
-import { JsxElement } from 'typescript';
 
 export function Header() {
   const notificationsCount = useUnreadNotificationsCount();

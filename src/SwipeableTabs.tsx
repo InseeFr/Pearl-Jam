@@ -1,9 +1,8 @@
-import { PropsWithChildren, PropsWithoutRef, useState } from 'react';
-import { Children } from 'react';
-import SwipeableViews from 'react-swipeable-views';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import { Children, PropsWithChildren, useState } from 'react';
+import SwipeableViews from 'react-swipeable-views';
 
 export function SwipeableTab(props: Readonly<PropsWithChildren<{ index: number; label: string }>>) {
   const { children, index, ...other } = props;

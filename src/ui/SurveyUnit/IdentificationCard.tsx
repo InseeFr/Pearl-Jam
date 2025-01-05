@@ -81,7 +81,7 @@ export function IdentificationCard({ surveyUnit }: Readonly<{ surveyUnit: Survey
   );
 }
 
-function MoveQuestion({ surveyUnit }: { surveyUnit: SurveyUnit }) {
+function MoveQuestion({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>) {
   const options = [
     { label: D.yes, value: true },
     { label: D.no, value: false },

@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Grid, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import D from 'i18n';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { SurveyUnit } from 'types/pearl';
 import { ScrollableBox } from 'ui/ScrollableBox';
 import { Select } from 'ui/Select';
