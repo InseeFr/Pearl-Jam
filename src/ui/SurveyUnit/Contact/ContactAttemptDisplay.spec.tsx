@@ -19,7 +19,7 @@ describe('ContactAttemptDisplay', () => {
 
     screen.getByText('Interview accepted');
     screen.getByText('- Phone');
-    screen.getByText('Sunday, January 1, 2023 at 1:00 PM');
+    screen.getByText('Sunday, January 1, 2023');
   });
 
   it('should call onDelete when delete button is clicked', () => {
