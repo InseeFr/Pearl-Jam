@@ -98,7 +98,7 @@ export function useIdentificationQuestions(surveyUnit) {
       setQuestion(undefined);
     } else {
       // Automatically select the next unanswered question or close the current selected question
-      const currentIndex = questions.findIndex(q => q.type === question.type);
+      const currentIndex = questions.findIndex(q => q.type === question?.type);
       const nextIndex = questions.findIndex((q, k) => k > currentIndex && !q.answer);
       setQuestion(nextIndex ? questions[nextIndex] : undefined);
     }
