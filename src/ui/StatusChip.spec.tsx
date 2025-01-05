@@ -5,7 +5,7 @@ import { ToDoEnumValues } from '../utils/enum/SUToDoEnum';
 import { StatusChip } from './StatusChip';
 
 describe('StatusChip', () => {
-  it.only('renders correctly with the given status', () => {
+  it('renders correctly with the given status', () => {
     const theme = createTheme({
       palette: {
         primary: {
@@ -26,6 +26,6 @@ describe('StatusChip', () => {
       </ThemeProvider>
     );
 
-    const chipElement = screen.getByText('Completed');
+    screen.getByText('Completed');
   });
 });
