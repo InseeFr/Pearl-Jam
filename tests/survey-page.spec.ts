@@ -25,6 +25,7 @@ test('check if all tabs work properly', async ({ page }) => {
   await expect(await surveyPage.getTitle('Commentaire')).toBeVisible();
 
   await surveyPage.selectTab('Logement & Repérage');
+  await expect(await surveyPage.getTitle('Individu')).not.toBeVisible();
   await page.getByRole('button', { name: 'Modifier' }).click();
 
   await expect(page.getByRole('heading', { name: "Modification de l'adresse" })).toBeVisible();
