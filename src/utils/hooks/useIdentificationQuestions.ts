@@ -94,20 +94,20 @@ export function useIdentification(surveyUnit: SurveyUnit) {
   ) => {
     let updatedResponses: ResponseState = { ...responses, [selectedQuestionId]: option };
     let identification: SurveyUnitIdentification = surveyUnit.identification ?? {};
+    const availableQuestionIds = Object.entries(questions).map(([questionId, question]) => {
+      const available = checkAvailability(questions, question, updatedResponses);
+
+      if (!available) {
+        updatedResponses[question.id] = undefined;
+      } else if (question.options.find(o => o.value === option.value)) {
+        updatedResponses[question.id] = option;
+      }
+
+      identification[question.id] = updatedResponses[question.id]?.value;
+      return [questionId, available];
+    });
+
     setResponses(() => {
-      const availableQuestionIds = Object.entries(questions).map(([questionId, question]) => {
-        const available = checkAvailability(questions, question, updatedResponses);
-
-        if (!available) {
-          updatedResponses[question.id] = undefined;
-        } else if (question.options.find(o => o.value === option.value)) {
-          updatedResponses[question.id] = option;
-        }
-
-        identification[question.id] = updatedResponses[question.id]?.value;
-        return [questionId, available];
-      });
-
       const updatedAvailability = Object.fromEntries(availableQuestionIds);
 
       if (questions[selectedQuestionId] && !updatedResponses[selectedQuestionId]?.concluding) {
