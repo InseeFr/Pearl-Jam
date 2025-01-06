@@ -1,8 +1,8 @@
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestionsRefactored';
-import { IdentificationQuestions } from '../identificationFunctionsRefactored';
+import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
+import { IdentificationQuestions } from '../identificationFunctions';
 import D from 'i18n';
 
-export const identificationQuestionsHousetel: IdentificationQuestions = {
+export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
   [IdentificationQuestionsId.SITUATION]: {
     id: IdentificationQuestionsId.SITUATION,
     nextId: IdentificationQuestionsId.CATEGORY,
