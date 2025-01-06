@@ -59,7 +59,7 @@ const persistIdentification = (
   });
 };
 
-export function useIdentification(surveyUnit: SurveyUnit) {
+export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
   const questions =
     identificationQuestionsTree[
       IdentificationConfiguration[surveyUnit.identificationConfiguration]
