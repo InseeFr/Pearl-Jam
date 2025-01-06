@@ -7,7 +7,7 @@ import { Card, CardContent } from '@mui/material';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import { ButtonLine } from 'ui/ButtonLine';
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
-import { useIdentification } from 'utils/hooks/useIdentificationQuestions';
+import { useIdentificationQuestions } from 'utils/hooks/useIdentificationQuestions';
 import { IdentificationDialog } from './IdentificationDialog';
 
 type IdentificationCardProps = {
@@ -22,7 +22,7 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
     availableQuestions,
     setSelectedDialogId,
     handleResponse,
-  } = useIdentification(surveyUnit);
+  } = useIdentificationQuestions(surveyUnit);
 
   return (
     <Card elevation={0}>

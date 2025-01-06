@@ -23,7 +23,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { makeStyles, useTheme } from '@mui/styles';
 import D from '../../i18n/build-dictionary';
 import { SurveyUnit } from 'types/pearl';
-import { useIdentification } from 'utils/hooks/useIdentificationQuestions';
+import { useIdentificationQuestions } from 'utils/hooks/useIdentificationQuestions';
 import { isValidForTransmission } from 'utils/functions/identifications/identificationFunctions';
 
 const useStyles = makeStyles({
@@ -48,7 +48,7 @@ export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>
   const theme = useTheme();
   const classes = useStyles();
   const [isContactOutcomeValid, setIsContactOutcomeValid] = useState(false);
-  const { responses } = useIdentification(surveyUnit);
+  const { responses } = useIdentificationQuestions(surveyUnit);
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
