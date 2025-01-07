@@ -1,6 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { checkAvailability, IdentificationQuestions } from './identificationFunctions';
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
+import {
+  checkAvailability,
+  identificationIsFinished,
+  IdentificationQuestions,
+} from './identificationFunctions';
+import {
+  IdentificationConfiguration,
+  IdentificationQuestionsId,
+} from 'utils/enum/identifications/IdentificationsQuestions';
 
 // TODO : Missing tests for other functions
 const mockQuestions: IdentificationQuestions = {
@@ -46,7 +53,11 @@ describe('checkAvailability', () => {
 
   it('should return true if dependency values match', () => {
     const responses = {
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'YES', label: 'Yes', concluding: false },
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
+        value: 'YES',
+        label: 'Yes',
+        concluding: false,
+      },
     };
     const result = checkAvailability(
       mockQuestions,
@@ -82,7 +93,11 @@ describe('checkAvailability', () => {
 
   it('should return true if parent question is available and non-concluding', () => {
     const responses = {
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'YES', label: 'Yes', concluding: false },
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
+        value: 'YES',
+        label: 'Yes',
+        concluding: false,
+      },
     };
     const result = checkAvailability(
       mockQuestions,
@@ -110,7 +125,11 @@ describe('checkAvailability', () => {
     };
 
     const responses = {
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'YES', label: 'Yes', concluding: false },
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
+        value: 'YES',
+        label: 'Yes',
+        concluding: false,
+      },
       [IdentificationQuestionsId.SITUATION]: {
         value: 'ACTIVE',
         label: 'Active',
@@ -158,5 +177,35 @@ describe('checkAvailability', () => {
       responses
     );
     expect(result).toBe(false);
+  });
+});
+
+describe('identificationIsFinished', () => {
+  it('should return false if identification is undefined', () => {
+    const result = identificationIsFinished(IdentificationConfiguration.INDTEL);
+    expect(result).toBe(false);
+  });
+
+  it('should return false if any question is not answered', () => {
+    const identification = {
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: 'answer1',
+      // Missing answer for QUESTION_2
+    };
+    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    expect(result).toBe(false);
+  });
+
+  it('should return true if all questions are answered', () => {
+    const identification = {
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: 'answer1',
+      [IdentificationQuestionsId.SITUATION]: 'answer2',
+    };
+    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    expect(result).toBe(true);
+  });
+
+  it('should return true if there are no questions in the configuration', () => {
+    const result = identificationIsFinished(IdentificationConfiguration.NOIDENT, {});
+    expect(result).toBe(true);
   });
 });
