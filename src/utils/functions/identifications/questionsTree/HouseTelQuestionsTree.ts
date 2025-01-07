@@ -1,6 +1,7 @@
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
 import { IdentificationQuestions } from '../identificationFunctions';
 import D from 'i18n';
+import { optionsMap } from './optionsMap';
 
 export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
   [IdentificationQuestionsId.SITUATION]: {
@@ -8,17 +9,17 @@ export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
     nextId: IdentificationQuestionsId.CATEGORY,
     text: `${D.housingSituation}`,
     options: [
-      { label: `${D.situationOrdinary}`, value: 'ORDINARY', concluding: false },
+      { ...optionsMap.ORDINARY, concluding: false },
       { label: `${D.absorbed}`, value: 'ABSORBED', concluding: true },
-      { label: `${D.situationNonOrdinary}`, value: 'NOORDINARY', concluding: true },
+      { ...optionsMap.NOORDINARY, concluding: true },
     ],
   },
   [IdentificationQuestionsId.CATEGORY]: {
     id: IdentificationQuestionsId.CATEGORY,
     text: `${D.housingCategory}`,
     options: [
-      { label: `${D.categoryPrimary}`, value: 'PRIMARY', concluding: true },
-      { label: `${D.categorySecondary}`, value: 'SECONDARY', concluding: true },
+      { ...optionsMap.PRIMARY, concluding: true },
+      { ...optionsMap.SECONDARY, concluding: true },
       { label: `${D.vacant}`, value: 'VACANT', concluding: true },
     ],
     dependsOn: {
