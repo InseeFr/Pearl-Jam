@@ -58,6 +58,8 @@ export const getContactOutcomeByConfiguration = (
       ...{ NO_LONGER_USED_FOR_HABITATION: contactOutcomeEnum.NO_LONGER_USED_FOR_HABITATION },
     };
   }
+
+  // Will be removed when deprecated outcomes will be unused
   const selectedOutcome = findContactOutcomeByValue(selectedOutcomeValue);
 
   if (configuration === 'TEL' || configuration === 'F2F')
