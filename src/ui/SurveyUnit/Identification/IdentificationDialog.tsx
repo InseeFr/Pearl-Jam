@@ -75,7 +75,7 @@ export function IdentificationDialog({
           <Button
             variant="contained"
             type="button"
-            disabled={!selectedOption}
+            disabled={false}
             onClick={() => {
               onClose();
               onSubmit(questionId, selectedOption);
