@@ -47,7 +47,8 @@ export function IdentificationDialog({
             handleChange({
               value: e.target.value,
               label: options?.find(o => o.value === e.target.value)?.label ?? 'Missing label',
-              concluding: options?.find(o => o.value === e.target.value)?.concluding ?? false,
+              concluding:
+                options?.find(o => o.value === e.target.value)?.concluding ?? D.missingLabel,
             })
           }
           defaultValue={selectedOption?.value}

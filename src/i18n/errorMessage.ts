@@ -9,6 +9,11 @@ const errorMessage = {
     en: "There's no survey unit with the identifier",
     sq: 'Nuk ka njësi anketimi me identifikuesin',
   },
+  missingLabel: {
+    fr: 'Label manquant',
+    en: 'Missing label',
+    sq: 'Etiketë e humbur',
+  },
 };
 
 export default errorMessage;
