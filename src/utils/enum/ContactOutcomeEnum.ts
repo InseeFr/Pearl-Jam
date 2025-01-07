@@ -40,8 +40,8 @@ let commonContactOutcomes = {
   UNABLE_TO_RESPOND: contactOutcomeEnum.UNABLE_TO_RESPOND,
   ALREADY_ANSWERED: contactOutcomeEnum.ALREADY_ANSWERED,
   UNUSABLE_CONTACT_DATA: contactOutcomeEnum.UNUSABLE_CONTACT_DATA,
-  NOT_APPLICABLE: contactOutcomeEnum.NOT_APPLICABLE,
   DEFINITLY_UNAVAILABLE: contactOutcomeEnum.DEFINITLY_UNAVAILABLE,
+  NOT_APPLICABLE: contactOutcomeEnum.NOT_APPLICABLE,
 };
 
 type ContactOutcomeEnum = {
