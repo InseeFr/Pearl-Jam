@@ -85,10 +85,6 @@ export function identificationIsFinished(
 
   if (!identification) return false;
 
-  if (!questionsTree) {
-    return false;
-  }
-
   for (const questionId in questionsTree) {
     const question = questionsTree[questionId as IdentificationQuestionsId];
     if (!question) continue;
