@@ -4,30 +4,54 @@ import {
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit } from 'types/pearl';
-import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { addNewState, persistSurveyUnit } from 'utils/functions';
-import { checkAvailability } from 'utils/functions/identifications/identificationFunctions';
+import * as surveyUnitFunctions from 'utils/functions';
+import {
+  checkAvailability,
+  identificationIsFinished,
+} from 'utils/functions/identifications/identificationFunctions';
 import { useIdentificationQuestions } from './useIdentificationQuestions';
+import { persistSurveyUnit } from 'utils/functions';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
-vi.mock('utils/functions', () => ({
-  addNewState: vi.fn(),
-  persistSurveyUnit: vi.fn(),
-}));
-
-vi.mock('utils/functions/identifications/identificationFunctions', () => ({
-  checkAvailability: vi.fn(() => true),
-  identificationIsFinished: vi.fn(() => true),
-  identificationQuestionsTree: {
-    CONFIG_A: {
-      Q1: { id: 'Q1', options: [{ value: 'A', concluding: false }], nextId: 'Q2' },
-      Q2: { id: 'Q2', options: [{ value: 'B', concluding: true }] },
+vi.mock('utils/functions', { spy: true });
+vi.mock('utils/functions/identifications/identificationFunctions', async () => {
+  return {
+    checkAvailability: vi.fn(() => true),
+    identificationIsFinished: vi.fn(() => false),
+    identificationQuestionsTree: {
+      CONFIG_A: {
+        Q1: {
+          id: 'Q1',
+          options: [
+            { value: 'A', concluding: false },
+            { value: 'C', concluding: true },
+          ],
+          nextId: 'Q2',
+        },
+        Q2: {
+          id: 'Q2',
+          options: [{ value: 'B', concluding: true }],
+          dependsOn: {
+            questionId: 'Q1',
+            values: ['A'],
+          },
+        },
+      },
+      CONFIG_B: {},
     },
+  };
+});
+
+vi.mock('utils/enum/identifications/IdentificationsQuestions', () => ({
+  IdentificationConfiguration: {
+    CONFIG_A: 'CONFIG_A',
+    CONFIG_B: 'CONFIG_B',
   },
 }));
 
-describe('useIdentification', () => {
+describe('useIdentificationQuestions', () => {
   const mockSurveyUnit: SurveyUnit = {
     identificationConfiguration: 'CONFIG_A' as IdentificationConfiguration,
     identification: {},
@@ -81,7 +105,6 @@ describe('useIdentification', () => {
     communicationRequests: [],
     communicationTemplates: [],
   };
-
   it('initializes with correct responses and availability', () => {
     const { result } = renderHook(() => useIdentificationQuestions(mockSurveyUnit));
 
@@ -110,12 +133,12 @@ describe('useIdentification', () => {
     });
 
     expect(result.current.responses).toEqual({
-      Q1: { value: 'A', concluding: false },
+      Q1: { value: 'A', label: '', concluding: false },
       Q2: undefined,
     });
     expect(result.current.selectedDialogId).toEqual('Q2');
 
-    expect(persistSurveyUnit).toHaveBeenCalledWith(
+    expect(surveyUnitFunctions.persistSurveyUnit).toHaveBeenCalledWith(
       expect.objectContaining({
         identification: { Q1: 'A' },
       })
@@ -124,43 +147,63 @@ describe('useIdentification', () => {
 
   it('updates states when all questions are answered', () => {
     const { result } = renderHook(() => useIdentificationQuestions(mockSurveyUnit));
-
     act(() => {
       result.current.handleResponse('Q1' as IdentificationQuestionsId, {
         value: 'A',
         concluding: false,
         label: '',
       });
+      mockSurveyUnit.identification = { Q1: 'A' };
+    });
+
+    expect(persistSurveyUnit).toHaveBeenLastCalledWith(mockSurveyUnit);
+
+    (identificationIsFinished as Mock).mockImplementationOnce(() => {
+      return true;
+    });
+
+    act(() => {
       result.current.handleResponse('Q2' as IdentificationQuestionsId, {
         value: 'B',
         concluding: true,
         label: '',
       });
+      mockSurveyUnit.identification = { Q1: 'A', Q2: 'B' };
     });
 
-    expect(persistSurveyUnit).toHaveBeenCalledWith(
-      expect.objectContaining({
-        states: expect.any(Array),
-      })
-    );
+    expect(result.current.responses).toEqual({
+      Q1: { value: 'A', concluding: false, label: '' },
+      Q2: { value: 'B', concluding: true, label: '' },
+    });
 
-    expect(addNewState).toHaveBeenCalledWith(
-      mockSurveyUnit,
-      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
+    expect(persistSurveyUnit).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        states: [
+          {
+            date: expect.any(Number),
+            type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
+          },
+        ],
+      })
     );
   });
 
   it('resets availability for unavailable questions', () => {
-    (checkAvailability as Mock).mockImplementationOnce((questions, question) => {
+    mockSurveyUnit.identification = { Q1: 'A', Q2: 'B' };
+    const { result } = renderHook(() => useIdentificationQuestions(mockSurveyUnit));
+
+    (identificationIsFinished as Mock).mockImplementationOnce(() => {
+      return true;
+    });
+
+    (checkAvailability as Mock).mockImplementation((questions, question, responses) => {
       return question.id !== 'Q2';
     });
 
-    const { result } = renderHook(() => useIdentificationQuestions(mockSurveyUnit));
-
     act(() => {
       result.current.handleResponse('Q1' as IdentificationQuestionsId, {
-        value: 'A',
-        concluding: false,
+        value: 'C',
+        concluding: true,
         label: '',
       });
     });
@@ -171,7 +214,7 @@ describe('useIdentification', () => {
     });
 
     expect(result.current.responses).toEqual({
-      Q1: { value: 'A', concluding: false },
+      Q1: { value: 'C', label: '', concluding: true },
       Q2: undefined,
     });
   });

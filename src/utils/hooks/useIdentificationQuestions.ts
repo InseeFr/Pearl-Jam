@@ -42,7 +42,7 @@ const allQuestionsAnswered = (
   return allAnswered;
 };
 
-const persistStates = (surveyUnit: SurveyUnit, states: any) => {
+export const persistStates = (surveyUnit: SurveyUnit, states: any) => {
   persistSurveyUnit({
     ...surveyUnit,
     states: states,
