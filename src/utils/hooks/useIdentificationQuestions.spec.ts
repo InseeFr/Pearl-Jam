@@ -145,6 +145,47 @@ describe('useIdentificationQuestions', () => {
     );
   });
 
+  it('handles response updates correctly', () => {
+    const { result } = renderHook(() => useIdentificationQuestions(mockSurveyUnit));
+
+    act(() => {
+      result.current.handleResponse('Q1' as IdentificationQuestionsId, {
+        value: 'A',
+        concluding: false,
+        label: '',
+      });
+    });
+
+    act(() => {
+      result.current.handleResponse('Q2' as IdentificationQuestionsId, {
+        value: 'B',
+        concluding: true,
+        label: '',
+      });
+    });
+
+    act(() => {
+      result.current.handleResponse('Q1' as IdentificationQuestionsId, {
+        value: 'A',
+        concluding: false,
+        label: '',
+      });
+    });
+
+    expect(result.current.responses).toEqual({
+      Q1: { value: 'A', label: '', concluding: false },
+      Q2: undefined,
+    });
+
+    expect(result.current.selectedDialogId).toEqual('Q2');
+
+    expect(surveyUnitFunctions.persistSurveyUnit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identification: { Q1: 'A' },
+      })
+    );
+  });
+
   it('updates states when all questions are answered', () => {
     const { result } = renderHook(() => useIdentificationQuestions(mockSurveyUnit));
     act(() => {
