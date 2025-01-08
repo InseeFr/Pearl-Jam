@@ -41,4 +41,13 @@ export enum IdentificationQuestionOptionValues {
   SECONDARY = 'SECONDARY',
   OCCASIONAL = 'OCCASIONAL',
   VACANT = 'VACANT',
+  SAME_COMPO = 'SAME_COMPO',
+  OTHER_COMPO = 'OTHER_COMPO',
+  AT_LEAST_ONE = 'AT_LEAST_ONE',
+  NONE = 'NONE',
+  YES = 'YES',
+  NO = 'NO',
+  ONE = 'ONE',
+  MANY = 'MANY',
+  DK = 'DK',
 }
