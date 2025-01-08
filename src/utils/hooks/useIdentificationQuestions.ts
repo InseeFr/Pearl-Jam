@@ -98,15 +98,13 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     const availableQuestionIds = Object.entries(questions).map(([questionId, question]) => {
       const available = checkAvailability(questions, question, updatedResponses);
 
-      if (!available) {
-        updatedResponses[question.id] = undefined;
-      } else if (setResponsesAsUndefined) {
-        updatedResponses[question.id] = undefined;
-      } else if (question.options.find(o => o.value === option.value)) {
-        updatedResponses[question.id] = option;
-      }
+      if (!available) updatedResponses[question.id] = undefined;
+      else if (setResponsesAsUndefined) updatedResponses[question.id] = undefined;
 
-      if (questionId === selectedQuestionId) setResponsesAsUndefined = true;
+      if (questionId === selectedQuestionId) {
+        updatedResponses[question.id] = option;
+        setResponsesAsUndefined = true;
+      }
 
       identification[question.id] = updatedResponses[question.id]?.value;
       return [questionId, available];
