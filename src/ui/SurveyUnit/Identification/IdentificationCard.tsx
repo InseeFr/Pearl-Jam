@@ -52,7 +52,7 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
           questionId={selectedDialogId}
           key={`dialog-${selectedDialogId}`}
           question={questions[selectedDialogId]}
-          defaultOption={responses[selectedDialogId] ?? questions[selectedDialogId]?.options[0]}
+          defaultOption={responses[selectedDialogId] ?? undefined}
           onSubmit={handleResponse}
           onClose={() => {
             setSelectedDialogId(undefined);
