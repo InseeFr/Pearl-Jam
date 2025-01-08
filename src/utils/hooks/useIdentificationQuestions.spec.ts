@@ -10,9 +10,7 @@ import {
   identificationIsFinished,
 } from 'utils/functions/identifications/identificationFunctions';
 import { useIdentificationQuestions } from './useIdentificationQuestions';
-import { persistSurveyUnit } from 'utils/functions';
-import { renderHook } from '@testing-library/react';
-import { act } from 'react';
+import { renderHook, act } from '@testing-library/react';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 vi.mock('utils/functions', { spy: true });
@@ -197,7 +195,7 @@ describe('useIdentificationQuestions', () => {
       mockSurveyUnit.identification = { Q1: 'A' };
     });
 
-    expect(persistSurveyUnit).toHaveBeenLastCalledWith(mockSurveyUnit);
+    expect(surveyUnitFunctions.persistSurveyUnit).toHaveBeenLastCalledWith(mockSurveyUnit);
 
     (identificationIsFinished as Mock).mockImplementationOnce(() => {
       return true;
@@ -217,7 +215,7 @@ describe('useIdentificationQuestions', () => {
       Q2: { value: 'B', concluding: true, label: '' },
     });
 
-    expect(persistSurveyUnit).toHaveBeenLastCalledWith(
+    expect(surveyUnitFunctions.persistSurveyUnit).toHaveBeenLastCalledWith(
       expect.objectContaining({
         states: [
           {
