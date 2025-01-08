@@ -12,8 +12,8 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
     nextId: IdentificationQuestionsId.ACCESS,
     text: `${D.housingIdentification}`,
     options: [
-      { ...optionsMap.IDENTIFIED, concluding: false },
-      { ...optionsMap.UNIDENTIFIED, concluding: false },
+      { ...optionsMap.HOUSE_IDENTIFIED, concluding: false },
+      { ...optionsMap.HOUSE_UNIDENTIFIED, concluding: false },
       { ...optionsMap.DESTROY, concluding: true },
     ],
   },
@@ -67,8 +67,8 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
     id: IdentificationQuestionsId.OCCUPANT,
     text: `${D.housingOccupant}`,
     options: [
-      { ...optionsMap.IDENTIFIED, concluding: true },
-      { ...optionsMap.UNIDENTIFIED, concluding: true },
+      { ...optionsMap.OCCUPANT_IDENTIFIED, concluding: true },
+      { ...optionsMap.OCCUPANT_UNIDENTIFIED, concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.CATEGORY,

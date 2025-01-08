@@ -18,12 +18,20 @@ export const optionsMap = {
     label: `${D.situationNonOrdinary}`,
     value: IdentificationQuestionOptionValues.NOORDINARY,
   },
-  IDENTIFIED: {
-    label: `${D.identificationIdentified}`,
+  HOUSE_IDENTIFIED: {
+    label: `${D.houseIdentified}`,
     value: IdentificationQuestionOptionValues.IDENTIFIED,
   },
-  UNIDENTIFIED: {
-    label: `${D.identificationUnidentified}`,
+  HOUSE_UNIDENTIFIED: {
+    label: `${D.houseUnidentified}`,
+    value: IdentificationQuestionOptionValues.UNIDENTIFIED,
+  },
+  OCCUPANT_IDENTIFIED: {
+    label: `${D.occupantIdentified}`,
+    value: IdentificationQuestionOptionValues.IDENTIFIED,
+  },
+  OCCUPANT_UNIDENTIFIED: {
+    label: `${D.occupantUnidentified}`,
     value: IdentificationQuestionOptionValues.UNIDENTIFIED,
   },
   DESTROY: {
