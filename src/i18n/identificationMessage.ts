@@ -34,12 +34,12 @@ const identificationMessage = {
     en: 'Not Ordinary',
     sq: 'Jo i zakonshëm',
   },
-  identificationIdentified: {
+  houseIdentified: {
     fr: 'Logement identifié',
     en: 'Identified housing',
     sq: 'Banimit i identifikuar',
   },
-  identificationUnidentified: {
+  houseUnidentified: {
     fr: 'Logement non identifié',
     en: 'Unidentified housing',
     sq: 'Banimi i paidentifikuar',
