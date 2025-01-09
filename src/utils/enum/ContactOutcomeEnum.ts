@@ -18,7 +18,10 @@ export const contactOutcomeEnum = {
     label: `${D.definitlyUnavailable}`,
   },
   NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
-};
+} as const;
+
+export type ContactOutcomeValue =
+  (typeof contactOutcomeEnum)[keyof typeof contactOutcomeEnum]['value'];
 
 export const findContactOutcomeLabelByValue = (value?: string) =>
   Object.values(contactOutcomeEnum).find(co => co.value === value)?.label;
@@ -42,10 +45,6 @@ let commonContactOutcomes = {
   UNUSABLE_CONTACT_DATA: contactOutcomeEnum.UNUSABLE_CONTACT_DATA,
   DEFINITLY_UNAVAILABLE: contactOutcomeEnum.DEFINITLY_UNAVAILABLE,
   NOT_APPLICABLE: contactOutcomeEnum.NOT_APPLICABLE,
-};
-
-type ContactOutcomeEnum = {
-  [key in keyof typeof contactOutcomeEnum]?: (typeof contactOutcomeEnum)[key];
 };
 
 export const getContactOutcomeByConfiguration = (

@@ -37,47 +37,15 @@ export const indtelIdentificationQuestionsTree: IdentificationQuestions = {
   },
 } as const;
 
-export const transmissionRulesByTel: TransmissionsRules = [
-  {
+export const transmissionRulesByTel: TransmissionRules = {
+  validIfIdentificationFinished: true,
+  invalidIdentificationAndContactOutcome: {
     identification: {
-      individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
-      situation: IdentificationQuestionOptionValues.ORDINARY,
+      questionId: IdentificationQuestionsId.SITUATION,
+      value: IdentificationQuestionOptionValues.ORDINARY,
     },
-    outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
-    isValid: true,
+    contactOutcome: 'NOA',
   },
-  {
-    identification: {
-      individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
-      situation: IdentificationQuestionOptionValues.ORDINARY,
-    },
-    outcome: contactOutcomeEnum.REFUSAL.value,
-    isValid: true,
-  },
-  {
-    identification: {
-      individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
-      situation: IdentificationQuestionOptionValues.ORDINARY,
-    },
-    outcome: contactOutcomeEnum.IMPOSSIBLE_TO_REACH.value,
-    isValid: false,
-  },
-  {
-    identification: {
-      individualStatus: IdentificationQuestionOptionValues.OTHER_ADDRESS,
-      situation: IdentificationQuestionOptionValues.NOORDINARY,
-    },
-    outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
-    isValid: true,
-  },
-  {
-    identification: { individualStatus: IdentificationQuestionOptionValues.NOIDENT },
-    outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
-    isValid: false,
-  },
-  {
-    identification: { individualStatus: IdentificationQuestionOptionValues.DCD },
-    outcome: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
-    isValid: false,
-  },
-];
+  invalidIfmissingContactOutcome: true,
+  invalidStateAndContactOutcome: { state: 'WFT', contactOutcome: 'INA' },
+};

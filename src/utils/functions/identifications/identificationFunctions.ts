@@ -49,11 +49,19 @@ export type ResponseState = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionOption>
 >;
 
-export type TransmissionsRules = {
-  identification: SurveyUnitIdentification;
-  outcome?: string;
-  isValid: boolean;
-}[];
+// Type might evolve to make possible any transmission rules match for any identification type possible
+export type TransmissionRules = {
+  validIfIdentificationFinished?: boolean;
+  invalidIfmissingContactOutcome?: boolean;
+  invalidIdentificationAndContactOutcome?: {
+    identification: {
+      questionId: IdentificationQuestionsId;
+      value: IdentificationQuestionOptionValues;
+    };
+    contactOutcome: ContactOutcomeValue;
+  };
+  invalidStateAndContactOutcome?: { state: StateValues; contactOutcome: ContactOutcomeValue };
+};
 
 export function checkAvailability(
   questions: IdentificationQuestions,
@@ -139,35 +147,61 @@ export const isValidForTransmission = (su: SurveyUnit) => {
     case IdentificationConfiguration.HOUSEF2F:
       return checkValidityForTransmissionIasco(su);
     case IdentificationConfiguration.INDTEL:
-      return validateTransmissionArray(transmissionRulesByTel, su);
+      return validateTransmission(transmissionRulesByTel, su);
     case IdentificationConfiguration.NOIDENT:
     default:
       return checkValidityForTransmissionNoident(su);
   }
 };
 
-// Must be extented for IASCO
-export function validateTransmissionArray(
-  transmissionRules: TransmissionsRules,
+export function isInvalidIdentificationAndContactOutcome(
+  transmissionRules: TransmissionRules,
   su: SurveyUnit
 ): boolean {
-  const outcome = su.contactOutcome?.type;
+  if (
+    transmissionRules.invalidIdentificationAndContactOutcome &&
+    su.identification &&
+    su.contactOutcome
+  ) {
+    const questionId =
+      transmissionRules.invalidIdentificationAndContactOutcome.identification.questionId;
+    const identificationValue =
+      transmissionRules.invalidIdentificationAndContactOutcome.identification.value;
+    const contactOutcome = transmissionRules.invalidIdentificationAndContactOutcome.contactOutcome;
 
-  if (!su.identification) return false;
-
-  const situation = su.identification.situation;
-  const individualStatus = su.identification.individualStatus;
-  const lastState = getLastState(su.states);
-
-  // If there is no questionnaire, then there is no transmission
-  if (lastState?.type !== surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) {
-    return false;
+    return (
+      su.identification[questionId] === identificationValue &&
+      su.contactOutcome.type === contactOutcome
+    );
   }
-  const rule = transmissionRules.find(
-    r =>
-      r.identification.individualStatus === individualStatus &&
-      (r.identification.situation === situation || r.identification.situation) &&
-      r.outcome === outcome
-  );
-  return rule?.isValid ?? false;
+  return false;
+}
+
+// Must be extented for IASCO
+export function validateTransmission(
+  transmissionRules: TransmissionRules,
+  su: SurveyUnit
+): boolean {
+  if (
+    transmissionRules.validIfIdentificationFinished !==
+    identificationIsFinished(su.identificationConfiguration, su.identification)
+  )
+    return false;
+
+  if (transmissionRules.invalidIfmissingContactOutcome && su.contactOutcome === undefined)
+    return false;
+
+  console.log(isInvalidIdentificationAndContactOutcome(transmissionRules, su));
+
+  if (isInvalidIdentificationAndContactOutcome(transmissionRules, su)) return false;
+
+  if (transmissionRules.invalidStateAndContactOutcome && su.contactOutcome) {
+    if (
+      su.contactOutcome.type === transmissionRules.invalidStateAndContactOutcome.contactOutcome &&
+      getLastState(su.states)?.type === transmissionRules.invalidStateAndContactOutcome.state
+    )
+      return false;
+  }
+
+  return true;
 }

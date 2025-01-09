@@ -34,7 +34,7 @@ export const surveyUnitStateEnum = {
 
 export type SurveyUnitStateEnum = typeof surveyUnitStateEnum;
 
-export type TypeValues = SurveyUnitStateEnum[keyof SurveyUnitStateEnum]['type'];
+export type StateValues = SurveyUnitStateEnum[keyof SurveyUnitStateEnum]['type'];
 
 export const findSuStateValueByType = (type: string) =>
   Object.values(surveyUnitStateEnum).filter(value => value.type === type)?.[0]?.value;

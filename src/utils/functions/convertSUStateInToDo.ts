@@ -1,7 +1,7 @@
-import { surveyUnitStateEnum, TypeValues } from 'utils/enum/SUStateEnum';
+import { surveyUnitStateEnum, StateValues } from 'utils/enum/SUStateEnum';
 import { toDoEnum } from 'utils/enum/SUToDoEnum';
 
-export const convertSUStateInToDo = (suState: TypeValues) => {
+export const convertSUStateInToDo = (suState: StateValues) => {
   if (
     surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type === suState ||
     surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type === suState
