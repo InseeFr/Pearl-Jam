@@ -1,5 +1,6 @@
 import {
   IdentificationConfiguration,
+  IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import {
@@ -8,10 +9,10 @@ import {
 } from './questionsTree/indtelQuestionsTree';
 import { houseF2FIdentificationQuestionsTree } from './questionsTree/houseF2FQuestionsTree';
 import { houseTelIdentificationQuestionsTree } from './questionsTree/HouseTelQuestionsTree';
-import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
+import { SurveyUnit } from 'types/pearl';
 import { checkValidityForTransmissionNoident, getLastState } from '../surveyUnitFunctions';
-import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
+import { StateValues, surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { contactOutcomeEnum, ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
 
 export type IdentificationQuestionOption = {
   value: string;
