@@ -5,7 +5,7 @@ import { ComponentProps } from 'react';
  * A horizontal stack
  */
 
-type RowTypes = Omit<ComponentProps<typeof Stack>, 'direction' | 'alignItems'>
+type RowTypes = Omit<ComponentProps<typeof Stack>, 'direction'>;
 export function Row(props: Readonly<RowTypes>) {
   return <Stack direction="row" alignItems="center" {...props} />;
 }

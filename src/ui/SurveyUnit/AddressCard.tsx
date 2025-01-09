@@ -17,9 +17,6 @@ interface AddressCardProps {
   surveyUnit: SurveyUnit;
 }
 
-/**
- * @param {SurveyUnit} surveyUnit
- */
 export function AddressCard({ surveyUnit }: Readonly<AddressCardProps>) {
   const address = getAddressData(surveyUnit.address);
   const [showModal, toggleModal] = useToggle(false);

@@ -102,7 +102,7 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
         o => o.value === communicationRequest[prop as keyof CommunicationRequestForm] && !o.disabled
       )
         ? communicationRequest[prop as keyof CommunicationRequestForm]
-        : options.find(o => !o.disabled)?.value ?? undefined;
+        : (options.find(o => !o.disabled)?.value ?? undefined);
     };
 
     let communicationTemplates = surveyUnit?.communicationTemplates ?? [];

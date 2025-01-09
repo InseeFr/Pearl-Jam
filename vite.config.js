@@ -16,7 +16,16 @@ export default defineConfig({
     environment: 'jsdom',
     coverage: {
       reporter: ['text', 'lcov'],
-      exclude: ['node_modules/', 'src/setupTests.js', 'tests/'],
+      exclude: [
+        'playwright.config.ts',
+        'vite.config.js',
+        'node_modules/',
+        'src/setupTests.js',
+        'tests/',
+        'playwright-report/',
+        'build/',
+        'src/**/*.spec.*',
+      ],
     },
   },
   resolve: {

@@ -1,9 +1,5 @@
 /**
  * Add or Remove an element from an array
- * @template any
- * @param {any[]} arr
- * @param {any} item
- * @return any[]
  */
 export function toggleItem(arr: any[], item: any) {
   if (arr.includes(item)) {

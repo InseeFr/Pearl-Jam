@@ -8,8 +8,6 @@ export interface ValidationErrorProps {
 
 /**
  * Display information about errors
- * @param {ZodError} error
- * @param {import('@mui/material').BoxProps} props
  */
 export function ValidationError({ error, ...props }: Readonly<ValidationErrorProps>) {
   if (!error || !(error instanceof ZodError)) {
