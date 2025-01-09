@@ -17,7 +17,7 @@ const mediumMapping: Record<string, MediumMessageKey> = {
 
 export type MediumMappingKey = keyof typeof mediumMapping;
 
-interface ContactAttemptDisplayProps {
+export interface ContactAttemptDisplayProps {
   attempt: SurveyUnitContactAttempt;
   onDelete: (a: SurveyUnitContactAttempt) => void;
 }

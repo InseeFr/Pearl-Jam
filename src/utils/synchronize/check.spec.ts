@@ -12,6 +12,7 @@ import {
   getSavedSyncQueenData,
   saveSyncPearlData,
 } from './check';
+import { NotificationState } from 'types/pearl';
 
 describe('check.ts', () => {
   describe('checkSyncResult', () => {
@@ -30,7 +31,7 @@ describe('check.ts', () => {
 
   describe('getNotifFromResult', () => {
     it('should create a notification object', () => {
-      const result = { state: 'success', messages: [] };
+      const result = { state: 'success' as NotificationState, messages: [] };
       const nowDate = Date.now();
       const notification = getNotifFromResult(result, nowDate);
       expect(notification).toHaveProperty('date', nowDate);
@@ -46,7 +47,7 @@ describe('check.ts', () => {
   describe('getReportFromResult', () => {
     it('should return report with details if state is not error', () => {
       const result = {
-        details: { transmittedSurveyUnits: [], loadedSurveyUnits: [] },
+        details: { transmittedSurveyUnits: {}, loadedSurveyUnits: {} },
         state: 'success',
       };
       const report = getReportFromResult(result);

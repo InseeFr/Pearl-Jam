@@ -10,5 +10,5 @@ const questionnaireState = {
 } as const;
 
 export type QuestionnaireState = typeof questionnaireState;
-export type QuestionnaireStateType = keyof QuestionnaireState;
+export type QuestionnaireStateType = keyof QuestionnaireState | 'READY';
 export default questionnaireState;

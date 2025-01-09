@@ -17,11 +17,11 @@ type SearchCriteria = {
   priority: boolean;
   subSample: number;
   subGrappe: string;
-  terminated: number;
+  terminated: boolean;
 };
 
 type SearchFilterValue = {
-  toggle: (key: string, value: string) => void;
+  toggle: (key: string, value?: string) => void;
   setSortField: (s: string) => void;
   setSubSample: (s: number | null) => void;
   setSubGrappe: (s: number | null) => void;
@@ -104,8 +104,12 @@ export function filterSurveyUnits(surveyUnits: SurveyUnit[], criteria: SearchCri
       case 'sampleIdentifiers':
         return a.sampleIdentifiers.ssech - b.sampleIdentifiers.ssech;
 
-      case 'priority':
-        return b.priority - a.priority;
+      case 'priority': {
+        if (a.priority === b.priority) {
+          return 0;
+        }
+        return a.priority ? -1 : 1;
+      }
 
       case 'campaign':
         return a.campaign.localeCompare(b.campaign);

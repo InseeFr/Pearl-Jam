@@ -1,7 +1,7 @@
+import { setDefaultOptions } from 'date-fns';
 import dictionary from './dictionary';
 // Importez le locale albanais si disponible
 import { fr, sq } from 'date-fns/locale';
-import setDefaultOptions from 'date-fns/setDefaultOptions';
 
 export type SupportedLocales = 'fr' | 'sq' | 'en';
 type DictionaryKey = keyof typeof dictionary;
@@ -10,8 +10,6 @@ type Dictionary = Record<DictionaryKey, DictionaryValue>;
 /**
  * Based on the locale passed as a parameter, this function will return
  * the corresponding dictionary.
- *
- * @param {string} lang the lang of the user
  */
 export const createDictionary = (lang: SupportedLocales): Record<string, string> => {
   // Set date-fns lang for French and Albanian

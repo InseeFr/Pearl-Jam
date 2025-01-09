@@ -75,9 +75,6 @@ export function useIdentificationQuestions(surveyUnit) {
     [question, config]
   );
 
-  /**
-   * @param {Answer} answer
-   */
   const setAnswer = (surveyUnit, answer) => {
     // When an answer is marked as "concluded" it makes next answer undefined
     let concluded = false;
@@ -101,7 +98,7 @@ export function useIdentificationQuestions(surveyUnit) {
       setQuestion(undefined);
     } else {
       // Automatically select the next unanswered question or close the current selected question
-      const currentIndex = questions.findIndex(q => q.type === question.type);
+      const currentIndex = questions.findIndex(q => q.type === question?.type);
       const nextIndex = questions.findIndex((q, k) => k > currentIndex && !q.answer);
       setQuestion(nextIndex ? questions[nextIndex] : undefined);
     }

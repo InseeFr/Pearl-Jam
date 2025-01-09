@@ -26,7 +26,9 @@ import { Popover, List, ListItem, ListItemIcon, ListItemText } from '@mui/materi
 import FiberManualRecordOutlinedIcon from '@mui/icons-material/FiberManualRecordOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useIdentificationQuestions } from '../../utils/hooks/useIdentificationQuestions';
-import { makeStyles, useTheme } from '@mui/styles';
+import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material/styles';
+
 import D from '../../i18n/build-dictionary';
 import { SurveyUnit } from 'types/pearl';
 

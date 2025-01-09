@@ -3,9 +3,6 @@ import { PropsWithChildren } from 'react';
 
 /**
  * Global layout for the app with 3 sections (header, sidebar and main content)
- *
- * @param {ReactNode} children
- * @return {JSX.Element}
  */
 export function SidebarLayout({ children }: PropsWithChildren) {
   return (

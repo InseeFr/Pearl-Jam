@@ -72,7 +72,6 @@ export function CampaignProgress({ label, surveyUnits }: Readonly<CampaignProgre
                     variant="determinate"
                     value={100}
                     thickness={2}
-                    sx={{ backgroundColor: theme.palette.primary, borderRadius: 150 }}
                   />
                   <CircularProgress
                     color="green"

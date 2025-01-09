@@ -26,11 +26,8 @@ interface FieldRowProps {
   [key: string]: any; // Spread operator for any additional props
 }
 
-export const FieldRow = forwardRef(
-  (
-    { label, maxWidth, checkbox, control, children, ...props }: PropsWithChildren<FieldRowProps>,
-    ref
-  ) => {
+export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
+  ({ label, maxWidth, checkbox, control, children, ...props }, ref) => {
     const isControlled = !!props.type;
 
     if (isControlled && !control) {
@@ -96,12 +93,6 @@ interface ControlledFieldProps {
 }
 /**
  * Select the right field to display
- *
- * @param {string} type
- * @param {string} name
- * @param {{label: string, value: unknown}[]} options
- * @param field
- * @returns {JSX.Element|null}
  */
 export function ControlledField({ type, name, options, field }: Readonly<ControlledFieldProps>) {
   if (type === 'switch') {

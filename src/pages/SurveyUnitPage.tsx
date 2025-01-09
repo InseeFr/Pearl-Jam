@@ -67,7 +67,7 @@ export function SurveyUnitPage() {
   return (
     <>
       <SurveyUnitHeader surveyUnit={surveyUnit} />
-      <SwipeableTabs value={1}>
+      <SwipeableTabs>
         <SwipeableTab index={0} label={D.goToIdentificationPage}>
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
             <AddressCard surveyUnit={surveyUnit} />

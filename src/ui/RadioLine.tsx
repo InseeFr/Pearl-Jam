@@ -23,7 +23,7 @@ const style = {
 
 export interface RadioLineProps {
   value: unknown;
-  disabled: boolean;
+  disabled?: boolean;
   label: string;
 }
 
