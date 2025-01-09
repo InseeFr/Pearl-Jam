@@ -23,8 +23,8 @@ const style = {
 
 export interface RadioLineProps {
   value: unknown;
-  disabled: boolean;
-  label?: string;
+  disabled?: boolean;
+  label: string;
 }
 
 export function RadioLine({ value, disabled, label }: Readonly<RadioLineProps>) {

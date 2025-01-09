@@ -1,1 +1,1 @@
-yarn test --watch=false
+yarn pre-push

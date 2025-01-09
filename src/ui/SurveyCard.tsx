@@ -24,12 +24,6 @@ interface SurveyCardProps {
   locked: boolean;
 }
 
-/**
- * @param {SurveyUnit} surveyUnit
- * @param {boolean} locked
- * @returns {JSX.Element}
- */
-
 export function SurveyCard({ surveyUnit, locked = false }: Readonly<SurveyCardProps>) {
   const {
     id,

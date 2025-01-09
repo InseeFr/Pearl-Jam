@@ -12,7 +12,6 @@ interface ContactOutcomeProps {
 
 /**
  * Display the contact outcome
- * @param {ContactOutcome} contact
  */
 export function ContactOutcomeDisplay({ contact }: Readonly<ContactOutcomeProps>) {
   if (!contact?.type) {

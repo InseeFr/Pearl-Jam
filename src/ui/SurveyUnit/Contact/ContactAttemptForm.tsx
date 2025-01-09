@@ -2,7 +2,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import { useMemo, useState } from 'react';
+import { MouseEvent, useMemo, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
 import { useIncrement } from '../../../utils/hooks/useIncrement';
@@ -49,11 +49,11 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     },
     1
   );
-  const [medium, setMedium] = useState('');
-  const [status, setStatus] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [medium, setMedium] = useState<string | null>('');
+  const [status, setStatus] = useState<string | null>('');
+  const [date, setDate] = useState<Date>(new Date());
 
-  const goPreviousStep = (e: MouseEvent) => {
+  const goPreviousStep = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (step === 1) {
       onClose();
@@ -62,7 +62,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     decrement();
   };
 
-  const goNextStep = (e: MouseEvent) => {
+  const goNextStep = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (step === 3) {
       const updatedSu = {
@@ -100,7 +100,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     return false;
   };
 
-  const setValue = (value: string) => {
+  const setValue = (value: string | null) => {
     if (step === 1) {
       setMedium(value);
       setStatus('');
@@ -109,7 +109,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
       setStatus(value);
     }
     if (step === 3) {
-      setDate(new Date(value));
+      setDate(new Date(value!));
     }
   };
 

@@ -121,7 +121,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
       return compareValues(compareA, compareB, isAscending);
     });
 
-  const defaultSortIcon = <IconAsc sx={{ opacity: 0.3 }} />;
+  const defaultSortIcon = <IconAsc />;
 
   return (
     <TableContainer sx={{ maxHeight: maxHeight }}>
@@ -163,7 +163,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                       <IconDesc />
                     )
                   ) : (
-                    <IconAsc sx={{ opacity: 0.3 }} />
+                    <IconAsc />
                   )}
                 </Box>
               </Box>
@@ -185,7 +185,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                       <IconDesc />
                     )
                   ) : (
-                    <IconAsc sx={{ opacity: 0.3 }} />
+                    <IconAsc />
                   )}
                 </Box>
               </Box>
@@ -209,7 +209,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                       <IconDesc />
                     )
                   ) : (
-                    <IconAsc sx={{ opacity: 0.3 }} />
+                    <IconAsc />
                   )}
                 </Box>
               </Box>
@@ -231,9 +231,6 @@ interface SurveyUnitRowProps {
   surveyUnit: SurveyUnit;
 }
 
-/**
- * @param {SurveyUnit} surveyUnit
- */
 function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
   const person = getprivilegedPerson(surveyUnit);
   const state = getSuTodoState(surveyUnit);
@@ -262,13 +259,13 @@ function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
         <TableCell align="center">
           {lastContact && (
             <>
-              <Typography as="span" variant="s" color="textPrimary">
+              <Typography component="span" variant="s" color="textPrimary">
                 {findContactAttemptValueByType(lastContact.status)}
                 <br />
                 {findMediumValueByType(lastContact.medium)}
               </Typography>
               {' | '}
-              <Typography as="span" variant="s" color="textTertiary">
+              <Typography component="span" variant="s" color="textTertiary">
                 {formatDate(lastContact.date)}
               </Typography>
             </>
@@ -277,11 +274,11 @@ function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
         <TableCell align="center">
           {surveyUnit.contactOutcome && (
             <>
-              <Typography as="span" variant="s" color="textPrimary">
+              <Typography component="span" variant="s" color="textPrimary">
                 {findContactOutcomeLabelByValue(surveyUnit.contactOutcome.type)}
               </Typography>
               <br />
-              <Typography as="span" variant="s" color="textTertiary">
+              <Typography component="span" variant="s" color="textTertiary">
                 {formatDate(surveyUnit.contactOutcome.date)}
               </Typography>
             </>
@@ -293,7 +290,7 @@ function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
               textAlign="center"
               onClick={toggleModal}
               role="button"
-              as="span"
+              component="span"
               sx={{ maxWidth: '10em', display: 'inline-block', cursor: 'pointer' }}
               noWrap
               variant="s"

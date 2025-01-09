@@ -29,8 +29,8 @@ export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) 
 
 export const getNotifFromResult = (
   result: { state: NotificationState; messages: string[] },
-  nowDate: number
-): Notification => {
+  nowDate?: number
+): Omit<Notification, 'id'> => {
   const { state, messages } = result;
   return {
     date: nowDate || new Date().getTime(),

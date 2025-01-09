@@ -151,9 +151,9 @@ export async function seedData() {
         staircase: '',
         cityPriorityDistrict: false,
       },
-      priority: false,
+      priority: user.id % 2 === 0,
       move: false,
-      campaign: 'TestCampaign',
+      campaign: user.id % 2 === 0 ? 'TestCampaign' : 'SecondTestCampaign',
       comments: [
         {
           type: 'MANAGEMENT',
@@ -171,11 +171,11 @@ export async function seedData() {
         noi: 0,
         numfa: 32,
         rges: 15,
-        ssech: 1,
+        ssech: user.id % 2 === 0 ? 1 : 2,
         nolog: 0,
         nole: 0,
         autre: '',
-        nograp: '',
+        nograp: user.id % 2 === 0 ? '1' : '2',
       },
       states: states,
       contactAttempts: [

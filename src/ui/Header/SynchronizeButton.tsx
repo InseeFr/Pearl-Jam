@@ -7,7 +7,7 @@ import { SyncContext } from '../Sync/SyncContextProvider';
 
 export function SynchronizeButton() {
   const isOnline = useNetworkOnline();
-  const { syncFunction } = useContext(SyncContext);
+  const { syncFunction } = useContext(SyncContext)!;
   return (
     <Button
       disabled={!isOnline}

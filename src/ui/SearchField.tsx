@@ -6,15 +6,9 @@ import D from '../i18n/build-dictionary';
 
 interface SearchFieldProps {
   onChange: (v: string) => void;
-  value: string;
+  value?: string;
 }
 
-/**
- * @param {(v: string) => void} onChange
- * @param {string} value
- * @return {JSX.Element}
- * @constructor
- */
 export function SearchField({ onChange, value }: Readonly<SearchFieldProps>) {
   const theme = useTheme();
   return (
