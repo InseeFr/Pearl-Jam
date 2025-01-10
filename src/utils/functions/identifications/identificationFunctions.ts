@@ -79,19 +79,21 @@ export function checkAvailability(
 
 export function identificationIsFinished(
   identificationConfiguration: IdentificationConfiguration,
-  identification?: Partial<Record<IdentificationQuestionsId, string>>
+  identification?: SurveyUnitIdentification
 ): boolean {
   const questionsTree = identificationQuestionsTree[identificationConfiguration];
 
   if (!identification) return false;
 
   for (const questionId in questionsTree) {
-    const question = questionsTree[questionId as IdentificationQuestionsId];
-    if (!question) continue;
+    const questions = questionsTree[questionId as IdentificationQuestionsId];
+    if (!questions) continue;
 
-    const response = identification[question.id];
-    if (!response) {
-      return false;
+    const response = identification[questions.id];
+    const concluding = questions.options.find(o => o.value === response)?.concluding;
+    if (!response) return false;
+    else if (concluding) {
+      return true;
     }
   }
   return true;

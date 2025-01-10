@@ -6,10 +6,10 @@ import {
 } from './identificationFunctions';
 import {
   IdentificationConfiguration,
+  IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
 
-// TODO : Missing tests for other functions
 const mockQuestions: IdentificationQuestions = {
   [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
     id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
@@ -197,8 +197,9 @@ describe('identificationIsFinished', () => {
 
   it('should return true if all questions are answered', () => {
     const identification = {
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: 'answer1',
-      [IdentificationQuestionsId.SITUATION]: 'answer2',
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
+        IdentificationQuestionOptionValues.SAME_ADDRESS,
+      [IdentificationQuestionsId.SITUATION]: IdentificationQuestionOptionValues.ORDINARY,
     };
     const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
     expect(result).toBe(true);
@@ -208,4 +209,14 @@ describe('identificationIsFinished', () => {
     const result = identificationIsFinished(IdentificationConfiguration.NOIDENT, {});
     expect(result).toBe(true);
   });
+
+  it('should return true one question is concluding', () => {
+    const identification = {
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
+    };
+    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    expect(result).toBe(true);
+  });
 });
+
+// TODO : Expand tests for ValidateTransmission when function is do
