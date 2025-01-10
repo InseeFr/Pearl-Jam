@@ -194,8 +194,6 @@ export function validateTransmission(
   if (transmissionRules.invalidIfmissingContactOutcome && su.contactOutcome === undefined)
     return false;
 
-  console.log(isInvalidIdentificationAndContactOutcome(transmissionRules, su));
-
   if (isInvalidIdentificationAndContactOutcome(transmissionRules, su)) return false;
 
   if (transmissionRules.invalidStateAndContactOutcome && su.contactOutcome) {
