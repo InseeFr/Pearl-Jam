@@ -46,7 +46,7 @@ export function IdentificationDialog({
           onChange={e =>
             handleChange({
               value: e.target.value,
-              label: options?.find(o => o.value === e.target.value)?.label ?? 'Missing label',
+              label: options?.find(o => o.value === e.target.value)?.label ?? D.missingLabel,
               concluding:
                 options?.find(o => o.value === e.target.value)?.concluding ?? D.missingLabel,
             })
