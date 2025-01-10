@@ -9,7 +9,7 @@ import {
 } from './questionsTree/indtelQuestionsTree';
 import { houseF2FIdentificationQuestionsTree } from './questionsTree/houseF2FQuestionsTree';
 import { houseTelIdentificationQuestionsTree } from './questionsTree/HouseTelQuestionsTree';
-import { SurveyUnit } from 'types/pearl';
+import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { checkValidityForTransmissionNoident, getLastState } from '../surveyUnitFunctions';
 import { StateValues, surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { contactOutcomeEnum, ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
