@@ -1,0 +1,40 @@
+name: pearl
+
+networks:
+  integration-test-network:
+    driver: bridge
+
+services:
+  front:
+    build: .
+    ports:
+      - '80:80'
+    networks:
+      - integration-test-network
+
+  playwright-dev:
+    build:
+      dockerfile: ./playwright-dev.Dockerfile
+    volumes:
+      - ./src:/app/src
+    entrypoint: npx playwright test --ui-port=8888 --ui-host=0.0.0
+    ipc: host
+    ports:
+      - '8888:8888'
+      - '5173:5173'
+
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.49.1-jammy
+    volumes:
+      - .:/app
+    working_dir: /app
+    entrypoint: npx playwright test --ui-port=8888 --ui-host=0.0.0
+    ipc: host
+    ports:
+      - '8888:8888'
+    environment:
+      - BASE_URL=http://front:80
+    networks:
+      - integration-test-network
+    depends_on:
+      - front
