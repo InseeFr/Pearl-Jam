@@ -9,7 +9,6 @@ import {
   isQuestionnaireAvailable,
   getCommentByType,
   getAge,
-  isValidForTransmission,
   lastContactAttemptIsSuccessfull,
   areCaEqual,
 } from 'utils/functions/index';
@@ -83,77 +82,6 @@ describe('getLastState', () => {
       date: 1616070963000,
       status: 'status',
     });
-  });
-});
-
-describe('isValidForTransmission', () => {
-  const cas = [{ status: contactAttemptEnum.NO_CONTACT.type }];
-  it('should return false if no contactAttempt', () => {
-    expect(isValidForTransmission({ contactAttempts: [] })).toEqual(false);
-  });
-
-  it('should return false if no contactOutcome', () => {
-    expect(isValidForTransmission({ contactAttempts: cas })).toEqual(false);
-  });
-
-  it('should return false if contactOutcome totalNumberOfContactAttempts = 0', () => {
-    expect(
-      isValidForTransmission({
-        contactAttempts: cas,
-        contactOutcome: {
-          type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
-          totalNumberOfContactAttempts: 0,
-        },
-      })
-    ).toEqual(false);
-  });
-  it('should return false if contactOutcome = INTERVIEW_ACCEPTED but lastState not WAITING_FOR_TRANSMISSION', () => {
-    expect(
-      isValidForTransmission({
-        contactAttempts: cas,
-        contactOutcome: {
-          type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
-          totalNumberOfContactAttempts: 2,
-        },
-        states: [
-          { id: 1, date: 1616070963000, type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT },
-          { id: 2, date: 1616075000000, type: surveyUnitStateEnum.QUESTIONNAIRE_STARTED },
-        ],
-      })
-    ).toEqual(false);
-  });
-
-  it('should return true if at least a contactAttempt + valid contactOutcome', () => {
-    expect(
-      isValidForTransmission({
-        contactAttempts: cas,
-        contactOutcome: {
-          type: contactOutcomeEnum.REFUSAL,
-          totalNumberOfContactAttempts: 2,
-        },
-      })
-    ).toEqual(true);
-    expect(
-      isValidForTransmission({
-        contactAttempts: cas,
-        contactOutcome: {
-          type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
-          totalNumberOfContactAttempts: 2,
-        },
-        states: [
-          {
-            id: 1,
-            date: 1616070963000,
-            type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
-          },
-          {
-            id: 2,
-            date: 1616075000000,
-            type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type,
-          },
-        ],
-      })
-    ).toEqual(true);
   });
 });
 

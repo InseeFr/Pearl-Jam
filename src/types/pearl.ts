@@ -1,9 +1,7 @@
-import { Answer } from 'utils/hooks/useIdentificationQuestions';
-
-export type Question = {
-  answer: Answer;
-  value: string;
-};
+import {
+  IdentificationConfiguration,
+  IdentificationQuestionsId,
+} from 'utils/enum/identifications/IdentificationsQuestions';
 
 export type SurveyUnitPhoneNumber = {
   source: string;
@@ -46,7 +44,7 @@ type SurveyUnitComment = {
 };
 
 type SurveyUnitState = {
-  id: number;
+  id?: number;
   date: number;
   type: string;
 };
@@ -65,13 +63,7 @@ type SurveyUnitSampleIdentifiers = {
   nograp: string;
 };
 
-type SurveyUnitIdentification = {
-  identification: unknown;
-  access: unknown;
-  situation: unknown;
-  category: unknown;
-  occupant: unknown;
-};
+export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId, string>>;
 
 export type SurveyUnitContactAttempt = {
   status: string;
@@ -108,7 +100,7 @@ export type SurveyUnit = {
   states: SurveyUnitState[];
   contactAttempts: SurveyUnitContactAttempt[];
   contactOutcome?: ContactOutcome;
-  identification: SurveyUnitIdentification;
+  identification?: SurveyUnitIdentification;
   campaignLabel: string;
   managementStartDate: number;
   interviewerStartDate: number;
@@ -116,7 +108,7 @@ export type SurveyUnit = {
   collectionStartDate: number;
   collectionEndDate: number;
   endDate: number;
-  identificationConfiguration: string;
+  identificationConfiguration: IdentificationConfiguration;
   contactOutcomeConfiguration: string;
   contactAttemptConfiguration: string;
   useLetterCommunication: boolean;

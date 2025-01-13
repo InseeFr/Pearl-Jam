@@ -6,7 +6,7 @@ import D from 'i18n';
 import { CommunicationsCard } from 'ui/SurveyUnit/Communication/CommunicationsCard';
 import Box from '@mui/material/Box';
 import { AddressCard } from '../ui/SurveyUnit/AddressCard';
-import { IdentificationCard } from '../ui/SurveyUnit/IdentificationCard';
+import { IdentificationCard } from '../ui/SurveyUnit/Identification/IdentificationCard';
 import { PersonsCard } from '../ui/SurveyUnit/PersonsCard';
 import { CommentCard } from '../ui/SurveyUnit/CommentCard';
 import Stack from '@mui/material/Stack';

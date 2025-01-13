@@ -3,8 +3,8 @@ import { contactOutcomeEnum } from '../enum/ContactOutcomeEnum';
 import { contactAttemptEnum } from '../enum/ContactAttemptEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
 import userIdbService from '../indexeddb/services/user-idb-service';
-import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 import { getRandomIntBetween, getRandomItemFromArray } from './random';
+import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 
 const day = 60 * 60 * 1000 * 24;
 const year = day * 365;
@@ -190,13 +190,7 @@ export async function seedData() {
           medium: 'FIELD',
         },
       ],
-      identification: {
-        identification: 'IDENTIFIED',
-        access: 'ACC',
-        situation: 'ORDINARY',
-        category: 'PRIMARY',
-        occupant: 'IDENTIFIED',
-      },
+      identification: {},
       campaignLabel: 'Démonstration Séminaire Filière 2023',
       managementStartDate: new Date().getTime() - 10 * day,
       interviewerStartDate: new Date().getTime() - 10 * day,
@@ -204,7 +198,8 @@ export async function seedData() {
       collectionStartDate: new Date().getTime() - 10 * day,
       collectionEndDate: new Date().getTime() + 50 * day,
       endDate: new Date().getTime() + 51 * day,
-      identificationConfiguration: 'IASCO',
+      identificationConfiguration:
+        user.id === 10 ? IdentificationConfiguration.HOUSEF2F : IdentificationConfiguration.INDTEL,
       contactOutcomeConfiguration: 'F2F',
       contactAttemptConfiguration: 'F2F',
       contactOutcome: {
@@ -218,10 +213,10 @@ export async function seedData() {
   surverUnits.push({
     ...surverUnits[0],
     id: 'sutel',
-    identification: {},
+    identification: null,
     firstName: 'ET',
     lastName: 'Telephone',
-    identificationConfiguration: identificationConfigurationEnum.TEL,
+    identificationConfiguration: IdentificationConfiguration.INDTEL,
   });
   surverUnits.push({
     ...surverUnits[0],
@@ -229,7 +224,7 @@ export async function seedData() {
     identification: {},
     firstName: 'John',
     lastName: 'Absent',
-    identificationConfiguration: identificationConfigurationEnum.NOIDENT,
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
   });
   surverUnits.push({
     ...surverUnits[0],
@@ -243,7 +238,7 @@ export async function seedData() {
     identification: {},
     firstName: 'Flin',
     lastName: 'Ished',
-    identificationConfiguration: identificationConfigurationEnum.NOIDENT,
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
   });
   await userIdbService.insert({
     id: 1,

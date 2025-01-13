@@ -1,15 +1,8 @@
 import { differenceInYears } from 'date-fns';
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST, TITLES } from 'utils/constants';
-import {
-  IASCO_CATEGORY_FINISHING_VALUES,
-  IASCO_IDENTIFICATION_FINISHING_VALUES,
-  IASCO_SITUATION_FINISHING_VALUES,
-  identificationIsFinished,
-} from './identificationFunctions';
 
 import D from 'i18n';
 import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
-import { identificationConfigurationEnum } from 'utils/enum/IdentificationConfigurationEnum';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
@@ -32,7 +25,7 @@ export const getSuTodoState = surveyUnit => {
 };
 
 /**
- * @param {{ status: string, date: number, id?: string }[]} states
+ * @param {SurveyUnitState} states
  * @returns {SurveyUnitState} or undefined if no states
  */
 export const getLastState = states => states?.slice?.().sort((a, b) => b.date - a.date)?.[0];
@@ -55,7 +48,8 @@ export const daysLeftForSurveyUnit = su => {
   );
 };
 
-const checkValidityForTransmissionNoident = su => {
+// TODO : must be replaced by validateTransmissionArray
+export const checkValidityForTransmissionNoident = su => {
   const { contactAttempts, contactOutcome, states = [] } = su;
   if (contactAttempts.length === 0) return false;
   if (!contactOutcome) return false;
@@ -64,46 +58,6 @@ const checkValidityForTransmissionNoident = su => {
   if (type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.value) return true;
   if (getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) return true;
   return false;
-};
-
-const checkValidityForTransmissionIasco = su => {
-  const { contactOutcome, identification, identificationConfiguration, states = [] } = su;
-
-  if (!identificationIsFinished(identificationConfiguration, identification)) return false;
-  if (!contactOutcome) return false;
-
-  const { type } = contactOutcome;
-  // INA contactOutcome + no questionnaire
-
-  if (
-    type === contactOutcomeEnum.INTERVIEW_ACCEPTED.value &&
-    !getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
-  )
-    return false;
-
-  // issue NOA + identification.avi
-  const { identification: identificationValue, category, situation } = identification;
-  if (
-    type === contactOutcomeEnum.NOT_APPLICABLE.type &&
-    !IASCO_IDENTIFICATION_FINISHING_VALUES.includes(identificationValue) &&
-    !IASCO_SITUATION_FINISHING_VALUES.includes(situation) &&
-    !IASCO_CATEGORY_FINISHING_VALUES.includes(category)
-  )
-    return false;
-
-  // TO finish There
-  return getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
-};
-
-export const isValidForTransmission = su => {
-  const { identificationConfiguration } = su;
-  switch (identificationConfiguration) {
-    case identificationConfigurationEnum.IASCO:
-      return checkValidityForTransmissionIasco(su);
-    case identificationConfigurationEnum.NOIDENT:
-    default:
-      return checkValidityForTransmissionNoident(su);
-  }
 };
 
 /**

@@ -36,6 +36,8 @@ export class SurveyPage {
   }
 
   async forward() {
+    await this.page.locator('div').filter({ hasText: /^Finalisé$/ });
+
     await this.page
       .locator('div')
       .filter({ hasText: /^Finalisé$/ })
