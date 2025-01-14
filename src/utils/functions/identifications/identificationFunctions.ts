@@ -7,8 +7,14 @@ import {
   indtelIdentificationQuestionsTree,
   transmissionRulesByTel,
 } from './questionsTree/indtelQuestionsTree';
-import { houseF2FIdentificationQuestionsTree } from './questionsTree/houseF2FQuestionsTree';
-import { houseTelIdentificationQuestionsTree } from './questionsTree/HouseTelQuestionsTree';
+import {
+  houseF2FIdentificationQuestionsTree,
+  transmissionRulesHouseF2F,
+} from './questionsTree/houseF2FQuestionsTree';
+import {
+  houseTelIdentificationQuestionsTree,
+  transmissionRulesHouseTel,
+} from './questionsTree/HouseTelQuestionsTree';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { checkValidityForTransmissionNoident, getLastState } from '../surveyUnitFunctions';
 import { StateValues, surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
@@ -41,6 +47,18 @@ export const identificationQuestionsTree: Record<
   [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
   [IdentificationConfiguration.HOUSETEL]: houseTelIdentificationQuestionsTree,
   [IdentificationConfiguration.HOUSETELWSR]: houseTelIdentificationQuestionsTree,
+  [IdentificationConfiguration.INDTELNOR]: {},
+  [IdentificationConfiguration.INDF2F]: {},
+  [IdentificationConfiguration.SRCVREINT]: {},
+};
+
+export const transmissionRules: Record<IdentificationConfiguration, TransmissionRules> = {
+  [IdentificationConfiguration.INDTEL]: transmissionRulesByTel,
+  [IdentificationConfiguration.IASCO]: transmissionRulesHouseF2F,
+  [IdentificationConfiguration.NOIDENT]: {},
+  [IdentificationConfiguration.HOUSEF2F]: transmissionRulesHouseF2F,
+  [IdentificationConfiguration.HOUSETEL]: transmissionRulesHouseTel,
+  [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHouseTel,
   [IdentificationConfiguration.INDTELNOR]: {},
   [IdentificationConfiguration.INDF2F]: {},
   [IdentificationConfiguration.SRCVREINT]: {},
@@ -143,18 +161,11 @@ export const checkValidityForTransmissionIasco = (su: SurveyUnit) => {
 };
 
 export const isValidForTransmission = (su: SurveyUnit) => {
-  const { identificationConfiguration } = su;
-  switch (identificationConfiguration) {
-    case IdentificationConfiguration.IASCO:
-      return checkValidityForTransmissionIasco(su);
-    case IdentificationConfiguration.HOUSEF2F:
-      return checkValidityForTransmissionIasco(su);
-    case IdentificationConfiguration.INDTEL:
-      return validateTransmission(transmissionRulesByTel, su);
-    case IdentificationConfiguration.NOIDENT:
-    default:
-      return checkValidityForTransmissionNoident(su);
-  }
+  if (su.identificationConfiguration)
+    return validateTransmission(transmissionRules[su.identificationConfiguration], su);
+
+  // TODO: can be used in validateTransmission ?
+  return checkValidityForTransmissionNoident(su);
 };
 
 export function isInvalidIdentificationAndContactOutcome(
@@ -181,7 +192,6 @@ export function isInvalidIdentificationAndContactOutcome(
   return false;
 }
 
-// Must be extented for IASCO
 export function validateTransmission(
   transmissionRules: TransmissionRules,
   su: SurveyUnit
