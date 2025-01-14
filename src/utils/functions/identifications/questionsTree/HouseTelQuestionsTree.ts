@@ -32,17 +32,17 @@ export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
   },
 } as const;
 
-export const transmissionRulesByTel: TransmissionRules = {
+export const transmissionRulesHouseTel: TransmissionRules = {
   validIfIdentificationFinished: true,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
-        questionId: IdentificationQuestionsId.OCCUPANT,
-        value: IdentificationQuestionOptionValues.IDENTIFIED,
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.ORDINARY,
       },
       {
-        questionId: IdentificationQuestionsId.OCCUPANT,
-        value: IdentificationQuestionOptionValues.UNIDENTIFIED,
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.NOORDINARY,
       },
     ],
     contactOutcome: 'NOA',

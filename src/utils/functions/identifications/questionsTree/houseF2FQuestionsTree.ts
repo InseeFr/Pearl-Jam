@@ -2,7 +2,7 @@ import {
   IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
-import { IdentificationQuestions } from '../identificationFunctions';
+import { IdentificationQuestions, TransmissionRules } from '../identificationFunctions';
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
 
@@ -79,3 +79,22 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
     },
   },
 } as const;
+
+export const transmissionRulesHouseF2F: TransmissionRules = {
+  validIfIdentificationFinished: true,
+  invalidIdentificationsAndContactOutcome: {
+    identifications: [
+      {
+        questionId: IdentificationQuestionsId.OCCUPANT,
+        value: IdentificationQuestionOptionValues.IDENTIFIED,
+      },
+      {
+        questionId: IdentificationQuestionsId.OCCUPANT,
+        value: IdentificationQuestionOptionValues.UNIDENTIFIED,
+      },
+    ],
+    contactOutcome: 'NOA',
+  },
+  invalidIfmissingContactOutcome: true,
+  invalidStateAndContactOutcome: { state: 'WFT', contactOutcome: 'INA' },
+};
