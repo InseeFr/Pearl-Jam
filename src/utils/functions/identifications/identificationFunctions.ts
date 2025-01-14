@@ -17,8 +17,8 @@ import {
 } from './questionsTree/HouseTelQuestionsTree';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { checkValidityForTransmissionNoident, getLastState } from '../surveyUnitFunctions';
-import { StateValues, surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { contactOutcomeEnum, ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
+import { StateValues } from 'utils/enum/SUStateEnum';
+import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
 
 export type IdentificationQuestionOption = {
   value: string;
