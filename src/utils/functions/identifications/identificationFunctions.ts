@@ -54,11 +54,11 @@ export type ResponseState = Partial<
 export type TransmissionRules = {
   validIfIdentificationFinished?: boolean;
   invalidIfmissingContactOutcome?: boolean;
-  invalidIdentificationAndContactOutcome?: {
-    identification: {
+  invalidIdentificationsAndContactOutcome?: {
+    identifications: {
       questionId: IdentificationQuestionsId;
       value: IdentificationQuestionOptionValues;
-    };
+    }[];
     contactOutcome: ContactOutcomeValue;
   };
   invalidStateAndContactOutcome?: { state: StateValues; contactOutcome: ContactOutcomeValue };
@@ -162,20 +162,21 @@ export function isInvalidIdentificationAndContactOutcome(
   su: SurveyUnit
 ): boolean {
   if (
-    transmissionRules.invalidIdentificationAndContactOutcome &&
+    transmissionRules.invalidIdentificationsAndContactOutcome &&
     su.identification &&
     su.contactOutcome
   ) {
-    const questionId =
-      transmissionRules.invalidIdentificationAndContactOutcome.identification.questionId;
-    const identificationValue =
-      transmissionRules.invalidIdentificationAndContactOutcome.identification.value;
-    const contactOutcome = transmissionRules.invalidIdentificationAndContactOutcome.contactOutcome;
+    const identifications =
+      transmissionRules.invalidIdentificationsAndContactOutcome.identifications;
+    const contactOutcome = transmissionRules.invalidIdentificationsAndContactOutcome.contactOutcome;
 
-    return (
-      su.identification[questionId] === identificationValue &&
-      su.contactOutcome.type === contactOutcome
-    );
+    for (const identification of identifications) {
+      if (
+        su.identification[identification.questionId] === identification.value &&
+        su.contactOutcome.type === contactOutcome
+      )
+        return true;
+    }
   }
   return false;
 }

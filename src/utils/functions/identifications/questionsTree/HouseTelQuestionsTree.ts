@@ -1,5 +1,8 @@
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
-import { IdentificationQuestions } from '../identificationFunctions';
+import {
+  IdentificationQuestionOptionValues,
+  IdentificationQuestionsId,
+} from 'utils/enum/identifications/IdentificationsQuestions';
+import { IdentificationQuestions, TransmissionRules } from '../identificationFunctions';
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
 
@@ -28,3 +31,22 @@ export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
     },
   },
 } as const;
+
+export const transmissionRulesByTel: TransmissionRules = {
+  validIfIdentificationFinished: true,
+  invalidIdentificationsAndContactOutcome: {
+    identifications: [
+      {
+        questionId: IdentificationQuestionsId.OCCUPANT,
+        value: IdentificationQuestionOptionValues.IDENTIFIED,
+      },
+      {
+        questionId: IdentificationQuestionsId.OCCUPANT,
+        value: IdentificationQuestionOptionValues.UNIDENTIFIED,
+      },
+    ],
+    contactOutcome: 'NOA',
+  },
+  invalidIfmissingContactOutcome: true,
+  invalidStateAndContactOutcome: { state: 'WFT', contactOutcome: 'INA' },
+};

@@ -38,11 +38,13 @@ export const indtelIdentificationQuestionsTree: IdentificationQuestions = {
 
 export const transmissionRulesByTel: TransmissionRules = {
   validIfIdentificationFinished: true,
-  invalidIdentificationAndContactOutcome: {
-    identification: {
-      questionId: IdentificationQuestionsId.SITUATION,
-      value: IdentificationQuestionOptionValues.ORDINARY,
-    },
+  invalidIdentificationsAndContactOutcome: {
+    identifications: [
+      {
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.ORDINARY,
+      },
+    ],
     contactOutcome: 'NOA',
   },
   invalidIfmissingContactOutcome: true,
