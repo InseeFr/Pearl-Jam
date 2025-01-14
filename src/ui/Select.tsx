@@ -1,5 +1,6 @@
 import MenuItem from '@mui/material/MenuItem';
 import SelectMaterial, { SelectProps as MaterialSelectProps } from '@mui/material/Select';
+import D from 'i18n';
 
 type SelectProps = {
   options: { value: string | number; label: string }[];
@@ -17,8 +18,7 @@ export function Select({ options, placeholder, allowEmpty, ...props }: Readonly<
         if (!selected) {
           return <em>{placeholder}</em>;
         }
-
-        return options.find(o => o.value === selected)?.label ?? <>{selected}</>;
+        return options.find(o => o.value === selected)?.label ?? D.missingValue;
       }}
       {...props}
       onChange={(e, child) => {
