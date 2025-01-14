@@ -1,22 +1,3 @@
-FROM mcr.microsoft.com/playwright:v1.49.1-jammy
+FROM node:20.11.1-bullseye
 
-WORKDIR /app
-
-COPY package.json .
-
-COPY yarn.lock .
-
-
-
-RUN yarn install --frozen-lockfile
-
-COPY . .
-
-EXPOSE 5173
-
-VOLUME /app/src
-
-RUN ulimit 65000 
-RUN sysctl fs.inotify.max_queued_events=16384
-RUN sysctl fs.inotify.max_user_instances=8192
-RUN sysctl fs.inotify.max_user_watches=524288
+RUN npx -y playwright@v1.49.1 install --with-deps

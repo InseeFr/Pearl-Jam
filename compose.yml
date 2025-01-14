@@ -1,40 +1,37 @@
-name: pearl
-
-networks:
-  integration-test-network:
-    driver: bridge
+x-react-volumes: &react-volumes
+  - ./:/opt/app
 
 services:
   front:
-    build: .
-    ports:
-      - '80:80'
-    networks:
-      - integration-test-network
-
-  playwright-dev:
+    container_name: reactapp
     build:
       dockerfile: ./playwright-dev.Dockerfile
-    volumes:
-      - ./src:/app/src
-    entrypoint: npx playwright test --ui-port=8888 --ui-host=0.0.0
+    hostname: front
+    volumes: *react-volumes
+    tty: true
+    stdin_open: true # without this node doesn't start
+    working_dir: /opt/app
     ipc: host
     ports:
-      - '8888:8888'
-      - '5173:5173'
-
-  playwright:
-    image: mcr.microsoft.com/playwright:v1.49.1-jammy
-    volumes:
-      - .:/app
-    working_dir: /app
-    entrypoint: npx playwright test --ui-port=8888 --ui-host=0.0.0
-    ipc: host
-    ports:
-      - '8888:8888'
+      - 5173:5173 # use by vite
+      - 8888:8888
+    deploy:
+      resources:
+        limits:
+          memory: 10g # Augmentez selon vos besoins
+        reservations:
+          memory: 8g
     environment:
-      - BASE_URL=http://front:80
-    networks:
-      - integration-test-network
-    depends_on:
-      - front
+      WATCHPACK_POLLING: true
+      FAST_REFRESH: true
+#
+#  playwright-ui:
+#    container_name: playwright-ui
+#    image: mcr.microsoft.com/playwright:v1.49.1-jammy
+#    hostname: playwright
+#    volumes: *react-volumes
+#    working_dir: /opt/app
+#    entrypoint: npx playwright show-report --host 0.0.0.0
+#    ports:
+#      - 9323:9323
+#npx playwright test --ui-port=8888 --ui-host=0.0.0.0
