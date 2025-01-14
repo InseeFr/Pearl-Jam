@@ -1,10 +1,45 @@
 const identificationMessage = {
-  identificationIdentified: {
+  sameAddress: {
+    fr: "Oui, à l'adresse indiquée",
+    en: 'Yes, at the specified address',
+    sq: 'Po, në adresën e specifikuar',
+  },
+  otherAddress: {
+    fr: 'Oui, mais à une autre adresse située dans le champs géographique',
+    en: 'Yes, but at another address within the geographical area',
+    sq: 'Po, por në një adresë tjetër brenda zonës gjeografike',
+  },
+  noField: {
+    fr: 'Oui, mais hors du champs géographique',
+    en: 'Yes, but outside the geographical area',
+    sq: 'Po, por jashtë zonës gjeografike',
+  },
+  noIdent: {
+    fr: 'Non',
+    en: 'No',
+    sq: 'Jo',
+  },
+  deceased: {
+    fr: 'Décédé',
+    en: 'Deceased',
+    sq: 'I ndjerë',
+  },
+  situationOrdinary: {
+    fr: 'Ordinaire',
+    en: 'Ordinary',
+    sq: 'Zakonshëm',
+  },
+  situationNonOrdinary: {
+    fr: 'Non Ordinaire',
+    en: 'Not Ordinary',
+    sq: 'Jo i zakonshëm',
+  },
+  houseIdentified: {
     fr: 'Logement identifié',
     en: 'Identified housing',
     sq: 'Banimit i identifikuar',
   },
-  identificationUnidentified: {
+  houseUnidentified: {
     fr: 'Logement non identifié',
     en: 'Unidentified housing',
     sq: 'Banimi i paidentifikuar',
@@ -14,13 +49,16 @@ const identificationMessage = {
     en: 'Destroyed housing',
     sq: 'Banimi i shkatërruar',
   },
-  accessAccessible: { fr: 'Logement accessible', en: 'Accessible housing', sq: 'Banimi i qasshëm' },
-  accessNotAccessible: {
+  accessibleHousing: {
+    fr: 'Logement accessible',
+    en: 'Accessible housing',
+    sq: 'Banimi i qasshëm',
+  },
+  notAccessibleHousing: {
     fr: 'Logement non accessible',
     en: 'Not accessible housing',
     sq: 'Banimi jo i qasshëm',
   },
-  situationOrdinary: { fr: 'Logement ordinaire', en: 'Ordinary housing', sq: 'Banimi i zakonshëm' },
   situationNotOrdinary: {
     fr: 'Logement non ordinaire',
     en: 'Not ordinary housing',
@@ -29,6 +67,7 @@ const identificationMessage = {
   situationAbsorbed: { fr: 'Logement absorbé', en: 'Absorbed housing', sq: 'Banimi i absorbuar' },
   categoryPrimary: { fr: 'Résidence principale', en: 'Primary housing', sq: 'Banimi kryesor' },
   categorySecondary: { fr: 'Résidence secondaire', en: 'Secondary housing', sq: 'Banimi dytësor' },
+  vacant: { fr: 'Vacant', en: 'Vacant', sq: 'Bosh' },
   categoryOccasional: {
     fr: 'Résidence occasionnelle',
     en: 'Occasional housing',
@@ -67,6 +106,7 @@ const identificationMessage = {
     en: 'Occupant identification',
     sq: 'Identifikimi i banorit',
   },
+  absorbed: { fr: 'Absorbé', en: 'Absorbed', sq: 'Banimi i absorbuar' },
   identification: { fr: 'Repérage', en: 'Identification', sq: 'Identifikimi' },
   move: { fr: 'Déplacement terrain', en: 'Onsite move', sq: 'Lëvizja në terren' },
   noLocation: {

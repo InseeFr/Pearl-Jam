@@ -78,7 +78,9 @@ export function StatsTracking({ surveyUnits }: Readonly<StatsTrackingProps>) {
               <Select
                 options={sortOptions}
                 value={sortDirection}
-                onChange={e => setSortDirection(e.target.value as SortDirection)}
+                onChange={(e: SelectChangeEvent<any>) =>
+                  setSortDirection(e.target.value as SortDirection)
+                }
                 placeholder={D.noSorting}
                 allowEmpty
                 sx={{ width: '210px' }}

@@ -6,13 +6,13 @@ class SyncReportIdbService extends AbstractIdbService<SyncReport> {
     super('syncReport');
   }
 
-  async addOrUpdateReport(item: SyncReport) {
+  async addOrUpdateReport(item: Partial<SyncReport>) {
     const { id, ...other } = item;
-    const report = await this.getById(id);
+    const report = await this.getById(id!);
     if (report) {
-      return this.update(item);
+      return this.update(item as SyncReport);
     }
-    return this.insert({ id: `${id}`, ...other });
+    return this.insert({ id: `${id}`, ...other } as SyncReport);
   }
 }
 

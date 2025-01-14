@@ -1,12 +1,4 @@
-
-export type Method =
-  | 'GET'
-  | 'OPTIONS'
-  | 'POST'
-  | 'PUT'
-  | 'PATCH'
-  | 'DELETE'
-
+export type Method = 'GET' | 'OPTIONS' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 // manage empty response during PUT or POST request
 const readJsonResponse = async (response: Response) => {
@@ -17,7 +9,12 @@ const readJsonResponse = async (response: Response) => {
   }
 };
 
-export const fetcher = async (url: string, token: string | undefined, method: Method, body: object | null) => {
+export const fetcher = async (
+  url: string,
+  token: string | undefined,
+  method: Method,
+  body: object | null
+) => {
   const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
   try {
     const response = await fetch(url, {

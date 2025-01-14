@@ -13,11 +13,11 @@ export const contactOutcomeEnum = {
     label: `${D.definitlyUnavailableForUnknownReason}`,
   },
   NO_LONGER_USED_FOR_HABITATION: { value: 'NUH', label: `${D.noLongerUsedForHabitation}` },
-  NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
   DEFINITLY_UNAVAILABLE: {
     value: 'DUK',
     label: `${D.definitlyUnavailable}`,
   },
+  NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
 };
 
 export const findContactOutcomeLabelByValue = (value?: string) =>
@@ -40,8 +40,8 @@ let commonContactOutcomes = {
   UNABLE_TO_RESPOND: contactOutcomeEnum.UNABLE_TO_RESPOND,
   ALREADY_ANSWERED: contactOutcomeEnum.ALREADY_ANSWERED,
   UNUSABLE_CONTACT_DATA: contactOutcomeEnum.UNUSABLE_CONTACT_DATA,
-  NOT_APPLICABLE: contactOutcomeEnum.NOT_APPLICABLE,
   DEFINITLY_UNAVAILABLE: contactOutcomeEnum.DEFINITLY_UNAVAILABLE,
+  NOT_APPLICABLE: contactOutcomeEnum.NOT_APPLICABLE,
 };
 
 type ContactOutcomeEnum = {
@@ -58,6 +58,8 @@ export const getContactOutcomeByConfiguration = (
       ...{ NO_LONGER_USED_FOR_HABITATION: contactOutcomeEnum.NO_LONGER_USED_FOR_HABITATION },
     };
   }
+
+  // Will be removed when deprecated outcomes will be unused
   const selectedOutcome = findContactOutcomeByValue(selectedOutcomeValue);
 
   if (configuration === 'TEL' || configuration === 'F2F')

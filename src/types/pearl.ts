@@ -1,3 +1,8 @@
+import {
+  IdentificationConfiguration,
+  IdentificationQuestionsId,
+} from 'utils/enum/identifications/IdentificationsQuestions';
+
 export type SurveyUnitPhoneNumber = {
   source: string;
   favorite: boolean;
@@ -39,7 +44,7 @@ type SurveyUnitComment = {
 };
 
 type SurveyUnitState = {
-  id: number;
+  id?: number;
   date: number;
   type: string;
 };
@@ -58,13 +63,7 @@ type SurveyUnitSampleIdentifiers = {
   nograp: string;
 };
 
-type SurveyUnitIdentification = {
-  identification: unknown;
-  access: unknown;
-  situation: unknown;
-  category: unknown;
-  occupant: unknown;
-};
+export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId, string>>;
 
 export type SurveyUnitContactAttempt = {
   status: string;
@@ -94,14 +93,14 @@ export type SurveyUnit = {
   persons: SurveyUnitPerson[];
   address: SurveyUnitAddress;
   priority: boolean;
-  move: boolean;
+  move: boolean | null;
   campaign: string;
   comments: SurveyUnitComment[];
   sampleIdentifiers: SurveyUnitSampleIdentifiers;
   states: SurveyUnitState[];
   contactAttempts: SurveyUnitContactAttempt[];
   contactOutcome?: ContactOutcome;
-  identification: SurveyUnitIdentification;
+  identification?: SurveyUnitIdentification;
   campaignLabel: string;
   managementStartDate: number;
   interviewerStartDate: number;
@@ -109,7 +108,7 @@ export type SurveyUnit = {
   collectionStartDate: number;
   collectionEndDate: number;
   endDate: number;
-  identificationConfiguration: string;
+  identificationConfiguration: IdentificationConfiguration;
   contactOutcomeConfiguration: string;
   contactAttemptConfiguration: string;
   useLetterCommunication: boolean;
@@ -123,6 +122,7 @@ export type Notification = {
   type: string;
   title: string;
   messages: string[];
+  message?: string;
   state: NotificationState;
   read: boolean;
   detail: string;
@@ -131,8 +131,8 @@ export type Notification = {
 
 export type SyncResult = {
   state: string;
-  messages: string[];
-  details: {
+  messages: string[] | string;
+  details?: {
     transmittedSurveyUnits: Record<string, string[]>;
     loadedSurveyUnits: Record<string, string[]>;
   };

@@ -6,16 +6,16 @@ class NotificationIdbService extends AbstractIdbService<Notification> {
     super('notification');
   }
 
-  async addOrUpdateNotif(item: Notification) {
+  async addOrUpdateNotif(item: Partial<Notification>) {
     const { id } = item;
     /* prevent duplicated survey-unit */
     if (id) {
       const notification = await this.get(id);
       if (notification) {
-        return this.update(item);
+        return this.update(item as Notification);
       }
     }
-    return this.insert(item);
+    return this.insert(item as Notification);
   }
 }
 
