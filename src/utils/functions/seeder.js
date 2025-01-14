@@ -240,6 +240,20 @@ export async function seedData() {
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
   });
+  surverUnits.push({
+    ...surverUnits[0],
+    managementStartDate: new Date().getTime() - 10 * day,
+    interviewerStartDate: new Date().getTime() - 9 * day,
+    identificationPhaseStartDate: new Date().getTime() - 8 * day,
+    collectionStartDate: new Date().getTime() - 7 * day,
+    collectionEndDate: new Date().getTime() - 6 * day,
+    endDate: new Date().getTime() + 15 * day,
+    id: 'HOUSETEL',
+    identification: {},
+    firstName: 'Flin',
+    lastName: 'Ished',
+    identificationConfiguration: IdentificationConfiguration.HOUSETEL,
+  });
   await userIdbService.insert({
     id: 1,
     title: 'MISTER',
