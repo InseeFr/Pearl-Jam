@@ -105,23 +105,23 @@ export function checkAvailability(
 }
 
 export function identificationIsFinished(
-  identificationConfiguration: IdentificationConfiguration,
+  identificationConfiguration?: IdentificationConfiguration,
   identification?: SurveyUnitIdentification
 ): boolean {
-  const questionsTree = identificationQuestionsTree[identificationConfiguration];
-
+  if (!identificationConfiguration) return true;
   if (!identification) return false;
+
+  const questionsTree = identificationQuestionsTree[identificationConfiguration];
 
   for (const questionId in questionsTree) {
     const questions = questionsTree[questionId as IdentificationQuestionsId];
     if (!questions) continue;
 
     const response = identification[questions.id];
-    const concluding = questions.options.find(o => o.value === response)?.concluding;
     if (!response) return false;
-    else if (concluding) {
-      return true;
-    }
+
+    const concluding = questions.options.find(o => o.value === response)?.concluding;
+    if (concluding) return true;
   }
   return true;
 }
@@ -162,11 +162,9 @@ export function validateTransmission(
   transmissionRules: TransmissionRules,
   su: SurveyUnit
 ): boolean {
-  if (
-    transmissionRules.validIfIdentificationFinished !==
-    identificationIsFinished(su.identificationConfiguration, su.identification)
-  )
-    return false;
+  if (transmissionRules.validIfIdentificationFinished) {
+    if (!identificationIsFinished(su.identificationConfiguration, su.identification)) return false;
+  }
 
   if (transmissionRules.invalidIfmissingContactOutcome && su.contactOutcome === undefined)
     return false;
