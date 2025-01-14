@@ -3,12 +3,17 @@ import {
   checkAvailability,
   identificationIsFinished,
   IdentificationQuestions,
+  isInvalidIdentificationAndContactOutcome,
+  TransmissionRules,
+  validateTransmission,
 } from './identificationFunctions';
 import {
   IdentificationConfiguration,
   IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
+import { SurveyUnit } from 'types/pearl';
+import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 
 const mockQuestions: IdentificationQuestions = {
   [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
