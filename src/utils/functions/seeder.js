@@ -198,7 +198,8 @@ export async function seedData() {
       collectionStartDate: new Date().getTime() - 10 * day,
       collectionEndDate: new Date().getTime() + 50 * day,
       endDate: new Date().getTime() + 51 * day,
-      identificationConfiguration: 'INDTEL',
+      identificationConfiguration:
+        user.id === 10 ? IdentificationConfiguration.HOUSEF2F : IdentificationConfiguration.INDTEL,
       contactOutcomeConfiguration: 'F2F',
       contactAttemptConfiguration: 'F2F',
       contactOutcome: {

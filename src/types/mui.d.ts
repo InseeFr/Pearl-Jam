@@ -4,6 +4,12 @@ import { ScrollableBox } from '@mui/material/ScrollableBox';
 import { Dialog } from '@mui/material/Dialog';
 import { CircularProgressProps } from '@mui/material/CircularProgress';
 
+declare module '@mui/system/createTheme' {
+  interface BreakpointOverrides {
+    s: true;
+  }
+}
+
 // Update the Card's variant prop options
 declare module '@mui/material/Card' {
   interface CardPropsVariantOverrides {
