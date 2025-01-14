@@ -126,40 +126,6 @@ export function identificationIsFinished(
   return true;
 }
 
-// TODO : must be replaced by validateTransmissionArray (as we're doing for INDTEL)
-export const checkValidityForTransmissionIasco = (su: SurveyUnit) => {
-  const { contactOutcome, identification, identificationConfiguration, states = [] } = su;
-
-  if (!identification || !contactOutcome) return false;
-  if (!identificationIsFinished(identificationConfiguration, identification)) return false;
-
-  // INA contactOutcome + no questionnaire
-  const type = contactOutcome.type;
-  if (
-    type === contactOutcomeEnum.INTERVIEW_ACCEPTED.value &&
-    getLastState(states)?.type !== surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
-  )
-    return false;
-
-  // issue NOA + identification.avi
-  const { identification: identificationValue, category, situation } = identification;
-  if (
-    type === contactOutcomeEnum.NOT_APPLICABLE.value &&
-    identificationQuestionsTree[IdentificationConfiguration.IASCO].identification?.options.find(
-      o => o.value === identificationValue && o.concluding
-    ) &&
-    identificationQuestionsTree[IdentificationConfiguration.IASCO].situation?.options.find(
-      o => o.value === situation && o.concluding
-    ) &&
-    identificationQuestionsTree[IdentificationConfiguration.IASCO].category?.options.find(
-      o => o.value === category && o.concluding
-    )
-  )
-    return false;
-
-  return getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
-};
-
 export const isValidForTransmission = (su: SurveyUnit) => {
   if (su.identificationConfiguration)
     return validateTransmission(transmissionRules[su.identificationConfiguration], su);
