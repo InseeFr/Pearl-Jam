@@ -224,4 +224,181 @@ describe('identificationIsFinished', () => {
   });
 });
 
-// TODO : Expand tests for ValidateTransmission when function is do
+describe('isInvalidIdentificationAndContactOutcome', () => {
+  it('should return true if identification and contact outcome match the invalid rules', () => {
+    const mockTransmissionRules: TransmissionRules = {
+      invalidIdentificationsAndContactOutcome: {
+        identifications: [
+          {
+            questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+            value: IdentificationQuestionOptionValues.NOIDENT,
+          },
+        ],
+        contactOutcome: contactOutcomeEnum.REFUSAL.value,
+      },
+    };
+
+    const mockSurveyUnit: SurveyUnit = {
+      identification: {
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 3,
+        type: contactOutcomeEnum.REFUSAL.value,
+      },
+      // other SurveyUnit properties can be mocked as needed
+    };
+
+    const result = isInvalidIdentificationAndContactOutcome(mockTransmissionRules, mockSurveyUnit);
+    expect(result).toBe(true);
+  });
+
+  it('should return false if identification does not match the invalid rules', () => {
+    const mockTransmissionRules: TransmissionRules = {
+      invalidIdentificationsAndContactOutcome: {
+        identifications: [
+          {
+            questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+            value: IdentificationQuestionOptionValues.NOIDENT,
+          },
+        ],
+        contactOutcome: contactOutcomeEnum.REFUSAL.value,
+      },
+    };
+
+    const mockSurveyUnit: SurveyUnit = {
+      identification: {
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
+          IdentificationQuestionOptionValues.SAME_ADDRESS,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 2,
+        type: contactOutcomeEnum.REFUSAL.value,
+      },
+    };
+
+    const result = isInvalidIdentificationAndContactOutcome(mockTransmissionRules, mockSurveyUnit);
+    expect(result).toBe(false);
+  });
+
+  it('should return false if contact outcome does not match the invalid rules', () => {
+    const mockTransmissionRules: TransmissionRules = {
+      invalidIdentificationsAndContactOutcome: {
+        identifications: [
+          {
+            questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+            value: IdentificationQuestionOptionValues.NOIDENT,
+          },
+        ],
+        contactOutcome: contactOutcomeEnum.REFUSAL.value,
+      },
+    };
+
+    const mockSurveyUnit: SurveyUnit = {
+      identification: {
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 4,
+        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+      },
+    };
+
+    const result = isInvalidIdentificationAndContactOutcome(mockTransmissionRules, mockSurveyUnit);
+    expect(result).toBe(false);
+  });
+});
+
+describe('validateTransmission', () => {
+  it('should return false if identification is not finished but required', () => {
+    const mockTransmissionRules: TransmissionRules = {
+      validIfIdentificationFinished: true,
+    };
+
+    const mockSurveyUnit: SurveyUnit = {
+      identificationConfiguration: IdentificationConfiguration.INDTEL,
+      identification: {
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
+          IdentificationQuestionOptionValues.SAME_ADDRESS,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+      },
+    };
+
+    const result = validateTransmission(mockTransmissionRules, mockSurveyUnit);
+    expect(result).toBe(false);
+  });
+
+  it('should return false if contact outcome is missing but required', () => {
+    const mockTransmissionRules: TransmissionRules = {
+      invalidIfmissingContactOutcome: true,
+    };
+
+    const mockSurveyUnit: SurveyUnit = {
+      identificationConfiguration: IdentificationConfiguration.INDTEL,
+      identification: {
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
+          IdentificationQuestionOptionValues.SAME_ADDRESS,
+      },
+    };
+
+    const result = validateTransmission(mockTransmissionRules, mockSurveyUnit);
+    expect(result).toBe(false);
+  });
+
+  it('should return false if invalid identification and contact outcome combination exists', () => {
+    const mockTransmissionRules: TransmissionRules = {
+      invalidIdentificationsAndContactOutcome: {
+        identifications: [
+          {
+            questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+            value: IdentificationQuestionOptionValues.NOIDENT,
+          },
+        ],
+        contactOutcome: contactOutcomeEnum.DECEASED.value,
+      },
+    };
+
+    const mockSurveyUnit: SurveyUnit = {
+      identification: {
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 5,
+        type: contactOutcomeEnum.DECEASED.value,
+      },
+    };
+
+    const result = validateTransmission(mockTransmissionRules, mockSurveyUnit);
+    expect(result).toBe(false);
+  });
+
+  it('should return true for valid transmission scenarios', () => {
+    const mockTransmissionRules: TransmissionRules = {
+      validIfIdentificationFinished: true,
+    };
+
+    const mockSurveyUnit: SurveyUnit = {
+      identificationConfiguration: IdentificationConfiguration.INDTEL,
+      identification: {
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
+          IdentificationQuestionOptionValues.SAME_ADDRESS,
+        [IdentificationQuestionsId.SITUATION]: IdentificationQuestionOptionValues.ORDINARY,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 2,
+        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+      },
+    };
+
+    const result = validateTransmission(mockTransmissionRules, mockSurveyUnit);
+    expect(result).toBe(true);
+  });
+});
