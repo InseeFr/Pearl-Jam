@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   checkAvailability,
   identificationIsFinished,
@@ -37,6 +37,196 @@ const mockQuestions: IdentificationQuestions = {
     },
   },
 };
+
+const mockedSurveyUnit: SurveyUnit = {
+  displayName: '',
+  id: '',
+  persons: [],
+  address: {} as any,
+  priority: true,
+  move: null,
+  campaign: '',
+  comments: [],
+  sampleIdentifiers: {} as any,
+  states: [],
+  contactAttempts: [],
+  campaignLabel: '',
+  managementStartDate: 0,
+  interviewerStartDate: 0,
+  identificationPhaseStartDate: 0,
+  collectionStartDate: 0,
+  collectionEndDate: 0,
+  endDate: 0,
+  identificationConfiguration: IdentificationConfiguration.NOIDENT,
+  contactOutcomeConfiguration: '',
+  contactAttemptConfiguration: '',
+  useLetterCommunication: false,
+  communicationRequests: [],
+  communicationTemplates: [],
+};
+
+const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.NOIDENT,
+      identification: {},
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.REFUSAL.value,
+      },
+    },
+    output: true,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.NOIDENT,
+      identification: {},
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.REFUSAL.value,
+      },
+      contactAttempts: [],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.NOIDENT,
+      identification: {},
+      contactAttempts: [],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.IASCO,
+      identification: {
+        identification: IdentificationQuestionOptionValues.IDENTIFIED,
+        access: IdentificationQuestionOptionValues.ACC,
+        situation: IdentificationQuestionOptionValues.ABSORBED, // Concluding
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.REFUSAL.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: true,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.IASCO,
+      identification: {
+        identification: IdentificationQuestionOptionValues.IDENTIFIED,
+        access: IdentificationQuestionOptionValues.ACC,
+        situation: IdentificationQuestionOptionValues.ORDINARY, // Missing remaining identifications
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.REFUSAL.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.IASCO,
+      identification: {
+        identification: IdentificationQuestionOptionValues.IDENTIFIED,
+        access: IdentificationQuestionOptionValues.ACC,
+        situation: IdentificationQuestionOptionValues.ABSORBED, // Concluding
+      },
+      // INTERVIEW_ACCEPTED + WFT -> INVALID
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.IASCO,
+      identification: {
+        identification: IdentificationQuestionOptionValues.IDENTIFIED,
+        access: IdentificationQuestionOptionValues.ACC,
+        situation: IdentificationQuestionOptionValues.ABSORBED, // Concluding
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'N/A', date: Date.now() }],
+    },
+    output: true,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.IASCO,
+      identification: {
+        identification: IdentificationQuestionOptionValues.IDENTIFIED,
+        access: IdentificationQuestionOptionValues.ACC,
+        situation: IdentificationQuestionOptionValues.ORDINARY,
+        category: IdentificationQuestionOptionValues.PRIMARY,
+        occupant: IdentificationQuestionOptionValues.IDENTIFIED,
+      },
+      // IDENTIFIED + NOA -> invalid
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.NOT_APPLICABLE.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.INDTEL,
+      identification: {
+        identification: IdentificationQuestionOptionValues.NOFIELD,
+      },
+      // WFT + INA -> invalid
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: false,
+  },
+];
+
+mockedSurveyUnits.map(({ input, output }) => {
+  it(`ValidateTransmission should return ${output} when adding ${input}`, () => {
+    expect(validateTransmission(input)).toBe(output);
+  });
+});
 
 describe('checkAvailability', () => {
   it('should return true if there are no responses', () => {
@@ -309,96 +499,5 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
 
     const result = isInvalidIdentificationAndContactOutcome(mockTransmissionRules, mockSurveyUnit);
     expect(result).toBe(false);
-  });
-});
-
-describe('validateTransmission', () => {
-  it('should return false if identification is not finished but required', () => {
-    const mockTransmissionRules: TransmissionRules = {
-      validIfIdentificationFinished: true,
-    };
-
-    const mockSurveyUnit: SurveyUnit = {
-      identificationConfiguration: IdentificationConfiguration.INDTEL,
-      identification: {
-        [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
-          IdentificationQuestionOptionValues.SAME_ADDRESS,
-      },
-      contactOutcome: {
-        date: Date.now(),
-        totalNumberOfContactAttempts: 1,
-      },
-    };
-
-    const result = validateTransmission(mockTransmissionRules, mockSurveyUnit);
-    expect(result).toBe(false);
-  });
-
-  it('should return false if contact outcome is missing but required', () => {
-    const mockTransmissionRules: TransmissionRules = {
-      invalidIfmissingContactOutcome: true,
-    };
-
-    const mockSurveyUnit: SurveyUnit = {
-      identificationConfiguration: IdentificationConfiguration.INDTEL,
-      identification: {
-        [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
-          IdentificationQuestionOptionValues.SAME_ADDRESS,
-      },
-    };
-
-    const result = validateTransmission(mockTransmissionRules, mockSurveyUnit);
-    expect(result).toBe(false);
-  });
-
-  it('should return false if invalid identification and contact outcome combination exists', () => {
-    const mockTransmissionRules: TransmissionRules = {
-      invalidIdentificationsAndContactOutcome: {
-        identifications: [
-          {
-            questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-            value: IdentificationQuestionOptionValues.NOIDENT,
-          },
-        ],
-        contactOutcome: contactOutcomeEnum.DECEASED.value,
-      },
-    };
-
-    const mockSurveyUnit: SurveyUnit = {
-      identification: {
-        [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
-      },
-      contactOutcome: {
-        date: Date.now(),
-        totalNumberOfContactAttempts: 5,
-        type: contactOutcomeEnum.DECEASED.value,
-      },
-    };
-
-    const result = validateTransmission(mockTransmissionRules, mockSurveyUnit);
-    expect(result).toBe(false);
-  });
-
-  it('should return true for valid transmission scenarios', () => {
-    const mockTransmissionRules: TransmissionRules = {
-      validIfIdentificationFinished: true,
-    };
-
-    const mockSurveyUnit: SurveyUnit = {
-      identificationConfiguration: IdentificationConfiguration.INDTEL,
-      identification: {
-        [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
-          IdentificationQuestionOptionValues.SAME_ADDRESS,
-        [IdentificationQuestionsId.SITUATION]: IdentificationQuestionOptionValues.ORDINARY,
-      },
-      contactOutcome: {
-        date: Date.now(),
-        totalNumberOfContactAttempts: 2,
-        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
-      },
-    };
-
-    const result = validateTransmission(mockTransmissionRules, mockSurveyUnit);
-    expect(result).toBe(true);
   });
 });

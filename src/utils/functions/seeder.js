@@ -233,7 +233,16 @@ export async function seedData() {
     firstName: 'John2',
     lastName: 'Absent2',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
-    states: [{}],
+    contactOutcome: undefined,
+  });
+  surverUnits.push({
+    ...surverUnits[0],
+    id: 'sunoident-WFT',
+    identification: {},
+    firstName: 'John3',
+    lastName: 'Absent3',
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    states: [{ type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type, date: 1 }],
     contactOutcome: undefined,
   });
   surverUnits.push({
