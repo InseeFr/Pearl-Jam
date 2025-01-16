@@ -228,6 +228,16 @@ export async function seedData() {
   });
   surverUnits.push({
     ...surverUnits[0],
+    id: 'sunoident-empty',
+    identification: {},
+    firstName: 'John2',
+    lastName: 'Absent2',
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    states: [{}],
+    contactOutcome: undefined,
+  });
+  surverUnits.push({
+    ...surverUnits[0],
     managementStartDate: new Date().getTime() - 10 * day,
     interviewerStartDate: new Date().getTime() - 9 * day,
     identificationPhaseStartDate: new Date().getTime() - 8 * day,
@@ -254,13 +264,6 @@ export async function seedData() {
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.HOUSETEL,
   });
-  await userIdbService.insert({
-    id: 1,
-    title: 'MISTER',
-    firstName: 'John',
-    lastName: 'Doe',
-    phoneNumber: '0123456789',
-    email: 'john@doe.fr',
-  });
+
   await surveyUnitIDBService.addAll(surverUnits);
 }
