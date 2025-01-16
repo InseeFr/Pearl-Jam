@@ -224,13 +224,10 @@ export const synchronizePearl = async (
 
   let surveyUnitsInTempZone;
   let surveyUnitsSuccess;
-  debugger;
-
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
     await getUserData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
     surveyUnitsInTempZone = await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
-
     transmittedSurveyUnits = await getWFSSurveyUnitsSortByCampaign();
 
     await clean();

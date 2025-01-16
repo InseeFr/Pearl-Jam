@@ -1,11 +1,9 @@
 import { differenceInYears } from 'date-fns';
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST, TITLES } from 'utils/constants';
-
-import D from 'i18n';
-import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
+import D from 'i18n';
 
 export const getCommentByType = (type, su) => {
   if (Array.isArray(su.comments) && su.comments.length > 0) {
@@ -20,6 +18,7 @@ export const getCommentByType = (type, su) => {
  * @param {SurveyUnit} surveyUnit
  * @returns {{ order: string, value: string, color: string }}
  */
+// TODO: convertSUStateInToDo deprecated ?
 export const getSuTodoState = surveyUnit => {
   return convertSUStateInToDo(getLastState(surveyUnit?.states ?? [])?.type);
 };
