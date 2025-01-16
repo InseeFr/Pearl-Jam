@@ -48,7 +48,7 @@ export const identificationQuestionsTree: Record<
   [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
   [IdentificationConfiguration.HOUSETEL]: houseTelIdentificationQuestionsTree,
   [IdentificationConfiguration.HOUSETELWSR]: houseTelIdentificationQuestionsTree,
-  [IdentificationConfiguration.INDTELNOR]: {},
+  [IdentificationConfiguration.INDTELNOR]: indtelIdentificationQuestionsTree,
   [IdentificationConfiguration.INDF2F]: {},
   [IdentificationConfiguration.SRCVREINT]: {},
 };
@@ -81,7 +81,8 @@ export type TransmissionRules = {
     }[];
     contactOutcome: ContactOutcomeValue;
   };
-  invalidStateAndContactOutcome?: { state: StateValues; contactOutcome?: ContactOutcomeValue };
+  invalidStateAndContactOutcome?: { state: StateValues; contactOutcome: ContactOutcomeValue };
+  invalidState?: StateValues;
 };
 
 export function checkAvailability(
@@ -159,20 +160,21 @@ export function validateTransmission(su: SurveyUnit): boolean {
     if (!identificationIsFinished(su.identificationConfiguration, su.identification)) return false;
   }
 
-  if (suTransmissionRules.invalidIfmissingContactOutcome && su.contactOutcome === undefined)
-    return false;
+  if (suTransmissionRules.invalidIfmissingContactOutcome && !su.contactOutcome) return false;
 
   if (isInvalidIdentificationAndContactOutcome(suTransmissionRules, su)) return false;
 
-  if (suTransmissionRules.invalidStateAndContactOutcome && su.contactOutcome) {
+  if (suTransmissionRules.invalidStateAndContactOutcome) {
     if (
-      su.contactOutcome.type === suTransmissionRules.invalidStateAndContactOutcome.contactOutcome &&
+      su?.contactOutcome?.type ===
+        suTransmissionRules.invalidStateAndContactOutcome.contactOutcome &&
       getLastState(su.states)?.type === suTransmissionRules.invalidStateAndContactOutcome.state
     )
       return false;
   }
 
-  console.log(suTransmissionRules.invalidIfmissingContactAttempt, su.contactAttempts);
+  if (suTransmissionRules.invalidState === getLastState(su.states)?.type) return false;
+
   if (suTransmissionRules.invalidIfmissingContactAttempt && !su.contactAttempts.length)
     return false;
 
