@@ -12,7 +12,7 @@ export function StatusChip({ status }: Readonly<StatusChipProps>) {
   return (
     <Chip
       sx={{
-        backgroundColor: status?.color ?? theme.palette.primary.light,
+        backgroundColor: status?.color ?? theme.palette.red.main,
         height: 28,
         color: theme.palette.primary.main,
         fontWeight: '600',
