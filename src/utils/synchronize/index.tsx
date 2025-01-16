@@ -1,6 +1,11 @@
 import * as api from 'utils/api';
 
-import { createCommunicationRequestIds, createStateIds, getSuTodoState } from 'utils/functions';
+import {
+  createCommunicationRequestIds,
+  createStateIds,
+  getLastState,
+  getSuTodoState,
+} from 'utils/functions';
 import { useCallback, useState } from 'react';
 
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
@@ -170,7 +175,7 @@ const getWFSSurveyUnitsSortByCampaign = async () => {
   const allSurveyUnits = await surveyUnitIDBService.getAll();
   return allSurveyUnits.reduce((wfs, su) => {
     const { campaign, id } = su;
-    const lastState = getSuTodoState(su);
+    const lastState = getLastState(su.states);
     if (lastState?.type === surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type)
       return { ...wfs, [campaign]: [...(wfs[campaign] || []), id] };
     return wfs;
@@ -219,10 +224,13 @@ export const synchronizePearl = async (
 
   let surveyUnitsInTempZone;
   let surveyUnitsSuccess;
+  debugger;
+
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
     await getUserData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
     surveyUnitsInTempZone = await sendData(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+
     transmittedSurveyUnits = await getWFSSurveyUnitsSortByCampaign();
 
     await clean();
