@@ -48,18 +48,6 @@ export const daysLeftForSurveyUnit = su => {
   );
 };
 
-// TODO : must be replaced by validateTransmissionArray
-export const checkValidityForTransmissionNoident = su => {
-  const { contactAttempts, contactOutcome, states = [] } = su;
-  if (contactAttempts.length === 0) return false;
-  if (!contactOutcome) return false;
-  const { type, totalNumberOfContactAttempts } = contactOutcome;
-  if (totalNumberOfContactAttempts === 0) return false;
-  if (type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.value) return true;
-  if (getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) return true;
-  return false;
-};
-
 /**
  * Contact attempts sorted by date descending
  *

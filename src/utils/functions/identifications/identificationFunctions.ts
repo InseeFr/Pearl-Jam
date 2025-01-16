@@ -16,7 +16,7 @@ import {
   transmissionRulesHouseTel,
 } from './questionsTree/HouseTelQuestionsTree';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
-import { checkValidityForTransmissionNoident, getLastState } from '../surveyUnitFunctions';
+import { getLastState } from '../surveyUnitFunctions';
 import { StateValues } from 'utils/enum/SUStateEnum';
 import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
 
@@ -72,6 +72,7 @@ export type ResponseState = Partial<
 export type TransmissionRules = {
   validIfIdentificationFinished?: boolean;
   invalidIfmissingContactOutcome?: boolean;
+  invalidIfmissingContactAttempt?: boolean;
   invalidIdentificationsAndContactOutcome?: {
     identifications: {
       questionId: IdentificationQuestionsId;
@@ -79,7 +80,7 @@ export type TransmissionRules = {
     }[];
     contactOutcome: ContactOutcomeValue;
   };
-  invalidStateAndContactOutcome?: { state: StateValues; contactOutcome: ContactOutcomeValue };
+  invalidStateAndContactOutcome?: { state: StateValues; contactOutcome?: ContactOutcomeValue };
 };
 
 export function checkAvailability(
@@ -126,14 +127,6 @@ export function identificationIsFinished(
   return true;
 }
 
-export const isValidForTransmission = (su: SurveyUnit) => {
-  if (su.identificationConfiguration)
-    return validateTransmission(transmissionRules[su.identificationConfiguration], su);
-
-  // TODO: can be used in validateTransmission ?
-  return checkValidityForTransmissionNoident(su);
-};
-
 export function isInvalidIdentificationAndContactOutcome(
   transmissionRules: TransmissionRules,
   su: SurveyUnit
@@ -158,26 +151,28 @@ export function isInvalidIdentificationAndContactOutcome(
   return false;
 }
 
-export function validateTransmission(
-  transmissionRules: TransmissionRules,
-  su: SurveyUnit
-): boolean {
-  if (transmissionRules.validIfIdentificationFinished) {
+export function validateTransmission(su: SurveyUnit): boolean {
+  const suTransmissionRules = transmissionRules[su.identificationConfiguration];
+
+  if (suTransmissionRules.validIfIdentificationFinished) {
     if (!identificationIsFinished(su.identificationConfiguration, su.identification)) return false;
   }
 
-  if (transmissionRules.invalidIfmissingContactOutcome && su.contactOutcome === undefined)
+  if (suTransmissionRules.invalidIfmissingContactOutcome && su.contactOutcome === undefined)
     return false;
 
-  if (isInvalidIdentificationAndContactOutcome(transmissionRules, su)) return false;
+  if (isInvalidIdentificationAndContactOutcome(suTransmissionRules, su)) return false;
 
-  if (transmissionRules.invalidStateAndContactOutcome && su.contactOutcome) {
+  if (suTransmissionRules.invalidStateAndContactOutcome && su.contactOutcome) {
     if (
-      su.contactOutcome.type === transmissionRules.invalidStateAndContactOutcome.contactOutcome &&
-      getLastState(su.states)?.type === transmissionRules.invalidStateAndContactOutcome.state
+      su.contactOutcome.type === suTransmissionRules.invalidStateAndContactOutcome.contactOutcome &&
+      getLastState(su.states)?.type === suTransmissionRules.invalidStateAndContactOutcome.state
     )
       return false;
   }
+
+  if (suTransmissionRules.invalidIfmissingContactAttempt && su.contactAttempts === undefined)
+    return false;
 
   return true;
 }
