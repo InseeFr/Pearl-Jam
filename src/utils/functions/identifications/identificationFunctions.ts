@@ -19,6 +19,7 @@ import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { getLastState } from '../surveyUnitFunctions';
 import { StateValues } from 'utils/enum/SUStateEnum';
 import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
+import { transmissionRulesNoIdentification } from './questionsTree/noIdentificationTransmissionRules';
 
 export type IdentificationQuestionOption = {
   value: string;
@@ -55,7 +56,7 @@ export const identificationQuestionsTree: Record<
 export const transmissionRules: Record<IdentificationConfiguration, TransmissionRules> = {
   [IdentificationConfiguration.INDTEL]: transmissionRulesByTel,
   [IdentificationConfiguration.IASCO]: transmissionRulesHouseF2F,
-  [IdentificationConfiguration.NOIDENT]: {},
+  [IdentificationConfiguration.NOIDENT]: transmissionRulesNoIdentification,
   [IdentificationConfiguration.HOUSEF2F]: transmissionRulesHouseF2F,
   [IdentificationConfiguration.HOUSETEL]: transmissionRulesHouseTel,
   [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHouseTel,
@@ -171,7 +172,8 @@ export function validateTransmission(su: SurveyUnit): boolean {
       return false;
   }
 
-  if (suTransmissionRules.invalidIfmissingContactAttempt && su.contactAttempts === undefined)
+  console.log(suTransmissionRules.invalidIfmissingContactAttempt, su.contactAttempts);
+  if (suTransmissionRules.invalidIfmissingContactAttempt && !su.contactAttempts.length)
     return false;
 
   return true;
