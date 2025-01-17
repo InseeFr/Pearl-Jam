@@ -16,6 +16,8 @@ import { SynchronizeButton } from './Header/SynchronizeButton';
 import { UserButton } from './Header/UserButton';
 import { Row } from './Row';
 import { Typography } from './Typography';
+import { SvgIconTypeMap } from '@mui/material';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 export function Header() {
   const notificationsCount = useUnreadNotificationsCount();
@@ -95,7 +97,7 @@ function HeaderNavLink({
 }: Readonly<
   PropsWithChildren<
     {
-      icon: ReactNode;
+      icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & { muiName: string };
       badge?: number;
       to?: string;
     } & PropsWithoutRef<ButtonProps>
