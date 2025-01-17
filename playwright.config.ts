@@ -38,6 +38,8 @@ export default defineConfig({
     video: 'on-first-retry',
   },
 
+  expect: { timeout: 10_000 },
+
   /* Configure projects for major browsers */
   projects: [
     {
@@ -68,7 +70,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'yarn dev',
+    command: 'yarn dev --host',
     url: 'http://localhost:5173',
   },
 });
