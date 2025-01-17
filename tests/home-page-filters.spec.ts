@@ -52,7 +52,7 @@ test('check if the status filters is working properly', async ({ page }) => {
 
   await page.getByLabel('A transmettre').check();
 
-  await homePage.checkNumberOfDisplayedItems(0, 16);
+  await homePage.checkNumberOfDisplayedItems(1, 16);
 
   await homePage.resetAllFilters();
 
@@ -133,7 +133,7 @@ test('check if the search input is working properly', async ({ page }) => {
   await homePage.go();
   await homePage.importData();
   await page.getByPlaceholder('Nom, prénom, ville, enquête,').fill('graham');
-  await homePage.checkNumberOfDisplayedItems(4, 16);
+  await homePage.checkNumberOfDisplayedItems(7, 16);
 });
 
 test('check if the order input is working properly', async ({ page }) => {
