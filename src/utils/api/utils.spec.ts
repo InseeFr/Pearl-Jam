@@ -9,6 +9,7 @@ import {
   getSecureHeader,
   getToken,
 } from './utils';
+import { SurveyUnit } from 'types/pearl';
 
 vi.mock('utils/keycloak', () => ({
   kc: { token: 'mocked_token' },
@@ -69,15 +70,9 @@ describe('Utils tests', () => {
     const surveyUnit = createSurveyUnit();
 
     const formatted = await formatSurveyUnitForPut(surveyUnit);
-    expect(formatted).toEqual({
+    const expected: SurveyUnit = {
       id: 'SU12345',
-      identification: {
-        access: null,
-        category: null,
-        identification: null,
-        occupant: null,
-        situation: null,
-      },
+      identification: {},
       move: false,
       persons: [
         {
@@ -137,7 +132,7 @@ describe('Utils tests', () => {
       contactOutcome: {
         date: 1700000000000,
         totalNumberOfContactAttempts: 3,
-        type: 'COMPLETED',
+        type: 'INA',
       },
       states: [
         {
@@ -146,7 +141,8 @@ describe('Utils tests', () => {
           type: 'INITIALIZED',
         },
       ],
-    });
+    };
+    expect(formatted).toEqual(expected);
   });
 
   it('should return header for KEYCLOAK mode when online', () => {
