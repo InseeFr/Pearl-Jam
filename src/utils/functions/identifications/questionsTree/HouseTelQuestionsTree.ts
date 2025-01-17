@@ -48,5 +48,6 @@ export const transmissionRulesHouseTel: TransmissionRules = {
     contactOutcome: 'NOA',
   },
   invalidIfmissingContactOutcome: true,
+  invalidIfmissingContactAttempt: true,
   invalidStateAndContactOutcome: { state: 'WFT', contactOutcome: 'INA' },
 };

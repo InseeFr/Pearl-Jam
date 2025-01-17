@@ -96,5 +96,6 @@ export const transmissionRulesHouseF2F: TransmissionRules = {
     contactOutcome: 'NOA',
   },
   invalidIfmissingContactOutcome: true,
+  invalidIfmissingContactAttempt: true,
   invalidStateAndContactOutcome: { state: 'WFT', contactOutcome: 'INA' },
 };
