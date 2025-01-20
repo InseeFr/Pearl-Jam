@@ -47,10 +47,7 @@ export function Home() {
 
   const filteredSurveyUnits = filterSurveyUnits(surveyUnits, filter);
 
-  //TODO we need to find a better solution
-  const isDev =
-    filteredSurveyUnits.length === 0 &&
-    (window.location.hostname === 'localhost' || window.location.hostname === 'front');
+  const isDev = filteredSurveyUnits.length === 0 && window.location.hostname === 'localhost';
 
   return (
     <SidebarLayout>
