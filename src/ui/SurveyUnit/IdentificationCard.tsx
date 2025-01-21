@@ -127,7 +127,7 @@ function IdentificationDialog({
 }: Readonly<{
   answers: Answer[];
   question: Question;
-  onClose: () => void;
+  onClose: VoidFunction;
   onSubmit: (answer?: Answer) => void;
 }>) {
   const [localAnswer, setLocalAnswer] = useState(question?.answer?.value);

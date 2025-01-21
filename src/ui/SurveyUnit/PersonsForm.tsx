@@ -25,7 +25,7 @@ import { Row } from '../Row';
 import { Typography } from '../Typography';
 
 interface PersonsFormProps {
-  onClose: () => void;
+  onClose: VoidFunction;
   surveyUnit: SurveyUnit;
   persons: SurveyUnitPerson[];
 }
@@ -187,7 +187,7 @@ interface PhoneLineProps {
   name: string;
   control: Control;
   editable?: boolean;
-  onRemove?: () => void;
+  onRemove?: VoidFunction;
 }
 
 /**

@@ -66,7 +66,7 @@ const PersonList = ({
   questionnairesVisible: Record<number, boolean>;
   toggleQuestionnaire: (index: number) => void;
   handleStartQuestionnaire: (index: number) => void;
-  toggleModal: () => void;
+  toggleModal: VoidFunction;
   isHouseHoldFinished: boolean;
 }>) => {
   const classes = useStyles();
