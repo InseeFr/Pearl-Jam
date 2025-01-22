@@ -1,5 +1,6 @@
 x-react-volumes: &react-volumes
   - ./:/opt/app
+  - /mnt/wslg/.X11-unix:/tmp/.X11-unix
   - /opt/app/node_modules
 
 services:
@@ -19,3 +20,17 @@ services:
     environment:
       WATCHPACK_POLLING: true
       FAST_REFRESH: true
+      DISPLAY: unix:0
+      WAYLAND_DISPLAY: wayland-0
+      XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
+    command:
+      - /bin/bash
+      - -c
+      - |
+        echo "Podman !!!" && sleep 1
+        mkdir -p /mnt/c/Windows/System32/WindowsPowerShell/v1.0 && sleep 1
+        touch /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe && sleep 1
+        chmod '755' /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
+        yarn install
+        yarn dev && sleep 1
+        sleep infinity

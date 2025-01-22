@@ -20,20 +20,18 @@ docker compose up
 docker exec -it reactapp /bin/sh
 ```
 
-- Once you are inside the container, you need maybe to run an install, because some dependencies are post-processed and depends on the OS.
-
-```shell
-# You are in the reactapp container
-yarn
-```
-
 - You can now run the **Vite** server and/or run the Playwright tests suite.
   When you launch Playwright, the **Vite** server will be started (you do not need to start it manually).
 
+// TODO: Pick if we either want the user to launch a dev server or let directly the service launching it
+
 ```shell
 # You are in the reactapp container
-yarn dev
+yarn dev --host
 npx playwright test --ui-port=8888 --ui-host=0.0.0.0 --workers=1
+
+# Generating a test file by captation
+npx playwright codegen test http://localhost:5173
 ```
 
-The application will be available on http://localhost:5173 and the Playwright UI on http://localhost:8888.
+The test running application (`playwright test`) will be available on http://localhost:5173 and the Playwright UI on http://localhost:8888.
