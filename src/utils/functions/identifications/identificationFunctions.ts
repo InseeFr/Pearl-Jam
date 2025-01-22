@@ -118,17 +118,21 @@ export function identificationIsFinished(
 
   const questionsTree = identificationQuestionsTree[identificationConfiguration];
 
+  let finished = true;
+
+  // questionsTree is unordered, so we can found an unanswered question but the next could be concluding
   for (const questionId in questionsTree) {
     const questions = questionsTree[questionId as IdentificationQuestionsId];
     if (!questions) continue;
 
     const response = identification[questions.id];
-    if (!response) continue;
+    if (!response) finished = false;
 
     const concluding = questions.options.find(o => o.value === response)?.concluding;
     if (concluding) return true;
   }
-  return false;
+
+  return finished;
 }
 
 export function isInvalidIdentificationAndContactOutcome(
