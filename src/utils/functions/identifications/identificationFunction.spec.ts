@@ -225,7 +225,29 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
 
 mockedSurveyUnits.map(({ input, output }) => {
   it(`ValidateTransmission should return ${output} when adding ${input}`, () => {
-    expect(validateTransmission(input)).toBe(output);
+    const result = validateTransmission(input);
+    if (result !== output) {
+      console.log('Failed input:', {
+        identificationConfiguration: input.identificationConfiguration,
+        identification: input.identification,
+        contactOutcome: input.contactOutcome,
+        contactAttempts: input.contactAttempts,
+        states: input.states,
+      });
+
+      console.log('Expected: ', output);
+      console.log('For given rules :', transmissionRules[input.identificationConfiguration]);
+      if (
+        transmissionRules[input.identificationConfiguration].invalidIdentificationsAndContactOutcome
+      )
+        console.log(
+          'invalidIdentificationsAndContactOutcome :',
+          transmissionRules[input.identificationConfiguration]
+            .invalidIdentificationsAndContactOutcome
+        );
+    }
+
+    expect(result).toBe(output);
   });
 });
 
