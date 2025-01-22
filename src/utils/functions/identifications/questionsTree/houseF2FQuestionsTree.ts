@@ -97,5 +97,5 @@ export const transmissionRulesHouseF2F: TransmissionRules = {
   },
   invalidIfmissingContactOutcome: true,
   invalidIfmissingContactAttempt: true,
-  invalidStateAndContactOutcome: { state: 'WFT', contactOutcome: 'INA' },
+  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
 };
