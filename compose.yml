@@ -1,5 +1,6 @@
 x-react-volumes: &react-volumes
   - ./:/opt/app
+  - /opt/app/node_modules
 
 services:
   front:
