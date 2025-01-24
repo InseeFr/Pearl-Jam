@@ -16,6 +16,7 @@ import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
 import { useAuth } from './utils/auth/initAuth';
 import { loadConfiguration, useConfiguration } from './utils/hooks/useConfiguration';
 import { useEffectOnce } from './utils/hooks/useEffectOnce';
+import { DevTools } from './devtools';
 
 const QueenPage = lazy(() => import('./pages/QueenPage'));
 
@@ -101,6 +102,7 @@ function AppWrapper() {
           )}
         </div>
       </LocalizationProvider>
+      {import.meta.env.DEV && <DevTools />}
     </PearlTheme>
   );
 }
