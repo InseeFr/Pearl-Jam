@@ -42,15 +42,12 @@ export interface CommunicationRequestForm {
 }
 
 interface CommunicationFormProps {
-  onClose: () => void;
+  onClose: VoidFunction;
   surveyUnit: SurveyUnit;
 }
 
 /**
  * Form to add a new communication request to a survey unit *
- * @param {() => void} onClose
- * @param {SurveyUnit} surveyUnit
- * @returns {TSX.Element}
  */
 export function CommunicationForm({ onClose, surveyUnit }: Readonly<CommunicationFormProps>) {
   const [step, setStep] = useState(Steps.MEDIUM);

@@ -11,9 +11,9 @@ export type ServiceWorkerState = {
   isUpdateAvailable: boolean;
   isServiceWorkerInstalled: boolean;
   isInstallationFailed: boolean;
-  updateApp: () => void;
-  clearUpdating: () => void;
-  uninstall: () => void;
+  updateApp: VoidFunction;
+  clearUpdating: VoidFunction;
+  uninstall: VoidFunction;
 };
 
 /**

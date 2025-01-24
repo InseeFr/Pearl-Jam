@@ -23,7 +23,7 @@ import { SyncResult } from 'types/pearl';
 export function SyncDialog({
   onClose,
   syncResult,
-}: Readonly<{ onClose: () => void; syncResult: SyncResult }>) {
+}: Readonly<{ onClose: VoidFunction; syncResult: SyncResult }>) {
   const { state, details, messages } = syncResult;
   const campaigns = useMemo(() => {
     if (!details) {

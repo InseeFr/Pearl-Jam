@@ -23,16 +23,12 @@ const defaultValue = {
 };
 
 interface ContactOutcomeFormProps {
-  onClose: () => void;
+  onClose: VoidFunction;
   surveyUnit: SurveyUnit;
 }
 
 /**
  * Form to update or create a new contact outcome
- *
- * @param {() => void} onClose
- * @param {SurveyUnit} surveyUnit
- * @returns {JSX.Element}
  */
 export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutcomeFormProps>) {
   const { handleSubmit, control, watch } = useForm({
