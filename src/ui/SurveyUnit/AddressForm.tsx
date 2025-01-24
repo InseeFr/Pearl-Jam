@@ -13,7 +13,7 @@ import { FieldRow } from '../FieldRow';
 import { SurveyUnit } from 'types/pearl';
 
 interface AddressFormProps {
-  onClose: () => void;
+  onClose: VoidFunction;
   surveyUnit: SurveyUnit;
 }
 

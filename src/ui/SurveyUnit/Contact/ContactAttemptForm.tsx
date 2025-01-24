@@ -31,7 +31,7 @@ const getTitle = (step: number) => {
 };
 
 interface ContactAttemptFormProps {
-  onClose: () => void;
+  onClose: VoidFunction;
   surveyUnit: SurveyUnit;
 }
 /**
