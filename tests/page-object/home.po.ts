@@ -14,8 +14,8 @@ export class HomePage implements GenericPage {
   }
 
   async checkNumberOfDisplayedItems(count: number, total: number) {
-    expect(
-      await this.page.getByText(`${count} unités sur ${total}`, { exact: false })
+    await expect(
+      this.page.getByText(`${count} unités sur ${total}`, { exact: false })
     ).toBeVisible();
   }
 
