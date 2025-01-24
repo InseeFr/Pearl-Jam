@@ -8,6 +8,7 @@ test('check if all tabs work properly', async ({ page }) => {
   homePage.importData();
 
   const surveyPage = new SurveyPage(page);
+
   await surveyPage.selectSurvey();
 
   await expect(await surveyPage.getTitle('Logement')).toBeVisible();

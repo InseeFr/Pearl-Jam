@@ -77,7 +77,7 @@ function ConfirmDialog({
   open,
   onConfirm,
   onCancel,
-}: Readonly<{ open: boolean; onConfirm: () => void; onCancel: () => void }>) {
+}: Readonly<{ open: boolean; onConfirm: VoidFunction; onCancel: VoidFunction }>) {
   const randomText = useMemo(
     () => generateRandomInt().toString(36).substring(2, 10).toUpperCase(),
     []

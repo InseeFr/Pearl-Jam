@@ -43,8 +43,8 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'], locale: 'fr-FR' },
+      name: 'firefox',
+      use: { ...devices['Firefox'], locale: 'fr-FR' },
     },
 
     /* Test against mobile viewports. */

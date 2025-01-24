@@ -20,7 +20,7 @@ const HousingResident = ({
   startHousing: boolean;
   finishedHousing: boolean;
   toggleHousing: (value: MouseEvent<HTMLButtonElement>) => void;
-  toggleModal: () => void;
+  toggleModal: VoidFunction;
 }>) => {
   return (
     <Row justifyContent="space-between">

@@ -21,7 +21,7 @@ import { Notification } from './Notification';
 
 interface NotificationsTypes {
   target: HTMLElement;
-  onClose: () => void;
+  onClose: VoidFunction;
 }
 
 export function Notifications({ target, onClose }: Readonly<NotificationsTypes>) {
