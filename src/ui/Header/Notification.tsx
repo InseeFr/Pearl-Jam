@@ -25,7 +25,7 @@ import { Typography } from '../Typography';
 
 interface NotificationProps {
   notification: NotificationType;
-  onExit: () => void;
+  onExit: VoidFunction;
 }
 
 export function Notification({ notification, onExit }: Readonly<NotificationProps>) {

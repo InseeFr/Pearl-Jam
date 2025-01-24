@@ -15,7 +15,7 @@ import { SurveyUnit } from 'types/pearl';
 interface CommentDialogProps {
   surveyUnit: SurveyUnit;
   open: boolean;
-  onClose: () => void;
+  onClose: VoidFunction;
 }
 
 /**

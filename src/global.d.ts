@@ -12,5 +12,5 @@ declare module 'dramaQueen/DramaIndex' {
   export function mount(configuration: {
     mountPoint: HTMLElement | null;
     initialPathname: string;
-  }): () => void;
+  }): VoidFunction;
 }

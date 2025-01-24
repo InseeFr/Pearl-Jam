@@ -47,8 +47,6 @@ export function Home() {
 
   const filteredSurveyUnits = filterSurveyUnits(surveyUnits, filter);
 
-  const isDev = filteredSurveyUnits.length === 0 && window.location.hostname === 'localhost';
-
   return (
     <SidebarLayout>
       <Sidebar surveyUnits={surveyUnits} />
@@ -75,16 +73,6 @@ export function Home() {
               />
             </div>
           ))}
-          {isDev && (
-            <Stack gap={2} py={5} alignItems="center" sx={{ gridColumn: '1 / -1' }}>
-              <Typography variant="m" color="textTertiary" as="p">
-                Vous êtes en mode développement
-              </Typography>
-              <Button variant="contained" onClick={seedData}>
-                Importer des données de test
-              </Button>
-            </Stack>
-          )}
         </Grid>
       </Stack>
     </SidebarLayout>

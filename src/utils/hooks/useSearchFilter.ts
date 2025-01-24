@@ -26,8 +26,8 @@ type SearchFilterValue = {
   setSubSample: (s: number | null) => void;
   setSubGrappe: (s: number | null) => void;
   setSearch: (s: string) => void;
-  toggleSortDirection: () => void;
-  reset: () => void;
+  toggleSortDirection: VoidFunction;
+  reset: VoidFunction;
 } & SearchCriteria;
 
 const storageKey = 'pearl-search-filter';
