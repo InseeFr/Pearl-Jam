@@ -5,7 +5,7 @@ export class HomePage implements GenericPage {
   constructor(private readonly page: Page) {}
 
   go() {
-    return this.page.goto('/');
+    return this.page.goto('/', { timeout: 10000 });
   }
 
   importData() {
