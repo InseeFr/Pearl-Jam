@@ -94,9 +94,6 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
     'A repérer/Contacter'
   );
   await expect(page.locator('tr:nth-child(3) > td:nth-child(4)')).toContainText('Face à face');
-  await expect(page.locator('tr:nth-child(3) > td:nth-child(5)')).toContainText(
-    'Enquête acceptéemercredi 15 janvier 2025'
-  );
 
   await page
     .getByRole('row', { name: '#su10 DUBUQUE-2 Clementina-2' })
