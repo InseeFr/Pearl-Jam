@@ -46,6 +46,7 @@ export function Home() {
   }, [surveyUnits.length]);
 
   const filteredSurveyUnits = filterSurveyUnits(surveyUnits, filter);
+
   const isDev = filteredSurveyUnits.length === 0 && window.location.hostname === 'localhost';
 
   return (

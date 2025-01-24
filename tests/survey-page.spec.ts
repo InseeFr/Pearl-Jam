@@ -25,7 +25,7 @@ test('check if all tabs work properly', async ({ page }) => {
   await expect(await surveyPage.getTitle('Commentaire')).toBeVisible();
 
   await surveyPage.selectTab('Logement & Repérage');
-  await expect(await surveyPage.getTitle('Individu')).not.toBeVisible();
+  await expect(await page.getByText('Numéro et libellé de voie :')).toBeVisible();
   await page.getByRole('button', { name: 'Modifier' }).click();
 
   await expect(page.getByRole('heading', { name: "Modification de l'adresse" })).toBeVisible();
@@ -58,6 +58,21 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
 
   const surveyPage = new SurveyPage(page);
   await page.getByRole('link', { name: 'DUBUQUE-2 Clementina-' }).click();
+
+  await page.getByRole('button', { name: 'Identification du logement' }).click();
+  await page.getByText('Logement identifié').click();
+  await page.getByRole('button', { name: 'Confirmer' }).click();
+  await page.getByText('Logement accessible').click();
+  await page.getByRole('button', { name: 'Confirmer' }).click();
+  await page
+    .locator('label')
+    .filter({ hasText: /^Ordinaire$/ })
+    .click();
+  await page.getByRole('button', { name: 'Confirmer' }).click();
+  await page.getByText('Résidence principale').click();
+  await page.getByRole('button', { name: 'Confirmer' }).click();
+  await page.getByText('Occupant identifié').click();
+  await page.getByRole('button', { name: 'Confirmer' }).click();
 
   await surveyPage.selectTab('Contacts');
   await surveyPage.addContactAttempt();
