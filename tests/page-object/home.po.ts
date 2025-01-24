@@ -8,7 +8,8 @@ export class HomePage implements GenericPage {
     return this.page.goto('/', { timeout: 10000 });
   }
 
-  importData() {
+  async importData() {
+    await this.page.getByLabel('DevTools').hover();
     return this.page.getByRole('button', { name: 'Importer des données de test' }).click();
   }
 
