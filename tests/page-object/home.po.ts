@@ -10,7 +10,8 @@ export class HomePage implements GenericPage {
 
   async importData() {
     await this.page.getByLabel('DevTools').hover();
-    return this.page.getByRole('button', { name: 'Importer des données de test' }).click();
+    await this.page.getByRole('button', { name: 'Importer des données de test' }).click();
+    await this.page.getByText('Mon suivi').hover();
   }
 
   async checkNumberOfDisplayedItems(count: number, total: number) {
