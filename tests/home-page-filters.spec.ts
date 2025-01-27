@@ -34,7 +34,7 @@ test('check if the status filters is working properly', async ({ page }) => {
 
   await page.getByLabel('A repérer/Contacter').check();
 
-  await homePage.checkNumberOfDisplayedItems(6, 16);
+  await homePage.checkNumberOfDisplayedItems(8, 16);
 
   await homePage.resetAllFilters();
 
