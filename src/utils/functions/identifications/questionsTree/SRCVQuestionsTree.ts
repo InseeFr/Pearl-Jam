@@ -6,6 +6,8 @@ import { IdentificationQuestions, TransmissionRules } from '../identificationFun
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
 
+// TODO : transformer en fonction qui retourne un IdentificationQuestions
+// (response) => IdentificationQuestions
 export const SRCVIdentificationQuestionsTree: IdentificationQuestions = {
   [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: {
     id: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,

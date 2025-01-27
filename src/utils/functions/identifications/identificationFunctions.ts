@@ -53,6 +53,8 @@ export const identificationQuestionsTree: Record<
   [IdentificationConfiguration.SRCVREINT]: {},
 };
 
+// TODO : changer la signature ? Record<IdentificationConfiguration | (response) => IdentificationConfiguration, TransmissionRules>
+// TODO : Adapter dans hook + fonction dans ce script mais pas grand chose à faire je pense
 export const transmissionRules: Record<IdentificationConfiguration, TransmissionRules> = {
   [IdentificationConfiguration.INDTEL]: transmissionRulesByTel,
   [IdentificationConfiguration.IASCO]: transmissionRulesHouseF2F,
