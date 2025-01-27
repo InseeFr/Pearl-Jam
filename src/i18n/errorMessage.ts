@@ -14,6 +14,11 @@ const errorMessage = {
     en: 'Missing label',
     sq: 'Etiketë e humbur',
   },
+  missingValue: {
+    fr: 'Valeur manquante',
+    en: 'Missing value',
+    sq: 'Vlerë e humbur',
+  },
 };
 
 export default errorMessage;

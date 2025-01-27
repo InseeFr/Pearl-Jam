@@ -152,7 +152,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
                 {formatDate(date.getTime(), true)}
               </Typography>
               <StaticDateTimePicker
-                defaultValue={date}
+                defaultValue={date.toISOString()}
                 onChange={setValue}
                 ampm={false}
                 ampmInClock={false}

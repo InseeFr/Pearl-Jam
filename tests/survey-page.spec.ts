@@ -58,7 +58,7 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
   await homePage.importData();
 
   const surveyPage = new SurveyPage(page);
-  await page.getByRole('link', { name: 'DUBUQUE-2 Clementina-' }).click();
+  await page.getByRole('link', { name: 'DUBUQUE-2 Clementina-2' }).click();
 
   await page.getByRole('button', { name: 'Identification du logement' }).click();
   await page.getByText('Logement identifié').click();
@@ -91,11 +91,10 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
     .first()
     .click();
 
-  await expect(page.locator('tr:nth-child(3) > td:nth-child(3)')).toContainText('A synchroniser');
-  await expect(page.locator('tr:nth-child(3) > td:nth-child(4)')).toContainText('Face à face');
-  await expect(page.locator('tr:nth-child(3) > td:nth-child(5)')).toContainText(
-    'Indisponibilité définitive'
+  await expect(page.locator('tr:nth-child(3) > td:nth-child(3)')).toContainText(
+    'A repérer/Contacter'
   );
+  await expect(page.locator('tr:nth-child(3) > td:nth-child(4)')).toContainText('Face à face');
 
   await page
     .getByRole('row', { name: '#su10 DUBUQUE-2 Clementina-2' })

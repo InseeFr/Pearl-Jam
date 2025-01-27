@@ -1,17 +1,25 @@
 import {
   IdentificationConfiguration,
+  IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import {
   indtelIdentificationQuestionsTree,
   transmissionRulesByTel,
 } from './questionsTree/indtelQuestionsTree';
-import { houseF2FIdentificationQuestionsTree } from './questionsTree/houseF2FQuestionsTree';
-import { houseTelIdentificationQuestionsTree } from './questionsTree/HouseTelQuestionsTree';
+import {
+  houseF2FIdentificationQuestionsTree,
+  transmissionRulesHouseF2F,
+} from './questionsTree/houseF2FQuestionsTree';
+import {
+  houseTelIdentificationQuestionsTree,
+  transmissionRulesHouseTel,
+} from './questionsTree/HouseTelQuestionsTree';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
-import { checkValidityForTransmissionNoident, getLastState } from '../surveyUnitFunctions';
-import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
+import { getLastState } from '../surveyUnitFunctions';
+import { StateValues } from 'utils/enum/SUStateEnum';
+import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
+import { transmissionRulesNoIdentification } from './questionsTree/noIdentificationTransmissionRules';
 
 export type IdentificationQuestionOption = {
   value: string;
@@ -40,6 +48,18 @@ export const identificationQuestionsTree: Record<
   [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
   [IdentificationConfiguration.HOUSETEL]: houseTelIdentificationQuestionsTree,
   [IdentificationConfiguration.HOUSETELWSR]: houseTelIdentificationQuestionsTree,
+  [IdentificationConfiguration.INDTELNOR]: indtelIdentificationQuestionsTree,
+  [IdentificationConfiguration.INDF2F]: {},
+  [IdentificationConfiguration.SRCVREINT]: {},
+};
+
+export const transmissionRules: Record<IdentificationConfiguration, TransmissionRules> = {
+  [IdentificationConfiguration.INDTEL]: transmissionRulesByTel,
+  [IdentificationConfiguration.IASCO]: transmissionRulesHouseF2F,
+  [IdentificationConfiguration.NOIDENT]: transmissionRulesNoIdentification,
+  [IdentificationConfiguration.HOUSEF2F]: transmissionRulesHouseF2F,
+  [IdentificationConfiguration.HOUSETEL]: transmissionRulesHouseTel,
+  [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHouseTel,
   [IdentificationConfiguration.INDTELNOR]: {},
   [IdentificationConfiguration.INDF2F]: {},
   [IdentificationConfiguration.SRCVREINT]: {},
@@ -49,11 +69,23 @@ export type ResponseState = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionOption>
 >;
 
-export type TransmissionsRules = {
-  identification: SurveyUnitIdentification;
-  outcome?: string;
-  isValid: boolean;
-}[];
+// Type might evolve to make possible any transmission rules match for any identification type possible
+export type TransmissionRules = {
+  validIfIdentificationFinished?: boolean;
+  invalidIfmissingContactOutcome?: boolean;
+  invalidIfmissingContactAttempt?: boolean;
+  invalidIdentificationsAndContactOutcome?: {
+    identifications: {
+      questionId: IdentificationQuestionsId;
+      value: IdentificationQuestionOptionValues;
+    }[];
+    contactOutcome: ContactOutcomeValue;
+  };
+  expectedStateForConctactOutcome?: {
+    expectedState: StateValues;
+    contactOutcome: ContactOutcomeValue;
+  };
+};
 
 export function checkAvailability(
   questions: IdentificationQuestions,
@@ -78,98 +110,78 @@ export function checkAvailability(
 }
 
 export function identificationIsFinished(
-  identificationConfiguration: IdentificationConfiguration,
+  identificationConfiguration?: IdentificationConfiguration,
   identification?: SurveyUnitIdentification
 ): boolean {
-  const questionsTree = identificationQuestionsTree[identificationConfiguration];
-
+  if (!identificationConfiguration) return true;
   if (!identification) return false;
 
+  const questionsTree = identificationQuestionsTree[identificationConfiguration];
+
+  let finished = true;
+
+  // questionsTree is unordered, so we can found an unanswered question but the next could be concluding
   for (const questionId in questionsTree) {
     const questions = questionsTree[questionId as IdentificationQuestionsId];
     if (!questions) continue;
 
     const response = identification[questions.id];
+    if (!response) finished = false;
+
     const concluding = questions.options.find(o => o.value === response)?.concluding;
-    if (!response) return false;
-    else if (concluding) {
-      return true;
-    }
+    if (concluding) return true;
   }
-  return true;
+
+  return finished;
 }
 
-// TODO : must be replaced by validateTransmissionArray (as we're doing for INDTEL)
-export const checkValidityForTransmissionIasco = (su: SurveyUnit) => {
-  const { contactOutcome, identification, identificationConfiguration, states = [] } = su;
-
-  if (!identification || !contactOutcome) return false;
-  if (!identificationIsFinished(identificationConfiguration, identification)) return false;
-
-  // INA contactOutcome + no questionnaire
-  const type = contactOutcome.type;
-  if (
-    type === contactOutcomeEnum.INTERVIEW_ACCEPTED.value &&
-    getLastState(states)?.type !== surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
-  )
-    return false;
-
-  // issue NOA + identification.avi
-  const { identification: identificationValue, category, situation } = identification;
-  if (
-    type === contactOutcomeEnum.NOT_APPLICABLE.value &&
-    identificationQuestionsTree[IdentificationConfiguration.IASCO].identification?.options.find(
-      o => o.value === identificationValue && o.concluding
-    ) &&
-    identificationQuestionsTree[IdentificationConfiguration.IASCO].situation?.options.find(
-      o => o.value === situation && o.concluding
-    ) &&
-    identificationQuestionsTree[IdentificationConfiguration.IASCO].category?.options.find(
-      o => o.value === category && o.concluding
-    )
-  )
-    return false;
-
-  return getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
-};
-
-export const isValidForTransmission = (su: SurveyUnit) => {
-  const { identificationConfiguration } = su;
-  switch (identificationConfiguration) {
-    case IdentificationConfiguration.IASCO:
-      return checkValidityForTransmissionIasco(su);
-    case IdentificationConfiguration.HOUSEF2F:
-      return checkValidityForTransmissionIasco(su);
-    case IdentificationConfiguration.INDTEL:
-      return validateTransmissionArray(transmissionRulesByTel, su);
-    case IdentificationConfiguration.NOIDENT:
-    default:
-      return checkValidityForTransmissionNoident(su);
-  }
-};
-
-// Must be extented for IASCO
-export function validateTransmissionArray(
-  transmissionRules: TransmissionsRules,
+export function isInvalidIdentificationAndContactOutcome(
+  transmissionRules: TransmissionRules,
   su: SurveyUnit
 ): boolean {
-  const outcome = su.contactOutcome?.type;
+  if (
+    transmissionRules.invalidIdentificationsAndContactOutcome &&
+    su.identification &&
+    su.contactOutcome
+  ) {
+    const identifications =
+      transmissionRules.invalidIdentificationsAndContactOutcome.identifications;
+    const contactOutcome = transmissionRules.invalidIdentificationsAndContactOutcome.contactOutcome;
 
-  if (!su.identification) return false;
-
-  const situation = su.identification.situation;
-  const individualStatus = su.identification.individualStatus;
-  const lastState = getLastState(su.states);
-
-  // If there is no questionnaire, then there is no transmission
-  if (lastState?.type !== surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) {
-    return false;
+    for (const identification of identifications) {
+      if (
+        su.identification[identification.questionId] === identification.value &&
+        su.contactOutcome.type === contactOutcome
+      )
+        return true;
+    }
   }
-  const rule = transmissionRules.find(
-    r =>
-      r.identification.individualStatus === individualStatus &&
-      (r.identification.situation === situation || r.identification.situation) &&
-      r.outcome === outcome
-  );
-  return rule?.isValid ?? false;
+  return false;
+}
+
+export function validateTransmission(su: SurveyUnit): boolean {
+  const suTransmissionRules = transmissionRules[su.identificationConfiguration];
+
+  if (suTransmissionRules.validIfIdentificationFinished) {
+    if (!identificationIsFinished(su.identificationConfiguration, su.identification)) return false;
+  }
+
+  if (suTransmissionRules.invalidIfmissingContactOutcome && !su.contactOutcome) return false;
+
+  if (isInvalidIdentificationAndContactOutcome(suTransmissionRules, su)) return false;
+
+  if (suTransmissionRules.expectedStateForConctactOutcome) {
+    if (
+      su?.contactOutcome?.type ===
+        suTransmissionRules.expectedStateForConctactOutcome.contactOutcome &&
+      getLastState(su.states)?.type !==
+        suTransmissionRules.expectedStateForConctactOutcome.expectedState
+    )
+      return false;
+  }
+
+  if (suTransmissionRules.invalidIfmissingContactAttempt && !su.contactAttempts.length)
+    return false;
+
+  return true;
 }

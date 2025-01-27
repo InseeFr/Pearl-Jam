@@ -228,6 +228,25 @@ export async function seedData() {
   });
   surverUnits.push({
     ...surverUnits[0],
+    id: 'sunoident-empty',
+    identification: {},
+    firstName: 'John2',
+    lastName: 'Absent2',
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    contactOutcome: undefined,
+  });
+  surverUnits.push({
+    ...surverUnits[0],
+    id: 'sunoident-WFT',
+    identification: {},
+    firstName: 'John3',
+    lastName: 'Absent3',
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    states: [{ type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type, date: 1 }],
+    contactOutcome: undefined,
+  });
+  surverUnits.push({
+    ...surverUnits[0],
     managementStartDate: new Date().getTime() - 10 * day,
     interviewerStartDate: new Date().getTime() - 9 * day,
     identificationPhaseStartDate: new Date().getTime() - 8 * day,
@@ -240,13 +259,20 @@ export async function seedData() {
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
   });
-  await userIdbService.insert({
-    id: 1,
-    title: 'MISTER',
-    firstName: 'John',
-    lastName: 'Doe',
-    phoneNumber: '0123456789',
-    email: 'john@doe.fr',
+  surverUnits.push({
+    ...surverUnits[0],
+    managementStartDate: new Date().getTime() - 10 * day,
+    interviewerStartDate: new Date().getTime() - 9 * day,
+    identificationPhaseStartDate: new Date().getTime() - 8 * day,
+    collectionStartDate: new Date().getTime() - 7 * day,
+    collectionEndDate: new Date().getTime() - 6 * day,
+    endDate: new Date().getTime() + 15 * day,
+    id: 'HOUSETEL',
+    identification: {},
+    firstName: 'Flin',
+    lastName: 'Ished',
+    identificationConfiguration: IdentificationConfiguration.HOUSETEL,
   });
+
   await surveyUnitIDBService.addAll(surverUnits);
 }

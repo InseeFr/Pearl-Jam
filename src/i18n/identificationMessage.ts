@@ -90,6 +90,11 @@ const identificationMessage = {
     en: 'Housing identification',
     sq: 'Identifikimi i banimit',
   },
+  foundIndividual: {
+    fr: 'Individu Retrouvé',
+    en: 'Found Individual',
+    sq: 'Gjetur Individ',
+  },
   housingAccess: { fr: 'Accès au logement', en: 'Housing access', sq: 'Qasja në banim' },
   housingSituation: {
     fr: 'Situation du logement',

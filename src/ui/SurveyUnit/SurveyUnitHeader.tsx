@@ -25,7 +25,7 @@ import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material/styles';
 import D from '../../i18n/build-dictionary';
 import { SurveyUnit } from 'types/pearl';
-import { isValidForTransmission } from 'utils/functions/identifications/identificationFunctions';
+import { validateTransmission } from 'utils/functions/identifications/identificationFunctions';
 
 const useStyles = makeStyles({
   rotateBox: {
@@ -197,7 +197,7 @@ interface SubmitButtonProp {
  * Transmit button to sync a surveyUnit
  */
 function SubmitButton({ surveyUnit }: Readonly<SubmitButtonProp>) {
-  const canSubmit = isValidForTransmission(surveyUnit);
+  const canSubmit = validateTransmission(surveyUnit);
   const handleSubmit = () => {
     const newStates = addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type);
     persistSurveyUnit({ ...surveyUnit, states: newStates });

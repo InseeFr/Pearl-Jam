@@ -1,3 +1,4 @@
+import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
@@ -85,7 +86,11 @@ export type SurveyUnitCommunicationTemplate = {
   id: string;
 };
 
-export type ContactOutcome = { date: number; totalNumberOfContactAttempts: number; type?: string };
+export type ContactOutcome = {
+  date: number;
+  totalNumberOfContactAttempts: number;
+  type?: ContactOutcomeValue;
+};
 
 export type SurveyUnit = {
   displayName: string;
