@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { convertSUStateInToDo } from './convertSUStateInToDo';
 import { toDoEnum } from 'utils/enum/SUToDoEnum';
-import { surveyUnitStateEnum, TypeValues } from 'utils/enum/SUStateEnum';
+import { surveyUnitStateEnum, StateValues } from 'utils/enum/SUStateEnum';
 
 describe('convertSUStateInToDo', () => {
   it('should return NOT_STARTED for VISIBLE_NOT_CLICKABLE and VISIBLE_AND_CLICKABLE', () => {
@@ -49,6 +49,6 @@ describe('convertSUStateInToDo', () => {
   });
 
   it('should return undefined for an unknown state', () => {
-    expect(convertSUStateInToDo('UNKNOWN_STATE' as unknown as TypeValues)).toBeUndefined();
+    expect(convertSUStateInToDo('UNKNOWN_STATE' as unknown as StateValues)).toBeUndefined();
   });
 });

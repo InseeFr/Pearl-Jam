@@ -18,7 +18,10 @@ export const contactOutcomeEnum = {
     label: `${D.definitlyUnavailable}`,
   },
   NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
-};
+} as const;
+
+export type ContactOutcomeValue =
+  (typeof contactOutcomeEnum)[keyof typeof contactOutcomeEnum]['value'];
 
 export const findContactOutcomeLabelByValue = (value?: string) =>
   Object.values(contactOutcomeEnum).find(co => co.value === value)?.label;

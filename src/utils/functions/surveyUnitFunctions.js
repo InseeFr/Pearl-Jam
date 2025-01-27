@@ -1,11 +1,9 @@
 import { differenceInYears } from 'date-fns';
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST, TITLES } from 'utils/constants';
-
-import D from 'i18n';
-import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
+import D from 'i18n';
 
 export const getCommentByType = (type, su) => {
   if (Array.isArray(su.comments) && su.comments.length > 0) {
@@ -46,18 +44,6 @@ export const daysLeftForSurveyUnit = su => {
     0,
     Math.ceil((new Date(su.collectionEndDate).getTime() - new Date().getTime()) / DAY)
   );
-};
-
-// TODO : must be replaced by validateTransmissionArray
-export const checkValidityForTransmissionNoident = su => {
-  const { contactAttempts, contactOutcome, states = [] } = su;
-  if (contactAttempts.length === 0) return false;
-  if (!contactOutcome) return false;
-  const { type, totalNumberOfContactAttempts } = contactOutcome;
-  if (totalNumberOfContactAttempts === 0) return false;
-  if (type !== contactOutcomeEnum.INTERVIEW_ACCEPTED.value) return true;
-  if (getLastState(states)?.type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) return true;
-  return false;
 };
 
 /**

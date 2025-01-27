@@ -25,7 +25,7 @@ export function ResetData() {
   const [isConfirmOpen, toggleDialog] = useToggle(false);
 
   const goBack = () => {
-    window.location = window.location.origin;
+    window.location.assign(window.location.origin);
   };
 
   const handleDeleteAll = async () => {
