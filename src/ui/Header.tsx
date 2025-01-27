@@ -1,11 +1,13 @@
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import { SvgIconTypeMap } from '@mui/material';
 import Badge from '@mui/material/Badge';
 import Button, { ButtonProps } from '@mui/material/Button';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
-import { PropsWithChildren, PropsWithoutRef, ReactNode, useEffect, useState } from 'react';
+import { PropsWithChildren, PropsWithoutRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { version } from '../../package.json';
 import D from '../i18n/build-dictionary';
@@ -16,8 +18,6 @@ import { SynchronizeButton } from './Header/SynchronizeButton';
 import { UserButton } from './Header/UserButton';
 import { Row } from './Row';
 import { Typography } from './Typography';
-import { SvgIconTypeMap } from '@mui/material';
-import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 export function Header() {
   const notificationsCount = useUnreadNotificationsCount();
@@ -97,7 +97,7 @@ function HeaderNavLink({
 }: Readonly<
   PropsWithChildren<
     {
-      icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & { muiName: string };
+      icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
       badge?: number;
       to?: string;
     } & PropsWithoutRef<ButtonProps>

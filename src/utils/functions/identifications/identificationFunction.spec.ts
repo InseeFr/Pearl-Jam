@@ -1,9 +1,10 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, Assertion } from 'vitest';
 import {
   checkAvailability,
   identificationIsFinished,
   IdentificationQuestions,
   isInvalidIdentificationAndContactOutcome,
+  transmissionRules,
   TransmissionRules,
   validateTransmission,
 } from './identificationFunctions';
@@ -150,7 +151,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         access: IdentificationQuestionOptionValues.ACC,
         situation: IdentificationQuestionOptionValues.ABSORBED, // Concluding
       },
-      // INTERVIEW_ACCEPTED + WFT -> INVALID
+      // INA + WFT -> VALID
       contactOutcome: {
         date: Date.now(),
         totalNumberOfContactAttempts: 1,
@@ -159,7 +160,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
       states: [{ type: 'WFT', date: Date.now() }],
     },
-    output: false,
+    output: true,
   },
   {
     input: {
@@ -178,7 +179,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
       states: [{ type: 'N/A', date: Date.now() }],
     },
-    output: true,
+    output: false,
   },
   {
     input: {
@@ -191,14 +192,14 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         category: IdentificationQuestionOptionValues.PRIMARY,
         occupant: IdentificationQuestionOptionValues.IDENTIFIED,
       },
-      // IDENTIFIED + NOA -> invalid
+      // INA + N/A -> invalid
       contactOutcome: {
         date: Date.now(),
         totalNumberOfContactAttempts: 1,
-        type: contactOutcomeEnum.NOT_APPLICABLE.value,
+        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
+      states: [{ type: 'N/A', date: Date.now() }],
     },
     output: false,
   },
@@ -207,9 +208,9 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.INDTEL,
       identification: {
-        identification: IdentificationQuestionOptionValues.NOFIELD,
+        individualStatus: IdentificationQuestionOptionValues.NOFIELD,
       },
-      // WFT + INA -> invalid
+      // WFT + INA + NOFIELD -> valid
       contactOutcome: {
         date: Date.now(),
         totalNumberOfContactAttempts: 1,
@@ -218,13 +219,35 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
       states: [{ type: 'WFT', date: Date.now() }],
     },
-    output: false,
+    output: true,
   },
 ];
 
 mockedSurveyUnits.map(({ input, output }) => {
   it(`ValidateTransmission should return ${output} when adding ${input}`, () => {
-    expect(validateTransmission(input)).toBe(output);
+    const result = validateTransmission(input);
+    if (result !== output) {
+      console.log('Failed input:', {
+        identificationConfiguration: input.identificationConfiguration,
+        identification: input.identification,
+        contactOutcome: input.contactOutcome,
+        contactAttempts: input.contactAttempts,
+        states: input.states,
+      });
+
+      console.log('Expected: ', output);
+      console.log('For given rules :', transmissionRules[input.identificationConfiguration]);
+      if (
+        transmissionRules[input.identificationConfiguration].invalidIdentificationsAndContactOutcome
+      )
+        console.log(
+          'invalidIdentificationsAndContactOutcome :',
+          transmissionRules[input.identificationConfiguration]
+            .invalidIdentificationsAndContactOutcome
+        );
+    }
+
+    expect(result).toBe(output);
   });
 });
 

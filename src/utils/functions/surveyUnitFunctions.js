@@ -18,7 +18,6 @@ export const getCommentByType = (type, su) => {
  * @param {SurveyUnit} surveyUnit
  * @returns {{ order: string, value: string, color: string }}
  */
-// TODO: convertSUStateInToDo deprecated ?
 export const getSuTodoState = surveyUnit => {
   return convertSUStateInToDo(getLastState(surveyUnit?.states ?? [])?.type);
 };

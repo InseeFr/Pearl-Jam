@@ -35,3 +35,5 @@ npx playwright codegen test http://localhost:5173
 ```
 
 The test running application (`playwright test`) will be available on http://localhost:5173 and the Playwright UI on http://localhost:8888.
+
+Containers should not be killed to ensure data persistence in order to avoid a full yarn install. Instead, you should either use `CTRL+C` in the bash/shell where it was launched or run `docker compose stop`.

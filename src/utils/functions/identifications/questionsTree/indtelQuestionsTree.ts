@@ -10,7 +10,7 @@ export const indtelIdentificationQuestionsTree: IdentificationQuestions = {
   [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
     id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
     nextId: IdentificationQuestionsId.SITUATION,
-    text: `${D.housingIdentification}`,
+    text: `${D.foundIndividual}`,
     options: [
       { ...optionsMap.SAME_ADDRESS, concluding: false },
       { ...optionsMap.OTHER_ADDRESS, concluding: false },
@@ -48,6 +48,6 @@ export const transmissionRulesByTel: TransmissionRules = {
     contactOutcome: 'NOA',
   },
   invalidIfmissingContactOutcome: true,
-  invalidStateAndContactOutcome: { state: 'WFT', contactOutcome: 'INA' },
   invalidIfmissingContactAttempt: true,
+  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
 };

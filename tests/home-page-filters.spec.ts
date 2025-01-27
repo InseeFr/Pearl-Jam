@@ -34,7 +34,7 @@ test('check if the status filters is working properly', async ({ page }) => {
 
   await page.getByLabel('A repérer/Contacter').check();
 
-  await homePage.checkNumberOfDisplayedItems(6, 16);
+  await homePage.checkNumberOfDisplayedItems(8, 16);
 
   await homePage.resetAllFilters();
 
@@ -87,6 +87,7 @@ test('check if the Survey filter is working properly', async ({ page }) => {
   await page.getByLabel('secondtestcampaign').check();
   await homePage.checkNumberOfDisplayedItems(11, 16);
   await homePage.resetAllFilters();
+  await homePage.checkNumberOfDisplayedItems(16, 16);
   await page.getByLabel('testcampaign', { exact: true }).check();
   await homePage.checkNumberOfDisplayedItems(5, 16);
   await homePage.resetAllFilters();

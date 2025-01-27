@@ -81,8 +81,10 @@ export type TransmissionRules = {
     }[];
     contactOutcome: ContactOutcomeValue;
   };
-  invalidStateAndContactOutcome?: { state: StateValues; contactOutcome: ContactOutcomeValue };
-  invalidState?: StateValues;
+  expectedStateForConctactOutcome?: {
+    expectedState: StateValues;
+    contactOutcome: ContactOutcomeValue;
+  };
 };
 
 export function checkAvailability(
@@ -116,17 +118,21 @@ export function identificationIsFinished(
 
   const questionsTree = identificationQuestionsTree[identificationConfiguration];
 
+  let finished = true;
+
+  // questionsTree is unordered, so we can found an unanswered question but the next could be concluding
   for (const questionId in questionsTree) {
     const questions = questionsTree[questionId as IdentificationQuestionsId];
     if (!questions) continue;
 
     const response = identification[questions.id];
-    if (!response) return false;
+    if (!response) finished = false;
 
     const concluding = questions.options.find(o => o.value === response)?.concluding;
     if (concluding) return true;
   }
-  return true;
+
+  return finished;
 }
 
 export function isInvalidIdentificationAndContactOutcome(
@@ -164,16 +170,15 @@ export function validateTransmission(su: SurveyUnit): boolean {
 
   if (isInvalidIdentificationAndContactOutcome(suTransmissionRules, su)) return false;
 
-  if (suTransmissionRules.invalidStateAndContactOutcome) {
+  if (suTransmissionRules.expectedStateForConctactOutcome) {
     if (
       su?.contactOutcome?.type ===
-        suTransmissionRules.invalidStateAndContactOutcome.contactOutcome &&
-      getLastState(su.states)?.type === suTransmissionRules.invalidStateAndContactOutcome.state
+        suTransmissionRules.expectedStateForConctactOutcome.contactOutcome &&
+      getLastState(su.states)?.type !==
+        suTransmissionRules.expectedStateForConctactOutcome.expectedState
     )
       return false;
   }
-
-  if (suTransmissionRules.invalidState === getLastState(su.states)?.type) return false;
 
   if (suTransmissionRules.invalidIfmissingContactAttempt && !su.contactAttempts.length)
     return false;
