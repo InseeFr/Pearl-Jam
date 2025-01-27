@@ -51,4 +51,24 @@ export const optionsMap = {
     value: IdentificationQuestionOptionValues.OCCASIONAL,
   },
   VACANT: { label: `${D.categoryVacant}`, value: IdentificationQuestionOptionValues.VACANT },
+  ONE: { label: `${D.oneRespondent}`, value: IdentificationQuestionOptionValues.ONE },
+  MANY: { label: `${D.manyRespondents}`, value: IdentificationQuestionOptionValues.MANY },
+  SAME_HOUSE: { label: `${D.sameHouse}`, value: IdentificationQuestionOptionValues.SAME_HOUSE },
+  OTHER_HOUSE: { label: `${D.otherHouse}`, value: IdentificationQuestionOptionValues.OTHER_HOUSE },
+  SAME_COMPO: {
+    label: `${D.sameHouseHoldComposition}`,
+    value: IdentificationQuestionOptionValues.SAME_COMPO,
+  },
+  OTHER_COMPO: {
+    label: `${D.otherHouseHoldComposition}`,
+    value: IdentificationQuestionOptionValues.OTHER_COMPO,
+  },
+  NO_IN_OLD_HOUSE: {
+    label: `${D.noOnePresentInPreviousHome}`,
+    value: IdentificationQuestionOptionValues.NO_IN_OLD_HOUSE,
+  },
+  IN_OLD_HOUSE: {
+    label: `${D.atLeastOnePresentInPreviousHome}`,
+    value: IdentificationQuestionOptionValues.IN_OLD_HOUSE,
+  },
 };
