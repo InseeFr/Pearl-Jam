@@ -1,4 +1,5 @@
 import Paper, { PaperProps } from '@mui/material/Paper';
+import { LinkProps } from 'react-router-dom';
 
 const style = {
   width: 24,
@@ -18,7 +19,7 @@ const style = {
   },
 };
 
-export function PaperIconButton(props: Readonly<PaperProps>) {
+export function PaperIconButton(props: Readonly<PaperProps & LinkProps>) {
   return (
     <Paper
       component="button"

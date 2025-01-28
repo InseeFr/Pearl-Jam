@@ -1,11 +1,10 @@
-import Stack from '@mui/material/Stack';
-import { ComponentProps } from 'react';
+import Stack, { StackProps } from '@mui/material/Stack';
 
 /**
  * A horizontal stack
  */
 
-type RowTypes = Omit<ComponentProps<typeof Stack>, 'direction'>;
+type RowTypes = Omit<StackProps, 'direction'>;
 export function Row(props: Readonly<RowTypes>) {
   return <Stack direction="row" alignItems="center" {...props} />;
 }

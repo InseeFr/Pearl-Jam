@@ -64,13 +64,7 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
   const isSyncNotification = notification.type === NOTIFICATION_TYPE_SYNC;
 
   return (
-    <Accordion
-      elevation={0}
-      disableGutters
-      variant="dense"
-      bgcolor="accent"
-      onChange={handleExpand}
-    >
+    <Accordion elevation={0} disableGutters variant="dense" color="accent" onChange={handleExpand}>
       <AccordionSummary
         sx={{ padding: 0, background: background, borderRadius: 2 }}
         expandIcon={<ExpandMoreIcon fontSize="large" color="textPrimary" />}
