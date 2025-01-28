@@ -20,6 +20,7 @@ import { getLastState } from '../surveyUnitFunctions';
 import { StateValues } from 'utils/enum/SUStateEnum';
 import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
 import { transmissionRulesNoIdentification } from './questionsTree/noIdentificationTransmissionRules';
+import { SRCVIdentificationQuestionsTreeFunction } from './questionsTree/SRCVQuestionsTree';
 
 export type IdentificationQuestionOption = {
   value: string;
@@ -32,25 +33,45 @@ export type IdentificationQuestionValue = {
   text: string;
   options: IdentificationQuestionOption[];
   dependsOn?: { questionId: IdentificationQuestionsId; values: string[] };
+  disabled?: boolean;
 };
 
 export type IdentificationQuestions = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionValue>
 >;
 
-export const identificationQuestionsTree: Record<
-  IdentificationConfiguration,
-  IdentificationQuestions
-> = {
-  [IdentificationConfiguration.INDTEL]: indtelIdentificationQuestionsTree,
-  [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
-  [IdentificationConfiguration.NOIDENT]: {},
-  [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
-  [IdentificationConfiguration.HOUSETEL]: houseTelIdentificationQuestionsTree,
-  [IdentificationConfiguration.HOUSETELWSR]: houseTelIdentificationQuestionsTree,
-  [IdentificationConfiguration.INDTELNOR]: indtelIdentificationQuestionsTree,
-  [IdentificationConfiguration.INDF2F]: {},
-  [IdentificationConfiguration.SRCVREINT]: {},
+export const identificationQuestionsTree = (identificationConfiguration : IdentificationConfiguration, identification?: SurveyUnitIdentification): Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>  => {
+  switch (identificationConfiguration) {
+    case IdentificationConfiguration.INDTEL:
+      return indtelIdentificationQuestionsTree;
+
+    case IdentificationConfiguration.IASCO:
+      return houseF2FIdentificationQuestionsTree;
+
+    case IdentificationConfiguration.NOIDENT:
+      return {};
+
+    case IdentificationConfiguration.HOUSEF2F:
+      return houseF2FIdentificationQuestionsTree;
+
+    case IdentificationConfiguration.HOUSETEL:
+      return houseTelIdentificationQuestionsTree;
+
+    case IdentificationConfiguration.HOUSETELWSR:
+      return houseTelIdentificationQuestionsTree;
+
+    case IdentificationConfiguration.SRCVREINT:
+      return SRCVIdentificationQuestionsTreeFunction(identification);
+
+    case IdentificationConfiguration.INDTELNOR:
+      return indtelIdentificationQuestionsTree;
+
+    case IdentificationConfiguration.INDF2F:
+      return {};
+
+    default:
+      return {};
+  }
 };
 
 // TODO : changer la signature, implémenter la fonction pour SRCVREINT
@@ -95,6 +116,9 @@ export function checkAvailability(
   question?: IdentificationQuestionValue,
   responses?: ResponseState
 ): boolean {
+  const disabled = question?.disabled;
+  if(disabled) return false;
+
   if (!responses) return true;
   const dependency = question?.dependsOn;
   if (!dependency) return true;
@@ -119,7 +143,7 @@ export function identificationIsFinished(
   if (!identificationConfiguration) return true;
   if (!identification) return false;
 
-  const questionsTree = identificationQuestionsTree[identificationConfiguration];
+  const questionsTree  = identificationQuestionsTree(identificationConfiguration, identification);
 
   let finished = true;
 

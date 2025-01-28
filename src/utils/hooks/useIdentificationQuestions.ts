@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
@@ -61,9 +60,9 @@ const persistIdentification = (
 
 export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
   const questions =
-    identificationQuestionsTree[
-      IdentificationConfiguration[surveyUnit.identificationConfiguration]
-    ];
+    identificationQuestionsTree(
+      surveyUnit.identificationConfiguration, surveyUnit.identification
+    );
 
   const initialResponses: ResponseState = Object.fromEntries(
     Object.keys(questions).map(id => [
