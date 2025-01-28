@@ -2,31 +2,34 @@ import {
   IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
-import {
-  IdentificationQuestions,
-  TransmissionRules,
-} from '../identificationFunctions';
+import { IdentificationQuestions, TransmissionRules } from '../identificationFunctions';
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
 import { SurveyUnitIdentification } from 'types/pearl';
 
-export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyUnitIdentification) => {
+const numberOfRespondents = {
+  [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: {
+    id: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
+    nextId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+    text: `${D.numberOfRespondents}`,
+    options: [
+      { ...optionsMap.ONE, concluding: false },
+      { ...optionsMap.MANY, concluding: false },
+    ],
+  },
+};
+
+export const SRCVIdentificationQuestionsTreeFunction = (
+  identification?: SurveyUnitIdentification
+) => {
   // return tree with one respondent
   if (identification?.numberOfRespondents === optionsMap.ONE.value) {
     return {
-      [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: {
-        id: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
-        nextId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-        text: `${D.numberOfRespondents}`,
-        options: [
-          { ...optionsMap.ONE, concluding: false },
-          { ...optionsMap.MANY, concluding: false },
-        ],
-      },
+      ...numberOfRespondents,
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
         id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
         nextId: IdentificationQuestionsId.SITUATION,
-        text: `${D.housingAccess}`,
+        text: `${D.foundIndividual}`,
         options: [
           { ...optionsMap.SAME_HOUSE, concluding: true },
           { ...optionsMap.OTHER_HOUSE, concluding: false },
@@ -42,7 +45,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
       [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
         id: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
         nextId: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
-        text: `${D.housingSituation}`,
+        text: `${D.houseHoldComposition}`,
         options: [
           { ...optionsMap.SAME_COMPO, concluding: false },
           { ...optionsMap.OTHER_COMPO, concluding: false },
@@ -62,7 +65,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
       },
       [IdentificationQuestionsId.SITUATION]: {
         id: IdentificationQuestionsId.SITUATION,
-        text: `${D.housingOccupant}`,
+        text: `${D.housingSituation}`,
         options: [
           { ...optionsMap.ORDINARY, concluding: true },
           { ...optionsMap.NOORDINARY, concluding: true },
@@ -81,19 +84,11 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
     identification?.individualStatus === optionsMap.NOFIELD.value
   ) {
     return {
-      [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: {
-        id: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
-        nextId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-        text: `${D.numberOfRespondents}`,
-        options: [
-          { ...optionsMap.ONE, concluding: false },
-          { ...optionsMap.MANY, concluding: false },
-        ],
-      },
+      ...numberOfRespondents,
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
         id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
         nextId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
-        text: `${D.housingAccess}`,
+        text: `${D.foundIndividual}`,
         options: [
           { ...optionsMap.SAME_HOUSE, concluding: true },
           { ...optionsMap.OTHER_HOUSE, concluding: false },
@@ -109,7 +104,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
       [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
         id: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
         nextId: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
-        text: `${D.housingSituation}`,
+        text: `${D.houseHoldComposition}`,
         options: [
           { ...optionsMap.SAME_COMPO, concluding: true },
           { ...optionsMap.OTHER_COMPO, concluding: true },
@@ -135,7 +130,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
       },
       [IdentificationQuestionsId.SITUATION]: {
         id: IdentificationQuestionsId.SITUATION,
-        text: `${D.housingOccupant}`,
+        text: `${D.housingSituation}`,
         options: [
           { ...optionsMap.ORDINARY, concluding: true },
           { ...optionsMap.NOORDINARY, concluding: true },
@@ -147,23 +142,15 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
 
   // return tree with several respondents (MANY -> OTHERHOUSE -> SAMECOMPO)
   if (
-    identification?.numberOfRespondents=== optionsMap.MANY.value &&
+    identification?.numberOfRespondents === optionsMap.MANY.value &&
     identification?.householdComposition === optionsMap.SAME_COMPO.value
   ) {
     return {
-      [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: {
-        id: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
-        nextId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-        text: `${D.numberOfRespondents}`,
-        options: [
-          { ...optionsMap.ONE, concluding: false },
-          { ...optionsMap.MANY, concluding: false },
-        ],
-      },
+      ...numberOfRespondents,
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
         id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
         nextId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
-        text: `${D.housingAccess}`,
+        text: `${D.foundIndividual}`,
         options: [
           { ...optionsMap.SAME_HOUSE, concluding: true },
           { ...optionsMap.OTHER_HOUSE, concluding: false },
@@ -179,7 +166,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
       [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
         id: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
         nextId: IdentificationQuestionsId.SITUATION,
-        text: `${D.housingSituation}`,
+        text: `${D.houseHoldComposition}`,
         options: [
           { ...optionsMap.SAME_COMPO, concluding: false },
           { ...optionsMap.OTHER_COMPO, concluding: false },
@@ -205,7 +192,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
       },
       [IdentificationQuestionsId.SITUATION]: {
         id: IdentificationQuestionsId.SITUATION,
-        text: `${D.housingOccupant}`,
+        text: `${D.housingSituation}`,
         options: [
           { ...optionsMap.ORDINARY, concluding: true },
           { ...optionsMap.NOORDINARY, concluding: true },
@@ -232,7 +219,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
     [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
       id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
       nextId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
-      text: `${D.housingAccess}`,
+      text: `${D.foundIndividual}`,
       options: [
         { ...optionsMap.SAME_HOUSE, concluding: true },
         { ...optionsMap.OTHER_HOUSE, concluding: false },
@@ -248,7 +235,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
     [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
       id: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
       nextId: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
-      text: `${D.housingSituation}`,
+      text: `${D.houseHoldComposition}`,
       options: [
         { ...optionsMap.SAME_COMPO, concluding: false },
         { ...optionsMap.OTHER_COMPO, concluding: false },
@@ -277,7 +264,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (identification?: SurveyU
     },
     [IdentificationQuestionsId.SITUATION]: {
       id: IdentificationQuestionsId.SITUATION,
-      text: `${D.housingOccupant}`,
+      text: `${D.housingSituation}`,
       options: [
         { ...optionsMap.ORDINARY, concluding: true },
         { ...optionsMap.NOORDINARY, concluding: true },
@@ -303,7 +290,7 @@ export const SRCVIdentificationQuestionsTree: IdentificationQuestions = {
   [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
     id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
     nextId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
-    text: `${D.housingAccess}`,
+    text: `${D.foundIndividual}`,
     options: [
       { ...optionsMap.SAME_HOUSE, concluding: true },
       { ...optionsMap.OTHER_HOUSE, concluding: false },
@@ -319,7 +306,7 @@ export const SRCVIdentificationQuestionsTree: IdentificationQuestions = {
   [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
     id: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
     nextId: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
-    text: `${D.housingSituation}`,
+    text: `${D.houseHoldComposition}`,
     options: [
       { ...optionsMap.SAME_COMPO, concluding: false },
       { ...optionsMap.OTHER_COMPO, concluding: true },
@@ -353,7 +340,7 @@ export const SRCVIdentificationQuestionsTree: IdentificationQuestions = {
   },
   [IdentificationQuestionsId.SITUATION]: {
     id: IdentificationQuestionsId.SITUATION,
-    text: `${D.housingOccupant}`,
+    text: `${D.housingSituation}`,
     options: [
       { ...optionsMap.ORDINARY, concluding: true },
       { ...optionsMap.NOORDINARY, concluding: true },
