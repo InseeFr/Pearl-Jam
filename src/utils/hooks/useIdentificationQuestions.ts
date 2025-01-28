@@ -1,7 +1,5 @@
-import { useState } from 'react';
-import {
-  IdentificationQuestionsId,
-} from 'utils/enum/identifications/IdentificationsQuestions';
+import { useEffect, useState } from 'react';
+import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { addNewState, persistSurveyUnit } from 'utils/functions';
@@ -59,33 +57,43 @@ const persistIdentification = (
 };
 
 export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
-  const questions =
-    identificationQuestionsTree(
-      surveyUnit.identificationConfiguration, surveyUnit.identification
-    );
-
-  const initialResponses: ResponseState = Object.fromEntries(
-    Object.keys(questions).map(id => [
-      id,
-      questions[id as IdentificationQuestionsId]?.options.find(
-        o => o.value === surveyUnit?.identification?.[id as IdentificationQuestionsId]
-      ),
-    ])
-  );
-
-  const initialAvailability: Partial<Record<IdentificationQuestionsId, boolean>> =
-    Object.fromEntries(
-      Object.entries(questions).map(([questionId, question]) => [
-        questionId,
-        checkAvailability(questions, question, initialResponses),
-      ])
-    );
-
-  const [responses, setResponses] = useState<ResponseState>(initialResponses);
+  const [questions, setQuestions] = useState<
+    Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>
+  >({});
+  const [responses, setResponses] = useState<ResponseState>({});
+  const [availableQuestions, setAvailableQuestions] = useState<
+    Partial<Record<IdentificationQuestionsId, boolean>>
+  >({});
   const [selectedDialogId, setSelectedDialogId] = useState<IdentificationQuestionsId | undefined>(
     undefined
   );
-  const [availableQuestions, setAvailableQuestions] = useState(initialAvailability);
+
+  useEffect(() => {
+    const newQuestions = identificationQuestionsTree(
+      surveyUnit.identificationConfiguration,
+      surveyUnit.identification
+    );
+
+    const newResponses: ResponseState = Object.fromEntries(
+      Object.keys(newQuestions).map(id => [
+        id,
+        newQuestions[id as IdentificationQuestionsId]?.options.find(
+          o => o.value === surveyUnit?.identification?.[id as IdentificationQuestionsId]
+        ),
+      ])
+    );
+
+    const newAvailability: Partial<Record<IdentificationQuestionsId, boolean>> = Object.fromEntries(
+      Object.entries(newQuestions).map(([questionId, question]) => [
+        questionId,
+        checkAvailability(newQuestions, question, newResponses),
+      ])
+    );
+
+    setQuestions(newQuestions);
+    setResponses(newResponses);
+    setAvailableQuestions(newAvailability);
+  }, [surveyUnit.identification]);
 
   const handleResponse = (
     selectedQuestionId: IdentificationQuestionsId,
