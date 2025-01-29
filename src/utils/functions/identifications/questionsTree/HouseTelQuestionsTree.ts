@@ -38,11 +38,7 @@ export const transmissionRulesHOUSETEL: TransmissionRules = {
     identifications: [
       {
         questionId: IdentificationQuestionsId.CATEGORY,
-        value: IdentificationQuestionOptionValues.ORDINARY,
-      },
-      {
-        questionId: IdentificationQuestionsId.CATEGORY,
-        value: IdentificationQuestionOptionValues.NOORDINARY,
+        value: IdentificationQuestionOptionValues.PRIMARY,
       },
     ],
     contactOutcome: 'NOA',
@@ -57,11 +53,11 @@ export const transmissionRulesHOUSETELWSR: TransmissionRules = {
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
-        questionId: IdentificationQuestionsId.SITUATION,
+        questionId: IdentificationQuestionsId.CATEGORY,
         value: IdentificationQuestionOptionValues.PRIMARY,
       },
       {
-        questionId: IdentificationQuestionsId.SITUATION,
+        questionId: IdentificationQuestionsId.CATEGORY,
         value: IdentificationQuestionOptionValues.SECONDARY,
       },
     ],
