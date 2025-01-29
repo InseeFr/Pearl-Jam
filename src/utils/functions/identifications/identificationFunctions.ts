@@ -40,7 +40,10 @@ export type IdentificationQuestions = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionValue>
 >;
 
-export const identificationQuestionsTree = (identificationConfiguration : IdentificationConfiguration, identification?: SurveyUnitIdentification): Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>  => {
+export const identificationQuestionsTree = (
+  identificationConfiguration: IdentificationConfiguration,
+  identification?: SurveyUnitIdentification
+): Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>> => {
   switch (identificationConfiguration) {
     case IdentificationConfiguration.INDTEL:
       return indtelIdentificationQuestionsTree;
@@ -117,7 +120,7 @@ export function checkAvailability(
   responses?: ResponseState
 ): boolean {
   const disabled = question?.disabled;
-  if(disabled) return false;
+  if (disabled) return false;
 
   if (!responses) return true;
   const dependency = question?.dependsOn;
@@ -143,7 +146,7 @@ export function identificationIsFinished(
   if (!identificationConfiguration) return true;
   if (!identification) return false;
 
-  const questionsTree  = identificationQuestionsTree(identificationConfiguration, identification);
+  const questionsTree = identificationQuestionsTree(identificationConfiguration, identification);
 
   let finished = true;
 
