@@ -26,13 +26,14 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && copy-and-watch configuration/configuration.json build",
+    "build": "vite build",
     "preview": "vite preview",
     "format": "prettier --write .",
     "test": "vitest",
     "prepare": "husky",
     "typecheck": "tsc --noEmit",
-    "pre-push": "stylelint \"src/**/*.css\"  && yarn test  --watch=false"
+    "pre-push": "stylelint \"src/**/*.css\"  && yarn test  --watch=false",
+    "postinstall": "vite-envs update-types"
   },
   "eslintConfig": {
     "extends": [
@@ -113,6 +114,7 @@
     "stylelint": "^16.11.0",
     "stylelint-config-standard": "^36.0.1",
     "vite": "^4.2.1",
+    "vite-envs": "^4.4.11",
     "vite-plugin-pwa": "^0.19.2",
     "vite-tsconfig-paths": "^3.6.0",
     "vitest": "^2.1.8"

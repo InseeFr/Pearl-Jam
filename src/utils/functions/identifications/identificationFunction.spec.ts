@@ -451,7 +451,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
       },
     };
 
-    const mockSurveyUnit: SurveyUnit = {
+    const mockSurveyUnit = {
       identification: {
         [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
       },
@@ -461,7 +461,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
         type: contactOutcomeEnum.REFUSAL.value,
       },
       // other SurveyUnit properties can be mocked as needed
-    };
+    } as SurveyUnit;
 
     const result = isInvalidIdentificationAndContactOutcome(mockTransmissionRules, mockSurveyUnit);
     expect(result).toBe(true);
@@ -480,7 +480,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
       },
     };
 
-    const mockSurveyUnit: SurveyUnit = {
+    const mockSurveyUnit = {
       identification: {
         [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
           IdentificationQuestionOptionValues.SAME_ADDRESS,
@@ -490,7 +490,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
         totalNumberOfContactAttempts: 2,
         type: contactOutcomeEnum.REFUSAL.value,
       },
-    };
+    } as SurveyUnit;
 
     const result = isInvalidIdentificationAndContactOutcome(mockTransmissionRules, mockSurveyUnit);
     expect(result).toBe(false);
@@ -509,7 +509,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
       },
     };
 
-    const mockSurveyUnit: SurveyUnit = {
+    const mockSurveyUnit = {
       identification: {
         [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
       },
@@ -518,7 +518,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
         totalNumberOfContactAttempts: 4,
         type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
       },
-    };
+    } as SurveyUnit;
 
     const result = isInvalidIdentificationAndContactOutcome(mockTransmissionRules, mockSurveyUnit);
     expect(result).toBe(false);

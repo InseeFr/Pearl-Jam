@@ -4,6 +4,16 @@
 
 Case management web application for Computer-Assisted Personal Interviewing (CAPI)
 
+## Setup the Project
+
+In order to run the application properly, you need define in a `.env.local` file these variables.
+
+```
+VITE_QUEEN_URL=
+VITE_PEARL_API_URL=
+VITE_PEARL_AUTHENTICATION_MODE=
+```
+
 ## Run the project in a Docker environnement
 
 We have a dedicateed `compose.yml` file we can use in order to launch the _front_end_ inside Docker.
@@ -37,3 +47,7 @@ npx playwright codegen test http://localhost:5173
 The test running application (`playwright test`) will be available on http://localhost:5173 and the Playwright UI on http://localhost:8888.
 
 Containers should not be killed to ensure data persistence in order to avoid a full yarn install. Instead, you should either use `CTRL+C` in the bash/shell where it was launched or run `docker compose stop`.
+
+```
+
+```

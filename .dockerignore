@@ -1,1 +1,7 @@
 node_modules
+.github
+.husky
+build
+coverage
+playwright-report
+tests
