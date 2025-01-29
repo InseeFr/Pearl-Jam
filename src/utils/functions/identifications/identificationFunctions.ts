@@ -6,9 +6,7 @@ import {
 import {
   indtelIdentificationQuestionsTree,
   transmissionRulesByINDTEL,
-  transmissionRulesByINDTELNOOR,
   transmissionRulesByINDTELNOR,
-  transmissionRulesByTelIndNord,
 } from './questionsTree/indtelQuestionsTree';
 import {
   houseF2FIdentificationQuestionsTree,
