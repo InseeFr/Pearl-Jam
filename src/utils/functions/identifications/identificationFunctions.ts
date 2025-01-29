@@ -5,7 +5,10 @@ import {
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import {
   indtelIdentificationQuestionsTree,
-  transmissionRulesByTel,
+  transmissionRulesByINDTEL,
+  transmissionRulesByINDTELNOOR,
+  transmissionRulesByINDTELNOR,
+  transmissionRulesByTelIndNord,
 } from './questionsTree/indtelQuestionsTree';
 import {
   houseF2FIdentificationQuestionsTree,
@@ -77,17 +80,14 @@ export const identificationQuestionsTree = (
   }
 };
 
-// TODO : changer la signature, implémenter la fonction pour SRCVREINT
-// transmissionRules -> Record<IdentificationConfiguration | (response) => IdentificationConfiguration, TransmissionRules> ?
-// TODO : Adapter dans hook + fonction dans ce script mais pas grand chose à faire je pense
 export const transmissionRules: Record<IdentificationConfiguration, TransmissionRules> = {
-  [IdentificationConfiguration.INDTEL]: transmissionRulesByTel,
+  [IdentificationConfiguration.INDTEL]: transmissionRulesByINDTEL,
   [IdentificationConfiguration.IASCO]: transmissionRulesHouseF2F,
   [IdentificationConfiguration.NOIDENT]: transmissionRulesNoIdentification,
   [IdentificationConfiguration.HOUSEF2F]: transmissionRulesHouseF2F,
   [IdentificationConfiguration.HOUSETEL]: transmissionRulesHouseTel,
   [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHouseTel,
-  [IdentificationConfiguration.INDTELNOR]: {},
+  [IdentificationConfiguration.INDTELNOR]: transmissionRulesByINDTELNOR,
   [IdentificationConfiguration.INDF2F]: {},
   [IdentificationConfiguration.SRCVREINT]: {},
 };

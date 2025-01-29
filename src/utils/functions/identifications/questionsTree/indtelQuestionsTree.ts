@@ -36,13 +36,37 @@ export const indtelIdentificationQuestionsTree: IdentificationQuestions = {
   },
 } as const;
 
-export const transmissionRulesByTel: TransmissionRules = {
+export const transmissionRulesByINDTEL: TransmissionRules = {
   validIfIdentificationFinished: true,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
         questionId: IdentificationQuestionsId.SITUATION,
         value: IdentificationQuestionOptionValues.ORDINARY,
+      },
+      {
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.NOORDINARY,
+      },
+    ],
+    contactOutcome: 'NOA',
+  },
+  invalidIfmissingContactOutcome: true,
+  invalidIfmissingContactAttempt: true,
+  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
+};
+
+export const transmissionRulesByINDTELNOR: TransmissionRules = {
+  validIfIdentificationFinished: true,
+  invalidIdentificationsAndContactOutcome: {
+    identifications: [
+      {
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.ORDINARY,
+      },
+      {
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.NOORDINARY,
       },
     ],
     contactOutcome: 'NOA',
