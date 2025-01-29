@@ -12,33 +12,6 @@ import {
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctions';
 
-const allQuestionsAnswered = (
-  surveyUnit: SurveyUnit,
-  identification: any,
-  questions: Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>,
-  selectedQuestionId: IdentificationQuestionsId | undefined,
-  updatedResponses: Partial<Record<IdentificationQuestionsId, IdentificationQuestionOption>>
-) => {
-  if (
-    !identificationIsFinished(surveyUnit.identificationConfiguration, identification) ||
-    !selectedQuestionId
-  )
-    return false;
-
-  const orderedQuestions = Object.values(questions);
-
-  let concludingQuestionIndex = orderedQuestions.findIndex(
-    question => updatedResponses[question.id]?.concluding === true
-  );
-  if (updatedResponses[selectedQuestionId]?.concluding) {
-    concludingQuestionIndex = orderedQuestions.findIndex(q => q.id === selectedQuestionId);
-  }
-
-  const previousQuestions = orderedQuestions.slice(0, concludingQuestionIndex + 1);
-  const allAnswered = previousQuestions.every(q => !!surveyUnit.identification?.[q.id]);
-  return allAnswered;
-};
-
 export const persistStates = (surveyUnit: SurveyUnit, states: any) => {
   persistSurveyUnit({
     ...surveyUnit,
@@ -46,7 +19,7 @@ export const persistStates = (surveyUnit: SurveyUnit, states: any) => {
   });
 };
 
-const persistIdentification = (
+export const persistIdentification = (
   surveyUnit: SurveyUnit,
   identification: Partial<Record<IdentificationQuestionsId, string>>
 ) => {
@@ -93,7 +66,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     setQuestions(newQuestions);
     setResponses(newResponses);
     setAvailableQuestions(newAvailability);
-  }, [surveyUnit.identification]);
+  }, [JSON.stringify(surveyUnit.identification)]);
 
   const handleResponse = (
     selectedQuestionId: IdentificationQuestionsId,
@@ -127,15 +100,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
 
       persistIdentification(surveyUnit, identification);
 
-      // States must be updated if identification is fully done and conluding
-      const allAnswered = allQuestionsAnswered(
-        surveyUnit,
-        identification,
-        questions,
-        selectedDialogId,
-        updatedResponses
-      );
-      if (allAnswered) {
+      if (identificationIsFinished(surveyUnit.identificationConfiguration, identification)) {
         persistStates(
           surveyUnit,
           addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
