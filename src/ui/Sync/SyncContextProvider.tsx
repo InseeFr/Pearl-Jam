@@ -41,7 +41,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
 
   const checkPearl = async () => {
     setPearlReady(null);
-    const { error, status } = await api.healthCheck(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+    const { error, status } = await api.healthCheck(PEARL_API_URL);
     if (!error && status === 200) {
       setPearlError(false);
       setPearlReady(true);
