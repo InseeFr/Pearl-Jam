@@ -32,17 +32,37 @@ export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
   },
 } as const;
 
-export const transmissionRulesHouseTel: TransmissionRules = {
+export const transmissionRulesHOUSETEL: TransmissionRules = {
+  validIfIdentificationFinished: true,
+  invalidIdentificationsAndContactOutcome: {
+    identifications: [
+      {
+        questionId: IdentificationQuestionsId.CATEGORY,
+        value: IdentificationQuestionOptionValues.ORDINARY,
+      },
+      {
+        questionId: IdentificationQuestionsId.CATEGORY,
+        value: IdentificationQuestionOptionValues.NOORDINARY,
+      },
+    ],
+    contactOutcome: 'NOA',
+  },
+  invalidIfmissingContactOutcome: true,
+  invalidIfmissingContactAttempt: true,
+  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
+};
+
+export const transmissionRulesHOUSETELWSR: TransmissionRules = {
   validIfIdentificationFinished: true,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
         questionId: IdentificationQuestionsId.SITUATION,
-        value: IdentificationQuestionOptionValues.ORDINARY,
+        value: IdentificationQuestionOptionValues.PRIMARY,
       },
       {
         questionId: IdentificationQuestionsId.SITUATION,
-        value: IdentificationQuestionOptionValues.NOORDINARY,
+        value: IdentificationQuestionOptionValues.SECONDARY,
       },
     ],
     contactOutcome: 'NOA',

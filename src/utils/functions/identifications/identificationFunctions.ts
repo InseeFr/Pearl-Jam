@@ -14,7 +14,7 @@ import {
 } from './questionsTree/houseF2FQuestionsTree';
 import {
   houseTelIdentificationQuestionsTree,
-  transmissionRulesHouseTel,
+  transmissionRulesHOUSETEL,
 } from './questionsTree/HouseTelQuestionsTree';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { getLastState } from '../surveyUnitFunctions';
@@ -83,8 +83,8 @@ export const transmissionRules: Record<IdentificationConfiguration, Transmission
   [IdentificationConfiguration.IASCO]: transmissionRulesHouseF2F,
   [IdentificationConfiguration.NOIDENT]: transmissionRulesNoIdentification,
   [IdentificationConfiguration.HOUSEF2F]: transmissionRulesHouseF2F,
-  [IdentificationConfiguration.HOUSETEL]: transmissionRulesHouseTel,
-  [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHouseTel,
+  [IdentificationConfiguration.HOUSETEL]: transmissionRulesHOUSETEL,
+  [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHOUSETEL,
   [IdentificationConfiguration.INDTELNOR]: transmissionRulesByINDTELNOR,
   [IdentificationConfiguration.INDF2F]: {},
   [IdentificationConfiguration.SRCVREINT]: {},
@@ -94,7 +94,6 @@ export type ResponseState = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionOption>
 >;
 
-// Type might evolve to make possible any transmission rules match for any identification type possible
 export type TransmissionRules = {
   validIfIdentificationFinished?: boolean;
   invalidIfmissingContactOutcome?: boolean;
@@ -105,6 +104,7 @@ export type TransmissionRules = {
       value: IdentificationQuestionOptionValues;
     }[];
     contactOutcome: ContactOutcomeValue;
+    invalidState?: StateValues;
   };
   expectedStateForConctactOutcome?: {
     expectedState: StateValues;
@@ -176,6 +176,10 @@ export function isInvalidIdentificationAndContactOutcome(
       transmissionRules.invalidIdentificationsAndContactOutcome.identifications;
     const contactOutcome = transmissionRules.invalidIdentificationsAndContactOutcome.contactOutcome;
 
+    // TODO: ajouter TU
+    const invalidState = transmissionRules.invalidIdentificationsAndContactOutcome.invalidState;
+    if (invalidState && getLastState(su.states)?.type === invalidState) return false;
+
     for (const identification of identifications) {
       if (
         su.identification[identification.questionId] === identification.value &&
@@ -204,8 +208,9 @@ export function validateTransmission(su: SurveyUnit): boolean {
         suTransmissionRules.expectedStateForConctactOutcome.contactOutcome &&
       getLastState(su.states)?.type !==
         suTransmissionRules.expectedStateForConctactOutcome.expectedState
-    )
+    ) {
       return false;
+    }
   }
 
   if (suTransmissionRules.invalidIfmissingContactAttempt && !su.contactAttempts.length)
