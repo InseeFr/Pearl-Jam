@@ -13,7 +13,7 @@ export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
     text: `${D.housingSituation}`,
     options: [
       { ...optionsMap.ORDINARY, concluding: false },
-      { label: `${D.absorbed}`, value: 'ABSORBED', concluding: true },
+      { ...optionsMap.ABSORBED, concluding: true },
       { ...optionsMap.NOORDINARY, concluding: true },
     ],
   },
@@ -23,7 +23,7 @@ export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
     options: [
       { ...optionsMap.PRIMARY, concluding: true },
       { ...optionsMap.SECONDARY, concluding: true },
-      { label: `${D.vacant}`, value: 'VACANT', concluding: true },
+      { ...optionsMap.VACANT, concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.SITUATION,
