@@ -53,8 +53,6 @@ export const optionsMap = {
   VACANT: { label: `${D.categoryVacant}`, value: IdentificationQuestionOptionValues.VACANT },
   ONE: { label: `${D.oneRespondent}`, value: IdentificationQuestionOptionValues.ONE },
   MANY: { label: `${D.manyRespondents}`, value: IdentificationQuestionOptionValues.MANY },
-  SAME_HOUSE: { label: `${D.sameHouse}`, value: IdentificationQuestionOptionValues.SAME_HOUSE },
-  OTHER_HOUSE: { label: `${D.otherHouse}`, value: IdentificationQuestionOptionValues.OTHER_HOUSE },
   SAME_COMPO: {
     label: `${D.sameHouseHoldComposition}`,
     value: IdentificationQuestionOptionValues.SAME_COMPO,

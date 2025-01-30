@@ -50,8 +50,4 @@ export enum IdentificationQuestionOptionValues {
   ONE = 'ONE',
   MANY = 'MANY',
   DK = 'DK',
-  SAME_HOUSE = 'SAME_HOUSE',
-  OTHER_HOUSE = 'OTHER_HOUSE',
-  AT_LEAST_ONE = 'IN_OLD_HOUSE',
-  NONE = 'NO_IN_OLD_HOUSE',
 }
