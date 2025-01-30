@@ -45,37 +45,25 @@ export const identificationQuestionsTree = (
   identificationConfiguration: IdentificationConfiguration,
   identification?: SurveyUnitIdentification
 ): Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>> => {
-  switch (identificationConfiguration) {
-    case IdentificationConfiguration.INDTEL:
-      return indtelIdentificationQuestionsTree;
+  const identificationMap: Record<
+    IdentificationConfiguration,
+    () => Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>
+  > = {
+    [IdentificationConfiguration.INDTEL]: () => indtelIdentificationQuestionsTree,
+    [IdentificationConfiguration.IASCO]: () => houseF2FIdentificationQuestionsTree,
+    [IdentificationConfiguration.NOIDENT]: () => ({}),
+    [IdentificationConfiguration.HOUSEF2F]: () => houseF2FIdentificationQuestionsTree,
+    [IdentificationConfiguration.HOUSETEL]: () => houseTelIdentificationQuestionsTree,
+    [IdentificationConfiguration.HOUSETELWSR]: () => houseTelIdentificationQuestionsTree,
+    [IdentificationConfiguration.SRCVREINT]: () =>
+      SRCVIdentificationQuestionsTreeFunction(identification),
+    [IdentificationConfiguration.INDTELNOR]: () => indtelIdentificationQuestionsTree,
+    [IdentificationConfiguration.INDF2F]: () => ({}),
+  };
 
-    case IdentificationConfiguration.IASCO:
-      return houseF2FIdentificationQuestionsTree;
+  const getQuestionsTree = identificationMap[identificationConfiguration];
 
-    case IdentificationConfiguration.NOIDENT:
-      return {};
-
-    case IdentificationConfiguration.HOUSEF2F:
-      return houseF2FIdentificationQuestionsTree;
-
-    case IdentificationConfiguration.HOUSETEL:
-      return houseTelIdentificationQuestionsTree;
-
-    case IdentificationConfiguration.HOUSETELWSR:
-      return houseTelIdentificationQuestionsTree;
-
-    case IdentificationConfiguration.SRCVREINT:
-      return SRCVIdentificationQuestionsTreeFunction(identification);
-
-    case IdentificationConfiguration.INDTELNOR:
-      return indtelIdentificationQuestionsTree;
-
-    case IdentificationConfiguration.INDF2F:
-      return {};
-
-    default:
-      return {};
-  }
+  return getQuestionsTree ? getQuestionsTree() : {};
 };
 
 export const transmissionRules: Record<IdentificationConfiguration, TransmissionRules> = {
