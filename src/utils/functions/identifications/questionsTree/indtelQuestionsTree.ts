@@ -44,10 +44,6 @@ export const transmissionRulesByINDTEL: TransmissionRules = {
         questionId: IdentificationQuestionsId.SITUATION,
         value: IdentificationQuestionOptionValues.ORDINARY,
       },
-      {
-        questionId: IdentificationQuestionsId.SITUATION,
-        value: IdentificationQuestionOptionValues.NOORDINARY,
-      },
     ],
     contactOutcome: 'NOA',
   },
