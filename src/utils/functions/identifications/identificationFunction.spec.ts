@@ -221,6 +221,61 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
     },
     output: true,
   },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.INDTELNOR,
+      identification: {
+        individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
+        situation: IdentificationQuestionOptionValues.NOORDINARY,
+      },
+      //  NOA + NOORDINARY -> unvalid
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.NOT_APPLICABLE.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.INDTELNOR,
+      identification: {
+        individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
+        situation: IdentificationQuestionOptionValues.ORDINARY,
+      },
+      //  DUK + ORDINARY -> valid
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.DEFINITLY_UNAVAILABLE.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: true,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.HOUSETELWSR,
+      identification: {
+        category: IdentificationQuestionOptionValues.ORDINARY,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: false,
+  },
 ];
 
 mockedSurveyUnits.map(({ input, output }) => {

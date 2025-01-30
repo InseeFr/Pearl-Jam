@@ -104,7 +104,6 @@ export type TransmissionRules = {
       value: IdentificationQuestionOptionValues;
     }[];
     contactOutcome: ContactOutcomeValue;
-    invalidState?: StateValues;
   };
   expectedStateForConctactOutcome?: {
     expectedState: StateValues;
@@ -176,16 +175,13 @@ export function isInvalidIdentificationAndContactOutcome(
       transmissionRules.invalidIdentificationsAndContactOutcome.identifications;
     const contactOutcome = transmissionRules.invalidIdentificationsAndContactOutcome.contactOutcome;
 
-    // TODO: ajouter TU
-    const invalidState = transmissionRules.invalidIdentificationsAndContactOutcome.invalidState;
-    if (invalidState && getLastState(su.states)?.type === invalidState) return false;
-
     for (const identification of identifications) {
       if (
         su.identification[identification.questionId] === identification.value &&
         su.contactOutcome.type === contactOutcome
-      )
+      ) {
         return true;
+      }
     }
   }
   return false;
