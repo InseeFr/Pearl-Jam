@@ -63,8 +63,8 @@ const presentInPreviousHome = {
     nextId: IdentificationQuestionsId.SITUATION,
     text: `${D.presentInPreviousHome}`,
     options: [
-      { ...optionsMap.NO_IN_OLD_HOUSE, concluding: false },
-      { ...optionsMap.IN_OLD_HOUSE, concluding: true },
+      { ...optionsMap.NONE, concluding: false },
+      { ...optionsMap.AT_LEAST_ONE, concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
@@ -78,7 +78,7 @@ const presentInPreviousHomeDisabled = {
     ...presentInPreviousHome[IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME],
     disabled: true,
   },
-}
+};
 
 const housingSituation = {
   [IdentificationQuestionsId.SITUATION]: {
@@ -90,7 +90,7 @@ const housingSituation = {
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
-      values: [IdentificationQuestionOptionValues.NO_IN_OLD_HOUSE],
+      values: [IdentificationQuestionOptionValues.NONE],
     },
   },
 };

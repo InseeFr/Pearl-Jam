@@ -63,12 +63,12 @@ export const optionsMap = {
     label: `${D.otherHouseHoldComposition}`,
     value: IdentificationQuestionOptionValues.OTHER_COMPO,
   },
-  NO_IN_OLD_HOUSE: {
+  NONE: {
     label: `${D.noOnePresentInPreviousHome}`,
-    value: IdentificationQuestionOptionValues.NO_IN_OLD_HOUSE,
+    value: IdentificationQuestionOptionValues.NONE,
   },
-  IN_OLD_HOUSE: {
+  AT_LEAST_ONE: {
     label: `${D.atLeastOnePresentInPreviousHome}`,
-    value: IdentificationQuestionOptionValues.IN_OLD_HOUSE,
+    value: IdentificationQuestionOptionValues.AT_LEAST_ONE,
   },
 };
