@@ -47,23 +47,21 @@ export const identificationQuestionsTree = (
 ): Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>> => {
   const identificationMap: Record<
     IdentificationConfiguration,
-    () => Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>
+    Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>
   > = {
-    [IdentificationConfiguration.INDTEL]: () => indtelIdentificationQuestionsTree,
-    [IdentificationConfiguration.IASCO]: () => houseF2FIdentificationQuestionsTree,
-    [IdentificationConfiguration.NOIDENT]: () => ({}),
-    [IdentificationConfiguration.HOUSEF2F]: () => houseF2FIdentificationQuestionsTree,
-    [IdentificationConfiguration.HOUSETEL]: () => houseTelIdentificationQuestionsTree,
-    [IdentificationConfiguration.HOUSETELWSR]: () => houseTelIdentificationQuestionsTree,
-    [IdentificationConfiguration.SRCVREINT]: () =>
+    [IdentificationConfiguration.INDTEL]: indtelIdentificationQuestionsTree,
+    [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
+    [IdentificationConfiguration.NOIDENT]: {},
+    [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
+    [IdentificationConfiguration.HOUSETEL]: houseTelIdentificationQuestionsTree,
+    [IdentificationConfiguration.HOUSETELWSR]: houseTelIdentificationQuestionsTree,
+    [IdentificationConfiguration.SRCVREINT]:
       SRCVIdentificationQuestionsTreeFunction(identification),
-    [IdentificationConfiguration.INDTELNOR]: () => indtelIdentificationQuestionsTree,
-    [IdentificationConfiguration.INDF2F]: () => ({}),
+    [IdentificationConfiguration.INDTELNOR]: indtelIdentificationQuestionsTree,
+    [IdentificationConfiguration.INDF2F]: {},
   };
 
-  const getQuestionsTree = identificationMap[identificationConfiguration];
-
-  return getQuestionsTree ? getQuestionsTree() : {};
+  return identificationMap[identificationConfiguration];
 };
 
 export const transmissionRules: Record<IdentificationConfiguration, TransmissionRules> = {
