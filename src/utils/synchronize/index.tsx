@@ -128,7 +128,7 @@ const clean = async () => {
 const validateSU = (su: SurveyUnit) => {
   const { states, comments } = su;
   if (Array.isArray(states) && states.length === 0) {
-    su.states.push(su.lastState);
+    su.states.push(getLastState(states));
   }
   if (Array.isArray(comments) && comments.length === 0) {
     const interviewerComment = { type: 'INTERVIEWER', value: '' };

@@ -1,4 +1,5 @@
 import { SurveyUnit } from 'types/pearl';
+import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 
 export const createSurveyUnit = (surveyUnit: Partial<SurveyUnit> = {}): SurveyUnit => {
   return {
@@ -84,15 +85,9 @@ export const createSurveyUnit = (surveyUnit: Partial<SurveyUnit> = {}): SurveyUn
     contactOutcome: {
       date: 1700000000000,
       totalNumberOfContactAttempts: 3,
-      type: 'COMPLETED',
+      type: 'INA',
     },
-    identification: {
-      identification: null,
-      access: null,
-      situation: null,
-      category: null,
-      occupant: null,
-    },
+    identification: {},
     campaignLabel: '2024 National Census',
     managementStartDate: 1699000000000,
     interviewerStartDate: 1699005000000,
@@ -100,7 +95,7 @@ export const createSurveyUnit = (surveyUnit: Partial<SurveyUnit> = {}): SurveyUn
     collectionStartDate: 1699020000000,
     collectionEndDate: 1699500000000,
     endDate: 1699600000000,
-    identificationConfiguration: 'Default',
+    identificationConfiguration: IdentificationConfiguration.IASCO,
     contactOutcomeConfiguration: 'Default',
     contactAttemptConfiguration: 'Default',
     useLetterCommunication: true,

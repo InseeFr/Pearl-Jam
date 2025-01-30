@@ -102,7 +102,7 @@ function ConfirmDialog({
       return;
     }
     const { id } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
-    if ((id || '').toLowerCase() === formData.get('code').toLowerCase()) {
+    if ((id || '').toLowerCase() === formData.get('code')?.toString().toLowerCase()) {
       onConfirm();
     } else {
       setError(D.confirmError);
