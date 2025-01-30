@@ -34,7 +34,7 @@ test('check if the status filters is working properly', async ({ page }) => {
 
   await page.getByLabel('A repérer/Contacter').check();
 
-  await homePage.checkNumberOfDisplayedItems(8, 17);
+  await homePage.checkNumberOfDisplayedItems(9, 17);
 
   await homePage.resetAllFilters();
 
@@ -85,7 +85,7 @@ test('check if the Survey filter is working properly', async ({ page }) => {
   await homePage.importData();
   await homePage.checkNumberOfDisplayedItems(17, 17);
   await page.getByLabel('secondtestcampaign').check();
-  await homePage.checkNumberOfDisplayedItems(11, 17);
+  await homePage.checkNumberOfDisplayedItems(12, 17);
   await homePage.resetAllFilters();
   await homePage.checkNumberOfDisplayedItems(17, 17);
   await page.getByLabel('testcampaign', { exact: true }).check();
@@ -99,7 +99,7 @@ test('check if the cluster filter is working properly', async ({ page }) => {
   await homePage.importData();
   await page.getByRole('combobox').first().click();
   await page.getByRole('option', { name: '2' }).click();
-  await homePage.checkNumberOfDisplayedItems(11, 17);
+  await homePage.checkNumberOfDisplayedItems(12, 17);
   await page.getByRole('combobox').nth(1).click();
   await page.getByRole('option', { name: '1' }).click();
   await page.getByText('unités sur 17').click();
@@ -134,7 +134,7 @@ test('check if the search input is working properly', async ({ page }) => {
   await homePage.go();
   await homePage.importData();
   await page.getByPlaceholder('Nom, prénom, ville, enquête,').fill('graham');
-  await homePage.checkNumberOfDisplayedItems(7, 17);
+  await homePage.checkNumberOfDisplayedItems(8, 17);
 });
 
 test('check if the order input is working properly', async ({ page }) => {
