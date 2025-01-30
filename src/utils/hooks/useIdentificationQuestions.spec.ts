@@ -127,7 +127,7 @@ const identificationQuestionsHookTests = [
       identificationConfiguration: IdentificationConfiguration.SRCVREINT,
       identification: {
         numberOfRespondents: optionsMap.MANY.value,
-        individualStatus: optionsMap.OTHER_HOUSE.value,
+        individualStatus: optionsMap.OTHER_ADDRESS.value,
         householdComposition: optionsMap.SAME_COMPO.value,
       },
     },
@@ -141,14 +141,14 @@ const identificationQuestionsHookTests = [
       },
       responses: {
         numberOfRespondents: optionsMap.MANY,
-        individualStatus: optionsMap.OTHER_HOUSE,
+        individualStatus: optionsMap.OTHER_ADDRESS,
         householdComposition: optionsMap.SAME_COMPO,
         presentInPreviousHome: undefined,
         situation: undefined,
       },
       questions: identificationQuestionsTree(IdentificationConfiguration.SRCVREINT, {
         numberOfRespondents: optionsMap.MANY.value,
-        individualStatus: optionsMap.OTHER_HOUSE.value,
+        individualStatus: optionsMap.OTHER_ADDRESS.value,
         householdComposition: optionsMap.SAME_COMPO.value,
       }),
       handleReponse: vi.fn as (
@@ -236,10 +236,9 @@ const identificationQuestionsHookSetReponseTests = [
         presentInPreviousHome: false,
         situation: true,
       },
-
       responses: {
         numberOfRespondents: optionsMap.MANY,
-        individualStatus: optionsMap.OTHER_HOUSE,
+        individualStatus: optionsMap.OTHER_ADDRESS,
         householdComposition: optionsMap.SAME_COMPO,
         presentInPreviousHome: undefined,
         situation: optionsMap.NOORDINARY,
@@ -263,7 +262,6 @@ const identificationQuestionsHookSetReponseTests = [
         presentInPreviousHome: false,
         situation: true,
       },
-
       responses: {
         numberOfRespondents: optionsMap.ONE,
         individualStatus: undefined,

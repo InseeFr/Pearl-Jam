@@ -25,8 +25,8 @@ const individualStatus = {
     nextId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
     text: `${D.foundIndividual}`,
     options: [
-      { ...optionsMap.SAME_HOUSE, concluding: true },
-      { ...optionsMap.OTHER_HOUSE, concluding: false },
+      { ...optionsMap.SAME_ADDRESS, concluding: true },
+      { ...optionsMap.OTHER_ADDRESS, concluding: false },
       { ...optionsMap.NOFIELD, concluding: false },
       { ...optionsMap.NOIDENT, concluding: true },
       { ...optionsMap.DCD, concluding: true },
@@ -51,7 +51,7 @@ const houseHoldComposition = {
       questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
       values: [
         IdentificationQuestionOptionValues.NOFIELD,
-        IdentificationQuestionOptionValues.OTHER_HOUSE,
+        IdentificationQuestionOptionValues.OTHER_ADDRESS,
       ],
     },
   },
@@ -107,8 +107,8 @@ export const SRCVIdentificationQuestionsTreeFunction = (
         ...individualStatus[IdentificationQuestionsId.INDIVIDUAL_STATUS],
         nextId: IdentificationQuestionsId.SITUATION,
         options: [
-          { ...optionsMap.SAME_HOUSE, concluding: true },
-          { ...optionsMap.OTHER_HOUSE, concluding: false },
+          { ...optionsMap.SAME_ADDRESS, concluding: true },
+          { ...optionsMap.OTHER_ADDRESS, concluding: false },
           { ...optionsMap.NOFIELD, concluding: true },
           { ...optionsMap.NOIDENT, concluding: true },
           { ...optionsMap.DCD, concluding: true },
@@ -126,7 +126,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (
         ...housingSituation[IdentificationQuestionsId.SITUATION],
         dependsOn: {
           questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-          values: [IdentificationQuestionOptionValues.OTHER_HOUSE],
+          values: [IdentificationQuestionOptionValues.OTHER_ADDRESS],
         },
       },
     };
@@ -157,7 +157,7 @@ export const SRCVIdentificationQuestionsTreeFunction = (
     };
   }
 
-  // return tree with several respondents (MANY -> OTHERHOUSE -> SAMECOMPO)
+  // return tree with several respondents (MANY -> OTHER ADRESS -> SAMECOMPO)
   if (
     identification?.numberOfRespondents === optionsMap.MANY.value &&
     identification?.householdComposition === optionsMap.SAME_COMPO.value
