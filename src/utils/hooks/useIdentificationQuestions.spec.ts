@@ -3,7 +3,7 @@ import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
-import { vi, expect } from 'vitest';
+import { vi, expect, it } from 'vitest';
 import { useIdentificationQuestions } from './useIdentificationQuestions';
 import { act, renderHook } from '@testing-library/react';
 import {
@@ -295,7 +295,7 @@ const identificationQuestionsHookSetReponseTests = [
   },
 ];
 
-identificationQuestionsHookTests.map(({ surveyUnitInput, output }) => {
+identificationQuestionsHookTests.forEach(({ surveyUnitInput, output }) => {
   it(`Initilization for useIdentificationQuestions should return ${output} when adding ${surveyUnitInput}`, () => {
     const { result, rerender } = renderHook(() => useIdentificationQuestions(surveyUnitInput));
 
@@ -312,7 +312,7 @@ identificationQuestionsHookTests.map(({ surveyUnitInput, output }) => {
   });
 });
 
-identificationQuestionsHookSetReponseTests.map(
+identificationQuestionsHookSetReponseTests.forEach(
   ({ surveyUnitInput, setResponseCallParameters, output }) => {
     it(`SetResponse for useIdentificationQuestions should return ${output} when adding ${surveyUnitInput} and calling ${setResponseCallParameters}`, () => {
       const { result, rerender } = renderHook(() => useIdentificationQuestions(surveyUnitInput));
