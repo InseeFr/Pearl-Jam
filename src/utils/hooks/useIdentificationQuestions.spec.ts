@@ -321,10 +321,6 @@ identificationQuestionsHookSetReponseTests.map(
       const addNewState = vi.spyOn(utilsFunctions, 'addNewState');
 
       act(() => {
-        result.current.setSelectedDialogId(setResponseCallParameters?.identificationQuestionsId);
-      });
-
-      act(() => {
         if (setResponseCallParameters)
           result.current.handleResponse(
             setResponseCallParameters.identificationQuestionsId,
@@ -340,7 +336,7 @@ identificationQuestionsHookSetReponseTests.map(
 
       expect(result.current.availableQuestions).toStrictEqual(output.availibility);
       expect(result.current.responses).toMatchObject(output.responses);
-      // expect(result.current.selectedDialogId).toEqual(output.nextDialog);
+      expect(result.current.selectedDialogId).toEqual(output.nextDialog);
     });
   }
 );
