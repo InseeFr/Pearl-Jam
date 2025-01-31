@@ -59,7 +59,7 @@ export function PersonsCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>
             <Row justifyContent="space-between">
               <Row gap={1}>
                 <PersonOutlineIcon fontSize="large" />
-                <Typography as="h2" variant="xl" fontWeight={700}>
+                <Typography component="h2" variant="xl" fontWeight={700}>
                   {D.surveyUnitIndividual}
                 </Typography>
               </Row>
@@ -148,7 +148,7 @@ function PersonInfo({
       </Row>
 
       <Stack gap={0.5}>
-        <Typography as="div" color="textTertiary" variant="s">
+        <Typography component="div" color="textTertiary" variant="s">
           {D.telephone} :
         </Typography>
         <PhoneLine
@@ -192,10 +192,10 @@ function PhoneLine({
     <Row
       sx={{ display: 'grid', gridTemplateColumns: '110px 110px 20px', gap: '1rem', minHeight: 24 }}
     >
-      <Typography as="div" color="textHint" variant="xs">
+      <Typography component="div" color="textHint" variant="xs">
         &nbsp; • {label} :
       </Typography>
-      <Typography as="div" color="textPrimary" variant="s">
+      <Typography component="div" color="textPrimary" variant="s">
         {phoneNumber?.number ?? '-'}
       </Typography>
       {phoneNumber && (

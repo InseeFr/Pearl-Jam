@@ -37,7 +37,7 @@ export function CommentCard({ surveyUnit }: Readonly<CommentCardProps>) {
         <Stack gap={3} component="form" onSubmit={handleSubmit}>
           <Row gap={1}>
             <CommentIcon fontSize="large" />
-            <Typography as="h2" variant="xl" fontWeight={700}>
+            <Typography component="h2" variant="xl" fontWeight={700}>
               {D.goToCommentsPage}
             </Typography>
           </Row>

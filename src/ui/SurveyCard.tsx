@@ -78,7 +78,7 @@ export function SurveyCard({ surveyUnit, locked = false }: Readonly<SurveyCardPr
               </Row>
               {locked && <LockIcon color="iconLock" />}
             </Row>
-            <Typography variant="s" color="textHint" as="div">
+            <Typography variant="s" color="textHint" component="div">
               #{surveyUnit.displayName ?? surveyUnit.id}
             </Typography>
           </Stack>

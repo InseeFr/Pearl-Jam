@@ -21,10 +21,10 @@ export function ContactOutcomeDisplay({ contact }: Readonly<ContactOutcomeProps>
     <Box px={2} py={1.5} borderRadius={1} bgcolor="surfacePrimary.main">
       <Row justifyContent="space-between">
         <div>
-          <Typography color="textPrimary" variant="s" as="div">
+          <Typography color="textPrimary" variant="s" component="div">
             {findContactOutcomeLabelByValue(contact.type)}
           </Typography>
-          <Typography color="textTertiary" variant="s" as="div">
+          <Typography color="textTertiary" variant="s" component="div">
             {formatDate(contact.date)}
           </Typography>
         </div>

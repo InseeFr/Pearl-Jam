@@ -62,7 +62,7 @@ export function SyncDialog({
         <Stack gap={2}>
           <Stack gap={1}>
             {state && (
-              <Typography as="p" color="textPrimary" variant="m">
+              <Typography component="p" color="textPrimary" variant="m">
                 <SyncIcon
                   state={state}
                   sx={{ marginRight: 1, verticalAlign: 'middle' }}
@@ -117,7 +117,7 @@ function SyncDetail({
           {campaign.total === 0 && <DialogContentText>{D.nothingToDisplay}</DialogContentText>}
           {campaign.loaded > 0 && (
             <DialogContentText>
-              <Typography variant="s" color="textTertiary" as="strong" fontWeight={700}>
+              <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
                 {campaign.name.toLowerCase()} :{' '}
               </Typography>{' '}
               {D.loadedSurveyUnits(campaign.loaded)}
@@ -125,7 +125,7 @@ function SyncDetail({
           )}
           {campaign.transmitted > 0 && (
             <DialogContentText>
-              <Typography variant="s" color="textTertiary" as="strong" fontWeight={700}>
+              <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
                 {campaign.name.toLowerCase()} :{' '}
               </Typography>{' '}
               {D.transmittedSurveyUnits(campaign.loaded)}

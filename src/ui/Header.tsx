@@ -30,7 +30,7 @@ export function Header() {
 
   return (
     <Row
-      as="header"
+      component="header"
       justifyContent="space-between"
       bgcolor="white.main"
       py={2}
@@ -50,15 +50,15 @@ export function Header() {
         </Link>
         {/* Logo Sabiane */}
         <Stack>
-          <Row gap={0.5} as={Link} sx={{ textDecoration: 'none' }}>
-            <Typography color="textPrimary" variant="headingM" as="span">
+          <Row gap={0.5} component={Link} sx={{ textDecoration: 'none' }}>
+            <Typography color="textPrimary" variant="headingM" component="span">
               Sabiane
             </Typography>
-            <Typography color="accent" variant="headingM" as="span">
+            <Typography color="accent" variant="headingM" component="span">
               Collecte
             </Typography>
           </Row>
-          <Typography color="hint" variant="xs" as="span" style={{ color: '#BDBDBD' }}>
+          <Typography color="hint" variant="xs" component="span" style={{ color: '#BDBDBD' }}>
             V.{version}
           </Typography>
         </Stack>

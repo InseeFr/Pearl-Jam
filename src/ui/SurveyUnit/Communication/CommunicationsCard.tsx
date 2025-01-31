@@ -63,7 +63,7 @@ export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardPr
           <Stack gap={3}>
             <Row gap={1} key={surveyUnit.id}>
               <CampaignIcon fontSize="large" />
-              <Typography as="h2" variant="xl" fontWeight={700}>
+              <Typography component="h2" variant="xl" fontWeight={700}>
                 {D.surveyUnitCommunications}
               </Typography>
             </Row>

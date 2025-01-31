@@ -27,11 +27,11 @@ export function TextWithLabel({ label, children, sx }: Readonly<TextWithLabelPro
   }
   return (
     <div>
-      <Typography as="span" color="textTertiary" variant="s" sx={sx}>
+      <Typography component="span" color="textTertiary" variant="s" sx={sx}>
         {label} :
       </Typography>
       &nbsp; &nbsp;
-      <Typography as="span" color="textPrimary" variant="s" sx={sx}>
+      <Typography component="span" color="textPrimary" variant="s" sx={sx}>
         {children || '-'}
       </Typography>
     </div>
