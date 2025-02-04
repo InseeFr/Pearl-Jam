@@ -9,7 +9,6 @@ import {
   IdentificationQuestionOption,
   IdentificationQuestions,
   getIdentificationQuestionsTree,
-  IdentificationQuestionValue,
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctions';
 
