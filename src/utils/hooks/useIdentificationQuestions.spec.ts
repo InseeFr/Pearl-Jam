@@ -11,6 +11,7 @@ import {
   identificationQuestionsTree,
 } from 'utils/functions/identifications/identificationFunctions';
 import { optionsMap } from 'utils/functions/identifications/questionsTree/optionsMap';
+import D from 'i18n';
 import * as utilsFunctions from 'utils/functions';
 
 vi.mock('utils/functions', { spy: true });
@@ -92,10 +93,7 @@ const identificationQuestionsHookTests = [
         category: undefined,
         occupant: undefined,
       },
-      questions: identificationQuestionsTree(
-        IdentificationConfiguration.IASCO,
-        mockSurveyUnit.identification
-      ),
+      questions: identificationQuestionsTree(IdentificationConfiguration.IASCO, {}),
       handleReponse: vi.fn as (
         selectedQuestionId: IdentificationQuestionsId,
         option: IdentificationQuestionOption
@@ -111,10 +109,7 @@ const identificationQuestionsHookTests = [
     output: {
       availibility: {},
       responses: {},
-      questions: identificationQuestionsTree(
-        IdentificationConfiguration.NOIDENT,
-        mockSurveyUnit.identification
-      ),
+      questions: identificationQuestionsTree(IdentificationConfiguration.NOIDENT, {}),
       handleReponse: vi.fn as (
         selectedQuestionId: IdentificationQuestionsId,
         option: IdentificationQuestionOption
@@ -141,7 +136,7 @@ const identificationQuestionsHookTests = [
       },
       responses: {
         numberOfRespondents: optionsMap.MANY,
-        individualStatus: optionsMap.OTHER_ADDRESS,
+        individualStatus: { ...optionsMap.OTHER_ADDRESS, label: D.otherHouse },
         householdComposition: optionsMap.SAME_COMPO,
         presentInPreviousHome: undefined,
         situation: undefined,
@@ -238,7 +233,7 @@ const identificationQuestionsHookSetReponseTests = [
       },
       responses: {
         numberOfRespondents: optionsMap.MANY,
-        individualStatus: optionsMap.OTHER_ADDRESS,
+        individualStatus: { ...optionsMap.OTHER_ADDRESS, label: D.otherHouse },
         householdComposition: optionsMap.SAME_COMPO,
         presentInPreviousHome: undefined,
         situation: optionsMap.NOORDINARY,
@@ -304,9 +299,10 @@ identificationQuestionsHookTests.forEach(({ surveyUnitInput, output }) => {
       rerender({ ...surveyUnitInput, displayName: 'test' });
     });
 
+    const { root, ...questions } = output.questions;
     expect(result.current.availableQuestions).toStrictEqual(output.availibility);
     expect(result.current.responses).toMatchObject(output.responses);
-    expect(result.current.questions).toStrictEqual(output.questions);
+    expect(result.current.questions).toMatchObject(questions);
     expect(result.current.handleResponse).toBeTypeOf(typeof output.handleReponse);
     expect(result.current.selectedDialogId).toBeUndefined();
   });

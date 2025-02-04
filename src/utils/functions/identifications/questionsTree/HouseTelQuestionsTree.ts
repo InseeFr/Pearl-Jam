@@ -7,6 +7,7 @@ import D from 'i18n';
 import { optionsMap } from './optionsMap';
 
 export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
+  root: IdentificationQuestionsId.SITUATION,
   [IdentificationQuestionsId.SITUATION]: {
     id: IdentificationQuestionsId.SITUATION,
     nextId: IdentificationQuestionsId.CATEGORY,

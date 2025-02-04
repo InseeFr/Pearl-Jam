@@ -15,6 +15,7 @@ import {
 import {
   houseTelIdentificationQuestionsTree,
   transmissionRulesHOUSETEL,
+  transmissionRulesHOUSETELWSR,
 } from './questionsTree/HouseTelQuestionsTree';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { getLastState } from '../surveyUnitFunctions';
@@ -39,16 +40,15 @@ export type IdentificationQuestionValue = {
 
 export type IdentificationQuestions = Partial<
   Record<IdentificationQuestionsId, IdentificationQuestionValue>
->;
+> & {
+  root?: IdentificationQuestionsId;
+};
 
 export const identificationQuestionsTree = (
   identificationConfiguration: IdentificationConfiguration,
   identification?: SurveyUnitIdentification
-): Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>> => {
-  const identificationMap: Record<
-    IdentificationConfiguration,
-    Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>
-  > = {
+): IdentificationQuestions => {
+  const identificationMap: Record<IdentificationConfiguration, IdentificationQuestions> = {
     [IdentificationConfiguration.INDTEL]: indtelIdentificationQuestionsTree,
     [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
     [IdentificationConfiguration.NOIDENT]: {},
@@ -70,7 +70,7 @@ export const transmissionRules: Record<IdentificationConfiguration, Transmission
   [IdentificationConfiguration.NOIDENT]: transmissionRulesNoIdentification,
   [IdentificationConfiguration.HOUSEF2F]: transmissionRulesHouseF2F,
   [IdentificationConfiguration.HOUSETEL]: transmissionRulesHOUSETEL,
-  [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHOUSETEL,
+  [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHOUSETELWSR,
   [IdentificationConfiguration.INDTELNOR]: transmissionRulesByINDTELNOR,
   [IdentificationConfiguration.INDF2F]: {},
   [IdentificationConfiguration.SRCVREINT]: {},
@@ -129,23 +129,28 @@ export function identificationIsFinished(
   if (!identificationConfiguration) return true;
   if (!identification) return false;
 
-  const questionsTree = identificationQuestionsTree(identificationConfiguration, identification);
+  const questions = identificationQuestionsTree(identificationConfiguration, identification);
+  const root = questions.root;
 
-  let finished = true;
+  if (!root) return true;
+  let question = questions[root];
 
-  // questionsTree is unordered, so we can found an unanswered question but the next could be concluding
-  for (const questionId in questionsTree) {
-    const questions = questionsTree[questionId as IdentificationQuestionsId];
-    if (!questions) continue;
+  while (question) {
+    const response = identification[question.id];
+    if (response) {
+      const isConcluding = question.options.find(o => o.value === response && o.concluding);
 
-    const response = identification[questions.id];
-    if (!response) finished = false;
+      if (isConcluding) return true;
+    }
 
-    const concluding = questions.options.find(o => o.value === response)?.concluding;
-    if (concluding) return true;
+    if (question.nextId) {
+      question = questions[question.nextId];
+    } else {
+      question = undefined;
+    }
   }
 
-  return finished;
+  return false;
 }
 
 export function isInvalidIdentificationAndContactOutcome(

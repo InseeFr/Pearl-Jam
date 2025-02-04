@@ -2,128 +2,117 @@ import {
   IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
-import { TransmissionRules } from '../identificationFunctions';
+import {
+  IdentificationQuestions,
+  IdentificationQuestionValue,
+  TransmissionRules,
+} from '../identificationFunctions';
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
 import { SurveyUnitIdentification } from 'types/pearl';
 
-const numberOfRespondents = {
-  [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: {
-    id: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
-    nextId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-    text: `${D.numberOfRespondents}`,
-    options: [
-      { ...optionsMap.ONE, concluding: false },
-      { ...optionsMap.MANY, concluding: false },
+const numberOfRespondents: IdentificationQuestionValue = {
+  id: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
+  nextId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+  text: `${D.numberOfRespondents}`,
+  options: [
+    { ...optionsMap.ONE, concluding: false },
+    { ...optionsMap.MANY, concluding: false },
+  ],
+};
+
+const individualStatus: IdentificationQuestionValue = {
+  id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+  nextId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
+  text: `${D.foundIndividual}`,
+  options: [
+    { ...optionsMap.SAME_ADDRESS, concluding: true, label: D.sameHouse },
+    { ...optionsMap.OTHER_ADDRESS, concluding: false, label: D.otherHouse },
+    { ...optionsMap.NOFIELD, concluding: false },
+    { ...optionsMap.NOIDENT, concluding: true },
+    { ...optionsMap.DCD, concluding: true },
+  ],
+  dependsOn: {
+    questionId: IdentificationQuestionsId.IDENTIFICATION,
+    values: [IdentificationQuestionOptionValues.ONE, IdentificationQuestionOptionValues.MANY],
+  },
+};
+
+const houseHoldComposition: IdentificationQuestionValue = {
+  id: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
+  nextId: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
+  text: `${D.houseHoldComposition}`,
+  options: [
+    { ...optionsMap.SAME_COMPO, concluding: false },
+    { ...optionsMap.OTHER_COMPO, concluding: false },
+  ],
+  dependsOn: {
+    questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+    values: [
+      IdentificationQuestionOptionValues.NOFIELD,
+      IdentificationQuestionOptionValues.OTHER_ADDRESS,
     ],
   },
 };
 
-const individualStatus = {
-  [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
-    id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-    nextId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
-    text: `${D.foundIndividual}`,
-    options: [
-      { ...optionsMap.SAME_ADDRESS, concluding: true },
-      { ...optionsMap.OTHER_ADDRESS, concluding: false },
-      { ...optionsMap.NOFIELD, concluding: false },
-      { ...optionsMap.NOIDENT, concluding: true },
-      { ...optionsMap.DCD, concluding: true },
-    ],
-    dependsOn: {
-      questionId: IdentificationQuestionsId.IDENTIFICATION,
-      values: [IdentificationQuestionOptionValues.ONE, IdentificationQuestionOptionValues.MANY],
-    },
+const presentInPreviousHome: IdentificationQuestionValue = {
+  id: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
+  nextId: IdentificationQuestionsId.SITUATION,
+  text: `${D.presentInPreviousHome}`,
+  options: [
+    { ...optionsMap.NONE, concluding: false },
+    { ...optionsMap.AT_LEAST_ONE, concluding: true },
+  ],
+  dependsOn: {
+    questionId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
+    values: [IdentificationQuestionOptionValues.OTHER_COMPO],
   },
 };
 
-const houseHoldComposition = {
-  [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
-    id: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
-    nextId: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
-    text: `${D.houseHoldComposition}`,
-    options: [
-      { ...optionsMap.SAME_COMPO, concluding: false },
-      { ...optionsMap.OTHER_COMPO, concluding: false },
-    ],
-    dependsOn: {
-      questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-      values: [
-        IdentificationQuestionOptionValues.NOFIELD,
-        IdentificationQuestionOptionValues.OTHER_ADDRESS,
-      ],
-    },
-  },
+const presentInPreviousHomeDisabled: IdentificationQuestionValue = {
+  ...presentInPreviousHome,
+  disabled: true,
 };
 
-const presentInPreviousHome = {
-  [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]: {
-    id: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
-    nextId: IdentificationQuestionsId.SITUATION,
-    text: `${D.presentInPreviousHome}`,
-    options: [
-      { ...optionsMap.NONE, concluding: false },
-      { ...optionsMap.AT_LEAST_ONE, concluding: true },
-    ],
-    dependsOn: {
-      questionId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
-      values: [IdentificationQuestionOptionValues.OTHER_COMPO],
-    },
-  },
-};
-
-const presentInPreviousHomeDisabled = {
-  [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]: {
-    ...presentInPreviousHome[IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME],
-    disabled: true,
-  },
-};
-
-const housingSituation = {
-  [IdentificationQuestionsId.SITUATION]: {
-    id: IdentificationQuestionsId.SITUATION,
-    text: `${D.housingSituation}`,
-    options: [
-      { ...optionsMap.ORDINARY, concluding: true },
-      { ...optionsMap.NOORDINARY, concluding: true },
-    ],
-    dependsOn: {
-      questionId: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
-      values: [IdentificationQuestionOptionValues.NONE],
-    },
+const housingSituation: IdentificationQuestionValue = {
+  id: IdentificationQuestionsId.SITUATION,
+  text: `${D.housingSituation}`,
+  options: [
+    { ...optionsMap.ORDINARY, concluding: true },
+    { ...optionsMap.NOORDINARY, concluding: true },
+  ],
+  dependsOn: {
+    questionId: IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME,
+    values: [IdentificationQuestionOptionValues.NONE],
   },
 };
 
 export const SRCVIdentificationQuestionsTreeFunction = (
   identification?: SurveyUnitIdentification
-) => {
+): IdentificationQuestions => {
   // return tree with one respondent
   if (identification?.numberOfRespondents === optionsMap.ONE.value) {
     return {
-      ...numberOfRespondents,
-
+      root: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
+      [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: numberOfRespondents,
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
-        ...individualStatus[IdentificationQuestionsId.INDIVIDUAL_STATUS],
+        ...individualStatus,
         nextId: IdentificationQuestionsId.SITUATION,
         options: [
-          { ...optionsMap.SAME_ADDRESS, concluding: true },
-          { ...optionsMap.OTHER_ADDRESS, concluding: false },
+          { ...optionsMap.SAME_ADDRESS, concluding: true, label: D.sameHouse },
+          { ...optionsMap.OTHER_ADDRESS, concluding: false, label: D.otherHouse },
           { ...optionsMap.NOFIELD, concluding: true },
           { ...optionsMap.NOIDENT, concluding: true },
           { ...optionsMap.DCD, concluding: true },
         ],
       },
-
       [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
-        ...houseHoldComposition[IdentificationQuestionsId.HOUSEHOLD_COMPOSITION],
+        ...houseHoldComposition,
         disabled: true,
       },
-
-      ...presentInPreviousHomeDisabled,
-
+      [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]: presentInPreviousHomeDisabled,
       [IdentificationQuestionsId.SITUATION]: {
-        ...housingSituation[IdentificationQuestionsId.SITUATION],
+        ...housingSituation,
         dependsOn: {
           questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
           values: [IdentificationQuestionOptionValues.OTHER_ADDRESS],
@@ -138,20 +127,19 @@ export const SRCVIdentificationQuestionsTreeFunction = (
     identification?.individualStatus === optionsMap.NOFIELD.value
   ) {
     return {
-      ...numberOfRespondents,
-      ...individualStatus,
+      root: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
+      [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: numberOfRespondents,
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatus,
       [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
-        ...houseHoldComposition[IdentificationQuestionsId.HOUSEHOLD_COMPOSITION],
+        ...houseHoldComposition,
         options: [
           { ...optionsMap.SAME_COMPO, concluding: true },
           { ...optionsMap.OTHER_COMPO, concluding: true },
         ],
       },
-
-      ...presentInPreviousHomeDisabled,
-
+      [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]: presentInPreviousHomeDisabled,
       [IdentificationQuestionsId.SITUATION]: {
-        ...housingSituation[IdentificationQuestionsId.SITUATION],
+        ...housingSituation,
         disabled: true,
       },
     };
@@ -163,18 +151,16 @@ export const SRCVIdentificationQuestionsTreeFunction = (
     identification?.householdComposition === optionsMap.SAME_COMPO.value
   ) {
     return {
-      ...numberOfRespondents,
-      ...individualStatus,
-
+      root: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
+      [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: numberOfRespondents,
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatus,
       [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
-        ...houseHoldComposition[IdentificationQuestionsId.HOUSEHOLD_COMPOSITION],
+        ...houseHoldComposition,
         nextId: IdentificationQuestionsId.SITUATION,
       },
-
-      ...presentInPreviousHomeDisabled,
-
+      [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]: presentInPreviousHomeDisabled,
       [IdentificationQuestionsId.SITUATION]: {
-        ...housingSituation[IdentificationQuestionsId.SITUATION],
+        ...housingSituation,
         dependsOn: {
           questionId: IdentificationQuestionsId.HOUSEHOLD_COMPOSITION,
           values: [IdentificationQuestionOptionValues.SAME_COMPO],
@@ -185,11 +171,12 @@ export const SRCVIdentificationQuestionsTreeFunction = (
 
   // return default tree
   return {
-    ...numberOfRespondents,
-    ...individualStatus,
-    ...houseHoldComposition,
-    ...presentInPreviousHome,
-    ...housingSituation,
+    root: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
+    [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: numberOfRespondents,
+    [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatus,
+    [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: houseHoldComposition,
+    [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]: presentInPreviousHome,
+    [IdentificationQuestionsId.SITUATION]: housingSituation,
   };
 };
 

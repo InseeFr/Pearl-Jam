@@ -264,7 +264,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.HOUSETELWSR,
       identification: {
-        category: IdentificationQuestionOptionValues.ORDINARY,
+        situation: IdentificationQuestionOptionValues.ORDINARY,
       },
       contactOutcome: {
         date: Date.now(),
@@ -275,6 +275,42 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       states: [{ type: 'WFT', date: Date.now() }],
     },
     output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.HOUSETELWSR,
+      identification: {
+        situation: IdentificationQuestionOptionValues.ORDINARY,
+        category: IdentificationQuestionOptionValues.SECONDARY,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.NOT_APPLICABLE.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.HOUSETELWSR,
+      identification: {
+        situation: IdentificationQuestionOptionValues.ORDINARY,
+        category: IdentificationQuestionOptionValues.SECONDARY,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: true,
   },
 ];
 

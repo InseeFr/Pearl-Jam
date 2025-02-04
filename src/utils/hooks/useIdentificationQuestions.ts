@@ -7,6 +7,7 @@ import {
   checkAvailability,
   identificationIsFinished,
   IdentificationQuestionOption,
+  IdentificationQuestions,
   identificationQuestionsTree,
   IdentificationQuestionValue,
   ResponseState,
@@ -30,9 +31,7 @@ export const persistIdentification = (
 };
 
 export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
-  const [questions, setQuestions] = useState<
-    Partial<Record<IdentificationQuestionsId, IdentificationQuestionValue>>
-  >({});
+  const [questions, setQuestions] = useState<Omit<IdentificationQuestions, 'root'>>({});
   const [responses, setResponses] = useState<ResponseState>({});
   const [availableQuestions, setAvailableQuestions] = useState<
     Partial<Record<IdentificationQuestionsId, boolean>>
@@ -41,8 +40,18 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     undefined
   );
 
+  const setNextDialogId = (
+    questions: IdentificationQuestions,
+    dialogId?: IdentificationQuestionsId
+  ) => {
+    if (!dialogId || !questions[dialogId]?.disabled) return dialogId;
+
+    const nextId = questions[dialogId].nextId;
+    return setNextDialogId(questions, nextId);
+  };
+
   useEffect(() => {
-    const newQuestions = identificationQuestionsTree(
+    const { root, ...newQuestions } = identificationQuestionsTree(
       surveyUnit.identificationConfiguration,
       surveyUnit.identification
     );
@@ -63,6 +72,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
       ])
     );
 
+    setNextDialogId(newQuestions, selectedDialogId);
     setQuestions(newQuestions);
     setResponses(newResponses);
     setAvailableQuestions(newAvailability);
@@ -92,7 +102,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
       const updatedAvailability = Object.fromEntries(availableQuestionIds);
 
       if (questions[selectedQuestionId] && !updatedResponses[selectedQuestionId]?.concluding) {
-        setSelectedDialogId(questions[selectedQuestionId]?.nextId);
+        setSelectedDialogId(questions[selectedQuestionId].nextId);
       }
 
       // Prevent rerender
