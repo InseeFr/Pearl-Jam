@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, Assertion } from 'vitest';
 import {
   checkAvailability,
-  identificationIsFinished,
+  isIdentificationFinished,
   IdentificationQuestions,
   isInvalidIdentificationAndContactOutcome,
+  isValidContactOutcome,
   transmissionRules,
   TransmissionRules,
   validateTransmission,
@@ -491,7 +492,7 @@ describe('checkAvailability', () => {
 
 describe('identificationIsFinished', () => {
   it('should return false if identification is undefined', () => {
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL);
+    const result = isIdentificationFinished(IdentificationConfiguration.INDTEL);
     expect(result).toBe(false);
   });
 
@@ -500,7 +501,7 @@ describe('identificationIsFinished', () => {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: 'answer1',
       // Missing answer for QUESTION_2
     };
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    const result = isIdentificationFinished(IdentificationConfiguration.INDTEL, identification);
     expect(result).toBe(false);
   });
 
@@ -510,12 +511,12 @@ describe('identificationIsFinished', () => {
         IdentificationQuestionOptionValues.SAME_ADDRESS,
       [IdentificationQuestionsId.SITUATION]: IdentificationQuestionOptionValues.ORDINARY,
     };
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    const result = isIdentificationFinished(IdentificationConfiguration.INDTEL, identification);
     expect(result).toBe(true);
   });
 
   it('should return true if there are no questions in the configuration', () => {
-    const result = identificationIsFinished(IdentificationConfiguration.NOIDENT, {});
+    const result = isIdentificationFinished(IdentificationConfiguration.NOIDENT, {});
     expect(result).toBe(true);
   });
 
@@ -523,7 +524,7 @@ describe('identificationIsFinished', () => {
     const identification = {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
     };
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    const result = isIdentificationFinished(IdentificationConfiguration.INDTEL, identification);
     expect(result).toBe(true);
   });
 });

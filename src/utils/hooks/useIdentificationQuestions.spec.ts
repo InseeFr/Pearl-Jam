@@ -8,7 +8,7 @@ import { useIdentificationQuestions } from './useIdentificationQuestions';
 import { act, renderHook } from '@testing-library/react';
 import {
   IdentificationQuestionOption,
-  identificationQuestionsTree,
+  getIdentificationQuestionsTree,
 } from 'utils/functions/identifications/identificationFunctions';
 import { optionsMap } from 'utils/functions/identifications/questionsTree/optionsMap';
 import D from 'i18n';
@@ -93,7 +93,7 @@ const identificationQuestionsHookTests = [
         category: undefined,
         occupant: undefined,
       },
-      questions: identificationQuestionsTree(IdentificationConfiguration.IASCO, {}),
+      questions: getIdentificationQuestionsTree(IdentificationConfiguration.IASCO, {}),
       handleReponse: vi.fn as (
         selectedQuestionId: IdentificationQuestionsId,
         option: IdentificationQuestionOption
@@ -109,7 +109,7 @@ const identificationQuestionsHookTests = [
     output: {
       availibility: {},
       responses: {},
-      questions: identificationQuestionsTree(IdentificationConfiguration.NOIDENT, {}),
+      questions: getIdentificationQuestionsTree(IdentificationConfiguration.NOIDENT, {}),
       handleReponse: vi.fn as (
         selectedQuestionId: IdentificationQuestionsId,
         option: IdentificationQuestionOption
@@ -141,7 +141,7 @@ const identificationQuestionsHookTests = [
         presentInPreviousHome: undefined,
         situation: undefined,
       },
-      questions: identificationQuestionsTree(IdentificationConfiguration.SRCVREINT, {
+      questions: getIdentificationQuestionsTree(IdentificationConfiguration.SRCVREINT, {
         numberOfRespondents: optionsMap.MANY.value,
         individualStatus: optionsMap.OTHER_ADDRESS.value,
         householdComposition: optionsMap.SAME_COMPO.value,
@@ -169,7 +169,7 @@ const identificationQuestionsHookTests = [
         individualStatus: optionsMap.OTHER_ADDRESS,
         situation: undefined,
       },
-      questions: identificationQuestionsTree(IdentificationConfiguration.INDTEL, {
+      questions: getIdentificationQuestionsTree(IdentificationConfiguration.INDTEL, {
         individualStatus: optionsMap.OTHER_ADDRESS.value,
       }),
       handleReponse: vi.fn as (

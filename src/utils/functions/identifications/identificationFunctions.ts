@@ -44,7 +44,7 @@ export type IdentificationQuestions = Partial<
   root?: IdentificationQuestionsId;
 };
 
-export const identificationQuestionsTree = (
+export const getIdentificationQuestionsTree = (
   identificationConfiguration: IdentificationConfiguration,
   identification?: SurveyUnitIdentification
 ): IdentificationQuestions => {
@@ -102,8 +102,7 @@ export function checkAvailability(
   question?: IdentificationQuestionValue,
   responses?: ResponseState
 ): boolean {
-  const disabled = question?.disabled;
-  if (disabled) return false;
+  if (question?.disabled) return false;
 
   if (!responses) return true;
   const dependency = question?.dependsOn;
@@ -122,14 +121,14 @@ export function checkAvailability(
   return true;
 }
 
-export function identificationIsFinished(
+export function isIdentificationFinished(
   identificationConfiguration?: IdentificationConfiguration,
   identification?: SurveyUnitIdentification
 ): boolean {
   if (!identificationConfiguration) return true;
   if (!identification) return false;
 
-  const questions = identificationQuestionsTree(identificationConfiguration, identification);
+  const questions = getIdentificationQuestionsTree(identificationConfiguration, identification);
   const root = questions.root;
 
   if (!root) return true;
@@ -178,27 +177,29 @@ export function isInvalidIdentificationAndContactOutcome(
   return false;
 }
 
+function isValidStateForContactOutcome(su: SurveyUnit, suTransmissionRules: TransmissionRules) {
+  const expectedOutcome = suTransmissionRules?.expectedStateForConctactOutcome;
+  if (!expectedOutcome) return true;
+
+  const hasMatchingOutcome = su?.contactOutcome?.type === expectedOutcome.contactOutcome;
+  const lastStateType = getLastState(su.states)?.type;
+  const hasExpectedState = lastStateType === expectedOutcome.expectedState;
+
+  return !(hasMatchingOutcome && !hasExpectedState);
+}
+
 export function validateTransmission(su: SurveyUnit): boolean {
   const suTransmissionRules = transmissionRules[su.identificationConfiguration];
 
   if (suTransmissionRules.validIfIdentificationFinished) {
-    if (!identificationIsFinished(su.identificationConfiguration, su.identification)) return false;
+    if (!isIdentificationFinished(su.identificationConfiguration, su.identification)) return false;
   }
 
   if (suTransmissionRules.invalidIfmissingContactOutcome && !su.contactOutcome) return false;
 
   if (isInvalidIdentificationAndContactOutcome(suTransmissionRules, su)) return false;
 
-  if (suTransmissionRules.expectedStateForConctactOutcome) {
-    if (
-      su?.contactOutcome?.type ===
-        suTransmissionRules.expectedStateForConctactOutcome.contactOutcome &&
-      getLastState(su.states)?.type !==
-        suTransmissionRules.expectedStateForConctactOutcome.expectedState
-    ) {
-      return false;
-    }
-  }
+  if (!isValidStateForContactOutcome(su, suTransmissionRules)) return false;
 
   if (suTransmissionRules.invalidIfmissingContactAttempt && !su.contactAttempts.length)
     return false;

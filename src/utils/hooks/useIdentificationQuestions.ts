@@ -5,10 +5,10 @@ import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { addNewState, persistSurveyUnit } from 'utils/functions';
 import {
   checkAvailability,
-  identificationIsFinished,
+  isIdentificationFinished,
   IdentificationQuestionOption,
   IdentificationQuestions,
-  identificationQuestionsTree,
+  getIdentificationQuestionsTree,
   IdentificationQuestionValue,
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctions';
@@ -51,7 +51,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
   };
 
   useEffect(() => {
-    const { root, ...newQuestions } = identificationQuestionsTree(
+    const { root, ...newQuestions } = getIdentificationQuestionsTree(
       surveyUnit.identificationConfiguration,
       surveyUnit.identification
     );
@@ -110,7 +110,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
 
       persistIdentification(surveyUnit, identification);
 
-      if (identificationIsFinished(surveyUnit.identificationConfiguration, identification)) {
+      if (isIdentificationFinished(surveyUnit.identificationConfiguration, identification)) {
         persistStates(
           surveyUnit,
           addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
