@@ -39,14 +39,10 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     undefined
   );
 
-  console.log(selectedDialogId);
-
   const setNextDialogId = (
     questions: IdentificationQuestions,
     dialogId?: IdentificationQuestionsId
   ) => {
-    console.log(dialogId);
-
     if (!dialogId || !questions[dialogId]?.disabled) return dialogId;
 
     const nextId = questions[dialogId].nextId;
