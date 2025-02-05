@@ -39,10 +39,14 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     undefined
   );
 
+  console.log(selectedDialogId);
+
   const setNextDialogId = (
     questions: IdentificationQuestions,
     dialogId?: IdentificationQuestionsId
   ) => {
+    console.log(dialogId);
+
     if (!dialogId || !questions[dialogId]?.disabled) return dialogId;
 
     const nextId = questions[dialogId].nextId;
@@ -71,11 +75,12 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
       ])
     );
 
-    setNextDialogId(newQuestions, selectedDialogId);
+    const newDialogId = setNextDialogId(newQuestions, selectedDialogId);
+    setSelectedDialogId(newDialogId);
     setQuestions(newQuestions);
     setResponses(newResponses);
     setAvailableQuestions(newAvailability);
-  }, [JSON.stringify(surveyUnit.identification)]);
+  }, [JSON.stringify(surveyUnit.identification), selectedDialogId]);
 
   const handleResponse = (
     selectedQuestionId: IdentificationQuestionsId,
