@@ -179,23 +179,3 @@ export const SRCVIdentificationQuestionsTreeFunction = (
     [IdentificationQuestionsId.SITUATION]: housingSituation,
   };
 };
-
-export const transmissionRulesHouseF2F: TransmissionRules = {
-  validIfIdentificationFinished: true,
-  invalidIdentificationsAndContactOutcome: {
-    identifications: [
-      {
-        questionId: IdentificationQuestionsId.OCCUPANT,
-        value: IdentificationQuestionOptionValues.IDENTIFIED,
-      },
-      {
-        questionId: IdentificationQuestionsId.OCCUPANT,
-        value: IdentificationQuestionOptionValues.UNIDENTIFIED,
-      },
-    ],
-    contactOutcome: 'NOA',
-  },
-  invalidIfmissingContactOutcome: true,
-  invalidIfmissingContactAttempt: true,
-  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
-};

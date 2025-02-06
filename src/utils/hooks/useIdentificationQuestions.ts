@@ -50,9 +50,12 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
   };
 
   useEffect(() => {
+    let identification = { ...surveyUnit.identification };
+    if (selectedDialogId && identification) identification[selectedDialogId] = undefined;
+
     const { root, ...newQuestions } = getIdentificationQuestionsTree(
       surveyUnit.identificationConfiguration,
-      surveyUnit.identification
+      identification
     );
 
     const newResponses: ResponseState = Object.fromEntries(
