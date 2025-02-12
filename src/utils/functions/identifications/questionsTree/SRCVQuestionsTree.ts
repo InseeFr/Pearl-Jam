@@ -2,11 +2,7 @@ import {
   IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
-import {
-  IdentificationQuestions,
-  IdentificationQuestionValue,
-  TransmissionRules,
-} from '../identificationFunctions';
+import { IdentificationQuestions, IdentificationQuestionValue } from '../identificationFunctions';
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
 import { SurveyUnitIdentification } from 'types/pearl';
