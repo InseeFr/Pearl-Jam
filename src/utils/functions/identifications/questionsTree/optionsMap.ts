@@ -10,6 +10,7 @@ export const optionsMap = {
     label: `${D.otherAddress}`,
     value: IdentificationQuestionOptionValues.OTHER_ADDRESS,
   },
+
   NOFIELD: { label: `${D.noField}`, value: IdentificationQuestionOptionValues.NOFIELD },
   NOIDENT: { label: `${D.noIdent}`, value: IdentificationQuestionOptionValues.NOIDENT },
   DCD: { label: `${D.deceased}`, value: IdentificationQuestionOptionValues.DCD },
@@ -51,4 +52,22 @@ export const optionsMap = {
     value: IdentificationQuestionOptionValues.OCCASIONAL,
   },
   VACANT: { label: `${D.categoryVacant}`, value: IdentificationQuestionOptionValues.VACANT },
+  ONE: { label: `${D.oneRespondent}`, value: IdentificationQuestionOptionValues.ONE },
+  MANY: { label: `${D.manyRespondents}`, value: IdentificationQuestionOptionValues.MANY },
+  SAME_COMPO: {
+    label: `${D.sameHouseHoldComposition}`,
+    value: IdentificationQuestionOptionValues.SAME_COMPO,
+  },
+  OTHER_COMPO: {
+    label: `${D.otherHouseHoldComposition}`,
+    value: IdentificationQuestionOptionValues.OTHER_COMPO,
+  },
+  NONE: {
+    label: `${D.noOnePresentInPreviousHome}`,
+    value: IdentificationQuestionOptionValues.NONE,
+  },
+  AT_LEAST_ONE: {
+    label: `${D.atLeastOnePresentInPreviousHome}`,
+    value: IdentificationQuestionOptionValues.AT_LEAST_ONE,
+  },
 };

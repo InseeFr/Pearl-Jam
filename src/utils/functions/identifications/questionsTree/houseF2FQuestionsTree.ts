@@ -7,6 +7,7 @@ import D from 'i18n';
 import { optionsMap } from './optionsMap';
 
 export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
+  root: IdentificationQuestionsId.IDENTIFICATION,
   [IdentificationQuestionsId.IDENTIFICATION]: {
     id: IdentificationQuestionsId.IDENTIFICATION,
     nextId: IdentificationQuestionsId.ACCESS,

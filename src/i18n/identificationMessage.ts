@@ -4,6 +4,16 @@ const identificationMessage = {
     en: 'Yes, at the specified address',
     sq: 'Po, në adresën e specifikuar',
   },
+  sameHouse: {
+    fr: 'Oui, dans le logement indiqué',
+    en: 'Yes, at the specified housing',
+    sq: 'Po, në banesën e specifikuar',
+  },
+  otherHouse: {
+    fr: 'Oui, mais dans un autre logement situé dans le champ géographique',
+    en: 'Yes, but in another home within the same geographical area',
+    sq: 'Po, por në një shtëpi tjetër brenda së njëjtës zonë gjeografike',
+  },
   otherAddress: {
     fr: 'Oui, mais à une autre adresse située dans le champs géographique',
     en: 'Yes, but at another address within the geographical area',
@@ -118,6 +128,21 @@ const identificationMessage = {
     fr: 'Pas de repérage pour cette enquête',
     en: 'No location for this survey',
     sq: 'Asnjë vendndodhje për këtë anketë',
+  },
+  oneRespondent: {
+    fr: 'Un individu panel',
+    en: 'Individual panel',
+    sq: 'Paneli individual',
+  },
+  manyRespondents: {
+    fr: 'Plusieurs individus panel',
+    en: 'Several individuals panel',
+    sq: 'Paneli i disa individëve',
+  },
+  numberOfRespondents: {
+    fr: "Nombre d'individus panel à interroger",
+    en: 'Number of panel individuals to interview',
+    sq: 'Numri i individëve të panelit për intervistë',
   },
   yes: { fr: 'Oui', en: 'Yes', sq: 'Po' },
   no: { fr: 'Non', en: 'No', sq: 'Jo' },
