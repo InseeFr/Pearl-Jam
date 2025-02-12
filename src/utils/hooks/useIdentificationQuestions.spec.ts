@@ -79,7 +79,7 @@ const identificationQuestionsHookTests = [
     },
 
     output: {
-      availibility: {
+      availability: {
         identification: true,
         access: true,
         situation: true,
@@ -107,7 +107,7 @@ const identificationQuestionsHookTests = [
       identification: {},
     },
     output: {
-      availibility: {},
+      availability: {},
       responses: {},
       questions: getIdentificationQuestionsTree(IdentificationConfiguration.NOIDENT, {}),
       handleReponse: vi.fn as (
@@ -127,7 +127,7 @@ const identificationQuestionsHookTests = [
       },
     },
     output: {
-      availibility: {
+      availability: {
         numberOfRespondents: true,
         individualStatus: true,
         householdComposition: true,
@@ -161,7 +161,7 @@ const identificationQuestionsHookTests = [
       },
     },
     output: {
-      availibility: {
+      availability: {
         situation: true,
         individualStatus: true,
       },
@@ -189,7 +189,7 @@ const identificationQuestionsHookSetReponseTests = [
       option: { ...optionsMap.DESTROY, concluding: true },
     },
     output: {
-      availibility: {
+      availability: {
         identification: true,
         access: false,
         situation: false,
@@ -212,7 +212,7 @@ const identificationQuestionsHookSetReponseTests = [
     surveyUnitInput: identificationQuestionsHookTests[1].surveyUnitInput,
     setResponseCallParameters: undefined,
     output: {
-      availibility: {},
+      availability: {},
       responses: {},
     },
   },
@@ -224,7 +224,7 @@ const identificationQuestionsHookSetReponseTests = [
       option: { ...optionsMap.NOORDINARY, concluding: true },
     },
     output: {
-      availibility: {
+      availability: {
         numberOfRespondents: true,
         individualStatus: true,
         householdComposition: true,
@@ -250,7 +250,7 @@ const identificationQuestionsHookSetReponseTests = [
       option: { ...optionsMap.ONE, concluding: false },
     },
     output: {
-      availibility: {
+      availability: {
         numberOfRespondents: true,
         individualStatus: true,
         householdComposition: false,
@@ -276,7 +276,7 @@ const identificationQuestionsHookSetReponseTests = [
       option: { ...optionsMap.ORDINARY, concluding: true },
     },
     output: {
-      availibility: {
+      availability: {
         situation: true,
         individualStatus: true,
       },
@@ -300,7 +300,7 @@ identificationQuestionsHookTests.forEach(({ surveyUnitInput, output }) => {
     });
 
     const { root, ...questions } = output.questions;
-    expect(result.current.availableQuestions).toStrictEqual(output.availibility);
+    expect(result.current.availableQuestions).toStrictEqual(output.availability);
     expect(result.current.responses).toMatchObject(output.responses);
     expect(result.current.questions).toMatchObject(questions);
     expect(result.current.handleResponse).toBeTypeOf(typeof output.handleReponse);
@@ -330,7 +330,7 @@ identificationQuestionsHookSetReponseTests.forEach(
       if (output.persistSurveyUnitIdentificationCall) expect(spyPersistSurveyUnit).toBeCalled();
       if (output.addNewStateCall) expect(addNewState).toBeCalled();
 
-      expect(result.current.availableQuestions).toStrictEqual(output.availibility);
+      expect(result.current.availableQuestions).toStrictEqual(output.availability);
       expect(result.current.responses).toMatchObject(output.responses);
       expect(result.current.selectedDialogId).toEqual(output.nextDialog);
     });
