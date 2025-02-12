@@ -7,13 +7,14 @@ import D from 'i18n';
 import { optionsMap } from './optionsMap';
 
 export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
+  root: IdentificationQuestionsId.SITUATION,
   [IdentificationQuestionsId.SITUATION]: {
     id: IdentificationQuestionsId.SITUATION,
     nextId: IdentificationQuestionsId.CATEGORY,
     text: `${D.housingSituation}`,
     options: [
       { ...optionsMap.ORDINARY, concluding: false },
-      { label: `${D.absorbed}`, value: 'ABSORBED', concluding: true },
+      { ...optionsMap.ABSORBED, concluding: true },
       { ...optionsMap.NOORDINARY, concluding: true },
     ],
   },
@@ -23,7 +24,7 @@ export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
     options: [
       { ...optionsMap.PRIMARY, concluding: true },
       { ...optionsMap.SECONDARY, concluding: true },
-      { label: `${D.vacant}`, value: 'VACANT', concluding: true },
+      { ...optionsMap.VACANT, concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.SITUATION,
@@ -32,17 +33,33 @@ export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
   },
 } as const;
 
-export const transmissionRulesHouseTel: TransmissionRules = {
+export const transmissionRulesHOUSETEL: TransmissionRules = {
   validIfIdentificationFinished: true,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
-        questionId: IdentificationQuestionsId.SITUATION,
-        value: IdentificationQuestionOptionValues.ORDINARY,
+        questionId: IdentificationQuestionsId.CATEGORY,
+        value: IdentificationQuestionOptionValues.PRIMARY,
+      },
+    ],
+    contactOutcome: 'NOA',
+  },
+  invalidIfmissingContactOutcome: true,
+  invalidIfmissingContactAttempt: true,
+  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
+};
+
+export const transmissionRulesHOUSETELWSR: TransmissionRules = {
+  validIfIdentificationFinished: true,
+  invalidIdentificationsAndContactOutcome: {
+    identifications: [
+      {
+        questionId: IdentificationQuestionsId.CATEGORY,
+        value: IdentificationQuestionOptionValues.PRIMARY,
       },
       {
-        questionId: IdentificationQuestionsId.SITUATION,
-        value: IdentificationQuestionOptionValues.NOORDINARY,
+        questionId: IdentificationQuestionsId.CATEGORY,
+        value: IdentificationQuestionOptionValues.SECONDARY,
       },
     ],
     contactOutcome: 'NOA',

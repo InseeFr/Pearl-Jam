@@ -19,6 +19,36 @@ const detailsMessage = {
     en: 'Address modification',
     sq: 'Ndryshimi i adresës',
   },
+  houseHoldComposition: {
+    fr: 'Modification de la composition du ménage',
+    en: 'Change in household composition',
+    sq: 'Ndryshimi në përbërjen e familjes',
+  },
+  sameHouseHoldComposition: {
+    fr: 'Tous les individus panels vivent dans le logement',
+    en: 'All individual panels living in the dwelling',
+    sq: 'Të gjitha panelet individuale që jetojnë në banesë',
+  },
+  otherHouseHoldComposition: {
+    fr: 'Tous les individus panels ne vivent pas dans le logement',
+    en: 'All individual panels do not live in the dwelling',
+    sq: 'Të gjitha panelet individuale nuk jetojnë në banesë',
+  },
+  presentInPreviousHome: {
+    fr: "Présence dans l'ancien logement",
+    en: 'Presence in previous home',
+    sq: 'Prania në shtëpinë e mëparshme',
+  },
+  noOnePresentInPreviousHome: {
+    fr: "Aucun individu panel n'est encore présent dans l'ancien logement",
+    en: 'No individual panel is still present in the old home',
+    sq: 'Asnjë panel individual nuk është ende i pranishëm në shtëpinë e vjetër',
+  },
+  atLeastOnePresentInPreviousHome: {
+    fr: "Au moins un individu panel est encore présent dans l'ancien logement",
+    en: 'At least one panel member is still present in the old home',
+    sq: 'Të paktën një anëtar i panelit është ende i pranishëm në shtëpinë e vjetër',
+  },
   surveyUnitEmail: { fr: 'Mail', en: 'Email', sq: 'Email' },
   surveyUnitPhone: { fr: 'Téléphone', en: 'Phone', sq: 'Telefoni' },
   surveyUnitNoPhone: {
