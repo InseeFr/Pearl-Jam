@@ -96,15 +96,14 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
       if (updatedAvailability != availableQuestions) setAvailableQuestions(updatedAvailability);
 
       let newStates = surveyUnit.states;
-      if (isIdentificationFinished(surveyUnit.identificationConfiguration, identification)) {
+      if (isIdentificationFinished(surveyUnit.identificationConfiguration, identification))
         newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
 
-        persistSurveyUnit({
-          ...surveyUnit,
-          states: newStates,
-          identification: identification,
-        });
-      }
+      persistSurveyUnit({
+        ...surveyUnit,
+        states: newStates,
+        identification: identification,
+      });
 
       return updatedResponses;
     });
