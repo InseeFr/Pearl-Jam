@@ -39,7 +39,7 @@ export function IdentificationDialog({
   };
 
   return (
-    <Dialog maxWidth="sm" open={question ? question.text.length > 0 : false} onClose={onClose}>
+    <Dialog maxWidth="m" open={question ? question.text.length > 0 : false} onClose={onClose}>
       <DialogTitle id="identification-title">{question?.text}</DialogTitle>
       <DialogContent>
         <RadioGroup

@@ -7,6 +7,7 @@ import D from 'i18n';
 import { optionsMap } from './optionsMap';
 
 export const indtelIdentificationQuestionsTree: IdentificationQuestions = {
+  root: IdentificationQuestionsId.INDIVIDUAL_STATUS,
   [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
     id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
     nextId: IdentificationQuestionsId.SITUATION,
@@ -36,13 +37,33 @@ export const indtelIdentificationQuestionsTree: IdentificationQuestions = {
   },
 } as const;
 
-export const transmissionRulesByTel: TransmissionRules = {
+export const transmissionRulesByINDTEL: TransmissionRules = {
   validIfIdentificationFinished: true,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
         questionId: IdentificationQuestionsId.SITUATION,
         value: IdentificationQuestionOptionValues.ORDINARY,
+      },
+    ],
+    contactOutcome: 'NOA',
+  },
+  invalidIfmissingContactOutcome: true,
+  invalidIfmissingContactAttempt: true,
+  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
+};
+
+export const transmissionRulesByINDTELNOR: TransmissionRules = {
+  validIfIdentificationFinished: true,
+  invalidIdentificationsAndContactOutcome: {
+    identifications: [
+      {
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.ORDINARY,
+      },
+      {
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.NOORDINARY,
       },
     ],
     contactOutcome: 'NOA',

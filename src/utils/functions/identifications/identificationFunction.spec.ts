@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, Assertion } from 'vitest';
 import {
   checkAvailability,
-  identificationIsFinished,
+  isIdentificationFinished,
   IdentificationQuestions,
   isInvalidIdentificationAndContactOutcome,
+  isValidContactOutcome,
   transmissionRules,
   TransmissionRules,
   validateTransmission,
@@ -221,6 +222,97 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
     },
     output: true,
   },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.INDTELNOR,
+      identification: {
+        individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
+        situation: IdentificationQuestionOptionValues.NOORDINARY,
+      },
+      //  NOA + NOORDINARY -> unvalid
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.NOT_APPLICABLE.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.INDTELNOR,
+      identification: {
+        individualStatus: IdentificationQuestionOptionValues.SAME_ADDRESS,
+        situation: IdentificationQuestionOptionValues.ORDINARY,
+      },
+      //  DUK + ORDINARY -> valid
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.DEFINITLY_UNAVAILABLE.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: true,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.HOUSETELWSR,
+      identification: {
+        situation: IdentificationQuestionOptionValues.ORDINARY,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.HOUSETELWSR,
+      identification: {
+        situation: IdentificationQuestionOptionValues.ORDINARY,
+        category: IdentificationQuestionOptionValues.SECONDARY,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.NOT_APPLICABLE.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.HOUSETELWSR,
+      identification: {
+        situation: IdentificationQuestionOptionValues.ORDINARY,
+        category: IdentificationQuestionOptionValues.SECONDARY,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+      },
+      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      states: [{ type: 'WFT', date: Date.now() }],
+    },
+    output: true,
+  },
 ];
 
 mockedSurveyUnits.map(({ input, output }) => {
@@ -400,7 +492,7 @@ describe('checkAvailability', () => {
 
 describe('identificationIsFinished', () => {
   it('should return false if identification is undefined', () => {
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL);
+    const result = isIdentificationFinished(IdentificationConfiguration.INDTEL);
     expect(result).toBe(false);
   });
 
@@ -409,7 +501,7 @@ describe('identificationIsFinished', () => {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: 'answer1',
       // Missing answer for QUESTION_2
     };
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    const result = isIdentificationFinished(IdentificationConfiguration.INDTEL, identification);
     expect(result).toBe(false);
   });
 
@@ -419,12 +511,12 @@ describe('identificationIsFinished', () => {
         IdentificationQuestionOptionValues.SAME_ADDRESS,
       [IdentificationQuestionsId.SITUATION]: IdentificationQuestionOptionValues.ORDINARY,
     };
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    const result = isIdentificationFinished(IdentificationConfiguration.INDTEL, identification);
     expect(result).toBe(true);
   });
 
   it('should return true if there are no questions in the configuration', () => {
-    const result = identificationIsFinished(IdentificationConfiguration.NOIDENT, {});
+    const result = isIdentificationFinished(IdentificationConfiguration.NOIDENT, {});
     expect(result).toBe(true);
   });
 
@@ -432,7 +524,7 @@ describe('identificationIsFinished', () => {
     const identification = {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
     };
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    const result = isIdentificationFinished(IdentificationConfiguration.INDTEL, identification);
     expect(result).toBe(true);
   });
 });

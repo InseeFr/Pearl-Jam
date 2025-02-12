@@ -55,7 +55,7 @@ export default defineConfig({
       },
     }),
     VitePWA({
-      injectRegister: 'null',
+      injectRegister: null,
       strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'service-worker.js',
