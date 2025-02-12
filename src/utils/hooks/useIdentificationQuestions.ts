@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
@@ -11,23 +11,6 @@ import {
   getIdentificationQuestionsTree,
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctions';
-
-export const persistStates = (surveyUnit: SurveyUnit, states: any) => {
-  persistSurveyUnit({
-    ...surveyUnit,
-    states: states,
-  });
-};
-
-export const persistIdentification = (
-  surveyUnit: SurveyUnit,
-  identification: Partial<Record<IdentificationQuestionsId, string>>
-) => {
-  persistSurveyUnit({
-    ...surveyUnit,
-    identification: identification,
-  });
-};
 
 export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
   const [questions, setQuestions] = useState<Omit<IdentificationQuestions, 'root'>>({});
@@ -51,7 +34,8 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
 
   useEffect(() => {
     let identification = { ...surveyUnit.identification };
-    if (selectedDialogId && identification) identification[selectedDialogId] = undefined;
+    if (selectedDialogId && identification[selectedDialogId])
+      identification[selectedDialogId] = undefined;
 
     const { root, ...newQuestions } = getIdentificationQuestionsTree(
       surveyUnit.identificationConfiguration,
@@ -111,13 +95,15 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
       // Prevent rerender
       if (updatedAvailability != availableQuestions) setAvailableQuestions(updatedAvailability);
 
-      persistIdentification(surveyUnit, identification);
-
+      let newStates = surveyUnit.states;
       if (isIdentificationFinished(surveyUnit.identificationConfiguration, identification)) {
-        persistStates(
-          surveyUnit,
-          addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
-        );
+        newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
+
+        persistSurveyUnit({
+          ...surveyUnit,
+          states: newStates,
+          identification: identification,
+        });
       }
 
       return updatedResponses;
