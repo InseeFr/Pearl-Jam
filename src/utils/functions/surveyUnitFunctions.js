@@ -136,7 +136,7 @@ const addContactState = (surveyUnit, newState) => {
  *
  * @param {SurveyUnit } surveyUnit
  * @param {String }stateType
- * @returns {Array.<{ type: string, value: string }>}
+ * @returns {SurveyUnitState[]}
  */
 export const addNewState = (surveyUnit, stateType) => {
   // init returned states : previous states or empty array

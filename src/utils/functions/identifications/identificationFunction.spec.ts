@@ -1,57 +1,58 @@
-import { describe, it, expect, vi, Assertion } from 'vitest';
+import { describe, it, expect, vi, Assertion } from "vitest";
 import {
   checkAvailability,
-  identificationIsFinished,
+  isIdentificationFinished,
   IdentificationQuestions,
   isInvalidIdentificationAndContactOutcome,
+  isValidContactOutcome,
   transmissionRules,
   TransmissionRules,
   validateTransmission,
-} from './identificationFunctions';
+} from "./identificationFunctions";
 import {
   IdentificationConfiguration,
   IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
-} from 'utils/enum/identifications/IdentificationsQuestions';
-import { SurveyUnit } from 'types/pearl';
-import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
+} from "utils/enum/identifications/IdentificationsQuestions";
+import { SurveyUnit } from "types/pearl";
+import { contactOutcomeEnum } from "utils/enum/ContactOutcomeEnum";
 
 const mockQuestions: IdentificationQuestions = {
   [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
     id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-    text: 'Person Question',
+    text: "Person Question",
     options: [
-      { value: 'YES', label: 'Yes', concluding: false },
-      { value: 'NO', label: 'No', concluding: true },
+      { value: "YES", label: "Yes", concluding: false },
+      { value: "NO", label: "No", concluding: true },
     ],
   },
   [IdentificationQuestionsId.SITUATION]: {
     id: IdentificationQuestionsId.SITUATION,
-    text: 'Situation Question',
+    text: "Situation Question",
     options: [
-      { value: 'ACTIVE', label: 'Active', concluding: false },
-      { value: 'INACTIVE', label: 'Inactive', concluding: true },
+      { value: "ACTIVE", label: "Active", concluding: false },
+      { value: "INACTIVE", label: "Inactive", concluding: true },
     ],
     dependsOn: {
       questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-      values: ['YES'],
+      values: ["YES"],
     },
   },
 };
 
 const mockedSurveyUnit: SurveyUnit = {
-  displayName: '',
-  id: '',
+  displayName: "",
+  id: "",
   persons: [],
   address: {} as any,
   priority: true,
   move: null,
-  campaign: '',
+  campaign: "",
   comments: [],
   sampleIdentifiers: {} as any,
   states: [],
   contactAttempts: [],
-  campaignLabel: '',
+  campaignLabel: "",
   managementStartDate: 0,
   interviewerStartDate: 0,
   identificationPhaseStartDate: 0,
@@ -59,8 +60,8 @@ const mockedSurveyUnit: SurveyUnit = {
   collectionEndDate: 0,
   endDate: 0,
   identificationConfiguration: IdentificationConfiguration.NOIDENT,
-  contactOutcomeConfiguration: '',
-  contactAttemptConfiguration: '',
+  contactOutcomeConfiguration: "",
+  contactAttemptConfiguration: "",
   useLetterCommunication: false,
   communicationRequests: [],
   communicationTemplates: [],
@@ -72,7 +73,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.NOIDENT,
       identification: {},
-      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
       contactOutcome: {
         date: Date.now(),
         totalNumberOfContactAttempts: 1,
@@ -118,8 +119,8 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         totalNumberOfContactAttempts: 1,
         type: contactOutcomeEnum.REFUSAL.value,
       },
-      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "WFT", date: Date.now() }],
     },
     output: true,
   },
@@ -137,8 +138,8 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         totalNumberOfContactAttempts: 1,
         type: contactOutcomeEnum.REFUSAL.value,
       },
-      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "WFT", date: Date.now() }],
     },
     output: false,
   },
@@ -157,8 +158,8 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         totalNumberOfContactAttempts: 1,
         type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
       },
-      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "WFT", date: Date.now() }],
     },
     output: true,
   },
@@ -176,8 +177,8 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         totalNumberOfContactAttempts: 1,
         type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
       },
-      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'N/A', date: Date.now() }],
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "N/A", date: Date.now() }],
     },
     output: false,
   },
@@ -198,8 +199,8 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         totalNumberOfContactAttempts: 1,
         type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
       },
-      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'N/A', date: Date.now() }],
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "N/A", date: Date.now() }],
     },
     output: false,
   },
@@ -216,8 +217,8 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         totalNumberOfContactAttempts: 1,
         type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
       },
-      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "WFT", date: Date.now() }],
     },
     output: true,
   },
@@ -235,8 +236,8 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         totalNumberOfContactAttempts: 1,
         type: contactOutcomeEnum.NOT_APPLICABLE.value,
       },
-      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "WFT", date: Date.now() }],
     },
     output: false,
   },
@@ -254,8 +255,8 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         totalNumberOfContactAttempts: 1,
         type: contactOutcomeEnum.DEFINITLY_UNAVAILABLE.value,
       },
-      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "WFT", date: Date.now() }],
     },
     output: true,
   },
@@ -264,17 +265,53 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.HOUSETELWSR,
       identification: {
-        category: IdentificationQuestionOptionValues.ORDINARY,
+        situation: IdentificationQuestionOptionValues.ORDINARY,
       },
       contactOutcome: {
         date: Date.now(),
         totalNumberOfContactAttempts: 1,
         type: contactOutcomeEnum.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value,
       },
-      contactAttempts: [{ status: 'OK', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "WFT", date: Date.now() }],
     },
     output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.HOUSETELWSR,
+      identification: {
+        situation: IdentificationQuestionOptionValues.ORDINARY,
+        category: IdentificationQuestionOptionValues.SECONDARY,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.NOT_APPLICABLE.value,
+      },
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "WFT", date: Date.now() }],
+    },
+    output: false,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.HOUSETELWSR,
+      identification: {
+        situation: IdentificationQuestionOptionValues.ORDINARY,
+        category: IdentificationQuestionOptionValues.SECONDARY,
+      },
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 1,
+        type: contactOutcomeEnum.INTERVIEW_ACCEPTED.value,
+      },
+      contactAttempts: [{ status: "OK", date: Date.now(), medium: "PHONE" }],
+      states: [{ type: "WFT", date: Date.now() }],
+    },
+    output: true,
   },
 ];
 
@@ -282,7 +319,7 @@ mockedSurveyUnits.map(({ input, output }) => {
   it(`ValidateTransmission should return ${output} when adding ${input}`, () => {
     const result = validateTransmission(input);
     if (result !== output) {
-      console.log('Failed input:', {
+      console.log("Failed input:", {
         identificationConfiguration: input.identificationConfiguration,
         identification: input.identification,
         contactOutcome: input.contactOutcome,
@@ -290,13 +327,17 @@ mockedSurveyUnits.map(({ input, output }) => {
         states: input.states,
       });
 
-      console.log('Expected: ', output);
-      console.log('For given rules :', transmissionRules[input.identificationConfiguration]);
+      console.log("Expected: ", output);
+      console.log(
+        "For given rules :",
+        transmissionRules[input.identificationConfiguration]
+      );
       if (
-        transmissionRules[input.identificationConfiguration].invalidIdentificationsAndContactOutcome
+        transmissionRules[input.identificationConfiguration]
+          .invalidIdentificationsAndContactOutcome
       )
         console.log(
-          'invalidIdentificationsAndContactOutcome :',
+          "invalidIdentificationsAndContactOutcome :",
           transmissionRules[input.identificationConfiguration]
             .invalidIdentificationsAndContactOutcome
         );
@@ -306,8 +347,8 @@ mockedSurveyUnits.map(({ input, output }) => {
   });
 });
 
-describe('checkAvailability', () => {
-  it('should return true if there are no responses', () => {
+describe("checkAvailability", () => {
+  it("should return true if there are no responses", () => {
     const result = checkAvailability(
       mockQuestions,
       mockQuestions[IdentificationQuestionsId.INDIVIDUAL_STATUS]
@@ -315,7 +356,7 @@ describe('checkAvailability', () => {
     expect(result).toBe(true);
   });
 
-  it('should return true if the question has no dependencies', () => {
+  it("should return true if the question has no dependencies", () => {
     const result = checkAvailability(
       mockQuestions,
       mockQuestions[IdentificationQuestionsId.INDIVIDUAL_STATUS],
@@ -324,11 +365,11 @@ describe('checkAvailability', () => {
     expect(result).toBe(true);
   });
 
-  it('should return true if dependency values match', () => {
+  it("should return true if dependency values match", () => {
     const responses = {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
-        value: 'YES',
-        label: 'Yes',
+        value: "YES",
+        label: "Yes",
         concluding: false,
       },
     };
@@ -340,35 +381,43 @@ describe('checkAvailability', () => {
     expect(result).toBe(true);
   });
 
-  it('should return false if dependency values do not match', () => {
-    const responses = {
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'NO', label: 'No', concluding: true },
-    };
-    const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.SITUATION],
-      responses
-    );
-    expect(result).toBe(false);
-  });
-
-  it('should return false if the dependency question is concluding', () => {
-    const responses = {
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'NO', label: 'No', concluding: true },
-    };
-    const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.SITUATION],
-      responses
-    );
-    expect(result).toBe(false);
-  });
-
-  it('should return true if parent question is available and non-concluding', () => {
+  it("should return false if dependency values do not match", () => {
     const responses = {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
-        value: 'YES',
-        label: 'Yes',
+        value: "NO",
+        label: "No",
+        concluding: true,
+      },
+    };
+    const result = checkAvailability(
+      mockQuestions,
+      mockQuestions[IdentificationQuestionsId.SITUATION],
+      responses
+    );
+    expect(result).toBe(false);
+  });
+
+  it("should return false if the dependency question is concluding", () => {
+    const responses = {
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
+        value: "NO",
+        label: "No",
+        concluding: true,
+      },
+    };
+    const result = checkAvailability(
+      mockQuestions,
+      mockQuestions[IdentificationQuestionsId.SITUATION],
+      responses
+    );
+    expect(result).toBe(false);
+  });
+
+  it("should return true if parent question is available and non-concluding", () => {
+    const responses = {
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
+        value: "YES",
+        label: "Yes",
         concluding: false,
       },
     };
@@ -380,32 +429,32 @@ describe('checkAvailability', () => {
     expect(result).toBe(true);
   });
 
-  it('should handle cases with multiple levels of dependencies', () => {
+  it("should handle cases with multiple levels of dependencies", () => {
     const extendedQuestions: IdentificationQuestions = {
       ...mockQuestions,
       [IdentificationQuestionsId.CATEGORY]: {
         id: IdentificationQuestionsId.CATEGORY,
-        text: 'Category Question',
+        text: "Category Question",
         options: [
-          { value: 'A', label: 'Category A', concluding: false },
-          { value: 'B', label: 'Category B', concluding: true },
+          { value: "A", label: "Category A", concluding: false },
+          { value: "B", label: "Category B", concluding: true },
         ],
         dependsOn: {
           questionId: IdentificationQuestionsId.SITUATION,
-          values: ['ACTIVE'],
+          values: ["ACTIVE"],
         },
       },
     };
 
     const responses = {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
-        value: 'YES',
-        label: 'Yes',
+        value: "YES",
+        label: "Yes",
         concluding: false,
       },
       [IdentificationQuestionsId.SITUATION]: {
-        value: 'ACTIVE',
-        label: 'Active',
+        value: "ACTIVE",
+        label: "Active",
         concluding: false,
       },
     };
@@ -418,28 +467,32 @@ describe('checkAvailability', () => {
     expect(result).toBe(true);
   });
 
-  it('should return false if a parent question dependency chain fails', () => {
+  it("should return false if a parent question dependency chain fails", () => {
     const extendedQuestions: IdentificationQuestions = {
       ...mockQuestions,
       [IdentificationQuestionsId.CATEGORY]: {
         id: IdentificationQuestionsId.CATEGORY,
-        text: 'Category Question',
+        text: "Category Question",
         options: [
-          { value: 'A', label: 'Category A', concluding: false },
-          { value: 'B', label: 'Category B', concluding: true },
+          { value: "A", label: "Category A", concluding: false },
+          { value: "B", label: "Category B", concluding: true },
         ],
         dependsOn: {
           questionId: IdentificationQuestionsId.SITUATION,
-          values: ['ACTIVE'],
+          values: ["ACTIVE"],
         },
       },
     };
 
     const responses = {
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: { value: 'NO', label: 'No', concluding: true },
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
+        value: "NO",
+        label: "No",
+        concluding: true,
+      },
       [IdentificationQuestionsId.SITUATION]: {
-        value: 'INACTIVE',
-        label: 'Inactive',
+        value: "INACTIVE",
+        label: "Inactive",
         concluding: true,
       },
     };
@@ -453,47 +506,61 @@ describe('checkAvailability', () => {
   });
 });
 
-describe('identificationIsFinished', () => {
-  it('should return false if identification is undefined', () => {
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL);
+describe("identificationIsFinished", () => {
+  it("should return false if identification is undefined", () => {
+    const result = isIdentificationFinished(IdentificationConfiguration.INDTEL);
     expect(result).toBe(false);
   });
 
-  it('should return false if any question is not answered', () => {
+  it("should return false if any question is not answered", () => {
     const identification = {
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: 'answer1',
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: "answer1",
       // Missing answer for QUESTION_2
     };
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    const result = isIdentificationFinished(
+      IdentificationConfiguration.INDTEL,
+      identification
+    );
     expect(result).toBe(false);
   });
 
-  it('should return true if all questions are answered', () => {
+  it("should return true if all questions are answered", () => {
     const identification = {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
         IdentificationQuestionOptionValues.SAME_ADDRESS,
-      [IdentificationQuestionsId.SITUATION]: IdentificationQuestionOptionValues.ORDINARY,
+      [IdentificationQuestionsId.SITUATION]:
+        IdentificationQuestionOptionValues.ORDINARY,
     };
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    const result = isIdentificationFinished(
+      IdentificationConfiguration.INDTEL,
+      identification
+    );
     expect(result).toBe(true);
   });
 
-  it('should return true if there are no questions in the configuration', () => {
-    const result = identificationIsFinished(IdentificationConfiguration.NOIDENT, {});
+  it("should return true if there are no questions in the configuration", () => {
+    const result = isIdentificationFinished(
+      IdentificationConfiguration.NOIDENT,
+      {}
+    );
     expect(result).toBe(true);
   });
 
-  it('should return true one question is concluding', () => {
+  it("should return true one question is concluding", () => {
     const identification = {
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
+        IdentificationQuestionOptionValues.NOIDENT,
     };
-    const result = identificationIsFinished(IdentificationConfiguration.INDTEL, identification);
+    const result = isIdentificationFinished(
+      IdentificationConfiguration.INDTEL,
+      identification
+    );
     expect(result).toBe(true);
   });
 });
 
-describe('isInvalidIdentificationAndContactOutcome', () => {
-  it('should return true if identification and contact outcome match the invalid rules', () => {
+describe("isInvalidIdentificationAndContactOutcome", () => {
+  it("should return true if identification and contact outcome match the invalid rules", () => {
     const mockTransmissionRules: TransmissionRules = {
       invalidIdentificationsAndContactOutcome: {
         identifications: [
@@ -508,7 +575,8 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
 
     const mockSurveyUnit: SurveyUnit = {
       identification: {
-        [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
+          IdentificationQuestionOptionValues.NOIDENT,
       },
       contactOutcome: {
         date: Date.now(),
@@ -518,11 +586,14 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
       // other SurveyUnit properties can be mocked as needed
     };
 
-    const result = isInvalidIdentificationAndContactOutcome(mockTransmissionRules, mockSurveyUnit);
+    const result = isInvalidIdentificationAndContactOutcome(
+      mockTransmissionRules,
+      mockSurveyUnit
+    );
     expect(result).toBe(true);
   });
 
-  it('should return false if identification does not match the invalid rules', () => {
+  it("should return false if identification does not match the invalid rules", () => {
     const mockTransmissionRules: TransmissionRules = {
       invalidIdentificationsAndContactOutcome: {
         identifications: [
@@ -547,11 +618,14 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
       },
     };
 
-    const result = isInvalidIdentificationAndContactOutcome(mockTransmissionRules, mockSurveyUnit);
+    const result = isInvalidIdentificationAndContactOutcome(
+      mockTransmissionRules,
+      mockSurveyUnit
+    );
     expect(result).toBe(false);
   });
 
-  it('should return false if contact outcome does not match the invalid rules', () => {
+  it("should return false if contact outcome does not match the invalid rules", () => {
     const mockTransmissionRules: TransmissionRules = {
       invalidIdentificationsAndContactOutcome: {
         identifications: [
@@ -566,7 +640,8 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
 
     const mockSurveyUnit: SurveyUnit = {
       identification: {
-        [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]:
+          IdentificationQuestionOptionValues.NOIDENT,
       },
       contactOutcome: {
         date: Date.now(),
@@ -575,7 +650,10 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
       },
     };
 
-    const result = isInvalidIdentificationAndContactOutcome(mockTransmissionRules, mockSurveyUnit);
+    const result = isInvalidIdentificationAndContactOutcome(
+      mockTransmissionRules,
+      mockSurveyUnit
+    );
     expect(result).toBe(false);
   });
 });
