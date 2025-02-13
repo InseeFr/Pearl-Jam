@@ -33,8 +33,6 @@ docker exec -it reactapp /bin/sh
 - You can now run the **Vite** server and/or run the Playwright tests suite.
   When you launch Playwright, the **Vite** server will be started (you do not need to start it manually).
 
-// TODO: Pick if we either want the user to launch a dev server or let directly the service launching it
-
 ```shell
 # You are in the reactapp container
 yarn dev --host
@@ -47,7 +45,3 @@ npx playwright codegen test http://localhost:5173
 The test running application (`playwright test`) will be available on http://localhost:5173 and the Playwright UI on http://localhost:8888.
 
 Containers should not be killed to ensure data persistence in order to avoid a full yarn install. Instead, you should either use `CTRL+C` in the bash/shell where it was launched or run `docker compose stop`.
-
-```
-
-```
