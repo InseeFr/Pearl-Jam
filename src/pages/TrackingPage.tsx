@@ -51,7 +51,7 @@ export const Component = () => {
           <Stack gap={4}>
             <Row justifyContent="space-between">
               <Row gap={2}>
-                <Typography sx={{ flex: 'none' }} variant="headingM" color="black" as="h1">
+                <Typography sx={{ flex: 'none' }} variant="headingM" color="black" component="h1">
                   {D.goToMyTracking}
                 </Typography>
                 {tab === 'table' && (

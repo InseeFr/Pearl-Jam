@@ -82,18 +82,18 @@ export function Home() {
 function GridHeader({
   visibleCount,
   totalCount,
-}: Readonly<{ visibleCount: number; totalCount: Number }>) {
+}: Readonly<{ visibleCount: number; totalCount: number }>) {
   const { setSortField, sortField, sortDirection, toggleSortDirection, setSearch, search } =
     useSearchFilter();
   return (
     <Stack gap={2} sx={{ flex: 'none' }}>
       <SearchField value={search} onChange={setSearch} />
       <Row justifyContent="space-between" mb={2.5}>
-        <Typography size="m">
+        <Typography variant="m">
           {visibleCount} {D.surveyUnits} {totalCount}
         </Typography>
         <Row gap={1}>
-          <Typography as="label" id="sort-field" sx={{ flex: 'none' }}>
+          <Typography component="label" id="sort-field" sx={{ flex: 'none' }}>
             {`${D.sortBy} :`}
           </Typography>
           <Select

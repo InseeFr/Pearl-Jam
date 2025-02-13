@@ -134,7 +134,7 @@ function PersonFields({ person, register, control, index }: Readonly<PersonField
         control={control}
       />
       <FieldRow label={D.surveyUnitEmail} {...register(`persons.${index}.email`)} />
-      <Typography as="div" color="textTertiary" variant="s">
+      <Typography component="div" color="textTertiary" variant="s">
         {D.telephone}
       </Typography>
       <PhoneLine
@@ -214,7 +214,7 @@ function PhoneLine({
           minHeight: 24,
         }}
       >
-        <Typography as="div" color="textHint" variant="xs">
+        <Typography component="div" color="textHint" variant="xs">
           &nbsp; • {label} :
         </Typography>
         {editable ? (
@@ -224,7 +224,7 @@ function PhoneLine({
             name={`${name}.number`}
           />
         ) : (
-          <Typography as="div" color="textPrimary" variant="s">
+          <Typography component="div" color="textPrimary" variant="s">
             {phoneNumber?.number ?? '-'}
           </Typography>
         )}

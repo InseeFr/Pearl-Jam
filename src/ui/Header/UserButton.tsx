@@ -62,11 +62,11 @@ export function UserButton() {
 function UserLine({ label, value }: Readonly<{ label: string; value: string }>) {
   return (
     <ListItem>
-      <Typography variant="s" as="span" color="textTertiary">
+      <Typography variant="s" component="span" color="textTertiary">
         {label} :
       </Typography>
       &nbsp;
-      <Typography variant="s" as="span" color="textPrimary">
+      <Typography variant="s" component="span" color="textPrimary">
         {value}
       </Typography>
     </ListItem>

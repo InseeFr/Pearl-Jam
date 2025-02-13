@@ -44,20 +44,20 @@ const CommunicationConfirmation = ({
         <Box>
           <Stack gap={2} p={2} bgcolor="surfacePrimary.main" minWidth={325} borderRadius={2}>
             <div>
-              <Typography variant="s" color="textTertiary" as="h3">
+              <Typography variant="s" color="textTertiary" component="h3">
                 {D.communicationSummaryContent}
               </Typography>
               <Box component="ul" p={0} pl={3} m={0}>
                 <Typography
                   variant="s"
-                  as="li"
+                  component="li"
                   color={communicationError.success ? 'textPrimary' : 'error'}
                 >
                   {findCommunicationMediumLabelByValue(communication.medium)}{' '}
                 </Typography>
                 <Typography
                   variant="s"
-                  as="li"
+                  component="li"
                   color={communicationError.success ? 'textPrimary' : 'error'}
                 >
                   {findCommunicationTypeLabelByValue(communication.type)}{' '}
@@ -65,7 +65,7 @@ const CommunicationConfirmation = ({
                 {!bypassReasonLabel && (
                   <Typography
                     variant="s"
-                    as="li"
+                    component="li"
                     color={communicationError.success ? 'textPrimary' : 'error'}
                   >
                     {findCommunicationReasonLabelByValue(communication.reason)}
@@ -77,12 +77,12 @@ const CommunicationConfirmation = ({
               )}
             </div>
             <div>
-              <Typography variant="s" color="textTertiary" as="h3">
+              <Typography variant="s" color="textTertiary" component="h3">
                 {D.communicationSummaryRecipientAddress}
               </Typography>
               <Typography
                 variant="s"
-                as="p"
+                component="p"
                 color={recipientError.success ? 'textPrimary' : 'error'}
               >
                 {getTitle(recipient.title)} {recipient.firstName} {recipient.lastName}
@@ -118,10 +118,10 @@ const CommunicationConfirmation = ({
               {!recipientError.success && <ValidationError error={recipientError.error} mt={1} />}
             </div>
             <div>
-              <Typography variant="s" color="textTertiary" as="h3">
+              <Typography variant="s" color="textTertiary" component="h3">
                 {D.communicationSummaryInterviewerAddress}
               </Typography>
-              <Typography variant="s" as="p" color={userError.success ? 'textPrimary' : 'error'}>
+              <Typography variant="s" component="p" color={userError.success ? 'textPrimary' : 'error'}>
                 {user.firstName} {user.lastName}
                 <ol />
                 {user.email}

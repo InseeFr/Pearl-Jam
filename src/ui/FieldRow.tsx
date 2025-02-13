@@ -13,7 +13,7 @@ import { forwardRef, PropsWithChildren } from 'react';
 import { Control, Controller, ControllerRenderProps, FieldValues } from 'react-hook-form';
 import { RadioLine } from './RadioLine';
 import { Row } from './Row';
-import { Typography } from './Typography';
+import { Label, Typography } from './Typography';
 
 interface FieldRowProps {
   label: string; // Label displayed alongside the field
@@ -38,8 +38,7 @@ export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
       <Row gap={3}>
         {label && (
           <Box sx={{ flex: 'none', minWidth: 90 }}>
-            <Typography
-              as="label"
+            <Label
               id={`label-${props.name}`}
               htmlFor={props.name}
               variant="s"
@@ -48,11 +47,11 @@ export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
             >
               {label}
               {props.required && (
-                <Typography as="span" color="red" variant="s">
+                <Typography component="span" color="red" variant="s">
                   {' *'}
                 </Typography>
               )}
-            </Typography>
+            </Label>
           </Box>
         )}
         <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>

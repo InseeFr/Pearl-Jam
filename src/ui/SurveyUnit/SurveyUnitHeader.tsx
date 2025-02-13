@@ -4,7 +4,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import { Row } from '../Row';
-import { PaperIconButton } from '../PaperIconButton';
+import { PaperIconButton, PaperIconLink } from '../PaperIconButton';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import { Link } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
@@ -93,9 +93,9 @@ export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>
     >
       {/* Left side */}
       <Row gap={4}>
-        <PaperIconButton component={Link} to="/" elevation={0}>
+        <PaperIconLink component={Link} to="/" elevation={0}>
           <KeyboardArrowLeftIcon />
-        </PaperIconButton>
+        </PaperIconLink>
         <Stack gap={2}>
           <Row gap={0.5}>
             <Chip

@@ -30,7 +30,7 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
         <Stack gap={3}>
           <Row gap={1}>
             <AssignmentIndOutlinedIcon fontSize="large" />
-            <Typography as="h2" variant="xl" fontWeight={700}>
+            <Typography component="h2" variant="xl" fontWeight={700}>
               {D.identification}
             </Typography>
           </Row>

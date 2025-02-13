@@ -94,7 +94,7 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
       <AccordionDetails>
         <Stack gap={1}>
           {notification.messages.map(message => (
-            <Typography as="p" variant="s" key={message}>
+            <Typography component="p" variant="s" key={message}>
               {message}
             </Typography>
           ))}

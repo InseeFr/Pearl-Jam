@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
-import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
-import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { addNewState, persistSurveyUnit } from 'utils/functions';
+import { useEffect, useState } from "react";
+import { IdentificationQuestionsId } from "utils/enum/identifications/IdentificationsQuestions";
+import { SurveyUnit, SurveyUnitIdentification } from "types/pearl";
+import { surveyUnitStateEnum } from "utils/enum/SUStateEnum";
+import { addNewState, persistSurveyUnit } from "utils/functions";
 import {
   checkAvailability,
   isIdentificationFinished,
@@ -10,17 +10,19 @@ import {
   IdentificationQuestions,
   getIdentificationQuestionsTree,
   ResponseState,
-} from 'utils/functions/identifications/identificationFunctions';
+} from "utils/functions/identifications/identificationFunctions";
 
 export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
-  const [questions, setQuestions] = useState<Omit<IdentificationQuestions, 'root'>>({});
+  const [questions, setQuestions] = useState<
+    Omit<IdentificationQuestions, "root">
+  >({});
   const [responses, setResponses] = useState<ResponseState>({});
   const [availableQuestions, setAvailableQuestions] = useState<
     Partial<Record<IdentificationQuestionsId, boolean>>
   >({});
-  const [selectedDialogId, setSelectedDialogId] = useState<IdentificationQuestionsId | undefined>(
-    undefined
-  );
+  const [selectedDialogId, setSelectedDialogId] = useState<
+    IdentificationQuestionsId | undefined
+  >(undefined);
 
   const setNextDialogId = (
     questions: IdentificationQuestions,
@@ -43,20 +45,23 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     );
 
     const newResponses: ResponseState = Object.fromEntries(
-      Object.keys(newQuestions).map(id => [
+      Object.keys(newQuestions).map((id) => [
         id,
         newQuestions[id as IdentificationQuestionsId]?.options.find(
-          o => o.value === surveyUnit?.identification?.[id as IdentificationQuestionsId]
+          (o) =>
+            o.value ===
+            surveyUnit?.identification?.[id as IdentificationQuestionsId]
         ),
       ])
     );
 
-    const newAvailability: Partial<Record<IdentificationQuestionsId, boolean>> = Object.fromEntries(
-      Object.entries(newQuestions).map(([questionId, question]) => [
-        questionId,
-        checkAvailability(newQuestions, question, newResponses),
-      ])
-    );
+    const newAvailability: Partial<Record<IdentificationQuestionsId, boolean>> =
+      Object.fromEntries(
+        Object.entries(newQuestions).map(([questionId, question]) => [
+          questionId,
+          checkAvailability(newQuestions, question, newResponses),
+        ])
+      );
 
     const newDialogId = setNextDialogId(newQuestions, selectedDialogId);
     setSelectedDialogId(newDialogId);
@@ -69,35 +74,58 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     selectedQuestionId: IdentificationQuestionsId,
     option: IdentificationQuestionOption
   ) => {
-    let updatedResponses: ResponseState = { ...responses, [selectedQuestionId]: option };
-    let identification: SurveyUnitIdentification = surveyUnit.identification ?? {};
+    let updatedResponses: ResponseState = {
+      ...responses,
+      [selectedQuestionId]: option,
+    };
+    let identification: SurveyUnitIdentification =
+      surveyUnit.identification ?? {};
     let setResponsesAsUndefined = false;
-    const availableQuestionIds = Object.entries(questions).map(([questionId, question]) => {
-      const available = checkAvailability(questions, question, updatedResponses);
+    const availableQuestionIds = Object.entries(questions).map(
+      ([questionId, question]) => {
+        const available = checkAvailability(
+          questions,
+          question,
+          updatedResponses
+        );
 
-      if (!available || setResponsesAsUndefined) updatedResponses[question.id] = undefined;
-      else if (questionId === selectedQuestionId) {
-        updatedResponses[question.id] = option;
-        setResponsesAsUndefined = true;
+        if (!available || setResponsesAsUndefined)
+          updatedResponses[question.id] = undefined;
+        else if (questionId === selectedQuestionId) {
+          updatedResponses[question.id] = option;
+          setResponsesAsUndefined = true;
+        }
+
+        identification[question.id] = updatedResponses[question.id]?.value;
+        return [questionId, available];
       }
-
-      identification[question.id] = updatedResponses[question.id]?.value;
-      return [questionId, available];
-    });
+    );
 
     setResponses(() => {
       const updatedAvailability = Object.fromEntries(availableQuestionIds);
 
-      if (questions[selectedQuestionId] && !updatedResponses[selectedQuestionId]?.concluding) {
+      if (
+        questions[selectedQuestionId] &&
+        !updatedResponses[selectedQuestionId]?.concluding
+      ) {
         setSelectedDialogId(questions[selectedQuestionId].nextId);
       }
 
       // Prevent rerender
-      if (updatedAvailability != availableQuestions) setAvailableQuestions(updatedAvailability);
+      if (updatedAvailability != availableQuestions)
+        setAvailableQuestions(updatedAvailability);
 
       let newStates = surveyUnit.states;
-      if (isIdentificationFinished(surveyUnit.identificationConfiguration, identification))
-        newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
+      if (
+        isIdentificationFinished(
+          surveyUnit.identificationConfiguration,
+          identification
+        )
+      )
+        newStates = addNewState(
+          surveyUnit,
+          surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
+        );
 
       persistSurveyUnit({
         ...surveyUnit,
