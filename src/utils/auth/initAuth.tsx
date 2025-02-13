@@ -43,7 +43,7 @@ export const useAuth = () => {
       return;
     }
 
-    const { PEARL_AUTHENTICATION_MODE } = configuration!;
+    const { PEARL_AUTHENTICATION_MODE } = configuration;
     switch (PEARL_AUTHENTICATION_MODE) {
       case 'anonymous':
         window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(GUEST_PEARL_USER));
