@@ -20,6 +20,7 @@ export const findContactAttemptValueByType = (type: string) =>
   Object.values(contactAttemptEnum).filter(value => value.type === type)?.[0]?.value;
 
 const commonPhoneContactAttemptEnum = {
+  INTERVIEW_ACCEPTED: contactAttemptEnum.INTERVIEW_ACCEPTED,
   APPOINTMENT_MADE: contactAttemptEnum.APPOINTMENT_MADE,
   MESSAGE_SENT: contactAttemptEnum.MESSAGE_SENT,
   REFUSAL: contactAttemptEnum.REFUSAL,
@@ -29,6 +30,7 @@ const commonPhoneContactAttemptEnum = {
   PERMANENTLY_UNAVAILABLE: contactAttemptEnum.PERMANENTLY_UNAVAILABLE,
 } as const;
 const mailContactAttemptEnum = {
+  INTERVIEW_ACCEPTED: contactAttemptEnum.INTERVIEW_ACCEPTED,
   APPOINTMENT_MADE: contactAttemptEnum.APPOINTMENT_MADE,
   MESSAGE_SENT: contactAttemptEnum.MESSAGE_SENT,
   REFUSAL: contactAttemptEnum.REFUSAL,
