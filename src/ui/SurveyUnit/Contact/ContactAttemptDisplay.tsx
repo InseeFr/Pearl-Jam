@@ -41,14 +41,14 @@ export function ContactAttemptDisplay({ attempt, onDelete }: Readonly<ContactAtt
       <Row justifyContent="space-between">
         <div>
           <Row gap={1}>
-            <Typography color="textPrimary" variant="s" as="div">
+            <Typography color="textPrimary" variant="s" component="div">
               {findContactAttemptValueByType(attempt.status)}
             </Typography>
-            <Typography color="textSecondary" variant="s" as="div">
+            <Typography color="textSecondary" variant="s" component="div">
               - {getMediumMessage(attempt.medium)}
             </Typography>
           </Row>
-          <Typography color="textTertiary" variant="s" as="div">
+          <Typography color="textTertiary" variant="s" component="div">
             {formatDate(attempt.date, true)}
           </Typography>
         </div>

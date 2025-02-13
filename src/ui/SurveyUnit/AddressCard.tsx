@@ -29,7 +29,7 @@ export function AddressCard({ surveyUnit }: Readonly<AddressCardProps>) {
             <Row justifyContent="space-between">
               <Row gap={1}>
                 <HomeOutlinedIcon fontSize="large" />
-                <Typography as="h2" variant="xl" fontWeight={700}>
+                <Typography component="h2" variant="xl" fontWeight={700}>
                   {D.surveyUnitHousing}
                 </Typography>
               </Row>

@@ -1,11 +1,14 @@
 import {
   IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
-} from 'utils/enum/identifications/IdentificationsQuestions';
-import { IdentificationQuestions, IdentificationQuestionValue } from '../identificationFunctions';
-import D from 'i18n';
-import { optionsMap } from './optionsMap';
-import { SurveyUnitIdentification } from 'types/pearl';
+} from "utils/enum/identifications/IdentificationsQuestions";
+import {
+  IdentificationQuestions,
+  IdentificationQuestionValue,
+} from "../identificationFunctions";
+import D from "i18n";
+import { optionsMap } from "./optionsMap";
+import { SurveyUnitIdentification } from "types/pearl";
 
 const numberOfRespondents: IdentificationQuestionValue = {
   id: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
@@ -30,7 +33,10 @@ const individualStatus: IdentificationQuestionValue = {
   ],
   dependsOn: {
     questionId: IdentificationQuestionsId.IDENTIFICATION,
-    values: [IdentificationQuestionOptionValues.ONE, IdentificationQuestionOptionValues.MANY],
+    values: [
+      IdentificationQuestionOptionValues.ONE,
+      IdentificationQuestionOptionValues.MANY,
+    ],
   },
 };
 
@@ -96,7 +102,11 @@ export const SRCVIdentificationQuestionsTreeFunction = (
         nextId: IdentificationQuestionsId.SITUATION,
         options: [
           { ...optionsMap.SAME_ADDRESS, concluding: true, label: D.sameHouse },
-          { ...optionsMap.OTHER_ADDRESS, concluding: false, label: D.otherHouse },
+          {
+            ...optionsMap.OTHER_ADDRESS,
+            concluding: false,
+            label: D.otherHouse,
+          },
           { ...optionsMap.NOFIELD, concluding: true },
           { ...optionsMap.NOIDENT, concluding: true },
           { ...optionsMap.DCD, concluding: true },
@@ -106,7 +116,8 @@ export const SRCVIdentificationQuestionsTreeFunction = (
         ...houseHoldComposition,
         disabled: true,
       },
-      [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]: presentInPreviousHomeDisabled,
+      [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]:
+        presentInPreviousHomeDisabled,
       [IdentificationQuestionsId.SITUATION]: {
         ...housingSituation,
         dependsOn: {
@@ -133,7 +144,8 @@ export const SRCVIdentificationQuestionsTreeFunction = (
           { ...optionsMap.OTHER_COMPO, concluding: true },
         ],
       },
-      [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]: presentInPreviousHomeDisabled,
+      [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]:
+        presentInPreviousHomeDisabled,
       [IdentificationQuestionsId.SITUATION]: {
         ...housingSituation,
         disabled: true,
@@ -154,7 +166,8 @@ export const SRCVIdentificationQuestionsTreeFunction = (
         ...houseHoldComposition,
         nextId: IdentificationQuestionsId.SITUATION,
       },
-      [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]: presentInPreviousHomeDisabled,
+      [IdentificationQuestionsId.PRESENT_IN_PREVIOUS_HOME]:
+        presentInPreviousHomeDisabled,
       [IdentificationQuestionsId.SITUATION]: {
         ...housingSituation,
         dependsOn: {

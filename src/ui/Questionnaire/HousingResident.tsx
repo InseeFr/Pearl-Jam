@@ -26,7 +26,7 @@ const HousingResident = ({
     <Row justifyContent="space-between">
       <Row gap={2}>
         <DoorFrontOutlinedIcon fontSize="large" />
-        <Typography as="h2" variant="xl" fontWeight={700}>
+        <Typography component="h2" variant="xl" fontWeight={700}>
           Habitants du logement
         </Typography>
         {!finishedHousing && (

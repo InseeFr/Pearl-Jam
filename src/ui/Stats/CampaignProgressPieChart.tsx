@@ -60,14 +60,14 @@ export function CampaignProgressPieChart({ surveyUnits }: Readonly<CampaignProgr
           <PieChart size={240} parts={slices} paddingBlock={80} paddingInline={100} />
         </div>
         <Stack gap={0} sx={{ width: 330 }}>
-          <Typography variant="xl" color="black" as="p" textAlign="center">
+          <Typography variant="xl" color="black" component="p" textAlign="center">
             Échéance
           </Typography>
           <Row justifyContent="space-between" pb={0.5}>
-            <Typography variant="s" color="black" as="div">
+            <Typography variant="s" color="black" component="div">
               0 {D.days}.
             </Typography>
-            <Typography variant="s" color="black" textAlign="right" as="div">
+            <Typography variant="s" color="black" textAlign="right" component="div">
               {maxDays} {D.days}.
             </Typography>
           </Row>

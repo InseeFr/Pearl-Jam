@@ -1,5 +1,6 @@
 import Paper, { PaperProps } from '@mui/material/Paper';
-import { LinkProps } from 'react-router-dom';
+import { PropsWithoutRef } from 'react';
+import { Link, LinkProps } from 'react-router-dom';
 
 const style = {
   width: 24,
@@ -19,14 +20,10 @@ const style = {
   },
 };
 
-export function PaperIconButton(props: Readonly<PaperProps & LinkProps>) {
-  return (
-    <Paper
-      component="button"
-      aria-label="delete"
-      elevation={2}
-      sx={{ ...style, ...props.sx }}
-      {...props}
-    />
-  );
+export function PaperIconButton(props: Readonly<PaperProps<'button'>>) {
+  return <Paper component="button" elevation={2} sx={{ ...style, ...props.sx }} {...props} />;
+}
+
+export function PaperIconLink(props: Readonly<PaperProps<typeof Link>>) {
+  return <Paper component={Link} elevation={2} sx={{ ...style, ...props.sx }} {...props} />;
 }

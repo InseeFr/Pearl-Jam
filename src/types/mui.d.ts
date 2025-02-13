@@ -20,6 +20,8 @@ declare module '@mui/material/Card' {
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
     s: true;
+    headingM: true;
+    headingS: true;
   }
 }
 

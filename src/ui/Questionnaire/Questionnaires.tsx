@@ -22,7 +22,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
         <Stack gap={3}>
           <Row gap={1}>
             <StickyNote2Icon fontSize="large" />
-            <Typography as="h2" variant="xl" fontWeight={700}>
+            <Typography component="h2" variant="xl" fontWeight={700}>
               {D.openQuestionnaire}
             </Typography>
           </Row>
