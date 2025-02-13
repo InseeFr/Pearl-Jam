@@ -20,7 +20,7 @@ export type ServiceWorkerState = {
  * Resolve the state of the service worker
  */
 export const useServiceWorker = (authenticated: boolean): ServiceWorkerState => {
-  const { QUEEN_URL } = useConfiguration()!;
+  const { QUEEN_URL } = useConfiguration();
   const [isInstallingServiceWorker, setIsInstallingServiceWorker] = useState(false);
   const [waitingServiceWorker, setWaitingServiceWorker] = useState<ServiceWorker | null>(null);
   const [isUpdateAvailable, setUpdateAvailable] = useState(false);

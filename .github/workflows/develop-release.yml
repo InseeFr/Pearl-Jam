@@ -44,10 +44,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - uses: actions/download-artifact@v3
-        with:
-          name: pearl-jam
-          path: build
       - uses: docker/build-push-action@v4
         with:
           platforms: linux/amd64,linux/arm64
