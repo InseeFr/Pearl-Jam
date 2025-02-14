@@ -1,32 +1,37 @@
-### BUILD STEP ###
+FROM nginx:stable-alpine
 
-FROM node:latest AS builder
+## Remove default nginx index page
+RUN rm -rf /usr/share/nginx/html/*
 
-WORKDIR /pearl
+#Add build to nginx root webapp
+ADD dist /usr/share/nginx/html
 
-COPY ./ ./
+#Copy nginx configuration
+RUN rm etc/nginx/conf.d/default.conf
+COPY container/nginx.conf etc/nginx/conf.d/
 
-RUN yarn && yarn build
 
-### EXECUTION STEP ###
+WORKDIR /usr/share/nginx/html
 
-FROM nginxinc/nginx-unprivileged:mainline-alpine
+# Add bash
+RUN apk add --no-cache bash
 
-# Non root user
-ENV NGINX_USER_ID=101
-ENV NGINX_GROUP_ID=101
-ENV NGINX_USER=nginx
-ENV NGINX_GROUP=nginx
+COPY scripts/env.sh .
+COPY scripts/.env .
 
-USER $NGINX_USER_ID
+# Make our shell script executable
+RUN chmod +x env.sh
 
-# Add build to nginx root webapp
-COPY --from=builder --chown=$NGINX_USER:$NGINX_GROUP /pearl/build /usr/share/nginx/html
+# add non-root user
+RUN touch /var/run/nginx.pid
+RUN chown -R nginx:nginx /var/run/nginx.pid /usr/share/nginx/html /var/cache/nginx /var/log/nginx /etc/nginx/conf.d
 
-# Copy nginx configuration
-RUN rm /etc/nginx/conf.d/default.conf
-COPY --from=builder --chown=$NGINX_USER:$NGINX_GROUP /pearl/nginx.conf /etc/nginx/conf.d/nginx.conf
+# non root users cannot listen on 80
+EXPOSE 8080
 
-# Add entrypoint and start nginx server
-RUN chmod 755 /usr/share/nginx/html/vite-envs.sh
-ENTRYPOINT [ "sh", "-c", "/usr/share/nginx/html/vite-envs.sh && nginx -g 'daemon off;'"]
+USER nginx
+
+# Start Nginx server
+ENTRYPOINT sh -c "./vite-envs.sh && nginx -g 'daemon off;'"
+RUN chmod +x vite-envs.sh
+
