@@ -15,7 +15,7 @@ import { IconDesc } from 'ui/Icons/IconDesc';
 import { PaperIconButton } from 'ui/PaperIconButton';
 import { StatusChip } from 'ui/StatusChip';
 import { CommentDialog } from 'ui/SurveyUnit/CommentDialog';
-import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
+import { findContactAttemptLabelByValue } from 'utils/enum/ContactAttemptEnum';
 import { findContactOutcomeLabelByValue } from 'utils/enum/ContactOutcomeEnum';
 import { findMediumValueByType } from 'utils/enum/MediumEnum';
 import {
@@ -260,7 +260,7 @@ function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
           {lastContact && (
             <>
               <Typography component="span" variant="s" color="textPrimary">
-                {findContactAttemptValueByType(lastContact.status)}
+                {findContactAttemptLabelByValue(lastContact.status)}
                 <br />
                 {findMediumValueByType(lastContact.medium)}
               </Typography>

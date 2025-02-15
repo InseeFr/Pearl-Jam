@@ -1,25 +1,25 @@
 import D from 'i18n';
 
 export const contactAttemptEnum = {
-  INTERVIEW_ACCEPTED: { type: 'INA', value: `${D.interviewAccepted}` },
-  APPOINTMENT_MADE: { type: 'APT', value: `${D.appointmentMade}` },
-  REFUSAL: { type: 'REF', value: `${D.refusal}` },
-  TEMPORARY_UNAVAILABLE: { type: 'TUN', value: `${D.temporaryUnavailable}` },
-  NO_CONTACT: { type: 'NOC', value: `${D.noContact}` },
-  MESSAGE_SENT: { type: 'MES', value: `${D.messageSent}` },
-  UNUSABLE_CONTACT_DATA: { type: 'UCD', value: `${D.unusableContactData}` },
-  PERMANENTLY_UNAVAILABLE: { type: 'PUN', value: `${D.permanentlyUnavailable}` },
-  NOTICE_OF_PASSAGE_SENT: { type: 'NPS', value: `${D.noticeOfPassageSent}` },
+  INTERVIEW_ACCEPTED: { value: 'INA', label: `${D.interviewAccepted}` },
+  APPOINTMENT_MADE: { value: 'APT', label: `${D.appointmentMade}` },
+  REFUSAL: { value: 'REF', label: `${D.refusal}` },
+  TEMPORARY_UNAVAILABLE: { value: 'TUN', label: `${D.temporaryUnavailable}` },
+  NO_CONTACT: { value: 'NOC', label: `${D.noContact}` },
+  MESSAGE_SENT: { value: 'MES', label: `${D.messageSent}` },
+  UNUSABLE_CONTACT_DATA: { value: 'UCD', label: `${D.unusableContactData}` },
+  PERMANENTLY_UNAVAILABLE: { value: 'PUN', label: `${D.permanentlyUnavailable}` },
+  NOTICE_OF_PASSAGE_SENT: { value: 'NPS', label: `${D.noticeOfPassageSent}` },
   NOTIFICATION_LETTER_HAND_DELIVERED: {
-    type: 'NLH',
-    value: `${D.notificationLetterHandDelivered}`,
+    value: 'NLH',
+    label: `${D.notificationLetterHandDelivered}`,
   },
 } as const;
 
-export const findContactAttemptValueByType = (type: string) =>
-  Object.values(contactAttemptEnum).filter(value => value.type === type)?.[0]?.value;
+export const findContactAttemptLabelByValue = (value: string) =>
+  Object.values(contactAttemptEnum).filter(ca => ca.value === value)?.[0]?.label;
 
-const commonPhoneContactAttemptEnum = {
+const phoneContactAttemptEnum = {
   INTERVIEW_ACCEPTED: contactAttemptEnum.INTERVIEW_ACCEPTED,
   APPOINTMENT_MADE: contactAttemptEnum.APPOINTMENT_MADE,
   MESSAGE_SENT: contactAttemptEnum.MESSAGE_SENT,
@@ -48,24 +48,15 @@ const fieldContactAttemptEnum = {
   PERMANENTLY_UNAVAILABLE: contactAttemptEnum.PERMANENTLY_UNAVAILABLE,
 } as const;
 
-export const getContactAttemptByConfiguration = (configuration: string, medium: string) => {
+export const getContactAttemptByConfiguration = (medium: string | null) => {
   switch (medium) {
     case 'FIELD':
       return fieldContactAttemptEnum;
     case 'TEL':
-      switch (configuration) {
-        case 'TEL':
-          return {
-            INTERVIEW_ACCEPTED: contactAttemptEnum.INTERVIEW_ACCEPTED,
-            ...commonPhoneContactAttemptEnum,
-          };
-        case 'F2F':
-        default:
-          return commonPhoneContactAttemptEnum;
-      }
+      return phoneContactAttemptEnum;
     case 'EMAIL':
       return mailContactAttemptEnum;
     default:
-      break;
+      return {};
   }
 };

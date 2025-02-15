@@ -118,9 +118,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
       case 1:
         return Object.values(getMediumByConfiguration(surveyUnit.contactAttemptConfiguration));
       case 2:
-        return Object.values(
-          getContactAttemptByConfiguration(surveyUnit.contactAttemptConfiguration, medium)
-        );
+        return Object.values(getContactAttemptByConfiguration(medium));
       default:
         return [];
     }
@@ -141,7 +139,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
             >
               <Stack gap={1} width={1}>
                 {options.map(o => (
-                  <RadioLine value={o.type} key={o.type} label={o.value} disabled={false} />
+                  <RadioLine value={o.value} key={o.type} label={o.label} disabled={false} />
                 ))}
               </Stack>
             </RadioGroup>
