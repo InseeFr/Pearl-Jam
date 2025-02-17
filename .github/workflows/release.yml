@@ -14,21 +14,6 @@ jobs:
         with:
           node-version: 18
       - run: yarn --frozen-lockfile
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js 14
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - run: yarn
-      - run: yarn build
-      - name: Upload build
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: build
   release:
     runs-on: ubuntu-latest
     steps:
@@ -52,16 +37,9 @@ jobs:
           draft: false
           prerelease: false
   docker:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download build
-        id: download
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-          path: build
       - name: Get current version
         id: version
         uses: notiz-dev/github-action-json-property@release

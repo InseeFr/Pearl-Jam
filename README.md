@@ -4,6 +4,16 @@
 
 Case management web application for Computer-Assisted Personal Interviewing (CAPI)
 
+## Setup the Project
+
+In order to run the application properly, you need define in a `.env.local` file these variables.
+
+```
+VITE_QUEEN_URL=
+VITE_PEARL_API_URL=
+VITE_PEARL_AUTHENTICATION_MODE=
+```
+
 ## Run the project in a Docker environnement
 
 We have a dedicateed `compose.yml` file we can use in order to launch the _front_end_ inside Docker.
@@ -22,8 +32,6 @@ docker exec -it reactapp /bin/sh
 
 - You can now run the **Vite** server and/or run the Playwright tests suite.
   When you launch Playwright, the **Vite** server will be started (you do not need to start it manually).
-
-// TODO: Pick if we either want the user to launch a dev server or let directly the service launching it
 
 ```shell
 # You are in the reactapp container

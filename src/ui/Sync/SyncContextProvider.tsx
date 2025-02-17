@@ -24,7 +24,7 @@ export const SyncContext = createContext<SyncContextValue | undefined>(undefined
 
 export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unknown>>) {
   const online = useNetworkOnline();
-  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = useConfiguration()!;
+  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = useConfiguration();
   const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
   const [isSync, setIsSync] = useState(() => {

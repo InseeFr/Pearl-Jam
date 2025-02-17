@@ -4,6 +4,7 @@ import { enUS, fr } from 'date-fns/locale';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import './app.css';
+import { DevTools } from './devtools';
 import D from './i18n/build-dictionary';
 import { Home } from './pages/Home';
 import { ResetData } from './pages/ResetData';
@@ -14,9 +15,6 @@ import { Preloader } from './ui/Preloader';
 import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
 import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
 import { useAuth } from './utils/auth/initAuth';
-import { loadConfiguration, useConfiguration } from './utils/hooks/useConfiguration';
-import { useEffectOnce } from './utils/hooks/useEffectOnce';
-import { DevTools } from './devtools';
 
 const QueenPage = lazy(() => import('./pages/QueenPage'));
 
@@ -60,14 +58,6 @@ const router = createBrowserRouter([
 ]);
 
 export function App() {
-  const configuration = useConfiguration();
-
-  useEffectOnce(loadConfiguration, []);
-
-  if (!configuration) {
-    return null;
-  }
-
   return <RouterProvider router={router} />;
 }
 

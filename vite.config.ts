@@ -5,6 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import federation from '@originjs/vite-plugin-federation';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
+import { viteEnvs } from 'vite-envs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -48,8 +49,7 @@ export default defineConfig({
       name: 'Pearl',
       remotes: {
         dramaQueen: {
-          external:
-            "fetch(`${window.location.origin}/configuration.json`).then(response => response.json().then(configurationResponse => {const { QUEEN_URL } = configurationResponse; return QUEEN_URL + '/assets/remoteEntry.js';}))",
+          external: "Promise.resolve(import.meta.env.VITE_QUEEN_URL + '/assets/remoteEntry.js')",
           externalType: 'promise',
         },
       },
@@ -84,6 +84,9 @@ export default defineConfig({
         theme_color: '#000000',
         background_color: '#ffffff',
       },
+    }),
+    viteEnvs({
+      declarationFile: '.env',
     }),
   ],
 });
