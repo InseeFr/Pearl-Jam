@@ -2,7 +2,6 @@ import { surveyUnitStateEnum } from '../enum/SUStateEnum';
 import { contactOutcomeEnum } from '../enum/ContactOutcomeEnum';
 import { contactAttemptEnum } from '../enum/ContactAttemptEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
-import userIdbService from '../indexeddb/services/user-idb-service';
 import { getRandomIntBetween, getRandomItemFromArray } from './random';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 

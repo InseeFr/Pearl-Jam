@@ -22,7 +22,7 @@ import Dialog from '@mui/material/Dialog';
 const getTitle = (step: number) => {
   switch (step) {
     case 1:
-      return D.selectCommunciationRequestMedium;
+      return D.mediumQuestion;
     case 2:
       return D.contactAttempt;
     case 3:
@@ -124,6 +124,8 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     }
   }, [step, surveyUnit.contactAttemptConfiguration]);
   const isRadioStep = step !== 3;
+  console.log(options);
+
   return (
     <Dialog maxWidth="s" open={true} onClose={onClose}>
       <DialogTitle id="dialogtitle">{getTitle(step)}</DialogTitle>

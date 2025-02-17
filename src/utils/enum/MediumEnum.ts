@@ -1,13 +1,13 @@
 import D from 'i18n';
 
 export const mediumEnum = {
-  EMAIL: { type: 'EMAIL', value: `${D.mediumEmail}` },
-  TEL: { type: 'TEL', value: `${D.mediumPhone}` },
-  FIELD: { type: 'FIELD', value: `${D.mediumFaceToFace}` },
+  EMAIL: { value: 'EMAIL', label: `${D.mediumEmail}` },
+  TEL: { value: 'TEL', label: `${D.mediumPhone}` },
+  FIELD: { value: 'FIELD', label: `${D.mediumFaceToFace}` },
 } as const;
 
-export const findMediumValueByType = (type: string) =>
-  Object.values(mediumEnum).filter(value => value.type === type)?.[0]?.value;
+export const findMediumLabelByValue = (value: string) =>
+  Object.values(mediumEnum).filter(medium => medium.value === value)?.[0]?.label;
 
 export const getMediumByConfiguration = (configuration: string) => {
   switch (configuration) {
