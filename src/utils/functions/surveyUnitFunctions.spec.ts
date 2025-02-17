@@ -1,6 +1,5 @@
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
-import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
 import {
   getContactAttemptNumber,
   getLastState,
@@ -44,13 +43,13 @@ describe('getCommentByType', () => {
   const emptyCommentsSu = { comments: [] };
   const interviewercomment = { type: 'INTERVIEWER', value: 'Beware of the dog!' };
   const managementComment = { type: 'MANAGEMENT', value: 'Use email first' };
-  it('should return empty string if su has no comments attribute with same type', () => {
+  it('should return empty string if su has no comments attribute with same value', () => {
     expect(getCommentByType('INTERVIEWER', noCommentsSu)).toEqual('');
     expect(getCommentByType('INTERVIEWER', emptyCommentsSu)).toEqual('');
     expect(getCommentByType('INTERVIEWER', { comments: [managementComment] })).toEqual('');
     expect(getCommentByType('MANAGEMENT', { comments: [interviewercomment] })).toEqual('');
   });
-  it('should return comment value of matching type comment', () => {
+  it('should return comment value of matching value comment', () => {
     expect(
       getCommentByType('INTERVIEWER', { comments: [interviewercomment, managementComment] })
     ).toEqual('Beware of the dog!');
@@ -207,14 +206,14 @@ describe('areCasEqual', () => {
     expect(
       areCaEqual(undefined, {
         date: 1600000000000,
-        status: contactAttemptEnum.APPOINTMENT_MADE.type,
+        status: contactAttemptEnum.APPOINTMENT_MADE.value,
       })
     ).toEqual(false);
     expect(
       areCaEqual(
         {
           date: 1600000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.type,
+          status: contactAttemptEnum.APPOINTMENT_MADE.value,
         },
         undefined
       )
@@ -225,11 +224,11 @@ describe('areCasEqual', () => {
       areCaEqual(
         {
           date: 1600000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.type,
+          status: contactAttemptEnum.APPOINTMENT_MADE.value,
         },
         {
           date: 161000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.type,
+          status: contactAttemptEnum.APPOINTMENT_MADE.value,
         }
       )
     ).toEqual(false);
@@ -237,11 +236,11 @@ describe('areCasEqual', () => {
       areCaEqual(
         {
           date: 1600000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.type,
+          status: contactAttemptEnum.APPOINTMENT_MADE.value,
         },
         {
           date: 160000000000,
-          status: contactAttemptEnum.INTERVIEW_ACCEPTED.type,
+          status: contactAttemptEnum.INTERVIEW_ACCEPTED.value,
         }
       )
     ).toEqual(false);
@@ -251,11 +250,11 @@ describe('areCasEqual', () => {
       areCaEqual(
         {
           date: 1600000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.type,
+          status: contactAttemptEnum.APPOINTMENT_MADE.value,
         },
         {
           date: 1600000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.type,
+          status: contactAttemptEnum.APPOINTMENT_MADE.value,
         }
       )
     ).toEqual(true);
@@ -269,7 +268,7 @@ describe('lastContactAttemptIsSuccessfull', () => {
   it('should return false if cas contains no successfull ca', () => {
     expect(
       lastContactAttemptIsSuccessfull({
-        contactAttempts: [{ date: 1, status: contactAttemptEnum.NO_CONTACT.type }],
+        contactAttempts: [{ date: 1, status: contactAttemptEnum.NO_CONTACT.value }],
       })
     ).toEqual(false);
   });
@@ -277,8 +276,8 @@ describe('lastContactAttemptIsSuccessfull', () => {
     expect(
       lastContactAttemptIsSuccessfull({
         contactAttempts: [
-          { date: 1, status: contactAttemptEnum.INTERVIEW_ACCEPTED.type },
-          { date: 2, status: contactAttemptEnum.NO_CONTACT.type },
+          { date: 1, status: contactAttemptEnum.INTERVIEW_ACCEPTED.value },
+          { date: 2, status: contactAttemptEnum.NO_CONTACT.value },
         ],
       })
     ).toEqual(false);
@@ -287,8 +286,8 @@ describe('lastContactAttemptIsSuccessfull', () => {
     expect(
       lastContactAttemptIsSuccessfull({
         contactAttempts: [
-          { date: 1, status: contactAttemptEnum.NO_CONTACT.type },
-          { date: 2, status: contactAttemptEnum.INTERVIEW_ACCEPTED.type },
+          { date: 1, status: contactAttemptEnum.NO_CONTACT.value },
+          { date: 2, status: contactAttemptEnum.INTERVIEW_ACCEPTED.value },
         ],
       })
     ).toEqual(true);

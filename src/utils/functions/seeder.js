@@ -180,12 +180,12 @@ export async function seedData() {
       states: states,
       contactAttempts: [
         {
-          status: contactAttemptEnum.TEMPORARY_UNAVAILABLE.type,
+          status: contactAttemptEnum.TEMPORARY_UNAVAILABLE.value,
           date: new Date().getTime() - getRandomIntBetween(10, 100) * day,
           medium: 'FIELD',
         },
         {
-          status: contactAttemptEnum.INTERVIEW_ACCEPTED.type,
+          status: contactAttemptEnum.INTERVIEW_ACCEPTED.value,
           date: new Date().getTime() - getRandomIntBetween(3, 9) * day,
           medium: 'FIELD',
         },

@@ -35,8 +35,8 @@ export const CONTACT_RELATED_STATES = [
 ];
 
 export const CONTACT_SUCCESS_LIST = [
-  contactAttemptEnum.INTERVIEW_ACCEPTED.type,
-  contactAttemptEnum.APPOINTMENT_MADE.type,
+  contactAttemptEnum.INTERVIEW_ACCEPTED.value,
+  contactAttemptEnum.APPOINTMENT_MADE.value,
 ];
 
 export const HEALTHY_COMMUNICATION_REQUEST_STATUS = [
