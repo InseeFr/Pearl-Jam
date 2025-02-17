@@ -17,7 +17,7 @@ import { StatusChip } from 'ui/StatusChip';
 import { CommentDialog } from 'ui/SurveyUnit/CommentDialog';
 import { findContactAttemptLabelByValue } from 'utils/enum/ContactAttemptEnum';
 import { findContactOutcomeLabelByValue } from 'utils/enum/ContactOutcomeEnum';
-import { findMediumValueByType } from 'utils/enum/MediumEnum';
+import { findMediumLabelByValue } from 'utils/enum/MediumEnum';
 import {
   getprivilegedPerson,
   getSuTodoState,
@@ -262,7 +262,7 @@ function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
               <Typography component="span" variant="s" color="textPrimary">
                 {findContactAttemptLabelByValue(lastContact.status)}
                 <br />
-                {findMediumValueByType(lastContact.medium)}
+                {findMediumLabelByValue(lastContact.medium)}
               </Typography>
               {' | '}
               <Typography component="span" variant="s" color="textTertiary">
