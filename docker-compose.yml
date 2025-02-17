@@ -21,7 +21,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    image: gitlab-registry.insee.fr:443/filiere-enquete/preparer-collecter/gitops/rebuild-opensource/platine-management-api:2.8.3-rc
+    image: inseefr/pearl-jam-back-office:5.3.1-rc
     network_mode: 'host'
     container_name: backend
     environment:
