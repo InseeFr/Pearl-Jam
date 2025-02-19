@@ -1,3 +1,4 @@
+import { ContactAttemptValue } from 'utils/enum/ContactAttemptEnum';
 import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
 import {
   IdentificationConfiguration,
@@ -67,7 +68,7 @@ type SurveyUnitSampleIdentifiers = {
 export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId, string>>;
 
 export type SurveyUnitContactAttempt = {
-  status: string;
+  status: ContactAttemptValue;
   date: number;
   medium: string;
 };
