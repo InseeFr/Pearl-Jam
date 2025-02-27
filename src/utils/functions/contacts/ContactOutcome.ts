@@ -1,6 +1,6 @@
 import D from 'i18n';
 
-export const contactOutcomeEnum = {
+export const contactOutcomes = {
   INTERVIEW_ACCEPTED: { value: 'INA', label: `${D.interviewAccepted}` },
   REFUSAL: { value: 'REF', label: `${D.refusal}` },
   IMPOSSIBLE_TO_REACH: { value: 'IMP', label: `${D.impossibleReach}` },
@@ -20,35 +20,34 @@ export const contactOutcomeEnum = {
   NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
 } as const;
 
-export type ContactOutcomeValue =
-  (typeof contactOutcomeEnum)[keyof typeof contactOutcomeEnum]['value'];
+export type ContactOutcomeValue = (typeof contactOutcomes)[keyof typeof contactOutcomes]['value'];
 
 export const findContactOutcomeLabelByValue = (value?: string) =>
-  Object.values(contactOutcomeEnum).find(co => co.value === value)?.label;
+  Object.values(contactOutcomes).find(co => co.value === value)?.label;
 
 export const findContactOutcomeByValue = (value?: string) => {
-  const key = Object.keys(contactOutcomeEnum)
-    .find(key => contactOutcomeEnum[key as keyof typeof contactOutcomeEnum].value === value)
+  const key = Object.keys(contactOutcomes)
+    .find(key => contactOutcomes[key as keyof typeof contactOutcomes].value === value)
     ?.toString();
 
   if (!key || Object.keys(commonContactOutcomes).find(ckey => ckey === key)) return {};
 
-  return { key: contactOutcomeEnum[key as keyof typeof contactOutcomeEnum] };
+  return { key: contactOutcomes[key as keyof typeof contactOutcomes] };
 };
 
 let commonContactOutcomes = {
-  INTERVIEW_ACCEPTED: contactOutcomeEnum.INTERVIEW_ACCEPTED,
-  REFUSAL: contactOutcomeEnum.REFUSAL,
-  IMPOSSIBLE_TO_REACH: contactOutcomeEnum.IMPOSSIBLE_TO_REACH,
-  UNABLE_TO_RESPOND: contactOutcomeEnum.UNABLE_TO_RESPOND,
-  ALREADY_ANSWERED: contactOutcomeEnum.ALREADY_ANSWERED,
-  UNUSABLE_CONTACT_DATA: contactOutcomeEnum.UNUSABLE_CONTACT_DATA,
-  DEFINITLY_UNAVAILABLE: contactOutcomeEnum.DEFINITLY_UNAVAILABLE,
-  NOT_APPLICABLE: contactOutcomeEnum.NOT_APPLICABLE,
+  INTERVIEW_ACCEPTED: contactOutcomes.INTERVIEW_ACCEPTED,
+  REFUSAL: contactOutcomes.REFUSAL,
+  IMPOSSIBLE_TO_REACH: contactOutcomes.IMPOSSIBLE_TO_REACH,
+  UNABLE_TO_RESPOND: contactOutcomes.UNABLE_TO_RESPOND,
+  ALREADY_ANSWERED: contactOutcomes.ALREADY_ANSWERED,
+  UNUSABLE_CONTACT_DATA: contactOutcomes.UNUSABLE_CONTACT_DATA,
+  DEFINITLY_UNAVAILABLE: contactOutcomes.DEFINITLY_UNAVAILABLE,
+  NOT_APPLICABLE: contactOutcomes.NOT_APPLICABLE,
 };
 
 type ContactOutcomeEnum = {
-  [key in keyof typeof contactOutcomeEnum]?: (typeof contactOutcomeEnum)[key];
+  [key in keyof typeof contactOutcomes]?: (typeof contactOutcomes)[key];
 };
 
 export const getContactOutcomeByConfiguration = (
@@ -58,7 +57,7 @@ export const getContactOutcomeByConfiguration = (
   if (configuration === 'TEL') {
     commonContactOutcomes = {
       ...commonContactOutcomes,
-      ...{ NO_LONGER_USED_FOR_HABITATION: contactOutcomeEnum.NO_LONGER_USED_FOR_HABITATION },
+      ...{ NO_LONGER_USED_FOR_HABITATION: contactOutcomes.NO_LONGER_USED_FOR_HABITATION },
     };
   }
 

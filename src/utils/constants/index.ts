@@ -1,5 +1,4 @@
 import {
-  communicationEmitterEnum,
   communicationMediumEnum,
   communicationReasonEnum,
   communicationStatusEnum,
@@ -7,8 +6,8 @@ import {
 } from 'utils/enum/CommunicationEnums';
 
 import D from 'i18n';
-import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { contactAttemps } from 'utils/functions/contacts/ContactAttempt';
 
 export const NOTIFICATION_TYPE_SYNC = 'synchronization';
 export const NOTIFICATION_TYPE_MANAGEMENT = 'management';
@@ -35,8 +34,8 @@ export const CONTACT_RELATED_STATES = [
 ];
 
 export const CONTACT_SUCCESS_LIST = [
-  contactAttemptEnum.INTERVIEW_ACCEPTED.value,
-  contactAttemptEnum.APPOINTMENT_MADE.value,
+  contactAttemps.INTERVIEW_ACCEPTED.value,
+  contactAttemps.APPOINTMENT_MADE.value,
 ];
 
 export const HEALTHY_COMMUNICATION_REQUEST_STATUS = [

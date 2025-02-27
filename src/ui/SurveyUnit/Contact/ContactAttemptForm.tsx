@@ -5,14 +5,9 @@ import Button from '@mui/material/Button';
 import { MouseEvent, useMemo, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
-import { getMediumByConfiguration } from '../../../utils/enum/MediumEnum';
 import RadioGroup from '@mui/material/RadioGroup';
 import { RadioLine } from '../../RadioLine';
 import Box from '@mui/material/Box';
-import {
-  ContactAttemptMedium,
-  getContactAttemptByConfiguration,
-} from '../../../utils/enum/ContactAttemptEnum';
 import { StaticDateTimePicker } from '@mui/x-date-pickers/StaticDateTimePicker';
 import { Typography } from '../../Typography';
 import { formatDate } from '../../../utils/functions/date';
@@ -20,6 +15,11 @@ import { addNewState, persistSurveyUnit } from '../../../utils/functions';
 import { surveyUnitStateEnum } from '../../../utils/enum/SUStateEnum';
 import { SurveyUnit } from 'types/pearl';
 import Dialog from '@mui/material/Dialog';
+import {
+  ContactAttemptMedium,
+  getMediumByConfiguration,
+  getContactAttemptsByMedium,
+} from 'utils/functions/contacts/ContactAttempt';
 
 type StepValue = 'medium' | 'contactAttempt' | 'datePicker';
 const steps: StepValue[] = ['medium', 'contactAttempt', 'datePicker'];
@@ -83,11 +83,11 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     }
   };
 
-  const isValidMedium = (value: any): value is ContactAttemptMedium => {
-    return value === 'TEL' || value === 'EMAIL' || value === 'FIELD' || value === undefined;
+  const isValidMedium = (medium?: ContactAttemptMedium): medium is ContactAttemptMedium => {
+    return medium === 'TEL' || medium === 'EMAIL' || medium === 'FIELD';
   };
 
-  const setValue = (value?: string | null) => {
+  const setValue = (value: any) => {
     if (step === 'medium' && isValidMedium(value)) {
       setMedium(value);
       setStatus(null);
@@ -100,17 +100,8 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     }
   };
 
-  const options = useMemo(() => {
-    switch (step) {
-      case 'medium':
-        return Object.values(getMediumByConfiguration(surveyUnit.contactAttemptConfiguration));
-      case 'contactAttempt':
-        return Object.values(getContactAttemptByConfiguration(medium));
-      default:
-        return [];
-    }
-  }, [step, surveyUnit.contactAttemptConfiguration]);
-  const isRadioStep = step !== 'datePicker';
+  const mediumOptions = getMediumByConfiguration(surveyUnit.contactAttemptConfiguration);
+  const contactAttempts = getContactAttemptsByMedium(medium);
 
   return (
     <Dialog maxWidth="s" open={true} onClose={onClose}>
@@ -119,7 +110,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
       </DialogTitle>
       <DialogContent>
         <Box>
-          {isRadioStep && (
+          {step != 'datePicker' && (
             <RadioGroup
               value={step === 'medium' ? medium : status}
               onChange={e => setValue(e.target.value)}
@@ -127,11 +118,20 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
               aria-labelledby="dialogtitle"
               name="contact-attempt-radio-group"
             >
-              <Stack gap={1} width={1}>
-                {options.map(o => (
-                  <RadioLine value={o.value} key={o.type} label={o.label} disabled={false} />
-                ))}
-              </Stack>
+              {step === 'medium' && (
+                <Stack gap={1} width={1}>
+                  {mediumOptions.map(o => (
+                    <RadioLine value={o.value} key={o.label} label={o.label} disabled={false} />
+                  ))}
+                </Stack>
+              )}
+              {step === 'contactAttempt' && (
+                <Stack gap={1} width={1}>
+                  {contactAttempts.map(o => (
+                    <RadioLine value={o.value} key={o.value} label={o.label} disabled={false} />
+                  ))}
+                </Stack>
+              )}
             </RadioGroup>
           )}
           {step === 'datePicker' && (

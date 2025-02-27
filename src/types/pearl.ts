@@ -1,9 +1,12 @@
-import { ContactAttemptValue } from 'utils/enum/ContactAttemptEnum';
-import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
+import {
+  ContactAttemptValue,
+  ContactAttemptConfiguration,
+} from 'utils/functions/contacts/ContactAttempt';
+import { ContactOutcomeValue } from 'utils/functions/contacts/ContactOutcome';
 
 export type SurveyUnitPhoneNumber = {
   source: string;
@@ -116,7 +119,7 @@ export type SurveyUnit = {
   endDate: number;
   identificationConfiguration: IdentificationConfiguration;
   contactOutcomeConfiguration: string;
-  contactAttemptConfiguration: string;
+  contactAttemptConfiguration: ContactAttemptConfiguration;
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
