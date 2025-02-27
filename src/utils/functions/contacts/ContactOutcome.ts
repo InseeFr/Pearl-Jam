@@ -46,7 +46,7 @@ let commonContactOutcomes = {
   NOT_APPLICABLE: contactOutcomes.NOT_APPLICABLE,
 };
 
-type ContactOutcomeEnum = typeof contactOutcomes;
+type ContactOutcomes = typeof contactOutcomes;
 
 export const getContactOutcomeByConfiguration = (
   configuration: string,
