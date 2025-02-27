@@ -1,10 +1,10 @@
 import { Box } from '@mui/material';
 import { ContactOutcome } from 'types/pearl';
 import { Row } from 'ui/Row';
-import { findContactOutcomeLabelByValue } from 'utils/enum/ContactOutcomeEnum';
 import { formatDate } from 'utils/functions/date';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Typography } from 'ui/Typography';
+import { findContactOutcomeLabelByValue } from 'utils/functions/contacts/ContactOutcome';
 
 interface ContactOutcomeProps {
   contact?: ContactOutcome;

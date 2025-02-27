@@ -7,7 +7,7 @@ import {
 
 import D from 'i18n';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { contactAttemps } from 'utils/functions/contacts/ContactAttempt';
+import { contactAttempts } from 'utils/functions/contacts/ContactAttempt';
 
 export const NOTIFICATION_TYPE_SYNC = 'synchronization';
 export const NOTIFICATION_TYPE_MANAGEMENT = 'management';
@@ -34,8 +34,8 @@ export const CONTACT_RELATED_STATES = [
 ];
 
 export const CONTACT_SUCCESS_LIST = [
-  contactAttemps.INTERVIEW_ACCEPTED.value,
-  contactAttemps.APPOINTMENT_MADE.value,
+  contactAttempts.INTERVIEW_ACCEPTED.value,
+  contactAttempts.APPOINTMENT_MADE.value,
 ];
 
 export const HEALTHY_COMMUNICATION_REQUEST_STATUS = [

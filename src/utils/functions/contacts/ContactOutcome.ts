@@ -46,14 +46,12 @@ let commonContactOutcomes = {
   NOT_APPLICABLE: contactOutcomes.NOT_APPLICABLE,
 };
 
-type ContactOutcomeEnum = {
-  [key in keyof typeof contactOutcomes]?: (typeof contactOutcomes)[key];
-};
+type ContactOutcomeEnum = typeof contactOutcomes;
 
 export const getContactOutcomeByConfiguration = (
   configuration: string,
   selectedOutcomeValue?: string
-): ContactOutcomeEnum => {
+) => {
   if (configuration === 'TEL') {
     commonContactOutcomes = {
       ...commonContactOutcomes,

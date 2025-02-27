@@ -2,12 +2,12 @@ import { Box, IconButton } from '@mui/material';
 import { SupportedLocales } from 'i18n/build-dictionary';
 import { SurveyUnitContactAttempt } from 'types/pearl';
 import { Row } from 'ui/Row';
-import { findContactAttemptLabelByValue } from 'utils/enum/ContactAttemptEnum';
 import { formatDate } from 'utils/functions/date';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Typography } from 'ui/Typography';
 import { MediumMessageKey } from 'i18n/mediumMessage';
 import { mediumMessage } from 'i18n';
+import { findContactAttemptLabelByValue } from 'utils/functions/contacts/ContactAttempt';
 
 const mediumMapping: Record<string, MediumMessageKey> = {
   FIELD: 'mediumFaceToFace',

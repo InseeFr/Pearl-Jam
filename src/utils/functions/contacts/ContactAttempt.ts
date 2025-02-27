@@ -17,7 +17,7 @@ export type ContactAttemptValue =
   | 'NPS'
   | 'NLH';
 
-export const contactAttemps: ContactAttempts = {
+export const contactAttempts: ContactAttempts = {
   INTERVIEW_ACCEPTED: {
     value: 'INA',
     label: `${D.interviewAccepted}`,
@@ -89,11 +89,11 @@ export const getMediumByConfiguration = (configuration?: ContactAttemptConfigura
 };
 
 export const findContactAttemptLabelByValue = (value: ContactAttemptValue) =>
-  Object.values(contactAttemps).filter(ca => ca.value === value)?.[0]?.label;
+  Object.values(contactAttempts).filter(ca => ca.value === value)?.[0]?.label;
 
 export const getContactAttemptsByMedium = (medium?: ContactAttemptMedium) => {
   if (!medium) return [];
-  return Object.values(contactAttemps)
+  return Object.values(contactAttempts)
     .filter(attempt => attempt.mediums?.includes(medium))
     .map(({ value, label }) => ({ value, label }));
 };

@@ -1,5 +1,4 @@
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { contactAttemptEnum } from 'utils/enum/ContactAttemptEnum';
 import {
   getContactAttemptNumber,
   getLastState,
@@ -12,6 +11,7 @@ import {
   areCaEqual,
 } from 'utils/functions/index';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { contactAttempts } from './contacts/ContactAttempt';
 
 describe('getAge', () => {
   it('should return undefined for an empty or invalid birthdate', () => {
@@ -206,14 +206,14 @@ describe('areCasEqual', () => {
     expect(
       areCaEqual(undefined, {
         date: 1600000000000,
-        status: contactAttemptEnum.APPOINTMENT_MADE.value,
+        status: contactAttempts.APPOINTMENT_MADE.value,
       })
     ).toEqual(false);
     expect(
       areCaEqual(
         {
           date: 1600000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.value,
+          status: contactAttempts.APPOINTMENT_MADE.value,
         },
         undefined
       )
@@ -224,11 +224,11 @@ describe('areCasEqual', () => {
       areCaEqual(
         {
           date: 1600000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.value,
+          status: contactAttempts.APPOINTMENT_MADE.value,
         },
         {
           date: 161000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.value,
+          status: contactAttempts.APPOINTMENT_MADE.value,
         }
       )
     ).toEqual(false);
@@ -236,11 +236,11 @@ describe('areCasEqual', () => {
       areCaEqual(
         {
           date: 1600000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.value,
+          status: contactAttempts.APPOINTMENT_MADE.value,
         },
         {
           date: 160000000000,
-          status: contactAttemptEnum.INTERVIEW_ACCEPTED.value,
+          status: contactAttempts.INTERVIEW_ACCEPTED.value,
         }
       )
     ).toEqual(false);
@@ -250,11 +250,11 @@ describe('areCasEqual', () => {
       areCaEqual(
         {
           date: 1600000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.value,
+          status: contactAttempts.APPOINTMENT_MADE.value,
         },
         {
           date: 1600000000000,
-          status: contactAttemptEnum.APPOINTMENT_MADE.value,
+          status: contactAttempts.APPOINTMENT_MADE.value,
         }
       )
     ).toEqual(true);
@@ -268,7 +268,7 @@ describe('lastContactAttemptIsSuccessfull', () => {
   it('should return false if cas contains no successfull ca', () => {
     expect(
       lastContactAttemptIsSuccessfull({
-        contactAttempts: [{ date: 1, status: contactAttemptEnum.NO_CONTACT.value }],
+        contactAttempts: [{ date: 1, status: contactAttempts.NO_CONTACT.value }],
       })
     ).toEqual(false);
   });
@@ -276,8 +276,8 @@ describe('lastContactAttemptIsSuccessfull', () => {
     expect(
       lastContactAttemptIsSuccessfull({
         contactAttempts: [
-          { date: 1, status: contactAttemptEnum.INTERVIEW_ACCEPTED.value },
-          { date: 2, status: contactAttemptEnum.NO_CONTACT.value },
+          { date: 1, status: contactAttempts.INTERVIEW_ACCEPTED.value },
+          { date: 2, status: contactAttempts.NO_CONTACT.value },
         ],
       })
     ).toEqual(false);
@@ -286,8 +286,8 @@ describe('lastContactAttemptIsSuccessfull', () => {
     expect(
       lastContactAttemptIsSuccessfull({
         contactAttempts: [
-          { date: 1, status: contactAttemptEnum.NO_CONTACT.value },
-          { date: 2, status: contactAttemptEnum.INTERVIEW_ACCEPTED.value },
+          { date: 1, status: contactAttempts.NO_CONTACT.value },
+          { date: 2, status: contactAttempts.INTERVIEW_ACCEPTED.value },
         ],
       })
     ).toEqual(true);
