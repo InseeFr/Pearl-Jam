@@ -2,9 +2,22 @@ import D from 'i18n';
 
 export type ContactAttemptConfiguration = 'F2F' | 'TEL';
 export type ContactAttempts = Record<
-  string,
+  ContactAttemptProperties,
   { value: ContactAttemptValue; label: string; mediums: ContactAttemptMedium[] }
 >;
+
+export type ContactAttemptProperties =
+  | 'INTERVIEW_ACCEPTED'
+  | 'APPOINTMENT_MADE'
+  | 'MESSAGE_SENT'
+  | 'REFUSAL'
+  | 'TEMPORARY_UNAVAILABLE'
+  | 'NO_CONTACT'
+  | 'UNUSABLE_CONTACT_DATA'
+  | 'PERMANENTLY_UNAVAILABLE'
+  | 'NOTICE_OF_PASSAGE_SENT'
+  | 'NOTIFICATION_LETTER_HAND_DELIVERED';
+
 export type ContactAttemptValue =
   | 'INA'
   | 'APT'
@@ -68,7 +81,7 @@ export const contactAttempts: ContactAttempts = {
     label: `${D.notificationLetterHandDelivered}`,
     mediums: ['FIELD'],
   },
-};
+} as const;
 
 export const mediumEnum = {
   EMAIL: { value: 'EMAIL', label: `${D.mediumEmail}` },
@@ -76,7 +89,7 @@ export const mediumEnum = {
   FIELD: { value: 'FIELD', label: `${D.mediumFaceToFace}` },
 } as const;
 
-export type ContactAttemptMedium = (typeof mediumEnum)[keyof typeof mediumEnum]['value'] | {};
+export type ContactAttemptMedium = (typeof mediumEnum)[keyof typeof mediumEnum]['value'];
 
 export const findMediumLabelByValue = (value: string) =>
   Object.values(mediumEnum).filter(medium => medium.value === value)?.[0]?.label;
@@ -93,7 +106,8 @@ export const findContactAttemptLabelByValue = (value: ContactAttemptValue) =>
 
 export const getContactAttemptsByMedium = (medium?: ContactAttemptMedium) => {
   if (!medium) return [];
+
   return Object.values(contactAttempts)
-    .filter(attempt => attempt.mediums?.includes(medium))
+    .filter(attempt => attempt.mediums.includes(medium))
     .map(({ value, label }) => ({ value, label }));
 };
