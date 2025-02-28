@@ -22,20 +22,22 @@ export const contactOutcomes = {
 
 export type ContactOutcomeValue = (typeof contactOutcomes)[keyof typeof contactOutcomes]['value'];
 
-export const findContactOutcomeLabelByValue = (value?: string) =>
+export const findContactOutcomeLabelByValue = (value?: ContactOutcomeValue) =>
   Object.values(contactOutcomes).find(co => co.value === value)?.label;
 
-export const findContactOutcomeByValue = (value?: string) => {
+export const findOldContactOutcomeByValue = (value?: ContactOutcomeValue) => {
   const key = Object.keys(contactOutcomes)
     .find(key => contactOutcomes[key as keyof typeof contactOutcomes].value === value)
-    ?.toString();
+    ?.toString() as keyof typeof contactOutcomes;
 
   if (!key || Object.keys(commonContactOutcomes).find(ckey => ckey === key)) return {};
 
-  return { key: contactOutcomes[key as keyof typeof contactOutcomes] };
+  return { [key]: contactOutcomes[key] };
 };
 
-let commonContactOutcomes = {
+export type ContactOutcomeConfiguration = 'TEL' | 'F2F';
+
+export const commonContactOutcomes = {
   INTERVIEW_ACCEPTED: contactOutcomes.INTERVIEW_ACCEPTED,
   REFUSAL: contactOutcomes.REFUSAL,
   IMPOSSIBLE_TO_REACH: contactOutcomes.IMPOSSIBLE_TO_REACH,
@@ -47,22 +49,24 @@ let commonContactOutcomes = {
 };
 
 export const getContactOutcomeByConfiguration = (
-  configuration: string,
-  selectedOutcomeValue?: string
+  configuration: ContactOutcomeConfiguration,
+  selectedOutcomeValue?: ContactOutcomeValue
 ) => {
+  let newContactOutcomes = commonContactOutcomes;
+
   if (configuration === 'TEL') {
-    commonContactOutcomes = {
-      ...commonContactOutcomes,
+    newContactOutcomes = {
+      ...newContactOutcomes,
       ...{ NO_LONGER_USED_FOR_HABITATION: contactOutcomes.NO_LONGER_USED_FOR_HABITATION },
     };
   }
 
-  // Will be removed when deprecated outcomes will be unused
-  const selectedOutcome = findContactOutcomeByValue(selectedOutcomeValue);
+  // Will be removed when deprecated outcomes will be unused ?
+  const selectedOutcome = findOldContactOutcomeByValue(selectedOutcomeValue);
 
   if (configuration === 'TEL' || configuration === 'F2F')
     return {
-      ...commonContactOutcomes,
+      ...newContactOutcomes,
       ...selectedOutcome,
     };
 

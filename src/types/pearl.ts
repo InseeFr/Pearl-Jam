@@ -6,7 +6,10 @@ import {
   ContactAttemptValue,
   ContactAttemptConfiguration,
 } from 'utils/functions/contacts/ContactAttempt';
-import { ContactOutcomeValue } from 'utils/functions/contacts/ContactOutcome';
+import {
+  ContactOutcomeConfiguration,
+  ContactOutcomeValue,
+} from 'utils/functions/contacts/ContactOutcome';
 
 export type SurveyUnitPhoneNumber = {
   source: string;
@@ -118,7 +121,7 @@ export type SurveyUnit = {
   collectionEndDate: number;
   endDate: number;
   identificationConfiguration: IdentificationConfiguration;
-  contactOutcomeConfiguration: string;
+  contactOutcomeConfiguration: ContactOutcomeConfiguration;
   contactAttemptConfiguration: ContactAttemptConfiguration;
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
