@@ -2,11 +2,8 @@ import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'utils/constants';
 import { getTokenInfo, keycloakAuthentication } from 'utils/keycloak';
 import { useEffect, useRef, useState } from 'react';
 
-import { useConfiguration } from '../hooks/useConfiguration';
-
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
-  const configuration = useConfiguration();
   const init = useRef(false);
 
   const interviewerRoles = ['pearl-interviewer', 'uma_authorization', 'Guest'];
@@ -43,7 +40,7 @@ export const useAuth = () => {
       return;
     }
 
-    const { PEARL_AUTHENTICATION_MODE } = configuration;
+    const PEARL_AUTHENTICATION_MODE = import.meta.env.VITE_PEARL_AUTHENTICATION_MODE;
     switch (PEARL_AUTHENTICATION_MODE) {
       case 'anonymous':
         window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(GUEST_PEARL_USER));

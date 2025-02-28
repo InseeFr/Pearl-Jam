@@ -2,7 +2,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import { MouseEvent, useMemo, useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
 import RadioGroup from '@mui/material/RadioGroup';
