@@ -77,7 +77,7 @@ export const createSurveyUnit = (surveyUnit: Partial<SurveyUnit> = {}): SurveyUn
     ],
     contactAttempts: [
       {
-        status: 'SUCCESS',
+        status: 'APT',
         date: 1700000000000,
         medium: 'Phone',
       },
@@ -96,8 +96,8 @@ export const createSurveyUnit = (surveyUnit: Partial<SurveyUnit> = {}): SurveyUn
     collectionEndDate: 1699500000000,
     endDate: 1699600000000,
     identificationConfiguration: IdentificationConfiguration.IASCO,
-    contactOutcomeConfiguration: 'Default',
-    contactAttemptConfiguration: 'Default',
+    contactOutcomeConfiguration: 'F2F',
+    contactAttemptConfiguration: 'F2F',
     useLetterCommunication: true,
     communicationRequests: [
       {
