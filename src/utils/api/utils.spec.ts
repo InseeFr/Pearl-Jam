@@ -126,7 +126,7 @@ describe('Utils tests', () => {
         {
           date: 1700000000000,
           medium: 'Phone',
-          status: 'SUCCESS',
+          status: 'APT',
         },
       ],
       contactOutcome: {
