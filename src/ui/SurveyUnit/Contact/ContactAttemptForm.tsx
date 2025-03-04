@@ -96,7 +96,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
       setStatus(value);
     }
     if (step === 'datePicker') {
-      setDate(new Date(value!));
+      setDate(new Date(value));
     }
   };
 
