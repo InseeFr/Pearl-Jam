@@ -1,18 +1,12 @@
 import { renderHook, act } from '@testing-library/react';
 import { useServiceWorker } from './useServiceWorker';
 import * as serviceWorker from '../../serviceWorkerRegistration';
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 const QUEEN_URL = 'http://example.com';
-
 vi.mock('../../serviceWorkerRegistration');
-vi.mock('./useConfiguration', () => {
-  return {
-    useConfiguration: () => {
-      return {
-        QUEEN_URL: 'http://example.com',
-      };
-    },
-  };
+
+beforeAll(() => {
+  vi.stubEnv('VITE_QUEEN_URL', QUEEN_URL);
 });
 
 describe('useServiceWorker', () => {

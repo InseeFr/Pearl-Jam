@@ -8,7 +8,7 @@ import { User } from './model/user';
 import { SyncReport } from './model/syncReport';
 import { SurveyUnitMissing } from './model/surveyUnitMissing';
 import type { SurveyUnit, Notification } from '../../types/pearl';
-import { contactOutcomeEnum } from 'utils/enum/ContactOutcomeEnum';
+import { contactOutcomes } from 'utils/functions/contacts/ContactOutcome';
 
 export const db = new Dexie('Pearl') as Dexie & {
   notification: EntityTable<Notification, 'id'>;
@@ -20,12 +20,10 @@ export const db = new Dexie('Pearl') as Dexie & {
 
 const convertDeprecatedContactOutcomeType = (contactOutcomeType: string) => {
   let newContactOutcomeType = contactOutcomeType;
-  if (contactOutcomeType === contactOutcomeEnum.DECEASED.value)
-    newContactOutcomeType = contactOutcomeEnum.NOT_APPLICABLE.value;
-  else if (
-    contactOutcomeType === contactOutcomeEnum.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value
-  ) {
-    newContactOutcomeType = contactOutcomeEnum.DEFINITLY_UNAVAILABLE.value;
+  if (contactOutcomeType === contactOutcomes.DECEASED.value)
+    newContactOutcomeType = contactOutcomes.NOT_APPLICABLE.value;
+  else if (contactOutcomeType === contactOutcomes.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value) {
+    newContactOutcomeType = contactOutcomes.DEFINITLY_UNAVAILABLE.value;
   }
 
   return newContactOutcomeType;

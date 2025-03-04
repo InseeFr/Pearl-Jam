@@ -6,7 +6,6 @@ import { NotificationState } from 'types/pearl';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
 import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
-import { useConfiguration } from '../../utils/hooks/useConfiguration';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
@@ -24,7 +23,8 @@ export const SyncContext = createContext<SyncContextValue | undefined>(undefined
 
 export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unknown>>) {
   const online = useNetworkOnline();
-  const { PEARL_API_URL, PEARL_AUTHENTICATION_MODE } = useConfiguration();
+  const PEARL_API_URL = import.meta.env.VITE_PEARL_API_URL;
+  const PEARL_AUTHENTICATION_MODE = import.meta.env.VITE_PEARL_AUTHENTICATION_MODE;
   const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
   const [isSync, setIsSync] = useState(() => {

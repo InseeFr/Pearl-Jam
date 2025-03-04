@@ -1,8 +1,15 @@
-import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
+import {
+  ContactAttemptValue,
+  ContactAttemptConfiguration,
+} from 'utils/functions/contacts/ContactAttempt';
+import {
+  ContactOutcomeConfiguration,
+  ContactOutcomeValue,
+} from 'utils/functions/contacts/ContactOutcome';
 
 export type SurveyUnitPhoneNumber = {
   source: string;
@@ -67,7 +74,7 @@ type SurveyUnitSampleIdentifiers = {
 export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId, string>>;
 
 export type SurveyUnitContactAttempt = {
-  status: string;
+  status: ContactAttemptValue;
   date: number;
   medium: string;
 };
@@ -114,8 +121,8 @@ export type SurveyUnit = {
   collectionEndDate: number;
   endDate: number;
   identificationConfiguration: IdentificationConfiguration;
-  contactOutcomeConfiguration: string;
-  contactAttemptConfiguration: string;
+  contactOutcomeConfiguration: ContactOutcomeConfiguration;
+  contactAttemptConfiguration: ContactAttemptConfiguration;
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];

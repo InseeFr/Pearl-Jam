@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import * as serviceWorker from '../../serviceWorkerRegistration';
-import { useConfiguration } from './useConfiguration';
 
 const SW_UPDATE_KEY = 'installing-update';
 
@@ -20,7 +19,7 @@ export type ServiceWorkerState = {
  * Resolve the state of the service worker
  */
 export const useServiceWorker = (authenticated: boolean): ServiceWorkerState => {
-  const { QUEEN_URL } = useConfiguration();
+  const QUEEN_URL = import.meta.env.VITE_QUEEN_URL;
   const [isInstallingServiceWorker, setIsInstallingServiceWorker] = useState(false);
   const [waitingServiceWorker, setWaitingServiceWorker] = useState<ServiceWorker | null>(null);
   const [isUpdateAvailable, setUpdateAvailable] = useState(false);

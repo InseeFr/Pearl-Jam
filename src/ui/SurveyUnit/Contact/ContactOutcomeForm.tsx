@@ -10,11 +10,12 @@ import { useForm } from 'react-hook-form';
 import { SurveyUnit } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { FieldRow } from 'ui/FieldRow';
-import {
-  contactOutcomeEnum,
-  getContactOutcomeByConfiguration,
-} from 'utils/enum/ContactOutcomeEnum';
+
 import { addNewState, persistSurveyUnit } from 'utils/functions';
+import {
+  contactOutcomes,
+  getContactOutcomeByConfiguration,
+} from 'utils/functions/contacts/ContactOutcome';
 
 const defaultValue = {
   date: new Date().getTime(),
@@ -38,7 +39,7 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
   const onSubmit = handleSubmit(data => {
     // Update survey unit state
     let newState: string = surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
-    if (data.type === contactOutcomeEnum.INTERVIEW_ACCEPTED.value) {
+    if (data.type === contactOutcomes.INTERVIEW_ACCEPTED.value) {
       newState = surveyUnitStateEnum.APPOINTMENT_MADE.type;
     }
     const newStates = addNewState(surveyUnit, newState);
@@ -54,7 +55,7 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
     onClose();
   };
 
-  const contactOutcomes = useMemo(() => {
+  const availableContactOutcomes = useMemo(() => {
     return Object.values(
       getContactOutcomeByConfiguration(
         surveyUnit.contactOutcomeConfiguration,
@@ -75,12 +76,17 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
         <DialogTitle>{D.contactOutcome}</DialogTitle>
         <DialogContent>
           <Stack gap={2}>
-            <FieldRow control={control} type="radiostack" options={contactOutcomes} name="type" />
+            <FieldRow
+              control={control}
+              type="radiostack"
+              options={availableContactOutcomes}
+              name="type"
+            />
             <FieldRow
               label={D.totalNumberOfContactAttempts}
               control={control}
               type="increment"
-              options={contactOutcomes}
+              options={availableContactOutcomes}
               name="totalNumberOfContactAttempts"
             />
           </Stack>

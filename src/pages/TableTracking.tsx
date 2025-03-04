@@ -15,9 +15,6 @@ import { IconDesc } from 'ui/Icons/IconDesc';
 import { PaperIconButton } from 'ui/PaperIconButton';
 import { StatusChip } from 'ui/StatusChip';
 import { CommentDialog } from 'ui/SurveyUnit/CommentDialog';
-import { findContactAttemptValueByType } from 'utils/enum/ContactAttemptEnum';
-import { findContactOutcomeLabelByValue } from 'utils/enum/ContactOutcomeEnum';
-import { findMediumValueByType } from 'utils/enum/MediumEnum';
 import {
   getprivilegedPerson,
   getSuTodoState,
@@ -30,6 +27,11 @@ import { useToggle } from 'utils/hooks/useToggle';
 import D from 'i18n';
 import AddIcon from '@mui/icons-material/Add';
 import { SurveyUnit } from 'types/pearl';
+import {
+  findContactAttemptLabelByValue,
+  findMediumLabelByValue,
+} from 'utils/functions/contacts/ContactAttempt';
+import { findContactOutcomeLabelByValue } from 'utils/functions/contacts/ContactOutcome';
 
 interface TableTrackingProps {
   campaign: string;
@@ -260,9 +262,9 @@ function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
           {lastContact && (
             <>
               <Typography component="span" variant="s" color="textPrimary">
-                {findContactAttemptValueByType(lastContact.status)}
+                {findContactAttemptLabelByValue(lastContact.status)}
                 <br />
-                {findMediumValueByType(lastContact.medium)}
+                {findMediumLabelByValue(lastContact.medium)}
               </Typography>
               {' | '}
               <Typography component="span" variant="s" color="textTertiary">
