@@ -10,8 +10,10 @@ import {
   lastContactAttemptIsSuccessfull,
   areCaEqual,
 } from 'utils/functions/index';
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
 import { contactAttempts } from './contacts/ContactAttempt';
+import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
+import { createStateIdsAndCommunicationRequestIds } from './surveyUnitFunctions';
 
 describe('getAge', () => {
   it('should return undefined for an empty or invalid birthdate', () => {
@@ -291,5 +293,38 @@ describe('lastContactAttemptIsSuccessfull', () => {
         ],
       })
     ).toEqual(true);
+  });
+});
+
+describe('createStateIdsAndCommunicationRequestIds', () => {
+  vi.mock('utils/indexeddb/services/surveyUnit-idb-service', () => ({
+    surveyUnitIDBService: {
+      getById: vi.fn(),
+      addOrUpdateSU: vi.fn(),
+    },
+  }));
+
+  it('should fetch the previous survey unit and persist the updated data', async () => {
+    const latestSurveyUnit = {
+      id: '123',
+      states: ['state1', 'state2'],
+      communicationRequests: ['request1', 'request2'],
+    };
+    const previousSurveyUnit = {
+      id: '123',
+      states: ['oldState'],
+      communicationRequests: ['oldRequest'],
+    };
+
+    (surveyUnitIDBService.getById as Mock).mockResolvedValue(previousSurveyUnit);
+
+    await createStateIdsAndCommunicationRequestIds(latestSurveyUnit);
+
+    expect(surveyUnitIDBService.getById).toHaveBeenCalledWith('123');
+    expect(surveyUnitIDBService.addOrUpdateSU).toHaveBeenCalledWith({
+      ...previousSurveyUnit,
+      states: latestSurveyUnit.states,
+      communicationRequests: latestSurveyUnit.communicationRequests,
+    });
   });
 });
