@@ -5,6 +5,7 @@ import {
 import { IdentificationQuestions, TransmissionRules } from '../identificationFunctions';
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
+import { commonTransmissionRules } from './commonTransmissionRules';
 
 export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
   root: IdentificationQuestionsId.IDENTIFICATION,
@@ -14,7 +15,7 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
     text: `${D.housingIdentification}`,
     options: [
       { ...optionsMap.HOUSE_IDENTIFIED, concluding: false },
-      { ...optionsMap.HOUSE_UNIDENTIFIED, concluding: false },
+      { ...optionsMap.HOUSE_UNIDENTIFIED, concluding: true },
       { ...optionsMap.DESTROY, concluding: true },
     ],
   },
@@ -82,7 +83,7 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
 } as const;
 
 export const transmissionRulesHouseF2F: TransmissionRules = {
-  validIfIdentificationFinished: true,
+  ...commonTransmissionRules,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
@@ -96,7 +97,4 @@ export const transmissionRulesHouseF2F: TransmissionRules = {
     ],
     contactOutcome: 'NOA',
   },
-  invalidIfmissingContactOutcome: true,
-  invalidIfmissingContactAttempt: true,
-  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
 };

@@ -5,6 +5,7 @@ import {
 import { IdentificationQuestions, TransmissionRules } from '../identificationFunctions';
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
+import { commonTransmissionRules } from './commonTransmissionRules';
 
 export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
   root: IdentificationQuestionsId.SITUATION,
@@ -34,7 +35,7 @@ export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
 } as const;
 
 export const transmissionRulesHOUSETEL: TransmissionRules = {
-  validIfIdentificationFinished: true,
+  ...commonTransmissionRules,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
@@ -44,13 +45,10 @@ export const transmissionRulesHOUSETEL: TransmissionRules = {
     ],
     contactOutcome: 'NOA',
   },
-  invalidIfmissingContactOutcome: true,
-  invalidIfmissingContactAttempt: true,
-  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
 };
 
 export const transmissionRulesHOUSETELWSR: TransmissionRules = {
-  validIfIdentificationFinished: true,
+  ...commonTransmissionRules,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
@@ -64,7 +62,4 @@ export const transmissionRulesHOUSETELWSR: TransmissionRules = {
     ],
     contactOutcome: 'NOA',
   },
-  invalidIfmissingContactOutcome: true,
-  invalidIfmissingContactAttempt: true,
-  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
 };

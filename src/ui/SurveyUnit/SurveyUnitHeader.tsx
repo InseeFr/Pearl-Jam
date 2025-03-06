@@ -25,6 +25,7 @@ import D from '../../i18n/build-dictionary';
 import { SurveyUnit } from 'types/pearl';
 import { SubmitButton } from './SubmitButton';
 import CheckIcon from '@mui/icons-material/Check';
+import { validateTransmission } from 'utils/functions/identifications/identificationFunctions';
 
 const useStyles = makeStyles({
   rotateBox: {
@@ -81,8 +82,7 @@ export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>
   const id = open ? 'simple-popover' : undefined;
   const states = Object.values(toDoEnum).filter(toDo => Number(toDo.order) < 6);
   const currentState = Number(getSuTodoState(surveyUnit).order);
-  const canSubmit =
-    getLastState(surveyUnit.states).type === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
+  const canSubmit = validateTransmission(surveyUnit);
 
   return (
     <Box

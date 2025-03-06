@@ -2,27 +2,27 @@ import {
   IdentificationConfiguration,
   IdentificationQuestionOptionValues,
   IdentificationQuestionsId,
-} from "utils/enum/identifications/IdentificationsQuestions";
+} from 'utils/enum/identifications/IdentificationsQuestions';
 import {
   indtelIdentificationQuestionsTree,
   transmissionRulesByINDTEL,
   transmissionRulesByINDTELNOR,
-} from "./questionsTree/indtelQuestionsTree";
+} from './questionsTree/indtelQuestionsTree';
 import {
   houseF2FIdentificationQuestionsTree,
   transmissionRulesHouseF2F,
-} from "./questionsTree/houseF2FQuestionsTree";
+} from './questionsTree/houseF2FQuestionsTree';
 import {
   houseTelIdentificationQuestionsTree,
   transmissionRulesHOUSETEL,
   transmissionRulesHOUSETELWSR,
-} from "./questionsTree/HouseTelQuestionsTree";
-import { SurveyUnit, SurveyUnitIdentification } from "types/pearl";
-import { getLastState } from "../surveyUnitFunctions";
-import { StateValues } from "utils/enum/SUStateEnum";
-import { ContactOutcomeValue } from "utils/enum/ContactOutcomeEnum";
-import { transmissionRulesNoIdentification } from "./questionsTree/noIdentificationTransmissionRules";
-import { SRCVIdentificationQuestionsTreeFunction } from "./questionsTree/SRCVQuestionsTree";
+} from './questionsTree/HouseTelQuestionsTree';
+import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
+import { getLastState } from '../surveyUnitFunctions';
+import { StateValues } from 'utils/enum/SUStateEnum';
+import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
+import { transmissionRulesNoIdentification } from './questionsTree/noIdentificationTransmissionRules';
+import { SRCVIdentificationQuestionsTreeFunction } from './questionsTree/SRCVQuestionsTree';
 
 export type IdentificationQuestionOption = {
   value: string;
@@ -48,17 +48,13 @@ export const getIdentificationQuestionsTree = (
   identificationConfiguration: IdentificationConfiguration,
   identification?: SurveyUnitIdentification
 ): IdentificationQuestions => {
-  const identificationMap: Record<
-    IdentificationConfiguration,
-    IdentificationQuestions
-  > = {
+  const identificationMap: Record<IdentificationConfiguration, IdentificationQuestions> = {
     [IdentificationConfiguration.INDTEL]: indtelIdentificationQuestionsTree,
     [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
     [IdentificationConfiguration.NOIDENT]: {},
     [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
     [IdentificationConfiguration.HOUSETEL]: houseTelIdentificationQuestionsTree,
-    [IdentificationConfiguration.HOUSETELWSR]:
-      houseTelIdentificationQuestionsTree,
+    [IdentificationConfiguration.HOUSETELWSR]: houseTelIdentificationQuestionsTree,
     [IdentificationConfiguration.SRCVREINT]:
       SRCVIdentificationQuestionsTreeFunction(identification),
     [IdentificationConfiguration.INDTELNOR]: indtelIdentificationQuestionsTree,
@@ -68,10 +64,7 @@ export const getIdentificationQuestionsTree = (
   return identificationMap[identificationConfiguration];
 };
 
-export const transmissionRules: Record<
-  IdentificationConfiguration,
-  TransmissionRules
-> = {
+export const transmissionRules: Record<IdentificationConfiguration, TransmissionRules> = {
   [IdentificationConfiguration.INDTEL]: transmissionRulesByINDTEL,
   [IdentificationConfiguration.IASCO]: transmissionRulesHouseF2F,
   [IdentificationConfiguration.NOIDENT]: transmissionRulesNoIdentification,
@@ -79,8 +72,8 @@ export const transmissionRules: Record<
   [IdentificationConfiguration.HOUSETEL]: transmissionRulesHOUSETEL,
   [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHOUSETELWSR,
   [IdentificationConfiguration.INDTELNOR]: transmissionRulesByINDTELNOR,
-  [IdentificationConfiguration.INDF2F]: {},
-  [IdentificationConfiguration.SRCVREINT]: {},
+  [IdentificationConfiguration.INDF2F]: transmissionRulesNoIdentification,
+  [IdentificationConfiguration.SRCVREINT]: transmissionRulesNoIdentification,
 };
 
 export type ResponseState = Partial<
@@ -88,9 +81,9 @@ export type ResponseState = Partial<
 >;
 
 export type TransmissionRules = {
-  validIfIdentificationFinished?: boolean;
-  invalidIfmissingContactOutcome?: boolean;
-  invalidIfmissingContactAttempt?: boolean;
+  shouldValidIfIdentificationFinished: boolean;
+  invalidIfmissingContactOutcome: boolean;
+  invalidIfmissingContactAttempt: boolean;
   invalidIdentificationsAndContactOutcome?: {
     identifications: {
       questionId: IdentificationQuestionsId;
@@ -98,10 +91,7 @@ export type TransmissionRules = {
     }[];
     contactOutcome: ContactOutcomeValue;
   };
-  expectedStateForConctactOutcome?: {
-    expectedState: StateValues;
-    contactOutcome: ContactOutcomeValue;
-  };
+  expectedState: StateValues;
 };
 
 export function checkAvailability(
@@ -135,10 +125,7 @@ export function isIdentificationFinished(
   if (!identificationConfiguration) return true;
   if (!identification) return false;
 
-  const questions = getIdentificationQuestionsTree(
-    identificationConfiguration,
-    identification
-  );
+  const questions = getIdentificationQuestionsTree(identificationConfiguration, identification);
   const root = questions.root;
 
   if (!root) return true;
@@ -147,9 +134,7 @@ export function isIdentificationFinished(
   while (question) {
     const response = identification[question.id];
     if (response) {
-      const isConcluding = question.options.find(
-        (o) => o.value === response && o.concluding
-      );
+      const isConcluding = question.options.find(o => o.value === response && o.concluding);
 
       if (isConcluding) return true;
     }
@@ -175,8 +160,7 @@ export function isInvalidIdentificationAndContactOutcome(
   ) {
     const identifications =
       transmissionRules.invalidIdentificationsAndContactOutcome.identifications;
-    const contactOutcome =
-      transmissionRules.invalidIdentificationsAndContactOutcome.contactOutcome;
+    const contactOutcome = transmissionRules.invalidIdentificationsAndContactOutcome.contactOutcome;
 
     for (const identification of identifications) {
       if (
@@ -190,47 +174,35 @@ export function isInvalidIdentificationAndContactOutcome(
   return false;
 }
 
-function isValidStateForContactOutcome(
-  su: SurveyUnit,
-  suTransmissionRules: TransmissionRules
-) {
-  const expectedOutcome = suTransmissionRules?.expectedStateForConctactOutcome;
-  if (!expectedOutcome) return true;
-
-  const hasMatchingOutcome =
-    su?.contactOutcome?.type === expectedOutcome.contactOutcome;
+function isValidStateForContactOutcome(su: SurveyUnit, suTransmissionRules: TransmissionRules) {
   const lastStateType = getLastState(su.states)?.type;
-  const hasExpectedState = lastStateType === expectedOutcome.expectedState;
+  const hasExpectedState = lastStateType === suTransmissionRules.expectedState;
 
-  return !(hasMatchingOutcome && !hasExpectedState);
+  // when questionnaireState is available, use it here for consistency
+  // => if contactOutcome=INA then check if questionnaireState is VALIDATED
+  return hasExpectedState;
 }
 
 export function validateTransmission(su: SurveyUnit): boolean {
   const suTransmissionRules = transmissionRules[su.identificationConfiguration];
 
-  if (suTransmissionRules.validIfIdentificationFinished) {
-    if (
-      !isIdentificationFinished(
-        su.identificationConfiguration,
-        su.identification
-      )
-    )
-      return false;
+  // identification completion
+  if (suTransmissionRules.shouldValidIfIdentificationFinished) {
+    if (!isIdentificationFinished(su.identificationConfiguration, su.identification)) return false;
   }
 
-  if (suTransmissionRules.invalidIfmissingContactOutcome && !su.contactOutcome)
+  // contactOutcome requirement
+  if (suTransmissionRules.invalidIfmissingContactOutcome && !su.contactOutcome) return false;
+
+  // at least one contactAttempt
+  if (suTransmissionRules.invalidIfmissingContactAttempt && !su.contactAttempts.length)
     return false;
 
-  if (isInvalidIdentificationAndContactOutcome(suTransmissionRules, su))
-    return false;
+  // consistency between identification and contactOutcome
+  if (isInvalidIdentificationAndContactOutcome(suTransmissionRules, su)) return false;
 
+  // consistency between state and contactOutcome
   if (!isValidStateForContactOutcome(su, suTransmissionRules)) return false;
-
-  if (
-    suTransmissionRules.invalidIfmissingContactAttempt &&
-    !su.contactAttempts.length
-  )
-    return false;
 
   return true;
 }
