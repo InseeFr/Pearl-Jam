@@ -1,7 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import { ContactOutcome } from 'types/pearl';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { ContactOutcomeDisplay } from './ContactOutcomeDisplay';
+
+beforeAll(() => {
+  // Force locale to en-US
+  const OriginalDateTimeFormat = Intl.DateTimeFormat;
+
+  vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((locale, options) => {
+    return new OriginalDateTimeFormat('en-US', options); // Use the original constructor
+  });
+});
 
 describe('ContactOutcomeDisplay', () => {
   it('should not render anything if contact is undefined', () => {

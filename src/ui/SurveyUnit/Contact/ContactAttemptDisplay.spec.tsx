@@ -1,6 +1,15 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { ContactAttemptDisplay, ContactAttemptDisplayProps } from './ContactAttemptDisplay';
+
+beforeAll(() => {
+  // Force locale to en-US
+  const OriginalDateTimeFormat = Intl.DateTimeFormat;
+
+  vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((locale, options) => {
+    return new OriginalDateTimeFormat('en-US', options); // Use the original constructor
+  });
+});
 
 describe('ContactAttemptDisplay', () => {
   const mockOnDelete = vi.fn();
