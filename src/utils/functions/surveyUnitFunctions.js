@@ -310,16 +310,10 @@ export const getprivilegedPerson = surveyUnit => {
   return privilegedPerson ?? persons[0];
 };
 
-export const createStateIds = async latestSurveyUnit => {
-  const { id, states } = latestSurveyUnit;
+export const createStateIdsAndCommunicationRequestIds = async latestSurveyUnit => {
+  const { id, states, communicationRequests } = latestSurveyUnit;
   const previousSurveyUnit = await surveyUnitIDBService.getById(id);
-  persistSurveyUnit({ ...previousSurveyUnit, states });
-};
-
-export const createCommunicationRequestIds = async latestSurveyUnit => {
-  const { id, communicationRequests } = latestSurveyUnit;
-  const previousSurveyUnit = await surveyUnitIDBService.getById(id);
-  persistSurveyUnit({ ...previousSurveyUnit, communicationRequests });
+  persistSurveyUnit({ ...previousSurveyUnit, states, communicationRequests });
 };
 
 const toggleFavoritePhoneNumber = (surveyUnit, personId, phoneNumber) => {

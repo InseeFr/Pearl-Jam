@@ -1,21 +1,20 @@
 import * as api from 'utils/api';
 
+import { useCallback, useState } from 'react';
 import {
-  createCommunicationRequestIds,
-  createStateIds,
+  createStateIdsAndCommunicationRequestIds,
   getLastState,
   getSuTodoState,
 } from 'utils/functions';
-import { useCallback, useState } from 'react';
 
-import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
-import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
-import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useNavigate } from 'react-router-dom';
-import { TITLES, PEARL_USER_KEY } from 'utils/constants';
-import userIdbService from 'utils/indexeddb/services/user-idb-service';
 import { QueenEvent } from 'types/events';
 import { SurveyUnit } from 'types/pearl';
+import { PEARL_USER_KEY, TITLES } from 'utils/constants';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
+import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
+import userIdbService from 'utils/indexeddb/services/user-idb-service';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
@@ -82,8 +81,7 @@ const sendData = async (urlPearlApi: string, authenticationMode: string) => {
         status,
       } = await api.putDataSurveyUnitById(urlPearlApi, authenticationMode)(id, body);
       if (!error) {
-        await createStateIds(latestSurveyUnit);
-        await createCommunicationRequestIds(latestSurveyUnit);
+        await createStateIdsAndCommunicationRequestIds(latestSurveyUnit);
       }
       if (error && status && [400, 403, 404, 500].includes(status)) {
         const { error: tempZoneError } = await api.putSurveyUnitToTempZone(
