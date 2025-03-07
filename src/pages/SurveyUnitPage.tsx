@@ -27,7 +27,7 @@ export function SurveyUnitPage() {
   useEffect(() => {
     if (surveyUnit !== undefined) {
       const lastState = getLastState(surveyUnit.states);
-      if (lastState?.value === surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type) {
+      if (lastState?.type === surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type) {
         const newStates = addNewState(surveyUnit, surveyUnitStateEnum.IN_PREPARATION.type);
         persistSurveyUnit({ ...surveyUnit, states: newStates });
       }
