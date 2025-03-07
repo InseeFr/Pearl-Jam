@@ -1,24 +1,24 @@
-import { SurveyUnitHeader } from '../ui/SurveyUnit/SurveyUnitHeader';
-import { Link as RouterLink, useParams } from 'react-router-dom';
-import { useSurveyUnit } from '../utils/hooks/database';
-import { SwipeableTab, SwipeableTabs } from '../SwipeableTabs';
-import D from 'i18n';
-import { CommunicationsCard } from 'ui/SurveyUnit/Communication/CommunicationsCard';
+import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Stack from '@mui/material/Stack';
+import D from 'i18n';
+import { useEffect } from 'react';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+import { CommunicationsCard } from 'ui/SurveyUnit/Communication/CommunicationsCard';
+import { ContactsCard } from 'ui/SurveyUnit/Contact/ContactsCard';
+import { SwipeableTab, SwipeableTabs } from '../SwipeableTabs';
+import { Questionnaires } from '../ui/Questionnaire/Questionnaires';
 import { AddressCard } from '../ui/SurveyUnit/AddressCard';
+import { CommentCard } from '../ui/SurveyUnit/CommentCard';
 import { IdentificationCard } from '../ui/SurveyUnit/Identification/IdentificationCard';
 import { PersonsCard } from '../ui/SurveyUnit/PersonsCard';
-import { CommentCard } from '../ui/SurveyUnit/CommentCard';
-import Stack from '@mui/material/Stack';
-import CircularProgress from '@mui/material/CircularProgress';
-import NotInterestedIcon from '@mui/icons-material/NotInterested';
-import Button from '@mui/material/Button';
+import { SurveyUnitHeader } from '../ui/SurveyUnit/SurveyUnitHeader';
 import { Typography } from '../ui/Typography';
-import { Questionnaires } from '../ui/Questionnaire/Questionnaires';
-import { addNewState, getSuTodoState, persistSurveyUnit } from '../utils/functions';
-import { useEffect } from 'react';
 import { surveyUnitStateEnum } from '../utils/enum/SUStateEnum';
-import { ContactsCard } from 'ui/SurveyUnit/Contact/ContactsCard';
+import { addNewState, getLastState, persistSurveyUnit } from '../utils/functions';
+import { useSurveyUnit } from '../utils/hooks/database';
 
 export function SurveyUnitPage() {
   const { id } = useParams<{ id: string }>();
@@ -26,7 +26,7 @@ export function SurveyUnitPage() {
 
   useEffect(() => {
     if (surveyUnit !== undefined) {
-      const lastState = getSuTodoState(surveyUnit);
+      const lastState = getLastState(surveyUnit.states);
       if (lastState?.value === surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type) {
         const newStates = addNewState(surveyUnit, surveyUnitStateEnum.IN_PREPARATION.type);
         persistSurveyUnit({ ...surveyUnit, states: newStates });
