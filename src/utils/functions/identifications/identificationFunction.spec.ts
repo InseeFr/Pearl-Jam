@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, Assertion } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   checkAvailability,
   isIdentificationFinished,
@@ -15,6 +15,7 @@ import {
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit } from 'types/pearl';
 import { contactOutcomes } from '../contacts/ContactOutcome';
+import { commonTransmissionRules } from './questionsTree/commonTransmissionRules';
 
 const mockQuestions: IdentificationQuestions = {
   [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
@@ -49,7 +50,7 @@ const mockedSurveyUnit: SurveyUnit = {
   campaign: '',
   comments: [],
   sampleIdentifiers: {} as any,
-  states: [],
+  states: [{ type: 'WFT', date: Date.now() }],
   contactAttempts: [],
   campaignLabel: '',
   managementStartDate: 0,
@@ -59,7 +60,7 @@ const mockedSurveyUnit: SurveyUnit = {
   collectionEndDate: 0,
   endDate: 0,
   identificationConfiguration: IdentificationConfiguration.NOIDENT,
-  contactOutcomeConfiguration: '',
+  contactOutcomeConfiguration: 'F2F',
   contactAttemptConfiguration: 'F2F',
   useLetterCommunication: false,
   communicationRequests: [],
@@ -119,7 +120,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.REFUSAL.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: true,
   },
@@ -138,7 +138,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.REFUSAL.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: false,
   },
@@ -158,7 +157,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: true,
   },
@@ -177,7 +175,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'N/A', date: Date.now() }],
+      states: [{ type: 'NOA', date: Date.now() }],
     },
     output: false,
   },
@@ -192,14 +190,14 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         category: IdentificationQuestionOptionValues.PRIMARY,
         occupant: IdentificationQuestionOptionValues.IDENTIFIED,
       },
-      // INA + N/A -> invalid
+      // INA + NOA -> invalid
       contactOutcome: {
         date: Date.now(),
         totalNumberOfContactAttempts: 1,
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'N/A', date: Date.now() }],
+      states: [{ type: 'NOA', date: Date.now() }],
     },
     output: false,
   },
@@ -217,7 +215,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: true,
   },
@@ -236,7 +233,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.NOT_APPLICABLE.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: false,
   },
@@ -255,7 +251,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.DEFINITLY_UNAVAILABLE.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: true,
   },
@@ -272,7 +267,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: false,
   },
@@ -290,7 +284,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.NOT_APPLICABLE.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: false,
   },
@@ -308,14 +301,13 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: true,
   },
 ];
 
-mockedSurveyUnits.map(({ input, output }) => {
-  it(`ValidateTransmission should return ${output} when adding ${input}`, () => {
+mockedSurveyUnits.forEach(({ input, output }) => {
+  it(`ValidateTransmission should return ${output} when adding ${JSON.stringify(input)}`, () => {
     const result = validateTransmission(input);
     if (result !== output) {
       console.log('Failed input:', {
@@ -543,6 +535,7 @@ describe('identificationIsFinished', () => {
 describe('isInvalidIdentificationAndContactOutcome', () => {
   it('should return true if identification and contact outcome match the invalid rules', () => {
     const mockTransmissionRules: TransmissionRules = {
+      ...commonTransmissionRules,
       invalidIdentificationsAndContactOutcome: {
         identifications: [
           {
@@ -572,6 +565,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
 
   it('should return false if identification does not match the invalid rules', () => {
     const mockTransmissionRules: TransmissionRules = {
+      ...commonTransmissionRules,
       invalidIdentificationsAndContactOutcome: {
         identifications: [
           {
@@ -601,6 +595,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
 
   it('should return false if contact outcome does not match the invalid rules', () => {
     const mockTransmissionRules: TransmissionRules = {
+      ...commonTransmissionRules,
       invalidIdentificationsAndContactOutcome: {
         identifications: [
           {

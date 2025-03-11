@@ -5,6 +5,7 @@ import {
 import { IdentificationQuestions, TransmissionRules } from '../identificationFunctions';
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
+import { commonTransmissionRules } from './commonTransmissionRules';
 
 export const indtelIdentificationQuestionsTree: IdentificationQuestions = {
   root: IdentificationQuestionsId.INDIVIDUAL_STATUS,
@@ -38,7 +39,7 @@ export const indtelIdentificationQuestionsTree: IdentificationQuestions = {
 } as const;
 
 export const transmissionRulesByINDTEL: TransmissionRules = {
-  validIfIdentificationFinished: true,
+  ...commonTransmissionRules,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
@@ -48,13 +49,10 @@ export const transmissionRulesByINDTEL: TransmissionRules = {
     ],
     contactOutcome: 'NOA',
   },
-  invalidIfmissingContactOutcome: true,
-  invalidIfmissingContactAttempt: true,
-  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
 };
 
 export const transmissionRulesByINDTELNOR: TransmissionRules = {
-  validIfIdentificationFinished: true,
+  ...commonTransmissionRules,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
@@ -68,7 +66,4 @@ export const transmissionRulesByINDTELNOR: TransmissionRules = {
     ],
     contactOutcome: 'NOA',
   },
-  invalidIfmissingContactOutcome: true,
-  invalidIfmissingContactAttempt: true,
-  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
 };
