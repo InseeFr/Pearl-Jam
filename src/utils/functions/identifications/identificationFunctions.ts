@@ -24,7 +24,11 @@ import {
   transmissionRulesHOUSETELWSR,
 } from './questionsTree/HouseTelQuestionsTree';
 import { ContactOutcomeValue } from '../contacts/ContactOutcome';
-import { indTelIdentificationQuestionsTree } from './questionsTree/indF2FQuestionsTree';
+import {
+  indF2FIdentificationQuestionsTree,
+  transmissionRulesByINDF2F,
+  transmissionRulesByINDF2FNOR,
+} from './questionsTree/indF2FQuestionsTree';
 
 export type IdentificationQuestionOption = {
   value: string;
@@ -47,7 +51,6 @@ export type IdentificationQuestionsMap = Partial<
 export type IdentificationQuestions = {
   map: IdentificationQuestionsMap;
   root?: IdentificationQuestionId;
-  popUpContent?: (identification?: SurveyUnitIdentification) => string | undefined;
 };
 
 const noIdentQuestionTree: IdentificationQuestions = { map: {} };
@@ -65,7 +68,8 @@ export const getIdentificationQuestionsTree = (
     [IdentificationConfiguration.HOUSETELWSR]: houseTelIdentificationQuestionsTree,
     [IdentificationConfiguration.SRCVREINT]: SRCVIdentificationQuestionsTree(identification),
     [IdentificationConfiguration.INDTELNOR]: indtelIdentificationQuestionsTree,
-    [IdentificationConfiguration.INDF2F]: indTelIdentificationQuestionsTree(identification),
+    [IdentificationConfiguration.INDF2F]: indF2FIdentificationQuestionsTree(identification),
+    [IdentificationConfiguration.INDF2FNOR]: indF2FIdentificationQuestionsTree(identification),
   };
 
   return identificationMap[identificationConfiguration];
@@ -79,7 +83,8 @@ export const transmissionRules: Record<IdentificationConfiguration, Transmission
   [IdentificationConfiguration.HOUSETEL]: transmissionRulesHOUSETEL,
   [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHOUSETELWSR,
   [IdentificationConfiguration.INDTELNOR]: transmissionRulesByINDTELNOR,
-  [IdentificationConfiguration.INDF2F]: transmissionRulesNoIdentification,
+  [IdentificationConfiguration.INDF2F]: transmissionRulesByINDF2F,
+  [IdentificationConfiguration.INDF2FNOR]: transmissionRulesByINDF2FNOR,
   [IdentificationConfiguration.SRCVREINT]: transmissionRulesNoIdentification,
 };
 
@@ -97,6 +102,10 @@ export type TransmissionRules = {
     contactOutcome: ContactOutcomeValue;
   };
   expectedState: StateValues;
+  invalidIdentification?: {
+    id: IdentificationQuestionId;
+    value: IdentificationQuestionOptionValues;
+  };
 };
 
 export function checkAvailability(
@@ -193,6 +202,18 @@ function isValidStateForContactOutcome(su: SurveyUnit, suTransmissionRules: Tran
   return hasExpectedState;
 }
 
+export function isValidIdentification(
+  invalidIdentification?: {
+    id: IdentificationQuestionId;
+    value: IdentificationQuestionOptionValues;
+  },
+  suIdentification?: SurveyUnitIdentification
+) {
+  if (!suIdentification || !invalidIdentification) return true;
+
+  return suIdentification[invalidIdentification.id] !== invalidIdentification.value;
+}
+
 export function validateTransmission(su: SurveyUnit): boolean {
   const suTransmissionRules = transmissionRules[su.identificationConfiguration];
 
@@ -213,6 +234,9 @@ export function validateTransmission(su: SurveyUnit): boolean {
 
   // consistency between state and contactOutcome
   if (!isValidStateForContactOutcome(su, suTransmissionRules)) return false;
+
+  if (!isValidIdentification(suTransmissionRules.invalidIdentification, su.identification))
+    return false;
 
   return true;
 }

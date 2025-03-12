@@ -20,6 +20,7 @@ export enum IdentificationConfiguration {
   INDTEL = 'INDTEL',
   INDTELNOR = 'INDTELNOR',
   INDF2F = 'INDF2F',
+  INDF2FNOR = 'INDF2FNOR',
   SRCVREINT = 'SRCVREINT',
 }
 

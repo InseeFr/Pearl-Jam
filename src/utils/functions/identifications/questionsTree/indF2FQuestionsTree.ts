@@ -2,10 +2,15 @@ import {
   IdentificationQuestionsId,
   IdentificationQuestionOptionValues,
 } from 'utils/enum/identifications/IdentificationsQuestions';
-import { IdentificationQuestions, IdentificationQuestionValue } from '../identificationFunctions';
+import {
+  IdentificationQuestions,
+  IdentificationQuestionValue,
+  TransmissionRules,
+} from '../identificationFunctions';
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
 import { SurveyUnitIdentification } from 'types/pearl';
+import { commonTransmissionRules } from './commonTransmissionRules';
 
 const individualStatusDefault: IdentificationQuestionValue = {
   id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
@@ -70,7 +75,7 @@ const situationOtherAdress: IdentificationQuestionValue = {
   },
 };
 
-export const indTelIdentificationQuestionsTree = (
+export const indF2FIdentificationQuestionsTree = (
   identification?: SurveyUnitIdentification
 ): IdentificationQuestions => {
   if (identification?.individualStatus === IdentificationQuestionOptionValues.SAME_ADDRESS) {
@@ -101,4 +106,42 @@ export const indTelIdentificationQuestionsTree = (
       [IdentificationQuestionsId.SITUATION]: situationOtherAdress,
     },
   };
+};
+
+export const transmissionRulesByINDF2F: TransmissionRules = {
+  ...commonTransmissionRules,
+  invalidIdentification: {
+    id: IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS,
+    value: IdentificationQuestionOptionValues.NOTREAT,
+  },
+  invalidIdentificationsAndContactOutcome: {
+    identifications: [
+      {
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.ORDINARY,
+      },
+    ],
+    contactOutcome: 'NOA',
+  },
+};
+
+export const transmissionRulesByINDF2FNOR: TransmissionRules = {
+  ...commonTransmissionRules,
+  invalidIdentification: {
+    id: IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS,
+    value: IdentificationQuestionOptionValues.NOTREAT,
+  },
+  invalidIdentificationsAndContactOutcome: {
+    identifications: [
+      {
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.ORDINARY,
+      },
+      {
+        questionId: IdentificationQuestionsId.SITUATION,
+        value: IdentificationQuestionOptionValues.NOORDINARY,
+      },
+    ],
+    contactOutcome: 'NOA',
+  },
 };

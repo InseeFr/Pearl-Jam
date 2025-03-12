@@ -7,6 +7,7 @@ import {
   transmissionRules,
   TransmissionRules,
   validateTransmission,
+  isValidIdentification,
 } from './identificationFunctions';
 import {
   IdentificationConfiguration,
@@ -628,3 +629,57 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
     expect(result).toBe(false);
   });
 });
+
+[
+  {
+    input: {
+      rule: {
+        id: IdentificationQuestionsId.ACCESS,
+        value: IdentificationQuestionOptionValues.ACC,
+      },
+
+      identification: {
+        [IdentificationQuestionsId.ACCESS]: IdentificationQuestionOptionValues.ACC,
+      },
+    },
+    output: false,
+  },
+  {
+    input: {
+      rule: {
+        id: IdentificationQuestionsId.ACCESS,
+        value: IdentificationQuestionOptionValues.AT_LEAST_ONE,
+      },
+
+      identification: {
+        [IdentificationQuestionsId.ACCESS]: IdentificationQuestionOptionValues.ACC,
+      },
+    },
+    output: true,
+  },
+  {
+    input: {
+      rule: {
+        id: IdentificationQuestionsId.ACCESS,
+        value: IdentificationQuestionOptionValues.ACC,
+      },
+
+      identification: undefined,
+    },
+    output: true,
+  },
+  {
+    input: {
+      rule: undefined,
+      identification: {
+        [IdentificationQuestionsId.ACCESS]: IdentificationQuestionOptionValues.ACC,
+      },
+    },
+    output: true,
+  },
+].map(({ input, output }) =>
+  it(`isValidIdentification should return ${output} when comparing ${input.rule?.value} with ${JSON.stringify(input.identification)}`, () => {
+    const result = isValidIdentification(input.rule, input.identification);
+    expect(result).toBe(output);
+  })
+);
