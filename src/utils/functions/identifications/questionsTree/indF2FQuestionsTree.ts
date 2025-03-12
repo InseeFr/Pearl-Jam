@@ -76,23 +76,29 @@ export const indTelIdentificationQuestionsTree = (
   if (identification?.individualStatus === IdentificationQuestionOptionValues.SAME_ADDRESS) {
     return {
       root: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatusSameAdress,
-      [IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS]: interviewerCanProcessDisabled,
-      [IdentificationQuestionsId.SITUATION]: situationSameAdress,
+      map: {
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatusSameAdress,
+        [IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS]: interviewerCanProcessDisabled,
+        [IdentificationQuestionsId.SITUATION]: situationSameAdress,
+      },
     };
   }
   if (identification?.individualStatus === IdentificationQuestionOptionValues.OTHER_ADDRESS) {
     return {
       root: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatusOtherAdress,
-      [IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS]: interviewerCanProcess,
-      [IdentificationQuestionsId.SITUATION]: situationOtherAdress,
+      map: {
+        [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatusOtherAdress,
+        [IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS]: interviewerCanProcess,
+        [IdentificationQuestionsId.SITUATION]: situationOtherAdress,
+      },
     };
   }
   return {
     root: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-    [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatusDefault,
-    [IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS]: interviewerCanProcess,
-    [IdentificationQuestionsId.SITUATION]: situationOtherAdress,
+    map: {
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatusDefault,
+      [IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS]: interviewerCanProcess,
+      [IdentificationQuestionsId.SITUATION]: situationOtherAdress,
+    },
   };
 };

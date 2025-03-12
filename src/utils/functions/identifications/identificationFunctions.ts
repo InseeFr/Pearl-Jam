@@ -1,6 +1,7 @@
 import {
   IdentificationConfiguration,
   IdentificationQuestionOptionValues,
+  IdentificationQuestionsId as IdentificationQuestionId,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import {
@@ -16,13 +17,13 @@ import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { getLastState } from '../surveyUnitFunctions';
 import { StateValues } from 'utils/enum/SUStateEnum';
 import { transmissionRulesNoIdentification } from './questionsTree/noIdentificationTransmissionRules';
-import { SRCVIdentificationQuestionsTreeFunction as SRCVIdentificationQuestionsTree } from './questionsTree/SRCVQuestionsTree';
-import { ContactOutcomeValue } from '../contacts/ContactOutcome';
+import { SRCVIdentificationQuestionsTree } from './questionsTree/SRCVQuestionsTree';
 import {
   houseTelIdentificationQuestionsTree,
   transmissionRulesHOUSETEL,
   transmissionRulesHOUSETELWSR,
 } from './questionsTree/HouseTelQuestionsTree';
+import { ContactOutcomeValue } from '../contacts/ContactOutcome';
 import { indTelIdentificationQuestionsTree } from './questionsTree/indF2FQuestionsTree';
 
 export type IdentificationQuestionOption = {
@@ -31,28 +32,34 @@ export type IdentificationQuestionOption = {
   concluding: boolean;
 };
 export type IdentificationQuestionValue = {
-  id: IdentificationQuestionsId;
-  nextId?: IdentificationQuestionsId;
+  id: IdentificationQuestionId;
+  nextId?: IdentificationQuestionId;
   text: string;
   options: IdentificationQuestionOption[];
-  dependsOn?: { questionId: IdentificationQuestionsId; values: string[] };
+  dependsOn?: { questionId: IdentificationQuestionId; values: string[] };
   disabled?: boolean;
 };
 
-export type IdentificationQuestions = Partial<
-  Record<IdentificationQuestionsId, IdentificationQuestionValue>
-> & {
-  root?: IdentificationQuestionsId;
+export type IdentificationQuestionsMap = Partial<
+  Record<IdentificationQuestionId, IdentificationQuestionValue>
+>;
+
+export type IdentificationQuestions = {
+  map: IdentificationQuestionsMap;
+  root?: IdentificationQuestionId;
+  popUpContent?: (identification?: SurveyUnitIdentification) => string | undefined;
 };
+
+const noIdentQuestionTree: IdentificationQuestions = { map: {} };
 
 export const getIdentificationQuestionsTree = (
   identificationConfiguration: IdentificationConfiguration,
   identification?: SurveyUnitIdentification
-): IdentificationQuestions => {
-  const identificationMap: Record<IdentificationConfiguration, IdentificationQuestions> = {
+) => {
+  const identificationMap = {
     [IdentificationConfiguration.INDTEL]: indtelIdentificationQuestionsTree,
     [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
-    [IdentificationConfiguration.NOIDENT]: {},
+    [IdentificationConfiguration.NOIDENT]: noIdentQuestionTree,
     [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
     [IdentificationConfiguration.HOUSETEL]: houseTelIdentificationQuestionsTree,
     [IdentificationConfiguration.HOUSETELWSR]: houseTelIdentificationQuestionsTree,
@@ -76,9 +83,7 @@ export const transmissionRules: Record<IdentificationConfiguration, Transmission
   [IdentificationConfiguration.SRCVREINT]: transmissionRulesNoIdentification,
 };
 
-export type ResponseState = Partial<
-  Record<IdentificationQuestionsId, IdentificationQuestionOption>
->;
+export type ResponseState = Partial<Record<IdentificationQuestionId, IdentificationQuestionOption>>;
 
 export type TransmissionRules = {
   shouldValidIfIdentificationFinished: boolean;
@@ -95,21 +100,21 @@ export type TransmissionRules = {
 };
 
 export function checkAvailability(
-  questions: IdentificationQuestions,
+  identificationQuestionsMap?: IdentificationQuestionsMap,
   question?: IdentificationQuestionValue,
   responses?: ResponseState
 ): boolean {
+  if (!identificationQuestionsMap) return false;
   if (question?.disabled) return false;
-
   if (!responses) return true;
   const dependency = question?.dependsOn;
   if (!dependency) return true;
   if (responses[dependency.questionId]?.concluding) return false;
 
   // Recursively check if the parent question is itself available
-  const parentResponseQuestion = questions[dependency.questionId];
+  const parentResponseQuestion = identificationQuestionsMap[dependency.questionId];
   if (parentResponseQuestion)
-    return checkAvailability(questions, parentResponseQuestion, responses);
+    return checkAvailability(identificationQuestionsMap, parentResponseQuestion, responses);
 
   // If the parent question has a response, check if its value satisfies the dependency condition
   const parentResponse = responses[dependency.questionId];
@@ -125,17 +130,22 @@ export function isIdentificationFinished(
   if (!identificationConfiguration) return true;
   if (!identification) return false;
 
-  const questions = getIdentificationQuestionsTree(identificationConfiguration, identification);
-  const root = questions.root;
+  const questionsMap = getIdentificationQuestionsTree(
+    identificationConfiguration,
+    identification
+  ) as IdentificationQuestions;
+  if (!questionsMap) return true;
 
-  if (!root) return true;
+  const root = questionsMap.root;
+  const questions = questionsMap.map;
+
+  if (!root || !questions) return true;
   let question = questions[root];
 
   while (question) {
     const response = identification[question.id];
     if (response) {
       const isConcluding = question.options.find(o => o.value === response && o.concluding);
-
       if (isConcluding) return true;
     }
 

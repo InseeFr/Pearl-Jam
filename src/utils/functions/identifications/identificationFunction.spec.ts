@@ -18,24 +18,26 @@ import { contactOutcomes } from '../contacts/ContactOutcome';
 import { commonTransmissionRules } from './questionsTree/commonTransmissionRules';
 
 const mockQuestions: IdentificationQuestions = {
-  [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
-    id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-    text: 'Person Question',
-    options: [
-      { value: 'YES', label: 'Yes', concluding: false },
-      { value: 'NO', label: 'No', concluding: true },
-    ],
-  },
-  [IdentificationQuestionsId.SITUATION]: {
-    id: IdentificationQuestionsId.SITUATION,
-    text: 'Situation Question',
-    options: [
-      { value: 'ACTIVE', label: 'Active', concluding: false },
-      { value: 'INACTIVE', label: 'Inactive', concluding: true },
-    ],
-    dependsOn: {
-      questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-      values: ['YES'],
+  map: {
+    [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
+      id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+      text: 'Person Question',
+      options: [
+        { value: 'YES', label: 'Yes', concluding: false },
+        { value: 'NO', label: 'No', concluding: true },
+      ],
+    },
+    [IdentificationQuestionsId.SITUATION]: {
+      id: IdentificationQuestionsId.SITUATION,
+      text: 'Situation Question',
+      options: [
+        { value: 'ACTIVE', label: 'Active', concluding: false },
+        { value: 'INACTIVE', label: 'Inactive', concluding: true },
+      ],
+      dependsOn: {
+        questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+        values: ['YES'],
+      },
     },
   },
 };
@@ -337,16 +339,16 @@ mockedSurveyUnits.forEach(({ input, output }) => {
 describe('checkAvailability', () => {
   it('should return true if there are no responses', () => {
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.INDIVIDUAL_STATUS]
+      mockQuestions.map,
+      mockQuestions.map[IdentificationQuestionsId.INDIVIDUAL_STATUS]
     );
     expect(result).toBe(true);
   });
 
   it('should return true if the question has no dependencies', () => {
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.INDIVIDUAL_STATUS],
+      mockQuestions.map,
+      mockQuestions.map[IdentificationQuestionsId.INDIVIDUAL_STATUS],
       {}
     );
     expect(result).toBe(true);
@@ -361,8 +363,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.SITUATION],
+      mockQuestions.map,
+      mockQuestions.map[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(true);
@@ -377,8 +379,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.SITUATION],
+      mockQuestions.map,
+      mockQuestions.map[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(false);
@@ -393,8 +395,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.SITUATION],
+      mockQuestions.map,
+      mockQuestions.map[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(false);
@@ -409,8 +411,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.SITUATION],
+      mockQuestions.map,
+      mockQuestions.map[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(true);
@@ -418,17 +420,19 @@ describe('checkAvailability', () => {
 
   it('should handle cases with multiple levels of dependencies', () => {
     const extendedQuestions: IdentificationQuestions = {
-      ...mockQuestions,
-      [IdentificationQuestionsId.CATEGORY]: {
-        id: IdentificationQuestionsId.CATEGORY,
-        text: 'Category Question',
-        options: [
-          { value: 'A', label: 'Category A', concluding: false },
-          { value: 'B', label: 'Category B', concluding: true },
-        ],
-        dependsOn: {
-          questionId: IdentificationQuestionsId.SITUATION,
-          values: ['ACTIVE'],
+      map: {
+        ...mockQuestions.map,
+        [IdentificationQuestionsId.CATEGORY]: {
+          id: IdentificationQuestionsId.CATEGORY,
+          text: 'Category Question',
+          options: [
+            { value: 'A', label: 'Category A', concluding: false },
+            { value: 'B', label: 'Category B', concluding: true },
+          ],
+          dependsOn: {
+            questionId: IdentificationQuestionsId.SITUATION,
+            values: ['ACTIVE'],
+          },
         },
       },
     };
@@ -447,8 +451,8 @@ describe('checkAvailability', () => {
     };
 
     const result = checkAvailability(
-      extendedQuestions,
-      extendedQuestions[IdentificationQuestionsId.CATEGORY],
+      extendedQuestions.map,
+      extendedQuestions.map[IdentificationQuestionsId.CATEGORY],
       responses
     );
     expect(result).toBe(true);
@@ -456,17 +460,19 @@ describe('checkAvailability', () => {
 
   it('should return false if a parent question dependency chain fails', () => {
     const extendedQuestions: IdentificationQuestions = {
-      ...mockQuestions,
-      [IdentificationQuestionsId.CATEGORY]: {
-        id: IdentificationQuestionsId.CATEGORY,
-        text: 'Category Question',
-        options: [
-          { value: 'A', label: 'Category A', concluding: false },
-          { value: 'B', label: 'Category B', concluding: true },
-        ],
-        dependsOn: {
-          questionId: IdentificationQuestionsId.SITUATION,
-          values: ['ACTIVE'],
+      map: {
+        ...mockQuestions.map,
+        [IdentificationQuestionsId.CATEGORY]: {
+          id: IdentificationQuestionsId.CATEGORY,
+          text: 'Category Question',
+          options: [
+            { value: 'A', label: 'Category A', concluding: false },
+            { value: 'B', label: 'Category B', concluding: true },
+          ],
+          dependsOn: {
+            questionId: IdentificationQuestionsId.SITUATION,
+            values: ['ACTIVE'],
+          },
         },
       },
     };
@@ -485,8 +491,8 @@ describe('checkAvailability', () => {
     };
 
     const result = checkAvailability(
-      extendedQuestions,
-      extendedQuestions[IdentificationQuestionsId.CATEGORY],
+      extendedQuestions.map,
+      extendedQuestions.map[IdentificationQuestionsId.CATEGORY],
       responses
     );
     expect(result).toBe(false);
