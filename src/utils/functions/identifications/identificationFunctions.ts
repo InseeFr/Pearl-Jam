@@ -12,17 +12,18 @@ import {
   houseF2FIdentificationQuestionsTree,
   transmissionRulesHouseF2F,
 } from './questionsTree/houseF2FQuestionsTree';
+import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
+import { getLastState } from '../surveyUnitFunctions';
+import { StateValues } from 'utils/enum/SUStateEnum';
+import { transmissionRulesNoIdentification } from './questionsTree/noIdentificationTransmissionRules';
+import { SRCVIdentificationQuestionsTreeFunction as SRCVIdentificationQuestionsTree } from './questionsTree/SRCVQuestionsTree';
+import { ContactOutcomeValue } from '../contacts/ContactOutcome';
 import {
   houseTelIdentificationQuestionsTree,
   transmissionRulesHOUSETEL,
   transmissionRulesHOUSETELWSR,
 } from './questionsTree/HouseTelQuestionsTree';
-import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
-import { getLastState } from '../surveyUnitFunctions';
-import { StateValues } from 'utils/enum/SUStateEnum';
-import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
-import { transmissionRulesNoIdentification } from './questionsTree/noIdentificationTransmissionRules';
-import { SRCVIdentificationQuestionsTreeFunction } from './questionsTree/SRCVQuestionsTree';
+import { indTelIdentificationQuestionsTree } from './questionsTree/indF2FQuestionsTree';
 
 export type IdentificationQuestionOption = {
   value: string;
@@ -55,10 +56,9 @@ export const getIdentificationQuestionsTree = (
     [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
     [IdentificationConfiguration.HOUSETEL]: houseTelIdentificationQuestionsTree,
     [IdentificationConfiguration.HOUSETELWSR]: houseTelIdentificationQuestionsTree,
-    [IdentificationConfiguration.SRCVREINT]:
-      SRCVIdentificationQuestionsTreeFunction(identification),
+    [IdentificationConfiguration.SRCVREINT]: SRCVIdentificationQuestionsTree(identification),
     [IdentificationConfiguration.INDTELNOR]: indtelIdentificationQuestionsTree,
-    [IdentificationConfiguration.INDF2F]: {},
+    [IdentificationConfiguration.INDF2F]: indTelIdentificationQuestionsTree(identification),
   };
 
   return identificationMap[identificationConfiguration];

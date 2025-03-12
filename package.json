@@ -33,7 +33,7 @@
     "test": "vitest",
     "prepare": "husky",
     "typecheck": "tsc --noEmit",
-    "pre-push": "stylelint \"src/**/*.css\"  && yarn test  --watch=false",
+    "pre-push": "stylelint \"src/**/*.css\"  && yarn test --watch=false",
     "postinstall": "vite-envs update-types"
   },
   "eslintConfig": {
