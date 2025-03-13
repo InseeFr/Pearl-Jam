@@ -6,6 +6,10 @@ type ImportMetaEnv = {
   VITE_QUEEN_URL: string;
   VITE_PEARL_API_URL: string;
   VITE_PEARL_AUTHENTICATION_MODE: string;
+  VITE_KEYCLOAK_CLIENTID: string;
+  VITE_KEYCLOAK_REALM: string;
+  VITE_KEYCLOAK_URL: string;
+  VITE_KEYCLOAK_ROLES_ALLOW_LIST: string;
   BASE_URL: string;
   MODE: string;
   DEV: boolean;
