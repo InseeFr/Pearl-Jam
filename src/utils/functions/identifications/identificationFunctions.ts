@@ -139,10 +139,7 @@ export function isIdentificationFinished(
   if (!identificationConfiguration) return true;
   if (!identification) return false;
 
-  const questionsMap = getIdentificationQuestionsTree(
-    identificationConfiguration,
-    identification
-  ) as IdentificationQuestions;
+  const questionsMap = getIdentificationQuestionsTree(identificationConfiguration, identification);
   if (!questionsMap) return true;
 
   const root = questionsMap.root;
