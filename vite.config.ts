@@ -86,8 +86,5 @@ export default defineConfig({
         background_color: '#ffffff',
       },
     }),
-    viteEnvs({
-      declarationFile: '.env',
-    }),
   ],
 });

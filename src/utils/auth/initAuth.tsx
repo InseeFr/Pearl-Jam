@@ -6,6 +6,8 @@ export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const init = useRef(false);
 
+  console.log('useAuth', init.current);
+
   const interviewerRoles = ['pearl-interviewer', 'uma_authorization', 'Guest'];
 
   const accessAuthorized = () => {
@@ -35,10 +37,10 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    if (init.current) {
+    /*if (init.current) {
       console.log('alreadyInit');
       return;
-    }
+    }*/
 
     const PEARL_AUTHENTICATION_MODE = import.meta.env.VITE_PEARL_AUTHENTICATION_MODE;
     switch (PEARL_AUTHENTICATION_MODE) {
@@ -53,13 +55,18 @@ export const useAuth = () => {
           checkLoginIframe: false,
         })
           .then(auth => {
+            console.log(auth);
             if (auth) {
               const interviewerInfos = getTokenInfo();
               const { roles } = interviewerInfos;
+              console.log(roles);
               if (isAuthorized(roles)) {
+                console.log('authorized');
                 window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(interviewerInfos));
                 accessAuthorized();
               } else {
+                console.log('denied');
+
                 accessDenied();
               }
               // offline mode
