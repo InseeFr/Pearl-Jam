@@ -90,7 +90,7 @@ export const SRCVIdentificationQuestionsTree = (
   if (identification?.numberOfRespondents === optionsMap.ONE.value) {
     return {
       root: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
-      map: {
+      values: {
         [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: numberOfRespondents,
         [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
           ...individualStatus,
@@ -130,7 +130,7 @@ export const SRCVIdentificationQuestionsTree = (
   ) {
     return {
       root: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
-      map: {
+      values: {
         [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: numberOfRespondents,
         [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatus,
         [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
@@ -156,7 +156,7 @@ export const SRCVIdentificationQuestionsTree = (
   ) {
     return {
       root: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
-      map: {
+      values: {
         [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: numberOfRespondents,
         [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatus,
         [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: {
@@ -178,7 +178,7 @@ export const SRCVIdentificationQuestionsTree = (
   // return default tree
   return {
     root: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
-    map: {
+    values: {
       [IdentificationQuestionsId.NUMBER_OF_RESPONDENTS]: numberOfRespondents,
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatus,
       [IdentificationQuestionsId.HOUSEHOLD_COMPOSITION]: houseHoldComposition,

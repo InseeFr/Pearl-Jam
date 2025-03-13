@@ -9,7 +9,7 @@ import { commonTransmissionRules } from './commonTransmissionRules';
 
 export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
   root: IdentificationQuestionsId.IDENTIFICATION,
-  map: {
+  values: {
     [IdentificationQuestionsId.IDENTIFICATION]: {
       id: IdentificationQuestionsId.IDENTIFICATION,
       nextId: IdentificationQuestionsId.ACCESS,

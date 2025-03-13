@@ -49,11 +49,11 @@ export type IdentificationQuestionsMap = Partial<
 >;
 
 export type IdentificationQuestions = {
-  map: IdentificationQuestionsMap;
+  values: IdentificationQuestionsMap;
   root?: IdentificationQuestionId;
 };
 
-const noIdentQuestionTree: IdentificationQuestions = { map: {} };
+const noIdentQuestionTree: IdentificationQuestions = { values: {} };
 
 export const getIdentificationQuestionsTree = (
   identificationConfiguration: IdentificationConfiguration,
@@ -143,7 +143,7 @@ export function isIdentificationFinished(
   if (!questionsMap) return true;
 
   const root = questionsMap.root;
-  const questions = questionsMap.map;
+  const questions = questionsMap.values;
 
   if (!root || !questions) return true;
   let question = questions[root];

@@ -81,7 +81,7 @@ export const indF2FIdentificationQuestionsTree = (
   if (identification?.individualStatus === IdentificationQuestionOptionValues.SAME_ADDRESS) {
     return {
       root: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-      map: {
+      values: {
         [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatusSameAdress,
         [IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS]: interviewerCanProcessDisabled,
         [IdentificationQuestionsId.SITUATION]: situationSameAdress,
@@ -91,7 +91,7 @@ export const indF2FIdentificationQuestionsTree = (
   if (identification?.individualStatus === IdentificationQuestionOptionValues.OTHER_ADDRESS) {
     return {
       root: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-      map: {
+      values: {
         [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatusOtherAdress,
         [IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS]: interviewerCanProcess,
         [IdentificationQuestionsId.SITUATION]: situationOtherAdress,
@@ -100,7 +100,7 @@ export const indF2FIdentificationQuestionsTree = (
   }
   return {
     root: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-    map: {
+    values: {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: individualStatusDefault,
       [IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS]: interviewerCanProcess,
       [IdentificationQuestionsId.SITUATION]: situationOtherAdress,

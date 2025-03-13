@@ -9,7 +9,7 @@ import { commonTransmissionRules } from './commonTransmissionRules';
 
 export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
   root: IdentificationQuestionsId.SITUATION,
-  map: {
+  values: {
     [IdentificationQuestionsId.SITUATION]: {
       id: IdentificationQuestionsId.SITUATION,
       nextId: IdentificationQuestionsId.CATEGORY,

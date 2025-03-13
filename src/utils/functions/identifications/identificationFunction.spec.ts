@@ -19,7 +19,7 @@ import { contactOutcomes } from '../contacts/ContactOutcome';
 import { commonTransmissionRules } from './questionsTree/commonTransmissionRules';
 
 const mockQuestions: IdentificationQuestions = {
-  map: {
+  values: {
     [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
       id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
       text: 'Person Question',
@@ -340,16 +340,16 @@ mockedSurveyUnits.forEach(({ input, output }) => {
 describe('checkAvailability', () => {
   it('should return true if there are no responses', () => {
     const result = checkAvailability(
-      mockQuestions.map,
-      mockQuestions.map[IdentificationQuestionsId.INDIVIDUAL_STATUS]
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.INDIVIDUAL_STATUS]
     );
     expect(result).toBe(true);
   });
 
   it('should return true if the question has no dependencies', () => {
     const result = checkAvailability(
-      mockQuestions.map,
-      mockQuestions.map[IdentificationQuestionsId.INDIVIDUAL_STATUS],
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.INDIVIDUAL_STATUS],
       {}
     );
     expect(result).toBe(true);
@@ -364,8 +364,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions.map,
-      mockQuestions.map[IdentificationQuestionsId.SITUATION],
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(true);
@@ -380,8 +380,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions.map,
-      mockQuestions.map[IdentificationQuestionsId.SITUATION],
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(false);
@@ -396,8 +396,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions.map,
-      mockQuestions.map[IdentificationQuestionsId.SITUATION],
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(false);
@@ -412,8 +412,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions.map,
-      mockQuestions.map[IdentificationQuestionsId.SITUATION],
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(true);
@@ -421,8 +421,8 @@ describe('checkAvailability', () => {
 
   it('should handle cases with multiple levels of dependencies', () => {
     const extendedQuestions: IdentificationQuestions = {
-      map: {
-        ...mockQuestions.map,
+      values: {
+        ...mockQuestions.values,
         [IdentificationQuestionsId.CATEGORY]: {
           id: IdentificationQuestionsId.CATEGORY,
           text: 'Category Question',
@@ -452,8 +452,8 @@ describe('checkAvailability', () => {
     };
 
     const result = checkAvailability(
-      extendedQuestions.map,
-      extendedQuestions.map[IdentificationQuestionsId.CATEGORY],
+      extendedQuestions.values,
+      extendedQuestions.values[IdentificationQuestionsId.CATEGORY],
       responses
     );
     expect(result).toBe(true);
@@ -461,8 +461,8 @@ describe('checkAvailability', () => {
 
   it('should return false if a parent question dependency chain fails', () => {
     const extendedQuestions: IdentificationQuestions = {
-      map: {
-        ...mockQuestions.map,
+      values: {
+        ...mockQuestions.values,
         [IdentificationQuestionsId.CATEGORY]: {
           id: IdentificationQuestionsId.CATEGORY,
           text: 'Category Question',
@@ -492,8 +492,8 @@ describe('checkAvailability', () => {
     };
 
     const result = checkAvailability(
-      extendedQuestions.map,
-      extendedQuestions.map[IdentificationQuestionsId.CATEGORY],
+      extendedQuestions.values,
+      extendedQuestions.values[IdentificationQuestionsId.CATEGORY],
       responses
     );
     expect(result).toBe(false);

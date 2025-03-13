@@ -13,7 +13,7 @@ import {
 } from 'utils/functions/identifications/identificationFunctions';
 
 export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
-  const [questions, setQuestions] = useState<IdentificationQuestions>({ map: {} });
+  const [questions, setQuestions] = useState<IdentificationQuestions>({ values: {} });
   const [responses, setResponses] = useState<ResponseState>({});
   const [availableQuestions, setAvailableQuestions] = useState<
     Partial<Record<IdentificationQuestionsId, boolean>>
@@ -26,9 +26,9 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     questions: IdentificationQuestions,
     dialogId?: IdentificationQuestionsId
   ) => {
-    if (!dialogId || !questions.map[dialogId]?.disabled) return dialogId;
+    if (!dialogId || !questions.values[dialogId]?.disabled) return dialogId;
 
-    const nextId = questions.map[dialogId].nextId;
+    const nextId = questions.values[dialogId].nextId;
     return setNextDialogId(questions, nextId);
   };
 
@@ -43,18 +43,18 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     );
 
     const newResponses: ResponseState = Object.fromEntries(
-      Object.keys(newQuestions.map).map(id => [
+      Object.keys(newQuestions.values).map(id => [
         id,
-        newQuestions.map[id as IdentificationQuestionsId]?.options.find(
+        newQuestions.values[id as IdentificationQuestionsId]?.options.find(
           o => o.value === surveyUnit?.identification?.[id as IdentificationQuestionsId]
         ),
       ])
     );
 
     const newAvailability: Partial<Record<IdentificationQuestionsId, boolean>> = Object.fromEntries(
-      Object.entries(newQuestions.map).map(([questionId, question]) => [
+      Object.entries(newQuestions.values).map(([questionId, question]) => [
         questionId,
-        checkAvailability(newQuestions.map, question, newResponses),
+        checkAvailability(newQuestions.values, question, newResponses),
       ])
     );
 
@@ -75,8 +75,8 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     };
     let identification: SurveyUnitIdentification = surveyUnit.identification ?? {};
     let setResponsesAsUndefined = false;
-    const availableQuestionIds = Object.entries(questions.map).map(([questionId, question]) => {
-      const available = checkAvailability(questions?.map, question, updatedResponses);
+    const availableQuestionIds = Object.entries(questions.values).map(([questionId, question]) => {
+      const available = checkAvailability(questions?.values, question, updatedResponses);
 
       if (!available || setResponsesAsUndefined) updatedResponses[question.id] = undefined;
       else if (questionId === selectedQuestionId) {
@@ -91,8 +91,11 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     setResponses(() => {
       const updatedAvailability = Object.fromEntries(availableQuestionIds);
 
-      if (questions?.map[selectedQuestionId] && !updatedResponses[selectedQuestionId]?.concluding) {
-        setSelectedDialogId(questions.map[selectedQuestionId].nextId);
+      if (
+        questions?.values[selectedQuestionId] &&
+        !updatedResponses[selectedQuestionId]?.concluding
+      ) {
+        setSelectedDialogId(questions.values[selectedQuestionId].nextId);
       }
 
       // Prevent rerender
