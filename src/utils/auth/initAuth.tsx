@@ -8,7 +8,7 @@ export const useAuth = () => {
 
   console.log('useAuth', init.current);
 
-  const interviewerRoles = ['pearl-interviewer', 'uma_authorization', 'Guest'];
+  const interviewerRoles = import.meta.env.VITE_KEYCLOAK_ROLES_ALLOW_LIST.split(',');
 
   const accessAuthorized = () => {
     setAuthenticated(true);

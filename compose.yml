@@ -75,6 +75,19 @@ services:
     ports:
       - ${QUESTIONNAIRE_API_PORT}:8080
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    environment:
+      KEYCLOAK_ADMIN: administrator
+      KEYCLOAK_ADMIN_PASSWORD: administrator
+      KC_HEALTH_ENABLED: 'true'
+      KC_LOG_LEVEL: info
+    command: ['start-dev', '--import-realm']
+    ports:
+      - '${KEYCLOAK_PORT}:8080'
+    volumes:
+      - ./keycloak/realms:/opt/keycloak/data/import
+
   pearl-api:
     image: inseefr/pearl-jam-back-office:snapshot-feat-dockerize-tests
     depends_on:
@@ -97,7 +110,8 @@ services:
       - APPLICATION_ROLES_NATIONAL_USER=${INTERNAL_USER_ROLE}
       - APPLICATION_ROLES_ADMIN=${ADMIN_ROLE}
       - APPLICATION_ROLES_WEBCLIENT=${WEBCLIENT_ROLE}
-      - APPLICATION_CORSORIGINS='*'
+      # - APPLICATION_CORSORIGINS='*'
+      - application.corsOrigins=http://localhost:3000
       - FEATURE_OIDC_ENABLED=true
       - FEATURE_OIDC_REALM=${AUTH_REALM}
       - FEATURE_OIDC_CLIENTID=${AUTH_CLIENT_ID}
@@ -114,15 +128,38 @@ services:
     ports:
       - ${PEARL_API_PORT}:8080
 
-  keycloak:
-    image: quay.io/keycloak/keycloak:24.0
-    environment:
-      KEYCLOAK_ADMIN: administrator
-      KEYCLOAK_ADMIN_PASSWORD: administrator
-      KC_HEALTH_ENABLED: 'true'
-      KC_LOG_LEVEL: info
-    command: ['start-dev', '--import-realm']
+  playwright:
+    build:
+      dockerfile: ./playwright-dev.Dockerfile
+    depends_on:
+      - pearl-api
+      - questionnaire-api
+      - pearl-db
+      - questionnaire-db
+      - keycloak
+    container_name: playwright
+    hostname: front
+    volumes: *react-volumes
+    tty: true
+    stdin_open: true # without this node doesn't start
+    working_dir: /opt/app
+    ipc: host
     ports:
-      - '${KEYCLOAK_PORT}:8080'
-    volumes:
-      - ./keycloak/realms:/opt/keycloak/data/import
+      - ${FRONTEND_PORT}:${FRONTEND_PORT}
+      - ${PLAYWRIGHT_PORT}:${PLAYWRIGHT_PORT}
+    environment:
+      WATCHPACK_POLLING: true
+      FAST_REFRESH: true
+      DISPLAY: unix:0
+      XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
+    command:
+      - /bin/bash
+      - -c
+      - |
+        echo "Podman !!!" && sleep 1
+        mkdir -p /mnt/c/Windows/System32/WindowsPowerShell/v1.0 && sleep 1
+        touch /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe && sleep 1
+        chmod '755' /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
+        yarn install
+        npx playwright codegen http://localhost:${FRONTEND_PORT}/ --ui-host=0.0.0.0
+        sleep infinity
