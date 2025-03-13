@@ -70,4 +70,12 @@ export const optionsMap = {
     label: `${D.atLeastOnePresentInPreviousHome}`,
     value: IdentificationQuestionOptionValues.AT_LEAST_ONE,
   },
+  TREAT: {
+    label: `${D.treat}`,
+    value: IdentificationQuestionOptionValues.TREAT,
+  },
+  NOTREAT: {
+    label: `${D.noTreat}`,
+    value: IdentificationQuestionOptionValues.NOTREAT,
+  },
 };

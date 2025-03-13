@@ -35,11 +35,11 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
             </Typography>
           </Row>
           <Stack gap={1}>
-            {(Object.keys(questions) as IdentificationQuestionsId[]).map(questionId => (
+            {(Object.keys(questions.values) as IdentificationQuestionsId[]).map(questionId => (
               <ButtonLine
                 key={questionId}
                 onClick={() => setSelectedDialogId(questionId)}
-                label={responses[questionId]?.label ?? questions[questionId]?.text}
+                label={responses[questionId]?.label ?? questions?.values[questionId]?.text}
                 checked={!!(responses[questionId] && availableQuestions[questionId])}
                 disabled={!availableQuestions[questionId]}
               ></ButtonLine>
@@ -51,7 +51,7 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
         <IdentificationDialog
           questionId={selectedDialogId}
           key={`dialog-${selectedDialogId}`}
-          question={questions[selectedDialogId]}
+          question={questions.values[selectedDialogId]}
           defaultOption={responses[selectedDialogId] ?? undefined}
           onSubmit={handleResponse}
           onClose={() => {

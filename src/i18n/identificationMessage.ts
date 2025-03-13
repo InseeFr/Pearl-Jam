@@ -29,6 +29,16 @@ const identificationMessage = {
     en: 'No',
     sq: 'Jo',
   },
+  noTreat: {
+    fr: 'Non',
+    en: 'No',
+    sq: 'Jo',
+  },
+  treat: {
+    fr: 'Oui',
+    en: 'Yes',
+    sq: 'Po',
+  },
   deceased: {
     fr: 'Décédé',
     en: 'Deceased',
@@ -104,6 +114,11 @@ const identificationMessage = {
     fr: 'Individu Retrouvé',
     en: 'Found Individual',
     sq: 'Gjetur Individ',
+  },
+  interviewerProcess: {
+    fr: 'Traitement enquêteur',
+    en: 'Interviewer processing',
+    sq: 'Procesi i intervistuesit',
   },
   housingAccess: { fr: 'Accès au logement', en: 'Housing access', sq: 'Qasja në banim' },
   housingSituation: {
