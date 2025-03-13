@@ -1,6 +1,6 @@
 {
   "name": "pearl",
-  "version": "2.7.10",
+  "version": "2.8.0",
   "private": true,
   "type": "module",
   "dependencies": {
@@ -33,7 +33,7 @@
     "test": "vitest",
     "prepare": "husky",
     "typecheck": "tsc --noEmit",
-    "pre-push": "stylelint \"src/**/*.css\"  && yarn test  --watch=false",
+    "pre-push": "stylelint \"src/**/*.css\"  && yarn test --watch=false",
     "postinstall": "vite-envs update-types"
   },
   "eslintConfig": {

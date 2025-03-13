@@ -1,6 +1,8 @@
 import { expect, Page } from '@playwright/test';
 import { GenericPage } from './generic-page.po';
 
+export const totalSu = 18;
+
 export class HomePage implements GenericPage {
   constructor(private readonly page: Page) {}
 
@@ -14,9 +16,9 @@ export class HomePage implements GenericPage {
     await this.page.getByText('Mon suivi').hover();
   }
 
-  async checkNumberOfDisplayedItems(count: number, total: number) {
+  async checkNumberOfDisplayedItems(count: number) {
     await expect(
-      this.page.getByText(`${count} unités sur ${total}`, { exact: false })
+      this.page.getByText(`${count} unités sur ${totalSu}`, { exact: false })
     ).toBeVisible();
   }
 

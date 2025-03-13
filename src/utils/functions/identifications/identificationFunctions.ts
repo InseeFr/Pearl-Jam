@@ -1,6 +1,7 @@
 import {
   IdentificationConfiguration,
   IdentificationQuestionOptionValues,
+  IdentificationQuestionsId as IdentificationQuestionId,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import {
@@ -12,17 +13,22 @@ import {
   houseF2FIdentificationQuestionsTree,
   transmissionRulesHouseF2F,
 } from './questionsTree/houseF2FQuestionsTree';
+import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
+import { getLastState } from '../surveyUnitFunctions';
+import { StateValues } from 'utils/enum/SUStateEnum';
+import { transmissionRulesNoIdentification } from './questionsTree/noIdentificationTransmissionRules';
+import { SRCVIdentificationQuestionsTree } from './questionsTree/SRCVQuestionsTree';
 import {
   houseTelIdentificationQuestionsTree,
   transmissionRulesHOUSETEL,
   transmissionRulesHOUSETELWSR,
 } from './questionsTree/HouseTelQuestionsTree';
-import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
-import { getLastState } from '../surveyUnitFunctions';
-import { StateValues } from 'utils/enum/SUStateEnum';
-import { ContactOutcomeValue } from 'utils/enum/ContactOutcomeEnum';
-import { transmissionRulesNoIdentification } from './questionsTree/noIdentificationTransmissionRules';
-import { SRCVIdentificationQuestionsTreeFunction } from './questionsTree/SRCVQuestionsTree';
+import { ContactOutcomeValue } from '../contacts/ContactOutcome';
+import {
+  indF2FIdentificationQuestionsTree,
+  transmissionRulesByINDF2F,
+  transmissionRulesByINDF2FNOR,
+} from './questionsTree/indF2FQuestionsTree';
 
 export type IdentificationQuestionOption = {
   value: string;
@@ -30,35 +36,40 @@ export type IdentificationQuestionOption = {
   concluding: boolean;
 };
 export type IdentificationQuestionValue = {
-  id: IdentificationQuestionsId;
-  nextId?: IdentificationQuestionsId;
+  id: IdentificationQuestionId;
+  nextId?: IdentificationQuestionId;
   text: string;
   options: IdentificationQuestionOption[];
-  dependsOn?: { questionId: IdentificationQuestionsId; values: string[] };
+  dependsOn?: { questionId: IdentificationQuestionId; values: string[] };
   disabled?: boolean;
 };
 
-export type IdentificationQuestions = Partial<
-  Record<IdentificationQuestionsId, IdentificationQuestionValue>
-> & {
-  root?: IdentificationQuestionsId;
+export type IdentificationQuestionsMap = Partial<
+  Record<IdentificationQuestionId, IdentificationQuestionValue>
+>;
+
+export type IdentificationQuestions = {
+  values: IdentificationQuestionsMap;
+  root?: IdentificationQuestionId;
 };
+
+const noIdentQuestionTree: IdentificationQuestions = { values: {} };
 
 export const getIdentificationQuestionsTree = (
   identificationConfiguration: IdentificationConfiguration,
   identification?: SurveyUnitIdentification
-): IdentificationQuestions => {
-  const identificationMap: Record<IdentificationConfiguration, IdentificationQuestions> = {
+) => {
+  const identificationMap = {
     [IdentificationConfiguration.INDTEL]: indtelIdentificationQuestionsTree,
     [IdentificationConfiguration.IASCO]: houseF2FIdentificationQuestionsTree,
-    [IdentificationConfiguration.NOIDENT]: {},
+    [IdentificationConfiguration.NOIDENT]: noIdentQuestionTree,
     [IdentificationConfiguration.HOUSEF2F]: houseF2FIdentificationQuestionsTree,
     [IdentificationConfiguration.HOUSETEL]: houseTelIdentificationQuestionsTree,
     [IdentificationConfiguration.HOUSETELWSR]: houseTelIdentificationQuestionsTree,
-    [IdentificationConfiguration.SRCVREINT]:
-      SRCVIdentificationQuestionsTreeFunction(identification),
+    [IdentificationConfiguration.SRCVREINT]: SRCVIdentificationQuestionsTree(identification),
     [IdentificationConfiguration.INDTELNOR]: indtelIdentificationQuestionsTree,
-    [IdentificationConfiguration.INDF2F]: {},
+    [IdentificationConfiguration.INDF2F]: indF2FIdentificationQuestionsTree(identification),
+    [IdentificationConfiguration.INDF2FNOR]: indF2FIdentificationQuestionsTree(identification),
   };
 
   return identificationMap[identificationConfiguration];
@@ -72,13 +83,12 @@ export const transmissionRules: Record<IdentificationConfiguration, Transmission
   [IdentificationConfiguration.HOUSETEL]: transmissionRulesHOUSETEL,
   [IdentificationConfiguration.HOUSETELWSR]: transmissionRulesHOUSETELWSR,
   [IdentificationConfiguration.INDTELNOR]: transmissionRulesByINDTELNOR,
-  [IdentificationConfiguration.INDF2F]: transmissionRulesNoIdentification,
+  [IdentificationConfiguration.INDF2F]: transmissionRulesByINDF2F,
+  [IdentificationConfiguration.INDF2FNOR]: transmissionRulesByINDF2FNOR,
   [IdentificationConfiguration.SRCVREINT]: transmissionRulesNoIdentification,
 };
 
-export type ResponseState = Partial<
-  Record<IdentificationQuestionsId, IdentificationQuestionOption>
->;
+export type ResponseState = Partial<Record<IdentificationQuestionId, IdentificationQuestionOption>>;
 
 export type TransmissionRules = {
   shouldValidIfIdentificationFinished: boolean;
@@ -92,24 +102,28 @@ export type TransmissionRules = {
     contactOutcome: ContactOutcomeValue;
   };
   expectedState: StateValues;
+  invalidIdentification?: {
+    id: IdentificationQuestionId;
+    value: IdentificationQuestionOptionValues;
+  };
 };
 
 export function checkAvailability(
-  questions: IdentificationQuestions,
+  identificationQuestionsMap?: IdentificationQuestionsMap,
   question?: IdentificationQuestionValue,
   responses?: ResponseState
 ): boolean {
+  if (!identificationQuestionsMap) return false;
   if (question?.disabled) return false;
-
   if (!responses) return true;
   const dependency = question?.dependsOn;
   if (!dependency) return true;
   if (responses[dependency.questionId]?.concluding) return false;
 
   // Recursively check if the parent question is itself available
-  const parentResponseQuestion = questions[dependency.questionId];
+  const parentResponseQuestion = identificationQuestionsMap[dependency.questionId];
   if (parentResponseQuestion)
-    return checkAvailability(questions, parentResponseQuestion, responses);
+    return checkAvailability(identificationQuestionsMap, parentResponseQuestion, responses);
 
   // If the parent question has a response, check if its value satisfies the dependency condition
   const parentResponse = responses[dependency.questionId];
@@ -125,17 +139,19 @@ export function isIdentificationFinished(
   if (!identificationConfiguration) return true;
   if (!identification) return false;
 
-  const questions = getIdentificationQuestionsTree(identificationConfiguration, identification);
-  const root = questions.root;
+  const questionsMap = getIdentificationQuestionsTree(identificationConfiguration, identification);
+  if (!questionsMap) return true;
 
-  if (!root) return true;
+  const root = questionsMap.root;
+  const questions = questionsMap.values;
+
+  if (!root || !questions) return true;
   let question = questions[root];
 
   while (question) {
     const response = identification[question.id];
     if (response) {
       const isConcluding = question.options.find(o => o.value === response && o.concluding);
-
       if (isConcluding) return true;
     }
 
@@ -183,6 +199,18 @@ function isValidStateForContactOutcome(su: SurveyUnit, suTransmissionRules: Tran
   return hasExpectedState;
 }
 
+export function isValidIdentification(
+  invalidIdentification?: {
+    id: IdentificationQuestionId;
+    value: IdentificationQuestionOptionValues;
+  },
+  suIdentification?: SurveyUnitIdentification
+) {
+  if (!suIdentification || !invalidIdentification) return true;
+
+  return suIdentification[invalidIdentification.id] !== invalidIdentification.value;
+}
+
 export function validateTransmission(su: SurveyUnit): boolean {
   const suTransmissionRules = transmissionRules[su.identificationConfiguration];
 
@@ -203,6 +231,9 @@ export function validateTransmission(su: SurveyUnit): boolean {
 
   // consistency between state and contactOutcome
   if (!isValidStateForContactOutcome(su, suTransmissionRules)) return false;
+
+  if (!isValidIdentification(suTransmissionRules.invalidIdentification, su.identification))
+    return false;
 
   return true;
 }

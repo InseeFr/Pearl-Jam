@@ -9,27 +9,29 @@ import { commonTransmissionRules } from './commonTransmissionRules';
 
 export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
   root: IdentificationQuestionsId.SITUATION,
-  [IdentificationQuestionsId.SITUATION]: {
-    id: IdentificationQuestionsId.SITUATION,
-    nextId: IdentificationQuestionsId.CATEGORY,
-    text: `${D.housingSituation}`,
-    options: [
-      { ...optionsMap.ORDINARY, concluding: false },
-      { ...optionsMap.ABSORBED, concluding: true },
-      { ...optionsMap.NOORDINARY, concluding: true },
-    ],
-  },
-  [IdentificationQuestionsId.CATEGORY]: {
-    id: IdentificationQuestionsId.CATEGORY,
-    text: `${D.housingCategory}`,
-    options: [
-      { ...optionsMap.PRIMARY, concluding: true },
-      { ...optionsMap.SECONDARY, concluding: true },
-      { ...optionsMap.VACANT, concluding: true },
-    ],
-    dependsOn: {
-      questionId: IdentificationQuestionsId.SITUATION,
-      values: ['ORDINARY'],
+  values: {
+    [IdentificationQuestionsId.SITUATION]: {
+      id: IdentificationQuestionsId.SITUATION,
+      nextId: IdentificationQuestionsId.CATEGORY,
+      text: `${D.housingSituation}`,
+      options: [
+        { ...optionsMap.ORDINARY, concluding: false },
+        { ...optionsMap.ABSORBED, concluding: true },
+        { ...optionsMap.NOORDINARY, concluding: true },
+      ],
+    },
+    [IdentificationQuestionsId.CATEGORY]: {
+      id: IdentificationQuestionsId.CATEGORY,
+      text: `${D.housingCategory}`,
+      options: [
+        { ...optionsMap.PRIMARY, concluding: true },
+        { ...optionsMap.SECONDARY, concluding: true },
+        { ...optionsMap.VACANT, concluding: true },
+      ],
+      dependsOn: {
+        questionId: IdentificationQuestionsId.SITUATION,
+        values: ['ORDINARY'],
+      },
     },
   },
 } as const;
