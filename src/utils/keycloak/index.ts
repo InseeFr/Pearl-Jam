@@ -1,7 +1,10 @@
 import Keycloak, { KeycloakInitOptions } from 'keycloak-js';
-import { PEARL_URL } from 'utils/constants';
 
-export const kc = new Keycloak(`${PEARL_URL}/keycloak.json`);
+export const kc = new Keycloak({
+  clientId: import.meta.env.VITE_KEYCLOAK_CLIENTID,
+  realm: import.meta.env.VITE_KEYCLOAK_REALM,
+  url: import.meta.env.VITE_KEYCLOAK_URL,
+});
 export const keycloakAuthentication = (params: KeycloakInitOptions) =>
   new Promise<void | boolean>((resolve, reject) => {
     if (navigator.onLine) {
