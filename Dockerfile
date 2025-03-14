@@ -20,7 +20,7 @@ WORKDIR /pearl
 
 COPY ./ ./
 
-RUN yarn && yarn build
+RUN yarn --network-timeout 1000000000 && yarn build
 
 ### EXECUTION STEP ###
 
