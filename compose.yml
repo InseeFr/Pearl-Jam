@@ -147,41 +147,34 @@ services:
         - VITE_KEYCLOAK_URL=http://localhost:${KEYCLOAK_PORT}
         - VITE_KEYCLOAK_ROLES_ALLOW_LIST=interviewer
     ports:
-      - '${PEARL_FRONTEND_PORT}:80'
+      - '${PEARL_FRONTEND_PORT}:8300'
 
-  playwright:
+  playwright-captation:
     build:
-      dockerfile: ./playwright-dev.Dockerfile
-    profiles: [tests]
+      dockerfile: playwright-dev.Dockerfile
+    profiles: [captation]
     depends_on:
       - pearl-api
       - questionnaire-api
-      - pearl-db
-      - questionnaire-db
       - keycloak
-    container_name: playwright
+    container_name: playwright-captation
     hostname: front
     volumes: *react-volumes
     tty: true
     stdin_open: true # without this node doesn't start
     working_dir: /opt/app
     ipc: host
+    network_mode: host
     ports:
-      - ${PEARL_FRONTEND_PORT}:${PEARL_FRONTEND_PORT}
-      - ${PLAYWRIGHT_PORT}:${PLAYWRIGHT_PORT}
+      - '${PEARL_FRONTEND_PORT}:3001'
     environment:
       WATCHPACK_POLLING: true
       FAST_REFRESH: true
       DISPLAY: unix:0
       XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
-    # command:
-    #   - /bin/bash
-    #   - -c
-    #   - |
-    #     echo "Podman !!!" && sleep 1
-    #     mkdir -p /mnt/c/Windows/System32/WindowsPowerShell/v1.0 && sleep 1
-    #     touch /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe && sleep 1
-    #     chmod '755' /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
-    #     yarn install
-    #     npx playwright codegen http://localhost:${PEARL_FRONTEND_PORT}/ --ui-host=0.0.0.0
-    #     sleep infinity
+    command:
+      - /bin/bash
+      - -c
+      - |
+        yarn install --frozen-lockfile
+        npx playwright codegen http://localhost:${PEARL_FRONTEND_PORT}/
