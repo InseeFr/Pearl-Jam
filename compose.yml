@@ -46,7 +46,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${QUESTIONNAIRE_DB_PASSWORD}
       - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
       - APPLICATION_TEMPFOLDER=/tmp
-      - APPLICATION_CORSORIGINS='*'
+      - APPLICATION_CORSORIGINS=http://localhost:3000,http://localhost:5001
       - APPLICATION_ROLES_INTERVIEWER=${INTERVIEWER_ROLE}
       - APPLICATION_ROLES_REVIEWER=${INTERNAL_USER_ROLE}
       - APPLICATION_ROLES_ADMIN=${ADMIN_ROLE}
@@ -110,7 +110,6 @@ services:
       - APPLICATION_ROLES_NATIONAL_USER=${INTERNAL_USER_ROLE}
       - APPLICATION_ROLES_ADMIN=${ADMIN_ROLE}
       - APPLICATION_ROLES_WEBCLIENT=${WEBCLIENT_ROLE}
-      # - APPLICATION_CORSORIGINS='*'
       - application.corsOrigins=http://localhost:3000
       - FEATURE_OIDC_ENABLED=true
       - FEATURE_OIDC_REALM=${AUTH_REALM}
@@ -128,9 +127,32 @@ services:
     ports:
       - ${PEARL_API_PORT}:8080
 
+  queen-front:
+    image: inseefr/drama-queen:2.3.10-rc.1
+    environment:
+      - VITE_QUEEN_API_URL=http://localhost:${QUESTIONNAIRE_API_PORT}
+      - VITE_OIDC_CLIENT_ID=${AUTH_CLIENT_ID}
+      - VITE_OIDC_ISSUER=http://localhost:${KEYCLOAK_PORT}/realms/${AUTH_REALM}
+    ports:
+      - '${QUEEN_FRONTEND_PORT}:80'
+
+  pearl-front:
+    build:
+      dockerfile: ./Dockerfile
+      args:
+        - VITE_PEARL_API_URL=http://localhost:${PEARL_API_PORT}
+        - VITE_PEARL_AUTHENTICATION_MODE=keycloak
+        - VITE_KEYCLOAK_CLIENTID=${AUTH_CLIENT_ID}
+        - VITE_KEYCLOAK_REALM=${AUTH_REALM}
+        - VITE_KEYCLOAK_URL=http://localhost:${KEYCLOAK_PORT}
+        - VITE_KEYCLOAK_ROLES_ALLOW_LIST=interviewer
+    ports:
+      - '${PEARL_FRONTEND_PORT}:80'
+
   playwright:
     build:
       dockerfile: ./playwright-dev.Dockerfile
+    profiles: [tests]
     depends_on:
       - pearl-api
       - questionnaire-api
@@ -145,21 +167,21 @@ services:
     working_dir: /opt/app
     ipc: host
     ports:
-      - ${FRONTEND_PORT}:${FRONTEND_PORT}
+      - ${PEARL_FRONTEND_PORT}:${PEARL_FRONTEND_PORT}
       - ${PLAYWRIGHT_PORT}:${PLAYWRIGHT_PORT}
     environment:
       WATCHPACK_POLLING: true
       FAST_REFRESH: true
       DISPLAY: unix:0
       XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
-    command:
-      - /bin/bash
-      - -c
-      - |
-        echo "Podman !!!" && sleep 1
-        mkdir -p /mnt/c/Windows/System32/WindowsPowerShell/v1.0 && sleep 1
-        touch /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe && sleep 1
-        chmod '755' /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
-        yarn install
-        npx playwright codegen http://localhost:${FRONTEND_PORT}/ --ui-host=0.0.0.0
-        sleep infinity
+    # command:
+    #   - /bin/bash
+    #   - -c
+    #   - |
+    #     echo "Podman !!!" && sleep 1
+    #     mkdir -p /mnt/c/Windows/System32/WindowsPowerShell/v1.0 && sleep 1
+    #     touch /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe && sleep 1
+    #     chmod '755' /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
+    #     yarn install
+    #     npx playwright codegen http://localhost:${PEARL_FRONTEND_PORT}/ --ui-host=0.0.0.0
+    #     sleep infinity
