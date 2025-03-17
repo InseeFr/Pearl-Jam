@@ -101,7 +101,10 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
   };
 
   const mediumOptions = getMediumByConfiguration(surveyUnit.contactAttemptConfiguration);
-  const contactAttempts = getContactAttemptsByMedium(medium);
+  const contactAttempts = getContactAttemptsByMedium(
+    surveyUnit.contactOutcomeConfiguration,
+    medium
+  );
 
   return (
     <Dialog maxWidth="s" open={true} onClose={onClose}>
