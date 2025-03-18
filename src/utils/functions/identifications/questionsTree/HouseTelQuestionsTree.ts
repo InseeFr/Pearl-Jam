@@ -5,36 +5,39 @@ import {
 import { IdentificationQuestions, TransmissionRules } from '../identificationFunctions';
 import D from 'i18n';
 import { optionsMap } from './optionsMap';
+import { commonTransmissionRules } from './commonTransmissionRules';
 
 export const houseTelIdentificationQuestionsTree: IdentificationQuestions = {
   root: IdentificationQuestionsId.SITUATION,
-  [IdentificationQuestionsId.SITUATION]: {
-    id: IdentificationQuestionsId.SITUATION,
-    nextId: IdentificationQuestionsId.CATEGORY,
-    text: `${D.housingSituation}`,
-    options: [
-      { ...optionsMap.ORDINARY, concluding: false },
-      { ...optionsMap.ABSORBED, concluding: true },
-      { ...optionsMap.NOORDINARY, concluding: true },
-    ],
-  },
-  [IdentificationQuestionsId.CATEGORY]: {
-    id: IdentificationQuestionsId.CATEGORY,
-    text: `${D.housingCategory}`,
-    options: [
-      { ...optionsMap.PRIMARY, concluding: true },
-      { ...optionsMap.SECONDARY, concluding: true },
-      { ...optionsMap.VACANT, concluding: true },
-    ],
-    dependsOn: {
-      questionId: IdentificationQuestionsId.SITUATION,
-      values: ['ORDINARY'],
+  values: {
+    [IdentificationQuestionsId.SITUATION]: {
+      id: IdentificationQuestionsId.SITUATION,
+      nextId: IdentificationQuestionsId.CATEGORY,
+      text: `${D.housingSituation}`,
+      options: [
+        { ...optionsMap.ORDINARY, concluding: false },
+        { ...optionsMap.ABSORBED, concluding: true },
+        { ...optionsMap.NOORDINARY, concluding: true },
+      ],
+    },
+    [IdentificationQuestionsId.CATEGORY]: {
+      id: IdentificationQuestionsId.CATEGORY,
+      text: `${D.housingCategory}`,
+      options: [
+        { ...optionsMap.PRIMARY, concluding: true },
+        { ...optionsMap.SECONDARY, concluding: true },
+        { ...optionsMap.VACANT, concluding: true },
+      ],
+      dependsOn: {
+        questionId: IdentificationQuestionsId.SITUATION,
+        values: ['ORDINARY'],
+      },
     },
   },
 } as const;
 
 export const transmissionRulesHOUSETEL: TransmissionRules = {
-  validIfIdentificationFinished: true,
+  ...commonTransmissionRules,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
@@ -44,13 +47,10 @@ export const transmissionRulesHOUSETEL: TransmissionRules = {
     ],
     contactOutcome: 'NOA',
   },
-  invalidIfmissingContactOutcome: true,
-  invalidIfmissingContactAttempt: true,
-  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
 };
 
 export const transmissionRulesHOUSETELWSR: TransmissionRules = {
-  validIfIdentificationFinished: true,
+  ...commonTransmissionRules,
   invalidIdentificationsAndContactOutcome: {
     identifications: [
       {
@@ -64,7 +64,4 @@ export const transmissionRulesHOUSETELWSR: TransmissionRules = {
     ],
     contactOutcome: 'NOA',
   },
-  invalidIfmissingContactOutcome: true,
-  invalidIfmissingContactAttempt: true,
-  expectedStateForConctactOutcome: { expectedState: 'WFT', contactOutcome: 'INA' },
 };

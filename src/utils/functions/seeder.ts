@@ -286,6 +286,20 @@ export async function seedData() {
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.SRCVREINT,
   });
+  surverUnits.push({
+    ...surverUnits[0],
+    managementStartDate: new Date().getTime() - 10 * day,
+    interviewerStartDate: new Date().getTime() - 9 * day,
+    identificationPhaseStartDate: new Date().getTime() - 8 * day,
+    collectionStartDate: new Date().getTime() - 7 * day,
+    collectionEndDate: new Date().getTime() - 6 * day,
+    endDate: new Date().getTime() + 15 * day,
+    id: 'INDF2F',
+    identification: {},
+    firstName: 'Flin',
+    lastName: 'Ished',
+    identificationConfiguration: IdentificationConfiguration.INDF2F,
+  });
 
   await surveyUnitIDBService.addAll(surverUnits);
 }

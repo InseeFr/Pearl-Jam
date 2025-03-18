@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, Assertion } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   checkAvailability,
   isIdentificationFinished,
@@ -7,6 +7,7 @@ import {
   transmissionRules,
   TransmissionRules,
   validateTransmission,
+  isValidIdentification,
 } from './identificationFunctions';
 import {
   IdentificationConfiguration,
@@ -15,26 +16,29 @@ import {
 } from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit } from 'types/pearl';
 import { contactOutcomes } from '../contacts/ContactOutcome';
+import { commonTransmissionRules } from './questionsTree/commonTransmissionRules';
 
 const mockQuestions: IdentificationQuestions = {
-  [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
-    id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-    text: 'Person Question',
-    options: [
-      { value: 'YES', label: 'Yes', concluding: false },
-      { value: 'NO', label: 'No', concluding: true },
-    ],
-  },
-  [IdentificationQuestionsId.SITUATION]: {
-    id: IdentificationQuestionsId.SITUATION,
-    text: 'Situation Question',
-    options: [
-      { value: 'ACTIVE', label: 'Active', concluding: false },
-      { value: 'INACTIVE', label: 'Inactive', concluding: true },
-    ],
-    dependsOn: {
-      questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
-      values: ['YES'],
+  values: {
+    [IdentificationQuestionsId.INDIVIDUAL_STATUS]: {
+      id: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+      text: 'Person Question',
+      options: [
+        { value: 'YES', label: 'Yes', concluding: false },
+        { value: 'NO', label: 'No', concluding: true },
+      ],
+    },
+    [IdentificationQuestionsId.SITUATION]: {
+      id: IdentificationQuestionsId.SITUATION,
+      text: 'Situation Question',
+      options: [
+        { value: 'ACTIVE', label: 'Active', concluding: false },
+        { value: 'INACTIVE', label: 'Inactive', concluding: true },
+      ],
+      dependsOn: {
+        questionId: IdentificationQuestionsId.INDIVIDUAL_STATUS,
+        values: ['YES'],
+      },
     },
   },
 };
@@ -49,7 +53,7 @@ const mockedSurveyUnit: SurveyUnit = {
   campaign: '',
   comments: [],
   sampleIdentifiers: {} as any,
-  states: [],
+  states: [{ type: 'WFT', date: Date.now() }],
   contactAttempts: [],
   campaignLabel: '',
   managementStartDate: 0,
@@ -59,7 +63,7 @@ const mockedSurveyUnit: SurveyUnit = {
   collectionEndDate: 0,
   endDate: 0,
   identificationConfiguration: IdentificationConfiguration.NOIDENT,
-  contactOutcomeConfiguration: '',
+  contactOutcomeConfiguration: 'F2F',
   contactAttemptConfiguration: 'F2F',
   useLetterCommunication: false,
   communicationRequests: [],
@@ -119,7 +123,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.REFUSAL.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: true,
   },
@@ -138,7 +141,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.REFUSAL.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: false,
   },
@@ -158,7 +160,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: true,
   },
@@ -177,7 +178,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'N/A', date: Date.now() }],
+      states: [{ type: 'NOA', date: Date.now() }],
     },
     output: false,
   },
@@ -192,14 +193,14 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         category: IdentificationQuestionOptionValues.PRIMARY,
         occupant: IdentificationQuestionOptionValues.IDENTIFIED,
       },
-      // INA + N/A -> invalid
+      // INA + NOA -> invalid
       contactOutcome: {
         date: Date.now(),
         totalNumberOfContactAttempts: 1,
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'N/A', date: Date.now() }],
+      states: [{ type: 'NOA', date: Date.now() }],
     },
     output: false,
   },
@@ -217,7 +218,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: true,
   },
@@ -236,7 +236,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.NOT_APPLICABLE.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: false,
   },
@@ -255,7 +254,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.DEFINITLY_UNAVAILABLE.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: true,
   },
@@ -272,7 +270,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: false,
   },
@@ -290,7 +287,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.NOT_APPLICABLE.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: false,
   },
@@ -308,14 +304,13 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'PHONE' }],
-      states: [{ type: 'WFT', date: Date.now() }],
     },
     output: true,
   },
 ];
 
-mockedSurveyUnits.map(({ input, output }) => {
-  it(`ValidateTransmission should return ${output} when adding ${input}`, () => {
+mockedSurveyUnits.forEach(({ input, output }) => {
+  it(`ValidateTransmission should return ${output} when adding ${JSON.stringify(input)}`, () => {
     const result = validateTransmission(input);
     if (result !== output) {
       console.log('Failed input:', {
@@ -345,16 +340,16 @@ mockedSurveyUnits.map(({ input, output }) => {
 describe('checkAvailability', () => {
   it('should return true if there are no responses', () => {
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.INDIVIDUAL_STATUS]
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.INDIVIDUAL_STATUS]
     );
     expect(result).toBe(true);
   });
 
   it('should return true if the question has no dependencies', () => {
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.INDIVIDUAL_STATUS],
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.INDIVIDUAL_STATUS],
       {}
     );
     expect(result).toBe(true);
@@ -369,8 +364,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.SITUATION],
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(true);
@@ -385,8 +380,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.SITUATION],
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(false);
@@ -401,8 +396,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.SITUATION],
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(false);
@@ -417,8 +412,8 @@ describe('checkAvailability', () => {
       },
     };
     const result = checkAvailability(
-      mockQuestions,
-      mockQuestions[IdentificationQuestionsId.SITUATION],
+      mockQuestions.values,
+      mockQuestions.values[IdentificationQuestionsId.SITUATION],
       responses
     );
     expect(result).toBe(true);
@@ -426,17 +421,19 @@ describe('checkAvailability', () => {
 
   it('should handle cases with multiple levels of dependencies', () => {
     const extendedQuestions: IdentificationQuestions = {
-      ...mockQuestions,
-      [IdentificationQuestionsId.CATEGORY]: {
-        id: IdentificationQuestionsId.CATEGORY,
-        text: 'Category Question',
-        options: [
-          { value: 'A', label: 'Category A', concluding: false },
-          { value: 'B', label: 'Category B', concluding: true },
-        ],
-        dependsOn: {
-          questionId: IdentificationQuestionsId.SITUATION,
-          values: ['ACTIVE'],
+      values: {
+        ...mockQuestions.values,
+        [IdentificationQuestionsId.CATEGORY]: {
+          id: IdentificationQuestionsId.CATEGORY,
+          text: 'Category Question',
+          options: [
+            { value: 'A', label: 'Category A', concluding: false },
+            { value: 'B', label: 'Category B', concluding: true },
+          ],
+          dependsOn: {
+            questionId: IdentificationQuestionsId.SITUATION,
+            values: ['ACTIVE'],
+          },
         },
       },
     };
@@ -455,8 +452,8 @@ describe('checkAvailability', () => {
     };
 
     const result = checkAvailability(
-      extendedQuestions,
-      extendedQuestions[IdentificationQuestionsId.CATEGORY],
+      extendedQuestions.values,
+      extendedQuestions.values[IdentificationQuestionsId.CATEGORY],
       responses
     );
     expect(result).toBe(true);
@@ -464,17 +461,19 @@ describe('checkAvailability', () => {
 
   it('should return false if a parent question dependency chain fails', () => {
     const extendedQuestions: IdentificationQuestions = {
-      ...mockQuestions,
-      [IdentificationQuestionsId.CATEGORY]: {
-        id: IdentificationQuestionsId.CATEGORY,
-        text: 'Category Question',
-        options: [
-          { value: 'A', label: 'Category A', concluding: false },
-          { value: 'B', label: 'Category B', concluding: true },
-        ],
-        dependsOn: {
-          questionId: IdentificationQuestionsId.SITUATION,
-          values: ['ACTIVE'],
+      values: {
+        ...mockQuestions.values,
+        [IdentificationQuestionsId.CATEGORY]: {
+          id: IdentificationQuestionsId.CATEGORY,
+          text: 'Category Question',
+          options: [
+            { value: 'A', label: 'Category A', concluding: false },
+            { value: 'B', label: 'Category B', concluding: true },
+          ],
+          dependsOn: {
+            questionId: IdentificationQuestionsId.SITUATION,
+            values: ['ACTIVE'],
+          },
         },
       },
     };
@@ -493,8 +492,8 @@ describe('checkAvailability', () => {
     };
 
     const result = checkAvailability(
-      extendedQuestions,
-      extendedQuestions[IdentificationQuestionsId.CATEGORY],
+      extendedQuestions.values,
+      extendedQuestions.values[IdentificationQuestionsId.CATEGORY],
       responses
     );
     expect(result).toBe(false);
@@ -543,6 +542,7 @@ describe('identificationIsFinished', () => {
 describe('isInvalidIdentificationAndContactOutcome', () => {
   it('should return true if identification and contact outcome match the invalid rules', () => {
     const mockTransmissionRules: TransmissionRules = {
+      ...commonTransmissionRules,
       invalidIdentificationsAndContactOutcome: {
         identifications: [
           {
@@ -572,6 +572,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
 
   it('should return false if identification does not match the invalid rules', () => {
     const mockTransmissionRules: TransmissionRules = {
+      ...commonTransmissionRules,
       invalidIdentificationsAndContactOutcome: {
         identifications: [
           {
@@ -601,6 +602,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
 
   it('should return false if contact outcome does not match the invalid rules', () => {
     const mockTransmissionRules: TransmissionRules = {
+      ...commonTransmissionRules,
       invalidIdentificationsAndContactOutcome: {
         identifications: [
           {
@@ -627,3 +629,57 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
     expect(result).toBe(false);
   });
 });
+
+[
+  {
+    input: {
+      rule: {
+        id: IdentificationQuestionsId.ACCESS,
+        value: IdentificationQuestionOptionValues.ACC,
+      },
+
+      identification: {
+        [IdentificationQuestionsId.ACCESS]: IdentificationQuestionOptionValues.ACC,
+      },
+    },
+    output: false,
+  },
+  {
+    input: {
+      rule: {
+        id: IdentificationQuestionsId.ACCESS,
+        value: IdentificationQuestionOptionValues.AT_LEAST_ONE,
+      },
+
+      identification: {
+        [IdentificationQuestionsId.ACCESS]: IdentificationQuestionOptionValues.ACC,
+      },
+    },
+    output: true,
+  },
+  {
+    input: {
+      rule: {
+        id: IdentificationQuestionsId.ACCESS,
+        value: IdentificationQuestionOptionValues.ACC,
+      },
+
+      identification: undefined,
+    },
+    output: true,
+  },
+  {
+    input: {
+      rule: undefined,
+      identification: {
+        [IdentificationQuestionsId.ACCESS]: IdentificationQuestionOptionValues.ACC,
+      },
+    },
+    output: true,
+  },
+].map(({ input, output }) =>
+  it(`isValidIdentification should return ${output} when comparing ${input.rule?.value} with ${JSON.stringify(input.identification)}`, () => {
+    const result = isValidIdentification(input.rule, input.identification);
+    expect(result).toBe(output);
+  })
+);

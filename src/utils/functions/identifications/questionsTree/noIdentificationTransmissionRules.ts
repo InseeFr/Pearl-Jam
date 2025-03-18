@@ -1,6 +1,7 @@
 import { TransmissionRules } from '../identificationFunctions';
+import { commonTransmissionRules } from './commonTransmissionRules';
 
 export const transmissionRulesNoIdentification: TransmissionRules = {
-  invalidIfmissingContactOutcome: true,
-  invalidIfmissingContactAttempt: true,
+  ...commonTransmissionRules,
+  shouldValidIfIdentificationFinished: false,
 };
