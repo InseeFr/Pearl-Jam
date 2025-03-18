@@ -134,6 +134,11 @@ services:
       - VITE_QUEEN_API_URL=http://localhost:${QUESTIONNAIRE_API_PORT}
       - VITE_OIDC_CLIENT_ID=${AUTH_CLIENT_ID}
       - VITE_OIDC_ISSUER=http://localhost:${KEYCLOAK_PORT}/realms/${AUTH_REALM}
+    depends_on:
+      keycloak:
+        condition: service_started
+      questionnaire-api:
+        condition: service_started
     ports:
       - '${QUEEN_FRONTEND_PORT}:80'
 
@@ -148,6 +153,13 @@ services:
         - VITE_KEYCLOAK_URL=http://localhost:${KEYCLOAK_PORT}
         - VITE_KEYCLOAK_ROLES_ALLOW_LIST=interviewer
         - VITE_QUEEN_URL=http://localhost:${QUEEN_FRONTEND_PORT}
+    depends_on:
+      queen-front:
+        condition: service_started
+      keycloak:
+        condition: service_started
+      pearl-api:
+        condition: service_started
     ports:
       - '${PEARL_FRONTEND_PORT}:8300'
 
