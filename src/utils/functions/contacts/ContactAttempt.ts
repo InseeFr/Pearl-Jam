@@ -1,5 +1,4 @@
 import D from 'i18n';
-import { ContactOutcomeConfiguration } from './ContactOutcome';
 
 export type ContactAttemptConfiguration = 'F2F' | 'TEL';
 export type ContactAttemptMedium = 'TEL' | 'EMAIL' | 'FIELD';
