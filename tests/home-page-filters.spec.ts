@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { HomePage } from './page-object/home.po';
 
-test('check if filters are saved inside the localStorage', async ({ page }) => {
+test.only('check if filters are saved inside the localStorage', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();
   await homePage.importData();

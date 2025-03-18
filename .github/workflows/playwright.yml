@@ -16,6 +16,11 @@ jobs:
       - name: Run Docker Compose
         run: |
           docker compose --env-file ./.env.docker up -d
+      - name: Wait for Queen
+        uses: cygnetdigital/wait_for_response@v2.0.0
+        with:
+          url: 'https://localhost:5001/assets/remoteEntry.js'
+          responseCode: '200'
       - name: Run Playwright tests
         run: |
           yarn

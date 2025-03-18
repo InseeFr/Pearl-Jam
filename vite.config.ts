@@ -1,11 +1,10 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import { VitePWA } from 'vite-plugin-pwa';
 import federation from '@originjs/vite-plugin-federation';
-import { fileURLToPath } from 'node:url';
+import react from '@vitejs/plugin-react';
 import { dirname, resolve } from 'node:path';
-import { viteEnvs } from 'vite-envs';
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
