@@ -36,7 +36,7 @@ services:
       - ${QUESTIONNAIRE_DB_PORT}:5432
 
   questionnaire-api:
-    image: inseefr/queen-back-office:snapshot-fix-demo-data
+    image: inseefr/queen-back-office:snapshot-fix-data-reviewer
     depends_on:
       questionnaire-db:
         condition: service_healthy
@@ -71,6 +71,7 @@ services:
       - FEATURE_CACHE_ENABLED=true
       - FEATURE_INTERVIEWERMODE_ENABLED=true
       - SPRING_LIQUIBASE_ENABLED=true
+      - SPRING_LIQUIBASE_CONTEXTS=demo
       - SPRING_LIQUIBASE_CHANGELOG=classpath:db/integration-demo.xml
     ports:
       - ${QUESTIONNAIRE_API_PORT}:8080
@@ -123,7 +124,7 @@ services:
       - SPRINGDOC_SWAGGER_UI_OAUTH_CLIENT_ID=${AUTH_CLIENT_ID}
       - SPRING_LIQUIBASE_ENABLED=true
       - SPRING_LIQUIBASE_CONTEXTS=demo
-      - SPRING_LIQUIBASE_CHANGELOG=classpath:db/demo.xml
+      - SPRING_LIQUIBASE_CHANGELOG=classpath:db/integration-demo.xml
     ports:
       - ${PEARL_API_PORT}:8080
 
