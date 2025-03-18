@@ -16,10 +16,10 @@ jobs:
       - name: Run Docker Compose
         run: |
           docker compose --env-file ./.env.docker up -d
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: |
+          yarn
+          npx playwright install --with-deps
           npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
