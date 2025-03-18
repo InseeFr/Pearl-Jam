@@ -1,6 +1,5 @@
 import { surveyUnitStateEnum } from '../enum/SUStateEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
-import { contactAttempts } from './contacts/ContactAttempt';
 import { contactOutcomes } from './contacts/ContactOutcome';
 import { getRandomIntBetween, getRandomItemFromArray } from './random';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
@@ -179,12 +178,12 @@ export async function seedData() {
       states: states,
       contactAttempts: [
         {
-          status: contactAttempts.TEMPORARY_UNAVAILABLE.value,
+          status: 'TUN',
           date: new Date().getTime() - getRandomIntBetween(10, 100) * day,
           medium: 'FIELD',
         },
         {
-          status: contactAttempts.INTERVIEW_ACCEPTED.value,
+          status: 'INA',
           date: new Date().getTime() - getRandomIntBetween(3, 9) * day,
           medium: 'FIELD',
         },

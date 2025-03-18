@@ -34,7 +34,12 @@ export type ContactAttemptValue =
   | 'NPS'
   | 'NLH';
 
-export const commonContactAttempts: ContactAttempts = {
+export const contactAttempts: ContactAttempts = {
+  INTERVIEW_ACCEPTED: {
+    value: 'INA',
+    label: `${D.interviewAccepted}`,
+    mediums: ['TEL', 'EMAIL', 'FIELD'],
+  },
   APPOINTMENT_MADE: {
     value: 'APT',
     label: `${D.appointmentMade}`,
@@ -86,18 +91,21 @@ export const filteredContactAttempts = (
   contactOutcomeConfiguration: ContactOutcomeConfiguration,
   medium: ContactAttemptMedium
 ): ContactAttempts => {
-  let filteredContactAttempts = commonContactAttempts;
+  console.log('attemps ', contactAttempts);
+
+  const { INTERVIEW_ACCEPTED, ...filtered } = contactAttempts;
+  console.log(filtered);
   if (medium === 'TEL' && contactOutcomeConfiguration === 'F2F') {
-    delete filteredContactAttempts.INTERVIEW_ACCEPTED;
+    return filtered;
   }
 
   if (medium === 'EMAIL') {
     if (contactOutcomeConfiguration === 'TEL' || contactOutcomeConfiguration === 'F2F') {
-      delete filteredContactAttempts.INTERVIEW_ACCEPTED;
+      return filtered;
     }
   }
 
-  return filteredContactAttempts;
+  return contactAttempts;
 };
 
 export const mediumEnum = {
@@ -117,7 +125,7 @@ export const getMediumByConfiguration = (configuration?: ContactAttemptConfigura
 };
 
 export const findContactAttemptLabelByValue = (value: ContactAttemptValue) =>
-  Object.values(commonContactAttempts).filter(ca => ca.value === value)?.[0]?.label;
+  Object.values(contactAttempts).filter(ca => ca.value === value)?.[0]?.label;
 
 export const getContactAttemptsByMedium = (
   contactOutcomeConfiguration: ContactOutcomeConfiguration,
@@ -127,7 +135,7 @@ export const getContactAttemptsByMedium = (
 
   const filteredAttemps = filteredContactAttempts(contactOutcomeConfiguration, medium);
 
-  return Object.values(commonContactAttempts)
+  return Object.values(filteredAttemps)
     .filter(attempt => attempt.mediums.includes(medium))
     .map(({ value, label }) => ({ value, label }));
 };
