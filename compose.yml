@@ -147,6 +147,7 @@ services:
         - VITE_KEYCLOAK_REALM=${AUTH_REALM}
         - VITE_KEYCLOAK_URL=http://localhost:${KEYCLOAK_PORT}
         - VITE_KEYCLOAK_ROLES_ALLOW_LIST=interviewer
+        - VITE_QUEEN_URL=http://localhost:${QUEEN_FRONTEND_PORT}
     ports:
       - '${PEARL_FRONTEND_PORT}:8300'
 
