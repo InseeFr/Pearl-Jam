@@ -3,11 +3,9 @@ import { ContactOutcomeConfiguration } from './ContactOutcome';
 
 export type ContactAttemptConfiguration = 'F2F' | 'TEL';
 export type ContactAttemptMedium = 'TEL' | 'EMAIL' | 'FIELD';
-export type ContactAttempts = Partial<
-  Record<
-    ContactAttemptProperties,
-    { value: ContactAttemptValue; label: string; mediums: ContactAttemptMedium[] }
-  >
+export type ContactAttempts = Record<
+  ContactAttemptProperties,
+  { value: ContactAttemptValue; label: string; mediums: ContactAttemptMedium[] }
 >;
 
 export type ContactAttemptProperties =
@@ -88,22 +86,17 @@ export const contactAttempts: ContactAttempts = {
 };
 
 export const filteredContactAttempts = (
-  contactOutcomeConfiguration: ContactOutcomeConfiguration,
+  contactAttemptConfiguration: ContactAttemptConfiguration,
   medium: ContactAttemptMedium
-): ContactAttempts => {
-  console.log('attemps ', contactAttempts);
-
+): Partial<ContactAttempts> => {
   const { INTERVIEW_ACCEPTED, ...filtered } = contactAttempts;
-  console.log(filtered);
-  if (medium === 'TEL' && contactOutcomeConfiguration === 'F2F') {
-    return filtered;
-  }
+  if (medium === 'TEL' && contactAttemptConfiguration === 'F2F') return filtered;
 
-  if (medium === 'EMAIL') {
-    if (contactOutcomeConfiguration === 'TEL' || contactOutcomeConfiguration === 'F2F') {
-      return filtered;
-    }
-  }
+  if (
+    medium === 'EMAIL' &&
+    (contactAttemptConfiguration === 'TEL' || contactAttemptConfiguration === 'F2F')
+  )
+    return filtered;
 
   return contactAttempts;
 };
@@ -128,12 +121,12 @@ export const findContactAttemptLabelByValue = (value: ContactAttemptValue) =>
   Object.values(contactAttempts).filter(ca => ca.value === value)?.[0]?.label;
 
 export const getContactAttemptsByMedium = (
-  contactOutcomeConfiguration: ContactOutcomeConfiguration,
+  contactAttemptConfiguration: ContactAttemptConfiguration,
   medium?: ContactAttemptMedium
 ) => {
   if (!medium) return [];
 
-  const filteredAttemps = filteredContactAttempts(contactOutcomeConfiguration, medium);
+  const filteredAttemps = filteredContactAttempts(contactAttemptConfiguration, medium);
 
   return Object.values(filteredAttemps)
     .filter(attempt => attempt.mediums.includes(medium))

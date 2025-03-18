@@ -6,6 +6,11 @@ import {
   contactAttempts,
   findContactAttemptLabelByValue,
   getContactAttemptsByMedium,
+  ContactAttemptValue,
+  ContactAttemptConfiguration,
+  ContactAttemptMedium,
+  filteredContactAttempts,
+  ContactAttempts,
 } from './ContactAttempt';
 import D from 'i18n';
 
@@ -25,8 +30,8 @@ describe('findMediumLabelByValue', () => {
 });
 
 const mediumByConfigTests = [
-  { input: 'F2F', output: [mediumEnum.EMAIL, mediumEnum.TEL, mediumEnum.FIELD] },
-  { input: 'TEL', output: [mediumEnum.EMAIL, mediumEnum.TEL] },
+  { input: 'F2F', output: [mediumEnum.FIELD, mediumEnum.TEL, mediumEnum.EMAIL] },
+  { input: 'TEL', output: [mediumEnum.TEL, mediumEnum.EMAIL] },
 ] as const;
 
 describe('getMediumByConfiguration', () => {
@@ -38,7 +43,7 @@ describe('getMediumByConfiguration', () => {
 });
 
 const findContactAttemptLabelByValueTests = [
-  { input: contactAttempts.INTERVIEW_ACCEPTED.value, output: D.interviewAccepted },
+  { input: 'INA' as ContactAttemptValue, output: D.interviewAccepted },
 ];
 
 describe('findContactAttemptLabelByValue', () => {
@@ -50,16 +55,89 @@ describe('findContactAttemptLabelByValue', () => {
 });
 
 const contactAttemptsByMediumTests = [
-  { input: 'EMAIL', output: ['INA', 'APT', 'MES', 'REF', 'UCD', 'PUN'] },
-  { input: 'TEL', output: ['INA', 'APT', 'MES', 'REF', 'TUN', 'NOC', 'UCD', 'PUN'] },
-  { input: 'FIELD', output: ['INA', 'APT', 'REF', 'TUN', 'NOC', 'PUN', 'NPS', 'NLH'] },
-  { input: undefined, output: [] },
+  {
+    input: { contactAttemptConfiguration: 'TEL' as ContactAttemptConfiguration, medium: undefined },
+    output: [],
+  },
+  {
+    input: {
+      contactAttemptConfiguration: 'F2F' as ContactAttemptConfiguration,
+      medium: 'TEL' as ContactAttemptMedium,
+    },
+    output: ['APT', 'MES', 'REF', 'TUN', 'NOC', 'UCD', 'PUN'],
+  },
+  {
+    input: {
+      contactAttemptConfiguration: 'TEL' as ContactAttemptConfiguration,
+      medium: 'TEL' as ContactAttemptMedium,
+    },
+    output: ['INA', 'APT', 'MES', 'REF', 'TUN', 'NOC', 'UCD', 'PUN'],
+  },
+  {
+    input: {
+      contactAttemptConfiguration: 'TEL' as ContactAttemptConfiguration,
+      medium: 'FIELD' as ContactAttemptMedium,
+    },
+    output: ['INA', 'APT', 'REF', 'TUN', 'NOC', 'PUN', 'NPS', 'NLH'],
+  },
+  {
+    input: {
+      contactAttemptConfiguration: 'TEL' as ContactAttemptConfiguration,
+      medium: 'EMAIL' as ContactAttemptMedium,
+    },
+    output: ['APT', 'MES', 'REF', 'UCD', 'PUN'],
+  },
 ] as const;
 
 describe('getContactAttemptsByMedium', () => {
   contactAttemptsByMediumTests.map(({ input, output }) => {
     it(`getContactAttemptsByMedium should return ${JSON.stringify(output)} when adding ${input}`, () => {
-      expect(getContactAttemptsByMedium(input).map(({ value }) => value)).toEqual(output);
+      expect(
+        getContactAttemptsByMedium(input.contactAttemptConfiguration, input.medium).map(
+          ({ value }) => value
+        )
+      ).toEqual(output);
+    });
+  });
+});
+
+const { INTERVIEW_ACCEPTED, ...filtered } = contactAttempts;
+
+const filteredContactAttemptsTests: {
+  input: { contactAttemptConfiguration: ContactAttemptConfiguration; medium: any };
+  output: Partial<ContactAttempts>;
+}[] = [
+  {
+    input: { contactAttemptConfiguration: 'TEL', medium: undefined },
+    output: contactAttempts,
+  },
+  {
+    input: { contactAttemptConfiguration: 'F2F', medium: 'TEL' },
+    output: filtered,
+  },
+  {
+    input: { contactAttemptConfiguration: 'TEL', medium: 'TEL' },
+    output: contactAttempts,
+  },
+  {
+    input: { contactAttemptConfiguration: 'TEL', medium: 'FIELD' },
+    output: contactAttempts,
+  },
+  {
+    input: { contactAttemptConfiguration: 'TEL', medium: 'EMAIL' },
+    output: filtered,
+  },
+  {
+    input: { contactAttemptConfiguration: 'F2F', medium: 'EMAIL' },
+    output: filtered,
+  },
+];
+
+describe('filteredContactAttempts', () => {
+  filteredContactAttemptsTests.map(({ input, output }) => {
+    it(`should return ${JSON.stringify(output)} for contactAttemptConfiguration=${input.contactAttemptConfiguration} and medium=${input.medium}`, () => {
+      const result = filteredContactAttempts(input.contactAttemptConfiguration, input.medium);
+      expect(result).toEqual(output);
     });
   });
 });
