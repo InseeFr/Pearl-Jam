@@ -15,7 +15,7 @@ jobs:
           node-version: lts/*
       - name: Run Docker Compose
         run: |
-          docker compose --env-file ./.env.docker up
+          docker compose --env-file ./.env.docker up -d
       - name: Install Playwright Browsers
         working-directory: ./Pearl-Jam
         run: npx playwright install --with-deps
