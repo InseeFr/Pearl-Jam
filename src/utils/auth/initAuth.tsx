@@ -6,8 +6,6 @@ export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const init = useRef(false);
 
-  console.log('useAuth', init.current);
-
   const interviewerRoles = import.meta.env.VITE_KEYCLOAK_ROLES_ALLOW_LIST.split(',');
 
   const accessAuthorized = () => {
@@ -55,18 +53,13 @@ export const useAuth = () => {
           checkLoginIframe: false,
         })
           .then(auth => {
-            console.log(auth);
             if (auth) {
               const interviewerInfos = getTokenInfo();
               const { roles } = interviewerInfos;
-              console.log(roles);
               if (isAuthorized(roles)) {
-                console.log('authorized');
                 window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(interviewerInfos));
                 accessAuthorized();
               } else {
-                console.log('denied');
-
                 accessDenied();
               }
               // offline mode

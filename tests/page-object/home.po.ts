@@ -13,10 +13,11 @@ export class HomePage implements GenericPage {
     await this.page.getByRole('textbox', { name: 'Username or email' }).press('Tab');
     await this.page.getByRole('textbox', { name: 'Password' }).fill('interv5');
     await this.page.getByRole('button', { name: 'Sign In' }).click();
+    await this.page.getByRole('button', { name: 'Fermer' }).click();
   }
 
   async importData() {
-    await this.page.getByRole('button', { name: 'Synchroniser' }).click({ force: true });
+    await this.page.getByRole('button', { name: 'Synchroniser' }).click();
     await this.page.getByRole('button', { name: "J'ai compris" }).click();
   }
 

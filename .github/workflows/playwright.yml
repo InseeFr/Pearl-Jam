@@ -16,8 +16,6 @@ jobs:
       - name: Run Docker Compose
         run: |
           docker compose --env-file ./.env.docker up -d
-      - name: Run Playwright tests
-        run: |
           yarn
           npx playwright install --with-deps chromium
           npx playwright test

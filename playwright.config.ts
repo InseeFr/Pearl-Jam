@@ -44,7 +44,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], locale: 'fr-FR' },
+      use: { ...devices['Desktop Chrome'], locale: 'fr-FR', serviceWorkers: 'block' },
     },
   ],
 });

@@ -28,7 +28,7 @@ describe('useAuth', () => {
   });
 
   it('should handle keycloak authentication when authorized', async () => {
-    const mockRoles = ['pearl-interviewer'];
+    const mockRoles = ['interviewer'];
     const mockTokenInfo = { roles: mockRoles };
     (keycloakUtils.keycloakAuthentication as Mock).mockResolvedValue(true);
     (keycloakUtils.getTokenInfo as Mock).mockReturnValue(mockTokenInfo);
@@ -56,7 +56,7 @@ describe('useAuth', () => {
   });
 
   it('should validate localStorage token in offline mode', async () => {
-    const mockRoles = ['pearl-interviewer'];
+    const mockRoles = ['interviewer'];
     const mockToken = { roles: mockRoles };
     mockGetItem.mockReturnValueOnce(JSON.stringify(mockToken));
     (keycloakUtils.keycloakAuthentication as Mock).mockResolvedValue(false);
