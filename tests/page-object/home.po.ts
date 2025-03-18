@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import { GenericPage } from './generic-page.po';
 
-export const totalSu = 18;
+export const totalSu = 25;
 
 export class HomePage implements GenericPage {
   constructor(private readonly page: Page) {}
