@@ -72,10 +72,10 @@ export const optionsMap = {
   },
   TREAT: {
     label: `${D.treat}`,
-    value: IdentificationQuestionOptionValues.TREAT,
+    value: IdentificationQuestionOptionValues.YES,
   },
   NOTREAT: {
     label: `${D.noTreat}`,
-    value: IdentificationQuestionOptionValues.NOTREAT,
+    value: IdentificationQuestionOptionValues.NO,
   },
 };
