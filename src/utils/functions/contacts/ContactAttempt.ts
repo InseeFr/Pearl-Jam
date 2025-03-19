@@ -35,7 +35,7 @@ export const contactAttempts: ContactAttempts = {
   INTERVIEW_ACCEPTED: {
     value: 'INA',
     label: `${D.interviewAccepted}`,
-    mediums: ['TEL', 'EMAIL', 'FIELD'],
+    mediums: ['TEL', 'FIELD'],
   },
   APPOINTMENT_MADE: {
     value: 'APT',
@@ -89,6 +89,7 @@ export const filteredContactAttempts = (
   medium: ContactAttemptMedium
 ): Partial<ContactAttempts> => {
   const { INTERVIEW_ACCEPTED, ...filtered } = contactAttempts;
+
   if (contactAttemptConfiguration === 'F2F' && medium !== 'FIELD') return filtered;
   if (contactAttemptConfiguration === 'TEL' && medium !== 'TEL') return filtered;
 

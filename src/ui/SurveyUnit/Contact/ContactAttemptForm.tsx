@@ -102,7 +102,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
 
   const mediumOptions = getMediumByConfiguration(surveyUnit.contactAttemptConfiguration);
   const contactAttempts = getContactAttemptsByMedium(
-    surveyUnit.contactOutcomeConfiguration,
+    surveyUnit.contactAttemptConfiguration,
     medium
   );
 
