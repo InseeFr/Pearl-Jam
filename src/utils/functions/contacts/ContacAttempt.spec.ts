@@ -76,13 +76,6 @@ const contactAttemptsByMediumTests = [
   {
     input: {
       contactAttemptConfiguration: 'TEL' as ContactAttemptConfiguration,
-      medium: 'FIELD' as ContactAttemptMedium,
-    },
-    output: ['INA', 'APT', 'REF', 'TUN', 'NOC', 'PUN', 'NPS', 'NLH'],
-  },
-  {
-    input: {
-      contactAttemptConfiguration: 'TEL' as ContactAttemptConfiguration,
       medium: 'EMAIL' as ContactAttemptMedium,
     },
     output: ['APT', 'MES', 'REF', 'UCD', 'PUN'],
@@ -108,27 +101,27 @@ const filteredContactAttemptsTests: {
   output: Partial<ContactAttempts>;
 }[] = [
   {
-    input: { contactAttemptConfiguration: 'TEL', medium: undefined },
+    input: { contactAttemptConfiguration: 'TEL', medium: 'TEL' as ContactAttemptMedium },
     output: contactAttempts,
   },
   {
-    input: { contactAttemptConfiguration: 'F2F', medium: 'TEL' },
+    input: { contactAttemptConfiguration: 'F2F', medium: 'TEL' as ContactAttemptMedium },
     output: filtered,
   },
   {
-    input: { contactAttemptConfiguration: 'TEL', medium: 'TEL' },
+    input: { contactAttemptConfiguration: 'F2F', medium: 'FIELD' as ContactAttemptMedium },
     output: contactAttempts,
   },
   {
-    input: { contactAttemptConfiguration: 'TEL', medium: 'FIELD' },
-    output: contactAttempts,
-  },
-  {
-    input: { contactAttemptConfiguration: 'TEL', medium: 'EMAIL' },
+    input: { contactAttemptConfiguration: 'TEL', medium: 'FIELD' as ContactAttemptMedium },
     output: filtered,
   },
   {
-    input: { contactAttemptConfiguration: 'F2F', medium: 'EMAIL' },
+    input: { contactAttemptConfiguration: 'TEL', medium: 'EMAIL' as ContactAttemptMedium },
+    output: filtered,
+  },
+  {
+    input: { contactAttemptConfiguration: 'F2F', medium: 'EMAIL' as ContactAttemptMedium },
     output: filtered,
   },
 ];
