@@ -41,6 +41,7 @@ export default defineConfig({
   build: {
     outDir: 'build',
     target: 'esnext',
+    sourcemap: true,
   },
   plugins: [
     tsconfigPaths(),
@@ -84,6 +85,9 @@ export default defineConfig({
         theme_color: '#000000',
         background_color: '#ffffff',
       },
+    }),
+    viteEnvs({
+      declarationFile: '.env',
     }),
   ],
 });
