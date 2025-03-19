@@ -294,7 +294,7 @@ export async function seedData() {
     collectionEndDate: new Date().getTime() - 6 * day,
     endDate: new Date().getTime() + 15 * day,
     id: 'INDF2F',
-    identification: {},
+    identification: null,
     firstName: 'Flin',
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.INDF2F,

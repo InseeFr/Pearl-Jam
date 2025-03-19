@@ -89,13 +89,8 @@ export const filteredContactAttempts = (
   medium: ContactAttemptMedium
 ): Partial<ContactAttempts> => {
   const { INTERVIEW_ACCEPTED, ...filtered } = contactAttempts;
-  if (medium === 'TEL' && contactAttemptConfiguration === 'F2F') return filtered;
-
-  if (
-    medium === 'EMAIL' &&
-    (contactAttemptConfiguration === 'TEL' || contactAttemptConfiguration === 'F2F')
-  )
-    return filtered;
+  if (contactAttemptConfiguration === 'F2F' && medium !== 'FIELD') return filtered;
+  if (contactAttemptConfiguration === 'TEL' && medium !== 'TEL') return filtered;
 
   return contactAttempts;
 };
