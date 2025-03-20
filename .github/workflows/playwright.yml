@@ -26,6 +26,7 @@ jobs:
         run: |
           yarn
           npx playwright install --with-deps chromium
+          lsof -i -P -n | grep LISTEN
           npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
