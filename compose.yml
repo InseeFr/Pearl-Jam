@@ -12,6 +12,7 @@ services:
       - POSTGRES_DB=${PEARL_DB}
     command: ['postgres']
     tty: true
+    stdin_open: true
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U ${PEARL_DB_USER} -d ${PEARL_DB} -h localhost']
       interval: 5s
@@ -28,6 +29,7 @@ services:
       - POSTGRES_DB=${QUESTIONNAIRE_DB}
     command: ['postgres']
     tty: true
+    stdin_open: true
     healthcheck:
       test:
         ['CMD-SHELL', 'pg_isready -U ${QUESTIONNAIRE_DB_USER} -d ${QUESTIONNAIRE_DB} -h localhost']
@@ -40,6 +42,7 @@ services:
   questionnaire-api:
     image: inseefr/queen-back-office:snapshot-fix-data-reviewer
     tty: true
+    stdin_open: true
     depends_on:
       questionnaire-db:
         condition: service_healthy
@@ -82,6 +85,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:24.0
     tty: true
+    stdin_open: true
     environment:
       KEYCLOAK_ADMIN: administrator
       KEYCLOAK_ADMIN_PASSWORD: administrator
@@ -96,6 +100,7 @@ services:
   pearl-api:
     image: inseefr/pearl-jam-back-office:snapshot-feat-dockerize-tests
     tty: true
+    stdin_open: true
     depends_on:
       pearl-db:
         condition: service_healthy
@@ -136,6 +141,7 @@ services:
   queen-front:
     image: inseefr/drama-queen:2.3.12-rc.0
     tty: true
+    stdin_open: true
     environment:
       - VITE_QUEEN_API_URL=http://localhost:${QUESTIONNAIRE_API_PORT}
       - VITE_OIDC_CLIENT_ID=${AUTH_CLIENT_ID}
@@ -160,6 +166,7 @@ services:
         - VITE_KEYCLOAK_ROLES_ALLOW_LIST=interviewer
         - VITE_QUEEN_URL=http://localhost:${QUEEN_FRONTEND_PORT}
     tty: true
+    stdin_open: true
     depends_on:
       queen-front:
         condition: service_started
@@ -170,32 +177,32 @@ services:
     ports:
       - '${PEARL_FRONTEND_PORT}:8300'
 
-  playwright-captation:
-    build:
-      dockerfile: playwright-dev.Dockerfile
-    profiles: [captation]
-    depends_on:
-      - pearl-api
-      - questionnaire-api
-      - keycloak
-    container_name: playwright-captation
-    hostname: front
-    volumes: *react-volumes
-    tty: true
-    stdin_open: true # without this node doesn't start
-    working_dir: /opt/app
-    ipc: host
-    network_mode: host
-    ports:
-      - '${PEARL_FRONTEND_PORT}:3001'
-    environment:
-      WATCHPACK_POLLING: true
-      FAST_REFRESH: true
-      DISPLAY: unix:0
-      XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
-    command:
-      - /bin/bash
-      - -c
-      - |
-        yarn install --frozen-lockfile
-        npx playwright codegen http://localhost:${PEARL_FRONTEND_PORT}/
+  # playwright-captation:
+  #   build:
+  #     dockerfile: playwright-dev.Dockerfile
+  #   profiles: [captation]
+  #   depends_on:
+  #     - pearl-api
+  #     - questionnaire-api
+  #     - keycloak
+  #   container_name: playwright-captation
+  #   hostname: front
+  #   volumes: *react-volumes
+  #   tty: true
+  #   stdin_open: true # without this node doesn't start
+  #   working_dir: /opt/app
+  #   ipc: host
+  #   network_mode: host
+  #   ports:
+  #     - '${PEARL_FRONTEND_PORT}:3001'
+  #   environment:
+  #     WATCHPACK_POLLING: true
+  #     FAST_REFRESH: true
+  #     DISPLAY: unix:0
+  #     XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
+  #   command:
+  #     - /bin/bash
+  #     - -c
+  #     - |
+  #       yarn install --frozen-lockfile
+  #       npx playwright codegen http://localhost:${PEARL_FRONTEND_PORT}/
