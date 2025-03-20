@@ -22,6 +22,7 @@ jobs:
           lsof -i -P -n | grep LISTEN
           curl http://localhost:5001/assets/remoteEntry.js
           docker ps
+          sudo netstat -tulpn
           npx playwright test
           docker ps
       - uses: actions/upload-artifact@v4
