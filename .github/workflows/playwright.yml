@@ -21,7 +21,9 @@ jobs:
           docker ps
           lsof -i -P -n | grep LISTEN
           curl http://localhost:5001/assets/remoteEntry.js
+          docker ps
           npx playwright test
+          docker ps
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
