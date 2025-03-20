@@ -51,6 +51,4 @@ export enum IdentificationQuestionOptionValues {
   ONE = 'ONE',
   MANY = 'MANY',
   DK = 'DK',
-  TREAT = 'TREAT',
-  NOTREAT = 'NOTREAT',
 }

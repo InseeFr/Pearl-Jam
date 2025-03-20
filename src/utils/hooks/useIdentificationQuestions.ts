@@ -33,7 +33,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
   };
 
   useEffect(() => {
-    let identification = { ...surveyUnit.identification };
+    let identification = surveyUnit.identification ?? {};
     if (selectedDialogId && identification[selectedDialogId])
       identification[selectedDialogId] = undefined;
 
@@ -63,7 +63,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     setQuestions(newQuestions);
     setResponses(newResponses);
     setAvailableQuestions(newAvailability);
-  }, [selectedDialogId]);
+  }, [JSON.stringify(surveyUnit.identification)]);
 
   const handleResponse = (
     selectedQuestionId: IdentificationQuestionsId,

@@ -5,6 +5,7 @@ import {
 import {
   ContactAttemptValue,
   ContactAttemptConfiguration,
+  ContactAttemptMedium,
 } from 'utils/functions/contacts/ContactAttempt';
 import {
   ContactOutcomeConfiguration,
@@ -76,7 +77,7 @@ export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId,
 export type SurveyUnitContactAttempt = {
   status: ContactAttemptValue;
   date: number;
-  medium: string;
+  medium: ContactAttemptMedium;
 };
 
 export type SurveyUnitCommunicationRequest = {
