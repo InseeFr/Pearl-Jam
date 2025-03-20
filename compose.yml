@@ -11,6 +11,7 @@ services:
       - POSTGRES_PASSWORD=${PEARL_DB_PASSWORD}
       - POSTGRES_DB=${PEARL_DB}
     command: ['postgres']
+    tty: true
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U ${PEARL_DB_USER} -d ${PEARL_DB} -h localhost']
       interval: 5s
@@ -26,6 +27,7 @@ services:
       - POSTGRES_PASSWORD=${QUESTIONNAIRE_DB_PASSWORD}
       - POSTGRES_DB=${QUESTIONNAIRE_DB}
     command: ['postgres']
+    tty: true
     healthcheck:
       test:
         ['CMD-SHELL', 'pg_isready -U ${QUESTIONNAIRE_DB_USER} -d ${QUESTIONNAIRE_DB} -h localhost']
@@ -37,6 +39,7 @@ services:
 
   questionnaire-api:
     image: inseefr/queen-back-office:snapshot-fix-data-reviewer
+    tty: true
     depends_on:
       questionnaire-db:
         condition: service_healthy
@@ -78,6 +81,7 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0
+    tty: true
     environment:
       KEYCLOAK_ADMIN: administrator
       KEYCLOAK_ADMIN_PASSWORD: administrator
@@ -91,6 +95,7 @@ services:
 
   pearl-api:
     image: inseefr/pearl-jam-back-office:snapshot-feat-dockerize-tests
+    tty: true
     depends_on:
       pearl-db:
         condition: service_healthy
@@ -130,6 +135,7 @@ services:
 
   queen-front:
     image: inseefr/drama-queen:2.3.12-rc.0
+    tty: true
     environment:
       - VITE_QUEEN_API_URL=http://localhost:${QUESTIONNAIRE_API_PORT}
       - VITE_OIDC_CLIENT_ID=${AUTH_CLIENT_ID}
@@ -153,6 +159,7 @@ services:
         - VITE_KEYCLOAK_URL=http://localhost:${KEYCLOAK_PORT}
         - VITE_KEYCLOAK_ROLES_ALLOW_LIST=interviewer
         - VITE_QUEEN_URL=http://localhost:${QUEEN_FRONTEND_PORT}
+    tty: true
     depends_on:
       queen-front:
         condition: service_started
