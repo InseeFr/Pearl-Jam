@@ -16,17 +16,11 @@ jobs:
       - name: Run Docker Compose
         run: |
           docker compose --env-file ./.env.docker up -d
-      - name: docker ps
-        run: |
-          docker ps
-      - name: Sleep for 60 seconds
-        run: sleep 180s
-        shell: bash
-      - name: Run Playwright tests
-        run: |
           yarn
           npx playwright install --with-deps chromium
+          docker ps
           lsof -i -P -n | grep LISTEN
+          curl http://localhost:5001/assets/remoteEntry.js
           npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
