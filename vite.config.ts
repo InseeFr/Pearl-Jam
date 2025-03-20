@@ -41,6 +41,7 @@ export default defineConfig({
   build: {
     outDir: 'build',
     target: 'esnext',
+    sourcemap: true,
   },
   plugins: [
     tsconfigPaths(),
