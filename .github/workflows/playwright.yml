@@ -18,9 +18,16 @@ jobs:
           docker compose --env-file ./.env.docker up -d
           yarn
           npx playwright install --with-deps chromium
-          docker ps        
-          yarn dev
-          npx playwright test
+          docker ps
+      - name: Wait for localhost:3000
+        run: |
+          while ! nc -z localhost 3000; do
+            echo "Waiting for port 3000..."
+            sleep 1
+          done
+        timeout-minutes: 5
+      - name: Run Playwright tests
+        run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
