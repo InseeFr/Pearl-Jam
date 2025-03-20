@@ -10,31 +10,24 @@ jobs:
     steps:
       - name: Checkout Pearl
         uses: actions/checkout@v4
-        with:
-          path: Pearl-Jam
-      - name: Checkout Queen
-        uses: actions/checkout@v4
-        with:
-          repository: inseefr/drama-queen
-          path: Drama-Queen
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
-      - name: Install dependencies
+      - name: Run Docker Compose
         run: |
-          npm install -g yarn
-          yarn --cwd Pearl-Jam
-          yarn --cwd Drama-Queen
-      - name: Install Playwright Browsers
-        working-directory: ./Pearl-Jam
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        working-directory: ./Pearl-Jam
-        run: |
+          docker compose --env-file ./.env.docker up -d
+          yarn
+          npx playwright install --with-deps chromium
+          docker ps
+          lsof -i -P -n | grep LISTEN
+          curl http://localhost:3001
+          curl http://localhost:5001/assets/remoteEntry.js
+          docker ps
           npx playwright test
+          docker ps
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
-          path: Pearl-Jam/playwright-report/
+          path: playwright-report/
           retention-days: 7
