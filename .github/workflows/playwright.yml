@@ -9,15 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Pearl
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-      - uses: gacts/install-podman@v1
         with:
           node-version: lts/*
       - name: Run Docker Compose
         run: |
           cat ./.env.docker
-          podman machine start
           podman compose --env-file ./.env.docker up -d
           yarn
           npx playwright install --with-deps chromium
