@@ -25,10 +25,10 @@ jobs:
             echo "Waiting for port 3000..."
             sleep 1
           done
-      - name: Wait for remoteEntry.js
+      - name: Wait for localhost:5001
         run: |
-          until curl --output /dev/null --silent --head --fail http://localhost:5001/assets/remoteEntry.js; do
-            echo "Waiting for remoteEntry.js..."
+          while ! nc -z localhost 5001; do
+            echo "Waiting for port 5001..."
             sleep 1
           done
       - name: Run Playwright tests
