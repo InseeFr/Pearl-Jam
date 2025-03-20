@@ -129,7 +129,7 @@ services:
       - ${PEARL_API_PORT}:8080
 
   queen-front:
-    image: inseefr/drama-queen:2.3.10-rc.1
+    image: inseefr/drama-queen:2.3.12-rc.0
     environment:
       - VITE_QUEEN_API_URL=http://localhost:${QUESTIONNAIRE_API_PORT}
       - VITE_OIDC_CLIENT_ID=${AUTH_CLIENT_ID}
