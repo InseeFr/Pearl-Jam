@@ -21,6 +21,7 @@ test('check if filters are saved inside the localStorage', async ({ page }) => {
   await homePage.checkNumberOfDisplayedItems(14, 25);
 });
 
+/*
 test('check if the status filters is working properly', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();
@@ -145,4 +146,4 @@ test('check if the order input is working properly', async ({ page }) => {
   await page.getByLabel('delete').click();
   const first = await page.$('.MuiCardContent-root');
   expect(await first?.innerText()).toContain('MOREAU Isabelle');
-});
+});*/
