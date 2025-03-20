@@ -25,7 +25,14 @@ jobs:
             echo "Waiting for port 3000..."
             sleep 1
           done
-        timeout-minutes: 5
+      - timeout-minutes: 5
+      - name: Wait for remoteEntry.js
+        run: |
+          until curl --output /dev/null --silent --head --fail http://localhost:5001/assets/remoteEntry.js; do
+            echo "Waiting for remoteEntry.js..."
+            sleep 1
+          done
+      - timeout-minutes: 5
       - name: Run Playwright tests
         run: npx playwright test
       - uses: actions/upload-artifact@v4
