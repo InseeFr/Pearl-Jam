@@ -18,9 +18,7 @@ jobs:
           docker compose --env-file ./.env.docker up -d
           yarn
           npx playwright install --with-deps chromium
-          docker ps
           lsof -i -P -n | grep LISTEN
-          curl http://localhost:5001/assets/remoteEntry.js
           docker ps
           sudo netstat -tulpn
           npx playwright test
