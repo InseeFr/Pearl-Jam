@@ -19,6 +19,9 @@ jobs:
       - name: docker ps
         run: |
           docker ps
+      - name: Sleep for 60 seconds
+        run: sleep 60s
+        shell: bash
       - name: Run Playwright tests
         run: |
           yarn
