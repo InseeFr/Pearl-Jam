@@ -15,12 +15,11 @@ jobs:
           node-version: lts/*
       - name: Run Docker Compose
         run: |
-          cat ./.env.docker
-          podman compose --env-file ./.env.docker up -d
+          docker compose --env-file ./.env.docker up -d
           yarn
           npx playwright install --with-deps chromium
           lsof -i -P -n | grep LISTEN
-          podman ps
+          docker ps
           sudo netstat -tulpn
           npx playwright test
       - uses: actions/upload-artifact@v4
