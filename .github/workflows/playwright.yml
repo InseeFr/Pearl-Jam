@@ -24,7 +24,6 @@ jobs:
           docker ps
           sudo netstat -tulpn
           npx playwright test
-
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
