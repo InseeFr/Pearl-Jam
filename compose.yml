@@ -4,32 +4,32 @@ x-react-volumes: &react-volumes
   - /opt/app/node_modules
 
 services:
-  front:
-    container_name: reactapp
-    build:
-      dockerfile: ./playwright-dev.Dockerfile
+  playwright-captation:
+    image: mcr.microsoft.com/playwright:v1.51.1-noble
+    profiles: [captation]
+    depends_on:
+      - pearl-api
+      - questionnaire-api
+      - keycloak
+    container_name: playwright-captation
     hostname: front
     volumes: *react-volumes
     tty: true
     stdin_open: true # without this node doesn't start
     working_dir: /opt/app
     ipc: host
-    ports:
-      - 5173:5173
-      - 8888:8888
+    network_mode: host
     environment:
       WATCHPACK_POLLING: true
       FAST_REFRESH: true
       DISPLAY: unix:0
       XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      NO_PROXY: ${NO_PROXY}
     command:
       - /bin/bash
       - -c
       - |
-        echo "Podman !!!" && sleep 1
-        mkdir -p /mnt/c/Windows/System32/WindowsPowerShell/v1.0 && sleep 1
-        touch /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe && sleep 1
-        chmod '755' /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
-        yarn install
-        yarn dev && sleep 1
-        sleep infinity
+        yarn install --network-timeout 100000
+        npx playwright codegen http://localhost:3000/
