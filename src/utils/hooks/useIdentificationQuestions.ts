@@ -45,8 +45,6 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
   };
 
   useEffectOnce(() => {
-    console.log('useEffectOnce');
-
     let identification = surveyUnit.identification ?? {};
     if (selectedDialogId && identification[selectedDialogId])
       identification[selectedDialogId] = undefined;
@@ -110,8 +108,6 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     let newStates = surveyUnit.states;
     if (isIdentificationFinished(surveyUnit.identificationConfiguration, identification))
       newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
-
-    console.log('newAvailability', newAvailability);
 
     persistSurveyUnit({
       ...surveyUnit,
