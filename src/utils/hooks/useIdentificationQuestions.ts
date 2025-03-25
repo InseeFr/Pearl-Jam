@@ -73,10 +73,6 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     selectedQuestionId: IdentificationQuestionsId,
     option: IdentificationQuestionOption
   ) => {
-    let updatedResponses: ResponseState = {
-      ...responses,
-      [selectedQuestionId]: option,
-    };
     let identification: SurveyUnitIdentification = surveyUnit.identification ?? {};
     identification[selectedQuestionId] = option.value;
 
@@ -94,9 +90,11 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
       Object.entries(newQuestions.values).map(([questionId, question]) => {
         const available = checkAvailability(newQuestions.values, question, newResponses);
 
-        if (!available || setResponsesAsUndefined) updatedResponses[question.id] = undefined;
-        else if (questionId === selectedQuestionId) {
-          updatedResponses[question.id] = option;
+        if (!available || setResponsesAsUndefined) {
+          newResponses[question.id] = undefined;
+          identification[question.id] = undefined;
+        } else if (questionId === selectedQuestionId) {
+          newResponses[questionId] = option;
           setResponsesAsUndefined = true;
         }
 
@@ -116,22 +114,14 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
       identification: identification,
     });
 
-    if (selectedDialogId)
-      identification[selectedDialogId] = updatedResponses[selectedDialogId]?.value;
+    if (selectedDialogId) identification[selectedDialogId] = newResponses[selectedDialogId]?.value;
 
-    if (
-      questions?.values[selectedQuestionId] &&
-      !updatedResponses[selectedQuestionId]?.concluding
-    ) {
-      setSelectedDialogId(
-        newQuestions.values[selectedQuestionId]
-          ? newQuestions.values[selectedQuestionId].nextId
-          : undefined
-      );
+    if (newQuestions?.values[selectedQuestionId] && !newResponses[selectedQuestionId]?.concluding) {
+      setSelectedDialogId(newQuestions.values[selectedQuestionId].nextId);
     }
 
     setAvailableQuestions(newAvailability);
-    setResponses(updatedResponses);
+    setResponses(newResponses);
   };
 
   const handleResponseCallback = useCallback(

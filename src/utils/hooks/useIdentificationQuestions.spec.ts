@@ -311,7 +311,7 @@ identificationQuestionsHookTests.forEach(({ surveyUnitInput, output }) => {
 identificationQuestionsHookSetReponseTests.forEach(
   ({ surveyUnitInput, setResponseCallParameters, output }) => {
     it(`SetResponse for useIdentificationQuestions should return ${output} when adding ${surveyUnitInput} and calling ${setResponseCallParameters}`, () => {
-      const { result, rerender } = renderHook(() => useIdentificationQuestions(surveyUnitInput));
+      const { result } = renderHook(() => useIdentificationQuestions(surveyUnitInput));
 
       const spyPersistSurveyUnit = vi.spyOn(utilsFunctions, 'persistSurveyUnit');
       const addNewState = vi.spyOn(utilsFunctions, 'addNewState');
@@ -322,9 +322,6 @@ identificationQuestionsHookSetReponseTests.forEach(
             setResponseCallParameters.identificationQuestionsId,
             setResponseCallParameters.option
           );
-
-        // simulating identification persisting and triggering rerender
-        rerender({ ...surveyUnitInput, identification: output.responses });
       });
 
       if (output.persistSurveyUnitIdentificationCall) expect(spyPersistSurveyUnit).toBeCalled();
