@@ -34,21 +34,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     undefined
   );
 
-  const setNextDialogId = (
-    questions: IdentificationQuestions,
-    dialogId?: IdentificationQuestionsId
-  ) => {
-    if (!dialogId || !questions.values[dialogId]?.disabled) return dialogId;
-
-    const nextId = questions.values[dialogId].nextId;
-    return setNextDialogId(questions, nextId);
-  };
-
   useEffectOnce(() => {
-    let identification = surveyUnit.identification ?? {};
-    if (selectedDialogId && identification[selectedDialogId])
-      identification[selectedDialogId] = undefined;
-
     const newQuestions = getIdentificationQuestionsTree(
       surveyUnit.identificationConfiguration,
       surveyUnit.identification
