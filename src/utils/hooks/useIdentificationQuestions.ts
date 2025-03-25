@@ -86,6 +86,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     );
 
     const newResponses = generateResponseState(newQuestions, identification);
+    console.log('newResponses', newResponses);
 
     let setResponsesAsUndefined = false;
 
@@ -130,16 +131,13 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     }
 
     setAvailableQuestions(newAvailability);
-
-    setResponses(() => {
-      return updatedResponses;
-    });
+    setResponses(updatedResponses);
   };
 
   const handleResponseCallback = useCallback(
     (selectedQuestionId: IdentificationQuestionsId, option: IdentificationQuestionOption) =>
       handleResponse(selectedQuestionId, option),
-    [selectedDialogId, responses]
+    [selectedDialogId, JSON.stringify(surveyUnit.identification)]
   );
 
   return {
