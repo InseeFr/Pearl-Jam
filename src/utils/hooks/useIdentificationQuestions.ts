@@ -68,8 +68,6 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     );
 
     const newResponses = generateResponseState(newQuestions, identification);
-    console.log('newResponses', newResponses);
-
     let setResponsesAsUndefined = false;
 
     const newAvailability: Partial<Record<IdentificationQuestionsId, boolean>> = Object.fromEntries(
