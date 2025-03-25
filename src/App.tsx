@@ -85,7 +85,9 @@ function AppWrapper() {
           {authenticated ? (
             <SyncContextProvider>
               <Header />
-              <Outlet />
+              <main>
+                <Outlet />
+              </main>
             </SyncContextProvider>
           ) : (
             <Preloader message={D.pleaseWait} />

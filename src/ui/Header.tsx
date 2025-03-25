@@ -40,13 +40,15 @@ export function Header() {
     >
       <Row gap={5}>
         <Link to="/">
-          <img
-            width={47}
-            height={50}
-            src="/static/images/logo-insee-header.png"
-            alt="Logo Insee"
-            style={{ display: 'block' }}
-          />
+          <h1>
+            <img
+              width={47}
+              height={50}
+              src="/static/images/logo-insee-header.png"
+              alt="Logo Insee"
+              style={{ display: 'block' }}
+            />
+          </h1>
         </Link>
         {/* Logo Sabiane */}
         <Stack>
@@ -58,7 +60,7 @@ export function Header() {
               Collecte
             </Typography>
           </Row>
-          <Typography color="hint" variant="xs" component="span" style={{ color: '#BDBDBD' }}>
+          <Typography color="hint" variant="xs" component="span">
             V.{version}
           </Typography>
         </Stack>
