@@ -30,9 +30,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
   const [availableQuestions, setAvailableQuestions] = useState<
     Partial<Record<IdentificationQuestionsId, boolean>>
   >({});
-  const [selectedDialogId, setSelectedDialogId] = useState<IdentificationQuestionsId | undefined>(
-    undefined
-  );
+  const [selectedDialogId, setSelectedDialogId] = useState<IdentificationQuestionsId>();
 
   useEffectOnce(() => {
     const newQuestions = getIdentificationQuestionsTree(
