@@ -59,7 +59,7 @@ services:
       - ./keycloak/realms:/opt/keycloak/data/import
 
   questionnaire-api:
-    image: inseefr/queen-back-office:snapshot-fix-data-reviewer
+    image: inseefr/queen-back-office:4.8.1-rc
     tty: true
     stdin_open: true
     #healthcheck:
@@ -106,7 +106,7 @@ services:
       - ${QUESTIONNAIRE_API_PORT}:8080
 
   pearl-api:
-    image: inseefr/pearl-jam-back-office:snapshot-feat-dockerize-tests
+    image: inseefr/pearl-jam-back-office:5.6.2-rc
     tty: true
     stdin_open: true
     # healthcheck:
@@ -200,6 +200,7 @@ services:
       - pearl-api
       - questionnaire-api
       - keycloak
+      - queen-front
     container_name: playwright-captation
     hostname: front
     volumes: *react-volumes
@@ -221,4 +222,4 @@ services:
       - -c
       - |
         yarn install --network-timeout 100000
-        npx playwright codegen http://localhost:3000/
+        npx playwright codegen --viewport-size="1920,1080" http://localhost:3000/
