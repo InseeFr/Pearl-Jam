@@ -70,7 +70,7 @@
     "prettier": "^3.3.3",
     "typescript": "^5.6.2",
     "typescript-eslint": "^8.8.1",
-    "vite": "^4.2.1",
+    "vite": "^4.5.11",
     "vite-plugin-pwa": "^0.19.2",
     "vite-tsconfig-paths": "^3.6.0",
     "vitest": "^2.1.2"
