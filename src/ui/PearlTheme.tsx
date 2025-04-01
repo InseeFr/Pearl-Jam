@@ -115,7 +115,7 @@ const coloredTheme = createTheme({
     textPrimary: colors(basicTheme, '#0A192E'),
     textHint: colors(basicTheme, '#797676'),
     textTertiary: colors(basicTheme, '#57677D'),
-    accent: colors(basicTheme, red['500']),
+    accent: colors(basicTheme, '#ca0a34'),
     iconLock: {
       main: '#323232',
     },

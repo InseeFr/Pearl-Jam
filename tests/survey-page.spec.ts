@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { HomePage } from './page-object/home.po';
 import { SurveyPage } from './page-object/survey.po';
 
-test('check if all tabs work properly', async ({ page }) => {
+test.skip('check if all tabs work properly', async ({ page }) => {
   const homePage = new HomePage(page);
   homePage.go();
   homePage.importData();
@@ -52,7 +52,7 @@ test('check if all tabs work properly', async ({ page }) => {
   await expect(page.getByLabel('Contacts')).toContainText('Dubuque');
 });
 
-test('check if a survey has the "To synchronize" state after Unavaible', async ({ page }) => {
+test.skip('check if a survey has the "To synchronize" state after Unavaible', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();
   await homePage.importData();

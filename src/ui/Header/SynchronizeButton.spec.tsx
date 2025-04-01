@@ -1,11 +1,11 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { SynchronizeButton } from './SynchronizeButton';
-import { SyncContext, SyncContextValue } from '../Sync/SyncContextProvider';
-import { useNetworkOnline } from '../../utils/hooks/useOnline';
-import D from '../../i18n/build-dictionary';
-import { describe, expect, it, Mock, MockContext, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach } from 'node:test';
 import { ComponentPropsWithoutRef } from 'react';
+import { describe, expect, it, Mock, vi } from 'vitest';
+import D from '../../i18n/build-dictionary';
+import { useNetworkOnline } from '../../utils/hooks/useOnline';
+import { SyncContext, SyncContextValue } from '../Sync/SyncContextProvider';
+import { SynchronizeButton } from './SynchronizeButton';
 
 vi.mock('../../utils/hooks/useOnline', () => ({
   useNetworkOnline: vi.fn(),

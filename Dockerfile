@@ -2,11 +2,27 @@
 
 FROM node:latest AS builder
 
+ARG VITE_PEARL_API_URL
+ARG VITE_PEARL_AUTHENTICATION_MODE
+ARG VITE_KEYCLOAK_CLIENTID
+ARG VITE_KEYCLOAK_REALM
+ARG VITE_KEYCLOAK_URL
+ARG VITE_KEYCLOAK_ROLES_ALLOW_LIST
+ARG VITE_QUEEN_URL
+
+ENV VITE_APP_ENV=$VITE_APP_ENV
+ENV VITE_PEARL_AUTHENTICATION_MODE=$VITE_PEARL_AUTHENTICATION_MODE
+ENV VITE_KEYCLOAK_CLIENTID=$VITE_KEYCLOAK_CLIENTID
+ENV VITE_KEYCLOAK_REALM=$VITE_KEYCLOAK_REALM
+ENV VITE_KEYCLOAK_URL=$VITE_KEYCLOAK_URL
+ENV VITE_KEYCLOAK_ROLES_ALLOW_LIST=$VITE_KEYCLOAK_ROLES_ALLOW_LIST
+ENV VITE_QUEEN_URL=$VITE_QUEEN_URL
+
 WORKDIR /pearl
 
 COPY ./ ./
 
-RUN yarn && yarn build
+RUN yarn --network-timeout 1000000000 && yarn build
 
 ### EXECUTION STEP ###
 
@@ -28,5 +44,4 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY --from=builder --chown=$NGINX_USER:$NGINX_GROUP /pearl/nginx.conf /etc/nginx/conf.d/nginx.conf
 
 # Add entrypoint and start nginx server
-RUN chmod 755 /usr/share/nginx/html/vite-envs.sh
-ENTRYPOINT [ "sh", "-c", "/usr/share/nginx/html/vite-envs.sh && nginx -g 'daemon off;'"]
+CMD ["nginx", "-g", "daemon off;"]

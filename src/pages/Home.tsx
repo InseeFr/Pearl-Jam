@@ -1,32 +1,32 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { SidebarLayout } from '../ui/SidebarLayout';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { InputLabel, SelectChangeEvent } from '@mui/material';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import { Typography } from '../ui/Typography';
+import { useEffect, useMemo, useState } from 'react';
+import { SurveyUnit } from 'types/pearl';
 import D from '../i18n/build-dictionary';
 import { Accordion } from '../ui/Accordion';
-import { useMissingSurveyUnits, useSurveyUnits } from '../utils/hooks/database';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { filterSurveyUnits, useSearchFilter } from '../utils/hooks/useSearchFilter';
 import { Hr } from '../ui/Hr';
-import { toDoEnum } from '../utils/enum/SUToDoEnum';
-import { StatusChip } from '../ui/StatusChip';
-import Grid from '@mui/material/Grid';
-import { SwitchIOS } from '../ui/Switch';
-import Button from '@mui/material/Button';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import IconButton from '@mui/material/IconButton';
-import { IconDesc } from '../ui/Icons/IconDesc';
 import { IconAsc } from '../ui/Icons/IconAsc';
-import { SearchField } from '../ui/SearchField';
-import { SurveyCard } from '../ui/SurveyCard';
+import { IconDesc } from '../ui/Icons/IconDesc';
 import { Row } from '../ui/Row';
+import { SearchField } from '../ui/SearchField';
 import { Select } from '../ui/Select';
-import { seedData } from '../utils/functions/seeder';
+import { SidebarLayout } from '../ui/SidebarLayout';
+import { StatusChip } from '../ui/StatusChip';
+import { SurveyCard } from '../ui/SurveyCard';
+import { SwitchIOS } from '../ui/Switch';
+import { Typography } from '../ui/Typography';
+import { toDoEnum } from '../utils/enum/SUToDoEnum';
 import { persistSurveyUnit, updateStateWithDates } from '../utils/functions';
-import { SurveyUnit } from 'types/pearl';
-import { SelectChangeEvent } from '@mui/material';
+import { useMissingSurveyUnits, useSurveyUnits } from '../utils/hooks/database';
+import { filterSurveyUnits, useSearchFilter } from '../utils/hooks/useSearchFilter';
+import { visuallyHidden } from '@mui/utils';
 
 export function Home() {
   const surveyUnits = useSurveyUnits();
@@ -222,7 +222,12 @@ function Sidebar({ surveyUnits }: Readonly<{ surveyUnits: SurveyUnit[] }>) {
         <Hr />
         <Accordion variant="dense" title={D.subSampleCluster} defaultOpen>
           <Stack gap={2} sx={{ width: '100%' }}>
+            <InputLabel style={visuallyHidden} id="subSampleCluster-label">
+              {D.subSample}
+            </InputLabel>
             <Select
+              labelId="subSampleCluster-label"
+              id="subSampleCluster"
               value={filter.subSample}
               allowEmpty
               placeholder={D.subSample}
@@ -231,7 +236,12 @@ function Sidebar({ surveyUnits }: Readonly<{ surveyUnits: SurveyUnit[] }>) {
               }}
               options={subSamples.map(s => ({ label: s.toString(), value: s }))}
             />
+            <InputLabel style={visuallyHidden} id="cluster-label">
+              {D.cluster}
+            </InputLabel>
             <Select
+              labelId="cluster-label"
+              id="cluster"
               value={filter.subGrappe}
               allowEmpty
               placeholder={D.cluster}

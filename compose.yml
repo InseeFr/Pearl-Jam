@@ -4,6 +4,195 @@ x-react-volumes: &react-volumes
   - /opt/app/node_modules
 
 services:
+  pearl-db:
+    image: postgres:15.1
+    environment:
+      - POSTGRES_USER=${PEARL_DB_USER}
+      - POSTGRES_PASSWORD=${PEARL_DB_PASSWORD}
+      - POSTGRES_DB=${PEARL_DB}
+    command: ['postgres']
+    tty: true
+    stdin_open: true
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${PEARL_DB_USER} -d ${PEARL_DB} -h localhost']
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    ports:
+      - ${PEARL_DB_PORT}:5432
+
+  questionnaire-db:
+    image: postgres:15.1
+    environment:
+      - POSTGRES_USER=${QUESTIONNAIRE_DB_USER}
+      - POSTGRES_PASSWORD=${QUESTIONNAIRE_DB_PASSWORD}
+      - POSTGRES_DB=${QUESTIONNAIRE_DB}
+    command: ['postgres']
+    tty: true
+    stdin_open: true
+    healthcheck:
+      test:
+        ['CMD-SHELL', 'pg_isready -U ${QUESTIONNAIRE_DB_USER} -d ${QUESTIONNAIRE_DB} -h localhost']
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    ports:
+      - ${QUESTIONNAIRE_DB_PORT}:5432
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    tty: true
+    stdin_open: true
+    environment:
+      KEYCLOAK_ADMIN: administrator
+      KEYCLOAK_ADMIN_PASSWORD: administrator
+      KC_HEALTH_ENABLED: 'true'
+      KC_LOG_LEVEL: info
+    command: ['start-dev', '--import-realm']
+    #healthcheck:
+    #  test: 'curl --head -fsS http://localhost:8080/health/ready'
+    #healthcheck:
+    #  test: ['CMD', 'curl', '--fail', 'http://localhost:8080']
+    ports:
+      - '${KEYCLOAK_PORT}:8080'
+    volumes:
+      - ./keycloak/realms:/opt/keycloak/data/import
+
+  questionnaire-api:
+    image: inseefr/queen-back-office:4.8.1-rc
+    tty: true
+    stdin_open: true
+    #healthcheck:
+    #  test: ['CMD', 'curl', '--fail', 'http://localhost:8080/api/healthcheck']
+    depends_on:
+      questionnaire-db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://questionnaire-db:5432/${QUESTIONNAIRE_DB}
+      - SPRING_DATASOURCE_USERNAME=${QUESTIONNAIRE_DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${QUESTIONNAIRE_DB_PASSWORD}
+      - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
+      - APPLICATION_TEMPFOLDER=/tmp
+      - APPLICATION_CORSORIGINS=http://localhost:3000,http://localhost:5001
+      - APPLICATION_ROLES_INTERVIEWER=${INTERVIEWER_ROLE}
+      - APPLICATION_ROLES_REVIEWER=${INTERNAL_USER_ROLE}
+      - APPLICATION_ROLES_ADMIN=${ADMIN_ROLE}
+      - APPLICATION_ROLES_WEBCLIENT=${WEBCLIENT_ROLE}
+      - FEATURE_OIDC_ENABLED=true
+      - FEATURE_OIDC_REALM=${AUTH_REALM}
+      - FEATURE_OIDC_CLIENTID=${AUTH_CLIENT_ID}
+      - FEATURE_OIDC_AUTHSERVERHOST=${AUTH_SERVER_URL}
+      - FEATURE_OIDC_AUTHSERVERURL=${AUTH_SERVER_URL}
+      - FEATURE_OIDC_ROLECLAIM=${JWT_ROLE_CLAIM}
+      - FEATURE_OIDC_PRINCIPALATTRIBUTE=preferred_username
+      - SPRINGDOC_SWAGGERUI_OAUTH_ADDITIONALQUERYSTRINGPARAMS_KC_IDP_HINT=${IDP_HINT}
+      # issuer-uri is used to auto discover keycloak configuration endpoints and to validate the iss in the token (spring boot check that issuer-uri and iss are identical)
+      # When using jwk-set-uri, issuer-uri is not used anymore to auto discover configuration.
+      # That's what we want here. By authenticating with swagger, host machine is used and the iss generated in the token is equals to issuer-uri
+      - spring.security.oauth2.resourceserver.jwt.issuer-uri=${AUTH_SERVER_URL}/realms/${AUTH_REALM}
+      - spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://keycloak:8080/realms/${AUTH_REALM}/protocol/openid-connect/certs
+      - FEATURE_PILOTAGE_ENABLED=true
+      - FEATURE_PILOTAGE_URL=http://pearl-api:8080
+      - FEATURE_SWAGGER_ENABLED=true
+      - FEATURE_COMMENTS_ENABLED=true
+      - FEATURE_CACHE_ENABLED=true
+      - FEATURE_INTERVIEWERMODE_ENABLED=true
+      - SPRING_LIQUIBASE_ENABLED=true
+      - SPRING_LIQUIBASE_CONTEXTS=demo
+      - SPRING_LIQUIBASE_CHANGELOG=classpath:db/integration-demo.xml
+    ports:
+      - ${QUESTIONNAIRE_API_PORT}:8080
+
+  pearl-api:
+    image: inseefr/pearl-jam-back-office:5.6.2-rc
+    tty: true
+    stdin_open: true
+    # healthcheck:
+    #   test: ['CMD', 'curl', '--fail', 'http://localhost:8080/api/healthcheck']
+    depends_on:
+      pearl-db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    environment:
+      - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://pearl-db:5432/${PEARL_DB}
+      - SPRING_DATASOURCE_USERNAME=${PEARL_DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${PEARL_DB_PASSWORD}
+      - SPRINGDOC_SWAGGER_UI_OAUTH_ADDITIONALQUERYSTRINGPARAMS_KC_IDP_HINT=${IDP_HINT}
+      # issuer-uri is used to auto discover keycloak configuration endpoints and to validate the iss in the token (spring boot check that issuer-uri and iss are identical)
+      # When using jwk-set-uri, issuer-uri is not used anymore to auto discover configuration.
+      # That's what we want here. By authenticating with swagger, host machine is used and the iss generated in the token is equals to issuer-uri
+      - spring.security.oauth2.resourceserver.jwt.issuer-uri=${AUTH_SERVER_URL}/realms/${AUTH_REALM}
+      - spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://keycloak:8080/realms/${AUTH_REALM}/protocol/openid-connect/certs
+      - APPLICATION_HOST=http://localhost:${PEARL_API_PORT}
+      - APPLICATION_ROLES_INTERVIEWER=${INTERVIEWER_ROLE}
+      - APPLICATION_ROLES_LOCAL_USER=${INTERNAL_USER_ROLE}
+      - APPLICATION_ROLES_NATIONAL_USER=${INTERNAL_USER_ROLE}
+      - APPLICATION_ROLES_ADMIN=${ADMIN_ROLE}
+      - APPLICATION_ROLES_WEBCLIENT=${WEBCLIENT_ROLE}
+      - application.corsOrigins=http://localhost:3000
+      - FEATURE_OIDC_ENABLED=true
+      - FEATURE_OIDC_REALM=${AUTH_REALM}
+      - FEATURE_OIDC_CLIENTID=${AUTH_CLIENT_ID}
+      - FEATURE_OIDC_AUTHSERVERHOST=${AUTH_SERVER_URL}
+      - FEATURE_OIDC_AUTHSERVERURL=${AUTH_SERVER_URL}
+      - FEATURE_OIDC_PRINCIPALATTRIBUTE=preferred_username
+      - FEATURE_MAILSERVICE_ENABLED=false
+      - FEATURE_SWAGGER_ENABLED=true
+      - LOGGING_FILE_ENABLED=false
+      - SPRINGDOC_SWAGGER_UI_OAUTH_CLIENT_ID=${AUTH_CLIENT_ID}
+      - SPRING_LIQUIBASE_ENABLED=true
+      - SPRING_LIQUIBASE_CONTEXTS=demo
+      - SPRING_LIQUIBASE_CHANGELOG=classpath:db/integration-demo.xml
+    ports:
+      - ${PEARL_API_PORT}:8080
+
+  queen-front:
+    image: inseefr/drama-queen:2.3.12-rc.0
+    tty: true
+    stdin_open: true
+    #healthcheck:
+    #  test: ['CMD', 'curl', '--fail', 'http://localhost']
+    environment:
+      - VITE_QUEEN_API_URL=http://localhost:${QUESTIONNAIRE_API_PORT}
+      - VITE_OIDC_CLIENT_ID=${AUTH_CLIENT_ID}
+      - VITE_OIDC_ISSUER=http://localhost:${KEYCLOAK_PORT}/realms/${AUTH_REALM}
+    depends_on:
+      keycloak:
+        condition: service_started
+      questionnaire-api:
+        condition: service_started
+    ports:
+      - '${QUEEN_FRONTEND_PORT}:8080'
+
+  pearl-front:
+    build:
+      dockerfile: ./Dockerfile
+      args:
+        - VITE_PEARL_API_URL=http://localhost:${PEARL_API_PORT}
+        - VITE_PEARL_AUTHENTICATION_MODE=keycloak
+        - VITE_KEYCLOAK_CLIENTID=${AUTH_CLIENT_ID}
+        - VITE_KEYCLOAK_REALM=${AUTH_REALM}
+        - VITE_KEYCLOAK_URL=http://localhost:${KEYCLOAK_PORT}
+        - VITE_KEYCLOAK_ROLES_ALLOW_LIST=interviewer
+        - VITE_QUEEN_URL=http://localhost:${QUEEN_FRONTEND_PORT}
+    tty: true
+    stdin_open: true
+    healthcheck:
+      test: ['CMD', 'curl', '--fail', 'http://localhost']
+    depends_on:
+      queen-front:
+        condition: service_started
+      keycloak:
+        condition: service_started
+      pearl-api:
+        condition: service_started
+    ports:
+      - '${PEARL_FRONTEND_PORT}:8300'
+
   playwright-captation:
     image: mcr.microsoft.com/playwright:v1.51.1-noble
     profiles: [captation]
@@ -11,6 +200,7 @@ services:
       - pearl-api
       - questionnaire-api
       - keycloak
+      - queen-front
     container_name: playwright-captation
     hostname: front
     volumes: *react-volumes
@@ -32,4 +222,4 @@ services:
       - -c
       - |
         yarn install --network-timeout 100000
-        npx playwright codegen http://localhost:3000/
+        npx playwright codegen --viewport-size="1920,1080" http://localhost:3000/
