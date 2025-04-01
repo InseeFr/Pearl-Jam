@@ -1,50 +1,50 @@
-import { SurveyUnit } from "types/pearl";
+import { SurveyUnit } from 'types/pearl';
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
-} from "utils/enum/identifications/IdentificationsQuestions";
-import { vi, expect, it } from "vitest";
-import { useIdentificationQuestions } from "./useIdentificationQuestions";
-import { act, renderHook } from "@testing-library/react";
+} from 'utils/enum/identifications/IdentificationsQuestions';
+import { vi, expect, it } from 'vitest';
+import { useIdentificationQuestions } from './useIdentificationQuestions';
+import { act, renderHook } from '@testing-library/react';
 import {
   IdentificationQuestionOption,
   getIdentificationQuestionsTree,
-} from "utils/functions/identifications/identificationFunctions";
-import { optionsMap } from "utils/functions/identifications/questionsTree/optionsMap";
-import D from "i18n";
-import * as utilsFunctions from "utils/functions";
+} from 'utils/functions/identifications/identificationFunctions';
+import { optionsMap } from 'utils/functions/identifications/questionsTree/optionsMap';
+import D from 'i18n';
+import * as utilsFunctions from 'utils/functions';
 
-vi.mock("utils/functions", { spy: true });
+vi.mock('utils/functions', { spy: true });
 
 let mockSurveyUnit: SurveyUnit = {
   identificationConfiguration: IdentificationConfiguration.NOIDENT,
   identification: {},
   states: [],
-  displayName: "",
-  id: "",
+  displayName: '',
+  id: '',
   persons: [],
   address: {
-    l1: "",
-    l2: "",
-    l3: "",
-    l4: "",
-    l5: "",
-    l6: "",
-    l7: "",
+    l1: '',
+    l2: '',
+    l3: '',
+    l4: '',
+    l5: '',
+    l6: '',
+    l7: '',
     elevator: false,
-    building: "",
-    floor: "",
-    door: "",
-    staircase: "",
+    building: '',
+    floor: '',
+    door: '',
+    staircase: '',
     cityPriorityDistrict: false,
   },
   priority: false,
   move: false,
-  campaign: "",
+  campaign: '',
   comments: [],
   sampleIdentifiers: {
     bs: 0,
-    ec: "",
+    ec: '',
     le: 0,
     noi: 0,
     numfa: 0,
@@ -52,19 +52,19 @@ let mockSurveyUnit: SurveyUnit = {
     ssech: 0,
     nolog: 0,
     nole: 0,
-    autre: "",
-    nograp: "",
+    autre: '',
+    nograp: '',
   },
   contactAttempts: [],
-  campaignLabel: "",
+  campaignLabel: '',
   managementStartDate: 0,
   interviewerStartDate: 0,
   identificationPhaseStartDate: 0,
   collectionStartDate: 0,
   collectionEndDate: 0,
   endDate: 0,
-  contactOutcomeConfiguration: "",
-  contactAttemptConfiguration: "",
+  contactOutcomeConfiguration: '',
+  contactAttemptConfiguration: '',
   useLetterCommunication: false,
   communicationRequests: [],
   communicationTemplates: [],
@@ -93,10 +93,7 @@ const identificationQuestionsHookTests = [
         category: undefined,
         occupant: undefined,
       },
-      questions: getIdentificationQuestionsTree(
-        IdentificationConfiguration.IASCO,
-        {}
-      ),
+      questions: getIdentificationQuestionsTree(IdentificationConfiguration.IASCO, {}),
       handleReponse: vi.fn as (
         selectedQuestionId: IdentificationQuestionsId,
         option: IdentificationQuestionOption
@@ -112,10 +109,7 @@ const identificationQuestionsHookTests = [
     output: {
       availability: {},
       responses: {},
-      questions: getIdentificationQuestionsTree(
-        IdentificationConfiguration.NOIDENT,
-        {}
-      ),
+      questions: getIdentificationQuestionsTree(IdentificationConfiguration.NOIDENT, {}),
       handleReponse: vi.fn as (
         selectedQuestionId: IdentificationQuestionsId,
         option: IdentificationQuestionOption
@@ -147,14 +141,11 @@ const identificationQuestionsHookTests = [
         presentInPreviousHome: undefined,
         situation: undefined,
       },
-      questions: getIdentificationQuestionsTree(
-        IdentificationConfiguration.SRCVREINT,
-        {
-          numberOfRespondents: optionsMap.MANY.value,
-          individualStatus: optionsMap.OTHER_ADDRESS.value,
-          householdComposition: optionsMap.SAME_COMPO.value,
-        }
-      ),
+      questions: getIdentificationQuestionsTree(IdentificationConfiguration.SRCVREINT, {
+        numberOfRespondents: optionsMap.MANY.value,
+        individualStatus: optionsMap.OTHER_ADDRESS.value,
+        householdComposition: optionsMap.SAME_COMPO.value,
+      }),
       handleReponse: vi.fn as (
         selectedQuestionId: IdentificationQuestionsId,
         option: IdentificationQuestionOption
@@ -178,12 +169,9 @@ const identificationQuestionsHookTests = [
         individualStatus: optionsMap.OTHER_ADDRESS,
         situation: undefined,
       },
-      questions: getIdentificationQuestionsTree(
-        IdentificationConfiguration.INDTEL,
-        {
-          individualStatus: optionsMap.OTHER_ADDRESS.value,
-        }
-      ),
+      questions: getIdentificationQuestionsTree(IdentificationConfiguration.INDTEL, {
+        individualStatus: optionsMap.OTHER_ADDRESS.value,
+      }),
       handleReponse: vi.fn as (
         selectedQuestionId: IdentificationQuestionsId,
         option: IdentificationQuestionOption
@@ -258,8 +246,7 @@ const identificationQuestionsHookSetReponseTests = [
     // SRCV 2
     surveyUnitInput: identificationQuestionsHookTests[2].surveyUnitInput,
     setResponseCallParameters: {
-      identificationQuestionsId:
-        IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
+      identificationQuestionsId: IdentificationQuestionsId.NUMBER_OF_RESPONDENTS,
       option: { ...optionsMap.ONE, concluding: false },
     },
     output: {
@@ -305,24 +292,18 @@ const identificationQuestionsHookSetReponseTests = [
 
 identificationQuestionsHookTests.forEach(({ surveyUnitInput, output }) => {
   it(`Initilization for useIdentificationQuestions should return ${output} when adding ${surveyUnitInput}`, () => {
-    const { result, rerender } = renderHook(() =>
-      useIdentificationQuestions(surveyUnitInput)
-    );
+    const { result, rerender } = renderHook(() => useIdentificationQuestions(surveyUnitInput));
 
     act(() => {
       // trigger useEffect
-      rerender({ ...surveyUnitInput, displayName: "test" });
+      rerender({ ...surveyUnitInput, displayName: 'test' });
     });
 
     const { root, ...questions } = output.questions;
-    expect(result.current.availableQuestions).toStrictEqual(
-      output.availability
-    );
+    expect(result.current.availableQuestions).toStrictEqual(output.availability);
     expect(result.current.responses).toMatchObject(output.responses);
     expect(result.current.questions).toMatchObject(questions);
-    expect(result.current.handleResponse).toBeTypeOf(
-      typeof output.handleReponse
-    );
+    expect(result.current.handleResponseCallback).toBeTypeOf(typeof output.handleReponse);
     expect(result.current.selectedDialogId).toBeUndefined();
   });
 });
@@ -330,34 +311,23 @@ identificationQuestionsHookTests.forEach(({ surveyUnitInput, output }) => {
 identificationQuestionsHookSetReponseTests.forEach(
   ({ surveyUnitInput, setResponseCallParameters, output }) => {
     it(`SetResponse for useIdentificationQuestions should return ${output} when adding ${surveyUnitInput} and calling ${setResponseCallParameters}`, () => {
-      const { result, rerender } = renderHook(() =>
-        useIdentificationQuestions(surveyUnitInput)
-      );
+      const { result } = renderHook(() => useIdentificationQuestions(surveyUnitInput));
 
-      const spyPersistSurveyUnit = vi.spyOn(
-        utilsFunctions,
-        "persistSurveyUnit"
-      );
-      const addNewState = vi.spyOn(utilsFunctions, "addNewState");
+      const spyPersistSurveyUnit = vi.spyOn(utilsFunctions, 'persistSurveyUnit');
+      const addNewState = vi.spyOn(utilsFunctions, 'addNewState');
 
       act(() => {
         if (setResponseCallParameters)
-          result.current.handleResponse(
+          result.current.handleResponseCallback(
             setResponseCallParameters.identificationQuestionsId,
             setResponseCallParameters.option
           );
-
-        // simulating identification persisting and triggering rerender
-        rerender({ ...surveyUnitInput, identification: output.responses });
       });
 
-      if (output.persistSurveyUnitIdentificationCall)
-        expect(spyPersistSurveyUnit).toBeCalled();
+      if (output.persistSurveyUnitIdentificationCall) expect(spyPersistSurveyUnit).toBeCalled();
       if (output.addNewStateCall) expect(addNewState).toBeCalled();
 
-      expect(result.current.availableQuestions).toStrictEqual(
-        output.availability
-      );
+      expect(result.current.availableQuestions).toStrictEqual(output.availability);
       expect(result.current.responses).toMatchObject(output.responses);
       expect(result.current.selectedDialogId).toEqual(output.nextDialog);
     });

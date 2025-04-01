@@ -21,7 +21,7 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
     selectedDialogId,
     availableQuestions,
     setSelectedDialogId,
-    handleResponse,
+    handleResponseCallback,
   } = useIdentificationQuestions(surveyUnit);
 
   return (
@@ -53,7 +53,7 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
           key={`dialog-${selectedDialogId}`}
           question={questions.values[selectedDialogId]}
           defaultOption={responses[selectedDialogId] ?? undefined}
-          onSubmit={handleResponse}
+          onSubmit={handleResponseCallback}
           onClose={() => {
             setSelectedDialogId(undefined);
           }}

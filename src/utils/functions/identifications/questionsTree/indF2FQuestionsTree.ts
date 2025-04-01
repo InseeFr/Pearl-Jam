@@ -71,7 +71,7 @@ const situationOtherAdress: IdentificationQuestionValue = {
   ...situationSameAdress,
   dependsOn: {
     questionId: IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS,
-    values: [IdentificationQuestionOptionValues.TREAT],
+    values: [IdentificationQuestionOptionValues.NO],
   },
 };
 
@@ -112,7 +112,7 @@ export const transmissionRulesByINDF2F: TransmissionRules = {
   ...commonTransmissionRules,
   invalidIdentification: {
     id: IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS,
-    value: IdentificationQuestionOptionValues.NOTREAT,
+    value: IdentificationQuestionOptionValues.NO,
   },
   invalidIdentificationsAndContactOutcome: {
     identifications: [
@@ -129,7 +129,7 @@ export const transmissionRulesByINDF2FNOR: TransmissionRules = {
   ...commonTransmissionRules,
   invalidIdentification: {
     id: IdentificationQuestionsId.INTERVIEWER_CAN_PROCESS,
-    value: IdentificationQuestionOptionValues.NOTREAT,
+    value: IdentificationQuestionOptionValues.NO,
   },
   invalidIdentificationsAndContactOutcome: {
     identifications: [

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
@@ -11,6 +11,18 @@ import {
   getIdentificationQuestionsTree,
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctions';
+import { useEffectOnce } from './useEffectOnce';
+
+const generateResponseState = (
+  questions: IdentificationQuestions,
+  identification?: SurveyUnitIdentification
+): ResponseState =>
+  Object.fromEntries(
+    Object.entries(questions.values).map(([id, { options }]) => [
+      id,
+      options.find(o => o.value === identification?.[id as IdentificationQuestionsId]),
+    ])
+  );
 
 export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
   const [questions, setQuestions] = useState<IdentificationQuestions>({ values: {} });
@@ -18,38 +30,17 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
   const [availableQuestions, setAvailableQuestions] = useState<
     Partial<Record<IdentificationQuestionsId, boolean>>
   >({});
-  const [selectedDialogId, setSelectedDialogId] = useState<IdentificationQuestionsId | undefined>(
-    undefined
-  );
+  const [selectedDialogId, setSelectedDialogId] = useState<IdentificationQuestionsId>();
 
-  const setNextDialogId = (
-    questions: IdentificationQuestions,
-    dialogId?: IdentificationQuestionsId
-  ) => {
-    if (!dialogId || !questions.values[dialogId]?.disabled) return dialogId;
-
-    const nextId = questions.values[dialogId].nextId;
-    return setNextDialogId(questions, nextId);
-  };
-
-  useEffect(() => {
-    let identification = surveyUnit.identification ?? {};
-    if (selectedDialogId && identification[selectedDialogId])
-      identification[selectedDialogId] = undefined;
-
+  useEffectOnce(() => {
     const newQuestions = getIdentificationQuestionsTree(
       surveyUnit.identificationConfiguration,
-      identification
+      surveyUnit.identification
     );
 
-    const newResponses: ResponseState = Object.fromEntries(
-      Object.keys(newQuestions.values).map(id => [
-        id,
-        newQuestions.values[id as IdentificationQuestionsId]?.options.find(
-          o => o.value === surveyUnit?.identification?.[id as IdentificationQuestionsId]
-        ),
-      ])
-    );
+    setQuestions(newQuestions);
+
+    const newResponses = generateResponseState(newQuestions, surveyUnit.identification);
 
     const newAvailability: Partial<Record<IdentificationQuestionsId, boolean>> = Object.fromEntries(
       Object.entries(newQuestions.values).map(([questionId, question]) => [
@@ -58,62 +49,68 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
       ])
     );
 
-    const newDialogId = setNextDialogId(newQuestions, selectedDialogId);
-    setSelectedDialogId(newDialogId);
-    setQuestions(newQuestions);
-    setResponses(newResponses);
     setAvailableQuestions(newAvailability);
-  }, [JSON.stringify(surveyUnit.identification)]);
+    setResponses(newResponses);
+  }, [surveyUnit.id]);
 
   const handleResponse = (
     selectedQuestionId: IdentificationQuestionsId,
     option: IdentificationQuestionOption
   ) => {
-    let updatedResponses: ResponseState = {
-      ...responses,
-      [selectedQuestionId]: option,
-    };
     let identification: SurveyUnitIdentification = surveyUnit.identification ?? {};
+    identification[selectedQuestionId] = option.value;
+
+    const newQuestions = getIdentificationQuestionsTree(
+      surveyUnit.identificationConfiguration,
+      identification
+    );
+
+    const newResponses = generateResponseState(newQuestions, identification);
     let setResponsesAsUndefined = false;
-    const availableQuestionIds = Object.entries(questions.values).map(([questionId, question]) => {
-      const available = checkAvailability(questions?.values, question, updatedResponses);
 
-      if (!available || setResponsesAsUndefined) updatedResponses[question.id] = undefined;
-      else if (questionId === selectedQuestionId) {
-        updatedResponses[question.id] = option;
-        setResponsesAsUndefined = true;
-      }
+    const newAvailability: Partial<Record<IdentificationQuestionsId, boolean>> = Object.fromEntries(
+      Object.entries(newQuestions.values).map(([questionId, question]) => {
+        const available = checkAvailability(newQuestions.values, question, newResponses);
 
-      identification[question.id] = updatedResponses[question.id]?.value;
-      return [questionId, available];
+        if (!available || setResponsesAsUndefined) {
+          newResponses[question.id] = undefined;
+          identification[question.id] = undefined;
+        } else if (questionId === selectedQuestionId) {
+          newResponses[questionId] = option;
+          setResponsesAsUndefined = true;
+        }
+
+        if (!available) identification[questionId as IdentificationQuestionsId] = undefined;
+
+        return [questionId, available];
+      })
+    );
+
+    let newStates = surveyUnit.states;
+    if (isIdentificationFinished(surveyUnit.identificationConfiguration, identification))
+      newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
+
+    persistSurveyUnit({
+      ...surveyUnit,
+      states: newStates,
+      identification: identification,
     });
 
-    setResponses(() => {
-      const updatedAvailability = Object.fromEntries(availableQuestionIds);
+    if (selectedDialogId) identification[selectedDialogId] = newResponses[selectedDialogId]?.value;
 
-      if (
-        questions?.values[selectedQuestionId] &&
-        !updatedResponses[selectedQuestionId]?.concluding
-      ) {
-        setSelectedDialogId(questions.values[selectedQuestionId].nextId);
-      }
+    if (newQuestions?.values[selectedQuestionId] && !newResponses[selectedQuestionId]?.concluding) {
+      setSelectedDialogId(newQuestions.values[selectedQuestionId].nextId);
+    }
 
-      // Prevent rerender
-      if (updatedAvailability != availableQuestions) setAvailableQuestions(updatedAvailability);
-
-      let newStates = surveyUnit.states;
-      if (isIdentificationFinished(surveyUnit.identificationConfiguration, identification))
-        newStates = addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
-
-      persistSurveyUnit({
-        ...surveyUnit,
-        states: newStates,
-        identification: identification,
-      });
-
-      return updatedResponses;
-    });
+    setAvailableQuestions(newAvailability);
+    setResponses(newResponses);
   };
+
+  const handleResponseCallback = useCallback(
+    (selectedQuestionId: IdentificationQuestionsId, option: IdentificationQuestionOption) =>
+      handleResponse(selectedQuestionId, option),
+    [selectedDialogId, JSON.stringify(surveyUnit.identification)]
+  );
 
   return {
     questions,
@@ -121,6 +118,6 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     selectedDialogId,
     availableQuestions,
     setSelectedDialogId,
-    handleResponse,
+    handleResponseCallback,
   };
 }
