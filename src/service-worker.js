@@ -87,9 +87,7 @@ registerRoute(
 const cacheConfiguration = async () => {
   const manifest = await fetch('/manifest.json');
   const { icons } = await manifest.json();
-  const urlsToPrecache = [`/keycloak.json`, `/manifest.json`].concat(
-    icons.map(({ src }) => src)
-  );
+  const urlsToPrecache = [`/manifest.json`].concat(icons.map(({ src }) => src));
   const cache = await self.caches.open(configurationCacheName);
   await cache.addAll(urlsToPrecache);
 };
