@@ -25,7 +25,6 @@ const getInterviewer = (apiUrl: string) => (id: string) => (token?: string) =>
   getRequest(`${apiUrl}/api/interviewer/${id}`)(token);
 
 export const API = {
-  getRequest,
   getInterviewer,
   getSurveyUnitById,
   putDataSurveyUnitById,
