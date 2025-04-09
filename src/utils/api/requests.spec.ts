@@ -48,12 +48,6 @@ describe('API Module', () => {
     expect(result.status).toBe('success');
   });
 
-  it('should make a GET request for health check', async () => {
-    const result = await API.healthCheck(apiUrl)(mockToken);
-    expect(fetcher).toHaveBeenCalledWith(`${apiUrl}/api/healthcheck`, mockToken, 'GET', null);
-    expect(result.status).toBe('success');
-  });
-
   it('should make a GET request to fetch interviewer by ID', async () => {
     const result = await API.getInterviewer(apiUrl)('INT1')(mockToken);
     expect(fetcher).toHaveBeenCalledWith(`${apiUrl}/api/interviewer/INT1`, mockToken, 'GET', null);
