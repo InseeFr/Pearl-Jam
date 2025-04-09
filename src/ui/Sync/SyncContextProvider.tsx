@@ -9,6 +9,7 @@ import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/sync
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
+import { getInterviewerCampaigns, healthCheck } from 'api/pearl';
 
 export type SyncContextValue = {
   setSyncResult: (value: {
@@ -41,8 +42,8 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
 
   const checkPearl = async () => {
     setPearlReady(null);
-    const { error, status } = await api.healthCheck(PEARL_API_URL);
-    if (!error && status === 200) {
+    const { status } = await healthCheck();
+    if (status === 200) {
       setPearlError(false);
       setPearlReady(true);
     } else {

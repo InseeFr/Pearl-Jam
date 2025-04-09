@@ -1,13 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
-import {
-  getSurveyUnits,
-  getSurveyUnitById,
-  putDataSurveyUnitById,
-  putSurveyUnitToTempZone,
-} from './surveyUnitAPI';
-import { API } from './requests';
-import { authentication, formatSurveyUnitForPut, getToken } from './utils';
 import { SurveyUnit } from 'types/pearl';
+import { describe, expect, it, vi } from 'vitest';
+import { API } from './requests';
+import { getSurveyUnitById, putDataSurveyUnitById, putSurveyUnitToTempZone } from './surveyUnitAPI';
+import { authentication, formatSurveyUnitForPut, getToken } from './utils';
 
 vi.mock('./utils', () => ({
   authentication: vi.fn(),
@@ -29,14 +24,6 @@ vi.mock('./requests', () => ({
 describe('API Module', () => {
   const urlPearApi = 'https://api.example.com';
   const authenticationMode = 'mock-auth-mode';
-
-  it('should fetch all survey units', async () => {
-    const result = await getSurveyUnits(urlPearApi, authenticationMode);
-    expect(authentication).toHaveBeenCalledWith(authenticationMode);
-    expect(getToken).toHaveBeenCalled();
-    expect(API.getSurveyUnits).toHaveBeenCalledWith(urlPearApi);
-    expect(result).toEqual([{ id: 'SU1' }, { id: 'SU2' }]);
-  });
 
   it('should fetch a survey unit by ID', async () => {
     const getSurveyUnit = getSurveyUnitById(urlPearApi, authenticationMode);

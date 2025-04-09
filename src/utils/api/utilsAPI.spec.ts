@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { sendMail, healthCheck, getUserData } from './utilsAPI';
+import { sendMail, getUserData } from './utilsAPI';
 import { authentication, getToken } from './utils';
 import { API } from './requests';
 
@@ -11,7 +11,6 @@ vi.mock('./utils', () => ({
 vi.mock('./requests', () => ({
   API: {
     sendMail: vi.fn(),
-    healthCheck: vi.fn(),
     getInterviewer: vi.fn(),
   },
 }));
@@ -45,21 +44,6 @@ describe('utilsAPI', () => {
     });
 
     await expect(sendMail(urlPearApi, authenticationMode)(subject, content)).rejects.toThrowError();
-  });
-
-  it('should perform health check successfully', async () => {
-    (API.healthCheck as Mock).mockReturnValue(() => 'Health check passed');
-
-    await expect(healthCheck(urlPearApi)).resolves.toBe('Health check passed');
-    expect(API.healthCheck).toHaveBeenCalledWith(urlPearApi);
-  });
-
-  it('should throw an error when health check fails', async () => {
-    (API.healthCheck as Mock).mockImplementation(() => {
-      throw new Error('Auth error');
-    });
-
-    await expect(healthCheck(urlPearApi)).rejects.toThrowError();
   });
 
   it('should get user data successfully', async () => {

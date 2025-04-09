@@ -1,0 +1,4166 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Pearl-Jam-Back-Office",
+    "version": "5.6.4"
+  },
+  "servers": [
+    {
+      "url": "https://api-collecte-enqueteurs-enquetes.developpement4.insee.fr"
+    }
+  ],
+  "security": [
+    {
+      "oauth2": ["read", "write"]
+    }
+  ],
+  "tags": [
+    {
+      "name": "04. Interviewers",
+      "description": "Endpoints for interviewers"
+    },
+    {
+      "name": "07. State-count",
+      "description": "Endpoints for state counts"
+    },
+    {
+      "name": "03. Users",
+      "description": "Endpoints for users"
+    },
+    {
+      "name": "11. Enums",
+      "description": "Endpoints for enums"
+    },
+    {
+      "name": "12. Messages",
+      "description": "Endpoints for messages"
+    },
+    {
+      "name": "01. Campaigns",
+      "description": "Endpoints for campaigns"
+    },
+    {
+      "name": "02. Survey-units",
+      "description": "Endpoints for survey-units"
+    },
+    {
+      "name": "06. Closing causes",
+      "description": "Endpoints for closing causes"
+    },
+    {
+      "name": "05. Organization-units",
+      "description": "Endpoints for organization-units"
+    }
+  ],
+  "paths": {
+    "/api/user/{userId}/organization-unit/{ouId}": {
+      "put": {
+        "tags": ["03. Users"],
+        "summary": "Assign User to Organization Unit",
+        "operationId": "assignUserToOU",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ouId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/{id}": {
+      "get": {
+        "tags": ["03. Users"],
+        "summary": "Get User by id",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["03. Users"],
+        "summary": "Update User",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["03. Users"],
+        "summary": "Delete User",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/survey-unit/{id}": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "Get detail of specific survey unit ",
+        "operationId": "getSurveyUnitById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyUnitInterviewerResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["02. Survey-units"],
+        "summary": "Update the Survey Unit",
+        "operationId": "updateSurveyUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SurveyUnitUpdateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyUnitDetailDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["02. Survey-units"],
+        "summary": "Delete survey-unit",
+        "operationId": "deleteSurveyUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/survey-unit/{id}/viewed": {
+      "put": {
+        "tags": ["02. Survey-units"],
+        "summary": "Update the state of Survey Units listed in request body",
+        "operationId": "updateSurveyUnitViewed",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/survey-unit/{id}/state/{state}": {
+      "put": {
+        "tags": ["02. Survey-units"],
+        "summary": "Update the state of Survey Units listed in request body",
+        "operationId": "updateSurveyUnitState",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "NVM",
+                "NNS",
+                "ANV",
+                "VIN",
+                "VIC",
+                "PRC",
+                "AOC",
+                "APS",
+                "INS",
+                "WFT",
+                "WFS",
+                "TBR",
+                "FIN",
+                "CLO",
+                "NVA"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/survey-unit/{id}/comment": {
+      "put": {
+        "tags": ["02. Survey-units"],
+        "summary": "Update the comment of a survey unit",
+        "operationId": "updateSurveyUnitComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/survey-unit/{id}/closing-cause/{closingCause}": {
+      "put": {
+        "tags": ["02. Survey-units"],
+        "summary": "Add Closing cause",
+        "operationId": "updateClosingCause",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "closingCause",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["NPA", "NPI", "NPX", "ROW"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/survey-unit/{id}/close/{closingCause}": {
+      "put": {
+        "tags": ["02. Survey-units"],
+        "summary": "Closes a survey unit",
+        "operationId": "closeSurveyUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "closingCause",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["NPA", "NPI", "NPX", "ROW"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/preferences": {
+      "put": {
+        "tags": ["preference-controller"],
+        "summary": "Update current user preferences with campaigns listed in request body",
+        "operationId": "updatePreferences",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/message/{id}/interviewer/{idep}/read": {
+      "put": {
+        "tags": ["12. Messages"],
+        "summary": "Mark a message as read",
+        "operationId": "postMessage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "idep",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/message/{id}/interviewer/{idep}/delete": {
+      "put": {
+        "tags": ["12. Messages"],
+        "summary": "Mark a message as deleted",
+        "operationId": "postDeletedMessage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "idep",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/interviewer/{id}": {
+      "get": {
+        "tags": ["04. Interviewers"],
+        "summary": "Get interviewer by Id",
+        "operationId": "getInterviewer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InterviewerContextDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["04. Interviewers"],
+        "summary": "Update interviewer",
+        "operationId": "updateInterviewer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InterviewerContextDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InterviewerContextDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["04. Interviewers"],
+        "summary": "Delete interviewer",
+        "operationId": "deleteInterviewer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get target campaign",
+        "operationId": "getCampaign",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["01. Campaigns"],
+        "summary": "Update campaign (label, email, configurations, visibilities, communication-informations, referents)",
+        "operationId": "updateCampaign",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignUpdateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["01. Campaigns"],
+        "summary": "Delete a campaign",
+        "operationId": "deleteCampaignById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "force",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/campaign/{idCampaign}/organizational-unit/{idOu}/visibility": {
+      "put": {
+        "tags": ["01. Campaigns"],
+        "summary": "Update the visibility of a campaign for an organizational unit",
+        "operationId": "updateVisibility",
+        "parameters": [
+          {
+            "name": "idCampaign",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idOu",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VisibilityUpdateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/verify-name": {
+      "post": {
+        "tags": ["12. Messages"],
+        "summary": "Update Messages with campaigns or interviewers listed in request body",
+        "operationId": "postMessage_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WsText"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user": {
+      "get": {
+        "tags": ["03. Users"],
+        "summary": "Get User",
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["03. Users"],
+        "summary": "Create User",
+        "operationId": "createUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/survey-units": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "Get SurveyUnits",
+        "operationId": "getListSurveyUnit",
+        "parameters": [
+          {
+            "name": "extended",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SurveyUnitDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["02. Survey-units"],
+        "summary": "Create survey-units",
+        "operationId": "postSurveyUnits",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SurveyUnitContextDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/survey-units/interviewers": {
+      "post": {
+        "tags": ["02. Survey-units"],
+        "summary": "Assign SurveyUnits to interviewers",
+        "operationId": "postSurveyUnitInterviewerLinks",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SurveyUnitInterviewerLinkDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/survey-unit/{id}/temp-zone": {
+      "post": {
+        "tags": ["02. Survey-units"],
+        "summary": "Post survey-unit to temp-zone",
+        "operationId": "postSurveyUnitByIdInTempZone",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonNode"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization-units": {
+      "get": {
+        "tags": ["05. Organization-units"],
+        "summary": "Get all organization-units",
+        "operationId": "getOrganizationUnits",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationUnitContextDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["05. Organization-units"],
+        "summary": "Create Context with Organizational Unit and users associated",
+        "operationId": "postContext",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationUnitContextDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization-unit": {
+      "post": {
+        "tags": ["05. Organization-units"],
+        "summary": "Create Organizational Unit and users associated",
+        "operationId": "postOrganizationUnit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationUnitContextDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization-unit/{id}/users": {
+      "post": {
+        "tags": ["05. Organization-units"],
+        "summary": "Create users by organization-unit",
+        "operationId": "postUsersByOrganizationUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UserContextDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/message": {
+      "post": {
+        "tags": ["12. Messages"],
+        "summary": "Post a message",
+        "operationId": "postMessage_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mail": {
+      "post": {
+        "tags": ["12. Messages"],
+        "summary": "Post a mail to admins",
+        "operationId": "postMailMessage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MailDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/interviewers": {
+      "get": {
+        "tags": ["04. Interviewers"],
+        "summary": "Get interviewers",
+        "operationId": "getListInterviewers",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InterviewerDto"
+                  },
+                  "uniqueItems": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["04. Interviewers"],
+        "summary": "Post interviewers",
+        "operationId": "postInterviewers",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/InterviewerContextDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign": {
+      "post": {
+        "tags": ["01. Campaigns"],
+        "summary": "Create a Campaign",
+        "operationId": "createCampaign",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/campaigns/{id}/ongoing": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Check if campaign is on-going",
+        "operationId": "isOngoing",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OngoingDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/survey-units/temp-zone": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "GET all survey-units in temp-zone",
+        "operationId": "getSurveyUnitsInTempZone",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/survey-units/closable": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "Get closable survey units",
+        "operationId": "getClosableSurveyUnits",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SurveyUnitCampaignDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/survey-unit/{id}/states": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "Get states of given survey unit",
+        "operationId": "getStatesBySurveyUnitId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyUnitStatesDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/messages/{id}": {
+      "get": {
+        "tags": ["12. Messages"],
+        "summary": "Get a message",
+        "operationId": "getMessages",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessageDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/message-history": {
+      "get": {
+        "tags": ["12. Messages"],
+        "summary": "Get the message history",
+        "operationId": "getMessageHistory",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessageDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/interviewers/survey-units/state-count": {
+      "get": {
+        "tags": ["07. State-count"],
+        "summary": "Get interviewersStateCount",
+        "operationId": "getInterviewersStateCount",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StateCountDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/interviewer/{id}/campaigns": {
+      "get": {
+        "tags": ["04. Interviewers"],
+        "summary": "Get interviewer campaigns",
+        "operationId": "getListCampaigns",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CampaignDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/interviewer/survey-unit/{id}": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "Get detail of specific survey unit ",
+        "operationId": "getSurveyUnitById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyUnitInterviewerResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/interviewer/campaigns": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get interviewer related Campaigns",
+        "operationId": "getInterviewerCampaigns",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CampaignDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/healthcheck": {
+      "get": {
+        "tags": ["09. HealthCheck"],
+        "summary": "Healthcheck, check if api is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/enum/state": {
+      "get": {
+        "tags": ["11. Enums"],
+        "summary": "Get enum",
+        "operationId": "getStateEnum",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "NVM",
+                      "NNS",
+                      "ANV",
+                      "VIN",
+                      "VIC",
+                      "PRC",
+                      "AOC",
+                      "APS",
+                      "INS",
+                      "WFT",
+                      "WFS",
+                      "TBR",
+                      "FIN",
+                      "CLO",
+                      "NVA"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/enum/contact-outcome": {
+      "get": {
+        "tags": ["11. Enums"],
+        "summary": "Get enum",
+        "operationId": "getContactOutcomeEnum",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "INA",
+                      "REF",
+                      "IMP",
+                      "UCD",
+                      "UTR",
+                      "ALA",
+                      "DUK",
+                      "DUU",
+                      "NUH",
+                      "DCD",
+                      "NOA"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/enum/contact-attempt": {
+      "get": {
+        "tags": ["11. Enums"],
+        "summary": "Get enum",
+        "operationId": "getContactAttemptEnum",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["INA", "APT", "REF", "TUN", "NOC", "MES", "UCD", "NLH", "NPS", "PUN"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/check-habilitation": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "Check habilitation",
+        "operationId": "checkHabilitation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/HabilitationDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaigns": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get user related Campaigns",
+        "operationId": "getListCampaign",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CampaignDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaigns/{id}/referents": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get referents of targeted campaign",
+        "operationId": "getReferents",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReferentDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaigns/survey-units/state-count": {
+      "get": {
+        "tags": ["07. State-count"],
+        "summary": "Get campaignStateCount",
+        "operationId": "getCampaignsStateCount",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StateCountDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaigns/survey-units/contact-outcomes": {
+      "get": {
+        "tags": ["contact-outcome-controller"],
+        "summary": "Get campaignStateCount",
+        "operationId": "getCampaignsContactOutcomeTypeCount",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContactOutcomeTypeCountDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaigns/ongoing": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "get ongoing sensitive campaigns",
+        "operationId": "getCampaignSensitivityDto",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CampaignSensitivityDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/visibilities": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get campaign visibilities",
+        "operationId": "getVisibilities",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VisibilityCampaignDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/survey-units": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "Get Survey Units in target campaign",
+        "operationId": "getSurveyUnitByCampaignId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SurveyUnitCampaignDto"
+                  },
+                  "uniqueItems": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/survey-units/state-count": {
+      "get": {
+        "tags": ["07. State-count"],
+        "summary": "Get campaignStateCount",
+        "operationId": "getCampaignStateCount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/StateCountCampaignDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/survey-units/not-attributed": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get numberSUNotAttributed",
+        "operationId": "getNbSUNotAttributed",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/survey-units/not-attributed/state-count": {
+      "get": {
+        "tags": ["07. State-count"],
+        "summary": "Get state count for non attributted SUs",
+        "operationId": "getNbSUNotAttributedStateCount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/StateCountDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/survey-units/not-attributed/contact-outcomes": {
+      "get": {
+        "tags": ["contact-outcome-controller"],
+        "summary": "Get Contact-outcomes count for non attributted SUs",
+        "operationId": "getNbSUNotAttributedContactOutcomes",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactOutcomeTypeCountDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/survey-units/interviewer/{idep}/state-count": {
+      "get": {
+        "tags": ["07. State-count"],
+        "summary": "Get interviewerStateCount",
+        "operationId": "getInterviewerStateCount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idep",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/StateCountDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/survey-units/interviewer/{idep}/contact-outcomes": {
+      "get": {
+        "tags": ["contact-outcome-controller"],
+        "summary": "Get contact-outcome type for an interviewer on a specific campaign",
+        "operationId": "getContactOuctomeByCampaignAndInterviewer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idep",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactOutcomeTypeCountDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/survey-units/interviewer/{idep}/closing-causes": {
+      "get": {
+        "tags": ["06. Closing causes"],
+        "summary": "Get interviewerStateCount",
+        "operationId": "getClosingCauseCount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idep",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClosingCauseCountDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/survey-units/contact-outcomes": {
+      "get": {
+        "tags": ["contact-outcome-controller"],
+        "summary": "Get campaignStateCount",
+        "operationId": "getContactOutcomeTypeCountByCampaign",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactOutcomeTypeCountCampaignDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/survey-units/abandoned": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get numberSUAbandoned",
+        "operationId": "getNbSUAbandoned",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/interviewers": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get interviewers",
+        "operationId": "getListInterviewers_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InterviewerDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/interviewers/state-count": {
+      "get": {
+        "tags": ["07. State-count"],
+        "summary": "Get interviewersStateCount",
+        "operationId": "getInterviewersStateCountByCampaign",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StateCountDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaign/{id}/communication-templates": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get campaign communication templates",
+        "operationId": "getCommunicationTemplates",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommunicationTemplateResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/survey-units": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "Get survey units id",
+        "operationId": "getAllSurveyUnitsId",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/interviewers": {
+      "get": {
+        "tags": ["04. Interviewers"],
+        "summary": "Get all interviewers",
+        "operationId": "getCompleteListInterviewers",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InterviewerContextDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/campaigns": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get Campaigns",
+        "operationId": "getAllCampaigns",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CampaignDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/campaign/{id}/survey-units": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "Get survey units id by campaign",
+        "operationId": "getAllSurveyUnitsIdByCampaignId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization-unit/{id}": {
+      "delete": {
+        "tags": ["05. Organization-units"],
+        "summary": "Delete an organization-unit",
+        "operationId": "deleteOrganizationUnit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OrganizationUnitDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "organizationUnit": {
+            "$ref": "#/components/schemas/OrganizationUnitDto"
+          },
+          "localOrganizationUnits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationUnitDto"
+            }
+          }
+        }
+      },
+      "AddressDto": {
+        "type": "object",
+        "properties": {
+          "l1": {
+            "type": "string"
+          },
+          "l2": {
+            "type": "string"
+          },
+          "l3": {
+            "type": "string"
+          },
+          "l4": {
+            "type": "string"
+          },
+          "l5": {
+            "type": "string"
+          },
+          "l6": {
+            "type": "string"
+          },
+          "l7": {
+            "type": "string"
+          },
+          "elevator": {
+            "type": "boolean"
+          },
+          "building": {
+            "type": "string"
+          },
+          "floor": {
+            "type": "string"
+          },
+          "door": {
+            "type": "string"
+          },
+          "staircase": {
+            "type": "string"
+          },
+          "cityPriorityDistrict": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CommentDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["INTERVIEWER", "MANAGEMENT"]
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 999,
+            "minLength": 0
+          }
+        },
+        "required": ["type", "value"]
+      },
+      "CommunicationRequestCreateDto": {
+        "type": "object",
+        "properties": {
+          "meshuggahId": {
+            "type": "string"
+          },
+          "creationTimestamp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["REFUSAL", "UNREACHABLE"]
+          }
+        },
+        "required": ["creationTimestamp", "meshuggahId", "reason"]
+      },
+      "ContactAttemptDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["INA", "APT", "REF", "TUN", "NOC", "MES", "UCD", "NLH", "NPS", "PUN"]
+          },
+          "medium": {
+            "type": "string",
+            "enum": ["TEL", "EMAIL", "FIELD"]
+          }
+        }
+      },
+      "ContactOutcomeDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["INA", "REF", "IMP", "UCD", "UTR", "ALA", "DUK", "DUU", "NUH", "DCD", "NOA"]
+          },
+          "totalNumberOfContactAttempts": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PersonDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string",
+            "enum": ["MISTER", "MISS"]
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "birthdate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "favoriteEmail": {
+            "type": "boolean"
+          },
+          "privileged": {
+            "type": "boolean"
+          },
+          "phoneNumbers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhoneNumberDto"
+            }
+          }
+        }
+      },
+      "PhoneNumberDto": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": ["FISCAL", "DIRECTORY", "INTERVIEWER"]
+          },
+          "favorite": {
+            "type": "boolean"
+          },
+          "number": {
+            "type": "string"
+          }
+        }
+      },
+      "RawIdentificationDto": {
+        "type": "object",
+        "properties": {
+          "identification": {
+            "type": "string",
+            "enum": ["IDENTIFIED", "DESTROY", "UNIDENTIFIED"]
+          },
+          "access": {
+            "type": "string",
+            "enum": ["ACC", "NACC"]
+          },
+          "situation": {
+            "type": "string",
+            "enum": ["ORDINARY", "ABSORBED", "NOORDINARY"]
+          },
+          "category": {
+            "type": "string",
+            "enum": ["PRIMARY", "OCCASIONAL", "SECONDARY", "VACANT"]
+          },
+          "occupant": {
+            "type": "string",
+            "enum": ["IDENTIFIED", "UNIDENTIFIED"]
+          },
+          "individualStatus": {
+            "type": "string",
+            "enum": ["DCD", "NOIDENT", "NOFIELD", "SAME_ADDRESS", "OTHER_ADDRESS"]
+          },
+          "interviewerCanProcess": {
+            "type": "string",
+            "enum": ["YES", "NO"]
+          },
+          "numberOfRespondents": {
+            "type": "string",
+            "enum": ["ONE", "MANY"]
+          },
+          "presentInPreviousHome": {
+            "type": "string",
+            "enum": ["AT_LEAST_ONE", "NONE"]
+          },
+          "householdComposition": {
+            "type": "string",
+            "enum": ["SAME_COMPO", "OTHER_COMPO"]
+          }
+        }
+      },
+      "StateDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "NVM",
+              "NNS",
+              "ANV",
+              "VIN",
+              "VIC",
+              "PRC",
+              "AOC",
+              "APS",
+              "INS",
+              "WFT",
+              "WFS",
+              "TBR",
+              "FIN",
+              "CLO",
+              "NVA"
+            ]
+          }
+        }
+      },
+      "SurveyUnitUpdateDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "persons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PersonDto"
+            }
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressDto"
+          },
+          "move": {
+            "type": "boolean"
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentDto"
+            }
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StateDto"
+            }
+          },
+          "contactAttempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContactAttemptDto"
+            }
+          },
+          "contactOutcome": {
+            "$ref": "#/components/schemas/ContactOutcomeDto"
+          },
+          "identification": {
+            "$ref": "#/components/schemas/RawIdentificationDto"
+          },
+          "communicationRequests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommunicationRequestCreateDto"
+            }
+          }
+        }
+      },
+      "CommunicationRequestResponseDto": {
+        "type": "object",
+        "properties": {
+          "communicationTemplateId": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": "string"
+          },
+          "meshuggahId": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["REFUSAL", "UNREACHABLE"]
+          },
+          "emitter": {
+            "type": "string",
+            "enum": ["TOOL", "INTERVIEWER"]
+          },
+          "status": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommunicationRequestStatusDto"
+            }
+          }
+        }
+      },
+      "CommunicationRequestStatusDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["INITIATED", "READY", "SUBMITTED", "UNDELIVERED", "FAILED", "CANCELLED"]
+          }
+        }
+      },
+      "IdentificationDto": {
+        "type": "object"
+      },
+      "SampleIdentifiersDto": {
+        "type": "object",
+        "properties": {
+          "bs": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ec": {
+            "type": "string"
+          },
+          "le": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "noi": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numfa": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rges": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ssech": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nolog": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nole": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "autre": {
+            "type": "string"
+          },
+          "nograp": {
+            "type": "string"
+          }
+        }
+      },
+      "SurveyUnitDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "persons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PersonDto"
+            }
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressDto"
+          },
+          "priority": {
+            "type": "boolean"
+          },
+          "move": {
+            "type": "boolean"
+          },
+          "campaign": {
+            "type": "string"
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentDto"
+            }
+          },
+          "sampleIdentifiers": {
+            "$ref": "#/components/schemas/SampleIdentifiersDto"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StateDto"
+            }
+          },
+          "contactAttempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContactAttemptDto"
+            }
+          },
+          "contactOutcome": {
+            "$ref": "#/components/schemas/ContactOutcomeDto"
+          },
+          "identification": {
+            "$ref": "#/components/schemas/IdentificationDto"
+          },
+          "communicationRequests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommunicationRequestResponseDto"
+            }
+          }
+        }
+      },
+      "InterviewerContextDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "enum": ["MISTER", "MISS"]
+          }
+        }
+      },
+      "CampaignUpdateDto": {
+        "type": "object",
+        "properties": {
+          "campaignLabel": {
+            "type": "string"
+          },
+          "visibilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VisibilityCampaignUpdateDto"
+            }
+          },
+          "referents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReferentDto"
+            }
+          },
+          "email": {
+            "type": "string"
+          },
+          "contactOutcomeConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          },
+          "contactAttemptConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          }
+        },
+        "required": ["campaignLabel"]
+      },
+      "ReferentDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "VisibilityCampaignUpdateDto": {
+        "type": "object",
+        "properties": {
+          "managementStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "interviewerStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "identificationPhaseStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionEndDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "organizationalUnit": {
+            "type": "string"
+          },
+          "useLetterCommunication": {
+            "type": "boolean"
+          },
+          "mail": {
+            "type": "string"
+          },
+          "tel": {
+            "type": "string"
+          }
+        },
+        "required": ["organizationalUnit"]
+      },
+      "VisibilityUpdateDto": {
+        "type": "object",
+        "properties": {
+          "managementStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "interviewerStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "identificationPhaseStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionEndDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "useLetterCommunication": {
+            "type": "boolean"
+          },
+          "mail": {
+            "type": "string"
+          },
+          "tel": {
+            "type": "string"
+          }
+        }
+      },
+      "WsText": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "ClosingCauseDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["NPA", "NPI", "NPX", "ROW"]
+          }
+        }
+      },
+      "SurveyUnitContextDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "persons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PersonDto"
+            }
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressDto"
+          },
+          "organizationUnitId": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "boolean"
+          },
+          "campaign": {
+            "type": "string"
+          },
+          "sampleIdentifiers": {
+            "$ref": "#/components/schemas/SampleIdentifiersDto"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StateDto"
+            }
+          },
+          "contactAttempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContactAttemptDto"
+            }
+          },
+          "contactOutcome": {
+            "$ref": "#/components/schemas/ContactOutcomeDto"
+          },
+          "closingCause": {
+            "$ref": "#/components/schemas/ClosingCauseDto"
+          },
+          "identification": {
+            "$ref": "#/components/schemas/RawIdentificationDto"
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentDto"
+            },
+            "uniqueItems": true
+          }
+        }
+      },
+      "SurveyUnitInterviewerLinkDto": {
+        "type": "object",
+        "properties": {
+          "surveyUnitId": {
+            "type": "string"
+          },
+          "interviewerId": {
+            "type": "string"
+          }
+        }
+      },
+      "JsonNode": {
+        "type": "object"
+      },
+      "OrganizationUnitContextDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["LOCAL", "NATIONAL"]
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserContextDto"
+            }
+          },
+          "organisationUnitRef": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UserContextDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "organizationUnit": {
+            "$ref": "#/components/schemas/OrganizationUnitDto"
+          },
+          "localOrganizationUnits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrganizationUnitDto"
+            }
+          }
+        }
+      },
+      "MessageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "text": {
+            "type": "string"
+          },
+          "sender": {
+            "type": "string"
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "typedRecipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifyNameResponseDto"
+            }
+          },
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "VerifyNameResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "MailDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          }
+        },
+        "required": ["content", "subject"]
+      },
+      "CampaignCreateDto": {
+        "type": "object",
+        "properties": {
+          "campaign": {
+            "type": "string"
+          },
+          "campaignLabel": {
+            "type": "string"
+          },
+          "visibilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VisibilityCampaignCreateDto"
+            }
+          },
+          "communicationTemplates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommunicationTemplateCreateDto"
+            }
+          },
+          "referents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReferentDto"
+            }
+          },
+          "email": {
+            "type": "string"
+          },
+          "identificationConfiguration": {
+            "type": "string",
+            "enum": [
+              "IASCO",
+              "HOUSEF2F",
+              "HOUSETEL",
+              "HOUSETELWSR",
+              "INDF2F",
+              "INDF2FNOR",
+              "INDTEL",
+              "INDTELNOR",
+              "SRCVREINT",
+              "NOIDENT"
+            ]
+          },
+          "contactOutcomeConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          },
+          "contactAttemptConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          },
+          "sensitivity": {
+            "type": "boolean"
+          }
+        },
+        "required": ["campaign", "campaignLabel", "visibilities"]
+      },
+      "CommunicationTemplateCreateDto": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string"
+          },
+          "meshuggahId": {
+            "type": "string"
+          },
+          "medium": {
+            "type": "string",
+            "enum": ["LETTER", "EMAIL"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["REMINDER", "NOTICE"]
+          }
+        },
+        "required": ["campaignId", "medium", "meshuggahId", "type"]
+      },
+      "VisibilityCampaignCreateDto": {
+        "type": "object",
+        "properties": {
+          "managementStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "interviewerStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "identificationPhaseStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionEndDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "organizationalUnit": {
+            "type": "string"
+          },
+          "useLetterCommunication": {
+            "type": "boolean"
+          },
+          "mail": {
+            "type": "string"
+          },
+          "tel": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "collectionEndDate",
+          "collectionStartDate",
+          "endDate",
+          "identificationPhaseStartDate",
+          "interviewerStartDate",
+          "mail",
+          "managementStartDate",
+          "organizationalUnit",
+          "tel",
+          "useLetterCommunication"
+        ]
+      },
+      "OngoingDto": {
+        "type": "object",
+        "properties": {
+          "ongoing": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SurveyUnitDto": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "campaign": {
+            "type": "string"
+          },
+          "campaignLabel": {
+            "type": "string"
+          },
+          "managementStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "interviewerStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "identificationPhaseStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionEndDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "identificationConfiguration": {
+            "type": "string",
+            "enum": [
+              "IASCO",
+              "HOUSEF2F",
+              "HOUSETEL",
+              "HOUSETELWSR",
+              "INDF2F",
+              "INDF2FNOR",
+              "INDTEL",
+              "INDTELNOR",
+              "SRCVREINT",
+              "NOIDENT"
+            ]
+          },
+          "contactOutcomeConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          },
+          "contactAttemptConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          },
+          "useLetterCommunication": {
+            "type": "boolean"
+          },
+          "persons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PersonDto"
+            }
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressDto"
+          }
+        }
+      },
+      "InterviewerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "interviewerFirstName": {
+            "type": "string"
+          },
+          "interviewerLastName": {
+            "type": "string"
+          }
+        }
+      },
+      "SurveyUnitCampaignDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "ssech": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "location": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "finalizationDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "campaign": {
+            "type": "string"
+          },
+          "closingCause": {
+            "type": "string",
+            "enum": ["NPA", "NPI", "NPX", "ROW"]
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "NVM",
+              "NNS",
+              "ANV",
+              "VIN",
+              "VIC",
+              "PRC",
+              "AOC",
+              "APS",
+              "INS",
+              "WFT",
+              "WFS",
+              "TBR",
+              "FIN",
+              "CLO",
+              "NVA"
+            ]
+          },
+          "reading": {
+            "type": "boolean"
+          },
+          "viewed": {
+            "type": "boolean"
+          },
+          "questionnaireState": {
+            "type": "string"
+          },
+          "contactOutcome": {
+            "$ref": "#/components/schemas/ContactOutcomeDto"
+          },
+          "identificationState": {
+            "type": "string",
+            "enum": ["MISSING", "FINISHED", "ONGOING"]
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentDto"
+            }
+          },
+          "interviewer": {
+            "$ref": "#/components/schemas/InterviewerDto"
+          }
+        }
+      },
+      "SurveyUnitStatesDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StateDto"
+            }
+          }
+        }
+      },
+      "CampaignDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "managementStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "interviewerStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "identificationPhaseStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionEndDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "allocated": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "toProcessInterviewer": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "toAffect": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "toFollowUp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "toReview": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "finalized": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "preference": {
+            "type": "boolean"
+          },
+          "identificationConfiguration": {
+            "type": "string",
+            "enum": [
+              "IASCO",
+              "HOUSEF2F",
+              "HOUSETEL",
+              "HOUSETELWSR",
+              "INDF2F",
+              "INDF2FNOR",
+              "INDTEL",
+              "INDTELNOR",
+              "SRCVREINT",
+              "NOIDENT"
+            ]
+          },
+          "contactAttemptConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          },
+          "contactOutcomeConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          },
+          "referents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReferentDto"
+            }
+          },
+          "campaignStats": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "writeOnly": true
+          }
+        }
+      },
+      "StateCountDto": {
+        "type": "object",
+        "properties": {
+          "idDem": {
+            "type": "string"
+          },
+          "labelDem": {
+            "type": "string"
+          },
+          "interviewer": {
+            "$ref": "#/components/schemas/InterviewerContextDto"
+          },
+          "campaign": {
+            "$ref": "#/components/schemas/CampaignDto"
+          },
+          "nvmCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nnsCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "anvCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "vinCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "vicCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "prcCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "aocCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "apsCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "insCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "wftCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "wfsCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tbrCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "finCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "cloCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nvaCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "npaCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "npiCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "npxCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "rowCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "noticeCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reminderCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "CommunicationTemplateResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": "string"
+          },
+          "meshuggahId": {
+            "type": "string"
+          },
+          "medium": {
+            "type": "string",
+            "enum": ["LETTER", "EMAIL"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["REMINDER", "NOTICE"]
+          }
+        }
+      },
+      "SurveyUnitInterviewerResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "persons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PersonDto"
+            }
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressDto"
+          },
+          "priority": {
+            "type": "boolean"
+          },
+          "move": {
+            "type": "boolean"
+          },
+          "campaign": {
+            "type": "string"
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentDto"
+            }
+          },
+          "sampleIdentifiers": {
+            "$ref": "#/components/schemas/SampleIdentifiersDto"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StateDto"
+            }
+          },
+          "contactAttempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContactAttemptDto"
+            }
+          },
+          "contactOutcome": {
+            "$ref": "#/components/schemas/ContactOutcomeDto"
+          },
+          "identification": {
+            "$ref": "#/components/schemas/IdentificationDto"
+          },
+          "communicationTemplates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommunicationTemplateResponseDto"
+            }
+          },
+          "communicationRequests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommunicationRequestResponseDto"
+            }
+          }
+        }
+      },
+      "HabilitationDto": {
+        "type": "object",
+        "properties": {
+          "habilitated": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ContactOutcomeTypeCountDto": {
+        "type": "object",
+        "properties": {
+          "idDem": {
+            "type": "string"
+          },
+          "labelDem": {
+            "type": "string"
+          },
+          "campaign": {
+            "$ref": "#/components/schemas/CampaignDto"
+          },
+          "inaCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "refCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "impCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ucdCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "utrCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "alaCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dcdCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nuhCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dukCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "duuCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "noaCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "CampaignSensitivityDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sensitivity": {
+            "type": "boolean"
+          }
+        },
+        "required": ["id"]
+      },
+      "CampaignResponseDto": {
+        "type": "object",
+        "properties": {
+          "campaign": {
+            "type": "string"
+          },
+          "campaignLabel": {
+            "type": "string"
+          },
+          "visibilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VisibilityCampaignDto"
+            }
+          },
+          "referents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReferentDto"
+            }
+          },
+          "email": {
+            "type": "string"
+          },
+          "identificationConfiguration": {
+            "type": "string",
+            "enum": [
+              "IASCO",
+              "HOUSEF2F",
+              "HOUSETEL",
+              "HOUSETELWSR",
+              "INDF2F",
+              "INDF2FNOR",
+              "INDTEL",
+              "INDTELNOR",
+              "SRCVREINT",
+              "NOIDENT"
+            ]
+          },
+          "contactOutcomeConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          },
+          "contactAttemptConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          },
+          "sensitivity": {
+            "type": "boolean"
+          }
+        }
+      },
+      "VisibilityCampaignDto": {
+        "type": "object",
+        "properties": {
+          "organizationalUnit": {
+            "type": "string"
+          },
+          "managementStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "interviewerStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "identificationPhaseStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionEndDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "useLetterCommunication": {
+            "type": "boolean"
+          },
+          "mail": {
+            "type": "string"
+          },
+          "tel": {
+            "type": "string"
+          }
+        }
+      },
+      "StateCountCampaignDto": {
+        "type": "object",
+        "properties": {
+          "organizationUnits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StateCountDto"
+            }
+          },
+          "france": {
+            "$ref": "#/components/schemas/StateCountDto"
+          }
+        }
+      },
+      "CountDto": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ClosingCauseCountDto": {
+        "type": "object",
+        "properties": {
+          "npiCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "npaCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "npxCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "rowCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ContactOutcomeTypeCountCampaignDto": {
+        "type": "object",
+        "properties": {
+          "organizationUnits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContactOutcomeTypeCountDto"
+            }
+          },
+          "france": {
+            "$ref": "#/components/schemas/ContactOutcomeTypeCountDto"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "name": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://auth.insee.test/auth/realms/agents-insee-interne/protocol/openid-connect/auth",
+            "tokenUrl": "https://auth.insee.test/auth/realms/agents-insee-interne/protocol/openid-connect/token",
+            "refreshUrl": "https://auth.insee.test/auth/realms/agents-insee-interne/protocol/openid-connect/token",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  }
+}

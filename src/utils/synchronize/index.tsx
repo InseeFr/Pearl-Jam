@@ -15,6 +15,7 @@ import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import userIdbService from 'utils/indexeddb/services/user-idb-service';
+import { getListSurveyUnit, SurveyUnitDto } from 'api/pearl';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
@@ -141,15 +142,14 @@ const validateSU = (su: SurveyUnit) => {
 const getData = async (pearlApiUrl: string, pearlAuthenticationMode: string) => {
   const surveyUnitsSuccess: { id: string; campaign: string }[] = [];
   const surveyUnitsFailed: string[] = [];
-  const {
-    data: surveyUnits,
-    error,
-    status,
-  } = await api.getSurveyUnits(pearlApiUrl, pearlAuthenticationMode);
 
-  if (!error) {
+  try {
+    const { status, data: surveyUnits } = await getListSurveyUnit();
+    if (status && !surveyUnits && ![400, 403, 404, 500].includes(status))
+      throw new Error('Server is not responding');
+
     await Promise.all(
-      surveyUnits.map(async (su: SurveyUnit) => {
+      surveyUnits.map(async (su: SurveyUnitDto) => {
         const { data: surveyUnit, error: getSuError } = await api.getSurveyUnitById(
           pearlApiUrl,
           pearlAuthenticationMode
@@ -163,8 +163,9 @@ const getData = async (pearlApiUrl: string, pearlAuthenticationMode: string) => 
         else throw new Error('Server is not responding');
       })
     );
-  } else if (status && ![400, 403, 404, 500].includes(status))
+  } catch {
     throw new Error('Server is not responding');
+  }
 
   return { surveyUnitsSuccess, surveyUnitsFailed };
 };

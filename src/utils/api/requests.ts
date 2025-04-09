@@ -7,9 +7,6 @@ const postRequest = (url: string) => (token?: string) => (body: object) =>
   fetcher(url, token, 'POST', body);
 
 /* All surveyUnits */
-const getSurveyUnits = (apiUrl: string) => (token?: string) =>
-  getRequest(`${apiUrl}/api/survey-units`)(token);
-
 /* SurveyUnit's data */
 const getSurveyUnitById = (apiUrl: string) => (id: string) => (token?: string) =>
   getRequest(`${apiUrl}/api/survey-unit/${id}`)(token);
@@ -24,18 +21,14 @@ const sendMail = (apiUrl: string) => (subject: string) => (content: string) => (
   return postRequest(`${apiUrl}/api/mail`)(token)(mailBody);
 };
 
-const healthCheck = (apiUrl: string) => (token?: string) =>
-  getRequest(`${apiUrl}/api/healthcheck`)(token);
 const getInterviewer = (apiUrl: string) => (id: string) => (token?: string) =>
   getRequest(`${apiUrl}/api/interviewer/${id}`)(token);
 
 export const API = {
   getRequest,
-  getSurveyUnits,
   getInterviewer,
   getSurveyUnitById,
   putDataSurveyUnitById,
   putToTempZone,
   sendMail,
-  healthCheck,
 };

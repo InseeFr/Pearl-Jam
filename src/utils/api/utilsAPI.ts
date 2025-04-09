@@ -12,13 +12,6 @@ export const sendMail =
     }
   };
 
-export const healthCheck = async (urlPearApi: string) => {
-  try {
-    return API.healthCheck(urlPearApi)();
-  } catch (e) {
-    throw new Error(`Error during refreshToken : ${e}`);
-  }
-};
 export const getUserData =
   (urlPearApi: string, authenticationMode: string) => async (id: string) => {
     try {

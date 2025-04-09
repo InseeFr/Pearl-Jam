@@ -12,12 +12,6 @@ describe('API Module', () => {
   const apiUrl = 'https://api.example.com';
   const mockToken = 'mock-token';
 
-  it('should make a GET request to fetch all survey units', async () => {
-    const result = await API.getSurveyUnits(apiUrl)(mockToken);
-    expect(fetcher).toHaveBeenCalledWith(`${apiUrl}/api/survey-units`, mockToken, 'GET', null);
-    expect(result.status).toBe('success');
-  });
-
   it('should make a GET request to fetch a survey unit by ID', async () => {
     const result = await API.getSurveyUnitById(apiUrl)('SU1')(mockToken);
     expect(fetcher).toHaveBeenCalledWith(`${apiUrl}/api/survey-unit/SU1`, mockToken, 'GET', null);
