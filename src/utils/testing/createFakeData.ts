@@ -79,7 +79,7 @@ export const createSurveyUnit = (surveyUnit: Partial<SurveyUnit> = {}): SurveyUn
       {
         status: 'APT',
         date: 1700000000000,
-        medium: 'Phone',
+        medium: 'TEL',
       },
     ],
     contactOutcome: {
