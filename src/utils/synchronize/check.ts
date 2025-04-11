@@ -9,6 +9,7 @@ import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMiss
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
 import { Notification, SyncReport } from 'utils/indexeddb/idb-config';
 import { NotificationState } from 'types/pearl';
+import { postMailMessage } from 'api/pearl';
 
 export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) => {
   if (pearlSuccess && queenSuccess) {
@@ -116,7 +117,7 @@ const getResult = (
   };
 };
 
-export const analyseResult = async (PEARL_API_URL: string, PEARL_AUTHENTICATION_MODE: string) => {
+export const analyseResult = async () => {
   const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
   const pearlSus = await surveyUnitIDBService.getAll();
   const pearlSurveyUnitsArray = pearlSus.map(({ id }: { id: string }) => id);
@@ -132,17 +133,18 @@ export const analyseResult = async (PEARL_API_URL: string, PEARL_AUTHENTICATION_
     surveyUnitsInTempZone: queenTempZone,
   } = getSavedSyncQueenData() || {};
 
-  if (pearlTempZone && pearlTempZone.length > 0) {
-    const mailSubjectToSend = D.subjectTempZone;
+  if (pearlTempZone?.length > 0) {
+    const subject = D.subjectTempZone;
 
-    const mailBodyToSend = D.bodyTempZonePearl(userId)(pearlTempZone);
-    await api.sendMail(PEARL_API_URL, PEARL_AUTHENTICATION_MODE)(mailSubjectToSend, mailBodyToSend);
+    const content = D.bodyTempZonePearl(userId)(pearlTempZone);
+
+    await postMailMessage({ subject, content });
   }
-  if (queenTempZone && queenTempZone.length > 0) {
-    const mailSubjectToSend = D.subjectTempZone;
+  if (queenTempZone?.length > 0) {
+    const subject = D.subjectTempZone;
 
-    const mailBodyToSend = D.bodyTempZoneQueen(userId)(queenTempZone);
-    await api.sendMail(PEARL_API_URL, PEARL_AUTHENTICATION_MODE)(mailSubjectToSend, mailBodyToSend);
+    const content = D.bodyTempZoneQueen(userId)(queenTempZone);
+    await postMailMessage({ subject, content });
   }
 
   const { pearlMissing, queenMissing } = checkSyncResult(
@@ -151,16 +153,15 @@ export const analyseResult = async (PEARL_API_URL: string, PEARL_AUTHENTICATION_
   );
 
   if (pearlMissing && pearlMissing.length > 0) {
-    const mailSubject = D.subjectPearlMissingUnits;
-    const mailContent = D.bodyPearlMissingUnits(userId)(pearlMissing);
-    // send Mail to assistance (too many units in queen database)
-    await api.sendMail(PEARL_API_URL, PEARL_AUTHENTICATION_MODE)(mailSubject, mailContent);
+    const subject = D.subjectPearlMissingUnits;
+    const content = D.bodyPearlMissingUnits(userId)(pearlMissing);
+    await postMailMessage({ subject, content });
   }
   if (queenMissing && queenMissing.length > 0) {
-    const mailSubject = D.subjectQueenMissingUnits;
-    const mailContent = D.bodyQueenMissingUnits(userId)(queenMissing);
+    const subject = D.subjectQueenMissingUnits;
+    const content = D.bodyQueenMissingUnits(userId)(queenMissing);
     // send Mail to assistance (not enough units in queen database)
-    await api.sendMail(PEARL_API_URL, PEARL_AUTHENTICATION_MODE)(mailSubject, mailContent);
+    await postMailMessage({ subject, content });
     // save missing (exist in Pearl, not in Queen) units in database
     await surveyUnitMissingIdbService.addAll(
       queenMissing.map((id: string) => {

@@ -13,14 +13,17 @@ const createCustomAxiosInstance = (baseUrl: string): AxiosInstance => {
   instance.interceptors.request.use(async config => {
     await authentication(import.meta.env.VITE_PEARL_AUTHENTICATION_MODE);
     const accessToken = getToken();
-    console.log(accessToken);
     config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
   });
 
   instance.interceptors.response.use(
     response => {
-      return response;
+      return {
+        ...response,
+        error: response.status > 300,
+        ok: response.status >= 200 && response.status <= 299,
+      };
     },
     error => {
       if (error.response) {
@@ -38,7 +41,7 @@ const axiosAiguillage = createCustomAxiosInstance(import.meta.env.VITE_PEARL_API
 export const customAiguillageFetch = <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig
-): Promise<AxiosResponse<T>> => {
+): Promise<AxiosResponse<T> & { error: boolean; ok: boolean }> => {
   return axiosAiguillage({ ...config, ...options });
 };
 

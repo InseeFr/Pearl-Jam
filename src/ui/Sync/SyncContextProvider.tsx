@@ -1,6 +1,6 @@
-import { PropsWithChildren, useEffect, useMemo, useState, createContext } from 'react';
-import * as api from 'utils/api';
+import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 
+import { healthCheck } from 'api/pearl';
 import D from 'i18n';
 import { NotificationState } from 'types/pearl';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
@@ -9,7 +9,6 @@ import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/sync
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
-import { getInterviewerCampaigns, healthCheck } from 'api/pearl';
 
 export type SyncContextValue = {
   setSyncResult: (value: {
@@ -58,7 +57,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
 
   useEffect(() => {
     const analyse = async () => {
-      const result = await analyseResult(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+      const result = await analyseResult();
       window.localStorage.removeItem('SYNCHRONIZE');
       setIsSync(false);
       setSyncResult(result);
@@ -87,7 +86,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   useEffect(() => {
     const sync = async () => {
       setIsSync(true);
-      const result = await synchronizePearl(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+      const result = await synchronizePearl();
       saveSyncPearlData(result);
       const { error } = result;
       if (!error) await synchronizeQueen();

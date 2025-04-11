@@ -1,4 +1,3 @@
-import * as api from 'utils/api';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
@@ -13,6 +12,7 @@ import {
   saveSyncPearlData,
 } from './check';
 import { NotificationState } from 'types/pearl';
+import * as api from 'api/pearl';
 
 describe('check.ts', () => {
   describe('checkSyncResult', () => {
@@ -92,9 +92,6 @@ describe('check.ts', () => {
   vi.mock('utils/indexeddb/services/surveyUnitMissing-idb-service');
 
   describe('analyseResult', () => {
-    const PEARL_API_URL = 'http://example.com';
-    const PEARL_AUTHENTICATION_MODE = 'token';
-
     beforeEach(() => {
       vi.clearAllMocks();
     });
@@ -115,18 +112,17 @@ describe('check.ts', () => {
       window.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(queenData));
       saveSyncPearlData(pearlData);
       vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([{ id: '1' }]);
-      const sendMail = vi.fn();
-      vi.spyOn(api, 'sendMail').mockImplementation(() => sendMail);
+      vi.spyOn(api, 'postMailMessage').mockImplementation(vi.fn());
       vi.spyOn(notificationIdbService, 'addOrUpdateNotif').mockResolvedValue(undefined);
       vi.spyOn(syncReportIdbService, 'addOrUpdateReport').mockResolvedValue(undefined);
 
-      const result = await analyseResult(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+      const result = await analyseResult();
 
       expect(result).toEqual({
         state: 'error',
         messages: expect.any(Array),
       });
-      expect(sendMail).not.toHaveBeenCalled();
+      expect(api.postMailMessage).not.toHaveBeenCalled();
     });
 
     it('should send mail for missing units', async () => {
@@ -146,21 +142,21 @@ describe('check.ts', () => {
       saveSyncPearlData(pearlData);
       vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([{ id: '1' }]);
 
-      const sendMail = vi.fn();
-      vi.spyOn(api, 'sendMail').mockImplementation(() => sendMail);
+      vi.spyOn(api, 'postMailMessage').mockImplementation(vi.fn());
       vi.spyOn(notificationIdbService, 'addOrUpdateNotif').mockResolvedValue(undefined);
       vi.spyOn(syncReportIdbService, 'addOrUpdateReport').mockResolvedValue(undefined);
 
-      const result = await analyseResult(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+      const result = await analyseResult();
 
       expect(result).toEqual({
         state: 'warning',
         messages: expect.any(Array),
         details: expect.any(Object),
       });
-      expect(sendMail).toHaveBeenCalledWith(
-        'Problem during synchronization : Survey-units are missing',
-        expect.any(String)
+      expect(api.postMailMessage).toHaveBeenCalledWith(
+        expect.objectContaining({
+          subject: 'Problem during synchronization : Survey-units are missing',
+        })
       );
     });
 
@@ -180,12 +176,11 @@ describe('check.ts', () => {
       window.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(queenData));
       saveSyncPearlData(pearlData);
       vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([{ id: '1' }]);
-      const sendMail = vi.fn();
-      vi.spyOn(api, 'sendMail').mockImplementation(() => sendMail);
+      vi.spyOn(api, 'postMailMessage').mockImplementation(vi.fn());
       vi.spyOn(notificationIdbService, 'addOrUpdateNotif').mockResolvedValue(undefined);
       vi.spyOn(syncReportIdbService, 'addOrUpdateReport').mockResolvedValue(undefined);
 
-      const result = await analyseResult(PEARL_API_URL, PEARL_AUTHENTICATION_MODE);
+      const result = await analyseResult();
 
       expect(result).toEqual({
         state: 'success',

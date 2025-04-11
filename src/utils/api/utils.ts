@@ -25,7 +25,7 @@ export const authentication = (mode: string) => {
       return Promise.reject(new Error(`App doesn't support "${mode}" for authentication`));
   }
 };
-export const formatSurveyUnitForPut = async (su: SurveyUnit) => {
+export const formatSurveyUnitForPut = (su: SurveyUnit) => {
   const newFormattedCommunicationRequests =
     su.communicationRequests
       ?.filter(
