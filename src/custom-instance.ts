@@ -36,13 +36,13 @@ const createCustomAxiosInstance = (baseUrl: string): AxiosInstance => {
   return instance;
 };
 
-const axiosAiguillage = createCustomAxiosInstance(import.meta.env.VITE_PEARL_API_URL);
+const axiosPearl = createCustomAxiosInstance(import.meta.env.VITE_PEARL_API_URL);
 
-export const customAiguillageFetch = <T>(
+export const customFetch = <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig
 ): Promise<AxiosResponse<T> & { error: boolean; ok: boolean }> => {
-  return axiosAiguillage({ ...config, ...options });
+  return axiosPearl({ ...config, ...options });
 };
 
 export type ErrorType<Error> = AxiosError<Error>;

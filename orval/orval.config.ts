@@ -6,11 +6,9 @@ export default {
       override: {
         mutator: {
           path: '../src/custom-instance.ts',
-          name: 'customAiguillageFetch',
+          name: 'customFetch',
         },
       },
     },
   },
 };
-
-//TODO comment variabiliser la baseUrl
