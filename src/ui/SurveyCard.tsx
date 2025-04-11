@@ -53,17 +53,15 @@ export function SurveyCard({ surveyUnit, locked = false }: Readonly<SurveyCardPr
               }}
             />
             <Chip label={surveyUnit.sampleIdentifiers.ssech} />
-            <Stack sx={{ marginLeft: 'auto' }} pl={2} alignItems="center">
-              {!priority ? (
-                <Typography color="textHint" variant="s" noWrap>
-                  {surveyUnit.sampleIdentifiers.nograp}
-                </Typography>
-              ) : (
+            <Chip label={surveyUnit.sampleIdentifiers.nograp} />
+
+            {priority && (
+              <Stack sx={{ marginLeft: 'auto' }} pl={2} alignItems="center">
                 <Typography variant="s" color="accent">
                   Prioritaire
                 </Typography>
-              )}
-            </Stack>
+              </Stack>
+            )}
           </Row>
           <Stack gap={0.5}>
             {/* Username */}
