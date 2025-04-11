@@ -1,5 +1,3 @@
-import * as api from 'utils/api';
-
 import { useCallback, useState } from 'react';
 import {
   createStateIdsAndCommunicationRequestIds,
@@ -7,24 +5,23 @@ import {
   getSuTodoState,
 } from 'utils/functions';
 
+import {
+  getInterviewer,
+  getListSurveyUnit,
+  getSurveyUnitById,
+  postSurveyUnitByIdInTempZone,
+  SurveyUnitDto,
+  updateSurveyUnit,
+} from 'api/pearl';
 import { useNavigate } from 'react-router-dom';
 import { QueenEvent } from 'types/events';
 import { SurveyUnit } from 'types/pearl';
+import { formatSurveyUnitForPut } from 'utils/api/utils';
 import { PEARL_USER_KEY, TITLES } from 'utils/constants';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import userIdbService from 'utils/indexeddb/services/user-idb-service';
-import {
-  getInterviewer,
-  getListSurveyUnit,
-  getSurveyUnitById,
-  getUser,
-  postSurveyUnitByIdInTempZone,
-  SurveyUnitDto,
-  updateSurveyUnit,
-} from 'api/pearl';
-import { formatSurveyUnitForPut } from 'utils/api/utils';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
