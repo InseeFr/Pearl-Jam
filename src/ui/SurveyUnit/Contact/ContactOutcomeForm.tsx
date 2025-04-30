@@ -67,8 +67,9 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
     }));
   }, [surveyUnit.contactOutcomeConfiguration]);
 
-  const [count] = watch(['totalNumberOfContactAttempts']);
-  const isInvalid = count <= 0 || Number.isNaN(count);
+
+  const [count, type] = watch(['totalNumberOfContactAttempts', 'type']);
+  const isInvalid = count <= 0 || Number.isNaN(count) || !type;
 
   return (
     <Dialog open={true} onClose={onClose}>
