@@ -35,8 +35,7 @@
     "prepare": "husky",
     "typecheck": "tsc --noEmit",
     "pre-push": "stylelint \"src/**/*.css\"  && yarn test --watch=false",
-    "generate-api-client": "orval --config ./orval/orval.config.ts",
-    "postinstall": "vite-envs update-types && yarn generate-api-client",
+    "postinstall": "vite-envs update-types",
     "openapi": "orval --config ./orval.config.ts"
   },
   "eslintConfig": {
