@@ -1,11 +1,11 @@
 export default {
   pearl: {
-    input: './pearl.json',
+    input: './spec-open-api/pearl.json',
     output: {
-      target: '../src/api/pearl.ts',
+      target: './src/api/pearl.ts',
       override: {
         mutator: {
-          path: '../src/custom-instance.ts',
+          path: './src/custom-instance.ts',
           name: 'customFetch',
         },
       },

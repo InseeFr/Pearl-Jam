@@ -5,6 +5,8 @@ x-react-volumes: &react-volumes
 
 services:
   pearl-db:
+    profiles:
+      - stack
     image: postgres:15.1
     environment:
       - POSTGRES_USER=${PEARL_DB_USER}
@@ -22,6 +24,8 @@ services:
       - ${PEARL_DB_PORT}:5432
 
   questionnaire-db:
+    profiles:
+      - stack
     image: postgres:15.1
     environment:
       - POSTGRES_USER=${QUESTIONNAIRE_DB_USER}
@@ -40,6 +44,8 @@ services:
       - ${QUESTIONNAIRE_DB_PORT}:5432
 
   keycloak:
+    profiles:
+      - stack
     image: quay.io/keycloak/keycloak:24.0
     tty: true
     stdin_open: true
@@ -59,6 +65,8 @@ services:
       - ./keycloak/realms:/opt/keycloak/data/import
 
   questionnaire-api:
+    profiles:
+      - stack
     image: inseefr/queen-back-office:4.8.1-rc
     tty: true
     stdin_open: true
@@ -106,6 +114,8 @@ services:
       - ${QUESTIONNAIRE_API_PORT}:8080
 
   pearl-api:
+    profiles:
+      - stack
     image: inseefr/pearl-jam-back-office:5.6.2-rc
     tty: true
     stdin_open: true
@@ -151,6 +161,8 @@ services:
       - ${PEARL_API_PORT}:8080
 
   queen-front:
+    profiles:
+      - stack
     image: inseefr/drama-queen:2.3.12-rc.0
     tty: true
     stdin_open: true
@@ -169,6 +181,8 @@ services:
       - '${QUEEN_FRONTEND_PORT}:8080'
 
   pearl-front:
+    profiles:
+      - front
     build:
       dockerfile: ./Dockerfile
       args:
