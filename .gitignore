@@ -29,5 +29,3 @@ dist-ssr
 /playwright/.cache/
 coverage
 .env.local
-
-src/api
