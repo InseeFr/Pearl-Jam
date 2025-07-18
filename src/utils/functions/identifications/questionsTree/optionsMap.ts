@@ -19,13 +19,17 @@ export const optionsMap = {
     label: `${D.situationNonOrdinary}`,
     value: IdentificationQuestionOptionValues.NOORDINARY,
   },
-  HOUSE_IDENTIFIED: {
-    label: `${D.houseIdentified}`,
+  ADDRESS_IDENTIFIED: {
+    label: `${D.adressIdentified}`,
     value: IdentificationQuestionOptionValues.IDENTIFIED,
   },
-  HOUSE_UNIDENTIFIED: {
-    label: `${D.houseUnidentified}`,
+  ADRESS_UNIDENTIFIED: {
+    label: `${D.adressUnidentified}`,
     value: IdentificationQuestionOptionValues.UNIDENTIFIED,
+  },
+  ADRESS_DESTROYED: {
+    label: `${D.adressDestroyed}`,
+    value: IdentificationQuestionOptionValues.DESTROY,
   },
   OCCUPANT_IDENTIFIED: {
     label: `${D.occupantIdentified}`,
@@ -35,12 +39,11 @@ export const optionsMap = {
     label: `${D.occupantUnidentified}`,
     value: IdentificationQuestionOptionValues.UNIDENTIFIED,
   },
-  DESTROY: {
-    label: `${D.identificationDestroy}`,
-    value: IdentificationQuestionOptionValues.DESTROY,
+  ACC: { label: `${D.accessibleIdentifiedHousing}`, value: IdentificationQuestionOptionValues.ACC },
+  NACC: {
+    label: `${D.notAccessibleIdentifiedHousing}`,
+    value: IdentificationQuestionOptionValues.NACC,
   },
-  ACC: { label: `${D.accessibleHousing}`, value: IdentificationQuestionOptionValues.ACC },
-  NACC: { label: `${D.notAccessibleHousing}`, value: IdentificationQuestionOptionValues.NACC },
   ABSORBED: { label: `${D.situationAbsorbed}`, value: IdentificationQuestionOptionValues.ABSORBED },
   PRIMARY: { label: `${D.categoryPrimary}`, value: IdentificationQuestionOptionValues.PRIMARY },
   SECONDARY: {

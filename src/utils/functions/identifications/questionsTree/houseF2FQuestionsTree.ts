@@ -13,20 +13,20 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
     [IdentificationQuestionsId.IDENTIFICATION]: {
       id: IdentificationQuestionsId.IDENTIFICATION,
       nextId: IdentificationQuestionsId.ACCESS,
-      text: `${D.housingIdentification}`,
+      text: `${D.adressIdentification}`,
       options: [
-        { ...optionsMap.HOUSE_IDENTIFIED, concluding: false },
-        { ...optionsMap.HOUSE_UNIDENTIFIED, concluding: true },
-        { ...optionsMap.DESTROY, concluding: true },
+        { ...optionsMap.ADDRESS_IDENTIFIED, concluding: false },
+        { ...optionsMap.ADRESS_DESTROYED, concluding: true },
+        { ...optionsMap.ADRESS_UNIDENTIFIED, concluding: true },
       ],
     },
     [IdentificationQuestionsId.ACCESS]: {
       id: IdentificationQuestionsId.ACCESS,
       nextId: IdentificationQuestionsId.SITUATION,
-      text: `${D.housingAccess}`,
+      text: `${D.housingAccessIdentification}`,
       options: [
         { ...optionsMap.ACC, concluding: false },
-        { ...optionsMap.NACC, concluding: false },
+        { ...optionsMap.NACC, concluding: true },
       ],
       dependsOn: {
         questionId: IdentificationQuestionsId.IDENTIFICATION,
@@ -47,7 +47,7 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
       ],
       dependsOn: {
         questionId: IdentificationQuestionsId.ACCESS,
-        values: [IdentificationQuestionOptionValues.ACC, IdentificationQuestionOptionValues.NACC],
+        values: [IdentificationQuestionOptionValues.ACC],
       },
     },
 
@@ -58,7 +58,6 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
       options: [
         { ...optionsMap.PRIMARY, concluding: false },
         { ...optionsMap.SECONDARY, concluding: true },
-        { ...optionsMap.OCCASIONAL, concluding: false },
         { ...optionsMap.VACANT, concluding: true },
       ],
       dependsOn: {
