@@ -7,6 +7,7 @@ services:
   pearl-db:
     profiles:
       - stack
+      - playwright
     image: postgres:15.1
     environment:
       - POSTGRES_USER=${PEARL_DB_USER}
@@ -26,6 +27,7 @@ services:
   questionnaire-db:
     profiles:
       - stack
+      - playwright
     image: postgres:15.1
     environment:
       - POSTGRES_USER=${QUESTIONNAIRE_DB_USER}
@@ -46,6 +48,7 @@ services:
   keycloak:
     profiles:
       - stack
+      - playwright
     image: quay.io/keycloak/keycloak:24.0
     tty: true
     stdin_open: true
@@ -67,7 +70,8 @@ services:
   questionnaire-api:
     profiles:
       - stack
-    image: inseefr/queen-back-office:4.8.1-rc
+      - playwright
+    image: inseefr/queen-back-office:4.8.7-rc
     tty: true
     stdin_open: true
     #healthcheck:
@@ -116,7 +120,8 @@ services:
   pearl-api:
     profiles:
       - stack
-    image: inseefr/pearl-jam-back-office:5.6.2-rc
+      - playwright
+    image: inseefr/pearl-jam-back-office:5.6.9-rc
     tty: true
     stdin_open: true
     # healthcheck:
@@ -163,6 +168,7 @@ services:
   queen-front:
     profiles:
       - stack
+      - playwright
     image: inseefr/drama-queen:2.3.12-rc.0
     tty: true
     stdin_open: true
@@ -183,6 +189,7 @@ services:
   pearl-front:
     profiles:
       - front
+      - playwright
     build:
       dockerfile: ./Dockerfile
       args:

@@ -36,7 +36,8 @@
     "typecheck": "tsc --noEmit",
     "pre-push": "stylelint \"src/**/*.css\"  && yarn test --watch=false",
     "postinstall": "vite-envs update-types",
-    "openapi": "orval --config ./orval.config.ts"
+    "openapi": "orval --config ./orval.config.ts",
+    "playwright": "npx playwright test --ui-port=8888 --ui-host=localhost"
   },
   "eslintConfig": {
     "extends": [
