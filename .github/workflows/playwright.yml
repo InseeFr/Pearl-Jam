@@ -15,7 +15,7 @@ jobs:
           node-version: lts/*
       - name: Run Docker Compose
         run: |
-          docker compose --env-file ./.env.docker up -d
+          docker compose --env-file ./.env.docker --profile playwright up -d
           yarn
           npx playwright install --with-deps chromium
           npx playwright test

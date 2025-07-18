@@ -15,7 +15,7 @@ export const Typography = ({
   return (
     <TypographyMaterial
       {...props}
-      color={`${color}.main`}
+      color={`${color.toString()}.main`}
       variant={variant}
       fontWeight={fontWeight}
     />
