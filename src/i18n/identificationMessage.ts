@@ -113,9 +113,9 @@ const identificationMessage = {
     en: 'Unidentified occupant',
     sq: 'Banori i paidentifikuar',
   },
-  adressIdentification: {
+  addressIdentification: {
     fr: "Identification de l'adresse",
-    en: 'Adress identification',
+    en: 'Address identification',
     sq: 'Identifikimi i banimit',
   },
   foundIndividual: {

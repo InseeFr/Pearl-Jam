@@ -13,7 +13,7 @@ export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
     [IdentificationQuestionsId.IDENTIFICATION]: {
       id: IdentificationQuestionsId.IDENTIFICATION,
       nextId: IdentificationQuestionsId.ACCESS,
-      text: `${D.adressIdentification}`,
+      text: `${D.addressIdentification}`,
       options: [
         { ...optionsMap.ADDRESS_IDENTIFIED, concluding: false },
         { ...optionsMap.ADRESS_DESTROYED, concluding: true },
