@@ -10,15 +10,18 @@ vi.mock('utils/keycloak');
 const mockSetItem = vi.spyOn(Storage.prototype, 'setItem');
 const mockGetItem = vi.spyOn(Storage.prototype, 'getItem');
 
+const mockRoles = 'interviewer';
+vi.stubEnv('VITE_KEYCLOAK_ROLES_ALLOW_LIST', mockRoles);
+
 describe('useAuth', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
     mockGetItem.mockReset();
     mockSetItem.mockReset();
     vi.stubEnv('VITE_PEARL_AUTHENTICATION_MODE', 'keycloak');
   });
 
-  it('should set authenticated to true in anonymous mode', () => {
+  it('should set authenticated to true in anonymous mode', async () => {
     vi.stubEnv('VITE_PEARL_AUTHENTICATION_MODE', 'anonymous');
 
     const { result } = renderHook(() => useAuth());
@@ -28,8 +31,7 @@ describe('useAuth', () => {
   });
 
   it('should handle keycloak authentication when authorized', async () => {
-    const mockRoles = ['interviewer'];
-    const mockTokenInfo = { roles: mockRoles };
+    const mockTokenInfo = { roles: [mockRoles] };
     (keycloakUtils.keycloakAuthentication as Mock).mockResolvedValue(true);
     (keycloakUtils.getTokenInfo as Mock).mockReturnValue(mockTokenInfo);
 
@@ -42,8 +44,7 @@ describe('useAuth', () => {
   });
 
   it('should handle keycloak authentication when unauthorized', async () => {
-    const mockRoles = ['some-other-role'];
-    const mockTokenInfo = { roles: mockRoles };
+    const mockTokenInfo = { roles: [mockRoles] };
     (keycloakUtils.keycloakAuthentication as Mock).mockResolvedValue(true);
     (keycloakUtils.getTokenInfo as Mock).mockReturnValue(mockTokenInfo);
 

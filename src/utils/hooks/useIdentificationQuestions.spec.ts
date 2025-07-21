@@ -186,7 +186,7 @@ const identificationQuestionsHookSetReponseTests = [
     surveyUnitInput: identificationQuestionsHookTests[0].surveyUnitInput,
     setResponseCallParameters: {
       identificationQuestionsId: IdentificationQuestionsId.IDENTIFICATION,
-      option: { ...optionsMap.DESTROY, concluding: true },
+      option: { ...optionsMap.ADRESS_DESTROYED, concluding: true },
     },
     output: {
       availability: {
@@ -197,7 +197,7 @@ const identificationQuestionsHookSetReponseTests = [
         occupant: false,
       },
       responses: {
-        identification: optionsMap.DESTROY,
+        identification: optionsMap.ADRESS_DESTROYED,
         access: undefined,
         situation: undefined,
         category: undefined,
