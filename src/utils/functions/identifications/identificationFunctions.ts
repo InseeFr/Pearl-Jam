@@ -169,25 +169,19 @@ export function isInvalidIdentificationAndContactOutcome(
   transmissionRules: TransmissionRules,
   su: SurveyUnit
 ): boolean {
-  if (
-    transmissionRules.invalidIdentificationsAndContactOutcome &&
-    su.identification &&
-    su.contactOutcome
-  ) {
-    const identifications =
-      transmissionRules.invalidIdentificationsAndContactOutcome.identifications;
-    const contactOutcome = transmissionRules.invalidIdentificationsAndContactOutcome.contactOutcome;
+  const rules = transmissionRules.invalidIdentificationsAndContactOutcome;
 
-    for (const identification of identifications) {
-      if (
-        su.identification[identification.questionId] === identification.value &&
-        su.contactOutcome.type === contactOutcome
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
+  if (!rules || !su.identification || !su.contactOutcome) return false;
+
+  const { identifications, contactOutcome } = rules;
+  const identificationData = su.identification;
+  const contactOutcomeType = su.contactOutcome.type;
+
+  return identifications.some(
+    identification =>
+      identificationData[identification.questionId] === identification.value &&
+      contactOutcomeType === contactOutcome
+  );
 }
 
 function isValidStateForContactOutcome(su: SurveyUnit, suTransmissionRules: TransmissionRules) {
