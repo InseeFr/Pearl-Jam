@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import { GUEST_PEARL_USER, PEARL_USER_KEY } from 'utils/constants';
 import { getTokenInfo, keycloakAuthentication } from 'utils/keycloak';
 
+function getAuthMode() {
+  return import.meta.env.VITE_PEARL_AUTHENTICATION_MODE;
+}
+
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
@@ -34,7 +38,7 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    const PEARL_AUTHENTICATION_MODE = import.meta.env.VITE_PEARL_AUTHENTICATION_MODE;
+    const PEARL_AUTHENTICATION_MODE = getAuthMode();
     switch (PEARL_AUTHENTICATION_MODE) {
       case 'anonymous':
         window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(GUEST_PEARL_USER));
