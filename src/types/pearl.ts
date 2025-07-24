@@ -100,6 +100,26 @@ export type ContactOutcome = {
   type?: ContactOutcomeValue;
 };
 
+export type Contact = {
+  civilite?: string;
+  firstName?: string;
+  age?: number;
+  isPanel?: boolean;
+  lastName?: string;
+  phoneNumber?: string;
+  isMailContact?: boolean;
+};
+
+export type PreviousCollectHistory = {
+  outcome: string;
+  houseHoldComposition: Contact[];
+  interviewerComment: string;
+};
+
+export type NextCollectHistory = {
+  houseHoldComposition: Contact[];
+};
+
 export type SurveyUnit = {
   displayName: string;
   id: string;
@@ -127,6 +147,8 @@ export type SurveyUnit = {
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
+  previousCollectHistory?: PreviousCollectHistory;
+  nextCollectHistory?: NextCollectHistory;
 };
 
 export type NotificationState = 'warning' | 'success' | 'error';
