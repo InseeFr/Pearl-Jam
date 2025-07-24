@@ -25,9 +25,14 @@ const navigationMessage = {
     sq: 'Banimi & Identifikimi',
   },
   goToPreviousCollect: {
-    fr: 'Informations de la collecte précédente',
-    en: 'Previous collect information',
-    sq: 'Informacionet e mbledhjes së mëparshme',
+    fr: 'Collecte précédente',
+    en: 'Previous collect',
+    sq: 'Mbledhja e mëparshme',
+  },
+  goToNextCollect: {
+    fr: 'Collecte suivante',
+    en: 'Next collect',
+    sq: 'Mbledhja e ardhshme',
   },
   goToCommunicationPage: {
     fr: 'Communications',

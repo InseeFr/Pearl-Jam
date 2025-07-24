@@ -74,8 +74,12 @@ export function SurveyUnitPage() {
   };
 
   const mockNextCollect: NextCollectHistory = {
-    houseHoldComposition: [{ firstName: 'John', isPanel: true, civilite: 'male', age: 23 }],
+    houseHoldComposition: [
+      { firstName: 'John', isPanel: true, civilite: 'male', age: 23, isMailContact: true },
+    ],
   };
+
+  console.log(mockNextCollect);
 
   return (
     <>

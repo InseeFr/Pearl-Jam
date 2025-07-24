@@ -10,12 +10,13 @@ import {
   Typography,
 } from '@mui/material';
 import { Contact } from 'types/pearl';
+import { CustomTableCell } from './CustomTableCell';
 
 type ContactsTableProps = {
   contacts: readonly Contact[];
 };
 
-export function ContactsTable({ contacts }: ContactsTableProps) {
+export function PreviousContactsTable({ contacts }: ContactsTableProps) {
   return (
     <Card elevation={0}>
       <CardContent sx={{ ml: -4 }}>
@@ -23,7 +24,7 @@ export function ContactsTable({ contacts }: ContactsTableProps) {
           <TableHead>
             <TableRow>
               {['Civilité', 'Prénom', 'Âge', 'Individu panel'].map(label => (
-                <TableCell align="right" key={label} style={{ backgroundColor: 'white' }}>
+                <TableCell key={label} style={{ backgroundColor: 'white' }}>
                   <Typography fontWeight={600} color={'grey'}>
                     {label}
                   </Typography>
@@ -33,19 +34,11 @@ export function ContactsTable({ contacts }: ContactsTableProps) {
           </TableHead>
           <TableBody>
             {contacts.map((c, i) => (
-              <TableRow key={i} hover={true}>
-                <TableCell>
-                  <Typography fontWeight={600}>{c.civilite}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography fontWeight={600}>{c.firstName}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography fontWeight={600}>{c.age}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography fontWeight={600}>{c.isPanel ? `${D.yes}` : `${D.no}`}</Typography>
-                </TableCell>
+              <TableRow key={i}>
+                <CustomTableCell>{c.civilite}</CustomTableCell>
+                <CustomTableCell>{c.firstName}</CustomTableCell>
+                <CustomTableCell>{c.age}</CustomTableCell>
+                <CustomTableCell>{c.isPanel ? D.yes : D.no}</CustomTableCell>
               </TableRow>
             ))}
           </TableBody>
