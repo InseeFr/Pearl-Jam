@@ -23,7 +23,7 @@ export function PreviousContactsTable({ contacts }: ContactsTableProps) {
         <Table size="medium">
           <TableHead>
             <TableRow>
-              {['Civilité', 'Prénom', 'Âge', 'Individu panel'].map(label => (
+              {[D.civility, D.firstName, D.age, D.panel].map(label => (
                 <TableCell key={label} style={{ backgroundColor: 'white' }}>
                   <Typography fontWeight={600} color={'grey'}>
                     {label}
@@ -35,7 +35,7 @@ export function PreviousContactsTable({ contacts }: ContactsTableProps) {
           <TableBody>
             {contacts.map((c, i) => (
               <TableRow key={i}>
-                <CustomTableCell>{c.civilite}</CustomTableCell>
+                <CustomTableCell>{c.civility}</CustomTableCell>
                 <CustomTableCell>{c.firstName}</CustomTableCell>
                 <CustomTableCell>{c.age}</CustomTableCell>
                 <CustomTableCell>{c.isPanel ? D.yes : D.no}</CustomTableCell>

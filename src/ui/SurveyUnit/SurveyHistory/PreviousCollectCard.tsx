@@ -13,14 +13,14 @@ export function PreviousCollectCard({ previousCollectHistory }: Readonly<Address
   return (
     <>
       <InfoCard>
-        <AssignmentOutlinedIcon />
+        <AssignmentOutlinedIcon fontSize="large" />
         <Typography component="h2" variant="xl">
           {D.previousCollectInfo}
         </Typography>
       </InfoCard>
       <InfoCard>
         <Typography fontWeight={600} color={'grey'}>
-          Outcome comment :
+          {D.outcomeComment}
         </Typography>
         <Typography fontWeight={600}>{previousCollectHistory.outcome}</Typography>
       </InfoCard>
@@ -34,7 +34,7 @@ export function PreviousCollectCard({ previousCollectHistory }: Readonly<Address
       </InfoCard>
       <InfoCard>
         <Typography fontWeight={600} color={'grey'}>
-          Comment :
+          {D.composition}
         </Typography>
         <Typography fontWeight={600}>
           {previousCollectHistory.interviewerComment.toString()}

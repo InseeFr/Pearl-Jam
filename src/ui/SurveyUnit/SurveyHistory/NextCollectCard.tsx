@@ -1,23 +1,20 @@
-import CardContent from '@mui/material/CardContent';
 import D from 'i18n';
-import Stack from '@mui/material/Stack';
-import { NextCollectHistory } from 'types/pearl';
-import Card from '@mui/material/Card';
+import { NextCollectHistory, SurveyUnit } from 'types/pearl';
 import { Grid, Typography } from '@mui/material';
-import { Row } from 'ui/Row';
 import EditIcon from 'ui/Questionnaire/Icons/EditIcon';
 import { NextContactsTable } from './tables/NextContactsTable';
 import { InfoCard } from './InfoCard';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
 interface AddressCardProps {
-  nextCollectHistory: NextCollectHistory;
+  surveyUnit: SurveyUnit;
 }
 
-export function NextCollectCard({ nextCollectHistory }: Readonly<AddressCardProps>) {
+export function NextCollectCard({ surveyUnit }: Readonly<AddressCardProps>) {
   return (
     <>
       <InfoCard>
-        <EditIcon />
+        <PersonOutlineIcon fontSize="large" />
         <Typography component="h2" variant="xl" fontWeight={700}>
           {D.nextCollectInfo}
         </Typography>
@@ -25,9 +22,9 @@ export function NextCollectCard({ nextCollectHistory }: Readonly<AddressCardProp
       <InfoCard>
         <Grid>
           <Typography fontWeight={600} color={'grey'}>
-            Comment :
+            {D.comment}
           </Typography>
-          <NextContactsTable nextCollectHistory={nextCollectHistory} />
+          <NextContactsTable surveyUnit={surveyUnit} />
         </Grid>
       </InfoCard>
     </>

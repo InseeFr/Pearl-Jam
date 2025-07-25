@@ -69,13 +69,13 @@ export function SurveyUnitPage() {
 
   const mockPreviousCollectHistory: PreviousCollectHistory = {
     outcome: 'Completed',
-    houseHoldComposition: [{ firstName: 'John', isPanel: true, civilite: 'male', age: 23 }],
+    houseHoldComposition: [{ firstName: 'John', isPanel: true, civility: 'male', age: 23 }],
     interviewerComment: 'No issues during the previous collection.',
   };
 
   const mockNextCollect: NextCollectHistory = {
     houseHoldComposition: [
-      { firstName: 'John', isPanel: true, civilite: 'male', age: 23, isMailContact: true },
+      { firstName: 'John', isPanel: true, civility: 'male', age: 23, isMailContact: true },
     ],
   };
 
@@ -113,7 +113,7 @@ export function SurveyUnitPage() {
         </SwipeableTab>
         {mockNextCollect && (
           <SwipeableTab index={6} label={D.goToNextCollect}>
-            <NextCollectCard nextCollectHistory={mockNextCollect} />
+            <NextCollectCard surveyUnit={surveyUnit} />
           </SwipeableTab>
         )}
       </SwipeableTabs>

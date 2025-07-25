@@ -8,7 +8,7 @@ type CustomCellProps = {
 
 export function CustomTableCell({ children, cellProps }: PropsWithChildren<CustomCellProps>) {
   return (
-    <TableCell {...cellProps}>
+    <TableCell {...cellProps} sx={{ minWidth: '150px' }}>
       <Typography fontWeight={600}>{children}</Typography>
     </TableCell>
   );

@@ -101,13 +101,14 @@ export type ContactOutcome = {
 };
 
 export type Contact = {
-  civilite?: string;
+  civility?: string;
   firstName?: string;
   age?: number;
   isPanel?: boolean;
   lastName?: string;
   phoneNumber?: string;
   isMailContact?: boolean;
+  email?: string;
 };
 
 export type PreviousCollectHistory = {
