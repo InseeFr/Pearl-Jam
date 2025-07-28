@@ -4,6 +4,11 @@ import { Contact } from 'types/pearl';
 import { FieldRow } from 'ui/FieldRow';
 import D from 'i18n';
 
+function forceTypeBoolean(e: any) {
+  console.log('force');
+  return e.target.value == 'true';
+}
+
 type ModifyContactModalProps = {
   open: boolean;
   modalTitle: string;
@@ -28,8 +33,14 @@ export function ContactModal({
     defaultValues: contact,
   });
 
-  const handleFormSubmit = (contact: Contact) => {
-    onConfirm(contact);
+  const handleFormSubmit = (contact: any) => {
+    console.log(contact);
+
+    const verifiedContact = {
+      ...contact,
+      isMailContact: contact.isMailContact === 'true' ? true : false,
+    };
+    onConfirm(verifiedContact);
   };
 
   return (
@@ -66,13 +77,13 @@ export function ContactModal({
             <FieldRow label={D.contactPhone} {...register('phoneNumber')} />
             <FieldRow label={D.contactEmail} {...register('email')} />
             <FieldRow
-              label={D.contactIsMail}
+              label={D.shouldBeEmail}
+              {...register('isMailContact')}
               control={control}
               type="radios"
-              name="isMailContact"
               options={[
-                { label: D.yes, value: true },
-                { label: D.no, value: false },
+                { label: D.yes, value: 'true' },
+                { label: D.no, value: 'false' },
               ]}
             />
 

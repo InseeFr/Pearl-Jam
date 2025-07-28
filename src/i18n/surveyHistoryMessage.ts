@@ -187,6 +187,11 @@ const surveyHistoryMessage = {
     en: 'Mail contact',
     sq: 'Kontakt përmes postës',
   },
+  shouldBeEmail: {
+    fr: 'Cette personne sera-t-elle le contact courrier ?',
+    en: 'Mail contact',
+    sq: 'Kontakt përmes postës',
+  },
   previousSurveyInfo: {
     fr: 'Information de la collecte précédante',
     en: 'Previous collect information',
