@@ -15,7 +15,7 @@ export function PreviousCollectCard({ previousCollectHistory }: Readonly<Address
       <InfoCard>
         <AssignmentOutlinedIcon fontSize="large" />
         <Typography component="h2" variant="xl">
-          {D.previousCollectInfo}
+          {D.previousSurveyInfo}
         </Typography>
       </InfoCard>
       <InfoCard>
@@ -27,14 +27,14 @@ export function PreviousCollectCard({ previousCollectHistory }: Readonly<Address
       <InfoCard>
         <Grid>
           <Typography fontWeight={600} color={'grey'}>
-            Composition
+            {D.compositionPreviousSurvey}
           </Typography>
           <PreviousContactsTable contacts={previousCollectHistory.houseHoldComposition} />
         </Grid>
       </InfoCard>
       <InfoCard>
         <Typography fontWeight={600} color={'grey'}>
-          {D.composition}
+          {D.previousCollectInterviewerComment}
         </Typography>
         <Typography fontWeight={600}>
           {previousCollectHistory.interviewerComment.toString()}

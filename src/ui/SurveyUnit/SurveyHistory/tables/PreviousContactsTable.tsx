@@ -23,7 +23,12 @@ export function PreviousContactsTable({ contacts }: ContactsTableProps) {
         <Table size="medium">
           <TableHead>
             <TableRow>
-              {[D.civility, D.firstName, D.age, D.panel].map(label => (
+              {[
+                D.contactCivilityLabel,
+                D.collectTableFirstName,
+                D.collectTableAge,
+                D.preivousCollectTablePanel,
+              ].map(label => (
                 <TableCell key={label} style={{ backgroundColor: 'white' }}>
                   <Typography fontWeight={600} color={'grey'}>
                     {label}

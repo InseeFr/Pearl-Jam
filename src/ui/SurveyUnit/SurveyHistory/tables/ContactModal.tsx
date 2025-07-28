@@ -25,7 +25,7 @@ export function ContactModal({
     control,
     formState: { errors },
   } = useForm<Contact>({
-    values: contact,
+    defaultValues: contact,
   });
 
   const handleFormSubmit = (contact: Contact) => {
@@ -43,13 +43,13 @@ export function ContactModal({
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <Stack spacing={3}>
             <FieldRow
-              label={D.contactCivilite}
-              name="civilite"
+              label={D.contactCivilityLabel}
+              name="civility"
               control={control}
               type="radios"
               options={[
-                { label: D.yes, value: 'male' },
-                { label: D.no, value: 'female' },
+                { label: D.editContactMale, value: 'male' },
+                { label: D.editContactFemale, value: 'female' },
               ]}
               required
             />

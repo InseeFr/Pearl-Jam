@@ -52,18 +52,13 @@ const surveyHistoryMessage = {
     en: 'Delete a line',
     sq: 'Fshij një linjë',
   },
-  contactNameLabel: {
-    fr: 'Nom du contact',
-    en: 'Contact name',
-    sq: 'Emri i kontaktit',
-  },
   contactPhoneLabel: {
     fr: 'Téléphone Enquêteur',
     en: 'Phone',
     sq: 'Telefoni',
   },
   contactEmailLabel: {
-    fr: 'Email',
+    fr: 'Adresse Mail',
     en: 'Email',
     sq: 'Email',
   },
@@ -97,13 +92,13 @@ const surveyHistoryMessage = {
     en: 'Edit a contact line',
     sq: 'Ndrysho një linjë kontakti',
   },
-  male: {
-    fr: 'Monsieur',
+  editContactMale: {
+    fr: 'M',
     en: 'Mr.',
     sq: 'Z.',
   },
-  female: {
-    fr: 'Madame',
+  editContactFemale: {
+    fr: 'Mme',
     en: 'Ms.',
     sq: 'Znj.',
   },
@@ -117,20 +112,25 @@ const surveyHistoryMessage = {
     en: 'No',
     sq: 'Jo',
   },
-  tableCivility: {
-    fr: 'Civilité',
-    en: 'Civility',
-    sq: 'Titulli',
-  },
-  tableLastName: {
+  collectTableLastName: {
     fr: 'Nom',
     en: 'Last name',
     sq: 'Mbiemri',
   },
-  tableFirstName: {
+  collectTableFirstName: {
     fr: 'Prénom',
     en: 'First name',
     sq: 'Emri',
+  },
+  collectTableAge: {
+    fr: 'Age',
+    en: 'Age',
+    sq: 'Mosha',
+  },
+  preivousCollectTablePanel: {
+    fr: 'Individu panel',
+    en: 'Panel Contact',
+    sq: 'Kontakti i panelit',
   },
   tablePhone: {
     fr: 'Téléphone',
@@ -147,40 +147,20 @@ const surveyHistoryMessage = {
     en: 'Mail contact',
     sq: 'Kontakt përmes postës',
   },
-  nextCollectInfo: {
-    fr: 'Informations de la collecte à venir',
-    en: 'Upcoming collection information',
-    sq: 'Informacion për mbledhjen e ardhshme',
-  },
   comment: {
     fr: 'Commentaire',
     en: 'Comment',
     sq: 'Koment',
   },
-  previousCollectInfo: {
-    fr: 'Informations de la dernière collecte',
-    en: 'Previous collection information',
-    sq: 'Informacion për mbledhjen e fundit',
-  },
   outcomeComment: {
-    fr: 'Commentaire sur le résultat',
+    fr: 'Bilan des contacts :',
     en: 'Outcome comment',
     sq: 'Koment mbi rezultatin',
   },
-  composition: {
-    fr: 'Composition du ménage',
-    en: 'Household composition',
-    sq: 'Përbërja e familjes',
-  },
-  civility: {
-    fr: 'Civilité',
-    en: 'Civility',
-    sq: 'Titulli',
-  },
-  contactCivilite: {
-    fr: 'Civilité',
-    en: 'Civility',
-    sq: 'Titulli',
+  compositionPreviousSurvey: {
+    fr: 'Composition du ménage :',
+    en: 'Household composition :',
+    sq: 'Përbërja e familjes :',
   },
   contactLastName: {
     fr: 'Nom',
@@ -206,6 +186,26 @@ const surveyHistoryMessage = {
     fr: 'Contact courrier',
     en: 'Mail contact',
     sq: 'Kontakt përmes postës',
+  },
+  previousSurveyInfo: {
+    fr: 'Information de la collecte précédante',
+    en: 'Previous collect information',
+    sq: 'Informacionet e mbledhjes së mëparshme',
+  },
+  nextSurveyInfo: {
+    fr: 'Coordonnées des individus pour la collecte suivante ',
+    en: 'Coordinates of individuals for the next collect',
+    sq: 'Koordinatat e individëve për mbledhjen e ardhshme',
+  },
+  previousCollectInterviewerComment: {
+    fr: 'Commentaire de l’enquêteur :',
+    en: "Interviewer's comment :",
+    sq: 'Komenti i hetuesit',
+  },
+  modalAddContact: {
+    fr: 'Ajouter une ligne de coordonnées',
+    en: 'Add new coordinates',
+    sq: 'Shtoni koordinata të reja',
   },
 };
 

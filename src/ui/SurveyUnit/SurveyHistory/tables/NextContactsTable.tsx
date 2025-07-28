@@ -75,13 +75,21 @@ export function NextContactsTable({ surveyUnit }: HouseholdTableProps) {
   };
 
   const handleAdd = (newContact: Contact) => {
-    surveyUnit.nextCollectHistory?.houseHoldComposition.push(newContact);
-    surveyUnitIDBService.addOrUpdateSU({
-      ...surveyUnit,
-    });
-
     setAddModalOpen(false);
     setSelectedContactIndex(-1);
+
+    if (surveyUnit.nextCollectHistory) {
+      surveyUnit.nextCollectHistory.houseHoldComposition.push(newContact);
+      surveyUnitIDBService.addOrUpdateSU({
+        ...surveyUnit,
+      });
+      return;
+    }
+
+    surveyUnitIDBService.addOrUpdateSU({
+      ...surveyUnit,
+      nextCollectHistory: { houseHoldComposition: [newContact] },
+    });
   };
 
   return (
@@ -90,18 +98,20 @@ export function NextContactsTable({ surveyUnit }: HouseholdTableProps) {
         {!!nextCollectHistory?.houseHoldComposition.length && (
           <Table size="medium">
             <TableHead>
-              <TableRow>
+              <TableRow
+                sx={{
+                  alignContent: 'center',
+                }}
+              >
                 {[
-                  D.tableCivility,
-                  D.tableLastName,
-                  D.tableFirstName,
+                  D.contactCivilityLabel,
+                  D.collectTableLastName,
+                  D.collectTableFirstName,
                   D.tablePhone,
-                  D.tableEmail,
+                  D.contactEmailLabel,
                   D.tableMailContact,
-                  '',
-                  '',
                 ].map(label => (
-                  <TableCell key={label}>
+                  <TableCell key={label} sx={{ backgroundColor: 'transparent', textAlign: 'left' }}>
                     <Typography fontWeight={600} color="grey.700">
                       {label}
                     </Typography>
@@ -111,28 +121,43 @@ export function NextContactsTable({ surveyUnit }: HouseholdTableProps) {
             </TableHead>
             <TableBody>
               {nextCollectHistory?.houseHoldComposition.map((c, i) => (
-                <TableRow key={i} hover>
+                <TableRow
+                  key={i}
+                  hover
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: 'transparent !important',
+                    },
+                  }}
+                >
                   <CustomTableCell>{c.civility}</CustomTableCell>
                   <CustomTableCell>{c.lastName?.toUpperCase()}</CustomTableCell>
                   <CustomTableCell>{c.firstName}</CustomTableCell>
                   <CustomTableCell>{c.phoneNumber}</CustomTableCell>
                   <CustomTableCell>{c.email}</CustomTableCell>
-                  <TableCell style={{ backgroundColor: 'white', textAlign: 'center' }}>
+                  <TableCell sx={{ backgroundColor: 'transparent', textAlign: 'center' }}>
                     {c.isMailContact && <CheckCircle fontSize="medium" color="success" />}
                   </TableCell>
-                  <Button onClick={() => handleModifyClick?.(i)} size="small" variant="contained">
-                    <Edit fontSize="small" />
-                    <Typography fontWeight={600}>{D.edit}</Typography>{' '}
-                  </Button>
-                  <Button
-                    onClick={() => handleDeleteClick(i)}
-                    size="small"
-                    variant="contained"
-                    sx={{ ml: 2 }}
+                  <TableCell
+                    sx={{
+                      backgroundColor: 'transparent',
+                      textAlign: 'center',
+                    }}
                   >
-                    <Delete fontSize="small" />
-                    <Typography fontWeight={600}>{D.delete}</Typography>{' '}
-                  </Button>
+                    <Button onClick={() => handleModifyClick?.(i)} size="small" variant="contained">
+                      <Edit fontSize="small" />
+                      <Typography fontWeight={600}>{D.edit}</Typography>
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteClick(i)}
+                      size="small"
+                      variant="contained"
+                      sx={{ ml: 2 }}
+                    >
+                      <Delete fontSize="small" />
+                      <Typography fontWeight={600}>{D.delete}</Typography>
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -168,7 +193,7 @@ export function NextContactsTable({ surveyUnit }: HouseholdTableProps) {
         />
       )}
       <ContactModal
-        modalTitle={D.contactModalTitleAdd}
+        modalTitle={D.modalAddContact}
         open={addModalOpen}
         onClose={() => setAddModalOpen(false)}
         onConfirm={handleAdd}

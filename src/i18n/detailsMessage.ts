@@ -61,16 +61,6 @@ const detailsMessage = {
   surveyUnitTitle: { fr: 'Civilité', en: 'Title', sq: 'Titulli' },
   surveyUnitAge: { fr: 'Âge', en: 'Age', sq: 'Mosha' },
   surveyUnitHousing: { fr: 'Logement', en: 'Housing', sq: 'Banimi' },
-  previousCollectInfo: {
-    fr: 'Information de la collecte précédante',
-    en: 'Previous collect information',
-    sq: 'Informacionet e mbledhjes së mëparshme',
-  },
-  nextCollectInfo: {
-    fr: 'Coordonnées des individus pour la collecte suivante ',
-    en: 'Coordinates of individuals for the next collect',
-    sq: 'Koordinatat e individëve për mbledhjen e ardhshme',
-  },
 
   surveyUnitIndividual: { fr: 'Individu', en: 'Individual', sq: 'Individ' },
   surveyUnitCommunications: {

@@ -1,7 +1,6 @@
 import D from 'i18n';
-import { NextCollectHistory, SurveyUnit } from 'types/pearl';
+import { SurveyUnit } from 'types/pearl';
 import { Grid, Typography } from '@mui/material';
-import EditIcon from 'ui/Questionnaire/Icons/EditIcon';
 import { NextContactsTable } from './tables/NextContactsTable';
 import { InfoCard } from './InfoCard';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
@@ -12,21 +11,23 @@ interface AddressCardProps {
 
 export function NextCollectCard({ surveyUnit }: Readonly<AddressCardProps>) {
   return (
-    <>
-      <InfoCard>
-        <PersonOutlineIcon fontSize="large" />
-        <Typography component="h2" variant="xl" fontWeight={700}>
-          {D.nextCollectInfo}
-        </Typography>
-      </InfoCard>
-      <InfoCard>
-        <Grid>
-          <Typography fontWeight={600} color={'grey'}>
-            {D.comment}
-          </Typography>
+    <InfoCard>
+      <Grid container direction="column">
+        <Grid container item direction="row" alignItems="center" spacing={0.5}>
+          <Grid item>
+            <PersonOutlineIcon fontSize="large" />
+          </Grid>
+          <Grid item>
+            <Typography component="h2" variant="h6" fontWeight={700}>
+              {D.nextSurveyInfo}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid item>
           <NextContactsTable surveyUnit={surveyUnit} />
         </Grid>
-      </InfoCard>
-    </>
+      </Grid>
+    </InfoCard>
   );
 }
