@@ -169,11 +169,18 @@ export type SurveyUnit = {
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
-  previousContactHistory?: PreviousContactHistory;
+  prevousContactHistory?: PreviousContactHistory;
   nextContactHistory?: NextContactHistory;
   collectNextContacts: boolean;
+  otherModeQuestionnaireState: OtherModeQuestionnaireState[];
 };
 
+export type OtherModeQuestionStateType = 'QUESTIONNAIRE_COMPLETED' | 'QUESTIONNAIRE_INIT';
+export type OtherModeQuestionnaireState = {
+  id: string;
+  state: OtherModeQuestionStateType;
+  date: string;
+};
 export type NotificationState = 'warning' | 'success' | 'error';
 export type Notification = {
   date: number;
