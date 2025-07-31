@@ -244,9 +244,11 @@ export const synchronizePearl = async () => {
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
     await getUserData();
+    const previousData = await surveyUnitIDBService.getAll();
+
     surveyUnitsInTempZone = await sendData();
     transmittedSurveyUnits = await getWFSSurveyUnitsSortByCampaign();
-
+    console.log({ previousData });
     await clean();
 
     const { surveyUnitsSuccess: susSuccess } = await getData();
@@ -259,6 +261,7 @@ export const synchronizePearl = async () => {
       surveyUnitsInTempZone,
       transmittedSurveyUnits,
       loadedSurveyUnits,
+      previousData,
     };
   } catch (e) {
     console.debug(e);

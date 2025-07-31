@@ -89,6 +89,19 @@ const syncMessage = {
     en: `For your information, you have "too much" questionnaire level data if your post,. This is not blocking anything. The application administrator has been notified.`,
     sq: `Për informacion, ju keni "shumë" të dhëna në nivelin e anketës nëse postimi juaj. Kjo nuk bllokon asgjë. Administratori i aplikacionit është njoftuar.`,
   },
+  webTerminatedSurveyUnit: {
+    fr: (su: number) =>
+      `Nombre d’unités terminées sur internet depuis la dernière synchronisation: ${su}`,
+    en: (su: number) => `Number of units completed online since the last synchronization:: ${su}`,
+    sq: (su: number) =>
+      `Numri i njësive të përfunduara në internet që nga sinkronizimi i fundit: ${su}`,
+  },
+  webInitSurveyUnit: {
+    fr: (su: number) =>
+      `Nombre d’unités démarrées sur internet depuis la dernière synchronisation: ${su}`,
+    en: (su: number) => `Number of units started online since the last synchronization: ${su}`,
+    sq: (su: number) => `Numri i njësive të nisura në internet që nga sinkronizimi i fundit: ${su}`,
+  },
   syncNoPearlData: {
     fr: `Pour information, vous n'avez récupéré aucune données.`,
     en: `For your information, you have not retrieved any data.`,
