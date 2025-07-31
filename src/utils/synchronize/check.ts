@@ -2,7 +2,12 @@ import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 
 import { postMailMessage } from 'api/pearl';
 import D from 'i18n';
-import { NotificationState } from 'types/pearl';
+import {
+  NotificationState,
+  OtherModeQuestionnaireState,
+  OtherModeQuestionStateType,
+  SurveyUnit,
+} from 'types/pearl';
 import { Notification, SyncReport } from 'utils/indexeddb/idb-config';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
@@ -73,7 +78,9 @@ const getResult = (
   pearlTempZone = [],
   queenTempZone = [],
   transmittedSurveyUnits = {},
-  loadedSurveyUnits = {}
+  loadedSurveyUnits = {},
+  webTerminatedSurvey: string[] = [],
+  webInitSurvey: string[] = []
 ): {
   state: NotificationState;
   messages: string[];
@@ -89,6 +96,14 @@ const getResult = (
       messages: [D.syncStopOnError, D.warningOrErrorEndMessage, D.syncPleaseTryAgain],
     };
   }
+
+  if (webTerminatedSurvey.length > 0) {
+    messages.push(D.webTerminatedSurveyUnit(webTerminatedSurvey.length));
+  }
+  if (webInitSurvey.length > 0) {
+    messages.push(D.webInitSurveyUnit(webInitSurvey.length));
+  }
+
   if (
     pearlTempZone.length > 0 ||
     queenTempZone.length > 0 ||
@@ -110,20 +125,66 @@ const getResult = (
   }
   return {
     state: 'success',
-    messages: [D.syncSuccessMessage],
+    messages: [...messages, D.syncSuccessMessage],
     details: { transmittedSurveyUnits, loadedSurveyUnits },
   };
 };
 
+const shouldAddMultiModeNotification = (
+  surveyUnit: SurveyUnit,
+  previousSurveyUnits: SurveyUnit[] = []
+): OtherModeQuestionStateType | null => {
+  const getMostRecentState = (surveyUnit?: SurveyUnit): OtherModeQuestionnaireState | undefined => {
+    if (!surveyUnit) {
+      return undefined;
+    }
+
+    return (surveyUnit.otherModeQuestionnaireState ?? []).reduce<
+      OtherModeQuestionnaireState | undefined
+    >((latest, current) => {
+      if (!latest) {
+        return current;
+      }
+      return new Date(current.date) > new Date(latest.date) ? current : latest;
+    }, undefined);
+  };
+  const previousSurveyUnit = previousSurveyUnits.find(su => su.id === surveyUnit.id);
+  const previousOtherModeQuestionState = getMostRecentState(previousSurveyUnit);
+  const mostRecentOtherModeQuestionnaireState = getMostRecentState(surveyUnit);
+
+  if (!previousSurveyUnit || !previousOtherModeQuestionState) {
+    const mostRecentOtherModeQuestionnaireState = getMostRecentState(surveyUnit);
+
+    if (!!mostRecentOtherModeQuestionnaireState) {
+      return mostRecentOtherModeQuestionnaireState.state;
+    }
+    return null;
+  }
+
+  if (previousOtherModeQuestionState?.state !== mostRecentOtherModeQuestionnaireState?.state) {
+    if (
+      mostRecentOtherModeQuestionnaireState?.state &&
+      ['QUESTIONNAIRE_COMPLETED', 'QUESTIONNAIRE_INIT'].includes(
+        mostRecentOtherModeQuestionnaireState?.state
+      )
+    ) {
+      return mostRecentOtherModeQuestionnaireState?.state;
+    }
+  }
+
+  return null;
+};
+
 export const analyseResult = async () => {
   const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
-  const pearlSus = await surveyUnitIDBService.getAll();
+  const pearlSus: SurveyUnit[] = await surveyUnitIDBService.getAll();
   const pearlSurveyUnitsArray = pearlSus.map(({ id }: { id: string }) => id);
   const {
     error: pearlError,
     surveyUnitsInTempZone: pearlTempZone,
     transmittedSurveyUnits,
     loadedSurveyUnits,
+    previousData,
   } = getSavedSyncPearlData() || {};
   const {
     error: queenError,
@@ -131,6 +192,18 @@ export const analyseResult = async () => {
     surveyUnitsInTempZone: queenTempZone,
   } = getSavedSyncQueenData() || {};
 
+  const webTerminatedSurvey: string[] = [];
+  const webInitSurvey: string[] = [];
+
+  pearlSus.forEach(su => {
+    const result = shouldAddMultiModeNotification(su, previousData);
+    if (result === 'QUESTIONNAIRE_COMPLETED') {
+      webTerminatedSurvey.push(su.id);
+    }
+    if (result === 'QUESTIONNAIRE_INIT') {
+      webInitSurvey.push(su.id);
+    }
+  });
   if (pearlTempZone?.length > 0) {
     const subject = D.subjectTempZone;
 
@@ -176,7 +249,9 @@ export const analyseResult = async () => {
     pearlTempZone,
     queenTempZone,
     transmittedSurveyUnits,
-    loadedSurveyUnits
+    loadedSurveyUnits,
+    webTerminatedSurvey,
+    webInitSurvey
   );
 
   const nowDate = new Date().getTime();

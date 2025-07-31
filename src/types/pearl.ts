@@ -127,8 +127,15 @@ export type SurveyUnit = {
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
+  otherModeQuestionnaireState: OtherModeQuestionnaireState[];
 };
 
+export type OtherModeQuestionStateType = 'QUESTIONNAIRE_COMPLETED' | 'QUESTIONNAIRE_INIT';
+export type OtherModeQuestionnaireState = {
+  id: string;
+  state: OtherModeQuestionStateType;
+  date: string;
+};
 export type NotificationState = 'warning' | 'success' | 'error';
 export type Notification = {
   date: number;
