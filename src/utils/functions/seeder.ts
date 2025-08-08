@@ -3,6 +3,7 @@ import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-servi
 import { contactOutcomes } from './contacts/ContactOutcome';
 import { getRandomIntBetween, getRandomItemFromArray } from './random';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
+import userIdbService from '../indexeddb/services/user-idb-service';
 
 const day = 60 * 60 * 1000 * 24;
 const year = day * 365;
@@ -299,6 +300,28 @@ export async function seedData() {
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.INDF2F,
   });
-
+  surverUnits.push({
+    ...surverUnits[0],
+    managementStartDate: new Date().getTime() - 10 * day,
+    interviewerStartDate: new Date().getTime() - 9 * day,
+    identificationPhaseStartDate: new Date().getTime() - 8 * day,
+    collectionStartDate: new Date().getTime() - 7 * day,
+    collectionEndDate: new Date().getTime() - 6 * day,
+    endDate: new Date().getTime() + 15 * day,
+    id: 'articulation',
+    identification: {},
+    firstName: 'Articulation',
+    lastName: 'Articulation',
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
+  });
+  await userIdbService.insert({
+    id: '1',
+    title: 'MISTER',
+    firstName: 'John',
+    lastName: 'Doe',
+    phoneNumber: '0123456789',
+    email: 'john@doe.fr',
+    civility: 'FR',
+  });
   await surveyUnitIDBService.addAll(surverUnits);
 }
