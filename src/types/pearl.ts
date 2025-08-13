@@ -172,7 +172,7 @@ export type SurveyUnit = {
   prevousContactHistory?: PreviousContactHistory;
   nextContactHistory?: NextContactHistory;
   collectNextContacts: boolean;
-  otherModeQuestionnaireState: OtherModeQuestionnaireState[];
+  otherModeQuestionnaireState?: OtherModeQuestionnaireState[];
 };
 
 export type OtherModeQuestionStateType = 'QUESTIONNAIRE_COMPLETED' | 'QUESTIONNAIRE_INIT';
@@ -194,11 +194,14 @@ export type Notification = {
   id: number;
 };
 
+export type SyncResultDetails = {
+  transmittedSurveyUnits: Record<string, string[]>;
+  loadedSurveyUnits: Record<string, string[]>;
+  startedWeb: Record<string, string[]>;
+  terminatedWeb: Record<string, string[]>;
+};
 export type SyncResult = {
   state: string;
   messages: string[] | string;
-  details?: {
-    transmittedSurveyUnits: Record<string, string[]>;
-    loadedSurveyUnits: Record<string, string[]>;
-  };
+  details?: SyncResultDetails;
 };
