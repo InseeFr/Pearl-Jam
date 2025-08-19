@@ -131,7 +131,7 @@ function SyncDetail({
 
       <List>
         {campaigns.map(campaign => (
-          <Stack key={campaign.name} gap={2} key={campaign.name}>
+          <Stack key={campaign.name} gap={2}>
             <>
               <ListItem>
                 <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
