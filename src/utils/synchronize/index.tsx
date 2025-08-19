@@ -236,46 +236,52 @@ const getNewSurveyUnitsByCampaign = async (
   }, {});
 };
 
-const shouldAddMultiModeNotification = (
+/**
+ * Return the latest (based on the date property) other mode questionnaire state
+ */
+const getMostRecentState = (surveyUnit?: SurveyUnit): OtherModeQuestionnaireState | undefined => {
+  if (!surveyUnit) {
+    return undefined;
+  }
+
+  return (surveyUnit.otherModeQuestionnaireState ?? []).reduce<
+    OtherModeQuestionnaireState | undefined
+  >((latest, current) => {
+    if (!latest) {
+      return current;
+    }
+    return new Date(current.date) > new Date(latest.date) ? current : latest;
+  }, undefined);
+};
+
+const isValidState = (state: OtherModeQuestionStateType): boolean =>
+  ['QUESTIONNAIRE_COMPLETED', 'QUESTIONNAIRE_INIT'].includes(state);
+
+const appearsAfterLastSync = (
+  previousState: OtherModeQuestionnaireState,
+  state: OtherModeQuestionStateType
+): boolean => state !== previousState.state;
+
+const getLatestSurveyUnitStateAfterSync = (
   surveyUnit: SurveyUnit,
   previousSurveyUnits: SurveyUnit[] = []
 ): OtherModeQuestionStateType | null => {
-  const getMostRecentState = (surveyUnit?: SurveyUnit): OtherModeQuestionnaireState | undefined => {
-    if (!surveyUnit) {
-      return undefined;
-    }
-
-    return (surveyUnit.otherModeQuestionnaireState ?? []).reduce<
-      OtherModeQuestionnaireState | undefined
-    >((latest, current) => {
-      if (!latest) {
-        return current;
-      }
-      return new Date(current.date) > new Date(latest.date) ? current : latest;
-    }, undefined);
-  };
   const previousSurveyUnit = previousSurveyUnits.find(su => su.id === surveyUnit.id);
-  const previousOtherModeQuestionState = getMostRecentState(previousSurveyUnit);
+
+  const previousMostRecentOtherModeQuestionState = getMostRecentState(previousSurveyUnit);
   const mostRecentOtherModeQuestionnaireState = getMostRecentState(surveyUnit);
+  const currentState = mostRecentOtherModeQuestionnaireState?.state ?? null;
 
-  if (!previousSurveyUnit || !previousOtherModeQuestionState) {
-    const mostRecentOtherModeQuestionnaireState = getMostRecentState(surveyUnit);
-
-    if (!!mostRecentOtherModeQuestionnaireState) {
-      return mostRecentOtherModeQuestionnaireState.state;
-    }
-    return null;
+  if (!previousMostRecentOtherModeQuestionState) {
+    return currentState;
   }
 
-  if (previousOtherModeQuestionState?.state !== mostRecentOtherModeQuestionnaireState?.state) {
-    if (
-      mostRecentOtherModeQuestionnaireState?.state &&
-      ['QUESTIONNAIRE_COMPLETED', 'QUESTIONNAIRE_INIT'].includes(
-        mostRecentOtherModeQuestionnaireState?.state
-      )
-    ) {
-      return mostRecentOtherModeQuestionnaireState?.state;
-    }
+  if (
+    currentState &&
+    appearsAfterLastSync(previousMostRecentOtherModeQuestionState, currentState) &&
+    isValidState(currentState)
+  ) {
+    return currentState;
   }
 
   return null;
@@ -305,7 +311,7 @@ export const synchronizePearl = async () => {
     let terminatedWeb: Record<string, string[]> = {};
 
     surveyUnits.forEach(su => {
-      const result = shouldAddMultiModeNotification(su, previousData);
+      const result = getLatestSurveyUnitStateAfterSync(su, previousData);
       if (result === 'QUESTIONNAIRE_COMPLETED') {
         terminatedWeb = {
           ...terminatedWeb,
