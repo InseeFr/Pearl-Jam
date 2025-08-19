@@ -110,7 +110,7 @@ const getResult = (
   }
   return {
     state: 'success',
-    messages: [...messages, D.syncSuccessMessage],
+    messages: [D.syncSuccessMessage],
     details: { transmittedSurveyUnits, loadedSurveyUnits, startedWeb, terminatedWeb },
   };
 };

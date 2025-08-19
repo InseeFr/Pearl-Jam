@@ -13,7 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
 import { useMemo } from 'react';
-import { SyncResult } from 'types/pearl';
+import { SyncResult, SyncResultDetails } from 'types/pearl';
 import { Accordion } from '../Accordion';
 import { Typography } from '../Typography';
 import { List, ListItem } from '@mui/material';
@@ -24,8 +24,19 @@ type CampaignNotification = {
   loaded: number;
   startedWeb: string[];
   terminatedWeb: string[];
-  total: number;
 };
+
+const hasAtLeastOneItemToDisplay =
+  (details: SyncResultDetails) =>
+  (campaign: string): boolean => {
+    return (
+      details.transmittedSurveyUnits[campaign]?.length > 0 ||
+      details.loadedSurveyUnits[campaign]?.length > 0 ||
+      details.startedWeb[campaign]?.length > 0 ||
+      details.terminatedWeb[campaign]?.length > 0
+    );
+  };
+
 /**
  * Dialog that summarize synchronization results
  */
@@ -46,13 +57,7 @@ export function SyncDialog({
     return (
       Array.from(campaignIds)
         // Remove campaigns with no messages
-        .filter(
-          campaign =>
-            details.transmittedSurveyUnits[campaign]?.length > 0 ||
-            details.loadedSurveyUnits[campaign]?.length > 0 ||
-            details.startedWeb[campaign]?.length > 0 ||
-            details.terminatedWeb[campaign]?.length > 0
-        )
+        .filter(hasAtLeastOneItemToDisplay(details))
         // Compute message into a single object
         .map(campaign => ({
           name: campaign,
@@ -60,11 +65,6 @@ export function SyncDialog({
           loaded: (details.loadedSurveyUnits[campaign] ?? []).length,
           startedWeb: details.startedWeb[campaign] ?? [],
           terminatedWeb: details.terminatedWeb[campaign] ?? [],
-          total:
-            (details.transmittedSurveyUnits[campaign] ?? []).length +
-            (details.loadedSurveyUnits[campaign] ?? []).length +
-            (details.startedWeb[campaign] ?? []).length +
-            (details.terminatedWeb[campaign] ?? []).length,
         }))
     );
   }, [details]);
@@ -120,7 +120,6 @@ function SyncDetail({
   campaigns: CampaignNotification[];
 }>) {
   const theme = useTheme();
-  console.log({ campaigns });
   return (
     <Accordion
       defaultOpen={false}
