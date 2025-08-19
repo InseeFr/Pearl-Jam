@@ -131,7 +131,7 @@ function SyncDetail({
 
       <List>
         {campaigns.map(campaign => (
-          <Stack gap={2} key={campaign.name}>
+          <Stack key={campaign.name} gap={2} key={campaign.name}>
             <>
               <ListItem>
                 <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
@@ -152,7 +152,9 @@ function SyncDetail({
                     </ListItem>
                     <List disablePadding>
                       {campaign.startedWeb.map(id => (
-                        <ListItem sx={{ pl: 16 }}>{id}</ListItem>
+                        <ListItem key={id} sx={{ pl: 16 }}>
+                          {id}
+                        </ListItem>
                       ))}
                     </List>
                   </>
@@ -164,7 +166,9 @@ function SyncDetail({
                     </ListItem>
                     <List disablePadding>
                       {campaign.terminatedWeb.map(id => (
-                        <ListItem sx={{ pl: 16 }}>{id}</ListItem>
+                        <ListItem key={id} sx={{ pl: 16 }}>
+                          {id}
+                        </ListItem>
                       ))}
                     </List>
                   </>
