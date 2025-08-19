@@ -62,7 +62,7 @@ test('check if the status filters is working properly', async ({ page }) => {
 
   await homePage.resetAllFilters();
 
-  await page.getByLabel('Terminé', { exact: true }).check();
+  await page.getByLabel('Terminé enquêteur', { exact: true }).check();
 
   await homePage.checkNumberOfDisplayedItems(0);
 
