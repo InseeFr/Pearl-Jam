@@ -74,8 +74,8 @@ const getResult = (
   queenTempZone = [],
   transmittedSurveyUnits = {},
   loadedSurveyUnits = {},
-  startedWeb: {},
-  terminatedWeb: {}
+  startedWeb = {},
+  terminatedWeb = {}
 ): {
   state: NotificationState;
   messages: string[];
