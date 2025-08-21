@@ -13,7 +13,7 @@ export function DeleteConfirmationModal({
   contactName,
   onClose,
   onConfirm,
-}: DeleteConfirmationModalProps) {
+}: Readonly<DeleteConfirmationModalProps>) {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle>

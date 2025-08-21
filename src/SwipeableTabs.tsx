@@ -1,7 +1,15 @@
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import { Children, PropsWithChildren, useState } from 'react';
+import {
+  Children,
+  PropsWithChildren,
+  useState,
+  ReactNode,
+  isValidElement,
+  ReactElement,
+} from 'react';
+
 import SwipeableViews from 'react-swipeable-views';
 
 export function SwipeableTab(props: Readonly<PropsWithChildren<{ index: number; label: string }>>) {
@@ -26,9 +34,7 @@ function a11yProps(index: number) {
   };
 }
 
-export function SwipeableTabs({
-  children,
-}: Readonly<{ children: { props: { label: string } }[] }>) {
+export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
   const [value, setValue] = useState(0);
 
   const handleChange = (event: unknown, newValue: number) => {
@@ -38,7 +44,10 @@ export function SwipeableTabs({
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
-  const tabs = Children.map(children, child => child.props.label);
+
+  const tabs = Children.toArray(children)
+    .filter(isValidElement)
+    .map(child => (child as ReactElement<{ label: string }>).props.label);
 
   return (
     <>

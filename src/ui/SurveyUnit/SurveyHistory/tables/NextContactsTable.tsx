@@ -18,12 +18,13 @@ import { useState } from 'react';
 import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import { ContactModal } from './ContactModal';
 import D from 'i18n';
+import { randomUUID } from 'crypto';
 
 type HouseholdTableProps = {
   surveyUnit: SurveyUnit;
 };
 
-export function NextContactsTable({ surveyUnit }: HouseholdTableProps) {
+export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>) {
   const [selectedContactIndex, setSelectedContactIndex] = useState<number>(-1);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [modifyModalOpen, setModifyModalOpen] = useState(false);
@@ -122,7 +123,7 @@ export function NextContactsTable({ surveyUnit }: HouseholdTableProps) {
             <TableBody>
               {nextCollectHistory?.houseHoldComposition.map((c, i) => (
                 <TableRow
-                  key={i}
+                  key={randomUUID()}
                   hover
                   sx={{
                     '&:hover': {
@@ -144,7 +145,7 @@ export function NextContactsTable({ surveyUnit }: HouseholdTableProps) {
                       textAlign: 'center',
                     }}
                   >
-                    <Button onClick={() => handleModifyClick?.(i)} size="small" variant="contained">
+                    <Button onClick={() => handleModifyClick(i)} size="small" variant="contained">
                       <Edit fontSize="small" />
                       <Typography fontWeight={600}>{D.edit}</Typography>
                     </Button>

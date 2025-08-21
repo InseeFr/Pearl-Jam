@@ -67,52 +67,40 @@ export function SurveyUnitPage() {
     );
   }
 
-  const mockPreviousCollectHistory: PreviousCollectHistory = {
-    outcome: 'Completed',
-    houseHoldComposition: [{ firstName: 'John', isPanel: true, civility: 'male', age: 23 }],
-    interviewerComment: 'No issues during the previous collection.',
-  };
-
-  const mockNextCollect: NextCollectHistory = {
-    houseHoldComposition: [
-      { firstName: 'John', isPanel: true, civility: 'male', age: 23, isMailContact: true },
-    ],
-  };
-
-  console.log(mockNextCollect);
+  const indexShift = surveyUnit.previousCollectHistory ? 1 : 0;
 
   return (
     <>
       <SurveyUnitHeader surveyUnit={surveyUnit} />
       <SwipeableTabs>
-        {mockPreviousCollectHistory && (
+        {!!surveyUnit.previousCollectHistory && (
           <SwipeableTab index={0} label={D.goToPreviousCollect}>
-            <PreviousCollectCard previousCollectHistory={mockPreviousCollectHistory} />
+            <PreviousCollectCard previousCollectHistory={surveyUnit.previousCollectHistory} />
           </SwipeableTab>
         )}
-        <SwipeableTab index={1} label={D.goToIdentificationPage}>
+        <SwipeableTab index={0 + indexShift} label={D.goToIdentificationPage}>
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
             <AddressCard surveyUnit={surveyUnit} />
             <IdentificationCard surveyUnit={surveyUnit} />
           </Box>
         </SwipeableTab>
-        <SwipeableTab index={2} label={D.goToContactPage}>
+        <SwipeableTab index={1 + indexShift} label={D.goToContactPage}>
           <Box sx={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '2rem' }}>
             <PersonsCard surveyUnit={surveyUnit} />
             <ContactsCard surveyUnit={surveyUnit} />
           </Box>
         </SwipeableTab>
-        <SwipeableTab index={3} label={D.goToCommunicationPage}>
+        <SwipeableTab index={2 + indexShift} label={D.goToCommunicationPage}>
           <CommunicationsCard surveyUnit={surveyUnit} />
         </SwipeableTab>
-        <SwipeableTab index={4} label={D.goToQuestionnairesPage}>
+        <SwipeableTab index={3 + indexShift} label={D.goToQuestionnairesPage}>
           <Questionnaires surveyUnit={surveyUnit} />
         </SwipeableTab>
-        <SwipeableTab index={5} label={D.goToCommentsPage}>
+        <SwipeableTab index={4 + indexShift} label={D.goToCommentsPage}>
           <CommentCard surveyUnit={surveyUnit} />
         </SwipeableTab>
-        {mockNextCollect && (
-          <SwipeableTab index={6} label={D.goToNextCollect}>
+        {surveyUnit.nextCollectHistory && (
+          <SwipeableTab index={5 + indexShift} label={D.goToNextCollect}>
             <NextCollectCard surveyUnit={surveyUnit} />
           </SwipeableTab>
         )}

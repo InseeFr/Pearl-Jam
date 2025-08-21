@@ -23,13 +23,8 @@ export function ContactModal({
   contact,
   onClose,
   onConfirm,
-}: ModifyContactModalProps) {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<Contact>({
+}: Readonly<ModifyContactModalProps>) {
+  const { register, handleSubmit, control } = useForm<Contact>({
     defaultValues: contact,
   });
 
@@ -38,7 +33,7 @@ export function ContactModal({
 
     const verifiedContact = {
       ...contact,
-      isMailContact: contact.isMailContact === 'true' ? true : false,
+      isMailContact: contact.isMailContact === 'true',
     };
     onConfirm(verifiedContact);
   };

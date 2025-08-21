@@ -1,9 +1,8 @@
-import { Card, CardContent, Stack, Typography } from '@mui/material';
+import { Card, CardContent, Stack } from '@mui/material';
 import { PropsWithChildren, ReactNode } from 'react';
 import { Row } from 'ui/Row';
 
 type InfoCardProps = {
-  icon?: JSX.Element;
   children?: ReactNode;
 };
 
