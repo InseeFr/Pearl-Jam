@@ -267,7 +267,7 @@ const getNewSurveyUnitsByCampaign = async (
 /**
  * Return the latest (based on the date property) other mode questionnaire state
  */
-const getMostRecentState = (surveyUnit?: SurveyUnit): OtherModeQuestionnaireState | undefined => {
+const getMostRecentState = (surveyUnit?: SurveyUnit) => {
   if (!surveyUnit) {
     return undefined;
   }
@@ -282,7 +282,7 @@ const getMostRecentState = (surveyUnit?: SurveyUnit): OtherModeQuestionnaireStat
   }, undefined);
 };
 
-const isValidState = (state: OtherModeQuestionStateType): boolean =>
+const isValidState = (state: OtherModeQuestionStateType) =>
   ['QUESTIONNAIRE_COMPLETED', 'QUESTIONNAIRE_INIT'].includes(state);
 
 const appearsAfterLastSync = (
@@ -293,7 +293,7 @@ const appearsAfterLastSync = (
 const getLatestSurveyUnitStateAfterSync = (
   surveyUnit: SurveyUnit,
   previousSurveyUnits: SurveyUnit[] = []
-): OtherModeQuestionStateType | null => {
+) => {
   const previousSurveyUnit = previousSurveyUnits.find(su => su.id === surveyUnit.id);
 
   const previousMostRecentOtherModeQuestionState = getMostRecentState(previousSurveyUnit);
