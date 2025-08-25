@@ -12,19 +12,9 @@ import {
 
 import SwipeableViews from 'react-swipeable-views';
 
-export function SwipeableTab(props: Readonly<PropsWithChildren<{ index: number; label: string }>>) {
-  const { children, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      <Box sx={{ p: 4 }}>{children}</Box>
-    </div>
-  );
+export function SwipeableTab(props: Readonly<PropsWithChildren<{ label: string }>>) {
+  const { children } = props;
+  return <Box sx={{ p: 4 }}>{children}</Box>;
 }
 
 function a11yProps(index: number) {
@@ -45,20 +35,28 @@ export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
     setValue(index);
   };
 
-  const tabs = Children.toArray(children)
-    .filter(t => t !== null)
-    .filter(isValidElement)
-    .map(child => (child as ReactElement<{ label: string }>).props.label);
+  const validChildren = Children.toArray(children).filter(isValidElement);
+  const tabs = validChildren.map((child, index) => {
+    const el = child as ReactElement<{ label: string }>;
+    return <Tab key={index} label={el.props.label} {...a11yProps(index)} />;
+  });
 
   return (
     <>
       <Tabs className="navigation" value={value} onChange={handleChange}>
-        {tabs.map((tab, index) => (
-          <Tab key={index} label={tab} {...a11yProps(index)} />
-        ))}
+        {tabs}
       </Tabs>
       <SwipeableViews axis="x" index={value} onChangeIndex={handleChangeIndex}>
-        {children}
+        {validChildren.map((child, index) => (
+          <div
+            key={index}
+            role="tabpanel"
+            id={`full-width-tabpanel-${index}`}
+            aria-labelledby={`full-width-tab-${index}`}
+          >
+            {child}
+          </div>
+        ))}
       </SwipeableViews>
     </>
   );
