@@ -101,24 +101,24 @@ export type ContactOutcome = {
 };
 
 export type Contact = {
-  civility?: string;
+  title?: string;
   firstName?: string;
-  age?: number;
-  isPanel?: boolean;
+  birthdate?: number;
   lastName?: string;
-  phoneNumber?: string;
-  isMailContact?: boolean;
+  phoneNumber?: string[];
+  panel?: boolean;
   email?: string;
 };
 
 export type PreviousContactHistory = {
   contactOutcomeValue: string;
-  houseHoldComposition: Contact[];
+  persons: Contact[];
   comment: string;
+  priority: boolean;
 };
 
 export type NextContactHistory = {
-  houseHoldComposition: Contact[];
+  persons: Contact[];
 };
 
 export type SurveyUnit = {

@@ -1693,7 +1693,7 @@
           "title": { "type": "string", "enum": ["MISTER", "MISS"] },
           "firstName": { "type": "string" },
           "lastName": { "type": "string" },
-          "phoneNumbers": { "type": "array", "items": { "type": "string", "pattern": "\\d+" } },
+          "phoneNumbers": { "type": "array", "items": { "type": "string", "pattern": "\\+?\\d+" } },
           "birthdate": { "type": "integer", "format": "int64" },
           "panel": { "type": "boolean" }
         },
@@ -1713,11 +1713,6 @@
       "NextContactHistoryDto": {
         "type": "object",
         "properties": {
-          "comment": { "type": "string" },
-          "contactOutcomeValue": {
-            "type": "string",
-            "enum": ["INA", "REF", "IMP", "UCD", "UTR", "ALA", "DUK", "DUU", "NUH", "DCD", "NOA"]
-          },
           "persons": {
             "type": "array",
             "items": { "$ref": "#/components/schemas/ContactHistoryPersonDto" }

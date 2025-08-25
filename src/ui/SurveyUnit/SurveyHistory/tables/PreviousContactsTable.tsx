@@ -41,10 +41,10 @@ export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>
           <TableBody>
             {contacts.map(c => (
               <TableRow key={uuidv4()}>
-                <CustomTableCell>{c.civility}</CustomTableCell>
+                <CustomTableCell>{c.title}</CustomTableCell>
                 <CustomTableCell>{c.firstName}</CustomTableCell>
-                <CustomTableCell>{c.age}</CustomTableCell>
-                <CustomTableCell>{c.isPanel ? D.yes : D.no}</CustomTableCell>
+                <CustomTableCell>{c.birthdate}</CustomTableCell>
+                <CustomTableCell>{c.panel ? D.yes : D.no}</CustomTableCell>
               </TableRow>
             ))}
           </TableBody>

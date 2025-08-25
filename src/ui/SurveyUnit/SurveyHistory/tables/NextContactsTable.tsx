@@ -38,8 +38,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   const handleConfirmDelete = () => {
     const newNextCollectHistory = {
       ...nextCollectHistory,
-      houseHoldComposition:
-        nextCollectHistory?.houseHoldComposition.toSpliced(selectedContactIndex, 1) ?? [],
+      persons: nextCollectHistory?.persons.toSpliced(selectedContactIndex, 1) ?? [],
     };
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
@@ -53,9 +52,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   const handleModify = (newContact: Contact) => {
     const newNextCollectHistory = {
       ...nextCollectHistory,
-      houseHoldComposition:
-        nextCollectHistory?.houseHoldComposition.toSpliced(selectedContactIndex, 1, newContact) ??
-        [],
+      persons: nextCollectHistory?.persons.toSpliced(selectedContactIndex, 1, newContact) ?? [],
     };
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
@@ -80,7 +77,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     setSelectedContactIndex(-1);
 
     if (surveyUnit.nextContactHistory) {
-      surveyUnit.nextContactHistory.houseHoldComposition.push(newContact);
+      surveyUnit.nextContactHistory.persons.push(newContact);
       surveyUnitIDBService.addOrUpdateSU({
         ...surveyUnit,
       });
@@ -89,14 +86,14 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
 
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
-      nextContactHistory: { houseHoldComposition: [newContact] },
+      nextContactHistory: { persons: [newContact] },
     });
   };
 
   return (
     <Card elevation={0}>
       <CardContent sx={{ ml: -2 }}>
-        {!!nextCollectHistory?.houseHoldComposition.length && (
+        {!!nextCollectHistory?.persons.length && (
           <Table size="medium">
             <TableHead>
               <TableRow
@@ -121,7 +118,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
               </TableRow>
             </TableHead>
             <TableBody>
-              {nextCollectHistory?.houseHoldComposition.map((c, i) => (
+              {nextCollectHistory?.persons.map((c, i) => (
                 <TableRow
                   key={uuidv4()}
                   hover
@@ -131,13 +128,13 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                     },
                   }}
                 >
-                  <CustomTableCell>{c.civility}</CustomTableCell>
+                  <CustomTableCell>{c.title}</CustomTableCell>
                   <CustomTableCell>{c.lastName?.toUpperCase()}</CustomTableCell>
                   <CustomTableCell>{c.firstName}</CustomTableCell>
                   <CustomTableCell>{c.phoneNumber}</CustomTableCell>
                   <CustomTableCell>{c.email}</CustomTableCell>
                   <TableCell sx={{ backgroundColor: 'transparent', textAlign: 'center' }}>
-                    {c.isMailContact && <CheckCircle fontSize="medium" color="success" />}
+                    {c.panel && <CheckCircle fontSize="medium" color="success" />}
                   </TableCell>
                   <TableCell
                     sx={{
@@ -180,15 +177,15 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
       </CardContent>
       <DeleteConfirmationModal
         open={deleteModalOpen}
-        contactName={nextCollectHistory?.houseHoldComposition[selectedContactIndex]?.firstName}
+        contactName={nextCollectHistory?.persons[selectedContactIndex]?.firstName}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
       />
-      {nextCollectHistory?.houseHoldComposition[selectedContactIndex] && (
+      {nextCollectHistory?.persons[selectedContactIndex] && (
         <ContactModal
           open={modifyModalOpen}
           modalTitle={D.contactModalTitleEdit}
-          contact={nextCollectHistory?.houseHoldComposition[selectedContactIndex]}
+          contact={nextCollectHistory?.persons[selectedContactIndex]}
           onClose={() => setModifyModalOpen(false)}
           onConfirm={handleModify}
         />

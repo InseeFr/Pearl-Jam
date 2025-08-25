@@ -4,11 +4,6 @@ import { Contact } from 'types/pearl';
 import { FieldRow } from 'ui/FieldRow';
 import D from 'i18n';
 
-function forceTypeBoolean(e: any) {
-  console.log('force');
-  return e.target.value == 'true';
-}
-
 type ModifyContactModalProps = {
   open: boolean;
   modalTitle: string;
@@ -29,11 +24,10 @@ export function ContactModal({
   });
 
   const handleFormSubmit = (contact: any) => {
-    console.log(contact);
-
     const verifiedContact = {
       ...contact,
-      isMailContact: contact.isMailContact === 'true',
+      // coerce value to boolean as form will return string (or keep base value if no modification done)
+      panel: contact.panel === true || contact.panel === 'true',
     };
     onConfirm(verifiedContact);
   };
@@ -50,14 +44,14 @@ export function ContactModal({
           <Stack spacing={3}>
             <FieldRow
               label={D.contactCivilityLabel}
-              name="civility"
               control={control}
               type="radios"
               options={[
-                { label: D.editContactMale, value: 'male' },
-                { label: D.editContactFemale, value: 'female' },
+                { label: D.editContactMale, value: 'MISTER' },
+                { label: D.editContactFemale, value: 'MISS' },
               ]}
               required
+              {...register('title', { required: true })}
             />
             <FieldRow
               label={D.contactLastName}
@@ -69,16 +63,19 @@ export function ContactModal({
               required
               {...register('firstName', { required: true })}
             />
-            <FieldRow label={D.contactPhone} {...register('phoneNumber')} />
-            <FieldRow label={D.contactEmail} {...register('email')} />
+            <FieldRow label={D.contactPhone} {...register('phoneNumber', { pattern: /^\d+$/ })} />
+            <FieldRow
+              label={D.contactEmail}
+              {...(register('email'), { pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ })}
+            />
             <FieldRow
               label={D.shouldBeEmail}
-              {...register('isMailContact')}
+              {...register('panel')}
               control={control}
               type="radios"
               options={[
-                { label: D.yes, value: 'true' },
-                { label: D.no, value: 'false' },
+                { label: D.yes, value: true },
+                { label: D.no, value: false },
               ]}
             />
 

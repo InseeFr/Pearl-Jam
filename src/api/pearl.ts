@@ -143,27 +143,7 @@ export interface ContactOutcomeDto {
   totalNumberOfContactAttempts?: number;
 }
 
-export type NextContactHistoryDtoContactOutcomeValue = typeof NextContactHistoryDtoContactOutcomeValue[keyof typeof NextContactHistoryDtoContactOutcomeValue];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const NextContactHistoryDtoContactOutcomeValue = {
-  INA: 'INA',
-  REF: 'REF',
-  IMP: 'IMP',
-  UCD: 'UCD',
-  UTR: 'UTR',
-  ALA: 'ALA',
-  DUK: 'DUK',
-  DUU: 'DUU',
-  NUH: 'NUH',
-  DCD: 'DCD',
-  NOA: 'NOA',
-} as const;
-
 export interface NextContactHistoryDto {
-  comment?: string;
-  contactOutcomeValue?: NextContactHistoryDtoContactOutcomeValue;
   persons?: ContactHistoryPersonDto[];
 }
 

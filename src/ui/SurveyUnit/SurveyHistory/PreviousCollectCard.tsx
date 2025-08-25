@@ -29,7 +29,7 @@ export function PreviousCollectCard({ previousCollectHistory }: Readonly<Address
           <Typography fontWeight={600} color={'grey'}>
             {D.compositionPreviousSurvey}
           </Typography>
-          <PreviousContactsTable contacts={previousCollectHistory.houseHoldComposition} />
+          <PreviousContactsTable contacts={previousCollectHistory.persons} />
         </Grid>
       </InfoCard>
       <InfoCard>
