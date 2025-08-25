@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Contact } from 'types/pearl';
 import { CustomTableCell } from './CustomTableCell';
-import { randomUUID } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 
 type ContactsTableProps = {
   contacts: readonly Contact[];
@@ -40,7 +40,7 @@ export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>
           </TableHead>
           <TableBody>
             {contacts.map(c => (
-              <TableRow key={randomUUID()}>
+              <TableRow key={uuidv4()}>
                 <CustomTableCell>{c.civility}</CustomTableCell>
                 <CustomTableCell>{c.firstName}</CustomTableCell>
                 <CustomTableCell>{c.age}</CustomTableCell>

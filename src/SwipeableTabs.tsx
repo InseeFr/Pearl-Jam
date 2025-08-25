@@ -46,6 +46,7 @@ export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
   };
 
   const tabs = Children.toArray(children)
+    .filter(t => t !== null)
     .filter(isValidElement)
     .map(child => (child as ReactElement<{ label: string }>).props.label);
 

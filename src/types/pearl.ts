@@ -111,13 +111,13 @@ export type Contact = {
   email?: string;
 };
 
-export type PreviousCollectHistory = {
-  outcome: string;
+export type PreviousContactHistory = {
+  contactOutcomeValue: string;
   houseHoldComposition: Contact[];
-  interviewerComment: string;
+  comment: string;
 };
 
-export type NextCollectHistory = {
+export type NextContactHistory = {
   houseHoldComposition: Contact[];
 };
 
@@ -148,8 +148,8 @@ export type SurveyUnit = {
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
-  previousCollectHistory?: PreviousCollectHistory;
-  nextCollectHistory?: NextCollectHistory;
+  previousContactHistory?: PreviousContactHistory;
+  nextContactHistory?: NextContactHistory;
 };
 
 export type NotificationState = 'warning' | 'success' | 'error';

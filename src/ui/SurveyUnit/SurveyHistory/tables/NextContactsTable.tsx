@@ -17,8 +17,8 @@ import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-se
 import { useState } from 'react';
 import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import { ContactModal } from './ContactModal';
+import { v4 as uuidv4 } from 'uuid';
 import D from 'i18n';
-import { randomUUID } from 'crypto';
 
 type HouseholdTableProps = {
   surveyUnit: SurveyUnit;
@@ -43,7 +43,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     };
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
-      nextCollectHistory: newNextCollectHistory,
+      nextContactHistory: newNextCollectHistory,
     });
 
     setDeleteModalOpen(false);
@@ -59,14 +59,14 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     };
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
-      nextCollectHistory: newNextCollectHistory,
+      nextContactHistory: newNextCollectHistory,
     });
 
     setModifyModalOpen(false);
     setSelectedContactIndex(-1);
   };
 
-  const nextCollectHistory = surveyUnit.nextCollectHistory;
+  const nextCollectHistory = surveyUnit.nextContactHistory;
   const handleModifyClick = (index: number) => {
     setSelectedContactIndex(index);
     setModifyModalOpen(true);
@@ -79,8 +79,8 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     setAddModalOpen(false);
     setSelectedContactIndex(-1);
 
-    if (surveyUnit.nextCollectHistory) {
-      surveyUnit.nextCollectHistory.houseHoldComposition.push(newContact);
+    if (surveyUnit.nextContactHistory) {
+      surveyUnit.nextContactHistory.houseHoldComposition.push(newContact);
       surveyUnitIDBService.addOrUpdateSU({
         ...surveyUnit,
       });
@@ -89,7 +89,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
 
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
-      nextCollectHistory: { houseHoldComposition: [newContact] },
+      nextContactHistory: { houseHoldComposition: [newContact] },
     });
   };
 
@@ -123,7 +123,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             <TableBody>
               {nextCollectHistory?.houseHoldComposition.map((c, i) => (
                 <TableRow
-                  key={randomUUID()}
+                  key={uuidv4()}
                   hover
                   sx={{
                     '&:hover': {

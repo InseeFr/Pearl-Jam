@@ -20,7 +20,7 @@ import { surveyUnitStateEnum } from '../utils/enum/SUStateEnum';
 import { addNewState, getLastState, persistSurveyUnit } from '../utils/functions';
 import { useSurveyUnit } from '../utils/hooks/database';
 import { PreviousCollectCard } from 'ui/SurveyUnit/SurveyHistory/PreviousCollectCard';
-import { NextCollectHistory, PreviousCollectHistory } from 'types/pearl';
+import { NextContactHistory, PreviousContactHistory } from 'types/pearl';
 import { NextCollectCard } from 'ui/SurveyUnit/SurveyHistory/NextCollectCard';
 
 export function SurveyUnitPage() {
@@ -67,15 +67,17 @@ export function SurveyUnitPage() {
     );
   }
 
-  const indexShift = surveyUnit.previousCollectHistory ? 1 : 0;
+  console.log(surveyUnit);
+
+  const indexShift = surveyUnit.previousContactHistory ? 1 : 0;
 
   return (
     <>
       <SurveyUnitHeader surveyUnit={surveyUnit} />
       <SwipeableTabs>
-        {!!surveyUnit.previousCollectHistory && (
+        {!!surveyUnit.previousContactHistory && (
           <SwipeableTab index={0} label={D.goToPreviousCollect}>
-            <PreviousCollectCard previousCollectHistory={surveyUnit.previousCollectHistory} />
+            <PreviousCollectCard previousCollectHistory={surveyUnit.previousContactHistory} />
           </SwipeableTab>
         )}
         <SwipeableTab index={0 + indexShift} label={D.goToIdentificationPage}>
@@ -99,7 +101,7 @@ export function SurveyUnitPage() {
         <SwipeableTab index={4 + indexShift} label={D.goToCommentsPage}>
           <CommentCard surveyUnit={surveyUnit} />
         </SwipeableTab>
-        {surveyUnit.nextCollectHistory && (
+        {surveyUnit.nextContactHistory && (
           <SwipeableTab index={5 + indexShift} label={D.goToNextCollect}>
             <NextCollectCard surveyUnit={surveyUnit} />
           </SwipeableTab>
