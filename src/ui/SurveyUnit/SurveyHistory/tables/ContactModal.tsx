@@ -4,6 +4,8 @@ import { Contact } from 'types/pearl';
 import { FieldRow } from 'ui/FieldRow';
 import D from 'i18n';
 
+import { useEffect } from 'react';
+
 type ModifyContactModalProps = {
   open: boolean;
   modalTitle: string;
@@ -19,9 +21,20 @@ export function ContactModal({
   onClose,
   onConfirm,
 }: Readonly<ModifyContactModalProps>) {
-  const { register, handleSubmit, control } = useForm<Contact>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<Contact>({
     defaultValues: contact,
+    reValidateMode: 'onSubmit',
   });
+
+  useEffect(() => {
+    if (contact) reset(contact);
+  }, [contact, reset]);
 
   const handleFormSubmit = (contact: any) => {
     const verifiedContact = {
@@ -30,6 +43,7 @@ export function ContactModal({
       panel: contact.panel === true || contact.panel === 'true',
     };
     onConfirm(verifiedContact);
+    reset();
   };
 
   return (
@@ -40,33 +54,55 @@ export function ContactModal({
         </Typography>
       </DialogTitle>
       <DialogContent sx={{ py: 2 }}>
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
           <Stack spacing={3}>
             <FieldRow
               label={D.contactCivilityLabel}
               control={control}
               type="radios"
+              helperText={errors.title?.message}
+              errors={errors}
               options={[
                 { label: D.editContactMale, value: 'MISTER' },
                 { label: D.editContactFemale, value: 'MISS' },
               ]}
               required
-              {...register('title', { required: true })}
+              {...register('title', { required: { value: true, message: D.requiredField } })}
             />
             <FieldRow
               label={D.contactLastName}
+              helperText={errors.lastName?.message}
+              errors={errors}
               required
-              {...register('lastName', { required: true })}
+              {...register('lastName', {
+                required: { value: true, message: D.requiredField },
+              })}
             />
             <FieldRow
+              helperText={errors.firstName?.message}
+              errors={errors}
               label={D.contactFirstName}
               required
-              {...register('firstName', { required: true })}
+              {...register('firstName', {
+                required: { value: true, message: D.requiredField },
+              })}
             />
-            <FieldRow label={D.contactPhone} {...register('phoneNumber', { pattern: /^\d+$/ })} />
+            <FieldRow
+              label={D.contactPhone}
+              helperText={errors.phoneNumber?.message}
+              errors={errors}
+              {...register('phoneNumber', {
+                pattern: { value: /\+?\d+/, message: D.invalidPhone },
+              })}
+            />
+
             <FieldRow
               label={D.contactEmail}
-              {...(register('email'), { pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ })}
+              helperText={errors.email?.message}
+              errors={errors}
+              {...register('email', {
+                pattern: { value: /^(.+)@(\S+)$/, message: D.invalidEmail },
+              })}
             />
             <FieldRow
               label={D.shouldBeEmail}

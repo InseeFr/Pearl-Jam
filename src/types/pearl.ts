@@ -105,7 +105,7 @@ export type Contact = {
   firstName?: string;
   birthdate?: number;
   lastName?: string;
-  phoneNumber?: string[];
+  phoneNumber?: string;
   panel?: boolean;
   email?: string;
 };

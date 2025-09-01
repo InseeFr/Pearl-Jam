@@ -1458,6 +1458,11 @@
     "@shikijs/types" "^3.2.1"
     "@shikijs/vscode-textmate" "^10.0.2"
 
+"@hookform/error-message@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/@hookform/error-message/-/error-message-2.0.1.tgz#6a37419106e13664ad6a29c9dae699ae6cd276b8"
+  integrity sha512-U410sAr92xgxT1idlu9WWOVjndxLdgPUHEB8Schr27C9eh7/xUnITWpCMF93s+lGiG++D4JnbSnrb5A21AdSNg==
+
 "@ibm-cloud/openapi-ruleset-utilities@1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@ibm-cloud/openapi-ruleset-utilities/-/openapi-ruleset-utilities-1.8.0.tgz#27c2a5206af88883502bcd7a5a5e2e293d067f45"

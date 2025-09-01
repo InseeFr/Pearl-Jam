@@ -114,7 +114,8 @@ export interface ContactHistoryPersonDto {
   title: ContactHistoryPersonDtoTitle;
   firstName: string;
   lastName: string;
-  phoneNumbers?: string[];
+  /** @pattern \+?\d+ */
+  phoneNumber?: string;
   birthdate?: number;
   panel?: boolean;
 }

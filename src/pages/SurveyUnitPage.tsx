@@ -66,10 +66,7 @@ export function SurveyUnitPage() {
     );
   }
 
-  // TODO mettre collectNextContacts dans SurveyUnitInterviewerDto ?
-
   const indexShift = surveyUnit.previousContactHistory ? 1 : 0;
-  console.log(indexShift);
 
   return (
     <>

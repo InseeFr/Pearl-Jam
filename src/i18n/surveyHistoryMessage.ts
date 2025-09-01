@@ -173,9 +173,9 @@ const surveyHistoryMessage = {
     sq: 'Emri',
   },
   contactPhone: {
-    fr: 'Téléphone - Enquêteur',
-    en: 'Phone - Interviewer',
-    sq: 'Telefoni - Intervistues',
+    fr: 'Téléphone',
+    en: 'Phone',
+    sq: 'Telefoni',
   },
   contactEmail: {
     fr: 'Email',
@@ -211,6 +211,21 @@ const surveyHistoryMessage = {
     fr: 'Ajouter une ligne de coordonnées',
     en: 'Add new coordinates',
     sq: 'Shtoni koordinata të reja',
+  },
+  requiredField: {
+    fr: 'Champ obligatoire',
+    en: 'Required field',
+    sq: 'Fushë e detyrueshme',
+  },
+  invalidPhone: {
+    fr: 'Téléphone invalide',
+    en: 'Invalid phone',
+    sq: 'Telefon i pavlefshëm',
+  },
+  invalidEmail: {
+    fr: 'Adresse email invalide',
+    en: 'Invalid email address',
+    sq: 'Adresa e emailit është e pavlefshme',
   },
 };
 

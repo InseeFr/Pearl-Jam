@@ -1693,7 +1693,7 @@
           "title": { "type": "string", "enum": ["MISTER", "MISS"] },
           "firstName": { "type": "string" },
           "lastName": { "type": "string" },
-          "phoneNumbers": { "type": "array", "items": { "type": "string", "pattern": "\\+?\\d+" } },
+          "phoneNumber": { "type": "string", "pattern": "\\+?\\d+" },
           "birthdate": { "type": "integer", "format": "int64" },
           "panel": { "type": "boolean" }
         },

@@ -89,6 +89,8 @@ const handleSurveyUnit = async (
   const formattedBody = formatSurveyUnitForPut(body);
 
   try {
+    if (formattedBody.id === '11') console.log(formattedBody);
+
     const response = await tryUpdateSurveyUnit(id, formattedBody);
 
     if (response.ok && response.data) {

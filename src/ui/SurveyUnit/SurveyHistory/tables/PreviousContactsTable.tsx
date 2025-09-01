@@ -12,6 +12,7 @@ import {
 import { Contact } from 'types/pearl';
 import { CustomTableCell } from './CustomTableCell';
 import { v4 as uuidv4 } from 'uuid';
+import { getAge } from 'utils/functions';
 
 type ContactsTableProps = {
   contacts: readonly Contact[];
@@ -43,7 +44,7 @@ export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>
               <TableRow key={uuidv4()}>
                 <CustomTableCell>{c.title}</CustomTableCell>
                 <CustomTableCell>{c.firstName}</CustomTableCell>
-                <CustomTableCell>{c.birthdate}</CustomTableCell>
+                <CustomTableCell>{getAge(c.birthdate)}</CustomTableCell>
                 <CustomTableCell>{c.panel ? D.yes : D.no}</CustomTableCell>
               </TableRow>
             ))}
