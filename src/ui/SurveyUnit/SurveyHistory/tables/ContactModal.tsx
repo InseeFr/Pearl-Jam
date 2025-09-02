@@ -92,7 +92,7 @@ export function ContactModal({
               helperText={errors.phoneNumber?.message}
               errors={errors}
               {...register('phoneNumber', {
-                pattern: { value: /\+?\d+/, message: D.invalidPhone },
+                pattern: { value: /^\+?\d+$/, message: D.invalidPhone },
               })}
             />
 

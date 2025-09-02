@@ -1694,6 +1694,7 @@
           "firstName": { "type": "string" },
           "lastName": { "type": "string" },
           "phoneNumber": { "type": "string", "pattern": "\\+?\\d+" },
+          "email": { "type": "string" },
           "birthdate": { "type": "integer", "format": "int64" },
           "panel": { "type": "boolean" }
         },

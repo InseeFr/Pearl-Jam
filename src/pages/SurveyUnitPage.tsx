@@ -68,6 +68,9 @@ export function SurveyUnitPage() {
 
   const indexShift = surveyUnit.previousContactHistory ? 1 : 0;
 
+  //TODO: e2e test
+  // CVE
+
   return (
     <>
       <SurveyUnitHeader surveyUnit={surveyUnit} />
