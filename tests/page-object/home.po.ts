@@ -24,9 +24,10 @@ export class HomePage implements GenericPage {
 
   async synchronize() {
     // try {
-    //   this.page.getByText("Erreur lors de l'installation").isVisible();
+    //   this.page.getByText("Erreur lors de l'installation")).toBeUndefined();
+    // } catch (error) {
     //   await this.page.getByRole('button', { name: 'Fermer' }).click();
-    // } catch (error) {}
+    // }
 
     const seen = [];
 
