@@ -190,6 +190,8 @@ services:
     profiles:
       - front
       - playwright
+    environment:
+      - PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS=1
     build:
       dockerfile: ./Dockerfile
       args:
