@@ -101,7 +101,7 @@ export function ContactModal({
               helperText={errors.email?.message}
               errors={errors}
               {...register('email', {
-                pattern: { value: /^(.+)@(\S+)$/, message: D.invalidEmail },
+                pattern: { value: /^[^@\s]+@[^@\s]+$/, message: D.invalidEmail },
               })}
             />
             <FieldRow
