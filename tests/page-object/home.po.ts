@@ -23,7 +23,13 @@ export class HomePage implements GenericPage {
   }
 
   async synchronize() {
-    const seen: any[] = [];
+    this.page.getByRole('button', { name: 'Fermer' });
+    const closeServiceWorkerModalButton = this.page.getByRole('button', { name: 'Fermer' });
+    if (await closeServiceWorkerModalButton.isVisible()) {
+      await closeServiceWorkerModalButton.click();
+    }
+
+    const seen = [];
 
     const finishedRequests = new Promise<void>((resolve, reject) => {
       const listener = async (req: any) => {
