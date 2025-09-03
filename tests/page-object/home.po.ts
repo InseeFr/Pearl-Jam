@@ -23,11 +23,10 @@ export class HomePage implements GenericPage {
   }
 
   async synchronize() {
-    try {
-      expect(this.page.getByText("Erreur lors de l'installation")).toBeUndefined();
-    } catch (error) {
-      await this.page.getByRole('button', { name: 'Fermer' }).click();
-    }
+    // try {
+    //   this.page.getByText("Erreur lors de l'installation").isVisible();
+    //   await this.page.getByRole('button', { name: 'Fermer' }).click();
+    // } catch (error) {}
 
     const seen = [];
 
