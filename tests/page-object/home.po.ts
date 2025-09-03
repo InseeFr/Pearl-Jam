@@ -23,10 +23,10 @@ export class HomePage implements GenericPage {
   }
 
   async synchronize() {
-    this.page.getByRole('button', { name: 'Fermer' });
-    const closeServiceWorkerModalButton = this.page.getByRole('button', { name: 'Fermer' });
-    if (await closeServiceWorkerModalButton.isVisible()) {
-      await closeServiceWorkerModalButton.click();
+    try {
+      expect(this.page.getByText("Erreur lors de l'installation")).toBeUndefined();
+    } catch (error) {
+      await this.page.getByRole('button', { name: 'Fermer' }).click();
     }
 
     const seen = [];
