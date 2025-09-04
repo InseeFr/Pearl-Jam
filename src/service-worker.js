@@ -103,6 +103,7 @@ const checkEventOrigin = async (event) => {
   const { url } = src;
   if (!url) return false;
   const senderOrigin = new URL(url).origin;
+  console.log(self.location.origin);
   return senderOrigin === self.location.origin;
 }
 
