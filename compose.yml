@@ -121,7 +121,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/pearl-jam-back-office:5.6.9-rc
+    image: inseefr/pearl-jam-back-office:snapshot-feat-add-contact-history
     tty: true
     stdin_open: true
     # healthcheck:
@@ -190,6 +190,8 @@ services:
     profiles:
       - front
       - playwright
+    environment:
+      - PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS=1
     build:
       dockerfile: ./Dockerfile
       args:

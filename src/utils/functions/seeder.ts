@@ -215,6 +215,26 @@ export async function seedData() {
     firstName: 'ET',
     lastName: 'Telephone',
     identificationConfiguration: IdentificationConfiguration.INDTEL,
+    nextCollectHistory: {
+      houseHoldComposition: [
+        {
+          firstName: 'John',
+          lastName: 'Cozart',
+          isPanel: true,
+          civilite: 'male',
+          age: 23,
+          isMailContact: true,
+        },
+        {
+          firstName: 'Jane',
+          lastName: 'Cozart',
+          isPanel: true,
+          civilite: 'female',
+          age: 23,
+          isMailContact: false,
+        },
+      ],
+    },
   });
   surverUnits.push({
     ...surverUnits[0],
@@ -298,6 +318,26 @@ export async function seedData() {
     firstName: 'Flin',
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.INDF2F,
+    nextCollectHistory: {
+      houseHoldComposition: [
+        {
+          firstName: 'John',
+          lastName: 'Cozart',
+          isPanel: true,
+          civilite: 'male',
+          age: 23,
+          isMailContact: true,
+        },
+        {
+          firstName: 'Jane',
+          lastName: 'Cozart',
+          isPanel: true,
+          civilite: 'female',
+          age: 23,
+          isMailContact: false,
+        },
+      ],
+    },
   });
 
   await surveyUnitIDBService.addAll(surverUnits);
