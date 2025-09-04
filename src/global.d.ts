@@ -14,3 +14,17 @@ declare module 'dramaQueen/DramaIndex' {
     initialPathname: string;
   }): VoidFunction;
 }
+
+declare module 'dramaQueen/useArticulationTable' {
+  export function useArticulationTable(
+    React,
+    string
+  ): {
+    rows: {
+      cells: { value: number }[];
+      progress: 0 | -1 | 1;
+      label: string;
+      url: string;
+    }[];
+  };
+}
