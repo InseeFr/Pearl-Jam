@@ -133,6 +133,7 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('button', { name: 'Confirmer' }).click();
 
   await homePage.synchronize();
+  await page.getByRole('link', { name: 'FARMER Ted' }).click();
 
   await expect(page.getByRole('tab', { name: 'Collecte suivante' })).toBeHidden();
   await expect(page.getByRole('cell', { name: 'MISTER' })).toBeHidden();
