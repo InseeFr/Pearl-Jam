@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { HomePage } from './page-object/home.po';
 
+test.use({ locale: 'fr-FR', viewport: { width: 1920, height: 1080 } });
+
 test('check if filters are saved inside the localStorage', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();

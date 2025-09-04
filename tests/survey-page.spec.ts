@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 import { HomePage } from './page-object/home.po';
 import { SurveyPage } from './page-object/survey.po';
 
+test.use({ locale: 'fr-FR', viewport: { width: 1920, height: 1080 } });
+
 test('check if all tabs work properly', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();

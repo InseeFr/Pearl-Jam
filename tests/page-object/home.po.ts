@@ -22,13 +22,7 @@ export class HomePage implements GenericPage {
     }
   }
 
-  async synchronize() {
-    // try {
-    //   this.page.getByText("Erreur lors de l'installation")).toBeUndefined();
-    // } catch (error) {
-    //   await this.page.getByRole('button', { name: 'Fermer' }).click();
-    // }
-
+  checkSu = async () => {
     const seen = [];
 
     const finishedRequests = new Promise<void>((resolve, reject) => {
@@ -50,6 +44,11 @@ export class HomePage implements GenericPage {
       }, 10000);
     });
 
+    return finishedRequests;
+  };
+
+  async synchronize() {
+    const finishedRequests = this.checkSu();
     await this.page.getByRole('button', { name: 'Synchroniser' }).click();
     await finishedRequests;
 
