@@ -71,7 +71,7 @@ export const lastContactAttemptIsSuccessfull = surveyUnit => {
   if (Array.isArray(contactAttempts) && contactAttempts.length === 0) return false;
   let lastContactAttempt;
   if (Array.isArray(contactAttempts) && contactAttempts.length > 1) {
-    lastContactAttempt = contactAttempts.reduce((a, b) => (a.date > b.date ? a : b));
+    lastContactAttempt = contactAttempts.reduce((a, b) => (a.date > b.date ? a : b), contactAttempts[0] );
   } else {
     [lastContactAttempt] = contactAttempts;
   }

@@ -97,12 +97,29 @@ self.addEventListener('install', event => {
   event.waitUntil(cacheConfiguration());
 });
 
+const checkEventOrigin = async (event) => {
+  const { src } = event;
+  if (!src) return false;
+  const { url } = src;
+  if (!url) return false;
+  const senderOrigin = new URL(url).origin;
+  return senderOrigin === self.location.origin;
+}
+
+
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
+
+  event.waitUntil((async () => {
+    if (!(await checkEventOrigin(event))) {
+      console.warn("DOM event rejected, unauthorized origin");
+      console.warn(event);
+      return;
+    }
+    if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
+  }))
+
 });
 
 // Any other custom service worker logic can go here.
