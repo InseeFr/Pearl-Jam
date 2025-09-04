@@ -96,7 +96,7 @@ export function SurveyUnitPage() {
         <SwipeableTab label={D.goToCommentsPage}>
           <CommentCard surveyUnit={surveyUnit} />
         </SwipeableTab>
-        {!!surveyUnit.nextContactHistory && (
+        {surveyUnit.nextContactHistory && (
           <SwipeableTab label={D.goToNextCollect}>
             <NextCollectCard surveyUnit={surveyUnit} />
           </SwipeableTab>
