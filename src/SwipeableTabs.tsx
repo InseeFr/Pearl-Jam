@@ -38,7 +38,7 @@ export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
   const validChildren = Children.toArray(children).filter(isValidElement);
   const tabs = validChildren.map((child, index) => {
     const el = child as ReactElement<{ label: string }>;
-    return <Tab key={index} label={el.props.label} {...a11yProps(index)} />;
+    return <Tab label={el.props.label} {...a11yProps(index)} />;
   });
 
   return (
@@ -49,7 +49,6 @@ export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
       <SwipeableViews axis="x" index={value} onChangeIndex={handleChangeIndex}>
         {validChildren.map((child, index) => (
           <div
-            key={index}
             role="tabpanel"
             id={`full-width-tabpanel-${index}`}
             aria-labelledby={`full-width-tab-${index}`}
