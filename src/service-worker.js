@@ -104,14 +104,12 @@ self.addEventListener('install', event => {
 self.addEventListener('message', event => {
 
   event.waitUntil((async () => {
-    event.waitUntil((async () => {
-      const s = event.source;
-      const url = s?.url ?? (s?.id ? (await self.clients.get(s.id))?.url : null);
-      if (!url || new URL(url).origin !== self.location.origin) return;
-      if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
-    }
-    ))
-  }))
+    const s = event.source;
+    const url = s?.url ?? (s?.id ? (await self.clients.get(s.id))?.url : null);
+    if (!url || new URL(url).origin !== self.location.origin) return;
+    if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
+  }
+  ))
 });
 
 // Any other custom service worker logic can go here.
