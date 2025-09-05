@@ -42,13 +42,15 @@ const hasAtLeastOneItemToDisplay =
  */
 export function SyncDialog({
   onClose,
+  onNotificationClick,
   syncResult,
-}: Readonly<{ onClose: VoidFunction; syncResult: SyncResult }>) {
+}: Readonly<{ onClose: VoidFunction; onNotificationClick: VoidFunction; syncResult: SyncResult }>) {
   const { state, details, messages } = syncResult;
   const campaigns: CampaignNotification[] = useMemo(() => {
     if (!details) {
       return [];
     }
+    console.log(details);
     const campaignIds = new Set([
       ...Object.keys(details.transmittedSurveyUnits),
       ...Object.keys(details.loadedSurveyUnits),
@@ -102,7 +104,13 @@ export function SyncDialog({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <div></div>
+        {syncResult.state === 'success' ? (
+          <Button variant="contained" onClick={onNotificationClick}>
+            {D.notifications}
+          </Button>
+        ) : (
+          <div></div>
+        )}
         <Button variant="contained" onClick={onClose}>
           {D.iUnderstand}
         </Button>
@@ -133,45 +141,40 @@ function SyncDetail({
         {campaigns.map(campaign => (
           <Stack key={campaign.name} gap={2}>
             <>
-              <ListItem>
-                <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
+              <ListItem sx={{ pl: 0 }}>
+                <Typography variant="m" color="textTertiary" component="strong" fontWeight={700}>
                   {campaign.name.toLowerCase()} :{' '}
                 </Typography>{' '}
               </ListItem>
               <List disablePadding>
                 {campaign.loaded > 0 && (
-                  <ListItem sx={{ pl: 8 }}>{D.loadedSurveyUnits(campaign.loaded)}</ListItem>
+                  <ListItem sx={{ pl: 4, pt: 0 }}>
+                    <DialogContentText>{D.loadedSurveyUnits(campaign.loaded)}</DialogContentText>
+                  </ListItem>
                 )}
                 {campaign.transmitted > 0 && (
-                  <ListItem sx={{ pl: 8 }}>{D.transmittedSurveyUnits(campaign.loaded)}</ListItem>
+                  <ListItem sx={{ pl: 4, pt: 0 }}>
+                    <DialogContentText>
+                      {D.transmittedSurveyUnits(campaign.transmitted)}
+                    </DialogContentText>
+                  </ListItem>
                 )}
+
                 {campaign.startedWeb.length > 0 && (
-                  <>
-                    <ListItem sx={{ pl: 8 }}>
-                      {D.webInitSurveyUnit(campaign.startedWeb.length)} :{' '}
-                    </ListItem>
-                    <List disablePadding>
-                      {campaign.startedWeb.map(id => (
-                        <ListItem key={id} sx={{ pl: 16 }}>
-                          {id}
-                        </ListItem>
-                      ))}
-                    </List>
-                  </>
+                  <ListItem sx={{ pl: 4, pt: 0 }}>
+                    <DialogContentText>
+                      {D.webInitSurveyUnit(campaign.startedWeb.length)}:{' '}
+                      {campaign.startedWeb.length}
+                    </DialogContentText>
+                  </ListItem>
                 )}
                 {campaign.terminatedWeb.length > 0 && (
-                  <>
-                    <ListItem sx={{ pl: 8 }}>
-                      {D.webTerminatedSurveyUnit(campaign.terminatedWeb.length)} :{' '}
-                    </ListItem>
-                    <List disablePadding>
-                      {campaign.terminatedWeb.map(id => (
-                        <ListItem key={id} sx={{ pl: 16 }}>
-                          {id}
-                        </ListItem>
-                      ))}
-                    </List>
-                  </>
+                  <ListItem sx={{ pl: 4, pt: 0 }}>
+                    <DialogContentText>
+                      {D.webTerminatedSurveyUnit(campaign.terminatedWeb.length)}:{' '}
+                      {campaign.terminatedWeb.length}
+                    </DialogContentText>
+                  </ListItem>
                 )}
               </List>
             </>

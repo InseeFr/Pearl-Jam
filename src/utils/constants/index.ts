@@ -20,7 +20,7 @@ export const PEARL_USER_KEY = 'pearl-user';
 export const GUEST_PEARL_USER = {
   lastName: 'Guest',
   firstName: 'Amazing',
-  id: 'Guest',
+  id: 'INTW1',
   roles: ['Guest'],
 };
 

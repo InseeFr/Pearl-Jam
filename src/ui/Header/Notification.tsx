@@ -14,7 +14,7 @@ import { useTheme } from '@mui/material/styles';
 import { formatDistance } from 'date-fns';
 import D from 'i18n';
 import { MouseEvent, useContext } from 'react';
-import { Notification as NotificationType } from 'types/pearl';
+import { Notification as NotificationType, SyncResultDetails } from 'types/pearl';
 import { dateFnsLocal } from '../../utils';
 import { NOTIFICATION_TYPE_SYNC } from '../../utils/constants';
 import { deleteNotification, markNotificationAsRead } from '../../utils/hooks/useNotifications';
@@ -22,13 +22,20 @@ import syncReportIdbService from '../../utils/indexeddb/services/syncReport-idb-
 import { Row } from '../Row';
 import { SyncContext } from '../Sync/SyncContextProvider';
 import { Typography } from '../Typography';
+import { DialogContent, DialogContentText, List, ListItem } from '@mui/material';
+import { NavLink } from 'react-router-dom';
 
 interface NotificationProps {
   notification: NotificationType;
   onExit: VoidFunction;
+  defaultExpanded: boolean;
 }
 
-export function Notification({ notification, onExit }: Readonly<NotificationProps>) {
+export function Notification({
+  notification,
+  onExit,
+  defaultExpanded,
+}: Readonly<NotificationProps>) {
   const theme = useTheme();
   const date = `${formatDistance(notification.date || 0, new Date(), {
     addSuffix: true,
@@ -64,7 +71,14 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
   const isSyncNotification = notification.type === NOTIFICATION_TYPE_SYNC;
 
   return (
-    <Accordion elevation={0} disableGutters variant="dense" color="accent" onChange={handleExpand}>
+    <Accordion
+      defaultExpanded={defaultExpanded}
+      elevation={0}
+      disableGutters
+      variant="dense"
+      color="accent"
+      onChange={handleExpand}
+    >
       <AccordionSummary
         sx={{ padding: 0, background: background, borderRadius: 2 }}
         expandIcon={<ExpandMoreIcon fontSize="large" color="textPrimary" />}
@@ -98,6 +112,7 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
               {message}
             </Typography>
           ))}
+          <NotificationDetails details={notification.details} />
           <Button sx={{ alignSelf: 'flex-end' }} color="textPrimary" onClick={handleDelete}>
             <DeleteOutlineIcon />
             {D.delete}
@@ -107,3 +122,78 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
     </Accordion>
   );
 }
+
+const SurveyUnitList = ({
+  surveyUnits,
+  message,
+}: Readonly<{ surveyUnits: string[]; message: (su: number) => string }>) => {
+  const { setNotificationOpened } = useContext(SyncContext);
+  if (!surveyUnits || surveyUnits.length === 0) return null;
+
+  return (
+    <>
+      <ListItem sx={{ pl: 4, pt: 0 }}>
+        <DialogContentText>{message(surveyUnits.length)}: </DialogContentText>
+      </ListItem>
+      <List sx={{ pl: 4 }}>
+        {surveyUnits.map(su => (
+          <ListItem key={su} sx={{ pl: 4, pt: 0 }}>
+            <DialogContentText>
+              <NavLink
+                onClick={() => setNotificationOpened(false)}
+                to={`/survey-unit/${su}/details`}
+              >
+                {su}
+              </NavLink>
+            </DialogContentText>
+          </ListItem>
+        ))}
+      </List>
+    </>
+  );
+};
+
+const NotificationDetails = ({ details }: { details?: SyncResultDetails }) => {
+  if (!details) return null;
+
+  const campaigns = new Set([
+    ...Object.keys(details.loadedSurveyUnits),
+    ...Object.keys(details.transmittedSurveyUnits),
+    ...Object.keys(details.startedWeb),
+    ...Object.keys(details.terminatedWeb),
+  ]);
+
+  if (campaigns.size === 0) return null;
+
+  return (
+    <List>
+      {Array.from(campaigns).map(campaign => (
+        <Stack key={campaign} gap={2}>
+          <>
+            <ListItem sx={{ pl: 0 }}>
+              <DialogContentText>{campaign.toLowerCase()} : </DialogContentText>{' '}
+            </ListItem>
+            <List disablePadding>
+              <SurveyUnitList
+                surveyUnits={details.loadedSurveyUnits[campaign] ?? []}
+                message={D.loadedSurveyUnits}
+              />
+              <SurveyUnitList
+                surveyUnits={details.transmittedSurveyUnits[campaign] ?? []}
+                message={D.transmittedSurveyUnits}
+              />
+              <SurveyUnitList
+                surveyUnits={details.startedWeb[campaign]}
+                message={D.webInitSurveyUnit}
+              />
+              <SurveyUnitList
+                surveyUnits={details.terminatedWeb[campaign]}
+                message={D.webTerminatedSurveyUnit}
+              />
+            </List>
+          </>
+        </Stack>
+      ))}
+    </List>
+  );
+};

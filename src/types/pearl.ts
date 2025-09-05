@@ -192,6 +192,7 @@ export type Notification = {
   read: boolean;
   detail: string;
   id: number;
+  details?: SyncResultDetails;
 };
 
 export type SyncResultDetails = {
