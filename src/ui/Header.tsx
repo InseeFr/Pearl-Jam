@@ -7,7 +7,15 @@ import { OverridableComponent } from '@mui/material/OverridableComponent';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
-import { PropsWithChildren, PropsWithoutRef, useEffect, useState } from 'react';
+import {
+  forwardRef,
+  PropsWithChildren,
+  PropsWithoutRef,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Link } from 'react-router-dom';
 import { version } from '../../package.json';
 import D from '../i18n/build-dictionary';
@@ -18,16 +26,19 @@ import { SynchronizeButton } from './Header/SynchronizeButton';
 import { UserButton } from './Header/UserButton';
 import { Row } from './Row';
 import { Typography } from './Typography';
+import { SyncContext } from './Sync/SyncContextProvider';
 
 export function Header() {
   const notificationsCount = useUnreadNotificationsCount();
-  const [notificationTarget, setNotificationTarget] = useState<HTMLElement | null>(null);
+  const { notificationOpened, setNotificationOpened } = useContext(SyncContext);
+  const ref = useRef<HTMLElement>(null);
   const theme = useTheme();
 
   useEffect(() => {
     loadNotifications();
   }, []);
 
+  console.log(ref.current);
   return (
     <Row
       component="header"
@@ -71,7 +82,8 @@ export function Header() {
         </HeaderNavLink>
 
         <HeaderNavLink
-          onClick={e => setNotificationTarget(e.currentTarget)}
+          ref={ref}
+          onClick={e => setNotificationOpened('NORMAL')}
           id="notifications-button"
           icon={NotificationsNoneIcon}
           badge={notificationsCount}
@@ -79,7 +91,11 @@ export function Header() {
           {D.goToNotificationsPage}
         </HeaderNavLink>
 
-        <Notifications target={notificationTarget!} onClose={() => setNotificationTarget(null)} />
+        <Notifications
+          target={ref.current!}
+          open={!!notificationOpened}
+          onClose={() => setNotificationOpened(false)}
+        />
 
         <SynchronizeButton />
 
@@ -91,23 +107,27 @@ export function Header() {
   );
 }
 
-function HeaderNavLink({
-  icon: IconComponent,
-  children,
-  badge = 0,
-  ...props
-}: Readonly<
-  PropsWithChildren<
-    {
-      icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
-      badge?: number;
-      to?: string;
-    } & PropsWithoutRef<ButtonProps>
-  >
->) {
+const HeaderNavLink = forwardRef(function (
+  {
+    icon: IconComponent,
+    children,
+    badge = 0,
+    ...props
+  }: Readonly<
+    PropsWithChildren<
+      {
+        icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+        badge?: number;
+        to?: string;
+      } & PropsWithoutRef<ButtonProps>
+    >
+  >,
+  ref
+) {
   return (
     <Badge color="accent" badgeContent={badge}>
       <Button
+        ref={ref}
         component={props.to ? Link : undefined}
         color="textPrimary"
         sx={{ textDecoration: 'none' }}
@@ -128,4 +148,4 @@ function HeaderNavLink({
       </Button>
     </Badge>
   );
-}
+});

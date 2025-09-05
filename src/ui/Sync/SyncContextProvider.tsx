@@ -11,6 +11,8 @@ import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
 
 export type SyncContextValue = {
+  notificationOpened: 'NORMAL' | 'LAST_NOTIF_OPENED' | false;
+  setNotificationOpened: (value: 'NORMAL' | 'LAST_NOTIF_OPENED' | false) => void;
   setSyncResult: (value: {
     date: string;
     state: NotificationState;
@@ -27,13 +29,16 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   const PEARL_AUTHENTICATION_MODE = import.meta.env.VITE_PEARL_AUTHENTICATION_MODE;
   const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
+  const [notificationOpened, setNotificationOpened] = useState<
+    'NORMAL' | 'LAST_NOTIF_OPENED' | false
+  >(false);
   const [isSync, setIsSync] = useState(() => {
     return window.localStorage.getItem('SYNCHRONIZE') === 'true';
   });
   const [loading, setLoading] = useState(false);
   const [syncResult, setSyncResult] = useState<
     undefined | null | { state: NotificationState; messages: string | string[] }
-  >(undefined);
+  >(null);
   const [componentReady, setComponentReady] = useState(false);
 
   const [pearlReady, setPearlReady] = useState<boolean | null>(null);
@@ -83,6 +88,11 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
     window.localStorage.removeItem('QUEEN_SYNC_RESULT');
   };
 
+  const handleNotificationClick = () => {
+    handleClose();
+    setNotificationOpened('LAST_NOTIF_OPENED');
+  };
+
   useEffect(() => {
     const sync = async () => {
       setIsSync(true);
@@ -119,7 +129,10 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
     PEARL_AUTHENTICATION_MODE,
   ]);
 
-  const context = useMemo(() => ({ syncFunction, setSyncResult }), [syncFunction, setSyncResult]);
+  const context = useMemo(
+    () => ({ syncFunction, setSyncResult, notificationOpened, setNotificationOpened }),
+    [syncFunction, setSyncResult]
+  );
 
   const syncMesssage = () => {
     if (loading && isSync) return D.synchronizationInProgress;
@@ -130,8 +143,12 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   return (
     <SyncContext.Provider value={context}>
       {componentReady && (loading || isSync) && <Preloader message={syncMesssage()} />}
-      {componentReady && !loading && !isSync && syncResult && (
-        <SyncDialog onClose={handleClose} syncResult={syncResult} />
+      {syncResult && (
+        <SyncDialog
+          onClose={handleClose}
+          onNotificationClick={handleNotificationClick}
+          syncResult={syncResult}
+        />
       )}
       {componentReady && !loading && !isSync && children}
     </SyncContext.Provider>

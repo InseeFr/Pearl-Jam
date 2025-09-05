@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import D from '../../i18n/build-dictionary';
 import { NOTIFICATION_TYPE_MANAGEMENT, NOTIFICATION_TYPE_SYNC } from '../../utils/constants';
 import {
@@ -18,17 +18,19 @@ import { Row } from '../Row';
 import { Typography } from '../Typography';
 import { HeaderBackdrop } from './HeaderBackdrop';
 import { Notification } from './Notification';
+import { SyncContext } from '../Sync/SyncContextProvider';
 
 interface NotificationsTypes {
   target: HTMLElement;
+  open: boolean;
   onClose: VoidFunction;
 }
 
-export function Notifications({ target, onClose }: Readonly<NotificationsTypes>) {
-  const open = !!target;
+export function Notifications({ target, open, onClose }: Readonly<NotificationsTypes>) {
   const { notifications } = useNotifications();
   const theme = useTheme();
   const [type, setType] = useState(null);
+  const { notificationOpened } = useContext(SyncContext)!;
 
   const filteredNotifications = type
     ? notifications.filter(notification => notification.type === type)
@@ -84,8 +86,13 @@ export function Notifications({ target, onClose }: Readonly<NotificationsTypes>)
             <Tab label={D.businessNotifications} value={NOTIFICATION_TYPE_MANAGEMENT} />
           </Tabs>
           <Stack gap={1}>
-            {filteredNotifications.map(notification => (
-              <Notification key={notification.id} notification={notification} onExit={onClose} />
+            {filteredNotifications.map((notification, i) => (
+              <Notification
+                key={notification.id}
+                defaultExpanded={notificationOpened === 'LAST_NOTIF_OPENED' && i === 0}
+                notification={notification}
+                onExit={onClose}
+              />
             ))}
           </Stack>
         </Stack>
