@@ -1,7 +1,12 @@
+import { SurveyUnit } from 'types/pearl';
 import { surveyUnitStateEnum, StateValues } from 'utils/enum/SUStateEnum';
 import { toDoEnum } from 'utils/enum/SUToDoEnum';
 
-export const convertSUStateInToDo = (suState: StateValues) => {
+export const convertSUStateInToDo = (surveyUnit: SurveyUnit, suState: StateValues) => {
+  if (surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'QUESTIONNAIRE_COMPLETED')) {
+    return toDoEnum.WEBTERMINATED;
+  }
+
   if (
     surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type === suState ||
     surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type === suState

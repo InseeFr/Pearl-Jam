@@ -19,7 +19,7 @@ export const getCommentByType = (type, su) => {
  * @returns {{ order: string, value: string, color: string }}
  */
 export const getSuTodoState = surveyUnit => {
-  return convertSUStateInToDo(getLastState(surveyUnit?.states ?? [])?.type);
+  return convertSUStateInToDo(surveyUnit, getLastState(surveyUnit?.states ?? [])?.type);
 };
 
 /**

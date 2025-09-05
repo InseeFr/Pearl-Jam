@@ -1,21 +1,41 @@
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import DialogContentText from '@mui/material/DialogContentText';
-import D from 'i18n';
-import React, { useMemo } from 'react';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import WarningIcon from '@mui/icons-material/Warning';
+import { useTheme } from '@emotion/react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import WarningIcon from '@mui/icons-material/Warning';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Stack from '@mui/material/Stack';
+import D from 'i18n';
+import { useMemo } from 'react';
+import { SyncResult, SyncResultDetails } from 'types/pearl';
 import { Accordion } from '../Accordion';
 import { Typography } from '../Typography';
-import ErrorIcon from '@mui/icons-material/Error';
-import { useTheme } from '@emotion/react';
-import { SyncResult } from 'types/pearl';
+import { List, ListItem } from '@mui/material';
+
+type CampaignNotification = {
+  name: string;
+  transmitted: number;
+  loaded: number;
+  startedWeb: string[];
+  terminatedWeb: string[];
+};
+
+const hasAtLeastOneItemToDisplay =
+  (details: SyncResultDetails) =>
+  (campaign: string): boolean => {
+    return (
+      details.transmittedSurveyUnits[campaign]?.length > 0 ||
+      details.loadedSurveyUnits[campaign]?.length > 0 ||
+      details.startedWeb[campaign]?.length > 0 ||
+      details.terminatedWeb[campaign]?.length > 0
+    );
+  };
 
 /**
  * Dialog that summarize synchronization results
@@ -25,7 +45,7 @@ export function SyncDialog({
   syncResult,
 }: Readonly<{ onClose: VoidFunction; syncResult: SyncResult }>) {
   const { state, details, messages } = syncResult;
-  const campaigns = useMemo(() => {
+  const campaigns: CampaignNotification[] = useMemo(() => {
     if (!details) {
       return [];
     }
@@ -33,22 +53,18 @@ export function SyncDialog({
       ...Object.keys(details.transmittedSurveyUnits),
       ...Object.keys(details.loadedSurveyUnits),
     ]);
+
     return (
       Array.from(campaignIds)
         // Remove campaigns with no messages
-        .filter(
-          campaign =>
-            details.transmittedSurveyUnits[campaign]?.length ||
-            details.loadedSurveyUnits[campaign]?.length
-        )
+        .filter(hasAtLeastOneItemToDisplay(details))
         // Compute message into a single object
         .map(campaign => ({
           name: campaign,
           transmitted: (details.transmittedSurveyUnits[campaign] ?? []).length,
           loaded: (details.loadedSurveyUnits[campaign] ?? []).length,
-          total:
-            (details.transmittedSurveyUnits[campaign] ?? []).length +
-            (details.loadedSurveyUnits[campaign] ?? []).length,
+          startedWeb: details.startedWeb[campaign] ?? [],
+          terminatedWeb: details.terminatedWeb[campaign] ?? [],
         }))
     );
   }, [details]);
@@ -101,7 +117,7 @@ export function SyncDialog({
 function SyncDetail({
   campaigns,
 }: Readonly<{
-  campaigns: { name: string; transmitted: number; loaded: number; total: number }[];
+  campaigns: CampaignNotification[];
 }>) {
   const theme = useTheme();
   return (
@@ -112,27 +128,56 @@ function SyncDetail({
       elevation={0}
     >
       {campaigns.length === 0 && <DialogContentText>{D.nothingToDisplay}</DialogContentText>}
-      {campaigns.map(campaign => (
-        <Stack gap={2} key={campaign.name}>
-          {campaign.total === 0 && <DialogContentText>{D.nothingToDisplay}</DialogContentText>}
-          {campaign.loaded > 0 && (
-            <DialogContentText>
-              <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
-                {campaign.name.toLowerCase()} :{' '}
-              </Typography>{' '}
-              {D.loadedSurveyUnits(campaign.loaded)}
-            </DialogContentText>
-          )}
-          {campaign.transmitted > 0 && (
-            <DialogContentText>
-              <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
-                {campaign.name.toLowerCase()} :{' '}
-              </Typography>{' '}
-              {D.transmittedSurveyUnits(campaign.loaded)}
-            </DialogContentText>
-          )}
-        </Stack>
-      ))}
+
+      <List>
+        {campaigns.map(campaign => (
+          <Stack key={campaign.name} gap={2}>
+            <>
+              <ListItem>
+                <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
+                  {campaign.name.toLowerCase()} :{' '}
+                </Typography>{' '}
+              </ListItem>
+              <List disablePadding>
+                {campaign.loaded > 0 && (
+                  <ListItem sx={{ pl: 8 }}>{D.loadedSurveyUnits(campaign.loaded)}</ListItem>
+                )}
+                {campaign.transmitted > 0 && (
+                  <ListItem sx={{ pl: 8 }}>{D.transmittedSurveyUnits(campaign.loaded)}</ListItem>
+                )}
+                {campaign.startedWeb.length > 0 && (
+                  <>
+                    <ListItem sx={{ pl: 8 }}>
+                      {D.webInitSurveyUnit(campaign.startedWeb.length)} :{' '}
+                    </ListItem>
+                    <List disablePadding>
+                      {campaign.startedWeb.map(id => (
+                        <ListItem key={id} sx={{ pl: 16 }}>
+                          {id}
+                        </ListItem>
+                      ))}
+                    </List>
+                  </>
+                )}
+                {campaign.terminatedWeb.length > 0 && (
+                  <>
+                    <ListItem sx={{ pl: 8 }}>
+                      {D.webTerminatedSurveyUnit(campaign.terminatedWeb.length)} :{' '}
+                    </ListItem>
+                    <List disablePadding>
+                      {campaign.terminatedWeb.map(id => (
+                        <ListItem key={id} sx={{ pl: 16 }}>
+                          {id}
+                        </ListItem>
+                      ))}
+                    </List>
+                  </>
+                )}
+              </List>
+            </>
+          </Stack>
+        ))}
+      </List>
     </Accordion>
   );
 }

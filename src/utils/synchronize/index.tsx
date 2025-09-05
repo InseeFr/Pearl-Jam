@@ -15,7 +15,7 @@ import {
 } from 'api/pearl';
 import { useNavigate } from 'react-router-dom';
 import { QueenEvent } from 'types/events';
-import { SurveyUnit } from 'types/pearl';
+import { OtherModeQuestionnaireState, OtherModeQuestionStateType, SurveyUnit } from 'types/pearl';
 import { formatSurveyUnitForPut } from 'utils/api/utils';
 import { PEARL_USER_KEY, TITLES } from 'utils/constants';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
@@ -188,7 +188,7 @@ const validateSU = (su: SurveyUnit) => {
 
 const getData = async () => {
   const surveyUnitsSuccess: { id: string; campaign: string }[] = [];
-
+  const allSurveyUnits: SurveyUnit[] = [];
   try {
     const { status, data: surveyUnits } = await getListSurveyUnit();
     if (status && !surveyUnits && ![400, 403, 404, 500].includes(status))
@@ -209,6 +209,7 @@ const getData = async () => {
               id: mergedSurveyUnit.id,
               campaign: mergedSurveyUnit.campaign,
             });
+            allSurveyUnits.push(mergedSurveyUnit);
           }
         } catch {
           throw new Error('Server is not responding');
@@ -219,7 +220,7 @@ const getData = async () => {
     throw new Error('Server is not responding');
   }
 
-  return { surveyUnitsSuccess };
+  return { surveyUnitsSuccess, surveyUnits: allSurveyUnits };
 };
 
 const getWFSSurveyUnitsSortByCampaign = async () => {
@@ -266,6 +267,57 @@ const getNewSurveyUnitsByCampaign = async (
   }, {});
 };
 
+/**
+ * Return the latest (based on the date property) other mode questionnaire state
+ */
+const getMostRecentState = (surveyUnit?: SurveyUnit) => {
+  if (!surveyUnit) {
+    return undefined;
+  }
+
+  return (surveyUnit.otherModeQuestionnaireState ?? []).reduce<
+    OtherModeQuestionnaireState | undefined
+  >((latest, current) => {
+    if (!latest) {
+      return current;
+    }
+    return new Date(current.date) > new Date(latest.date) ? current : latest;
+  }, undefined);
+};
+
+const isValidState = (state: OtherModeQuestionStateType) =>
+  ['QUESTIONNAIRE_COMPLETED', 'QUESTIONNAIRE_INIT'].includes(state);
+
+const appearsAfterLastSync = (
+  previousState: OtherModeQuestionnaireState,
+  state: OtherModeQuestionStateType
+): boolean => state !== previousState.state;
+
+const getLatestSurveyUnitStateAfterSync = (
+  surveyUnit: SurveyUnit,
+  previousSurveyUnits: SurveyUnit[] = []
+) => {
+  const previousSurveyUnit = previousSurveyUnits.find(su => su.id === surveyUnit.id);
+
+  const previousMostRecentOtherModeQuestionState = getMostRecentState(previousSurveyUnit);
+  const mostRecentOtherModeQuestionnaireState = getMostRecentState(surveyUnit);
+  const currentState = mostRecentOtherModeQuestionnaireState?.state ?? null;
+
+  if (!previousMostRecentOtherModeQuestionState) {
+    return currentState;
+  }
+
+  if (
+    currentState &&
+    appearsAfterLastSync(previousMostRecentOtherModeQuestionState, currentState) &&
+    isValidState(currentState)
+  ) {
+    return currentState;
+  }
+
+  return null;
+};
+
 export const synchronizePearl = async () => {
   let transmittedSurveyUnits = {};
   let loadedSurveyUnits = {};
@@ -275,21 +327,44 @@ export const synchronizePearl = async () => {
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
     await getUserData();
+    const previousData = await surveyUnitIDBService.getAll();
+
     surveyUnitsInTempZone = await sendData();
     transmittedSurveyUnits = await getWFSSurveyUnitsSortByCampaign();
 
     await clean();
 
-    const { surveyUnitsSuccess: susSuccess } = await getData();
-
+    const { surveyUnitsSuccess: susSuccess, surveyUnits } = await getData();
     surveyUnitsSuccess = susSuccess.map(({ id }) => id);
     loadedSurveyUnits = await getNewSurveyUnitsByCampaign(susSuccess, allOldSurveyUnitsByCampaign);
+
+    let startedWeb: Record<string, string[]> = {};
+    let terminatedWeb: Record<string, string[]> = {};
+
+    surveyUnits.forEach(su => {
+      const result = getLatestSurveyUnitStateAfterSync(su, previousData);
+      if (result === 'QUESTIONNAIRE_COMPLETED') {
+        terminatedWeb = {
+          ...terminatedWeb,
+          [su.campaign]: [...(terminatedWeb[su.campaign] ?? []), su.id],
+        };
+      }
+      if (result === 'QUESTIONNAIRE_INIT') {
+        startedWeb = {
+          ...startedWeb,
+          [su.campaign]: [...(startedWeb[su.campaign] ?? []), su.id],
+        };
+      }
+    });
+
     return {
       error: false,
       surveyUnitsSuccess,
       surveyUnitsInTempZone,
       transmittedSurveyUnits,
       loadedSurveyUnits,
+      startedWeb,
+      terminatedWeb,
     };
   } catch (e) {
     console.debug(e);

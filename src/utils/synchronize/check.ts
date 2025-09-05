@@ -2,7 +2,7 @@ import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 
 import { postMailMessage } from 'api/pearl';
 import D from 'i18n';
-import { NotificationState } from 'types/pearl';
+import { NotificationState, SurveyUnit, SyncResultDetails } from 'types/pearl';
 import { Notification, SyncReport } from 'utils/indexeddb/idb-config';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
@@ -73,22 +73,22 @@ const getResult = (
   pearlTempZone = [],
   queenTempZone = [],
   transmittedSurveyUnits = {},
-  loadedSurveyUnits = {}
+  loadedSurveyUnits = {},
+  startedWeb = {},
+  terminatedWeb = {}
 ): {
   state: NotificationState;
   messages: string[];
-  details?: {
-    transmittedSurveyUnits: Record<string, string[]>;
-    loadedSurveyUnits: Record<string, string[]>;
-  };
+  details?: SyncResultDetails;
 } => {
-  const messages = [];
+  const messages: string[] = [];
   if (pearlError || queenError) {
     return {
       state: 'error',
       messages: [D.syncStopOnError, D.warningOrErrorEndMessage, D.syncPleaseTryAgain],
     };
   }
+
   if (
     pearlTempZone.length > 0 ||
     queenTempZone.length > 0 ||
@@ -105,25 +105,27 @@ const getResult = (
     return {
       state: 'warning',
       messages: [...messages, D.warningOrErrorEndMessage, D.syncYouCanStillWork],
-      details: { transmittedSurveyUnits, loadedSurveyUnits },
+      details: { transmittedSurveyUnits, loadedSurveyUnits, startedWeb, terminatedWeb },
     };
   }
   return {
     state: 'success',
     messages: [D.syncSuccessMessage],
-    details: { transmittedSurveyUnits, loadedSurveyUnits },
+    details: { transmittedSurveyUnits, loadedSurveyUnits, startedWeb, terminatedWeb },
   };
 };
 
 export const analyseResult = async () => {
   const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
-  const pearlSus = await surveyUnitIDBService.getAll();
+  const pearlSus: SurveyUnit[] = await surveyUnitIDBService.getAll();
   const pearlSurveyUnitsArray = pearlSus.map(({ id }: { id: string }) => id);
   const {
     error: pearlError,
     surveyUnitsInTempZone: pearlTempZone,
     transmittedSurveyUnits,
     loadedSurveyUnits,
+    terminatedWeb,
+    startedWeb,
   } = getSavedSyncPearlData() || {};
   const {
     error: queenError,
@@ -176,7 +178,9 @@ export const analyseResult = async () => {
     pearlTempZone,
     queenTempZone,
     transmittedSurveyUnits,
-    loadedSurveyUnits
+    loadedSurveyUnits,
+    startedWeb,
+    terminatedWeb
   );
 
   const nowDate = new Date().getTime();

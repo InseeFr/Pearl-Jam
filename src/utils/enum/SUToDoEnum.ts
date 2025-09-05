@@ -21,6 +21,12 @@ export const toDoEnum = {
     stepName: D.stepTerminated,
     color: '#35C75880',
   },
+  WEBTERMINATED: {
+    order: '8',
+    value: D.toDoWebTerminated,
+    stepName: D.stepWebTerminated,
+    color: '#35C75880',
+  },
 };
 
 export interface ToDoEnumValues {
