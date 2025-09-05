@@ -69,14 +69,9 @@ export default defineConfig({
             type: 'image/x-icon',
           },
           {
-            src: 'static/images/insee.png',
-            sizes: '326x378',
-            type: 'image/png',
-          },
-          {
-            src: 'static/images/logo-insee-header.png',
-            sizes: '270x274',
-            type: 'image/png',
+            src: 'static/images/Insee_logo_header.webp',
+            sizes: '298x100',
+            type: 'image/webp',
           },
         ],
         start_url: '.',
