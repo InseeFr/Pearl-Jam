@@ -61,6 +61,7 @@ const detailsMessage = {
   surveyUnitTitle: { fr: 'Civilité', en: 'Title', sq: 'Titulli' },
   surveyUnitAge: { fr: 'Âge', en: 'Age', sq: 'Mosha' },
   surveyUnitHousing: { fr: 'Logement', en: 'Housing', sq: 'Banimi' },
+
   surveyUnitIndividual: { fr: 'Individu', en: 'Individual', sq: 'Individ' },
   surveyUnitCommunications: {
     fr: 'Mes communications',

@@ -27,7 +27,10 @@ const createCustomAxiosInstance = (baseUrl: string): AxiosInstance => {
     },
     error => {
       if (error.response) {
-        throw new Error(`HTTP error! Status: ${error.response.status}`);
+        throw new AxiosError(
+          `HTTP error! Status: ${error.response.status ?? '-1'}`,
+          error.response.status ?? '-1'
+        );
       }
       throw error;
     }
