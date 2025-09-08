@@ -10,6 +10,7 @@ type ImportMetaEnv = {
   VITE_KEYCLOAK_REALM: string;
   VITE_KEYCLOAK_URL: string;
   VITE_KEYCLOAK_ROLES_ALLOW_LIST: string;
+  VITE_ARTICULATION: string;
   BASE_URL: string;
   MODE: string;
   DEV: boolean;

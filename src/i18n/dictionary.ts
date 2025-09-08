@@ -58,6 +58,26 @@ const dictionary = {
     en: 'Access the questionnaire',
     sq: 'Aksesoni pyetësorin',
   },
+  personDetails: {
+    fr: 'Récapitulatif des individus',
+    en: 'Summary of individuals',
+    sq: 'Përmbledhje e individëve',
+  },
+  finished: {
+    fr: 'Terminé',
+    en: 'Finished',
+    sq: 'Përfunduar',
+  },
+  notStarted: {
+    fr: 'Non commencé',
+    en: 'Not started',
+    sq: 'Nuk ka filluar',
+  },
+  inProgress: {
+    fr: 'En cours',
+    en: 'In progress',
+    sq: 'Në progres',
+  },
   organizationComment: {
     fr: "Commentaire lié à l'organisation de la collecte",
     en: 'Comment related to the organization of the collection',
