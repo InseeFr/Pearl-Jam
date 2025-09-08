@@ -15,16 +15,38 @@ import BlockIcon from '@mui/icons-material/Block';
 import D from 'i18n';
 import { SurveyUnit } from 'types/pearl';
 import { isQuestionnaireAvailable } from '../../utils/functions';
-import { useArticulationTable } from 'dramaQueen/useArticulationTable';
 import { Table, TableBody, TableCell, TableRow } from '@mui/material';
 import Chip from '@mui/material/Chip';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const chipStyle = { background: '#FFF', boxShadow: 2 };
+
+type ArticulationTableHook = (
+  react: unknown,
+  id: string
+) => {
+  rows: {
+    cells: { value: number }[];
+    progress: 0 | -1 | 1;
+    label: string;
+    url: string;
+  }[];
+};
 
 export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>) {
   const { id } = surveyUnit;
   const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
+  const [articulationHook, setArticulationHook] = useState<ArticulationTableHook | null>(null);
+
+  useEffect(() => {
+    import('dramaQueen/useArticulationTable')
+      .then(module => {
+        setArticulationHook(() => module.default.useArticulationTable);
+      })
+      .catch(e => {
+        console.error("loading error 'dramaQueen/useArticulationTable'", e);
+      });
+  }, []);
 
   return (
     <Card elevation={0}>
@@ -74,7 +96,9 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               </Row>
 
               {/* Table */}
-              <ArticulationTable id={id} />
+              {articulationHook && (
+                <ArticulationTable id={id} useArticulationTable={articulationHook} />
+              )}
             </Stack>
           )}
         </Stack>
@@ -86,8 +110,11 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 /**
  * Articulation table for a given identifier.
  */
-export function ArticulationTable(props: { id: string }) {
-  const table = useArticulationTable(React, props.id);
+export function ArticulationTable(props: {
+  id: string;
+  useArticulationTable: ArticulationTableHook;
+}) {
+  const table = props.useArticulationTable(React, props.id);
 
   if (!table) {
     return null;
