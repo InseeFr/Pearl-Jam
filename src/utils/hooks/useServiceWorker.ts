@@ -37,8 +37,6 @@ export const useServiceWorker = (authenticated: boolean): ServiceWorkerState => 
   };
 
   useEffect(() => {
-    console.log('Queen url', QUEEN_URL);
-
     if (authenticated && QUEEN_URL) {
       serviceWorker.register({
         QUEEN_URL,

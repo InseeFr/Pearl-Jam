@@ -31,7 +31,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
             disabled={!isAvailable}
             startIcon={<LibraryBooksIcon />}
             component={RouterLink}
-            to={`/queen/survey-unit/${id}`}
+            to={`/queen/interrogations/${id}`}
           >
             {D.accessTheQuestionnaire}
           </Button>
