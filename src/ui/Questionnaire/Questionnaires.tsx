@@ -134,16 +134,18 @@ export function ArticulationTable(props: {
             <TableCell>
               <StateChip progress={row.progress} />
             </TableCell>
-            <TableCell>
-              <Button
-                variant="contained"
-                component={RouterLink}
-                to={row.url}
-                startIcon={<SlowMotionVideoIcon />}
-              >
-                {row.label}
-              </Button>
-            </TableCell>
+            {row.url && (
+              <TableCell>
+                <Button
+                  variant="contained"
+                  component={RouterLink}
+                  to={row.url}
+                  startIcon={<SlowMotionVideoIcon />}
+                >
+                  {row.label}
+                </Button>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>
