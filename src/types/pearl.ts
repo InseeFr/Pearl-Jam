@@ -148,10 +148,17 @@ export type SurveyUnit = {
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
+  otherModeQuestionnaireState?: OtherModeQuestionnaireState[];
   previousContactHistory?: PreviousContactHistory;
   nextContactHistory?: NextContactHistory;
 };
 
+export type OtherModeQuestionStateType = 'QUESTIONNAIRE_COMPLETED' | 'QUESTIONNAIRE_INIT';
+export type OtherModeQuestionnaireState = {
+  id: string;
+  state: OtherModeQuestionStateType;
+  date: string;
+};
 export type NotificationState = 'warning' | 'success' | 'error';
 export type Notification = {
   date: number;
@@ -165,11 +172,14 @@ export type Notification = {
   id: number;
 };
 
+export type SyncResultDetails = {
+  transmittedSurveyUnits: Record<string, string[]>;
+  loadedSurveyUnits: Record<string, string[]>;
+  startedWeb: Record<string, string[]>;
+  terminatedWeb: Record<string, string[]>;
+};
 export type SyncResult = {
   state: string;
   messages: string[] | string;
-  details?: {
-    transmittedSurveyUnits: Record<string, string[]>;
-    loadedSurveyUnits: Record<string, string[]>;
-  };
+  details?: SyncResultDetails;
 };

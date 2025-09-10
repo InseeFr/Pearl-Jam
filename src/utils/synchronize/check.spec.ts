@@ -175,7 +175,9 @@ describe('check.ts', () => {
 
       window.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(queenData));
       saveSyncPearlData(pearlData);
-      vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([{ id: '1' }]);
+      vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([
+        { id: '1', otherModeQuestionnaireState: [] },
+      ]);
       vi.spyOn(api, 'postMailMessage').mockImplementation(vi.fn());
       vi.spyOn(notificationIdbService, 'addOrUpdateNotif').mockResolvedValue(undefined);
       vi.spyOn(syncReportIdbService, 'addOrUpdateReport').mockResolvedValue(undefined);
