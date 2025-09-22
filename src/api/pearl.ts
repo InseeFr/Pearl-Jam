@@ -100,27 +100,6 @@ export interface ContactAttemptDto {
   medium?: ContactAttemptDtoMedium;
 }
 
-export type ContactHistoryPersonDtoTitle = typeof ContactHistoryPersonDtoTitle[keyof typeof ContactHistoryPersonDtoTitle];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ContactHistoryPersonDtoTitle = {
-  MISTER: 'MISTER',
-  MISS: 'MISS',
-} as const;
-
-export interface ContactHistoryPersonDto {
-  id?: number;
-  title: ContactHistoryPersonDtoTitle;
-  firstName: string;
-  lastName: string;
-  /** @pattern \+?\d+ */
-  phoneNumber?: string;
-  email?: string;
-  birthdate?: number;
-  panel?: boolean;
-}
-
 export type ContactOutcomeDtoType = typeof ContactOutcomeDtoType[keyof typeof ContactOutcomeDtoType];
 
 
@@ -146,7 +125,26 @@ export interface ContactOutcomeDto {
 }
 
 export interface NextContactHistoryDto {
-  persons?: ContactHistoryPersonDto[];
+  persons?: NextContactHistoryPersonDto[];
+}
+
+export type NextContactHistoryPersonDtoTitle = typeof NextContactHistoryPersonDtoTitle[keyof typeof NextContactHistoryPersonDtoTitle];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const NextContactHistoryPersonDtoTitle = {
+  MISTER: 'MISTER',
+  MISS: 'MISS',
+} as const;
+
+export interface NextContactHistoryPersonDto {
+  id?: number;
+  title: NextContactHistoryPersonDtoTitle;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  email?: string;
+  preferredContact?: boolean;
 }
 
 export type PersonDtoTitle = typeof PersonDtoTitle[keyof typeof PersonDtoTitle];
@@ -405,7 +403,25 @@ export const PreviousContactHistoryDtoContactOutcomeValue = {
 export interface PreviousContactHistoryDto {
   comment?: string;
   contactOutcomeValue: PreviousContactHistoryDtoContactOutcomeValue;
-  persons?: ContactHistoryPersonDto[];
+  persons?: PreviousContactHistoryPersonDto[];
+}
+
+export type PreviousContactHistoryPersonDtoTitle = typeof PreviousContactHistoryPersonDtoTitle[keyof typeof PreviousContactHistoryPersonDtoTitle];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PreviousContactHistoryPersonDtoTitle = {
+  MISTER: 'MISTER',
+  MISS: 'MISS',
+} as const;
+
+export interface PreviousContactHistoryPersonDto {
+  id?: number;
+  title: PreviousContactHistoryPersonDtoTitle;
+  firstName: string;
+  lastName: string;
+  birthdate?: number;
+  panel?: boolean;
 }
 
 export interface SampleIdentifiersDto {

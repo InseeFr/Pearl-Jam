@@ -1,17 +1,18 @@
 import { Dialog, DialogTitle, DialogContent, Button, Stack, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { Contact } from 'types/pearl';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { NextContactHistoryPerson } from 'types/pearl';
 import { FieldRow } from 'ui/FieldRow';
 import D from 'i18n';
-
 import { useEffect } from 'react';
+import { ContactFormData, contactSchema } from 'utils/schemas/nextContactSchema';
 
 type ModifyContactModalProps = {
   open: boolean;
   modalTitle: string;
-  contact?: Contact;
+  contact?: NextContactHistoryPerson;
   onClose: () => void;
-  onConfirm: (contact: Contact) => void;
+  onConfirm: (contact: NextContactHistoryPerson) => void;
 };
 
 export function ContactModal({
@@ -27,22 +28,36 @@ export function ContactModal({
     control,
     reset,
     formState: { errors },
-  } = useForm<Contact>({
-    defaultValues: contact,
-    reValidateMode: 'onSubmit',
+  } = useForm({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      title: contact?.title,
+      lastName: contact?.lastName,
+      firstName: contact?.firstName,
+      phoneNumber: contact?.phoneNumber,
+      email: contact?.email,
+      preferredContact: contact?.preferredContact ? 'true' : 'false',
+    },
+    mode: 'onSubmit',
   });
 
   useEffect(() => {
-    if (contact) reset(contact);
+    if (contact) {
+      reset({
+        title: contact.title,
+        lastName: contact.lastName || '',
+        firstName: contact.firstName || '',
+        phoneNumber: contact.phoneNumber || '',
+        email: contact.email || '',
+        preferredContact: contact?.preferredContact ? 'true' : 'false',
+      });
+    }
   }, [contact, reset]);
 
-  const handleFormSubmit = (contact: any) => {
-    const verifiedContact = {
-      ...contact,
-      // coerce value to boolean as form will return string (or keep base value if no modification done)
-      panel: contact.panel === true || contact.panel === 'true',
-    };
-    onConfirm(verifiedContact);
+  const handleFormSubmit = (formData: ContactFormData) => {
+    console.log('submit', formData);
+
+    onConfirm(formData);
     reset();
   };
 
@@ -67,51 +82,43 @@ export function ContactModal({
                 { label: D.editContactFemale, value: 'MISS' },
               ]}
               required
-              {...register('title', { required: { value: true, message: D.requiredField } })}
+              {...register('title')}
             />
             <FieldRow
               label={D.contactLastName}
               helperText={errors.lastName?.message}
               errors={errors}
               required
-              {...register('lastName', {
-                required: { value: true, message: D.requiredField },
-              })}
+              {...register('lastName')}
             />
             <FieldRow
               helperText={errors.firstName?.message}
               errors={errors}
               label={D.contactFirstName}
               required
-              {...register('firstName', {
-                required: { value: true, message: D.requiredField },
-              })}
+              {...register('firstName')}
             />
             <FieldRow
               label={D.contactPhone}
               helperText={errors.phoneNumber?.message}
               errors={errors}
-              {...register('phoneNumber', {
-                pattern: { value: /^\+?\d+$/, message: D.invalidPhone },
-              })}
+              {...register('phoneNumber')}
             />
-
             <FieldRow
               label={D.contactEmail}
               helperText={errors.email?.message}
               errors={errors}
-              {...register('email', {
-                pattern: { value: /^[^@\s]+@[^@\s]+$/, message: D.invalidEmail },
-              })}
+              {...register('email')}
             />
+
             <FieldRow
               label={D.shouldBeEmail}
-              {...register('panel')}
               control={control}
+              name="preferredContact"
               type="radios"
               options={[
-                { label: D.yes, value: true },
-                { label: D.no, value: false },
+                { label: D.yes, value: 'true' },
+                { label: D.no, value: 'false' },
               ]}
             />
 

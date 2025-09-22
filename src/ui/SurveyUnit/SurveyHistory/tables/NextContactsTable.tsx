@@ -11,13 +11,12 @@ import {
   Stack,
 } from '@mui/material';
 import { CheckCircle, Delete, Edit, Add } from '@mui/icons-material';
-import { Contact, SurveyUnit } from 'types/pearl';
+import { NextContactHistoryPerson, SurveyUnit } from 'types/pearl';
 import { CustomTableCell } from './CustomTableCell';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { useState } from 'react';
 import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import { ContactModal } from './ContactModal';
-import { v4 as uuidv4 } from 'uuid';
 import D from 'i18n';
 
 type HouseholdTableProps = {
@@ -49,7 +48,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     setSelectedContactIndex(-1);
   };
 
-  const handleModify = (newContact: Contact) => {
+  const handleModify = (newContact: NextContactHistoryPerson) => {
     const newNextCollectHistory = {
       ...nextCollectHistory,
       persons: nextCollectHistory?.persons.toSpliced(selectedContactIndex, 1, newContact) ?? [],
@@ -72,7 +71,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     setAddModalOpen(true);
   };
 
-  const handleAdd = (newContact: Contact) => {
+  const handleAdd = (newContact: NextContactHistoryPerson) => {
     setAddModalOpen(false);
     setSelectedContactIndex(-1);
 
@@ -120,7 +119,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             <TableBody>
               {nextCollectHistory?.persons.map((c, i) => (
                 <TableRow
-                  key={uuidv4()}
+                  key={c.id}
                   hover
                   sx={{
                     '&:hover': {
@@ -134,7 +133,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                   <CustomTableCell>{c.phoneNumber}</CustomTableCell>
                   <CustomTableCell>{c.email}</CustomTableCell>
                   <TableCell sx={{ backgroundColor: 'transparent', textAlign: 'center' }}>
-                    {c.panel && <CheckCircle fontSize="medium" color="success" />}
+                    {c.preferredContact && <CheckCircle fontSize="medium" color="success" />}
                   </TableCell>
                   <TableCell
                     sx={{

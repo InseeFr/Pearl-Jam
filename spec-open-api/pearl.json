@@ -1686,20 +1686,6 @@
           "medium": { "type": "string", "enum": ["TEL", "EMAIL", "FIELD"] }
         }
       },
-      "ContactHistoryPersonDto": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "integer", "format": "int64" },
-          "title": { "type": "string", "enum": ["MISTER", "MISS"] },
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "phoneNumber": { "type": "string", "pattern": "\\+?\\d+" },
-          "email": { "type": "string" },
-          "birthdate": { "type": "integer", "format": "int64" },
-          "panel": { "type": "boolean" }
-        },
-        "required": ["firstName", "lastName", "title"]
-      },
       "ContactOutcomeDto": {
         "type": "object",
         "properties": {
@@ -1716,9 +1702,22 @@
         "properties": {
           "persons": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/ContactHistoryPersonDto" }
+            "items": { "$ref": "#/components/schemas/NextContactHistoryPersonDto" }
           }
         }
+      },
+      "NextContactHistoryPersonDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "title": { "type": "string", "enum": ["MISTER", "MISS"] },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "phoneNumber": { "type": "string" },
+          "email": { "type": "string" },
+          "preferredContact": { "type": "boolean" }
+        },
+        "required": ["firstName", "lastName", "title"]
       },
       "PersonDto": {
         "type": "object",
@@ -1850,10 +1849,22 @@
           },
           "persons": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/ContactHistoryPersonDto" }
+            "items": { "$ref": "#/components/schemas/PreviousContactHistoryPersonDto" }
           }
         },
         "required": ["contactOutcomeValue"]
+      },
+      "PreviousContactHistoryPersonDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "title": { "type": "string", "enum": ["MISTER", "MISS"] },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "birthdate": { "type": "integer", "format": "int64" },
+          "panel": { "type": "boolean" }
+        },
+        "required": ["firstName", "lastName", "title"]
       },
       "SampleIdentifiersDto": {
         "type": "object",

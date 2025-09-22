@@ -31,6 +31,27 @@ export type SurveyUnitPerson = {
   phoneNumbers: SurveyUnitPhoneNumber[];
 };
 
+export type ContactHistoryPersonTitle = 'MISTER' | 'MISS';
+
+export type PreviousContactHistoryPerson = {
+  id?: number;
+  title: ContactHistoryPersonTitle;
+  firstName: string;
+  lastName: string;
+  birthdate?: number;
+  panel?: boolean;
+};
+
+export type NextContactHistoryPerson = {
+  id?: number;
+  title: ContactHistoryPersonTitle;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  email?: string;
+  preferredContact?: boolean;
+};
+
 type SurveyUnitAddress = {
   l1: string;
   l2: string;
@@ -112,13 +133,13 @@ export type Contact = {
 
 export type PreviousContactHistory = {
   contactOutcomeValue: string;
-  persons: Contact[];
+  persons: PreviousContactHistoryPerson[];
   comment: string;
   priority: boolean;
 };
 
 export type NextContactHistory = {
-  persons: Contact[];
+  persons: NextContactHistoryPerson[];
 };
 
 export type SurveyUnit = {

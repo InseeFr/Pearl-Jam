@@ -9,13 +9,13 @@ import {
   TableCell,
   Typography,
 } from '@mui/material';
-import { Contact } from 'types/pearl';
+import { PreviousContactHistoryPerson } from 'types/pearl';
 import { CustomTableCell } from './CustomTableCell';
 import { v4 as uuidv4 } from 'uuid';
 import { getAge } from 'utils/functions';
 
 type ContactsTableProps = {
-  contacts: readonly Contact[];
+  contacts: readonly PreviousContactHistoryPerson[];
 };
 
 export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>) {
