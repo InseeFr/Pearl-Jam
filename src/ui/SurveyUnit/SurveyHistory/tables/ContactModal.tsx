@@ -39,6 +39,7 @@ export function ContactModal({
       preferredContact: contact?.preferredContact ? 'true' : 'false',
     },
     mode: 'onSubmit',
+    reValidateMode: 'onBlur',
   });
 
   useEffect(() => {
@@ -55,8 +56,6 @@ export function ContactModal({
   }, [contact, reset]);
 
   const handleFormSubmit = (formData: ContactFormData) => {
-    console.log('submit', formData);
-
     onConfirm(formData);
     reset();
   };
