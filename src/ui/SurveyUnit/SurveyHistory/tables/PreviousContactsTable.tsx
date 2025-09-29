@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import { PreviousContactHistoryPerson } from 'types/pearl';
 import { CustomTableCell } from './CustomTableCell';
-import { v4 as uuidv4 } from 'uuid';
 import { getAge } from 'utils/functions';
 
 type ContactsTableProps = {
@@ -40,8 +39,8 @@ export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>
             </TableRow>
           </TableHead>
           <TableBody>
-            {contacts.map(c => (
-              <TableRow key={uuidv4()}>
+            {contacts.map((c, i) => (
+              <TableRow key={i}>
                 <CustomTableCell>{c.title}</CustomTableCell>
                 <CustomTableCell>{c.firstName}</CustomTableCell>
                 <CustomTableCell>{getAge(c.birthdate)}</CustomTableCell>

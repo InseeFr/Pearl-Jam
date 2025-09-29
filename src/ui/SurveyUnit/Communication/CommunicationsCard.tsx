@@ -12,7 +12,6 @@ import { Typography } from '../../Typography';
 import { CommunicationForm } from './CommunicationForm';
 import { CommunicationItem } from './CommunicationItem';
 import { SurveyUnit, SurveyUnitCommunicationTemplate } from 'types/pearl';
-import { v4 as uuidv4 } from 'uuid';
 
 interface CommunicationsCardProps {
   surveyUnit: SurveyUnit;
@@ -77,11 +76,11 @@ export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardPr
               {D.sendCommunication}
             </Button>
             <Stack gap={2}>
-              {surveyUnitCommunicationRequests?.map(comReq => (
+              {surveyUnitCommunicationRequests?.map((comReq, i) => (
                 <CommunicationItem
                   surveyUnitCommunicationTemplate={comReq.template}
                   communication={comReq}
-                  key={uuidv4()}
+                  key={i}
                 />
               ))}
             </Stack>
