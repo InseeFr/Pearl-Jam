@@ -76,11 +76,11 @@ export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardPr
               {D.sendCommunication}
             </Button>
             <Stack gap={2}>
-              {surveyUnitCommunicationRequests?.map((comReq, i) => (
+              {surveyUnitCommunicationRequests?.map(comReq => (
                 <CommunicationItem
                   surveyUnitCommunicationTemplate={comReq.template}
                   communication={comReq}
-                  key={i}
+                  key={comReq.status[0].date ?? 1}
                 />
               ))}
             </Stack>
