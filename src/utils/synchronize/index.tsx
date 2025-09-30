@@ -239,7 +239,7 @@ const getNewSurveyUnitsByCampaign = async (
 /**
  * Return the latest (based on the date property) other mode questionnaire state
  */
-const getMostRecentState = (surveyUnit?: SurveyUnit) => {
+export const getMostRecentState = (surveyUnit?: SurveyUnit) => {
   if (!surveyUnit) {
     return undefined;
   }
@@ -255,7 +255,7 @@ const getMostRecentState = (surveyUnit?: SurveyUnit) => {
 };
 
 const isValidState = (state: OtherModeQuestionStateType) =>
-  ['QUESTIONNAIRE_COMPLETED', 'QUESTIONNAIRE_INIT'].includes(state);
+  ['QUESTIONNAIRE_COMPLETED', 'QUESTIONNAIRE_INIT', 'QUESTIONNAIRE_VALIDATED'].includes(state);
 
 const appearsAfterLastSync = (
   previousState: OtherModeQuestionnaireState,
@@ -312,7 +312,7 @@ export const synchronizePearl = async () => {
 
     surveyUnits.forEach(su => {
       const result = getLatestSurveyUnitStateAfterSync(su, previousData);
-      if (result === 'QUESTIONNAIRE_COMPLETED') {
+      if (result === 'QUESTIONNAIRE_COMPLETED' || result === 'QUESTIONNAIRE_VALIDATED') {
         terminatedWeb = {
           ...terminatedWeb,
           [su.campaign]: [...(terminatedWeb[su.campaign] ?? []), su.id],

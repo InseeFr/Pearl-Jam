@@ -3,6 +3,10 @@ x-react-volumes: &react-volumes
   - /mnt/wslg/.X11-unix:/tmp/.X11-unix
   - /opt/app/node_modules
 
+volumes:
+  pearl_db_data:
+  questionnaire_db_data:
+
 services:
   pearl-db:
     profiles:
@@ -23,6 +27,8 @@ services:
       retries: 10
     ports:
       - ${PEARL_DB_PORT}:5432
+    volumes:
+      - pearl_db_data:/var/lib/postgresql/data
 
   questionnaire-db:
     profiles:
@@ -33,7 +39,14 @@ services:
       - POSTGRES_USER=${QUESTIONNAIRE_DB_USER}
       - POSTGRES_PASSWORD=${QUESTIONNAIRE_DB_PASSWORD}
       - POSTGRES_DB=${QUESTIONNAIRE_DB}
-    command: ['postgres']
+    command:
+      - 'postgres'
+      - '-c'
+      - 'wal_level=logical'
+      - '-c'
+      - 'max_wal_senders=10'
+      - '-c'
+      - 'max_replication_slots=10'
     tty: true
     stdin_open: true
     healthcheck:
@@ -44,6 +57,8 @@ services:
       retries: 10
     ports:
       - ${QUESTIONNAIRE_DB_PORT}:5432
+    volumes:
+      - questionnaire_db_data:/var/lib/postgresql/data
 
   keycloak:
     profiles:
@@ -213,6 +228,59 @@ services:
         condition: service_started
     ports:
       - '${PEARL_FRONTEND_PORT}:8300'
+
+  pulsar:
+    profiles:
+      - stack
+      - playwright
+    image: apachepulsar/pulsar:4.0.6
+    tty: true
+    stdin_open: true
+    environment:
+      - PULSAR_MEM=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g
+    command: bin/pulsar standalone
+    ports:
+      - ${PULSAR_PORT}:8080
+      - ${PULSAR_SERVICE_PORT}:6650
+    volumes:
+      - ./container:/pulsar/config
+    healthcheck:
+      test: ['CMD', 'curl', '--fail', 'http://localhost:8080/admin/v2/namespaces/public/default']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  debezium-connector:
+    profiles:
+      - stack
+      - playwright
+    image: apachepulsar/pulsar:4.0.6
+    depends_on:
+      pulsar:
+        condition: service_healthy
+      questionnaire-db:
+        condition: service_healthy
+    volumes:
+      - ./container:/pulsar/config
+      - ./container/connectors:/pulsar/download/connectors
+    environment:
+      - PULSAR_BROKER_SERVICE_URL=pulsar://pulsar:6650
+      - PULSAR_WEB_SERVICE_URL=http://pulsar:8080
+    command: >
+      bash -c "
+        if [ ! -f ./download/connectors/pulsar-io-debezium-postgres-4.0.5.nar ]; then
+          echo 'Downloading Debezium PostgreSQL connector...' &&
+          wget -O ./download/connectors/pulsar-io-debezium-postgres-4.0.5.nar https://archive.apache.org/dist/pulsar/pulsar-4.0.5/connectors/pulsar-io-debezium-postgres-4.0.5.nar
+        fi &&
+        echo 'Deleting existing source if it exists...' &&
+        ./bin/pulsar-admin --admin-url http://pulsar:8080 source delete --name debezium-postgres-source --namespace default --tenant public || echo 'Source does not exist, continuing...' &&
+        echo 'Cleaning up package metadata...' &&
+        ./bin/pulsar-admin --admin-url http://pulsar:8080 packages delete 'source://public/default/debezium-postgres-source@0' || echo 'Package does not exist, continuing...' &&
+        echo 'Creating new source...' &&
+        ./bin/pulsar-admin --admin-url http://pulsar:8080 source create --source-config-file /pulsar/config/debezium.yaml &&
+        echo 'Debezium connector created successfully.'  &&
+        sleep Infinity
+      "
 
   playwright-captation:
     image: mcr.microsoft.com/playwright:v1.51.1-noble

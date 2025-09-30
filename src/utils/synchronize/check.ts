@@ -170,7 +170,7 @@ export const analyseResult = async () => {
       })
     );
   }
-  /*const result = getResult(
+  const result = getResult(
     pearlError,
     queenError,
     pearlMissing,
@@ -182,27 +182,7 @@ export const analyseResult = async () => {
     loadedSurveyUnits,
     startedWeb,
     terminatedWeb
-  );*/
-
-  const result = {
-    state: 'success' as NotificationState,
-    messages: [D.syncSuccess],
-    date: new Date().toISOString(),
-    details: {
-      transmittedSurveyUnits: {
-        test: ['1'],
-      },
-      loadedSurveyUnits: {
-        test: ['1', '2', '3', '4', '5'],
-      },
-      startedWeb: {
-        test: ['1', '2', '3'],
-      },
-      terminatedWeb: {
-        test: ['4', '5'],
-      },
-    },
-  };
+  );
 
   const nowDate = new Date().getTime();
   const notification = getNotifFromResult(result, nowDate);

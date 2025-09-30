@@ -1,0 +1,34 @@
+tenant: "public"
+namespace: "default"
+name: "debezium-postgres-source"
+topicName: "debezium-postgres-topic"
+archive: "download/connectors/pulsar-io-debezium-postgres-4.0.5.nar"
+parallelism: 1
+
+configs:
+  database.hostname: "questionnaire-db"
+  database.port: "5432"
+  database.user: "mypostgresuser2"
+  database.password: "mypostgrespassword2"
+  database.server.id: "184054"
+  database.server.name: "dbserver1"
+  database.dbname: "questionnaire"
+  table.include.list: "public.outbox"
+  database.history: "org.apache.pulsar.io.debezium.PulsarDatabaseHistory"
+  database.history.pulsar.topic: "history-topic"
+  database.history.pulsar.service.url: "pulsar://pulsar:6650"
+
+  ## KEY_CONVERTER_CLASS_CONFIG, VALUE_CONVERTER_CLASS_CONFIG
+  key.converter: "org.apache.kafka.connect.json.JsonConverter"
+  value.converter: "org.apache.kafka.connect.json.JsonConverter"
+
+  ## PULSAR_SERVICE_URL_CONFIG
+  pulsar.service.url: "pulsar://pulsar:6650"
+  
+  ## PULSAR CLIENT URL
+  pulsar.client.service.url: "pulsar://pulsar:6650"
+
+  ## OFFSET_STORAGE_TOPIC_CONFIG
+  offset.storage.topic: "offset-topic"
+
+  plugin.name: pgoutput

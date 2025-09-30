@@ -4,6 +4,7 @@ import { contactOutcomes } from './contacts/ContactOutcome';
 import { getRandomIntBetween, getRandomItemFromArray } from './random';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 import userIdbService from '../indexeddb/services/user-idb-service';
+import { date } from 'zod';
 
 const day = 60 * 60 * 1000 * 24;
 const year = day * 365;
@@ -243,6 +244,7 @@ export async function seedData() {
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
     states: [{ type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type, date: 1 }],
     contactOutcome: undefined,
+    otherModeQuestionnaireState: [],
   });
   surverUnits.push({
     ...surverUnits[0],
@@ -257,6 +259,13 @@ export async function seedData() {
     firstName: 'Flin',
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    otherModeQuestionnaireState: [
+      {
+        id: '1',
+        state: 'QUESTIONNAIRE_COMPLETED',
+        date: '2025-01-01',
+      },
+    ],
   });
   surverUnits.push({
     ...surverUnits[0],
@@ -271,6 +280,13 @@ export async function seedData() {
     firstName: 'Flin',
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.HOUSETEL,
+    otherModeQuestionnaireState: [
+      {
+        id: '1',
+        state: 'QUESTIONNAIRE_INIT',
+        date: '2025-02-01',
+      },
+    ],
   });
   surverUnits.push({
     ...surverUnits[0],
