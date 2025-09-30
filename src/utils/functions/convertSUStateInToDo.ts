@@ -11,6 +11,10 @@ export const convertSUStateInToDo = (surveyUnit: SurveyUnit, suState: StateValue
     return toDoEnum.WEBTERMINATED;
   }
 
+  if (surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'QUESTIONNAIRE_INIT')) {
+    return toDoEnum.WEBSURVEY;
+  }
+
   if (
     surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type === suState ||
     surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type === suState
