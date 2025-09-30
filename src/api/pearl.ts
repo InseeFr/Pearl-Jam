@@ -1733,13 +1733,13 @@ export const postMessage2 = (
 export const postMailMessage = (
     mailDto: MailDto,
  options?: SecondParameter<typeof customFetch>,) => {
-      return customFetch<null>(
+   return customFetch<void>(
       {url: `/api/mail`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: mailDto
     },
       options);
-    }
+ }
   
 /**
  * @summary Get interviewers

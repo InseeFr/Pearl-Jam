@@ -126,7 +126,7 @@ export function Notification({
 const SurveyUnitList = ({
   surveyUnits,
   message,
-}: Readonly<{ surveyUnits: string[]; message: (su: number) => string }>) => {
+}: Readonly<{ surveyUnits?: string[]; message: (su: number) => string }>) => {
   const { setNotificationOpened } = useContext(SyncContext);
   if (!surveyUnits || surveyUnits.length === 0) return null;
 
@@ -156,44 +156,66 @@ const SurveyUnitList = ({
 const NotificationDetails = ({ details }: { details?: SyncResultDetails }) => {
   if (!details) return null;
 
+  const { loadedSurveyUnits, transmittedSurveyUnits, startedWeb, terminatedWeb } = details;
   const campaigns = new Set([
-    ...Object.keys(details.loadedSurveyUnits),
-    ...Object.keys(details.transmittedSurveyUnits),
-    ...Object.keys(details.startedWeb),
-    ...Object.keys(details.terminatedWeb),
+    ...Object.keys(loadedSurveyUnits),
+    ...Object.keys(transmittedSurveyUnits),
+    ...Object.keys(startedWeb),
+    ...Object.keys(terminatedWeb),
   ]);
 
   if (campaigns.size === 0) return null;
 
   return (
     <List>
-      {Array.from(campaigns).map(campaign => (
-        <Stack key={campaign} gap={2}>
-          <>
-            <ListItem sx={{ pl: 0 }}>
-              <DialogContentText>{campaign.toLowerCase()} : </DialogContentText>{' '}
-            </ListItem>
-            <List disablePadding>
-              <SurveyUnitList
-                surveyUnits={details.loadedSurveyUnits[campaign] ?? []}
-                message={D.loadedSurveyUnits}
-              />
-              <SurveyUnitList
-                surveyUnits={details.transmittedSurveyUnits[campaign] ?? []}
-                message={D.transmittedSurveyUnits}
-              />
-              <SurveyUnitList
-                surveyUnits={details.startedWeb[campaign]}
-                message={D.webInitSurveyUnit}
-              />
-              <SurveyUnitList
-                surveyUnits={details.terminatedWeb[campaign]}
-                message={D.webTerminatedSurveyUnit}
-              />
-            </List>
-          </>
-        </Stack>
-      ))}
+      {Array.from(campaigns)
+        .filter(
+          hasAtLeastOnSurveyUnitToDisplay(
+            loadedSurveyUnits,
+            transmittedSurveyUnits,
+            startedWeb,
+            terminatedWeb
+          )
+        )
+        .map(campaign => (
+          <Stack key={campaign} gap={2}>
+            <>
+              <ListItem sx={{ pl: 0 }}>
+                <DialogContentText>{campaign.toLowerCase()} : </DialogContentText>{' '}
+              </ListItem>
+              <List disablePadding>
+                <SurveyUnitList
+                  surveyUnits={loadedSurveyUnits[campaign]}
+                  message={D.loadedSurveyUnits}
+                />
+                <SurveyUnitList
+                  surveyUnits={transmittedSurveyUnits[campaign]}
+                  message={D.transmittedSurveyUnits}
+                />
+                <SurveyUnitList surveyUnits={startedWeb[campaign]} message={D.webInitSurveyUnit} />
+                <SurveyUnitList
+                  surveyUnits={terminatedWeb[campaign]}
+                  message={D.webTerminatedSurveyUnit}
+                />
+              </List>
+            </>
+          </Stack>
+        ))}
     </List>
   );
 };
+
+function hasAtLeastOnSurveyUnitToDisplay(
+  loadedSurveyUnits: Record<string, string[]>,
+  transmittedSurveyUnits: Record<string, string[]>,
+  startedWeb: Record<string, string[]>,
+  terminatedWeb: Record<string, string[]>
+): (value: string, index: number, array: string[]) => unknown {
+  return campaign =>
+    [
+      ...(loadedSurveyUnits[campaign] || []),
+      ...(transmittedSurveyUnits[campaign] || []),
+      ...(startedWeb[campaign] || []),
+      ...(terminatedWeb[campaign] || []),
+    ].length > 0;
+}

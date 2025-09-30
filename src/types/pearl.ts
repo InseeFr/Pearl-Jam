@@ -175,7 +175,10 @@ export type SurveyUnit = {
   otherModeQuestionnaireState?: OtherModeQuestionnaireState[];
 };
 
-export type OtherModeQuestionStateType = 'QUESTIONNAIRE_COMPLETED' | 'QUESTIONNAIRE_INIT';
+export type OtherModeQuestionStateType =
+  | 'QUESTIONNAIRE_VALIDATED'
+  | 'QUESTIONNAIRE_COMPLETED'
+  | 'QUESTIONNAIRE_INIT';
 export type OtherModeQuestionnaireState = {
   id: string;
   state: OtherModeQuestionStateType;

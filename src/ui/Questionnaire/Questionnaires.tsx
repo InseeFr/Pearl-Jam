@@ -15,9 +15,12 @@ import BlockIcon from '@mui/icons-material/Block';
 import D from 'i18n';
 import { SurveyUnit } from 'types/pearl';
 import { isQuestionnaireAvailable } from '../../utils/functions';
-import { Table, TableBody, TableCell, TableRow } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import React, { useEffect, useState } from 'react';
+import { Box, Table, TableBody, TableCell, TableRow } from '@mui/material';
+import { getMostRecentState } from '../../utils/synchronize';
+import { getLang } from '../../i18n/build-dictionary';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const chipStyle = { background: '#FFF', boxShadow: 2 };
 
@@ -35,7 +38,8 @@ type ArticulationTableHook = (
 
 export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>) {
   const { id } = surveyUnit;
-  const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
+  const isAvailable = true; //isQuestionnaireAvailable(surveyUnit)(false);
+
   const [articulationHook, setArticulationHook] = useState<ArticulationTableHook | null>(null);
 
   useEffect(() => {
@@ -48,6 +52,14 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
       });
   }, []);
 
+  const isQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
+    state => state.state === 'QUESTIONNAIRE_INIT'
+  );
+  const isQuestionnaireCompleted = surveyUnit.otherModeQuestionnaireState?.some(
+    state => state.state === 'QUESTIONNAIRE_COMPLETED' || state.state === 'QUESTIONNAIRE_VALIDATED'
+  );
+  const latestState = getMostRecentState(surveyUnit);
+
   return (
     <Card elevation={0}>
       <CardContent>
@@ -58,18 +70,13 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               <Row gap={1}>
                 <StickyNote2Icon fontSize="large" />
                 <Typography component="h2" variant="xl" fontWeight={700}>
-                  {D.openQuestionnaire}
+                 {D.openQuestionnaire}
                 </Typography>
               </Row>
 
-              {isAvailable && (
-                <Chip
-                  label={D.inProgress}
-                  icon={<TrackChangesIcon />}
-                  size="small"
-                  color="warning"
-                  sx={{ ...chipStyle, color: 'warning.main' }}
-                />
+              {isAvailable && isQuestionnaireCompleted ? <StateChip progress={1} /> : (isAvailable && isQuestionnaireInit && <StateChip progress={2} />)}
+              {isAvailable && !isQuestionnaireInit && !isQuestionnaireCompleted && (
+                <StateChip progress={-1} />
               )}
 
               <Button
@@ -82,8 +89,25 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
                 {D.accessTheQuestionnaire}
               </Button>
             </Row>
+
+            {latestState?.date && (
+              <Row gap={6}>
+                <Stack bgcolor="surfacePrimary.main" minWidth={325} borderRadius={2}>
+                  <Box m={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                    <CalendarMonthIcon />
+                    <Typography variant="s" color="text.secondary" sx={{ pl: 1 }}>
+                      {new Intl.DateTimeFormat(getLang(), {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                      }).format(new Date(latestState?.date))}
+                    </Typography>
+                  </Box>
+                </Stack>
+              </Row>
+            )}
           </Stack>
-          {import.meta.env.VITE_ARTICULATION && (
+          {true && (
             <Stack gap={3}>
               {/* Title */}
               <Row justifyContent="space-between">
@@ -96,7 +120,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               </Row>
 
               {/* Table */}
-              {articulationHook && (
+              {true && (
                 <ArticulationTable id={id} useArticulationTable={articulationHook} />
               )}
             </Stack>

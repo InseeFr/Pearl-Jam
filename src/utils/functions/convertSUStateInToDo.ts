@@ -3,7 +3,11 @@ import { surveyUnitStateEnum, StateValues } from 'utils/enum/SUStateEnum';
 import { toDoEnum } from 'utils/enum/SUToDoEnum';
 
 export const convertSUStateInToDo = (surveyUnit: SurveyUnit, suState: StateValues) => {
-  if (surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'QUESTIONNAIRE_COMPLETED')) {
+  if (
+    surveyUnit.otherModeQuestionnaireState?.find(
+      o => o.state === 'QUESTIONNAIRE_COMPLETED' || o.state === 'QUESTIONNAIRE_VALIDATED'
+    )
+  ) {
     return toDoEnum.WEBTERMINATED;
   }
 
