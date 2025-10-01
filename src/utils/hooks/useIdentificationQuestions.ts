@@ -25,6 +25,8 @@ const generateResponseState = (
   );
 
 export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
+  console.log(surveyUnit);
+
   const [questions, setQuestions] = useState<IdentificationQuestions>({ values: {} });
   const [responses, setResponses] = useState<ResponseState>({});
   const [availableQuestions, setAvailableQuestions] = useState<
