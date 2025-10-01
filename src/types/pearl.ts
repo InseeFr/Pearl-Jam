@@ -100,27 +100,6 @@ export type ContactOutcome = {
   type?: ContactOutcomeValue;
 };
 
-export type Contact = {
-  title?: string;
-  firstName?: string;
-  birthdate?: number;
-  lastName?: string;
-  phoneNumber?: string;
-  panel?: boolean;
-  email?: string;
-};
-
-export type PreviousContactHistory = {
-  contactOutcomeValue: string;
-  persons: Contact[];
-  comment: string;
-  priority: boolean;
-};
-
-export type NextContactHistory = {
-  persons: Contact[];
-};
-
 export type SurveyUnit = {
   displayName: string;
   id: string;
@@ -148,8 +127,6 @@ export type SurveyUnit = {
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
-  previousContactHistory?: PreviousContactHistory;
-  nextContactHistory?: NextContactHistory;
 };
 
 export type NotificationState = 'warning' | 'success' | 'error';

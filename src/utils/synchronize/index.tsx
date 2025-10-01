@@ -22,7 +22,6 @@ import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import userIdbService from 'utils/indexeddb/services/user-idb-service';
-import { AxiosError } from 'axios';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
@@ -72,78 +71,48 @@ export const useQueenSynchronisation = () => {
   return { checkQueen, synchronizeQueen, queenReady, queenError };
 };
 
-const sendData = async (): Promise<string[]> => {
+const sendData = async () => {
   const surveyUnitsInTempZone: string[] = [];
   const surveyUnits = await surveyUnitIDBService.getAll();
-  await Promise.all(surveyUnits.map(su => handleSurveyUnit(su, surveyUnitsInTempZone)));
+  await Promise.all(
+    surveyUnits.map(async surveyUnit => {
+      const lastState = getSuTodoState(surveyUnit);
+      const { id } = surveyUnit;
+      const body = {
+        ...surveyUnit,
+        lastState,
+      };
+
+      try {
+        const {
+          status,
+          data: latestSurveyUnit,
+          error,
+          ok,
+        } = await updateSurveyUnit(id, formatSurveyUnitForPut(body));
+
+        if (ok) {
+          await createStateIdsAndCommunicationRequestIds(latestSurveyUnit);
+        }
+
+        if ([400, 403, 404, 500].includes(status)) {
+          const { error: tempZoneError } = await postSurveyUnitByIdInTempZone(
+            id,
+            formatSurveyUnitForPut(body)
+          );
+          if (!tempZoneError) surveyUnitsInTempZone.push(id);
+          else throw new Error('Server is not responding');
+        }
+
+        if (error && ![400, 403, 404, 500].includes(status)) {
+          throw new Error('Server is not responding');
+        }
+      } catch {
+        throw new Error('Server is not responding');
+      }
+    })
+  );
   return surveyUnitsInTempZone;
-};
-
-const handleSurveyUnit = async (
-  surveyUnit: any,
-  surveyUnitsInTempZone: string[]
-): Promise<void> => {
-  const lastState = getSuTodoState(surveyUnit);
-  const { id } = surveyUnit;
-  const body = { ...surveyUnit, lastState };
-  const formattedBody = formatSurveyUnitForPut(body);
-
-  try {
-    const response = await tryUpdateSurveyUnit(id, formattedBody);
-
-    if (response.ok && response.data) {
-      await createStateIdsAndCommunicationRequestIds(response.data);
-    }
-
-    if (shouldPutInTempZone(response.status)) {
-      await handleTempZoneFallback(id, formattedBody, surveyUnitsInTempZone);
-    }
-
-    if (response.error && !shouldPutInTempZone(response.status)) {
-      throw new Error('Unhandled server error');
-    }
-  } catch (e) {
-    throw new Error(`Error during refreshToken: ${e}`);
-  }
-};
-
-const tryUpdateSurveyUnit = async (
-  id: string,
-  formattedBody: any
-): Promise<{
-  status?: number;
-  ok?: boolean;
-  data?: any;
-  error?: any;
-}> => {
-  try {
-    return await updateSurveyUnit(id, formattedBody);
-  } catch (err) {
-    const axiosError = err as AxiosError;
-
-    return {
-      status: parseInt(axiosError?.code || '-1'),
-      error: axiosError,
-      ok: false,
-    };
-  }
-};
-
-const shouldPutInTempZone = (status?: number): boolean =>
-  [400, 403, 404, 500].includes(status ?? -1);
-
-const handleTempZoneFallback = async (
-  id: string,
-  formattedBody: any,
-  surveyUnitsInTempZone: string[]
-) => {
-  const { error: tempZoneError } = await postSurveyUnitByIdInTempZone(id, formattedBody);
-
-  if (!tempZoneError) {
-    surveyUnitsInTempZone.push(id);
-  } else {
-    throw new Error('Server is not responding (temp zone fallback failed)');
-  }
 };
 
 const getUserData = async () => {

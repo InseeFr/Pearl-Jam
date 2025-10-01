@@ -19,8 +19,6 @@ import { Typography } from '../ui/Typography';
 import { surveyUnitStateEnum } from '../utils/enum/SUStateEnum';
 import { addNewState, getLastState, persistSurveyUnit } from '../utils/functions';
 import { useSurveyUnit } from '../utils/hooks/database';
-import { PreviousCollectCard } from 'ui/SurveyUnit/SurveyHistory/PreviousCollectCard';
-import { NextCollectCard } from 'ui/SurveyUnit/SurveyHistory/NextCollectCard';
 
 export function SurveyUnitPage() {
   const { id } = useParams<{ id: string }>();
@@ -70,37 +68,28 @@ export function SurveyUnitPage() {
     <>
       <SurveyUnitHeader surveyUnit={surveyUnit} />
       <SwipeableTabs>
-        {!!surveyUnit.previousContactHistory && (
-          <SwipeableTab label={D.goToPreviousCollect}>
-            <PreviousCollectCard previousCollectHistory={surveyUnit.previousContactHistory} />
-          </SwipeableTab>
-        )}
-        <SwipeableTab label={D.goToIdentificationPage}>
+        <SwipeableTab index={0} label={D.goToIdentificationPage}>
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
             <AddressCard surveyUnit={surveyUnit} />
             <IdentificationCard surveyUnit={surveyUnit} />
           </Box>
         </SwipeableTab>
-        <SwipeableTab label={D.goToContactPage}>
+        <SwipeableTab index={1} label={D.goToContactPage}>
           <Box sx={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '2rem' }}>
             <PersonsCard surveyUnit={surveyUnit} />
             <ContactsCard surveyUnit={surveyUnit} />
           </Box>
         </SwipeableTab>
-        <SwipeableTab label={D.goToCommunicationPage}>
+        <SwipeableTab index={2} label={D.goToCommunicationPage}>
           <CommunicationsCard surveyUnit={surveyUnit} />
         </SwipeableTab>
-        <SwipeableTab label={D.goToQuestionnairesPage}>
+        <SwipeableTab index={3} label={D.goToQuestionnairesPage}>
+          {/* <QuestionnaireCard surveyUnit={surveyUnit} /> */}
           <Questionnaires surveyUnit={surveyUnit} />
         </SwipeableTab>
-        <SwipeableTab label={D.goToCommentsPage}>
+        <SwipeableTab index={4} label={D.goToCommentsPage}>
           <CommentCard surveyUnit={surveyUnit} />
         </SwipeableTab>
-        {surveyUnit.nextContactHistory && (
-          <SwipeableTab label={D.goToNextCollect}>
-            <NextCollectCard surveyUnit={surveyUnit} />
-          </SwipeableTab>
-        )}
       </SwipeableTabs>
     </>
   );

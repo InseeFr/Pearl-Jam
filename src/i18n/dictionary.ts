@@ -25,7 +25,6 @@ import trackingMessage from './trackingMessage';
 import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
 import profileMessage from './profileMessage';
-import surveyHistoryMessage from './surveyHistoryMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -155,7 +154,6 @@ const dictionary = {
   ...profileMessage,
   ...stepNames,
   ...trackingMessage,
-  ...surveyHistoryMessage,
 };
 
 export default dictionary;
