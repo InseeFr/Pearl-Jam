@@ -10,20 +10,12 @@ import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { forwardRef, PropsWithChildren } from 'react';
-import {
-  Control,
-  Controller,
-  ControllerRenderProps,
-  FieldErrors,
-  FieldValues,
-} from 'react-hook-form';
+import { Control, Controller, ControllerRenderProps, FieldValues } from 'react-hook-form';
 import { RadioLine } from './RadioLine';
 import { Row } from './Row';
 import { Label, Typography } from './Typography';
-import { FormHelperText } from '@mui/material';
-import { ErrorMessage } from '@hookform/error-message';
 
-type FieldRowProps = {
+interface FieldRowProps {
   label: string; // Label displayed alongside the field
   maxWidth?: string | number; // Optional max width for the field
   checkbox?: boolean; // Determines if the field is a checkbox
@@ -31,10 +23,8 @@ type FieldRowProps = {
   type?: string;
   name?: string;
   options: { label: string; value: unknown }[];
-  helperText?: string;
-  errors?: FieldErrors<any>;
   [key: string]: any; // Spread operator for any additional props
-};
+}
 
 export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
   ({ label, maxWidth, checkbox, control, children, ...props }, ref) => {
@@ -86,15 +76,6 @@ export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
               fullWidth={!maxWidth}
               sx={{ maxWidth: maxWidth ? `${maxWidth}em` : undefined }}
               id={props.name}
-            />
-          )}
-          {props.helperText && (
-            <ErrorMessage
-              errors={props.errors}
-              name={props.name}
-              render={({ message }) => (
-                <FormHelperText sx={{ color: 'error.main', ml: 1 }}>{message}</FormHelperText>
-              )}
             />
           )}
         </Box>

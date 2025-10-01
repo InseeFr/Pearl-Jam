@@ -1,21 +1,22 @@
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import {
-  Children,
-  PropsWithChildren,
-  useState,
-  ReactNode,
-  isValidElement,
-  ReactElement,
-} from 'react';
-
+import { Children, PropsWithChildren, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import { v4 as uuidv4 } from 'uuid';
 
-export function SwipeableTab(props: Readonly<PropsWithChildren<{ label: string }>>) {
-  const { children } = props;
-  return <Box sx={{ p: 4 }}>{children}</Box>;
+export function SwipeableTab(props: Readonly<PropsWithChildren<{ index: number; label: string }>>) {
+  const { children, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      <Box sx={{ p: 4 }}>{children}</Box>
+    </div>
+  );
 }
 
 function a11yProps(index: number) {
@@ -25,7 +26,9 @@ function a11yProps(index: number) {
   };
 }
 
-export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
+export function SwipeableTabs({
+  children,
+}: Readonly<{ children: { props: { label: string } }[] }>) {
   const [value, setValue] = useState(0);
 
   const handleChange = (event: unknown, newValue: number) => {
@@ -35,29 +38,17 @@ export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
-
-  const validChildren = Children.toArray(children).filter(isValidElement);
-  const tabs = validChildren.map((child, index) => {
-    const el = child as ReactElement<{ label: string }>;
-    return <Tab key={uuidv4()} label={el.props.label} {...a11yProps(index)} />;
-  });
+  const tabs = Children.map(children, child => child.props.label);
 
   return (
     <>
       <Tabs className="navigation" value={value} onChange={handleChange}>
-        {tabs}
+        {tabs.map((tab, index) => (
+          <Tab key={index} label={tab} {...a11yProps(index)} />
+        ))}
       </Tabs>
       <SwipeableViews axis="x" index={value} onChangeIndex={handleChangeIndex}>
-        {validChildren.map((child, index) => (
-          <div
-            key={uuidv4()}
-            role="tabpanel"
-            id={`full-width-tabpanel-${index}`}
-            aria-labelledby={`full-width-tab-${index}`}
-          >
-            {child}
-          </div>
-        ))}
+        {children}
       </SwipeableViews>
     </>
   );
