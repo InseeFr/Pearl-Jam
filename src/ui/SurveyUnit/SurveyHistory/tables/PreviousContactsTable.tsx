@@ -1,4 +1,4 @@
-import D from 'i18n';
+import D from "i18n";
 import {
   Card,
   CardContent,
@@ -8,17 +8,18 @@ import {
   TableRow,
   TableCell,
   Typography,
-} from '@mui/material';
-import { Contact } from 'types/pearl';
-import { CustomTableCell } from './CustomTableCell';
-import { v4 as uuidv4 } from 'uuid';
-import { getAge } from 'utils/functions';
+} from "@mui/material";
+import { PreviousContactHistoryPerson } from "types/pearl";
+import { CustomTableCell } from "./CustomTableCell";
+import { getAge } from "utils/functions";
 
 type ContactsTableProps = {
-  contacts: readonly Contact[];
+  contacts: readonly PreviousContactHistoryPerson[];
 };
 
-export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>) {
+export function PreviousContactsTable({
+  contacts,
+}: Readonly<ContactsTableProps>) {
   return (
     <Card elevation={0}>
       <CardContent sx={{ ml: -4 }}>
@@ -30,9 +31,9 @@ export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>
                 D.collectTableFirstName,
                 D.collectTableAge,
                 D.preivousCollectTablePanel,
-              ].map(label => (
-                <TableCell key={label} style={{ backgroundColor: 'white' }}>
-                  <Typography fontWeight={600} color={'grey'}>
+              ].map((label) => (
+                <TableCell key={label} style={{ backgroundColor: "white" }}>
+                  <Typography fontWeight={600} color={"grey"}>
                     {label}
                   </Typography>
                 </TableCell>
@@ -40,8 +41,8 @@ export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>
             </TableRow>
           </TableHead>
           <TableBody>
-            {contacts.map(c => (
-              <TableRow key={uuidv4()}>
+            {contacts.map((c) => (
+              <TableRow key={`${c.title}${c.firstName}${c.birthdate}`}>
                 <CustomTableCell>{c.title}</CustomTableCell>
                 <CustomTableCell>{c.firstName}</CustomTableCell>
                 <CustomTableCell>{getAge(c.birthdate)}</CustomTableCell>

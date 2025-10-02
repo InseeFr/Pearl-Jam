@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { mediumRadioValues, reasonRadioValues, TITLES, typeRadioValues } from './constants';
+import { mediumRadioValues, reasonRadioValues, TITLES, typeRadioValues } from '../constants';
 
 const stringRequired = z
   .string({ required_error: 'Ce champs est requis' })

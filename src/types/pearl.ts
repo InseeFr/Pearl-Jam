@@ -1,16 +1,16 @@
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
-} from 'utils/enum/identifications/IdentificationsQuestions';
+} from "utils/enum/identifications/IdentificationsQuestions";
 import {
   ContactAttemptValue,
   ContactAttemptConfiguration,
   ContactAttemptMedium,
-} from 'utils/functions/contacts/ContactAttempt';
+} from "utils/functions/contacts/ContactAttempt";
 import {
   ContactOutcomeConfiguration,
   ContactOutcomeValue,
-} from 'utils/functions/contacts/ContactOutcome';
+} from "utils/functions/contacts/ContactOutcome";
 
 export type SurveyUnitPhoneNumber = {
   source: string;
@@ -29,6 +29,27 @@ export type SurveyUnitPerson = {
   favoriteEmail: boolean;
   privileged: boolean;
   phoneNumbers: SurveyUnitPhoneNumber[];
+};
+
+export type ContactHistoryPersonTitle = "MISTER" | "MISS";
+
+export type PreviousContactHistoryPerson = {
+  id?: number;
+  title: ContactHistoryPersonTitle;
+  firstName: string;
+  lastName: string;
+  birthdate?: number;
+  panel?: boolean;
+};
+
+export type NextContactHistoryPerson = {
+  id?: number;
+  title: ContactHistoryPersonTitle;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  email?: string;
+  preferredContact?: boolean;
 };
 
 type SurveyUnitAddress = {
@@ -72,7 +93,9 @@ type SurveyUnitSampleIdentifiers = {
   nograp: string;
 };
 
-export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId, string>>;
+export type SurveyUnitIdentification = Partial<
+  Record<IdentificationQuestionsId, string>
+>;
 
 export type SurveyUnitContactAttempt = {
   status: ContactAttemptValue;
@@ -81,7 +104,7 @@ export type SurveyUnitContactAttempt = {
 };
 
 export type SurveyUnitCommunicationRequest = {
-  emitter: 'INTERVIEWER' | 'TOOL';
+  emitter: "INTERVIEWER" | "TOOL";
   communicationTemplateId?: string;
   reason?: string;
   status: { date: number; status: string }[];
@@ -112,13 +135,13 @@ export type Contact = {
 
 export type PreviousContactHistory = {
   contactOutcomeValue: string;
-  persons: Contact[];
+  persons: PreviousContactHistoryPerson[];
   comment: string;
   priority: boolean;
 };
 
 export type NextContactHistory = {
-  persons: Contact[];
+  persons: NextContactHistoryPerson[];
 };
 
 export type SurveyUnit = {
@@ -152,7 +175,7 @@ export type SurveyUnit = {
   nextContactHistory?: NextContactHistory;
 };
 
-export type NotificationState = 'warning' | 'success' | 'error';
+export type NotificationState = "warning" | "success" | "error";
 export type Notification = {
   date: number;
   type: string;

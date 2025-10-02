@@ -9,22 +9,23 @@ import {
   Typography,
   Button,
   Stack,
-} from '@mui/material';
-import { CheckCircle, Delete, Edit, Add } from '@mui/icons-material';
-import { Contact, SurveyUnit } from 'types/pearl';
-import { CustomTableCell } from './CustomTableCell';
-import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
-import { useState } from 'react';
-import { DeleteConfirmationModal } from './DeleteConfirmationModal';
-import { ContactModal } from './ContactModal';
-import { v4 as uuidv4 } from 'uuid';
-import D from 'i18n';
+} from "@mui/material";
+import { CheckCircle, Delete, Edit, Add } from "@mui/icons-material";
+import { NextContactHistoryPerson, SurveyUnit } from "types/pearl";
+import { CustomTableCell } from "./CustomTableCell";
+import { surveyUnitIDBService } from "utils/indexeddb/services/surveyUnit-idb-service";
+import { useState } from "react";
+import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
+import { ContactModal } from "./ContactModal";
+import D from "i18n";
 
 type HouseholdTableProps = {
   surveyUnit: SurveyUnit;
 };
 
-export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>) {
+export function NextContactsTable({
+  surveyUnit,
+}: Readonly<HouseholdTableProps>) {
   const [selectedContactIndex, setSelectedContactIndex] = useState<number>(-1);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [modifyModalOpen, setModifyModalOpen] = useState(false);
@@ -38,7 +39,8 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   const handleConfirmDelete = () => {
     const newNextCollectHistory = {
       ...nextCollectHistory,
-      persons: nextCollectHistory?.persons.toSpliced(selectedContactIndex, 1) ?? [],
+      persons:
+        nextCollectHistory?.persons.toSpliced(selectedContactIndex, 1) ?? [],
     };
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
@@ -49,10 +51,15 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     setSelectedContactIndex(-1);
   };
 
-  const handleModify = (newContact: Contact) => {
+  const handleModify = (newContact: NextContactHistoryPerson) => {
     const newNextCollectHistory = {
       ...nextCollectHistory,
-      persons: nextCollectHistory?.persons.toSpliced(selectedContactIndex, 1, newContact) ?? [],
+      persons:
+        nextCollectHistory?.persons.toSpliced(
+          selectedContactIndex,
+          1,
+          newContact
+        ) ?? [],
     };
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
@@ -72,7 +79,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     setAddModalOpen(true);
   };
 
-  const handleAdd = (newContact: Contact) => {
+  const handleAdd = (newContact: NextContactHistoryPerson) => {
     setAddModalOpen(false);
     setSelectedContactIndex(-1);
 
@@ -98,7 +105,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             <TableHead>
               <TableRow
                 sx={{
-                  alignContent: 'center',
+                  alignContent: "center",
                 }}
               >
                 {[
@@ -108,8 +115,11 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                   D.tablePhone,
                   D.contactEmailLabel,
                   D.tableMailContact,
-                ].map(label => (
-                  <TableCell key={label} sx={{ backgroundColor: 'transparent', textAlign: 'left' }}>
+                ].map((label) => (
+                  <TableCell
+                    key={label}
+                    sx={{ backgroundColor: "transparent", textAlign: "left" }}
+                  >
                     <Typography fontWeight={600} color="grey.700">
                       {label}
                     </Typography>
@@ -120,11 +130,11 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             <TableBody>
               {nextCollectHistory?.persons.map((c, i) => (
                 <TableRow
-                  key={uuidv4()}
+                  key={c.id}
                   hover
                   sx={{
-                    '&:hover': {
-                      backgroundColor: 'transparent !important',
+                    "&:hover": {
+                      backgroundColor: "transparent !important",
                     },
                   }}
                 >
@@ -133,16 +143,24 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                   <CustomTableCell>{c.firstName}</CustomTableCell>
                   <CustomTableCell>{c.phoneNumber}</CustomTableCell>
                   <CustomTableCell>{c.email}</CustomTableCell>
-                  <TableCell sx={{ backgroundColor: 'transparent', textAlign: 'center' }}>
-                    {c.panel && <CheckCircle fontSize="medium" color="success" />}
+                  <TableCell
+                    sx={{ backgroundColor: "transparent", textAlign: "center" }}
+                  >
+                    {c.preferredContact && (
+                      <CheckCircle fontSize="medium" color="success" />
+                    )}
                   </TableCell>
                   <TableCell
                     sx={{
-                      backgroundColor: 'transparent',
-                      textAlign: 'center',
+                      backgroundColor: "transparent",
+                      textAlign: "center",
                     }}
                   >
-                    <Button onClick={() => handleModifyClick(i)} size="small" variant="contained">
+                    <Button
+                      onClick={() => handleModifyClick(i)}
+                      size="small"
+                      variant="contained"
+                    >
                       <Edit fontSize="small" />
                       <Typography fontWeight={600}>{D.edit}</Typography>
                     </Button>
@@ -167,17 +185,19 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             variant="contained"
             startIcon={<Add />}
             sx={{
-              bgcolor: 'primary.dark',
-              textTransform: 'none',
+              bgcolor: "primary.dark",
+              textTransform: "none",
             }}
           >
-            <Typography fontWeight={600}>{D.addContact}</Typography>{' '}
+            <Typography fontWeight={600}>{D.addContact}</Typography>{" "}
           </Button>
         </Stack>
       </CardContent>
       <DeleteConfirmationModal
         open={deleteModalOpen}
-        contactName={nextCollectHistory?.persons[selectedContactIndex]?.firstName}
+        contactName={
+          nextCollectHistory?.persons[selectedContactIndex]?.firstName
+        }
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
       />
