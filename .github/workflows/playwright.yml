@@ -14,8 +14,6 @@ jobs:
         with:
           node-version: lts/*
       - name: Run Docker Compose
-        env:
-          NODE_OPTIONS: --no-experimental-strip-types
         run: |
           docker compose --env-file ./.env.docker --profile playwright up -d
           yarn

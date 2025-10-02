@@ -1,6 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
+test.use({ locale: 'fr-FR', viewport: { width: 1920, height: 1080 } });
+
 ['/'].forEach(url => {
   test(`Should check accessibilituy for url ${url}`, async ({ page }) => {
     await page.goto('/');
