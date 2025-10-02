@@ -15,7 +15,7 @@ describe('useQueenListener', () => {
       detail: {
         type: 'QUEEN',
         command: 'CLOSE_QUEEN',
-        surveyUnit: surveyUnitID,
+        interrogationId: surveyUnitID,
         state: 'COMPLETED',
       },
     });
@@ -41,8 +41,8 @@ describe('useQueenListener', () => {
     const event = new CustomEvent('QUEEN', {
       detail: {
         type: 'QUEEN',
-        command: 'UPDATE_SURVEY_UNIT',
-        surveyUnit: surveyUnitID,
+        command: 'UPDATE_STATE',
+        interrogationId: surveyUnitID,
         state: 'COMPLETED',
       },
     });

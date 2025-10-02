@@ -54,10 +54,10 @@ const handleQueenEvent = (redirect: (url: string) => void) => async (event: Quee
   if (type === 'QUEEN') {
     switch (command) {
       case 'CLOSE_QUEEN':
-        closeQueen(redirect)(other.surveyUnit);
+        closeQueen(redirect)(other.interrogationId);
         break;
-      case 'UPDATE_SURVEY_UNIT':
-        await updateSurveyUnit(other.surveyUnit, other.state);
+      case 'UPDATE_STATE':
+        await updateSurveyUnit(other.interrogationId, other.state);
         window.dispatchEvent(new CustomEvent('pearl-update'));
         break;
       case 'UPDATE_SYNCHRONIZE':
@@ -80,7 +80,7 @@ declare global {
 type QueenEventDetail = {
   type: string;
   command: string;
-  surveyUnit: string;
+  interrogationId: string;
   state: QuestionnaireStateType;
 };
 interface QueenEvent extends CustomEvent<QueenEventDetail> {}
