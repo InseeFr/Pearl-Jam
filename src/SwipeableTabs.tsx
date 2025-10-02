@@ -9,9 +9,7 @@ import {
   isValidElement,
   ReactElement,
 } from 'react';
-
 import SwipeableViews from 'react-swipeable-views';
-import { v4 as uuidv4 } from 'uuid';
 
 export function SwipeableTab(props: Readonly<PropsWithChildren<{ label: string }>>) {
   const { children } = props;
@@ -39,7 +37,7 @@ export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
   const validChildren = Children.toArray(children).filter(isValidElement);
   const tabs = validChildren.map((child, index) => {
     const el = child as ReactElement<{ label: string }>;
-    return <Tab key={uuidv4()} label={el.props.label} {...a11yProps(index)} />;
+    return <Tab key={index} label={el.props.label} {...a11yProps(index)} />;
   });
 
   return (
@@ -50,7 +48,7 @@ export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
       <SwipeableViews axis="x" index={value} onChangeIndex={handleChangeIndex}>
         {validChildren.map((child, index) => (
           <div
-            key={uuidv4()}
+            key={index} // 🔥 stable across renders
             role="tabpanel"
             id={`full-width-tabpanel-${index}`}
             aria-labelledby={`full-width-tab-${index}`}
