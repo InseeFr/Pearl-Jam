@@ -12,7 +12,7 @@ export const convertSUStateInToDo = (surveyUnit: SurveyUnit, suState: StateValue
   }
 
   if (surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'QUESTIONNAIRE_INIT')) {
-    return toDoEnum.WEBSURVEY;
+    return toDoEnum.WEBFINALIZE;
   }
 
   if (

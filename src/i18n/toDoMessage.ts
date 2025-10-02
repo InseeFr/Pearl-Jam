@@ -10,16 +10,20 @@ const toDoMessage = {
     sq: 'Për të gjetur/Kontaktuar',
   },
   toDoSurvey: {
-    fr: 'A enquêter enquêteur',
-    en: 'To investigate interviewer',
-    sq: 'Për të hetuar Intervistuesi',
-  },
-  toDoWebSurvey: {
-    fr: 'A enquêter internet',
-    en: 'To investigate internet',
+    fr: 'A enquêter',
+    en: 'To investigate',
     sq: 'Për të hetuar',
   },
-  toDoFinalize: { fr: 'A finaliser', en: 'To finalize', sq: 'Për të përfunduar' },
+  toDoWebFinalize: {
+    fr: 'A finaliser internet',
+    en: 'To finalize internet',
+    sq: 'Për të përfunduar',
+  },
+  toDoFinalize: {
+    fr: 'A finaliser enquêteur',
+    en: 'To finalize interviewer',
+    sq: 'Për të përfunduar Intervistuesi',
+  },
   toDoTransmit: { fr: 'A transmettre', en: 'To be forwarded', sq: 'Për të transmetuar' },
   toDoSynchronize: { fr: 'A synchroniser', en: 'To synchronize', sq: 'Për të sinkronizuar' },
   toDoTerminated: {
