@@ -3,7 +3,7 @@ name: Release & Docker
 on:
   push:
     branches:
-      - 'master'
+      - "main"
 
 jobs:
   install:
@@ -23,8 +23,8 @@ jobs:
         id: version
         uses: notiz-dev/github-action-json-property@release
         with:
-          path: 'package.json'
-          prop_path: 'version'
+          path: "package.json"
+          prop_path: "version"
       - run: echo ${{steps.version.outputs.prop}}
       - name: Release snapshot
         id: release-snapshot
@@ -44,8 +44,8 @@ jobs:
         id: version
         uses: notiz-dev/github-action-json-property@release
         with:
-          path: 'package.json'
-          prop_path: 'version'
+          path: "package.json"
+          prop_path: "version"
       - run: echo ${{steps.version.outputs.prop}}
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
