@@ -49,7 +49,7 @@ export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
       <SwipeableViews axis="x" index={value} onChangeIndex={handleChangeIndex}>
         {validChildren.map((child, index) => (
           <div
-            key={index} // 🔥 stable across renders
+            key={child.key}
             role="tabpanel"
             id={`full-width-tabpanel-${index}`}
             aria-labelledby={`full-width-tab-${index}`}
