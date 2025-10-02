@@ -70,11 +70,15 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               <Row gap={1}>
                 <StickyNote2Icon fontSize="large" />
                 <Typography component="h2" variant="xl" fontWeight={700}>
-                 {D.openQuestionnaire}
+                  {D.openQuestionnaire}
                 </Typography>
               </Row>
 
-              {isAvailable && isQuestionnaireCompleted ? <StateChip progress={1} /> : (isAvailable && isQuestionnaireInit && <StateChip progress={2} />)}
+              {isAvailable && isQuestionnaireCompleted ? (
+                <StateChip progress={1} />
+              ) : (
+                isAvailable && isQuestionnaireInit && <StateChip progress={2} />
+              )}
               {isAvailable && !isQuestionnaireInit && !isQuestionnaireCompleted && (
                 <StateChip progress={-1} />
               )}
@@ -107,7 +111,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               </Row>
             )}
           </Stack>
-          {true && (
+          {import.meta.env.VITE_ARTICULATION && (
             <Stack gap={3}>
               {/* Title */}
               <Row justifyContent="space-between">
@@ -120,7 +124,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               </Row>
 
               {/* Table */}
-              {true && (
+              {articulationHook && (
                 <ArticulationTable id={id} useArticulationTable={articulationHook} />
               )}
             </Stack>
