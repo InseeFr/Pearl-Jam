@@ -37,7 +37,6 @@ export function Header() {
     loadNotifications();
   }, []);
 
-  console.log(ref.current);
   return (
     <Row
       component="header"

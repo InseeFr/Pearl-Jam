@@ -15,7 +15,6 @@ import BlockIcon from '@mui/icons-material/Block';
 import D from 'i18n';
 import { SurveyUnit } from 'types/pearl';
 import { isQuestionnaireAvailable } from '../../utils/functions';
-import { useArticulationTable } from 'dramaQueen/useArticulationTable';
 import { Box, Table, TableBody, TableCell, TableRow } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import React, {useEffect, useState} from 'react';
