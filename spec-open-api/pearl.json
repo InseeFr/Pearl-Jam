@@ -1,7 +1,19 @@
 {
   "openapi": "3.1.0",
-  "info": { "title": "Pearl-Jam-Back-Office", "version": "5.9.0" },
-  "security": [{ "oauth2": ["read", "write"] }],
+  "info": {
+    "title": "Pearl-Jam-Back-Office",
+    "version": "5.6.4"
+  },
+  "servers": [
+    {
+      "url": "https://api-collecte-enqueteurs-enquetes.developpement4.insee.fr"
+    }
+  ],
+  "security": [
+    {
+      "oauth2": ["read", "write"]
+    }
+  ],
   "tags": [
     { "name": "04. Interviewers", "description": "Endpoints for interviewers" },
     { "name": "07. State-count", "description": "Endpoints for state counts" },
@@ -185,7 +197,11 @@
             "schema": { "type": "string" }
           }
         ],
-        "responses": { "200": { "description": "OK" } }
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/survey-unit/{id}/viewed": {
@@ -276,7 +292,11 @@
           },
           "required": true
         },
-        "responses": { "200": { "description": "OK" } }
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/survey-unit/{id}/closing-cause/{closingCause}": {
@@ -295,7 +315,10 @@
             "name": "closingCause",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "enum": ["NPA", "NPI", "NPX", "ROW"] }
+            "schema": {
+              "type": "string",
+              "enum": ["NPA", "NPI", "NPX", "ROW"]
+            }
           }
         ],
         "responses": {
@@ -322,7 +345,10 @@
             "name": "closingCause",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "enum": ["NPA", "NPI", "NPX", "ROW"] }
+            "schema": {
+              "type": "string",
+              "enum": ["NPA", "NPI", "NPX", "ROW"]
+            }
           }
         ],
         "responses": {
@@ -364,7 +390,10 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int64" }
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           },
           {
             "name": "idep",
@@ -391,7 +420,10 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int64" }
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           },
           {
             "name": "idep",
@@ -449,7 +481,9 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/InterviewerContextDto" }
+              "schema": {
+                "$ref": "#/components/schemas/InterviewerContextDto"
+              }
             }
           },
           "required": true
@@ -497,7 +531,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "minLength": 1 }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -520,7 +556,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "minLength": 1 }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -531,7 +569,11 @@
           },
           "required": true
         },
-        "responses": { "200": { "description": "OK" } }
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       },
       "delete": {
         "tags": ["01. Campaigns"],
@@ -542,16 +584,25 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "minLength": 1 }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "force",
             "in": "query",
             "required": false,
-            "schema": { "type": "boolean", "default": false }
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
-        "responses": { "200": { "description": "OK" } }
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/campaign/{idCampaign}/organizational-unit/{idOu}/visibility": {
@@ -564,13 +615,17 @@
             "name": "idCampaign",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "minLength": 1 }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "idOu",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "minLength": 1 }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -581,7 +636,11 @@
           },
           "required": true
         },
-        "responses": { "200": { "description": "OK" } }
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/verify-name": {
@@ -649,7 +708,10 @@
             "name": "extended",
             "in": "query",
             "required": false,
-            "schema": { "type": "boolean", "default": false }
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -659,7 +721,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/SurveyUnitDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/SurveyUnitDto"
+                  }
                 }
               }
             }
@@ -833,7 +897,9 @@
             "application/json": {
               "schema": {
                 "type": "array",
-                "items": { "$ref": "#/components/schemas/UserContextDto" }
+                "items": {
+                  "$ref": "#/components/schemas/UserContextDto"
+                }
               }
             }
           },
@@ -881,7 +947,11 @@
           },
           "required": true
         },
-        "responses": { "200": { "description": "OK" } }
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/interviewers": {
@@ -896,7 +966,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/InterviewerDto" },
+                  "items": {
+                    "$ref": "#/components/schemas/InterviewerDto"
+                  },
                   "uniqueItems": true
                 }
               }
@@ -942,7 +1014,11 @@
           },
           "required": true
         },
-        "responses": { "200": { "description": "OK" } }
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/campaigns/{id}/ongoing": {
@@ -1048,7 +1124,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/MessageDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/MessageDto"
+                  }
                 }
               }
             }
@@ -1068,7 +1146,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/MessageDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/MessageDto"
+                  }
                 }
               }
             }
@@ -1086,7 +1166,10 @@
             "name": "date",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "format": "int64" }
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
         ],
         "responses": {
@@ -1096,7 +1179,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/StateCountDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/StateCountDto"
+                  }
                 }
               }
             }
@@ -1124,7 +1209,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/CampaignDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/CampaignDto"
+                  }
                 }
               }
             }
@@ -1171,7 +1258,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/CampaignDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/CampaignDto"
+                  }
                 }
               }
             }
@@ -1184,7 +1273,11 @@
         "tags": ["09. HealthCheck"],
         "summary": "Healthcheck, check if api is alive",
         "operationId": "healthCheck",
-        "responses": { "200": { "description": "OK" } }
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/enum/state": {
@@ -1338,7 +1431,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/CampaignDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/CampaignDto"
+                  }
                 }
               }
             }
@@ -1366,7 +1461,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/ReferentDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/ReferentDto"
+                  }
                 }
               }
             }
@@ -1409,7 +1506,10 @@
             "name": "date",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "format": "int64" }
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
         ],
         "responses": {
@@ -1419,7 +1519,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/StateCountDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/StateCountDto"
+                  }
                 }
               }
             }
@@ -1437,7 +1539,10 @@
             "name": "date",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "format": "int64" }
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
         ],
         "responses": {
@@ -1489,7 +1594,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "minLength": 1 }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1562,7 +1669,10 @@
             "name": "date",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "format": "int64" }
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
         ],
         "responses": {
@@ -1857,7 +1967,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/InterviewerDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/InterviewerDto"
+                  }
                 }
               }
             }
@@ -1881,7 +1993,10 @@
             "name": "date",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "format": "int64" }
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
         ],
         "responses": {
@@ -1891,7 +2006,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/StateCountDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/StateCountDto"
+                  }
                 }
               }
             }
@@ -1909,7 +2026,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "minLength": 1 }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2007,7 +2126,9 @@
               "*/*": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/CampaignDto" }
+                  "items": {
+                    "$ref": "#/components/schemas/CampaignDto"
+                  }
                 }
               }
             }
@@ -2082,49 +2203,95 @@
           },
           "localOrganizationUnits": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/OrganizationUnitDto" }
+            "items": {
+              "$ref": "#/components/schemas/OrganizationUnitDto"
+            }
           }
         }
       },
       "AddressDto": {
         "type": "object",
         "properties": {
-          "l1": { "type": "string" },
-          "l2": { "type": "string" },
-          "l3": { "type": "string" },
-          "l4": { "type": "string" },
-          "l5": { "type": "string" },
-          "l6": { "type": "string" },
-          "l7": { "type": "string" },
-          "elevator": { "type": "boolean" },
-          "building": { "type": "string" },
-          "floor": { "type": "string" },
-          "door": { "type": "string" },
-          "staircase": { "type": "string" },
-          "cityPriorityDistrict": { "type": "boolean" }
+          "l1": {
+            "type": "string"
+          },
+          "l2": {
+            "type": "string"
+          },
+          "l3": {
+            "type": "string"
+          },
+          "l4": {
+            "type": "string"
+          },
+          "l5": {
+            "type": "string"
+          },
+          "l6": {
+            "type": "string"
+          },
+          "l7": {
+            "type": "string"
+          },
+          "elevator": {
+            "type": "boolean"
+          },
+          "building": {
+            "type": "string"
+          },
+          "floor": {
+            "type": "string"
+          },
+          "door": {
+            "type": "string"
+          },
+          "staircase": {
+            "type": "string"
+          },
+          "cityPriorityDistrict": {
+            "type": "boolean"
+          }
         }
       },
       "CommentDto": {
         "type": "object",
         "properties": {
-          "type": { "type": "string", "enum": ["INTERVIEWER", "MANAGEMENT"] },
-          "value": { "type": "string", "maxLength": 999, "minLength": 0 }
+          "type": {
+            "type": "string",
+            "enum": ["INTERVIEWER", "MANAGEMENT"]
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 999,
+            "minLength": 0
+          }
         },
         "required": ["type", "value"]
       },
       "CommunicationRequestCreateDto": {
         "type": "object",
         "properties": {
-          "communicationTemplateId": { "type": "string" },
-          "creationTimestamp": { "type": "integer", "format": "int64" },
-          "reason": { "type": "string", "enum": ["REFUSAL", "UNREACHABLE"] }
+          "meshuggahId": {
+            "type": "string"
+          },
+          "creationTimestamp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["REFUSAL", "UNREACHABLE"]
+          }
         },
-        "required": ["communicationTemplateId", "creationTimestamp", "reason"]
+        "required": ["creationTimestamp", "meshuggahId", "reason"]
       },
       "ContactAttemptDto": {
         "type": "object",
         "properties": {
-          "date": { "type": "integer", "format": "int64" },
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -2140,27 +2307,19 @@
               "PUN"
             ]
           },
-          "medium": { "type": "string", "enum": ["TEL", "EMAIL", "FIELD"] }
+          "medium": {
+            "type": "string",
+            "enum": ["TEL", "EMAIL", "FIELD"]
+          }
         }
-      },
-      "ContactHistoryPersonDto": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "integer", "format": "int64" },
-          "title": { "type": "string", "enum": ["MISTER", "MISS"] },
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "phoneNumber": { "type": "string", "pattern": "\\+?\\d+" },
-          "email": { "type": "string" },
-          "birthdate": { "type": "integer", "format": "int64" },
-          "panel": { "type": "boolean" }
-        },
-        "required": ["firstName", "lastName", "title"]
       },
       "ContactOutcomeDto": {
         "type": "object",
         "properties": {
-          "date": { "type": "integer", "format": "int64" },
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
           "type": {
             "type": "string",
             "enum": [
@@ -2210,19 +2369,40 @@
       "PersonDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "format": "int64" },
-          "title": { "type": "string", "enum": ["MISTER", "MISS"] },
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "email": { "type": "string" },
-          "birthdate": { "type": "integer", "format": "int64" },
-          "privileged": { "type": "boolean" },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string",
+            "enum": ["MISTER", "MISS"]
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "birthdate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "favoriteEmail": {
+            "type": "boolean"
+          },
+          "privileged": {
+            "type": "boolean"
+          },
           "phoneNumbers": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/PhoneNumberDto" }
+            "items": {
+              "$ref": "#/components/schemas/PhoneNumberDto"
+            }
           }
-        },
-        "required": ["firstName", "lastName", "title"]
+        }
       },
       "PhoneNumberDto": {
         "type": "object",
@@ -2280,8 +2460,14 @@
       "StateDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "format": "int64" },
-          "date": { "type": "integer", "format": "int64" },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
           "type": {
             "type": "string",
             "enum": [
@@ -2324,7 +2510,15 @@
           },
           "contactAttempts": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/ContactAttemptDto" }
+            "items": {
+              "$ref": "#/components/schemas/ContactAttemptDto"
+            }
+          },
+          "contactOutcome": {
+            "$ref": "#/components/schemas/ContactOutcomeDto"
+          },
+          "identification": {
+            "$ref": "#/components/schemas/RawIdentificationDto"
           },
           "contactOutcome": {
             "$ref": "#/components/schemas/ContactOutcomeDto"
@@ -2346,11 +2540,23 @@
       "CommunicationRequestResponseDto": {
         "type": "object",
         "properties": {
-          "communicationTemplateId": { "type": "string" },
-          "campaignId": { "type": "string" },
-          "meshuggahId": { "type": "string" },
-          "reason": { "type": "string", "enum": ["REFUSAL", "UNREACHABLE"] },
-          "emitter": { "type": "string", "enum": ["TOOL", "INTERVIEWER"] },
+          "communicationTemplateId": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": "string"
+          },
+          "meshuggahId": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["REFUSAL", "UNREACHABLE"]
+          },
+          "emitter": {
+            "type": "string",
+            "enum": ["TOOL", "INTERVIEWER"]
+          },
           "status": {
             "type": "array",
             "items": {
@@ -2362,7 +2568,10 @@
       "CommunicationRequestStatusDto": {
         "type": "object",
         "properties": {
-          "date": { "type": "integer", "format": "int64" },
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -2421,17 +2630,47 @@
       "SampleIdentifiersDto": {
         "type": "object",
         "properties": {
-          "bs": { "type": "integer", "format": "int32" },
-          "ec": { "type": "string" },
-          "le": { "type": "integer", "format": "int32" },
-          "noi": { "type": "integer", "format": "int32" },
-          "numfa": { "type": "integer", "format": "int32" },
-          "rges": { "type": "integer", "format": "int32" },
-          "ssech": { "type": "integer", "format": "int32" },
-          "nolog": { "type": "integer", "format": "int32" },
-          "nole": { "type": "integer", "format": "int32" },
-          "autre": { "type": "string" },
-          "nograp": { "type": "string" }
+          "bs": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ec": {
+            "type": "string"
+          },
+          "le": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "noi": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numfa": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rges": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ssech": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nolog": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nole": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "autre": {
+            "type": "string"
+          },
+          "nograp": {
+            "type": "string"
+          }
         }
       },
       "SurveyUnitDetailDto": {
@@ -2459,7 +2698,15 @@
           },
           "contactAttempts": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/ContactAttemptDto" }
+            "items": {
+              "$ref": "#/components/schemas/ContactAttemptDto"
+            }
+          },
+          "contactOutcome": {
+            "$ref": "#/components/schemas/ContactOutcomeDto"
+          },
+          "identification": {
+            "$ref": "#/components/schemas/IdentificationDto"
           },
           "contactOutcome": {
             "$ref": "#/components/schemas/ContactOutcomeDto"
@@ -2484,18 +2731,33 @@
       "InterviewerContextDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "email": { "type": "string" },
-          "phoneNumber": { "type": "string" },
-          "title": { "type": "string", "enum": ["MISTER", "MISS"] }
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "enum": ["MISTER", "MISS"]
+          }
         }
       },
       "CampaignUpdateDto": {
         "type": "object",
         "properties": {
-          "campaignLabel": { "type": "string", "minLength": 1 },
+          "campaignLabel": {
+            "type": "string"
+          },
           "visibilities": {
             "type": "array",
             "items": {
@@ -2522,10 +2784,18 @@
       "ReferentDto": {
         "type": "object",
         "properties": {
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "phoneNumber": { "type": "string" },
-          "role": { "type": "string" }
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
         }
       },
       "VisibilityCampaignUpdateDto": {
@@ -2571,11 +2841,17 @@
       "ClosingCauseDto": {
         "type": "object",
         "properties": {
-          "date": { "type": "integer", "format": "int64" },
-          "type": { "type": "string", "enum": ["NPA", "NPI", "NPX", "ROW"] }
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["NPA", "NPI", "NPX", "ROW"]
+          }
         }
       },
-      "SurveyUnitCreationDto": {
+      "SurveyUnitContextDto": {
         "type": "object",
         "properties": {
           "id": { "type": "string" },
@@ -2597,7 +2873,18 @@
           },
           "contactAttempts": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/ContactAttemptDto" }
+            "items": {
+              "$ref": "#/components/schemas/ContactAttemptDto"
+            }
+          },
+          "contactOutcome": {
+            "$ref": "#/components/schemas/ContactOutcomeDto"
+          },
+          "closingCause": {
+            "$ref": "#/components/schemas/ClosingCauseDto"
+          },
+          "identification": {
+            "$ref": "#/components/schemas/RawIdentificationDto"
           },
           "contactOutcome": {
             "$ref": "#/components/schemas/ContactOutcomeDto"
@@ -2608,7 +2895,9 @@
           },
           "comments": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/CommentDto" },
+            "items": {
+              "$ref": "#/components/schemas/CommentDto"
+            },
             "uniqueItems": true
           },
           "contactHistory": {
@@ -2619,11 +2908,17 @@
       "SurveyUnitInterviewerLinkDto": {
         "type": "object",
         "properties": {
-          "surveyUnitId": { "type": "string" },
-          "interviewerId": { "type": "string" }
+          "surveyUnitId": {
+            "type": "string"
+          },
+          "interviewerId": {
+            "type": "string"
+          }
         }
       },
-      "JsonNode": {},
+      "JsonNode": {
+        "type": "object"
+      },
       "OrganizationUnitContextDto": {
         "type": "object",
         "properties": {
@@ -2651,31 +2946,58 @@
           },
           "localOrganizationUnits": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/OrganizationUnitDto" }
+            "items": {
+              "$ref": "#/components/schemas/OrganizationUnitDto"
+            }
           }
         }
       },
       "MessageDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "format": "int64" },
-          "text": { "type": "string" },
-          "sender": { "type": "string" },
-          "recipients": { "type": "array", "items": { "type": "string" } },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "text": {
+            "type": "string"
+          },
+          "sender": {
+            "type": "string"
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "typedRecipients": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/VerifyNameResponseDto" }
+            "items": {
+              "$ref": "#/components/schemas/VerifyNameResponseDto"
+            }
           },
-          "date": { "type": "integer", "format": "int64" },
-          "status": { "type": "string" }
+          "date": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "type": "string"
+          }
         }
       },
       "VerifyNameResponseDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "type": { "type": "string" },
-          "label": { "type": "string" }
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
         }
       },
       "MailDto": {
@@ -2689,8 +3011,12 @@
       "CampaignCreateDto": {
         "type": "object",
         "properties": {
-          "campaign": { "type": "string", "minLength": 1 },
-          "campaignLabel": { "type": "string", "minLength": 1 },
+          "campaign": {
+            "type": "string"
+          },
+          "campaignLabel": {
+            "type": "string"
+          },
           "visibilities": {
             "type": "array",
             "items": {
@@ -2739,10 +3065,12 @@
             "default": false,
             "description": "Is campaign data sensitive"
           },
-          "collectNextContacts": {
-            "type": "boolean",
-            "default": false,
-            "description": "Allow collection of future contacts data"
+          "contactAttemptConfiguration": {
+            "type": "string",
+            "enum": ["F2F", "TEL"]
+          },
+          "sensitivity": {
+            "type": "boolean"
           }
         },
         "required": ["campaign", "campaignLabel", "visibilities"]
@@ -2750,11 +3078,22 @@
       "CommunicationTemplateCreateDto": {
         "type": "object",
         "properties": {
-          "meshuggahId": { "type": "string" },
-          "medium": { "type": "string", "enum": ["LETTER", "EMAIL"] },
-          "type": { "type": "string", "enum": ["REMINDER", "NOTICE"] }
+          "campaignId": {
+            "type": "string"
+          },
+          "meshuggahId": {
+            "type": "string"
+          },
+          "medium": {
+            "type": "string",
+            "enum": ["LETTER", "EMAIL"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["REMINDER", "NOTICE"]
+          }
         },
-        "required": ["medium", "meshuggahId", "type"]
+        "required": ["campaignId", "medium", "meshuggahId", "type"]
       },
       "VisibilityCampaignCreateDto": {
         "type": "object",
@@ -2774,8 +3113,38 @@
             "default": false,
             "description": "Allow letter sending feature"
           },
-          "mail": { "type": "string" },
-          "tel": { "type": "string" }
+          "interviewerStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "identificationPhaseStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionStartDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionEndDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "organizationalUnit": {
+            "type": "string"
+          },
+          "useLetterCommunication": {
+            "type": "boolean"
+          },
+          "mail": {
+            "type": "string"
+          },
+          "tel": {
+            "type": "string"
+          }
         },
         "required": [
           "collectionEndDate",
@@ -2844,9 +3213,15 @@
       "InterviewerDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "interviewerFirstName": { "type": "string" },
-          "interviewerLastName": { "type": "string" }
+          "id": {
+            "type": "string"
+          },
+          "interviewerFirstName": {
+            "type": "string"
+          },
+          "interviewerLastName": {
+            "type": "string"
+          }
         }
       },
       "SurveyUnitCampaignDto": {
@@ -2962,7 +3337,12 @@
           },
           "campaignStats": {
             "type": "array",
-            "items": { "type": "array", "items": {} },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
             "writeOnly": true
           }
         }
@@ -3003,11 +3383,23 @@
       "CommunicationTemplateResponseDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "campaignId": { "type": "string" },
-          "meshuggahId": { "type": "string" },
-          "medium": { "type": "string", "enum": ["LETTER", "EMAIL"] },
-          "type": { "type": "string", "enum": ["REMINDER", "NOTICE"] }
+          "id": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": "string"
+          },
+          "meshuggahId": {
+            "type": "string"
+          },
+          "medium": {
+            "type": "string",
+            "enum": ["LETTER", "EMAIL"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["REMINDER", "NOTICE"]
+          }
         }
       },
       "SurveyUnitInterviewerResponseDto": {
@@ -3036,7 +3428,15 @@
           },
           "contactAttempts": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/ContactAttemptDto" }
+            "items": {
+              "$ref": "#/components/schemas/ContactAttemptDto"
+            }
+          },
+          "contactOutcome": {
+            "$ref": "#/components/schemas/ContactOutcomeDto"
+          },
+          "identification": {
+            "$ref": "#/components/schemas/IdentificationDto"
           },
           "contactOutcome": {
             "$ref": "#/components/schemas/ContactOutcomeDto"
@@ -3066,17 +3466,109 @@
       },
       "HabilitationDto": {
         "type": "object",
-        "properties": { "habilitated": { "type": "boolean" } }
+        "properties": {
+          "habilitated": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ContactOutcomeTypeCountDto": {
+        "type": "object",
+        "properties": {
+          "idDem": {
+            "type": "string"
+          },
+          "labelDem": {
+            "type": "string"
+          },
+          "campaign": {
+            "$ref": "#/components/schemas/CampaignDto"
+          },
+          "inaCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "refCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "impCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ucdCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "utrCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "alaCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dcdCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nuhCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dukCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "duuCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "noaCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "CampaignSensitivityDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sensitivity": {
+            "type": "boolean"
+          }
+        },
+        "required": ["id"]
       },
       "CampaignResponseDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "campaign": { "type": "string" },
-          "campaignLabel": { "type": "string" },
+          "campaign": {
+            "type": "string"
+          },
+          "campaignLabel": {
+            "type": "string"
+          },
           "visibilities": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/VisibilityCampaignDto" }
+            "items": {
+              "$ref": "#/components/schemas/VisibilityCampaignDto"
+            }
+          },
+          "referents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReferentDto"
+            }
+          },
+          "email": {
+            "type": "string"
           },
           "referents": {
             "type": "array",
@@ -3127,56 +3619,52 @@
           "tel": { "type": "string" }
         }
       },
-      "ContactOutcomeTypeCountDto": {
-        "type": "object",
-        "properties": {
-          "idDem": { "type": "string" },
-          "labelDem": { "type": "string" },
-          "campaign": { "$ref": "#/components/schemas/CampaignDto" },
-          "inaCount": { "type": "integer", "format": "int64" },
-          "refCount": { "type": "integer", "format": "int64" },
-          "impCount": { "type": "integer", "format": "int64" },
-          "ucdCount": { "type": "integer", "format": "int64" },
-          "utrCount": { "type": "integer", "format": "int64" },
-          "alaCount": { "type": "integer", "format": "int64" },
-          "dcdCount": { "type": "integer", "format": "int64" },
-          "nuhCount": { "type": "integer", "format": "int64" },
-          "dukCount": { "type": "integer", "format": "int64" },
-          "duuCount": { "type": "integer", "format": "int64" },
-          "noaCount": { "type": "integer", "format": "int64" },
-          "total": { "type": "integer", "format": "int64" }
-        }
-      },
-      "CampaignSensitivityDto": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string", "minLength": 1 },
-          "sensitivity": { "type": "boolean" }
-        },
-        "required": ["id"]
-      },
       "StateCountCampaignDto": {
         "type": "object",
         "properties": {
           "organizationUnits": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/StateCountDto" }
+            "items": {
+              "$ref": "#/components/schemas/StateCountDto"
+            }
           },
-          "france": { "$ref": "#/components/schemas/StateCountDto" }
+          "france": {
+            "$ref": "#/components/schemas/StateCountDto"
+          }
         }
       },
       "CountDto": {
         "type": "object",
-        "properties": { "count": { "type": "integer", "format": "int32" } }
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
       },
       "ClosingCauseCountDto": {
         "type": "object",
         "properties": {
-          "npiCount": { "type": "integer", "format": "int64" },
-          "npaCount": { "type": "integer", "format": "int64" },
-          "npxCount": { "type": "integer", "format": "int64" },
-          "rowCount": { "type": "integer", "format": "int64" },
-          "total": { "type": "integer", "format": "int64" }
+          "npiCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "npaCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "npxCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "rowCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
         }
       },
       "ContactOutcomeTypeCountCampaignDto": {
@@ -3200,9 +3688,9 @@
         "name": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "http://localhost:7080/realms/sabiane/protocol/openid-connect/auth",
-            "tokenUrl": "http://localhost:7080/realms/sabiane/protocol/openid-connect/token",
-            "refreshUrl": "http://localhost:7080/realms/sabiane/protocol/openid-connect/token",
+            "authorizationUrl": "https://auth.insee.test/auth/realms/agents-insee-interne/protocol/openid-connect/auth",
+            "tokenUrl": "https://auth.insee.test/auth/realms/agents-insee-interne/protocol/openid-connect/token",
+            "refreshUrl": "https://auth.insee.test/auth/realms/agents-insee-interne/protocol/openid-connect/token",
             "scopes": {}
           }
         }

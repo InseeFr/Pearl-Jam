@@ -1,10 +1,9 @@
 {
   "name": "pearl",
-  "version": "2.10.1",
+  "version": "2.11.0",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@babel/runtime": "7.26.10",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/montserrat": "^5.0.16",
@@ -122,7 +121,6 @@
     "react-hook-form": "^7.49.2",
     "stylelint": "^16.15.0",
     "stylelint-config-standard": "^37.0.0",
-    "uuid": "^11.1.0",
     "vite": "^6.2.0",
     "vite-envs": "^4.4.11",
     "vite-plugin-pwa": "^0.21.1",

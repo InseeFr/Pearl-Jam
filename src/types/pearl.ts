@@ -171,8 +171,6 @@ export type SurveyUnit = {
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
-  previousContactHistory?: PreviousContactHistory;
-  nextContactHistory?: NextContactHistory;
 };
 
 export type NotificationState = "warning" | "success" | "error";

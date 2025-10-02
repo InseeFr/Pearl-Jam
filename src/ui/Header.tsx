@@ -42,9 +42,9 @@ export function Header() {
         <Link to="/">
           <h1>
             <img
-              width={47}
+              width={150}
               height={50}
-              src="/static/images/logo-insee-header.png"
+              src="/static/images/Insee_logo_header.webp"
               alt="Logo Insee"
               style={{ display: 'block' }}
             />

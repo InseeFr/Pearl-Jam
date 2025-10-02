@@ -4,7 +4,11 @@ export class SurveyPage {
   constructor(private readonly page: Page) {}
 
   selectSurvey() {
-    return this.page.getByRole('link', { name: 'RAYMOND Harriette' }).click();
+    return this.page
+      .locator('div')
+      .filter({ hasText: /^GRAHAM-2 Leanne-2#questNotAvailable$/ })
+      .getByRole('link')
+      .click();
   }
 
   getTitle(title: string) {
