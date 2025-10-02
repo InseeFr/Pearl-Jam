@@ -122,7 +122,7 @@ const tryUpdateSurveyUnit = async (
     const axiosError = err as AxiosError;
 
     return {
-      status: parseInt(axiosError?.code || '-1'),
+      status: Number.parseInt(axiosError?.code || '-1'),
       error: axiosError,
       ok: false,
     };
@@ -139,11 +139,8 @@ const handleTempZoneFallback = async (
 ) => {
   const { error: tempZoneError } = await postSurveyUnitByIdInTempZone(id, formattedBody);
 
-  if (!tempZoneError) {
-    surveyUnitsInTempZone.push(id);
-  } else {
-    throw new Error('Server is not responding (temp zone fallback failed)');
-  }
+  if (tempZoneError) throw new Error('Server is not responding (temp zone fallback failed)');
+  surveyUnitsInTempZone.push(id);
 };
 
 const getUserData = async () => {
