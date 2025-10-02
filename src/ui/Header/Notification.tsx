@@ -22,7 +22,7 @@ import syncReportIdbService from '../../utils/indexeddb/services/syncReport-idb-
 import { Row } from '../Row';
 import { SyncContext } from '../Sync/SyncContextProvider';
 import { Typography } from '../Typography';
-import { DialogContent, DialogContentText, List, ListItem } from '@mui/material';
+import { DialogContentText, List, ListItem } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
 interface NotificationProps {

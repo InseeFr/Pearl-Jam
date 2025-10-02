@@ -38,7 +38,7 @@ type ArticulationTableHook = (
 
 export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>) {
   const { id } = surveyUnit;
-  const isAvailable = true; //isQuestionnaireAvailable(surveyUnit)(false);
+  const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
 
   const [articulationHook, setArticulationHook] = useState<ArticulationTableHook | null>(null);
 
@@ -138,10 +138,12 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 /**
  * Articulation table for a given identifier.
  */
-export function ArticulationTable(props: {
-  id: string;
-  useArticulationTable: ArticulationTableHook;
-}) {
+export function ArticulationTable(
+  props: Readonly<{
+    id: string;
+    useArticulationTable: ArticulationTableHook;
+  }>
+) {
   const table = props.useArticulationTable(React, props.id);
 
   if (!table) {
@@ -179,7 +181,7 @@ export function ArticulationTable(props: {
   );
 }
 
-function StateChip(props: { progress: number }) {
+function StateChip(props: Readonly<{ progress: number }>) {
   if (props.progress === 1) {
     return (
       <Chip
