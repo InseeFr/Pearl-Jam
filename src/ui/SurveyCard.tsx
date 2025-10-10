@@ -15,6 +15,7 @@ import {
 } from 'utils/functions';
 import D from '../i18n/build-dictionary';
 import { AbsoluteLink } from './AbsoluteLink';
+import { PriorityBadge } from './PriorityBadge';
 import { Row } from './Row';
 import { StatusChip } from './StatusChip';
 import { Typography } from './Typography';
@@ -32,7 +33,7 @@ export function SurveyCard({ surveyUnit, locked = false }: Readonly<SurveyCardPr
     priority,
     persons,
   } = surveyUnit;
-  const cityName = l6.replace(/^\d+\s/, '').trim();
+  const cityName = l6?.replace(/^\d+\s/, '')?.trim();
   const privilegedPerson = getprivilegedPerson(surveyUnit);
   const { firstName, lastName } = privilegedPerson ?? persons[0];
   const state = getSuTodoState(surveyUnit);
@@ -55,13 +56,7 @@ export function SurveyCard({ surveyUnit, locked = false }: Readonly<SurveyCardPr
             <Chip label={surveyUnit.sampleIdentifiers.ssech} />
             <Chip label={surveyUnit.sampleIdentifiers.nograp} />
 
-            {priority && (
-              <Stack sx={{ marginLeft: 'auto' }} pl={2} alignItems="center">
-                <Typography variant="s" color="accent">
-                  Prioritaire
-                </Typography>
-              </Stack>
-            )}
+            <PriorityBadge priority={priority} />
           </Row>
           <Stack gap={0.5}>
             {/* Username */}

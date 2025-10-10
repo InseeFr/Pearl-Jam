@@ -24,6 +24,7 @@ type CampaignNotification = {
   loaded: number;
   startedWeb: string[];
   terminatedWeb: string[];
+  prioritySurveyUnits: string[];
 };
 
 const hasAtLeastOneItemToDisplay =
@@ -33,7 +34,8 @@ const hasAtLeastOneItemToDisplay =
       details.transmittedSurveyUnits[campaign]?.length > 0 ||
       details.loadedSurveyUnits[campaign]?.length > 0 ||
       details.startedWeb[campaign]?.length > 0 ||
-      details.terminatedWeb[campaign]?.length > 0
+      details.terminatedWeb[campaign]?.length > 0 ||
+      details.prioritySurveyUnits[campaign]?.length > 0
     );
   };
 
@@ -50,10 +52,13 @@ export function SyncDialog({
     if (!details) {
       return [];
     }
-    console.log(details);
+
     const campaignIds = new Set([
       ...Object.keys(details.transmittedSurveyUnits),
       ...Object.keys(details.loadedSurveyUnits),
+      ...Object.keys(details.startedWeb),
+      ...Object.keys(details.terminatedWeb),
+      ...Object.keys(details.prioritySurveyUnits),
     ]);
 
     return (
@@ -67,6 +72,7 @@ export function SyncDialog({
           loaded: (details.loadedSurveyUnits[campaign] ?? []).length,
           startedWeb: details.startedWeb[campaign] ?? [],
           terminatedWeb: details.terminatedWeb[campaign] ?? [],
+          prioritySurveyUnits: details.prioritySurveyUnits[campaign] ?? [],
         }))
     );
   }, [details]);
@@ -173,6 +179,15 @@ function SyncDetail({
                     <DialogContentText>
                       {D.webTerminatedSurveyUnit(campaign.terminatedWeb.length)}:{' '}
                       {campaign.terminatedWeb.length}
+                    </DialogContentText>
+                  </ListItem>
+                )}
+
+                {campaign.prioritySurveyUnits.length > 0 && (
+                  <ListItem sx={{ pl: 4, pt: 0 }}>
+                    <DialogContentText>
+                      {D.prioritySurveyUnits(campaign.prioritySurveyUnits.length)}:{' '}
+                      {campaign.prioritySurveyUnits.length}
                     </DialogContentText>
                   </ListItem>
                 )}

@@ -203,6 +203,7 @@ export type SyncResultDetails = {
   loadedSurveyUnits: Record<string, string[]>;
   startedWeb: Record<string, string[]>;
   terminatedWeb: Record<string, string[]>;
+  prioritySurveyUnits: Record<string, string[]>;
 };
 export type SyncResult = {
   state: string;
