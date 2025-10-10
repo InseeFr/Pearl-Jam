@@ -35,7 +35,7 @@ const hasAtLeastOneItemToDisplay =
       details.loadedSurveyUnits[campaign]?.length > 0 ||
       details.startedWeb[campaign]?.length > 0 ||
       details.terminatedWeb[campaign]?.length > 0 ||
-      details.prioritySurveyUnits[campaign]?.length > 0
+      details.prioritySurveyUnits?.[campaign]?.length > 0
     );
   };
 
@@ -54,11 +54,11 @@ export function SyncDialog({
     }
 
     const campaignIds = new Set([
-      ...Object.keys(details.transmittedSurveyUnits),
-      ...Object.keys(details.loadedSurveyUnits),
-      ...Object.keys(details.startedWeb),
-      ...Object.keys(details.terminatedWeb),
-      ...Object.keys(details.prioritySurveyUnits),
+      ...Object.keys(details.transmittedSurveyUnits ?? {}),
+      ...Object.keys(details.loadedSurveyUnits ?? {}),
+      ...Object.keys(details.startedWeb ?? {}),
+      ...Object.keys(details.terminatedWeb ?? {}),
+      ...Object.keys(details.prioritySurveyUnits ?? {}),
     ]);
 
     return (
@@ -72,7 +72,7 @@ export function SyncDialog({
           loaded: (details.loadedSurveyUnits[campaign] ?? []).length,
           startedWeb: details.startedWeb[campaign] ?? [],
           terminatedWeb: details.terminatedWeb[campaign] ?? [],
-          prioritySurveyUnits: details.prioritySurveyUnits[campaign] ?? [],
+          prioritySurveyUnits: details.prioritySurveyUnits?.[campaign] ?? [],
         }))
     );
   }, [details]);
