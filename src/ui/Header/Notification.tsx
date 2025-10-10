@@ -156,12 +156,20 @@ const SurveyUnitList = ({
 const NotificationDetails = ({ details }: { details?: SyncResultDetails }) => {
   if (!details) return null;
 
-  const { loadedSurveyUnits, transmittedSurveyUnits, startedWeb, terminatedWeb } = details;
+  const {
+    loadedSurveyUnits,
+    transmittedSurveyUnits,
+    startedWeb,
+    terminatedWeb,
+    prioritySurveyUnits,
+  } = details;
+
   const campaigns = new Set([
     ...Object.keys(loadedSurveyUnits),
     ...Object.keys(transmittedSurveyUnits),
     ...Object.keys(startedWeb),
     ...Object.keys(terminatedWeb),
+    ...Object.keys(prioritySurveyUnits || {}),
   ]);
 
   if (campaigns.size === 0) return null;
@@ -174,7 +182,8 @@ const NotificationDetails = ({ details }: { details?: SyncResultDetails }) => {
             loadedSurveyUnits,
             transmittedSurveyUnits,
             startedWeb,
-            terminatedWeb
+            terminatedWeb,
+            prioritySurveyUnits
           )
         )
         .map(campaign => (
@@ -197,6 +206,10 @@ const NotificationDetails = ({ details }: { details?: SyncResultDetails }) => {
                   surveyUnits={terminatedWeb[campaign]}
                   message={D.webTerminatedSurveyUnit}
                 />
+                <SurveyUnitList
+                  surveyUnits={prioritySurveyUnits?.[campaign]}
+                  message={D.prioritySurveyUnits}
+                />
               </List>
             </>
           </Stack>
@@ -209,7 +222,8 @@ function hasAtLeastOnSurveyUnitToDisplay(
   loadedSurveyUnits: Record<string, string[]>,
   transmittedSurveyUnits: Record<string, string[]>,
   startedWeb: Record<string, string[]>,
-  terminatedWeb: Record<string, string[]>
+  terminatedWeb: Record<string, string[]>,
+  prioritySurveyUnits?: Record<string, string[]>
 ): (value: string, index: number, array: string[]) => unknown {
   return campaign =>
     [
@@ -217,5 +231,6 @@ function hasAtLeastOnSurveyUnitToDisplay(
       ...(transmittedSurveyUnits[campaign] || []),
       ...(startedWeb[campaign] || []),
       ...(terminatedWeb[campaign] || []),
+      ...(prioritySurveyUnits?.[campaign] || []),
     ].length > 0;
 }

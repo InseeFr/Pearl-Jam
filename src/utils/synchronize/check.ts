@@ -76,7 +76,8 @@ const getResult = (
   transmittedSurveyUnits = {},
   loadedSurveyUnits = {},
   startedWeb = {},
-  terminatedWeb = {}
+  terminatedWeb = {},
+  prioritySurveyUnits = {}
 ): {
   state: NotificationState;
   messages: string[];
@@ -106,13 +107,25 @@ const getResult = (
     return {
       state: 'warning',
       messages: [...messages, D.warningOrErrorEndMessage, D.syncYouCanStillWork],
-      details: { transmittedSurveyUnits, loadedSurveyUnits, startedWeb, terminatedWeb },
+      details: {
+        transmittedSurveyUnits,
+        loadedSurveyUnits,
+        startedWeb,
+        terminatedWeb,
+        prioritySurveyUnits,
+      },
     };
   }
   return {
     state: 'success',
     messages: [D.syncSuccessMessage],
-    details: { transmittedSurveyUnits, loadedSurveyUnits, startedWeb, terminatedWeb },
+    details: {
+      transmittedSurveyUnits,
+      loadedSurveyUnits,
+      startedWeb,
+      terminatedWeb,
+      prioritySurveyUnits,
+    },
   };
 };
 
@@ -127,6 +140,7 @@ export const analyseResult = async () => {
     loadedSurveyUnits,
     terminatedWeb,
     startedWeb,
+    prioritySurveyUnits,
   } = getSavedSyncPearlData() || {};
   const {
     error: queenError,
@@ -181,7 +195,8 @@ export const analyseResult = async () => {
     transmittedSurveyUnits,
     loadedSurveyUnits,
     startedWeb,
-    terminatedWeb
+    terminatedWeb,
+    prioritySurveyUnits
   );
 
   const nowDate = new Date().getTime();

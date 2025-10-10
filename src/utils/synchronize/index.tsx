@@ -290,7 +290,7 @@ const getLatestSurveyUnitStateAfterSync = (
 export const synchronizePearl = async () => {
   let transmittedSurveyUnits = {};
   let loadedSurveyUnits = {};
-
+  let prioritySurveyUnits: Record<string, string[]> = {};
   let surveyUnitsInTempZone;
   let surveyUnitsSuccess;
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
@@ -324,6 +324,18 @@ export const synchronizePearl = async () => {
           [su.campaign]: [...(startedWeb[su.campaign] ?? []), su.id],
         };
       }
+
+      // Check if survey unit became priority
+      const previousSurveyUnit = previousData.find(prevSu => prevSu.id === su.id);
+      const wasPriority = previousSurveyUnit?.priority ?? false;
+      const isPriority = su.priority ?? false;
+
+      if (isPriority && !wasPriority) {
+        prioritySurveyUnits = {
+          ...prioritySurveyUnits,
+          [su.campaign]: [...(prioritySurveyUnits[su.campaign] ?? []), su.id],
+        };
+      }
     });
 
     return {
@@ -334,6 +346,7 @@ export const synchronizePearl = async () => {
       loadedSurveyUnits,
       startedWeb,
       terminatedWeb,
+      prioritySurveyUnits,
     };
   } catch (e) {
     console.debug(e);
