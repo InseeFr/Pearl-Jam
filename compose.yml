@@ -54,7 +54,7 @@ services:
     stdin_open: true
     environment:
       KEYCLOAK_ADMIN: administrator
-      KEYCLOAK_ADMIN_PASSWORD: administrator
+      KEYCLOAK_ADMIN_PASSWORD: administrator # gitleaks:allow - Safe to ignore: test credential only.
       KC_HEALTH_ENABLED: 'true'
       KC_LOG_LEVEL: info
     command: ['start-dev', '--import-realm']
