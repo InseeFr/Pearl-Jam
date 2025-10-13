@@ -530,7 +530,7 @@ describe('identificationIsFinished', () => {
     expect(result).toBe(true);
   });
 
-  it('should return true first question is concluding', () => {
+  it('should return true if first question is concluding', () => {
     const identification = {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
     };
