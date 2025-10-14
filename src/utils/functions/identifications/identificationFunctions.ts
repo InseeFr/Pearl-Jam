@@ -150,16 +150,13 @@ export function isIdentificationFinished(
 
   while (question) {
     const response = identification[question.id];
-    if (response) {
-      const isConcluding = question.options.find(o => o.value === response && o.concluding);
-      if (isConcluding) return true;
-    }
 
-    if (question.nextId) {
-      question = questions[question.nextId];
-    } else {
-      question = undefined;
-    }
+    if (!response) return false;
+
+    const isConcluding = question.options.find(o => o.value === response && o.concluding);
+    if (isConcluding) return true;
+
+    question = question.nextId ? questions[question.nextId] : undefined;
   }
 
   return false;
