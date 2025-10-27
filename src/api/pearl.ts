@@ -357,7 +357,10 @@ export interface CommunicationRequestStatusDto {
   status?: CommunicationRequestStatusDtoStatus;
 }
 
-export interface IdentificationDto { [key: string]: unknown }
+export interface IdentificationDto {
+  demenagementWeb?: boolean;
+  demenagementEnqueteur?: boolean;
+}
 
 export interface SampleIdentifiersDto {
   bs?: number;
@@ -1644,13 +1647,13 @@ export const postMessage2 = (
 export const postMailMessage = (
     mailDto: MailDto,
  options?: SecondParameter<typeof customFetch>,) => {
-   return customFetch<void>(
+      return customFetch<void>(
       {url: `/api/mail`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: mailDto
     },
       options);
- }
+    }
   
 /**
  * @summary Get interviewers

@@ -190,7 +190,10 @@ export async function seedData() {
           medium: 'FIELD',
         },
       ],
-      identification: {},
+      identification: {
+        demenagementWeb: user.id % 3 === 0 ? 'true' : 'false',
+        demenagementEnqueteur: 'false',
+      },
       campaignLabel: 'Démonstration Séminaire Filière 2023',
       managementStartDate: new Date().getTime() - 10 * day,
       interviewerStartDate: new Date().getTime() - 10 * day,
@@ -221,7 +224,10 @@ export async function seedData() {
   surverUnits.push({
     ...surverUnits[0],
     id: 'sunoident',
-    identification: {},
+    identification: {
+      demenagementWeb: 'false',
+      demenagementEnqueteur: 'false',
+    },
     firstName: 'John',
     lastName: 'Absent',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
@@ -229,7 +235,10 @@ export async function seedData() {
   surverUnits.push({
     ...surverUnits[0],
     id: 'sunoident-empty',
-    identification: {},
+    identification: {
+      demenagementWeb: 'true',
+      demenagementEnqueteur: 'false',
+    },
     firstName: 'John2',
     lastName: 'Absent2',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
@@ -238,7 +247,10 @@ export async function seedData() {
   surverUnits.push({
     ...surverUnits[0],
     id: 'sunoident-WFT',
-    identification: {},
+    identification: {
+      demenagementWeb: 'false',
+      demenagementEnqueteur: 'false',
+    },
     firstName: 'John3',
     lastName: 'Absent3',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
@@ -255,7 +267,10 @@ export async function seedData() {
     collectionEndDate: new Date().getTime() - 6 * day,
     endDate: new Date().getTime() + 15 * day,
     id: 'questNotAvailable',
-    identification: {},
+    identification: {
+      demenagementWeb: 'true',
+      demenagementEnqueteur: 'true',
+    },
     firstName: 'Flin',
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
@@ -276,7 +291,10 @@ export async function seedData() {
     collectionEndDate: new Date().getTime() - 6 * day,
     endDate: new Date().getTime() + 15 * day,
     id: 'HOUSETEL',
-    identification: {},
+    identification: {
+      demenagementWeb: 'false',
+      demenagementEnqueteur: 'false',
+    },
     firstName: 'Flin',
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.HOUSETEL,
@@ -297,7 +315,10 @@ export async function seedData() {
     collectionEndDate: new Date().getTime() - 6 * day,
     endDate: new Date().getTime() + 15 * day,
     id: 'SRCVREINT',
-    identification: {},
+    identification: {
+      demenagementWeb: 'true',
+      demenagementEnqueteur: 'false',
+    },
     firstName: 'Flin',
     lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.SRCVREINT,
@@ -325,7 +346,10 @@ export async function seedData() {
     collectionEndDate: new Date().getTime() - 6 * day,
     endDate: new Date().getTime() + 15 * day,
     id: 'articulation',
-    identification: {},
+    identification: {
+      demenagementWeb: 'false',
+      demenagementEnqueteur: 'false',
+    },
     firstName: 'Articulation',
     lastName: 'Articulation',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,

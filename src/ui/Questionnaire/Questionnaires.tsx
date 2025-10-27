@@ -74,7 +74,6 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
                 </Typography>
               </Row>
 
-
               {isAvailable && isQuestionnaireInit && <StateChip progress={2} />}
               {isAvailable && isQuestionnaireCompleted && <StateChip progress={1} />}
               {isAvailable && !isQuestionnaireInit && !isQuestionnaireCompleted && (
