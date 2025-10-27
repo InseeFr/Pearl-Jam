@@ -71,7 +71,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/queen-back-office:4.8.7-rc
+    image: inseefr/queen-back-office:5.3.0-rc
     tty: true
     stdin_open: true
     #healthcheck:
@@ -169,7 +169,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/drama-queen:2.3.12-rc.0
+    image: inseefr/drama-queen:2.5.3
     tty: true
     stdin_open: true
     #healthcheck:

@@ -10,7 +10,7 @@ declare global {
 type QueenEventDetail = {
   type: string;
   command: string;
-  surveyUnit: string;
+  interrogationId: string;
   state: QuestionnaireStateType;
 };
 export interface QueenEvent extends CustomEvent<QueenEventDetail> {}
