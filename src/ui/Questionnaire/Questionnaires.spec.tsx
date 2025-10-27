@@ -188,6 +188,7 @@ describe('Questionnaires Component', () => {
       expect(screen.queryByText(D.inProgress)).toBeNull();
       expect(screen.queryByText(D.finished)).toBeNull();
     });
+
   });
 
   describe('Latest state date display', () => {
@@ -257,13 +258,11 @@ describe('Questionnaires Component', () => {
 });
 
 describe('ArticulationTable Component', () => {
-  const mockUseArticulationTable = vi.fn();
-
-  const renderWithProviders = (id: string, useArticulationTable: any) => {
+  const renderWithProviders = (table: any) => {
     return render(
       <PearlTheme>
         <BrowserRouter>
-          <ArticulationTable id={id} useArticulationTable={useArticulationTable} />
+          <ArticulationTable table={table} />
         </BrowserRouter>
       </PearlTheme>
     );
@@ -273,16 +272,14 @@ describe('ArticulationTable Component', () => {
     vi.clearAllMocks();
   });
 
-  it('should return null when useArticulationTable returns null', () => {
-    mockUseArticulationTable.mockReturnValue(null);
-
-    const { container } = renderWithProviders('survey-123', mockUseArticulationTable);
+  it('should return null when table is null', () => {
+    const { container } = renderWithProviders(null);
 
     expect(container.firstChild).toBeNull();
   });
 
-  it('should render table when useArticulationTable returns data', () => {
-    mockUseArticulationTable.mockReturnValue({
+  it('should render table when table has data', () => {
+    const mockTable = {
       rows: [
         {
           cells: [{ value: 1 }, { value: 2 }],
@@ -291,15 +288,15 @@ describe('ArticulationTable Component', () => {
           url: '/queen/survey-unit/123',
         },
       ],
-    });
+    };
 
-    renderWithProviders('survey-123', mockUseArticulationTable);
+    renderWithProviders(mockTable);
 
     expect(screen.getByRole('table')).toBeDefined();
   });
 
   it('should render table rows with correct data', () => {
-    mockUseArticulationTable.mockReturnValue({
+    const mockTable = {
       rows: [
         {
           cells: [{ value: 42 }, { value: 84 }],
@@ -308,9 +305,9 @@ describe('ArticulationTable Component', () => {
           url: '/queen/survey-unit/456',
         },
       ],
-    });
+    };
 
-    renderWithProviders('survey-123', mockUseArticulationTable);
+    renderWithProviders(mockTable);
 
     expect(screen.getByText('42')).toBeDefined();
     expect(screen.getByText('84')).toBeDefined();
@@ -318,7 +315,7 @@ describe('ArticulationTable Component', () => {
   });
 
   it('should render PersonOutlineOutlinedIcon for each row', () => {
-    mockUseArticulationTable.mockReturnValue({
+    const mockTable = {
       rows: [
         {
           cells: [{ value: 1 }],
@@ -333,16 +330,16 @@ describe('ArticulationTable Component', () => {
           url: '/queen/survey-unit/124',
         },
       ],
-    });
+    };
 
-    renderWithProviders('survey-123', mockUseArticulationTable);
+    renderWithProviders(mockTable);
 
     const icons = screen.getAllByTestId('PersonOutlineOutlinedIcon');
     expect(icons.length).toBe(2);
   });
 
   it('should render StateChip with correct progress values', () => {
-    mockUseArticulationTable.mockReturnValue({
+    const mockTable = {
       rows: [
         {
           cells: [{ value: 1 }],
@@ -351,15 +348,15 @@ describe('ArticulationTable Component', () => {
           url: '/queen/survey-unit/123',
         },
       ],
-    });
+    };
 
-    renderWithProviders('survey-123', mockUseArticulationTable);
+    renderWithProviders(mockTable);
 
     expect(screen.getByText(D.finished)).toBeDefined();
   });
 
   it('should render buttons with correct links', () => {
-    mockUseArticulationTable.mockReturnValue({
+    const mockTable = {
       rows: [
         {
           cells: [{ value: 1 }],
@@ -368,26 +365,16 @@ describe('ArticulationTable Component', () => {
           url: '/queen/survey-unit/999',
         },
       ],
-    });
+    };
 
-    renderWithProviders('survey-123', mockUseArticulationTable);
+    renderWithProviders(mockTable);
 
     const button = screen.getByText('Open questionnaire');
     expect(button.closest('a')?.getAttribute('href')).toBe('/queen/survey-unit/999');
   });
 
-  it('should call useArticulationTable with React and id', () => {
-    mockUseArticulationTable.mockReturnValue({
-      rows: [],
-    });
-
-    renderWithProviders('survey-456', mockUseArticulationTable);
-
-    expect(mockUseArticulationTable).toHaveBeenCalledWith(React, 'survey-456');
-  });
-
   it('should render multiple rows correctly', () => {
-    mockUseArticulationTable.mockReturnValue({
+    const mockTable = {
       rows: [
         {
           cells: [{ value: 10 }],
@@ -408,9 +395,9 @@ describe('ArticulationTable Component', () => {
           url: '/url3',
         },
       ],
-    });
+    };
 
-    renderWithProviders('survey-123', mockUseArticulationTable);
+    renderWithProviders(mockTable);
 
     expect(screen.getByText('10')).toBeDefined();
     expect(screen.getByText('20')).toBeDefined();
@@ -420,3 +407,4 @@ describe('ArticulationTable Component', () => {
     expect(screen.getByText('Row 3')).toBeDefined();
   });
 });
+
