@@ -24,10 +24,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const chipStyle = { background: '#FFF', boxShadow: 2 };
 
-type ArticulationTableHook = (
-  react: unknown,
-  id: string
-) => {
+type ArticulationTableData = {
   rows: {
     cells: { value: number }[];
     progress: 0 | -1 | 1;
@@ -36,11 +33,83 @@ type ArticulationTableHook = (
   }[];
 };
 
+type ArticulationTableHook = (
+  react: unknown,
+  id: string
+) => ArticulationTableData;
+
+/**
+ * Checks if all articulation rows are completed (progress === 1)
+ * @param table - The articulation table data
+ * @returns true if all rows are completed, false otherwise
+ */
+function areAllArticulationRowsCompleted(table: ArticulationTableData | null): boolean {
+  if (!table?.rows || table.rows.length === 0) {
+    return false;
+  }
+
+  return table.rows.every(row => row.progress === 1);
+}
+
+/**
+ * Determines the questionnaire progress state
+ * @returns -1 (not started), 1 (completed), 2 (in progress), or null (not available)
+ */
+function getQuestionnaireProgress(
+  isAvailable: boolean,
+  isQuestionnaireInit: boolean,
+  isQuestionnaireCompleted: boolean,
+  allArticulationRowsCompleted: boolean
+): -1 | 1 | 2 | null {
+  if (!isAvailable) {
+    return null;
+  }
+
+  if (isQuestionnaireCompleted || allArticulationRowsCompleted) {
+    return 1; // Completed
+  }
+
+  if (isQuestionnaireInit) {
+    return 2; // In progress
+  }
+
+  return -1; // Not started
+}
+
+/**
+ * Component to display the questionnaire state chip based on progress
+ */
+function QuestionnaireStateChip({
+  isAvailable,
+  isQuestionnaireInit,
+  isQuestionnaireCompleted,
+  allArticulationRowsCompleted,
+}: Readonly<{
+  isAvailable: boolean;
+  isQuestionnaireInit: boolean;
+  isQuestionnaireCompleted: boolean;
+  allArticulationRowsCompleted: boolean;
+}>) {
+  const progress = getQuestionnaireProgress(
+    isAvailable,
+    isQuestionnaireInit,
+    isQuestionnaireCompleted,
+    allArticulationRowsCompleted
+  );
+
+  if (progress === null) {
+    return null;
+  }
+
+  return <StateChip progress={progress} />;
+}
+
 export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>) {
   const { id } = surveyUnit;
   const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
 
   const [articulationHook, setArticulationHook] = useState<ArticulationTableHook | null>(null);
+  const [articulationTable, setArticulationTable] = useState<ArticulationTableData | null>(null);
 
   useEffect(() => {
     import('dramaQueen/useArticulationTable')
@@ -52,12 +121,22 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
       });
   }, []);
 
+  useEffect(() => {
+    if (articulationHook) {
+      const table = articulationHook(React, id);
+      setArticulationTable(table);
+    }
+  }, [articulationHook, id]);
+
   const isQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
     state => state.state === 'QUESTIONNAIRE_INIT'
   );
   const isQuestionnaireCompleted = surveyUnit.otherModeQuestionnaireState?.some(
     state => state.state === 'QUESTIONNAIRE_COMPLETED' || state.state === 'QUESTIONNAIRE_VALIDATED'
   );
+
+  const allArticulationRowsCompleted = areAllArticulationRowsCompleted(articulationTable);
+
   const latestState = getMostRecentState(surveyUnit);
 
   return (
@@ -74,11 +153,12 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
                 </Typography>
               </Row>
 
-              {isAvailable && isQuestionnaireInit && <StateChip progress={2} />}
-              {isAvailable && isQuestionnaireCompleted && <StateChip progress={1} />}
-              {isAvailable && !isQuestionnaireInit && !isQuestionnaireCompleted && (
-                <StateChip progress={-1} />
-              )}
+              <QuestionnaireStateChip
+                isAvailable={isAvailable}
+                isQuestionnaireInit={isQuestionnaireInit ?? false}
+                isQuestionnaireCompleted={isQuestionnaireCompleted ?? false}
+                allArticulationRowsCompleted={allArticulationRowsCompleted}
+              />
 
               <Button
                 variant="contained"
@@ -121,8 +201,8 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               </Row>
 
               {/* Table */}
-              {articulationHook && (
-                <ArticulationTable id={id} useArticulationTable={articulationHook} />
+              {articulationTable && (
+                <ArticulationTable table={articulationTable} />
               )}
             </Stack>
           )}
@@ -137,11 +217,10 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
  */
 export function ArticulationTable(
   props: Readonly<{
-    id: string;
-    useArticulationTable: ArticulationTableHook;
+    table: ArticulationTableData | null;
   }>
 ) {
-  const table = props.useArticulationTable(React, props.id);
+  const table = props.table;
 
   if (!table) {
     return null;

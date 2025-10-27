@@ -2827,7 +2827,15 @@
         }
       },
       "IdentificationDto": {
-        "type": "object"
+        "type": "object",
+        "properties": {
+          "demenagementWeb": {
+            "type": "boolean"
+          },
+          "demenagementEnqueteur": {
+            "type": "boolean"
+          }
+        }
       },
       "SampleIdentifiersDto": {
         "type": "object",
