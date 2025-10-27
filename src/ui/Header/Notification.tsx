@@ -127,7 +127,7 @@ const SurveyUnitList = ({
   surveyUnits,
   message,
 }: Readonly<{ surveyUnits?: string[]; message: (su: number) => string }>) => {
-  const { setNotificationOpened } = useContext(SyncContext);
+  const context = useContext(SyncContext);
   if (!surveyUnits || surveyUnits.length === 0) return null;
 
   return (
@@ -140,7 +140,7 @@ const SurveyUnitList = ({
           <ListItem key={su} sx={{ pl: 4, pt: 0 }}>
             <DialogContentText>
               <NavLink
-                onClick={() => setNotificationOpened(false)}
+                onClick={() => context?.setNotificationOpened(false)}
                 to={`/survey-unit/${su}/details`}
               >
                 {su}

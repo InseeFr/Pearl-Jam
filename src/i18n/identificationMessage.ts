@@ -173,6 +173,16 @@ const identificationMessage = {
   },
   yes: { fr: 'Oui', en: 'Yes', sq: 'Po' },
   no: { fr: 'Non', en: 'No', sq: 'Jo' },
+  moveDeclaredOnWeb: {
+    fr: 'Déménagement déclaré sur internet',
+    en: 'Move declared on the web',
+    sq: 'Lëvizja e deklaruar në internet',
+  },
+  moveAllResidents: {
+    fr: 'Déménagement de tous les habitants',
+    en: 'Move of all residents',
+    sq: 'Lëvizja e të gjithë banorëve',
+  },
 };
 
 export default identificationMessage;
