@@ -16,16 +16,21 @@ import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import D from 'i18n';
 import { SurveyUnit } from 'types/pearl';
 import { isQuestionnaireAvailable } from '../../utils/functions';
-import { Table, TableBody, TableCell, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableRow, Tooltip } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import React, { useEffect, useState } from 'react';
+import { CalendarIcon } from '@mui/x-date-pickers';
 
 const chipStyle = { background: '#FFF', boxShadow: 2 };
+const formatDate = new Intl.DateTimeFormat(undefined, {
+  dateStyle: 'short',
+}).format;
 
 type ArticulationTableHook = (
   react: unknown,
   id: string
 ) => {
+  dates: number[];
   rows: {
     cells: { value: number }[];
     progress: 0 | -1 | 1;
@@ -133,7 +138,15 @@ export function ArticulationTable(props: {
               <TableCell key={kk}>{cell.value}</TableCell>
             ))}
             <TableCell>
-              <StateChip progress={row.progress} />
+              {table.dates?.[k] ? (
+                <Tooltip title={formatDate(table.dates[k] * 1000)}>
+                  <div>
+                    <StateChip progress={row.progress} />
+                  </div>
+                </Tooltip>
+              ) : (
+                <StateChip progress={row.progress} />
+              )}
             </TableCell>
             {row.url && (
               <TableCell>
