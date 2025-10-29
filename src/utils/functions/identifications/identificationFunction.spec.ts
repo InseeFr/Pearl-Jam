@@ -530,12 +530,21 @@ describe('identificationIsFinished', () => {
     expect(result).toBe(true);
   });
 
-  it('should return true one question is concluding', () => {
+  it('should return true if first question is concluding', () => {
     const identification = {
       [IdentificationQuestionsId.INDIVIDUAL_STATUS]: IdentificationQuestionOptionValues.NOIDENT,
     };
     const result = isIdentificationFinished(IdentificationConfiguration.INDTEL, identification);
     expect(result).toBe(true);
+  });
+
+  it('should return false if last question is concluding and first unanwsered', () => {
+    const identification = {
+      [IdentificationQuestionsId.INDIVIDUAL_STATUS]: undefined,
+      [IdentificationQuestionsId.SITUATION]: IdentificationQuestionOptionValues.OTHER_ADDRESS,
+    };
+    const result = isIdentificationFinished(IdentificationConfiguration.INDTEL, identification);
+    expect(result).toBe(false);
   });
 });
 
