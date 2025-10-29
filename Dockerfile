@@ -20,9 +20,10 @@ ENV VITE_QUEEN_URL=$VITE_QUEEN_URL
 
 WORKDIR /pearl
 
-COPY ./ ./
+RUN npm install -g pnpm
+RUN pnpm install --frozen-lockfile && pnpm build
 
-RUN yarn install && yarn build
+COPY ./ ./
 
 ### EXECUTION STEP ###
 
