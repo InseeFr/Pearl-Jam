@@ -20,7 +20,7 @@ jobs:
           docker compose --env-file ./.env.docker --profile playwright up -d
           pnpm install --frozen-lockfile
           npx playwright install --with-deps chromium
-          pnpm exec playwright test
+          npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
