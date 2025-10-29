@@ -20,8 +20,6 @@ jobs:
           node-version: 20
           cache: 'pnpm'
       - name: Run Docker Compose
-        env:
-          NODE_OPTIONS: --no-experimental-strip-types
         run: |
           docker compose --env-file ./.env.docker --profile playwright up -d
           pnpm install --frozen-lockfile
