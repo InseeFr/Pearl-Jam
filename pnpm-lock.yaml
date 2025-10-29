@@ -66,8 +66,8 @@ importers:
         specifier: ^7.5.2
         version: 7.8.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-swipeable-views:
-        specifier: ^0.14.0
-        version: 0.14.0(react@18.3.1)
+        specifier: ^0.14.1
+        version: 0.14.1(react@18.3.1)
       typescript:
         specifier: ^5.8.2
         version: 5.9.2
@@ -171,6 +171,21 @@ importers:
       vitest:
         specifier: ^3.0.7
         version: 3.2.4(@types/node@22.18.0)(jsdom@23.2.0)(terser@5.44.0)(yaml@2.8.1)
+      workbox-cacheable-response:
+        specifier: ^7.3.0
+        version: 7.3.0
+      workbox-core:
+        specifier: ^7.3.0
+        version: 7.3.0
+      workbox-precaching:
+        specifier: ^7.3.0
+        version: 7.3.0
+      workbox-routing:
+        specifier: ^7.3.0
+        version: 7.3.0
+      workbox-strategies:
+        specifier: ^7.3.0
+        version: 7.3.0
       zod:
         specifier: ^3.23.8
         version: 3.25.76
@@ -3665,16 +3680,20 @@ packages:
       react-dom:
         optional: true
 
-  react-swipeable-views-core@0.14.0:
-    resolution: {integrity: sha512-0W/e9uPweNEOSPjmYtuKSC/SvKKg1sfo+WtPdnxeLF3t2L82h7jjszuOHz9C23fzkvLfdgkaOmcbAxE9w2GEjA==}
+  react-swipeable-views-core@0.14.1:
+    resolution: {integrity: sha512-0mmRN3OjAn5hPxM/tjL6hJBcnsGBADwMY67NM2PTyANSqKGoHcX0qzsL704jxwUrGcbPedr9/d1VYdQHBb4IAQ==}
     engines: {node: '>=6.0.0'}
+    peerDependencies:
+      react: ^15.3.0 || ^16.0.0 || ^17.0.0
 
-  react-swipeable-views-utils@0.14.0:
-    resolution: {integrity: sha512-W+fXBOsDqgFK1/g7MzRMVcDurp3LqO3ksC8UgInh2P/tKgb5DusuuB1geKHFc6o1wKl+4oyER4Zh3Lxmr8xbXA==}
+  react-swipeable-views-utils@0.14.1:
+    resolution: {integrity: sha512-eX0Lo5uZ4G9TBTSpROLNYFGGhd1Ja5K19LL8ZHQmm7oBpJBJXIDH2D364aFMrBR9BdlSbZOVxw9eNHElwMFRyg==}
     engines: {node: '>=6.0.0'}
+    peerDependencies:
+      react: ^15.3.0 || ^16.0.0 || ^17.0.0
 
-  react-swipeable-views@0.14.0:
-    resolution: {integrity: sha512-wrTT6bi2nC3JbmyNAsPXffUXLn0DVT9SbbcFr36gKpbaCgEp7rX/OFxsu5hPc/NBsUhHyoSRGvwqJNNrWTwCww==}
+  react-swipeable-views@0.14.1:
+    resolution: {integrity: sha512-dbCicNAez5yWKve7zu7PVGWWIY28JGgMIJBKwSUkpmZaC14zmEL/HaVoZzKyZ7Vm/pSVU2IGVo8zfCYsWJb3pQ==}
     engines: {node: '>=6.0.0'}
     peerDependencies:
       react: ^15.3.0 || ^16.0.0 || ^17.0.0
@@ -8560,29 +8579,29 @@ snapshots:
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
 
-  react-swipeable-views-core@0.14.0:
+  react-swipeable-views-core@0.14.1(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.0.0
+      react: 18.3.1
       warning: 4.0.3
 
-  react-swipeable-views-utils@0.14.0(react@18.3.1):
+  react-swipeable-views-utils@0.14.1(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.0.0
       keycode: 2.2.1
       prop-types: 15.8.1
+      react: 18.3.1
       react-event-listener: 0.6.6(react@18.3.1)
-      react-swipeable-views-core: 0.14.0
+      react-swipeable-views-core: 0.14.1(react@18.3.1)
       shallow-equal: 1.2.1
-    transitivePeerDependencies:
-      - react
 
-  react-swipeable-views@0.14.0(react@18.3.1):
+  react-swipeable-views@0.14.1(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.0.0
       prop-types: 15.8.1
       react: 18.3.1
-      react-swipeable-views-core: 0.14.0
-      react-swipeable-views-utils: 0.14.0(react@18.3.1)
+      react-swipeable-views-core: 0.14.1(react@18.3.1)
+      react-swipeable-views-utils: 0.14.1(react@18.3.1)
       warning: 4.0.3
 
   react-transition-group@4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
