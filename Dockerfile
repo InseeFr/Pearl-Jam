@@ -1,6 +1,7 @@
 ### BUILD STEP ###
 
 FROM node:latest AS builder
+RUN corepack enable && corepack prepare pnpm@8.15.4 --activate
 
 ARG VITE_PEARL_API_URL
 ARG VITE_PEARL_AUTHENTICATION_MODE
@@ -20,10 +21,12 @@ ENV VITE_QUEEN_URL=$VITE_QUEEN_URL
 
 WORKDIR /pearl
 
-RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile && pnpm build
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile
 
 COPY ./ ./
+RUN pnpm build
 
 ### EXECUTION STEP ###
 
