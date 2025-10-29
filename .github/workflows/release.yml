@@ -3,54 +3,69 @@ name: Release & Docker
 on:
   push:
     branches:
-      - "main"
+      - main
 
 jobs:
-  install:
+  release-and-publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for create-release and tagging
+      packages: write
+
     steps:
-      - name: Use Node.js 18
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-      - run: yarn --frozen-lockfile
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout current branch
-        uses: actions/checkout@v4
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Get current version
         id: version
         uses: notiz-dev/github-action-json-property@release
         with:
-          path: "package.json"
-          prop_path: "version"
-      - run: echo ${{steps.version.outputs.prop}}
-      - name: Release snapshot
-        id: release-snapshot
-        uses: actions/create-release@latest
+          path: 'package.json'
+          prop_path: 'version'
+
+      - name: Build project
+        run: pnpm build
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{steps.version.outputs.prop}}
-          release_name: ${{steps.version.outputs.prop}}
+          tag_name: ${{ steps.version.outputs.prop }}
+          release_name: v${{ steps.version.outputs.prop }}
           draft: false
           prerelease: false
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Get current version
-        id: version
-        uses: notiz-dev/github-action-json-property@release
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
         with:
-          path: "package.json"
-          prop_path: "version"
-      - run: echo ${{steps.version.outputs.prop}}
-      - name: Publish to Registry
-        uses: elgohr/Publish-Docker-Github-Action@master
-        with:
-          name: inseefr/pearl-jam
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          tags: ${{steps.version.outputs.prop}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            inseefr/pearl-jam:latest
+            inseefr/pearl-jam:${{ steps.version.outputs.prop }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

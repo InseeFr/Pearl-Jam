@@ -18,9 +18,9 @@ jobs:
           NODE_OPTIONS: --no-experimental-strip-types
         run: |
           docker compose --env-file ./.env.docker --profile playwright up -d
-          yarn
+          pnpm install --frozen-lockfile
           npx playwright install --with-deps chromium
-          npx playwright test
+          pnpm exec playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:

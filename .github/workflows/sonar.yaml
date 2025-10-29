@@ -3,27 +3,39 @@ name: Sonar
 on:
   push:
     branches:
-      - "main"
-      - "develop"
+      - main
+      - develop
   pull_request:
     branches:
-      - "*"
+      - '*'
 
 jobs:
-  install:
+  sonar:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/setup-node@v4
-      - run: yarn --frozen-lockfile
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: yarn
-      - run: yarn test --coverage
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests with coverage
+        run: pnpm test --coverage
+
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets. SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
