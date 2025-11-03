@@ -36,6 +36,8 @@ export default defineConfig({
 
     // Record video only when retrying a test for the first time.
     video: 'on-first-retry',
+
+    serviceWorkers: 'allow',
   },
 
   expect: { timeout: 20000 },

@@ -31,6 +31,27 @@ export type SurveyUnitPerson = {
   phoneNumbers: SurveyUnitPhoneNumber[];
 };
 
+export type ContactHistoryPersonTitle = 'MISTER' | 'MISS';
+
+export type PreviousContactHistoryPerson = {
+  id?: number;
+  title: ContactHistoryPersonTitle;
+  firstName: string;
+  lastName: string;
+  birthdate?: number;
+  panel?: boolean;
+};
+
+export type NextContactHistoryPerson = {
+  id?: number;
+  title: ContactHistoryPersonTitle;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  email?: string;
+  preferredContact?: boolean;
+};
+
 type SurveyUnitAddress = {
   l1: string;
   l2: string;
@@ -100,6 +121,27 @@ export type ContactOutcome = {
   type?: ContactOutcomeValue;
 };
 
+export type Contact = {
+  title?: string;
+  firstName?: string;
+  birthdate?: number;
+  lastName?: string;
+  phoneNumber?: string;
+  panel?: boolean;
+  email?: string;
+};
+
+export type PreviousContactHistory = {
+  contactOutcomeValue: string;
+  persons: PreviousContactHistoryPerson[];
+  comment: string;
+  priority: boolean;
+};
+
+export type NextContactHistory = {
+  persons: NextContactHistoryPerson[];
+};
+
 export type SurveyUnit = {
   displayName: string;
   id: string;
@@ -127,6 +169,8 @@ export type SurveyUnit = {
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
+  previousContactHistory?: PreviousContactHistory;
+  nextContactHistory?: NextContactHistory;
 };
 
 export type NotificationState = 'warning' | 'success' | 'error';
