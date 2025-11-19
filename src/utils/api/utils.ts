@@ -52,6 +52,7 @@ export const formatSurveyUnitForPut = (su: SurveyUnit) => {
     communicationRequests: newFormattedCommunicationRequests,
     previousContactHistory: su.previousContactHistory,
     nextContactHistory: su.nextContactHistory,
+    collectNextContacts: su.collectNextContacts,
   };
 
   return formattedSurveyUnit;

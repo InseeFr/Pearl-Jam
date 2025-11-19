@@ -13,11 +13,15 @@ services:
       - POSTGRES_USER=${PEARL_DB_USER}
       - POSTGRES_PASSWORD=${PEARL_DB_PASSWORD}
       - POSTGRES_DB=${PEARL_DB}
-    command: ['postgres']
+    command: ["postgres"]
     tty: true
     stdin_open: true
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${PEARL_DB_USER} -d ${PEARL_DB} -h localhost']
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${PEARL_DB_USER} -d ${PEARL_DB} -h localhost",
+        ]
       interval: 5s
       timeout: 10s
       retries: 10
@@ -33,12 +37,15 @@ services:
       - POSTGRES_USER=${QUESTIONNAIRE_DB_USER}
       - POSTGRES_PASSWORD=${QUESTIONNAIRE_DB_PASSWORD}
       - POSTGRES_DB=${QUESTIONNAIRE_DB}
-    command: ['postgres']
+    command: ["postgres"]
     tty: true
     stdin_open: true
     healthcheck:
       test:
-        ['CMD-SHELL', 'pg_isready -U ${QUESTIONNAIRE_DB_USER} -d ${QUESTIONNAIRE_DB} -h localhost']
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${QUESTIONNAIRE_DB_USER} -d ${QUESTIONNAIRE_DB} -h localhost",
+        ]
       interval: 5s
       timeout: 10s
       retries: 10
@@ -55,15 +62,15 @@ services:
     environment:
       KEYCLOAK_ADMIN: administrator
       KEYCLOAK_ADMIN_PASSWORD: administrator # gitleaks:allow - Safe to ignore: test credential only.
-      KC_HEALTH_ENABLED: 'true'
+      KC_HEALTH_ENABLED: "true"
       KC_LOG_LEVEL: info
-    command: ['start-dev', '--import-realm']
+    command: ["start-dev", "--import-realm"]
     #healthcheck:
     #  test: 'curl --head -fsS http://localhost:8080/health/ready'
     #healthcheck:
     #  test: ['CMD', 'curl', '--fail', 'http://localhost:8080']
     ports:
-      - '${KEYCLOAK_PORT}:8080'
+      - "${KEYCLOAK_PORT}:8080"
     volumes:
       - ./keycloak/realms:/opt/keycloak/data/import
 
@@ -71,7 +78,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/queen-back-office:5.3.0-rc
+    image: inseefr/queen-back-office:5.4.1
     tty: true
     stdin_open: true
     #healthcheck:
@@ -121,7 +128,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/pearl-jam-back-office:snapshot-feat-add-contact-history
+    image: inseefr/pearl-jam-back-office:snapshot-fix-add-new-data-for-next-collect-campaign
     tty: true
     stdin_open: true
     # healthcheck:
@@ -169,7 +176,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/drama-queen:2.5.3
+    image: inseefr/drama-queen:3.1.2
     tty: true
     stdin_open: true
     #healthcheck:
@@ -184,7 +191,7 @@ services:
       questionnaire-api:
         condition: service_started
     ports:
-      - '${QUEEN_FRONTEND_PORT}:8080'
+      - "${QUEEN_FRONTEND_PORT}:8080"
 
   pearl-front:
     profiles:
@@ -205,7 +212,7 @@ services:
     tty: true
     stdin_open: true
     healthcheck:
-      test: ['CMD', 'curl', '--fail', 'http://localhost']
+      test: ["CMD", "curl", "--fail", "http://localhost"]
     depends_on:
       queen-front:
         condition: service_started
@@ -214,7 +221,7 @@ services:
       pearl-api:
         condition: service_started
     ports:
-      - '${PEARL_FRONTEND_PORT}:8300'
+      - "${PEARL_FRONTEND_PORT}:8300"
 
   playwright-captation:
     image: mcr.microsoft.com/playwright:v1.51.1-noble

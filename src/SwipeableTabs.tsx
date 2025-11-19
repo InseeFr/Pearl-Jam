@@ -12,7 +12,12 @@ import {
 import SwipeableViews from 'react-swipeable-views';
 import { v4 as uuidv4 } from 'uuid';
 
-export function SwipeableTab(props: Readonly<PropsWithChildren<{ label: string }>>) {
+type SwipeableTabProps = {
+  label: string;
+  default?: boolean;
+};
+
+export function SwipeableTab(props: Readonly<PropsWithChildren<SwipeableTabProps>>) {
   const { children } = props;
   return <Box sx={{ p: 4 }}>{children}</Box>;
 }
@@ -25,7 +30,14 @@ function a11yProps(index: number) {
 }
 
 export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
-  const [value, setValue] = useState(0);
+  const validChildren = Children.toArray(children).filter(isValidElement) as ReactElement<{
+    label: string;
+    default?: boolean;
+  }>[];
+
+  const defaultIndex = validChildren.findIndex(child => child.props.default === true) ?? 0;
+
+  const [value, setValue] = useState(defaultIndex);
 
   const handleChange = (event: unknown, newValue: number) => {
     setValue(newValue);
@@ -35,21 +47,20 @@ export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
     setValue(index);
   };
 
-  const validChildren = Children.toArray(children).filter(isValidElement);
-  const tabs = validChildren.map((child, index) => {
-    const el = child as ReactElement<{ label: string }>;
-    return <Tab key={uuidv4()} label={el.props.label} {...a11yProps(index)} />;
-  });
+  const tabs = validChildren.map((child, index) => (
+    <Tab key={uuidv4()} label={child.props.label} {...a11yProps(index)} />
+  ));
 
   return (
     <>
       <Tabs className="navigation" value={value} onChange={handleChange}>
         {tabs}
       </Tabs>
+
       <SwipeableViews axis="x" index={value} onChangeIndex={handleChangeIndex}>
         {validChildren.map((child, index) => (
           <div
-            key={child.key}
+            key={child.key || index}
             role="tabpanel"
             id={`full-width-tabpanel-${index}`}
             aria-labelledby={`full-width-tab-${index}`}

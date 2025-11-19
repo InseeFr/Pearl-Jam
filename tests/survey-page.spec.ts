@@ -97,24 +97,24 @@ test('Check previous collect history, modify next collect history and synchroniz
 
   const surveyPage = new SurveyPage(page);
   await page.getByRole('checkbox', { name: 'Masquer les unités terminées' }).uncheck();
-  await page.getByRole('link', { name: 'FARMER Ted' }).click();
+  await page.getByRole('link', { name: 'SIMMONS Earl' }).click();
   await page
     .locator('div')
     .filter({ hasText: /^Bilan des contacts :INA$/ })
     .nth(1)
     .click();
   await expect(page.getByRole('cell', { name: 'MISTER' }).first()).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'Isidore' }).first()).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'Opre' }).first()).toBeVisible();
-  await expect(page.getByRole('cell', { name: '45' }).first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Clifford' }).first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Smith' }).first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: '23' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Oui' }).first()).toBeVisible();
 
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
 
   await expect(page.getByRole('tab', { name: 'Collecte suivante' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'MISTER' })).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'TURE' })).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'Fu' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Gary' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Grice' })).toBeVisible();
 
   await page.getByRole('cell', { name: 'test@test.com' }).click();
   await page.getByRole('button', { name: 'Ajouter une ligne de coordonn' }).click();
@@ -133,12 +133,12 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('button', { name: 'Confirmer' }).click();
 
   await homePage.synchronize();
-  await page.getByRole('link', { name: 'FARMER Ted' }).click();
+  await page.getByRole('link', { name: 'SIMMONS Earl' }).click();
 
   await expect(page.getByRole('tab', { name: 'Collecte suivante' })).toBeHidden();
   await expect(page.getByRole('cell', { name: 'MISTER' })).toBeHidden();
-  await expect(page.getByRole('cell', { name: 'TURE' })).toBeHidden();
-  await expect(page.getByRole('cell', { name: 'Fu' })).toBeHidden();
+  await expect(page.getByRole('cell', { name: 'Gary' })).toBeHidden();
+  await expect(page.getByRole('cell', { name: 'Grice' })).toBeHidden();
   await expect(page.getByRole('cell', { name: 'MISTER' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'SOUDIERE' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Hugo' }).first()).toBeVisible();

@@ -53,7 +53,7 @@ export function PersonsCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>
 
   return (
     <>
-      <Card p={2} elevation={0}>
+      <Card elevation={0}>
         <CardContent>
           <Stack gap={3}>
             <Row justifyContent="space-between">

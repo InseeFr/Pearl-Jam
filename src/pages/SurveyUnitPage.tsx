@@ -75,7 +75,7 @@ export function SurveyUnitPage() {
             <PreviousCollectCard previousCollectHistory={surveyUnit.previousContactHistory} />
           </SwipeableTab>
         )}
-        <SwipeableTab label={D.goToIdentificationPage}>
+        <SwipeableTab label={D.goToIdentificationPage} default>
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
             <AddressCard surveyUnit={surveyUnit} />
             <IdentificationCard surveyUnit={surveyUnit} />
@@ -96,7 +96,7 @@ export function SurveyUnitPage() {
         <SwipeableTab label={D.goToCommentsPage}>
           <CommentCard surveyUnit={surveyUnit} />
         </SwipeableTab>
-        {surveyUnit.nextContactHistory && (
+        {surveyUnit.collectNextContacts && (
           <SwipeableTab label={D.goToNextCollect}>
             <NextCollectCard surveyUnit={surveyUnit} />
           </SwipeableTab>

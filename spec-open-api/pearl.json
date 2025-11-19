@@ -1,6 +1,7 @@
 {
   "openapi": "3.1.0",
-  "info": { "title": "Pearl-Jam-Back-Office", "version": "5.9.0" },
+  "info": { "title": "Pearl-Jam-Back-Office", "version": "5.13.1" },
+  "servers": [{ "url": "https://api-collecte-enqueteurs-enquetes.developpement.insee.fr" }],
   "security": [{ "oauth2": ["read", "write"] }],
   "tags": [
     { "name": "04. Interviewers", "description": "Endpoints for interviewers" },
@@ -24,7 +25,10 @@
           { "name": "ouId", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "responses": {
-          "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } }
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/UserDto" } } }
+          }
         }
       }
     },
@@ -57,7 +61,10 @@
           "required": true
         },
         "responses": {
-          "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } }
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/UserDto" } } }
+          }
         }
       },
       "delete": {
@@ -67,9 +74,7 @@
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
-        "responses": {
-          "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } }
-        }
+        "responses": { "200": { "description": "OK" } }
       }
     },
     "/api/survey-unit/{id}": {
@@ -446,8 +451,8 @@
     "/api/user": {
       "get": {
         "tags": ["03. Users"],
-        "summary": "Get User",
-        "operationId": "getUser",
+        "summary": "Get current user",
+        "operationId": "getCurrentUser",
         "responses": {
           "200": {
             "description": "OK",
@@ -466,7 +471,10 @@
           "required": true
         },
         "responses": {
-          "200": { "description": "OK", "content": { "*/*": { "schema": { "type": "object" } } } }
+          "201": {
+            "description": "Created",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/UserDto" } } }
+          }
         }
       }
     },
@@ -920,6 +928,34 @@
         }
       }
     },
+    "/api/interrogations": {
+      "get": {
+        "tags": ["02. Survey-units"],
+        "summary": "Get SurveyUnits",
+        "operationId": "getListSurveyUnit_1",
+        "parameters": [
+          {
+            "name": "extended",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/SurveyUnitDto" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/healthcheck": {
       "get": {
         "tags": ["09. HealthCheck"],
@@ -1177,6 +1213,54 @@
                 "schema": {
                   "type": "array",
                   "items": { "$ref": "#/components/schemas/CampaignSensitivityDto" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaigns/commons/{id}": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get commons campaign",
+        "operationId": "getCommonsCampaignsById",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CampaignCommonsDto" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CampaignCommonsDto" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/campaigns/commons/ongoing": {
+      "get": {
+        "tags": ["01. Campaigns"],
+        "summary": "Get commons ongoing campaigns",
+        "operationId": "getCommonsOngoingCampaigns",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/CampaignCommonsDto" }
                 }
               }
             }
@@ -1625,7 +1709,8 @@
     "schemas": {
       "OrganizationUnitDto": {
         "type": "object",
-        "properties": { "id": { "type": "string" }, "label": { "type": "string" } }
+        "properties": { "id": { "type": "string" }, "label": { "type": "string" } },
+        "required": ["id"]
       },
       "UserDto": {
         "type": "object",
@@ -1638,7 +1723,8 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/OrganizationUnitDto" }
           }
-        }
+        },
+        "required": ["firstName", "id", "lastName", "organizationUnit"]
       },
       "AddressDto": {
         "type": "object",
@@ -2157,41 +2243,6 @@
         ]
       },
       "OngoingDto": { "type": "object", "properties": { "ongoing": { "type": "boolean" } } },
-      "SurveyUnitDto": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string" },
-          "campaign": { "type": "string" },
-          "campaignLabel": { "type": "string" },
-          "managementStartDate": { "type": "integer", "format": "int64" },
-          "interviewerStartDate": { "type": "integer", "format": "int64" },
-          "identificationPhaseStartDate": { "type": "integer", "format": "int64" },
-          "collectionStartDate": { "type": "integer", "format": "int64" },
-          "collectionEndDate": { "type": "integer", "format": "int64" },
-          "endDate": { "type": "integer", "format": "int64" },
-          "identificationConfiguration": {
-            "type": "string",
-            "enum": [
-              "IASCO",
-              "HOUSEF2F",
-              "HOUSETEL",
-              "HOUSETELWSR",
-              "INDF2F",
-              "INDF2FNOR",
-              "INDTEL",
-              "INDTELNOR",
-              "SRCVREINT",
-              "NOIDENT"
-            ]
-          },
-          "contactOutcomeConfiguration": { "type": "string", "enum": ["F2F", "TEL"] },
-          "contactAttemptConfiguration": { "type": "string", "enum": ["F2F", "TEL"] },
-          "collectNextContacts": { "type": "boolean" },
-          "useLetterCommunication": { "type": "boolean" },
-          "persons": { "type": "array", "items": { "$ref": "#/components/schemas/PersonDto" } },
-          "address": { "$ref": "#/components/schemas/AddressDto" }
-        }
-      },
       "InterviewerDto": {
         "type": "object",
         "properties": {
@@ -2364,6 +2415,41 @@
           "nextContactHistory": { "$ref": "#/components/schemas/NextContactHistoryDto" }
         }
       },
+      "SurveyUnitDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "campaign": { "type": "string" },
+          "campaignLabel": { "type": "string" },
+          "managementStartDate": { "type": "integer", "format": "int64" },
+          "interviewerStartDate": { "type": "integer", "format": "int64" },
+          "identificationPhaseStartDate": { "type": "integer", "format": "int64" },
+          "collectionStartDate": { "type": "integer", "format": "int64" },
+          "collectionEndDate": { "type": "integer", "format": "int64" },
+          "endDate": { "type": "integer", "format": "int64" },
+          "identificationConfiguration": {
+            "type": "string",
+            "enum": [
+              "IASCO",
+              "HOUSEF2F",
+              "HOUSETEL",
+              "HOUSETELWSR",
+              "INDF2F",
+              "INDF2FNOR",
+              "INDTEL",
+              "INDTELNOR",
+              "SRCVREINT",
+              "NOIDENT"
+            ]
+          },
+          "contactOutcomeConfiguration": { "type": "string", "enum": ["F2F", "TEL"] },
+          "contactAttemptConfiguration": { "type": "string", "enum": ["F2F", "TEL"] },
+          "collectNextContacts": { "type": "boolean" },
+          "useLetterCommunication": { "type": "boolean" },
+          "persons": { "type": "array", "items": { "$ref": "#/components/schemas/PersonDto" } },
+          "address": { "$ref": "#/components/schemas/AddressDto" }
+        }
+      },
       "HabilitationDto": {
         "type": "object",
         "properties": { "habilitated": { "type": "boolean" } }
@@ -2443,6 +2529,16 @@
         },
         "required": ["id"]
       },
+      "CampaignCommonsDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "dataCollectionTarget": { "type": "string", "minLength": 1 },
+          "sensitivity": { "type": "boolean" },
+          "collectMode": { "type": "string", "minLength": 1 }
+        },
+        "required": ["collectMode", "dataCollectionTarget", "id", "sensitivity"]
+      },
       "StateCountCampaignDto": {
         "type": "object",
         "properties": {
@@ -2484,9 +2580,9 @@
         "name": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "http://localhost:7080/realms/sabiane/protocol/openid-connect/auth",
-            "tokenUrl": "http://localhost:7080/realms/sabiane/protocol/openid-connect/token",
-            "refreshUrl": "http://localhost:7080/realms/sabiane/protocol/openid-connect/token",
+            "authorizationUrl": "https://auth.insee.test/auth/realms/agents-insee-interne/protocol/openid-connect/auth",
+            "tokenUrl": "https://auth.insee.test/auth/realms/agents-insee-interne/protocol/openid-connect/token",
+            "refreshUrl": "https://auth.insee.test/auth/realms/agents-insee-interne/protocol/openid-connect/token",
             "scopes": {}
           }
         }
