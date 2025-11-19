@@ -113,7 +113,7 @@ test('Check previous collect history, modify next collect history and synchroniz
   await expect(page.getByRole('cell', { name: 'M' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Gary' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Grice' })).toBeVisible();
-  await page.getByRole('cell', { name: 'test@test.com' }).first().click();
+  await expect(page.getByRole('cell', { name: 'test@test.com' }).first()).toBeVisible();
 
   await page.getByRole('button', { name: 'Ajouter une ligne de coordonn' }).click();
   await page.getByRole('radio', { name: 'M', exact: true }).check();
