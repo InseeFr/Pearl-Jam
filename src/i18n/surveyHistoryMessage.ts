@@ -94,13 +94,13 @@ const surveyHistoryMessage = {
   },
   editContactMale: {
     fr: 'M',
-    en: 'Mr.',
-    sq: 'Z.',
+    en: 'Mr',
+    sq: 'Z',
   },
   editContactFemale: {
     fr: 'Mme',
-    en: 'Ms.',
-    sq: 'Znj.',
+    en: 'Ms',
+    sq: 'Znj',
   },
   yes: {
     fr: 'Oui',

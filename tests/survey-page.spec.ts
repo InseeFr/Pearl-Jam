@@ -94,16 +94,15 @@ test('Check previous collect history, modify next collect history and synchroniz
   const homePage = new HomePage(page);
   await homePage.go();
   await homePage.synchronize();
-
-  const surveyPage = new SurveyPage(page);
   await page.getByRole('checkbox', { name: 'Masquer les unités terminées' }).uncheck();
   await page.getByRole('link', { name: 'SIMMONS Earl' }).click();
+  await page.getByRole('tab', { name: 'Collecte précédente' }).click();
   await page
     .locator('div')
     .filter({ hasText: /^Bilan des contacts :INA$/ })
     .nth(1)
     .click();
-  await expect(page.getByRole('cell', { name: 'MISTER' }).first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'MR' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Clifford' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Smith' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: '23' }).first()).toBeVisible();
@@ -112,7 +111,7 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
 
   await expect(page.getByRole('tab', { name: 'Collecte suivante' })).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'MISTER' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'MR' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Gary' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Grice' })).toBeVisible();
 
