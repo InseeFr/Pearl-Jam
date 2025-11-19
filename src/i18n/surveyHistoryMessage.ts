@@ -198,12 +198,12 @@ const surveyHistoryMessage = {
     sq: 'Informacionet e mbledhjes së mëparshme',
   },
   MISTER: {
-    fr: 'MR',
+    fr: 'M',
     en: 'Mr',
     sq: 'Z',
   },
   MISS: {
-    fr: 'MMe',
+    fr: 'Mme',
     en: 'Ms',
     sq: 'Znj',
   },

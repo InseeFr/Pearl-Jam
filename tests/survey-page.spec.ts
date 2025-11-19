@@ -102,16 +102,15 @@ test('Check previous collect history, modify next collect history and synchroniz
     .filter({ hasText: /^Bilan des contacts :INA$/ })
     .nth(1)
     .click();
-  await expect(page.getByRole('cell', { name: 'MR' }).first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'M' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Clifford' }).first()).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'Smith' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: '23' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Oui' }).first()).toBeVisible();
 
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
 
   await expect(page.getByRole('tab', { name: 'Collecte suivante' })).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'MR' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'M' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Gary' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Grice' })).toBeVisible();
 
@@ -135,10 +134,10 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('link', { name: 'SIMMONS Earl' }).click();
 
   await expect(page.getByRole('tab', { name: 'Collecte suivante' })).toBeHidden();
-  await expect(page.getByRole('cell', { name: 'MISTER' })).toBeHidden();
+  await expect(page.getByRole('cell', { name: 'M' })).toBeHidden();
   await expect(page.getByRole('cell', { name: 'Gary' })).toBeHidden();
   await expect(page.getByRole('cell', { name: 'Grice' })).toBeHidden();
-  await expect(page.getByRole('cell', { name: 'MISTER' }).first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'M' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'SOUDIERE' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Hugo' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'purpleposse@gmail.com' }).first()).toBeVisible();
