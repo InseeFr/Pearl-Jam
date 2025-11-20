@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import D from '../../i18n/build-dictionary';
@@ -90,7 +90,7 @@ describe('Questionnaires Component', () => {
 
       const button = screen.getByText(D.accessTheQuestionnaire);
       expect(button).toBeDefined();
-      expect(button.closest('a')?.getAttribute('href')).toBe(`/queen/survey-unit/${mockSurveyUnit.id}`);
+      expect(button.closest('button')).toBeDefined();
     });
 
     it('should render the StickyNote2Icon', () => {
@@ -107,8 +107,8 @@ describe('Questionnaires Component', () => {
 
       renderWithProviders(mockSurveyUnit);
 
-      const button = screen.getByText(D.accessTheQuestionnaire);
-      expect(button.closest('a')?.classList.contains('Mui-disabled')).toBe(false);
+      const button = screen.getByText(D.accessTheQuestionnaire).closest('button');
+      expect(button?.disabled).toBe(false);
     });
 
     it('should disable the button when questionnaire is not available', () => {
@@ -116,8 +116,8 @@ describe('Questionnaires Component', () => {
 
       renderWithProviders(mockSurveyUnit);
 
-      const button = screen.getByText(D.accessTheQuestionnaire);
-      expect(button.closest('a')?.classList.contains('Mui-disabled')).toBe(true);
+      const button = screen.getByText(D.accessTheQuestionnaire).closest('button');
+      expect(button?.disabled).toBe(true);
     });
   });
 
@@ -255,6 +255,38 @@ describe('Questionnaires Component', () => {
       expect(screen.getByTestId('GroupOutlinedIcon')).toBeDefined();
     });
   });
+
+  describe('Confirmation modal', () => {
+    it('should show confirmation modal when clicking access questionnaire button', async () => {
+      renderWithProviders(mockSurveyUnit);
+
+      const button = screen.getByText(D.accessTheQuestionnaire);
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(screen.getByText(D.questionnaireAccessConfirmationTitle)).toBeDefined();
+        expect(screen.getByText(D.questionnaireAccessConfirmationMessage)).toBeDefined();
+      });
+    });
+
+    it('should close modal when clicking cancel button', async () => {
+      renderWithProviders(mockSurveyUnit);
+
+      const button = screen.getByText(D.accessTheQuestionnaire);
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(screen.getByText(D.questionnaireAccessConfirmationTitle)).toBeDefined();
+      });
+
+      const cancelButton = screen.getByText(D.cancelButton);
+      fireEvent.click(cancelButton);
+
+      await waitFor(() => {
+        expect(screen.queryByText(D.questionnaireAccessConfirmationTitle)).toBeNull();
+      });
+    });
+  });
 });
 
 describe('ArticulationTable Component', () => {
@@ -355,7 +387,7 @@ describe('ArticulationTable Component', () => {
     expect(screen.getByText(D.finished)).toBeDefined();
   });
 
-  it('should render buttons with correct links', () => {
+  it('should render buttons correctly', () => {
     const mockTable = {
       rows: [
         {
@@ -370,7 +402,7 @@ describe('ArticulationTable Component', () => {
     renderWithProviders(mockTable);
 
     const button = screen.getByText('Open questionnaire');
-    expect(button.closest('a')?.getAttribute('href')).toBe('/queen/survey-unit/999');
+    expect(button.closest('button')).toBeDefined();
   });
 
   it('should render multiple rows correctly', () => {
@@ -405,6 +437,58 @@ describe('ArticulationTable Component', () => {
     expect(screen.getByText('Row 1')).toBeDefined();
     expect(screen.getByText('Row 2')).toBeDefined();
     expect(screen.getByText('Row 3')).toBeDefined();
+  });
+
+  it('should show confirmation modal when clicking on row button', async () => {
+    const mockTable = {
+      rows: [
+        {
+          cells: [{ value: 1 }],
+          progress: 1,
+          label: 'Open questionnaire',
+          url: '/queen/survey-unit/999',
+        },
+      ],
+    };
+
+    renderWithProviders(mockTable);
+
+    const button = screen.getByText('Open questionnaire');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByText(D.questionnaireAccessConfirmationTitle)).toBeDefined();
+      expect(screen.getByText(D.questionnaireAccessConfirmationMessage)).toBeDefined();
+    });
+  });
+
+  it('should close modal when clicking cancel button in ArticulationTable', async () => {
+    const mockTable = {
+      rows: [
+        {
+          cells: [{ value: 1 }],
+          progress: 1,
+          label: 'Open questionnaire',
+          url: '/queen/survey-unit/999',
+        },
+      ],
+    };
+
+    renderWithProviders(mockTable);
+
+    const button = screen.getByText('Open questionnaire');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByText(D.questionnaireAccessConfirmationTitle)).toBeDefined();
+    });
+
+    const cancelButton = screen.getByText(D.cancelButton);
+    fireEvent.click(cancelButton);
+
+    await waitFor(() => {
+      expect(screen.queryByText(D.questionnaireAccessConfirmationTitle)).toBeNull();
+    });
   });
 });
 
