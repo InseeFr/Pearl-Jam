@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Row } from '../Row';
 import { Typography } from '../Typography';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
@@ -15,7 +15,7 @@ import BlockIcon from '@mui/icons-material/Block';
 import D from 'i18n';
 import { SurveyUnit } from 'types/pearl';
 import { isQuestionnaireAvailable } from '../../utils/functions';
-import { Box, Table, TableBody, TableCell, TableRow } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableRow, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import React, {useEffect, useState} from 'react';
 import { getMostRecentState } from '../../utils/synchronize';
@@ -104,12 +104,46 @@ function QuestionnaireStateChip({
   return <StateChip progress={progress} />;
 }
 
+/**
+ * Confirmation modal component
+ */
+function ConfirmationModal({
+  open,
+  onClose,
+  onConfirm,
+}: Readonly<{
+  open: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+}>) {
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>{D.questionnaireAccessConfirmationTitle}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          {D.questionnaireAccessConfirmationMessage}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="primary">
+          {D.cancelButton}
+        </Button>
+        <Button onClick={onConfirm} color="primary" variant="contained">
+          {D.continueButton}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>) {
   const { id } = surveyUnit;
   const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
+  const navigate = useNavigate();
 
   const [articulationHook, setArticulationHook] = useState<ArticulationTableHook | null>(null);
   const [articulationTable, setArticulationTable] = useState<ArticulationTableData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     import('dramaQueen/useArticulationTable')
@@ -139,6 +173,19 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 
   const latestState = getMostRecentState(surveyUnit);
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleConfirm = () => {
+    setIsModalOpen(false);
+    navigate(`/queen/survey-unit/${id}`);
+  };
+
   return (
     <Card elevation={0}>
       <CardContent>
@@ -164,12 +211,17 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
                 variant="contained"
                 disabled={!isAvailable}
                 startIcon={<SlowMotionVideoIcon />}
-                component={RouterLink}
-                to={`/queen/survey-unit/${id}`}
+                onClick={handleOpenModal}
               >
                 {D.accessTheQuestionnaire}
               </Button>
             </Row>
+
+            <ConfirmationModal
+              open={isModalOpen}
+              onClose={handleCloseModal}
+              onConfirm={handleConfirm}
+            />
 
             {latestState?.date && (
               <Row gap={6}>
@@ -221,39 +273,65 @@ export function ArticulationTable(
   }>
 ) {
   const table = props.table;
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUrl, setSelectedUrl] = useState<string>('');
+
+  const handleOpenModal = (url: string) => {
+    setSelectedUrl(url);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedUrl('');
+  };
+
+  const handleConfirm = () => {
+    setIsModalOpen(false);
+    navigate(selectedUrl);
+    setSelectedUrl('');
+  };
 
   if (!table) {
     return null;
   }
 
   return (
-    <Table sx={{ borderCollapse: 'collapse' }} size="small" style={{ width: 'max-content' }}>
-      <TableBody>
-        {table.rows.map((row, k) => (
-          <TableRow key={k}>
-            <TableCell width={50} style={{ background: 'none' }}>
-              <PersonOutlineOutlinedIcon />
-            </TableCell>
-            {row.cells.map((cell, kk) => (
-              <TableCell key={kk}>{cell.value}</TableCell>
-            ))}
-            <TableCell>
-              <StateChip progress={row.progress} />
-            </TableCell>
-            <TableCell>
-              <Button
-                variant="contained"
-                component={RouterLink}
-                to={row.url}
-                startIcon={<SlowMotionVideoIcon />}
-              >
-                {row.label}
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <Table sx={{ borderCollapse: 'collapse' }} size="small" style={{ width: 'max-content' }}>
+        <TableBody>
+          {table.rows.map((row, k) => (
+            <TableRow key={k}>
+              <TableCell width={50} style={{ background: 'none' }}>
+                <PersonOutlineOutlinedIcon />
+              </TableCell>
+              {row.cells.map((cell, kk) => (
+                <TableCell key={kk}>{cell.value}</TableCell>
+              ))}
+              <TableCell>
+                <StateChip progress={row.progress} />
+              </TableCell>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  onClick={() => handleOpenModal(row.url)}
+                  startIcon={<SlowMotionVideoIcon />}
+                >
+                  {row.label}
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <ConfirmationModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirm}
+      />
+    </>
   );
 }
 
