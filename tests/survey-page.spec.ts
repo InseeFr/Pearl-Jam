@@ -48,7 +48,7 @@ test('check if all tabs work properly', async ({ page }) => {
   await expect(page.getByLabel('Contacts')).toContainText('Dubuque');
 });
 
-test.skip('check if a survey has the "To synchronize" state after Unavaible', async ({ page }) => {
+test('check if a survey has the "To synchronize" state after Unavaible', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();
   await homePage.synchronize();
@@ -56,11 +56,14 @@ test.skip('check if a survey has the "To synchronize" state after Unavaible', as
   const surveyPage = new SurveyPage(page);
   await page.getByRole('link', { name: 'MOREAU Isabelle' }).click();
 
-  await page.getByRole('button', { name: 'Identification du logement' }).click();
+  await page.getByRole('button', { name: "Identification de l'adresse" }).click();
+  await page.getByText('Adresse identifiée avec un bâtiment', { exact: true }).click();
+  await page.getByRole('button', { name: 'Confirmer' }).click();
+  await page.getByRole('heading', { name: 'Identification du logement' }).isVisible();
   await page.getByText('Logement identifié').click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
-  await page.getByText('Catégorie du logement').click();
-  await page.getByText('Résidence principale').click();
+  await page.getByRole('heading', { name: 'Situation du logement' }).isVisible();
+  await page.getByText("Logement absorbé ou ayant perdu son usage d'habitation").click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
 
   await surveyPage.selectTab('Contacts');
@@ -68,24 +71,25 @@ test.skip('check if a survey has the "To synchronize" state after Unavaible', as
   await surveyPage.editContactOutcome();
   await surveyPage.forward();
 
-  await homePage.go();
+  await homePage.goToRootPage();
+
   page.locator('div').filter({ hasText: /^MOREAU Isabelle#questNotAvailable$/ });
 
+  await page.getByRole('button', { name: 'Fermer' }).click();
   await page.getByRole('link', { name: 'Mon suivi' }).click();
   await page.getByRole('tab', { name: 'Suivi des unités par enquête' }).click();
-  await page.getByRole('row', { name: '#su10 MOREAU Isabell' }).locator('span').first().click();
+  await page.getByRole('cell', { name: 'MOREAU Isabelle' }).click();
 
-  await expect(page.locator('tr:nth-child(3) > td:nth-child(3)')).toContainText(
-    'A repérer/Contacter'
-  );
-  await expect(page.locator('tr:nth-child(3) > td:nth-child(4)')).toContainText('Face à face');
+  const row = page.getByRole('row', { name: 'MOREAU Isabelle' });
+  await expect(row.getByRole('cell', { name: 'A synchroniser' })).toBeVisible();
+  await expect(row.getByText('Face à face')).toBeVisible();
 
-  await page.getByRole('row', { name: '#su10 MOREAU Isabell' }).getByRole('button').click();
+  await row.getByRole('button').click();
   await page.getByPlaceholder('Saisissez un commentaire...').click();
   await page.getByPlaceholder('Saisissez un commentaire...').fill('Test commentaire');
   await page.getByRole('button', { name: 'Enregistrer' }).click();
-  await page.getByRole('link', { name: '#su10' }).click();
-  await expect(page.locator('#root')).toContainText('MOREAU Isabell');
+  await page.getByRole('link', { name: '#business-id-proto01' }).click();
+  await expect(page.getByText('MOREAU Isabelle')).toBeVisible();
 });
 
 test('Check previous collect history, modify next collect history and synchronize', async ({
@@ -108,7 +112,6 @@ test('Check previous collect history, modify next collect history and synchroniz
   await expect(page.getByRole('cell', { name: 'Oui' }).first()).toBeVisible();
 
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
-
   await expect(page.getByRole('tab', { name: 'Collecte suivante' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'M' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Gary' })).toBeVisible();
@@ -131,14 +134,12 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('button', { name: 'Confirmer' }).click();
 
   await homePage.synchronize();
-  await page.getByRole('link', { name: 'SIMMONS Earl' }).click();
 
-  await expect(page.getByRole('tab', { name: 'Collecte suivante' })).toBeHidden();
-  await expect(page.getByRole('cell', { name: 'M' })).toBeHidden();
+  await page.getByRole('link', { name: 'SIMMONS Earl' }).click();
+  await page.getByRole('tab', { name: 'Collecte suivante' }).click();
   await expect(page.getByRole('cell', { name: 'Gary' })).toBeHidden();
   await expect(page.getByRole('cell', { name: 'Grice' })).toBeHidden();
-  await expect(page.getByRole('cell', { name: 'M' }).first()).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'SOUDIERE' }).first()).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'Hugo' }).first()).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'purpleposse@gmail.com' }).first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'SOUDIERE' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Hugo' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'purpleposse@gmail.com' })).toBeVisible();
 });

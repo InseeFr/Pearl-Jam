@@ -26,8 +26,9 @@ export class SurveyPage {
   }
 
   async editContactOutcome() {
-    await this.page.getByRole('button', { name: 'Modifier le bilan des contacts' }).click();
+    await this.page.getByRole('button', { name: 'Faire le bilan des contacts' }).click();
     await this.page.getByText('Indisponibilité définitive').click();
+    await this.page.getByRole('button').nth(1).click();
     await this.page.getByRole('button', { name: 'Enregistrer' }).click();
   }
 
