@@ -121,13 +121,13 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('button', { name: 'Ajouter une ligne de coordonn' }).click();
   await page.getByRole('radio', { name: 'M', exact: true }).check();
   await page.getByRole('textbox', { name: 'Nom *', exact: true }).click();
-  await page.getByRole('textbox', { name: 'Nom *', exact: true }).fill('Soudiere');
+  await page.getByRole('textbox', { name: 'Nom *', exact: true }).fill('Hugue');
   await page.getByRole('textbox', { name: 'Prénom *' }).click();
   await page.getByRole('textbox', { name: 'Prénom *' }).fill('Hugo');
   await page.getByRole('textbox', { name: 'Téléphone' }).click();
   await page.getByRole('textbox', { name: 'Téléphone' }).fill('01010101');
   await page.getByRole('textbox', { name: 'Email' }).click();
-  await page.getByRole('textbox', { name: 'Email' }).fill('purpleposse@gmail.com');
+  await page.getByRole('textbox', { name: 'Email' }).fill('test2@gmail.com');
   await page.getByRole('radio', { name: 'Oui' }).check();
   await page.getByRole('button', { name: 'Enregistrer' }).click();
   await page.getByRole('button', { name: 'Supprimer' }).first().click();
@@ -139,7 +139,7 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
   await expect(page.getByRole('cell', { name: 'Gary' })).toBeHidden();
   await expect(page.getByRole('cell', { name: 'Grice' })).toBeHidden();
-  await expect(page.getByRole('cell', { name: 'SOUDIERE' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Hugue' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Hugo' })).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'purpleposse@gmail.com' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'test2@gmail.com' })).toBeVisible();
 });
