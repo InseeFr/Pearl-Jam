@@ -171,6 +171,7 @@ export type SurveyUnit = {
   communicationTemplates: SurveyUnitCommunicationTemplate[];
   previousContactHistory?: PreviousContactHistory;
   nextContactHistory?: NextContactHistory;
+  collectNextContacts: boolean;
 };
 
 export type NotificationState = 'warning' | 'success' | 'error';

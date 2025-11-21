@@ -94,13 +94,13 @@ const surveyHistoryMessage = {
   },
   editContactMale: {
     fr: 'M',
-    en: 'Mr.',
-    sq: 'Z.',
+    en: 'Mr',
+    sq: 'Z',
   },
   editContactFemale: {
     fr: 'Mme',
-    en: 'Ms.',
-    sq: 'Znj.',
+    en: 'Ms',
+    sq: 'Znj',
   },
   yes: {
     fr: 'Oui',
@@ -193,9 +193,19 @@ const surveyHistoryMessage = {
     sq: 'Kontakt përmes postës',
   },
   previousSurveyInfo: {
-    fr: 'Information de la collecte précédante',
-    en: 'Previous collect information',
+    fr: 'Informations de la collecte précédente',
+    en: 'Previous collect informations',
     sq: 'Informacionet e mbledhjes së mëparshme',
+  },
+  MISTER: {
+    fr: 'M',
+    en: 'Mr',
+    sq: 'Z',
+  },
+  MISS: {
+    fr: 'Mme',
+    en: 'Ms',
+    sq: 'Znj',
   },
   nextSurveyInfo: {
     fr: 'Coordonnées des individus pour la collecte suivante ',
@@ -203,8 +213,8 @@ const surveyHistoryMessage = {
     sq: 'Koordinatat e individëve për mbledhjen e ardhshme',
   },
   previousCollectInterviewerComment: {
-    fr: 'Commentaire de l’enquêteur :',
-    en: "Interviewer's comment :",
+    fr: "Commentaire(s) passé(s) de l'enquêteur :",
+    en: "Interviewer's comment(s) :",
     sq: 'Komenti i hetuesit',
   },
   modalAddContact: {

@@ -127,7 +127,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                     },
                   }}
                 >
-                  <CustomTableCell>{c.title}</CustomTableCell>
+                  <CustomTableCell>{D[c.title]}</CustomTableCell>
                   <CustomTableCell>{c.lastName?.toUpperCase()}</CustomTableCell>
                   <CustomTableCell>{c.firstName}</CustomTableCell>
                   <CustomTableCell>{c.phoneNumber}</CustomTableCell>

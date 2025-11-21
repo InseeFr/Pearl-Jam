@@ -41,7 +41,7 @@ export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>
           <TableBody>
             {contacts.map(c => (
               <TableRow key={`${c.title}${c.firstName}${c.birthdate}`}>
-                <CustomTableCell>{c.title}</CustomTableCell>
+                <CustomTableCell>{D[c.title]}</CustomTableCell>
                 <CustomTableCell>{c.firstName}</CustomTableCell>
                 <CustomTableCell>{getAge(c.birthdate)}</CustomTableCell>
                 <CustomTableCell>{c.panel ? D.yes : D.no}</CustomTableCell>
