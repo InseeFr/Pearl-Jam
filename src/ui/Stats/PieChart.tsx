@@ -4,7 +4,7 @@ type Props = {
   data: PieChartData[];
 };
 
-export default function PieChart({ data }: Props) {
+export default function PieChart({ data }: Readonly<Props>) {
   const total = data.reduce((sum, item) => sum + item.value, 0);
   const radius = 120;
   const cx = 200;
@@ -51,8 +51,8 @@ export default function PieChart({ data }: Props) {
 
   return (
     <svg width="1000px" height="400px" viewBox="0 0 400 400">
-      {slices.map((slice, index) => (
-        <g key={index}>
+      {slices.map(slice => (
+        <g key={slice.label}>
           <path d={slice.path} fill={slice.color} stroke="#E8EBF0" strokeWidth="2" />
           <line
             x1={slice.lineX}
