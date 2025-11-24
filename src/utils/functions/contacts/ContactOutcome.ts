@@ -18,7 +18,7 @@ export const contactOutcomes = {
   NO_LONGER_USED_FOR_HABITATION: { value: 'NUH', label: `${D.noLongerUsedForHabitation}` },
   DEFINITLY_UNAVAILABLE: {
     value: 'DUK',
-    label: `${D.definitlyUnavailable}`,
+    label: `${D.definitlyUnavailableForUnknownReason}`,
   },
   NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
   UNTREATED_INVESTIGATOR_ABSENT: { value: 'NPA', label: `${D.untreatedInvestigatorAbsent}` },

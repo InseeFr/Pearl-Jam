@@ -68,7 +68,7 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
 
   await surveyPage.selectTab('Contacts');
   await surveyPage.addContactAttempt();
-  await surveyPage.editContactOutcome();
+  await surveyPage.setContactOutcomeAsDUK();
   await surveyPage.forward();
 
   await homePage.goToRootPage();
