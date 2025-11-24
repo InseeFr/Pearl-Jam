@@ -36,11 +36,6 @@ const contactOutcomeMessage = {
     en: 'Contact attempts total',
     sq: 'Totali i përpjekjeve për kontakt',
   },
-  definitlyUnavailable: {
-    fr: 'Indisponibilité définitive',
-    en: 'Unavailable',
-    sq: 'I padisponueshëm',
-  },
   definitlyUnavailableForUnknownReason: {
     fr: 'Indisponibilité définitive pour motif inconnu',
     en: 'Unavailable for an unknown reason',
@@ -50,6 +45,26 @@ const contactOutcomeMessage = {
     fr: 'Sans objet',
     en: 'Not applicable',
     sq: 'Nuk aplikohet',
+  },
+  untreatedInvestigatorAbsent: {
+    fr: 'Non traitée, enquêteur absent',
+    en: 'Untreated, investigator absent',
+    sq: 'E patrajtuar, hetuesi mungon',
+  },
+  untreatedInvestigatorPresent: {
+    fr: 'Non traitée, enquêteur présent',
+    en: 'Untreated, investigator present',
+    sq: 'E patrajtuar, hetuesi i pranishëm',
+  },
+  untreatedExceptionalCause: {
+    fr: 'Non traitée, cause exceptionnelle',
+    en: 'Untreated, exceptional cause',
+    sq: 'E patrajtuar, shkak i jashtëzakonshëm',
+  },
+  rightOfWithdrawal: {
+    fr: 'Droit de retrait',
+    en: 'Right of withdrawal',
+    sq: 'E drejta e tërheqjes',
   },
 };
 

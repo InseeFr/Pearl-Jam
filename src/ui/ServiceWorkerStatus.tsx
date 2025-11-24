@@ -30,18 +30,18 @@ export function ServiceWorkerStatus({ authenticated }: Readonly<{ authenticated:
   const state = useServiceWorker(authenticated);
   const message = getMessageFromState(state);
   const severity = getSeverity(state);
-  const [isOpen, setOpen] = useState(!!message);
+  const [isOpen, setIsOpen] = useState(!!message);
 
   /**
    * Message can be null at start and can change asynchronously, we have to update "isOpen" state according to new message value
    * isOpen is true if message is not a empty string
    */
   useEffect(() => {
-    setOpen(!!message);
+    setIsOpen(!!message);
   }, [message]);
 
   const handleClose = () => {
-    setOpen(false);
+    setIsOpen(false);
     if (state.isUpdateInstalled) {
       state.clearUpdating();
     }
@@ -69,6 +69,6 @@ export function ServiceWorkerStatus({ authenticated }: Readonly<{ authenticated:
   );
 }
 
-function SlideTransition(props: Omit<SlideProps, 'direction'>) {
+function SlideTransition(props: Readonly<Omit<SlideProps, 'direction'>>) {
   return <Slide direction="down" {...props} />;
 }

@@ -13,9 +13,9 @@ import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, NetworkFirst } from 'workbox-strategies';
 
-self._DRAMAQUEEN_URL = new URL(location).searchParams.get('QUEEN_URL');
+globalThis._DRAMAQUEEN_URL = new URL(location).searchParams.get('QUEEN_URL');
 
-importScripts(`${self._DRAMAQUEEN_URL}/queen-service-worker.js`);
+importScripts(`${globalThis._DRAMAQUEEN_URL}/queen-service-worker.js`);
 
 clientsClaim();
 
@@ -23,7 +23,7 @@ clientsClaim();
 // Their URLs are injected into the manifest variable below.
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
-precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(globalThis.__WB_MANIFEST);
 
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
@@ -62,7 +62,7 @@ const configurationCacheName = 'configuration-cache';
 const manifestImageCacheName = 'manifest-cache';
 
 registerRoute(
-  new RegExp(getUrlRegexJson(self.location.origin)),
+  new RegExp(getUrlRegexJson(globalThis.location.origin)),
   new NetworkFirst({
     cacheName: configurationCacheName,
     plugins: [
@@ -73,7 +73,7 @@ registerRoute(
   })
 );
 registerRoute(
-  new RegExp(getUrlRegexManifestFiles(self.location.origin)),
+  new RegExp(getUrlRegexManifestFiles(globalThis.location.origin)),
   new CacheFirst({
     cacheName: manifestImageCacheName,
     plugins: [
@@ -88,20 +88,27 @@ const cacheConfiguration = async () => {
   const manifest = await fetch('/manifest.json');
   const { icons } = await manifest.json();
   const urlsToPrecache = [`/manifest.json`].concat(icons.map(({ src }) => src));
-  const cache = await self.caches.open(configurationCacheName);
+  const cache = await globalThis.caches.open(configurationCacheName);
   await cache.addAll(urlsToPrecache);
 };
 
-self.addEventListener('install', event => {
+globalThis.addEventListener('install', event => {
   console.log('Pearl  sw : installing configuration..');
   event.waitUntil(cacheConfiguration());
 });
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
-self.addEventListener('message', event => {
+globalThis.addEventListener('message', event => {
+  console.log(event.origin);
+  console.log(globalThis._DRAMAQUEEN_URL);
+
+  if (event.origin !== globalThis._DRAMAQUEEN_URL) {
+    return;
+  }
+
   if (event.data?.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+    globalThis.skipWaiting();
   }
 });
 

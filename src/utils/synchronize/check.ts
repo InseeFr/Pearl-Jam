@@ -116,7 +116,7 @@ const getResult = (
 };
 
 export const analyseResult = async () => {
-  const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
+  const { id: userId } = JSON.parse(globalThis.localStorage.getItem(PEARL_USER_KEY) || '{}');
   const pearlSus = await surveyUnitIDBService.getAll();
   const pearlSurveyUnitsArray = pearlSus.map(({ id }: { id: string }) => id);
   const {
@@ -189,8 +189,8 @@ export const analyseResult = async () => {
 };
 
 export const saveSyncPearlData = (data: unknown) =>
-  window.localStorage.setItem('PEARL_SYNC_RESULT', JSON.stringify(data));
+  globalThis.localStorage.setItem('PEARL_SYNC_RESULT', JSON.stringify(data));
 export const getSavedSyncPearlData = () =>
-  JSON.parse(window.localStorage.getItem('PEARL_SYNC_RESULT') || '{}');
+  JSON.parse(globalThis.localStorage.getItem('PEARL_SYNC_RESULT') || '{}');
 export const getSavedSyncQueenData = () =>
-  JSON.parse(window.localStorage.getItem('QUEEN_SYNC_RESULT') || '{}');
+  JSON.parse(globalThis.localStorage.getItem('QUEEN_SYNC_RESULT') || '{}');

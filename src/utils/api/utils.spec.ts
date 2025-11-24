@@ -51,7 +51,7 @@ describe('Utils tests', () => {
   });
 
   it('should authenticate with KEYCLOAK', async () => {
-    window.localStorage.setItem(PEARL_USER_KEY, 'user');
+    globalThis.localStorage.setItem(PEARL_USER_KEY, 'user');
     await authentication(KEYCLOAK);
     expect(refreshToken).toHaveBeenCalled();
   });

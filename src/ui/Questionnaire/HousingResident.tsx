@@ -31,7 +31,7 @@ const HousingResident = ({
         </Typography>
         {!finishedHousing && (
           <CustomChip
-            label={!startHousing ? 'Non commencé' : 'En cours'}
+            label={startHousing ? 'En cours' : 'Non commencé'}
             icon={startHousing ? <TimeIcon /> : <DisturbIcon />}
             color={startHousing ? '#FD8A02' : '#6C6E70'}
             shadow={true}

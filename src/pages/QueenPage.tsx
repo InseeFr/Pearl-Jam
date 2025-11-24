@@ -26,17 +26,17 @@ export default function QueenPage() {
       }
       navigate(newPathname);
     };
-    window.addEventListener('[Drama Queen] navigated', dramaQueenNavigationEventHandler);
+    globalThis.addEventListener('[Drama Queen] navigated', dramaQueenNavigationEventHandler);
 
     return () => {
-      window.removeEventListener('[Drama Queen] navigated', dramaQueenNavigationEventHandler);
+      globalThis.removeEventListener('[Drama Queen] navigated', dramaQueenNavigationEventHandler);
     };
   }, [location]);
 
   // Listen for Pearl location changes and dispatch a notification.
   useEffect(() => {
     if (location.pathname.startsWith(queenPathname)) {
-      window.dispatchEvent(
+      globalThis.dispatchEvent(
         new CustomEvent('[Pearl] navigated', {
           detail: location.pathname.replace(queenPathname, ''),
         })

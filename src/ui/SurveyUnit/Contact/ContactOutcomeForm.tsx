@@ -62,17 +62,16 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
         surveyUnit.contactOutcome?.type
       )
     ).map(o => ({
-      label: o.label,
+      label: `${o.value} : ${o.label}`,
       value: o.value,
     }));
   }, [surveyUnit.contactOutcomeConfiguration]);
-
 
   const [count, type] = watch(['totalNumberOfContactAttempts', 'type']);
   const isInvalid = count <= 0 || Number.isNaN(count) || !type;
 
   return (
-    <Dialog open={true} onClose={onClose}>
+    <Dialog open={true} onClose={onClose} maxWidth="lg">
       <form action="" onSubmit={onSubmit}>
         <DialogTitle>{D.contactOutcome}</DialogTitle>
         <DialogContent>
