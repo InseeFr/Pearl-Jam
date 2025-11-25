@@ -35,7 +35,7 @@ export type ContactHistoryPersonTitle = 'MISTER' | 'MISS';
 
 export type PreviousContactHistoryPerson = {
   id?: number;
-  title: ContactHistoryPersonTitle;
+  title?: ContactHistoryPersonTitle;
   firstName: string;
   lastName: string;
   birthdate?: number;
