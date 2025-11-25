@@ -1,11 +1,11 @@
 import { Dialog, DialogTitle, DialogContent, Button, Stack, Typography } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { DefaultValues, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { NextContactHistoryPerson } from 'types/pearl';
 import { FieldRow } from 'ui/FieldRow';
 import D from 'i18n';
-import { useEffect } from 'react';
 import { ContactFormData, contactSchema } from 'utils/schemas/nextContactSchema';
+import { useEffect } from 'react';
 
 type ModifyContactModalProps = {
   open: boolean;
@@ -22,6 +22,15 @@ export function ContactModal({
   onClose,
   onConfirm,
 }: Readonly<ModifyContactModalProps>) {
+  const defaultValues = {
+    title: contact?.title ?? 'MISTER',
+    firstName: contact?.firstName ?? '',
+    lastName: contact?.lastName ?? '',
+    phoneNumber: contact?.phoneNumber ?? '',
+    email: contact?.email ?? '',
+    preferredContact: contact?.preferredContact ? 'true' : 'false',
+  } as const;
+
   const {
     register,
     handleSubmit,
@@ -30,15 +39,8 @@ export function ContactModal({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(contactSchema),
-    defaultValues: {
-      title: contact?.title,
-      lastName: contact?.lastName,
-      firstName: contact?.firstName,
-      phoneNumber: contact?.phoneNumber,
-      email: contact?.email,
-      preferredContact: contact?.preferredContact ? 'true' : 'false',
-    },
     mode: 'onSubmit',
+    defaultValues: defaultValues,
     reValidateMode: 'onBlur',
   });
 
@@ -57,11 +59,15 @@ export function ContactModal({
 
   const handleFormSubmit = (formData: ContactFormData) => {
     onConfirm(formData);
+  };
+
+  const handleClose = () => {
+    onClose();
     reset();
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>
         <Typography variant="h6" fontWeight={600}>
           {modalTitle}
@@ -122,7 +128,11 @@ export function ContactModal({
             />
 
             <Stack spacing={2} direction="row" mt={2}>
-              <Button variant="outlined" onClick={onClose} sx={{ fontWeight: 600, flexGrow: 1 }}>
+              <Button
+                variant="outlined"
+                onClick={handleClose}
+                sx={{ fontWeight: 600, flexGrow: 1 }}
+              >
                 {D.cancel}
               </Button>
               <Button type="submit" variant="contained" sx={{ fontWeight: 600, flexGrow: 1 }}>
