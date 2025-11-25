@@ -128,7 +128,8 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('textbox', { name: 'Téléphone' }).fill('01010101');
   await page.getByRole('textbox', { name: 'Email' }).click();
   await page.getByRole('textbox', { name: 'Email' }).fill('test2@gmail.com');
-  await page.getByRole('radio', { name: 'Oui' }).check();
+  await page.getByRole('radio', { name: 'Oui' }).click();
+  await page.getByRole('button', { name: "J'ai compris" }).click();
   await page.getByRole('button', { name: 'Enregistrer' }).click();
   await page.getByRole('button', { name: 'Supprimer' }).first().click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
