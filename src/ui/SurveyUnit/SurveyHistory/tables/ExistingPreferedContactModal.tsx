@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, Typography, Button, Stack } from '@mui/material';
+import { Dialog, DialogContent, Typography, Button, Stack } from '@mui/material';
 import D from 'i18n';
 import { Contact } from 'types/pearl';
 
@@ -14,7 +14,7 @@ export function ExistingPreferedContactModal({
   preferredContact,
   open,
   onClose,
-}: PreferredContactModalProps) {
+}: Readonly<PreferredContactModalProps>) {
   if (!preferredContact) return <></>;
 
   const knownFullName = contact?.firstName || contact?.lastName;

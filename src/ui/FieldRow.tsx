@@ -155,7 +155,7 @@ export function ControlledField({
         value={field.value}
         onChange={e => {
           field.onChange(e.target.value);
-          onChange && onChange();
+          onChange?.();
         }}
         row
         aria-labelledby={`label-${name}`}
