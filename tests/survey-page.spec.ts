@@ -131,7 +131,8 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('radio', { name: 'Oui' }).click();
   await page.getByRole('button', { name: "J'ai compris" }).click();
   await page.getByRole('button', { name: 'Enregistrer' }).click();
-  await page.getByRole('button', { name: 'Supprimer' }).first().click();
+  const row = page.getByRole('row', { name: 'Gary' });
+  await row.getByRole('button', { name: 'Supprimer' }).click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
 
   await homePage.synchronize();
