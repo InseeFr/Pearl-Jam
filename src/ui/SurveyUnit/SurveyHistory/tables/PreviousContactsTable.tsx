@@ -44,7 +44,9 @@ export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>
                 <CustomTableCell>{c.title ? D[c.title] : '-'}</CustomTableCell>
                 <CustomTableCell>{c.firstName}</CustomTableCell>
                 <CustomTableCell>{getAge(c.birthdate)}</CustomTableCell>
-                <CustomTableCell>{c.panel ?? '-'}</CustomTableCell>
+                <CustomTableCell>
+                  {(c.panel && c.panel !== undefined ? D.yes : D.no) ?? '-'}
+                </CustomTableCell>
               </TableRow>
             ))}
           </TableBody>
