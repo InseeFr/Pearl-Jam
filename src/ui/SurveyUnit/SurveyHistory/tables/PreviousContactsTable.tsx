@@ -12,6 +12,7 @@ import {
 import { PreviousContactHistoryPerson } from 'types/pearl';
 import { CustomTableCell } from './CustomTableCell';
 import { getAge } from 'utils/functions';
+import { displayValue, displayBoolean } from 'utils/text-formatting';
 
 type ContactsTableProps = {
   contacts: readonly PreviousContactHistoryPerson[];
@@ -41,12 +42,10 @@ export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>
           <TableBody>
             {contacts.map(c => (
               <TableRow key={`${c.title}${c.firstName}${c.birthdate}`}>
-                <CustomTableCell>{c.title ? D[c.title] : '-'}</CustomTableCell>
-                <CustomTableCell>{c.firstName}</CustomTableCell>
-                <CustomTableCell>{getAge(c.birthdate) ?? '-'}</CustomTableCell>
-                <CustomTableCell>
-                  {c.panel != undefined ? (c.panel ? D.yes : D.no) : '-'}
-                </CustomTableCell>
+                <CustomTableCell>{displayValue(c.title ? D[c.title] : null)}</CustomTableCell>
+                <CustomTableCell>{displayValue(c.firstName)}</CustomTableCell>
+                <CustomTableCell>{displayValue(getAge(c.birthdate))}</CustomTableCell>
+                <CustomTableCell>{displayBoolean(c.panel, D.yes, D.no)}</CustomTableCell>
               </TableRow>
             ))}
           </TableBody>
