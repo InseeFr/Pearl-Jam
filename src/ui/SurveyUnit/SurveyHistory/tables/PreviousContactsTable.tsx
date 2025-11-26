@@ -43,9 +43,9 @@ export function PreviousContactsTable({ contacts }: Readonly<ContactsTableProps>
               <TableRow key={`${c.title}${c.firstName}${c.birthdate}`}>
                 <CustomTableCell>{c.title ? D[c.title] : '-'}</CustomTableCell>
                 <CustomTableCell>{c.firstName}</CustomTableCell>
-                <CustomTableCell>{getAge(c.birthdate)}</CustomTableCell>
+                <CustomTableCell>{getAge(c.birthdate) ?? '-'}</CustomTableCell>
                 <CustomTableCell>
-                  {(c.panel && c.panel !== undefined ? D.yes : D.no) ?? '-'}
+                  {c.panel != undefined ? (c.panel ? D.yes : D.no) : '-'}
                 </CustomTableCell>
               </TableRow>
             ))}
