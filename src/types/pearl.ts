@@ -37,7 +37,7 @@ export type PreviousContactHistoryPerson = {
   id?: number;
   title?: ContactHistoryPersonTitle;
   firstName: string;
-  lastName: string;
+  lastName?: string;
   birthdate?: number;
   panel?: boolean;
 };

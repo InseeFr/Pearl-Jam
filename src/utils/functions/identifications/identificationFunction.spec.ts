@@ -268,7 +268,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       contactOutcome: {
         date: Date.now(),
         totalNumberOfContactAttempts: 1,
-        type: contactOutcomes.UNTREATED_INVESTIGATOR_ABSENT.value,
+        type: contactOutcomes.UNTREATED_INTERVIEWER_ABSENT.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'TEL' }],
     },

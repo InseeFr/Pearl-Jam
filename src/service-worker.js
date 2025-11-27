@@ -100,9 +100,6 @@ globalThis.addEventListener('install', event => {
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 globalThis.addEventListener('message', event => {
-  console.log(event.origin);
-  console.log(globalThis._DRAMAQUEEN_URL);
-
   if (event.origin !== globalThis._DRAMAQUEEN_URL) {
     return;
   }

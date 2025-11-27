@@ -1,13 +1,5 @@
 import D from 'i18n';
 
-// NPA : Non traitée, enquêteur absent
-
-// NPI : Non traitée, enquêteur présent
-
-// NPX : Non traitée, cause exceptionnelle
-
-// ROW : Droit de retrait
-
 export const contactOutcomes = {
   INTERVIEW_ACCEPTED: { value: 'INA', label: `${D.interviewAccepted}` },
   REFUSAL: { value: 'REF', label: `${D.refusal}` },
@@ -21,10 +13,10 @@ export const contactOutcomes = {
     label: `${D.definitlyUnavailableForUnknownReason}`,
   },
   NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
-  UNTREATED_INVESTIGATOR_ABSENT: { value: 'NPA', label: `${D.untreatedInvestigatorAbsent}` },
-  UNTREATED_INVESTIGATOR_PRESENT: {
+  UNTREATED_INTERVIEWER_ABSENT: { value: 'NPA', label: `${D.untreatedInterviewerAbsent}` },
+  UNTREATED_INTERVIEWER_PRESENT: {
     value: 'NPI',
-    label: `${D.untreatedInvestigatorPresent}`,
+    label: `${D.untreatedInterviewerPresent}`,
   },
   UNTREATED_EXCEPTIONAL_CAUSE: { value: 'NPX', label: `${D.untreatedExceptionalCause}` },
   RIGHT_OF_WITHDRAWAL: { value: 'ROW', label: `${D.rightOfWithdrawal}` },
@@ -56,8 +48,8 @@ export const commonContactOutcomes = {
   UNUSABLE_CONTACT_DATA: contactOutcomes.UNUSABLE_CONTACT_DATA,
   DEFINITLY_UNAVAILABLE: contactOutcomes.DEFINITLY_UNAVAILABLE,
   NOT_APPLICABLE: contactOutcomes.NOT_APPLICABLE,
-  UNTREATED_INVESTIGATOR_ABSENT: contactOutcomes.UNTREATED_INVESTIGATOR_ABSENT,
-  UNTREATED_INVESTIGATOR_PRESENT: contactOutcomes.UNTREATED_INVESTIGATOR_PRESENT,
+  UNTREATED_INTERVIEWER_ABSENT: contactOutcomes.UNTREATED_INTERVIEWER_ABSENT,
+  UNTREATED_INTERVIEWER_PRESENT: contactOutcomes.UNTREATED_INTERVIEWER_PRESENT,
   UNTREATED_EXCEPTIONAL_CAUSE: contactOutcomes.UNTREATED_EXCEPTIONAL_CAUSE,
   RIGHT_OF_WITHDRAWAL: contactOutcomes.RIGHT_OF_WITHDRAWAL,
 };

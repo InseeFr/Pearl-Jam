@@ -46,14 +46,14 @@ const contactOutcomeMessage = {
     en: 'Not applicable',
     sq: 'Nuk aplikohet',
   },
-  untreatedInvestigatorAbsent: {
+  untreatedInterviewerAbsent: {
     fr: 'Non traitée, enquêteur absent',
-    en: 'Untreated, investigator absent',
-    sq: 'E patrajtuar, hetuesi mungon',
+    en: 'Untreated, interviewer absent',
+    sq: 'E patrajtuar, hetuesi i munguar',
   },
-  untreatedInvestigatorPresent: {
+  untreatedInterviewerPresent: {
     fr: 'Non traitée, enquêteur présent',
-    en: 'Untreated, investigator present',
+    en: 'Untreated, interviewer present',
     sq: 'E patrajtuar, hetuesi i pranishëm',
   },
   untreatedExceptionalCause: {

@@ -46,7 +46,7 @@ export function CommentDialog({ surveyUnit, open, onClose }: Readonly<CommentDia
   return (
     <Dialog open={open} onClose={close}>
       <form onSubmit={handleSubmit}>
-        <DialogTitle>{D.investigatorMessage}</DialogTitle>
+        <DialogTitle>{D.interviewerMessage}</DialogTitle>
         <DialogContent>
           <Stack gap={2}>
             <PrivilegedPerson surveyUnit={surveyUnit} />
