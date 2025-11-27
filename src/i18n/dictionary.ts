@@ -83,10 +83,10 @@ const dictionary = {
     en: 'Interviewer',
     sq: 'Intervistues',
   },
-  investigatorMessage: {
+  interviewerMessage: {
     fr: 'Commentaire enquêteur',
-    en: 'Investigator comment',
-    sq: 'Komenti i hetuesit',
+    en: 'Interviewer comment',
+    sq: 'Koment intervistuesi',
   },
   appInstalling: {
     fr: 'Installation, veuillez patientez...',

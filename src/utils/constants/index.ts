@@ -15,7 +15,7 @@ export const NOTIFICATION_TYPE_MANAGEMENT = 'management';
 export const KEYCLOAK = 'keycloak';
 export const ANONYMOUS = 'anonymous';
 
-export const PEARL_URL = window.localStorage.getItem('PEARL_URL') ?? '';
+export const PEARL_URL = globalThis.localStorage.getItem('PEARL_URL') ?? '';
 export const PEARL_USER_KEY = 'pearl-user';
 export const GUEST_PEARL_USER = {
   lastName: 'Guest',

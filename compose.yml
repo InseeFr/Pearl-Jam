@@ -128,7 +128,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/pearl-jam-back-office:snapshot-fix-add-new-data-for-next-collect-campaign
+    image: inseefr/pearl-jam-back-office:5.13.2-rc
     tty: true
     stdin_open: true
     # healthcheck:

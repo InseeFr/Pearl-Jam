@@ -3,6 +3,10 @@ on:
   pull_request:
     branches:
       - "*"
+  push:
+    branches:
+      - "develop"
+      - "main"
 jobs:
   test:
     timeout-minutes: 60
@@ -18,7 +22,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: Run Docker Compose
         run: |
           docker compose --env-file ./.env.docker --profile playwright up -d

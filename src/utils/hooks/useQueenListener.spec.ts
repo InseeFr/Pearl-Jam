@@ -20,7 +20,7 @@ describe('useQueenListener', () => {
       },
     });
 
-    window.dispatchEvent(event);
+    globalThis.dispatchEvent(event);
 
     expect(mockRedirect).toHaveBeenCalledWith(`/survey-unit/${surveyUnitID}/details`);
   });
@@ -47,7 +47,7 @@ describe('useQueenListener', () => {
       },
     });
 
-    window.dispatchEvent(event);
+    globalThis.dispatchEvent(event);
 
     await new Promise(process.nextTick);
 

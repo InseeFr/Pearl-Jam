@@ -28,7 +28,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
   const [isSync, setIsSync] = useState(() => {
-    return window.localStorage.getItem('SYNCHRONIZE') === 'true';
+    return globalThis.localStorage.getItem('SYNCHRONIZE') === 'true';
   });
   const [loading, setLoading] = useState(false);
   const [syncResult, setSyncResult] = useState<
@@ -58,7 +58,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   useEffect(() => {
     const analyse = async () => {
       const result = await analyseResult();
-      window.localStorage.removeItem('SYNCHRONIZE');
+      globalThis.localStorage.removeItem('SYNCHRONIZE');
       setIsSync(false);
       setSyncResult(result);
     };
@@ -68,9 +68,9 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
 
   const syncFunction = () => {
     const launchSynchronize = async () => {
-      window.localStorage.removeItem('PEARL_SYNC_RESULT');
-      window.localStorage.removeItem('QUEEN_SYNC_RESULT');
-      window.localStorage.setItem('SYNCHRONIZE', 'true');
+      globalThis.localStorage.removeItem('PEARL_SYNC_RESULT');
+      globalThis.localStorage.removeItem('QUEEN_SYNC_RESULT');
+      globalThis.localStorage.setItem('SYNCHRONIZE', 'true');
       setLoading(true);
       await checkPearl();
     };
@@ -79,8 +79,8 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
 
   const handleClose = async () => {
     setSyncResult(null);
-    window.localStorage.removeItem('PEARL_SYNC_RESULT');
-    window.localStorage.removeItem('QUEEN_SYNC_RESULT');
+    globalThis.localStorage.removeItem('PEARL_SYNC_RESULT');
+    globalThis.localStorage.removeItem('QUEEN_SYNC_RESULT');
   };
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
       };
       const notif = getNotifFromResult(result);
       await notificationIdbService.addOrUpdateNotif(notif);
-      window.localStorage.removeItem('SYNCHRONIZE');
+      globalThis.localStorage.removeItem('SYNCHRONIZE');
       setIsSync(false);
       setSyncResult(result);
       setLoading(false);

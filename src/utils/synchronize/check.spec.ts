@@ -68,7 +68,7 @@ describe('check.ts', () => {
   it('saveSyncPearlData - save data into the localStorage', () => {
     const data = { test: 'data' };
     saveSyncPearlData(data);
-    expect(window.localStorage.getItem('PEARL_SYNC_RESULT')).toBe(JSON.stringify(data));
+    expect(globalThis.localStorage.getItem('PEARL_SYNC_RESULT')).toBe(JSON.stringify(data));
   });
 
   it('getSavedSyncPearlData - get pearl data from the localStorage', () => {
@@ -80,7 +80,7 @@ describe('check.ts', () => {
 
   it('getSavedSyncQueenData - get queen from localStorage', () => {
     const data = { test: 'data' };
-    window.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(data));
+    globalThis.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(data));
     const retrievedData = getSavedSyncQueenData();
     expect(retrievedData).toEqual(data);
   });
@@ -109,7 +109,7 @@ describe('check.ts', () => {
         surveyUnitsInTempZone: [],
       };
 
-      window.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(queenData));
+      globalThis.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(queenData));
       saveSyncPearlData(pearlData);
       vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([{ id: '1' }]);
       vi.spyOn(api, 'postMailMessage').mockImplementation(vi.fn());
@@ -138,7 +138,7 @@ describe('check.ts', () => {
         surveyUnitsInTempZone: [],
       };
 
-      window.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(queenData));
+      globalThis.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(queenData));
       saveSyncPearlData(pearlData);
       vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([{ id: '1' }]);
 
@@ -173,7 +173,7 @@ describe('check.ts', () => {
         surveyUnitsInTempZone: [],
       };
 
-      window.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(queenData));
+      globalThis.localStorage.setItem('QUEEN_SYNC_RESULT', JSON.stringify(queenData));
       saveSyncPearlData(pearlData);
       vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([{ id: '1' }]);
       vi.spyOn(api, 'postMailMessage').mockImplementation(vi.fn());

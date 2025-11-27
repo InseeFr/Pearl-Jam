@@ -2,7 +2,6 @@ import Card from '@mui/material/Card';
 import { Typography } from '../Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import { PieChart } from './PieChart';
 import { daysLeftForSurveyUnit, getSuTodoState } from '../../utils/functions';
 import { generateColorInGradient } from '../../utils/functions/colors';
 import { Row } from '../Row';
@@ -10,6 +9,7 @@ import { groupBy } from '../../utils/functions/array';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
 import D from 'i18n';
 import { SurveyUnit } from 'types/pearl';
+import PieChart, { PieChartData } from './PieChart';
 
 const colorStart = '#D3DBE5';
 const colorEnd = '#3A4657';
@@ -37,12 +37,14 @@ export function CampaignProgressPieChart({ surveyUnits }: Readonly<CampaignProgr
 
   const maxDays = Math.max(...surveyUnits.map(daysLeftForSurveyUnit));
   const surveyUnitsInProgressPerCampaign = groupBy(surveyUnits, su => su.campaign);
-  const slices = Object.entries(surveyUnitsInProgressPerCampaign).map(([label, surveyUnits]) => ({
-    label,
-    value: surveyUnits.length / total,
-    rate: maxDays === 0 ? 0 : daysLeftForSurveyUnit(surveyUnits) / maxDays,
-    color: getColorForRate(maxDays === 0 ? 0 : daysLeftForSurveyUnit(surveyUnits) / maxDays),
-  }));
+  const slices: PieChartData[] = Object.entries(surveyUnitsInProgressPerCampaign).map(
+    ([label, surveyUnits]) => ({
+      label,
+      value: surveyUnits.length / total,
+      color: getColorForRate(daysLeftForSurveyUnit(surveyUnits) / maxDays),
+    })
+  );
+
   return (
     <Card elevation={0} raised>
       <Stack gap={2} alignItems="center" p={2} sx={{ height: 646 }}>
@@ -56,9 +58,7 @@ export function CampaignProgressPieChart({ surveyUnits }: Readonly<CampaignProgr
         >
           {D.numberOfUnitsRemaining}
         </Typography>
-        <div>
-          <PieChart size={240} parts={slices} paddingBlock={80} paddingInline={100} />
-        </div>
+        <PieChart data={slices} />
         <Stack gap={0} sx={{ width: 330 }}>
           <Typography variant="xl" color="black" component="p" textAlign="center">
             Échéance

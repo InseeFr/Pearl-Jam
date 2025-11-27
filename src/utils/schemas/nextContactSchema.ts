@@ -6,6 +6,7 @@ export const contactSchema = z
     title: z.enum(['MISTER', 'MISS'], {
       required_error: D.requiredField,
       invalid_type_error: D.requiredField,
+      message: D.requiredField,
     }),
     lastName: z.string().min(1, { message: D.requiredField }),
     firstName: z.string().min(1, { message: D.requiredField }),

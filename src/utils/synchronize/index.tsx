@@ -54,14 +54,14 @@ export const useQueenSynchronisation = () => {
       }
     };
     const removeQueenEventListener = () => {
-      window.removeEventListener('QUEEN', handleQueenEvent);
+      globalThis.removeEventListener('QUEEN', handleQueenEvent);
     };
 
-    window.addEventListener('QUEEN', handleQueenEvent);
+    globalThis.addEventListener('QUEEN', handleQueenEvent);
 
     const data = { type: 'PEARL', command: 'HEALTH_CHECK' };
     const event = new CustomEvent('PEARL', { detail: data });
-    window.dispatchEvent(event);
+    globalThis.dispatchEvent(event);
     setTimeout(() => removeQueenEventListener(), waitTime);
   };
 
@@ -144,7 +144,7 @@ const handleTempZoneFallback = async (
 };
 
 const getUserData = async () => {
-  const result = window.localStorage.getItem(PEARL_USER_KEY);
+  const result = globalThis.localStorage.getItem(PEARL_USER_KEY);
 
   if (!result) {
     return;
