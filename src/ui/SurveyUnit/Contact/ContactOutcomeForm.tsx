@@ -62,7 +62,7 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
         surveyUnit.contactOutcome?.type
       )
     ).map(o => ({
-      label: `${o.value} : ${o.label}`,
+      label: o.label,
       value: o.value,
     }));
   }, [surveyUnit.contactOutcomeConfiguration]);
