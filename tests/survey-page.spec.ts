@@ -118,7 +118,7 @@ test('Check previous collect history, modify next collect history and synchroniz
   await expect(page.getByRole('cell', { name: 'Grice' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'test@test.com' }).first()).toBeVisible();
 
-  await page.getByRole('button', { name: 'Ajouter une ligne de coordonn' }).click();
+  await page.getByRole('button', { name: 'Ajouter un individu' }).click();
   await page.getByRole('radio', { name: 'M', exact: true }).check();
   await page.getByRole('textbox', { name: 'Nom *', exact: true }).click();
   await page.getByRole('textbox', { name: 'Nom *', exact: true }).fill('Hugue');
