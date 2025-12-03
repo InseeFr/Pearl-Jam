@@ -38,9 +38,9 @@ const surveyHistoryMessage = {
     sq: 'Fshij',
   },
   addContact: {
-    fr: 'Ajouter une ligne de coordonnées',
-    en: 'Add a contact line',
-    sq: 'Shto një linjë kontakti',
+    fr: 'Ajouter un individu',
+    en: 'Add a contact',
+    sq: 'Shto një kontakt',
   },
   editContactLine: {
     fr: 'Modifier une ligne',
