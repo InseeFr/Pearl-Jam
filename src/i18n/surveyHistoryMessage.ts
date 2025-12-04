@@ -42,11 +42,6 @@ const surveyHistoryMessage = {
     en: 'Add a contact',
     sq: 'Shto një kontakt',
   },
-  editContactLine: {
-    fr: 'Modifier une ligne',
-    en: 'Edit a line',
-    sq: 'Ndrysho një linjë',
-  },
   deleteContactLine: {
     fr: 'Supprimer une ligne',
     en: 'Delete a line',
@@ -218,9 +213,9 @@ const surveyHistoryMessage = {
     sq: 'Shto një kontakt',
   },
   contactModalTitleEdit: {
-    fr: 'Modifier un individu',
-    en: 'Edit a contact',
-    sq: 'Ndrysho një kontakt',
+    fr: "Modifier les informations de l'individu",
+    en: 'Edit contact information',
+    sq: 'Ndrysho informacionin e kontaktit',
   },
   requiredField: {
     fr: 'Champ obligatoire',
