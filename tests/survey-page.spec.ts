@@ -103,7 +103,7 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('tab', { name: 'Collecte précédente' }).click();
   await page
     .locator('div')
-    .filter({ hasText: /^Bilan des contacts :INA$/ })
+    .filter({ hasText: /^Bilan des contacts : Enquête acceptée$/ })
     .nth(1)
     .click();
   await expect(page.getByRole('cell', { name: 'M' }).first()).toBeVisible();

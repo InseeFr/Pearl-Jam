@@ -82,11 +82,6 @@ const surveyHistoryMessage = {
     en: 'Contact information deleted',
     sq: 'Informacioni i kontaktit u fshi',
   },
-  modalTitleAdd: {
-    fr: 'Ajouter une ligne de coordonnées',
-    en: 'Add a contact line',
-    sq: 'Shto një linjë kontakti',
-  },
   modalTitleEdit: {
     fr: 'Modifier une ligne de coordonnées',
     en: 'Edit a contact line',
@@ -218,9 +213,14 @@ const surveyHistoryMessage = {
     sq: 'Komenti i hetuesit',
   },
   modalAddContact: {
-    fr: 'Ajouter une ligne de coordonnées',
-    en: 'Add new coordinates',
-    sq: 'Shtoni koordinata të reja',
+    fr: 'Ajouter un individu',
+    en: 'Add a contact',
+    sq: 'Shto një kontakt',
+  },
+  contactModalTitleEdit: {
+    fr: 'Modifier un individu',
+    en: 'Edit a contact',
+    sq: 'Ndrysho një kontakt',
   },
   requiredField: {
     fr: 'Champ obligatoire',

@@ -36,6 +36,11 @@ const contactOutcomeMessage = {
     en: 'Contact attempts total',
     sq: 'Totali i përpjekjeve për kontakt',
   },
+  definitlyUnavailable: {
+    fr: 'Indisponibilité définitive',
+    en: 'Unavailable',
+    sq: 'I padisponueshëm',
+  },
   definitlyUnavailableForUnknownReason: {
     fr: 'Indisponibilité définitive pour motif inconnu',
     en: 'Unavailable for an unknown reason',

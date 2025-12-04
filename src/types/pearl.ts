@@ -132,7 +132,7 @@ export type Contact = {
 };
 
 export type PreviousContactHistory = {
-  contactOutcomeValue: string;
+  contactOutcomeValue: ContactOutcomeValue;
   persons: PreviousContactHistoryPerson[];
   comment: string;
   priority: boolean;

@@ -147,7 +147,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                     <Grid container spacing={2}>
                       <Grid item>
                         <Button
-                          color="secondary"
+                          color="inherit"
                           onClick={() => handleModifyClick(i)}
                           size="small"
                           variant="contained"
@@ -181,11 +181,10 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             variant="contained"
             startIcon={<Add />}
             sx={{
-              bgcolor: 'primary.dark',
               textTransform: 'none',
             }}
           >
-            <Typography fontWeight={600}>{D.addContact}</Typography>{' '}
+            <Typography fontWeight={600}>{D.addContact}</Typography>
           </Button>
         </Stack>
       </CardContent>
