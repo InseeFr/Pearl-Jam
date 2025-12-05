@@ -20,9 +20,13 @@ ENV VITE_QUEEN_URL=$VITE_QUEEN_URL
 
 WORKDIR /pearl
 
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install
+
 COPY ./ ./
 
-RUN pnpm --network-timeout 1000000000 && pnpm build
+RUN pnpm build
 
 ### EXECUTION STEP ###
 
