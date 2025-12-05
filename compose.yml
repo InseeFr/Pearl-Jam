@@ -242,5 +242,5 @@ services:
       - /bin/bash
       - -c
       - |
-        yarn install --network-timeout 100000
+        pnpm install --network-timeout 100000
         npx playwright codegen --viewport-size="1920,1080" http://localhost:3000/
