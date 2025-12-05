@@ -41,11 +41,6 @@ const contactOutcomeMessage = {
     en: 'Unavailable',
     sq: 'I padisponueshëm',
   },
-  definitlyUnavailableForUnknownReason: {
-    fr: 'Indisponibilité définitive pour motif inconnu',
-    en: 'Unavailable for an unknown reason',
-    sq: 'Përgjithmonë e padisponueshme për një arsye të panjohur',
-  },
   notApplicable: {
     fr: 'Sans objet',
     en: 'Not applicable',

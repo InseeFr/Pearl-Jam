@@ -13,10 +13,6 @@ export const contactOutcomes = {
     label: `${D.definitlyUnavailable}`,
   },
   DECEASED: { value: 'DCD', label: `${D.deceased}` },
-  DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON: {
-    value: 'DUU',
-    label: `${D.definitlyUnavailableForUnknownReason}`,
-  },
   NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
   UNTREATED_INTERVIEWER_ABSENT: { value: 'NPA', label: `${D.untreatedInterviewerAbsent}` },
   UNTREATED_INTERVIEWER_PRESENT: {
