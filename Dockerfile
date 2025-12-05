@@ -1,6 +1,7 @@
 ### BUILD STEP ###
 
 FROM node:latest AS builder
+RUN npm install -g pnpm
 
 ARG VITE_PEARL_API_URL
 ARG VITE_PEARL_AUTHENTICATION_MODE
