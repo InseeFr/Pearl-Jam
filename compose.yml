@@ -1,8 +1,3 @@
-x-react-volumes: &react-volumes
-  - ./:/opt/app
-  - /mnt/wslg/.X11-unix:/tmp/.X11-unix
-  - /opt/app/node_modules
-
 services:
   pearl-db:
     profiles:
@@ -13,15 +8,11 @@ services:
       - POSTGRES_USER=${PEARL_DB_USER}
       - POSTGRES_PASSWORD=${PEARL_DB_PASSWORD}
       - POSTGRES_DB=${PEARL_DB}
-    command: ["postgres"]
+    command: ['postgres']
     tty: true
     stdin_open: true
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${PEARL_DB_USER} -d ${PEARL_DB} -h localhost",
-        ]
+      test: ['CMD-SHELL', 'pg_isready -U ${PEARL_DB_USER} -d ${PEARL_DB} -h localhost']
       interval: 5s
       timeout: 10s
       retries: 10
@@ -37,15 +28,12 @@ services:
       - POSTGRES_USER=${QUESTIONNAIRE_DB_USER}
       - POSTGRES_PASSWORD=${QUESTIONNAIRE_DB_PASSWORD}
       - POSTGRES_DB=${QUESTIONNAIRE_DB}
-    command: ["postgres"]
+    command: ['postgres']
     tty: true
     stdin_open: true
     healthcheck:
       test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${QUESTIONNAIRE_DB_USER} -d ${QUESTIONNAIRE_DB} -h localhost",
-        ]
+        ['CMD-SHELL', 'pg_isready -U ${QUESTIONNAIRE_DB_USER} -d ${QUESTIONNAIRE_DB} -h localhost']
       interval: 5s
       timeout: 10s
       retries: 10
@@ -62,17 +50,14 @@ services:
     environment:
       KEYCLOAK_ADMIN: administrator
       KEYCLOAK_ADMIN_PASSWORD: administrator # gitleaks:allow - Safe to ignore: test credential only.
-      KC_HEALTH_ENABLED: "true"
+      KC_HEALTH_ENABLED: 'true'
       KC_LOG_LEVEL: info
-    command: ["start-dev", "--import-realm"]
-    #healthcheck:
-    #  test: 'curl --head -fsS http://localhost:8080/health/ready'
-    #healthcheck:
-    #  test: ['CMD', 'curl', '--fail', 'http://localhost:8080']
+    command: ['start-dev', '--import-realm']
     ports:
-      - "${KEYCLOAK_PORT}:8080"
+      - '${KEYCLOAK_PORT}:8080'
     volumes:
       - ./keycloak/realms:/opt/keycloak/data/import
+      - ./:/opt/app
 
   questionnaire-api:
     profiles:
@@ -81,8 +66,6 @@ services:
     image: inseefr/queen-back-office:5.4.1
     tty: true
     stdin_open: true
-    #healthcheck:
-    #  test: ['CMD', 'curl', '--fail', 'http://localhost:8080/api/healthcheck']
     depends_on:
       questionnaire-db:
         condition: service_healthy
@@ -131,8 +114,6 @@ services:
     image: inseefr/pearl-jam-back-office:5.13.2-rc
     tty: true
     stdin_open: true
-    # healthcheck:
-    #   test: ['CMD', 'curl', '--fail', 'http://localhost:8080/api/healthcheck']
     depends_on:
       pearl-db:
         condition: service_healthy
@@ -179,8 +160,6 @@ services:
     image: inseefr/drama-queen:3.1.2
     tty: true
     stdin_open: true
-    #healthcheck:
-    #  test: ['CMD', 'curl', '--fail', 'http://localhost']
     environment:
       - VITE_QUEEN_API_URL=http://localhost:${QUESTIONNAIRE_API_PORT}
       - VITE_OIDC_CLIENT_ID=${AUTH_CLIENT_ID}
@@ -191,7 +170,7 @@ services:
       questionnaire-api:
         condition: service_started
     ports:
-      - "${QUEEN_FRONTEND_PORT}:8080"
+      - '${QUEEN_FRONTEND_PORT}:8080'
 
   pearl-front:
     profiles:
@@ -212,7 +191,7 @@ services:
     tty: true
     stdin_open: true
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost"]
+      test: ['CMD', 'curl', '--fail', 'http://localhost']
     depends_on:
       queen-front:
         condition: service_started
@@ -221,35 +200,4 @@ services:
       pearl-api:
         condition: service_started
     ports:
-      - "${PEARL_FRONTEND_PORT}:8300"
-
-  playwright-captation:
-    image: mcr.microsoft.com/playwright:v1.51.1-noble
-    profiles: [captation]
-    depends_on:
-      - pearl-api
-      - questionnaire-api
-      - keycloak
-      - queen-front
-    container_name: playwright-captation
-    hostname: front
-    volumes: *react-volumes
-    tty: true
-    stdin_open: true # without this node doesn't start
-    working_dir: /opt/app
-    ipc: host
-    network_mode: host
-    environment:
-      WATCHPACK_POLLING: true
-      FAST_REFRESH: true
-      DISPLAY: unix:0
-      XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
-      HTTP_PROXY: ${HTTP_PROXY}
-      HTTPS_PROXY: ${HTTPS_PROXY}
-      NO_PROXY: ${NO_PROXY}
-    command:
-      - /bin/bash
-      - -c
-      - |
-        yarn install --network-timeout 100000
-        npx playwright codegen --viewport-size="1920,1080" http://localhost:3000/
+      - '${PEARL_FRONTEND_PORT}:8300'

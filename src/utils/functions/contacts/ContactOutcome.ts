@@ -10,8 +10,9 @@ export const contactOutcomes = {
   NO_LONGER_USED_FOR_HABITATION: { value: 'NUH', label: `${D.noLongerUsedForHabitation}` },
   DEFINITLY_UNAVAILABLE: {
     value: 'DUK',
-    label: `${D.definitlyUnavailableForUnknownReason}`,
+    label: `${D.definitlyUnavailable}`,
   },
+  DECEASED: { value: 'DCD', label: `${D.deceased}` },
   NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
   UNTREATED_INTERVIEWER_ABSENT: { value: 'NPA', label: `${D.untreatedInterviewerAbsent}` },
   UNTREATED_INTERVIEWER_PRESENT: {
@@ -48,10 +49,6 @@ export const commonContactOutcomes = {
   UNUSABLE_CONTACT_DATA: contactOutcomes.UNUSABLE_CONTACT_DATA,
   DEFINITLY_UNAVAILABLE: contactOutcomes.DEFINITLY_UNAVAILABLE,
   NOT_APPLICABLE: contactOutcomes.NOT_APPLICABLE,
-  UNTREATED_INTERVIEWER_ABSENT: contactOutcomes.UNTREATED_INTERVIEWER_ABSENT,
-  UNTREATED_INTERVIEWER_PRESENT: contactOutcomes.UNTREATED_INTERVIEWER_PRESENT,
-  UNTREATED_EXCEPTIONAL_CAUSE: contactOutcomes.UNTREATED_EXCEPTIONAL_CAUSE,
-  RIGHT_OF_WITHDRAWAL: contactOutcomes.RIGHT_OF_WITHDRAWAL,
 };
 
 type ContactOutcome = {

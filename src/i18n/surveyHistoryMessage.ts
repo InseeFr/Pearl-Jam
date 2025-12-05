@@ -38,14 +38,9 @@ const surveyHistoryMessage = {
     sq: 'Fshij',
   },
   addContact: {
-    fr: 'Ajouter une ligne de coordonnées',
-    en: 'Add a contact line',
-    sq: 'Shto një linjë kontakti',
-  },
-  editContactLine: {
-    fr: 'Modifier une ligne',
-    en: 'Edit a line',
-    sq: 'Ndrysho një linjë',
+    fr: 'Ajouter un individu',
+    en: 'Add a contact',
+    sq: 'Shto një kontakt',
   },
   deleteContactLine: {
     fr: 'Supprimer une ligne',
@@ -81,11 +76,6 @@ const surveyHistoryMessage = {
     fr: 'Coordonnées supprimées',
     en: 'Contact information deleted',
     sq: 'Informacioni i kontaktit u fshi',
-  },
-  modalTitleAdd: {
-    fr: 'Ajouter une ligne de coordonnées',
-    en: 'Add a contact line',
-    sq: 'Shto një linjë kontakti',
   },
   modalTitleEdit: {
     fr: 'Modifier une ligne de coordonnées',
@@ -218,9 +208,14 @@ const surveyHistoryMessage = {
     sq: 'Komenti i hetuesit',
   },
   modalAddContact: {
-    fr: 'Ajouter une ligne de coordonnées',
-    en: 'Add new coordinates',
-    sq: 'Shtoni koordinata të reja',
+    fr: 'Ajouter un individu',
+    en: 'Add a contact',
+    sq: 'Shto një kontakt',
+  },
+  contactModalTitleEdit: {
+    fr: "Modifier les informations de l'individu",
+    en: 'Edit contact information',
+    sq: 'Ndrysho informacionin e kontaktit',
   },
   requiredField: {
     fr: 'Champ obligatoire',

@@ -9,6 +9,7 @@ import {
   Typography,
   Button,
   Stack,
+  Grid,
 } from '@mui/material';
 import { CheckCircle, Delete, Edit, Add } from '@mui/icons-material';
 import { NextContactHistoryPerson, SurveyUnit } from 'types/pearl';
@@ -143,19 +144,31 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                       textAlign: 'center',
                     }}
                   >
-                    <Button onClick={() => handleModifyClick(i)} size="small" variant="contained">
-                      <Edit fontSize="small" />
-                      <Typography fontWeight={600}>{D.edit}</Typography>
-                    </Button>
-                    <Button
-                      onClick={() => handleDeleteClick(i)}
-                      size="small"
-                      variant="contained"
-                      sx={{ ml: 2 }}
-                    >
-                      <Delete fontSize="small" />
-                      <Typography fontWeight={600}>{D.delete}</Typography>
-                    </Button>
+                    <Grid container spacing={2}>
+                      <Grid item>
+                        <Button
+                          color="inherit"
+                          onClick={() => handleModifyClick(i)}
+                          size="small"
+                          variant="contained"
+                          sx={{ minWidth: '150px' }}
+                        >
+                          <Edit fontSize="small" />
+                          <Typography fontWeight={600}>{D.edit}</Typography>
+                        </Button>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          onClick={() => handleDeleteClick(i)}
+                          size="small"
+                          variant="contained"
+                          sx={{ minWidth: '150px' }}
+                        >
+                          <Delete fontSize="small" />
+                          <Typography fontWeight={600}>{D.delete}</Typography>
+                        </Button>
+                      </Grid>
+                    </Grid>
                   </TableCell>
                 </TableRow>
               ))}
@@ -168,11 +181,10 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             variant="contained"
             startIcon={<Add />}
             sx={{
-              bgcolor: 'primary.dark',
               textTransform: 'none',
             }}
           >
-            <Typography fontWeight={600}>{D.addContact}</Typography>{' '}
+            <Typography fontWeight={600}>{D.addContact}</Typography>
           </Button>
         </Stack>
       </CardContent>
