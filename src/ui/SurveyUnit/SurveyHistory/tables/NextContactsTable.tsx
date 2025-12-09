@@ -91,6 +91,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   };
 
   const preferredContact = nextCollectHistory?.persons.find(c => c.preferredContact);
+  const selectedContact = nextCollectHistory?.persons[selectedContactIndex];
 
   return (
     <Card elevation={0}>
@@ -190,7 +191,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
       </CardContent>
       <DeleteConfirmationModal
         open={deleteModalOpen}
-        contactName={nextCollectHistory?.persons[selectedContactIndex]?.firstName}
+        selectedContact={selectedContact}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
       />
@@ -198,7 +199,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         <ContactModal
           open={modifyModalOpen}
           modalTitle={D.contactModalTitleEdit}
-          contact={nextCollectHistory?.persons[selectedContactIndex]}
+          contact={selectedContact}
           preferedContact={preferredContact}
           onClose={() => setModifyModalOpen(false)}
           onConfirm={handleModify}

@@ -1,16 +1,16 @@
 const surveyHistoryMessage = {
   deleteContactTitle: {
-    fr: 'Supprimer une ligne de coordonnées',
-    en: 'Delete a contact line',
-    sq: 'Fshij një linjë kontakti',
+    fr: "Supprimer les informations d'un individu",
+    en: 'Delete a contact information',
+    sq: 'Fshi informacionin e kontaktit',
   },
   deleteContactConfirmation: {
-    fr: (contactName: string) =>
-      `Souhaitez-vous supprimer la ligne contenant les coordonnées de ${contactName} ?`,
-    en: (contactName: string) =>
-      `Do you want to delete the line containing ${contactName}'s contact information?`,
-    sq: (contactName: string) =>
-      `Dëshironi të fshini linjën që përmban informacionin e kontaktit të ${contactName}?`,
+    fr: (contactFullName: string) =>
+      `Souhaitez-vous supprimer la ligne contenant les coordonnées de ${contactFullName} ?`,
+    en: (contactFullName: string) =>
+      `Do you want to delete the line containing ${contactFullName}'s contact information?`,
+    sq: (contactFullName: string) =>
+      `Dëshironi të fshini linjën që përmban informacionin e kontaktit të ${contactFullName}?`,
   },
   cancel: {
     fr: 'Annuler',
