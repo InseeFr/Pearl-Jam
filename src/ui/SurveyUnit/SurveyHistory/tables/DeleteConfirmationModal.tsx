@@ -1,16 +1,17 @@
 import { Dialog, DialogTitle, DialogContent, Button, Typography, Stack } from '@mui/material';
 import D from 'i18n';
+import { NextContactHistoryPerson } from 'types/pearl';
 
 type DeleteConfirmationModalProps = {
   open: boolean;
-  contactName?: string;
+  selectedContact?: NextContactHistoryPerson;
   onClose: () => void;
   onConfirm: () => void;
 };
 
 export function DeleteConfirmationModal({
   open,
-  contactName,
+  selectedContact,
   onClose,
   onConfirm,
 }: Readonly<DeleteConfirmationModalProps>) {
@@ -23,7 +24,9 @@ export function DeleteConfirmationModal({
       </DialogTitle>
       <DialogContent sx={{ py: 2 }}>
         <Typography fontWeight={600} color="grey.700">
-          {D.deleteContactConfirmation(contactName)}
+          {D.deleteContactConfirmation(
+            `${selectedContact?.firstName} ${selectedContact?.lastName}`
+          )}
         </Typography>
       </DialogContent>
       <DialogContent sx={{ px: 3, pb: 2 }}>

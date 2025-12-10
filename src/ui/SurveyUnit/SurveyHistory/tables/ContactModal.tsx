@@ -74,6 +74,7 @@ export function ContactModal({
 
   const handleFormSubmit = (formData: ContactFormData) => {
     onConfirm(formData);
+    reset();
   };
 
   const handleClose = () => {
