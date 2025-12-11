@@ -10,13 +10,13 @@ export const contactOutcomes = {
   NO_LONGER_USED_FOR_HABITATION: { value: 'NUH', label: `${D.noLongerUsedForHabitation}` },
   DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON: {
     value: 'DUU',
-    label: `${D.definitlyUnavailableForUnknownReason}`,
+    label: `${D.definitlyUnavailable}`,
   },
   DEFINITLY_UNAVAILABLE: {
     value: 'DUK',
     label: `${D.definitlyUnavailable}`,
   },
-  DECEASED: { value: 'DCD', label: `${D.deceased}` },
+  DECEASED: { value: 'DCD', label: `${D.notApplicable}` },
   NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
   UNTREATED_INTERVIEWER_ABSENT: { value: 'NPA', label: `${D.untreatedInterviewerAbsent}` },
   UNTREATED_INTERVIEWER_PRESENT: {
