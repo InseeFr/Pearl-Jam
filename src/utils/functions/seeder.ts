@@ -1,7 +1,8 @@
+import { SurveyUnit } from 'types/pearl';
 import { surveyUnitStateEnum } from '../enum/SUStateEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
 import { contactOutcomes } from './contacts/ContactOutcome';
-import { getRandomIntBetween, getRandomItemFromArray } from './random';
+import { getRandomIntBetween } from './random';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 
 const day = 60 * 60 * 1000 * 24;
@@ -31,7 +32,7 @@ const year = day * 365;
 
 export async function seedData() {
   /** @var {SurveyUnit[]} surveyUnits */
-  const surverUnits = [];
+  const surverUnits: SurveyUnit[] = [];
   /** @var {User[]} users */
   const users = await fetch('https://jsonplaceholder.typicode.com/users').then(r => r.json());
   for (const user of users) {
@@ -76,7 +77,7 @@ export async function seedData() {
       persons: [
         {
           id: user.id,
-          title: getRandomItemFromArray(['MISS', 'MISTER']),
+          title: ['MISS', 'MISTER'][user.id % 2],
           firstName: user.name.split(' ')[0],
           lastName: user.name.split(' ')[1],
           email: user.email,
@@ -88,17 +89,19 @@ export async function seedData() {
               source: 'FISCAL',
               favorite: false,
               number: user.phone,
+              id: '',
             },
             {
               source: 'DIRECTORY',
               favorite: true,
               number: user.phone + '01',
+              id: '',
             },
           ],
         },
         {
-          id: user.id + '_2',
-          title: getRandomItemFromArray(['MISS', 'MISTER']),
+          id: user.id,
+          title: ['MISS', 'MISTER'][user.id % 2],
           firstName: user.name.split(' ')[0] + '-2',
           lastName: user.name.split(' ')[1] + '-2',
           email: user.email + '-2',
@@ -110,26 +113,31 @@ export async function seedData() {
               source: 'FISCAL',
               favorite: false,
               number: user.phone + '-2',
+              id: '',
             },
             {
               source: 'DIRECTORY',
               favorite: true,
               number: user.phone + '-2',
+              id: '',
             },
             {
               source: 'INTERVIEWER',
               favorite: false,
               number: user.phone + '11',
+              id: '',
             },
             {
               source: 'INTERVIEWER',
               favorite: false,
               number: user.phone + '12',
+              id: '',
             },
             {
               source: 'INTERVIEWER',
               favorite: false,
               number: user.phone + '13',
+              id: '',
             },
           ],
         },
@@ -211,45 +219,25 @@ export async function seedData() {
   surverUnits.push({
     ...surverUnits[0],
     id: 'sutel',
-    identification: null,
-    firstName: 'ET',
-    lastName: 'Telephone',
+    identification: undefined,
     identificationConfiguration: IdentificationConfiguration.INDTEL,
-    nextCollectHistory: {
-      houseHoldComposition: [
-        {
-          firstName: 'John',
-          lastName: 'Cozart',
-          isPanel: true,
-          civilite: 'male',
-          age: 23,
-          isMailContact: true,
-        },
-        {
-          firstName: 'Jane',
-          lastName: 'Cozart',
-          isPanel: true,
-          civilite: 'female',
-          age: 23,
-          isMailContact: false,
-        },
-      ],
+    previousContactHistory: {
+      contactOutcomeValue: 'DUU',
+      persons: [],
+      comment: '',
+      priority: false,
     },
   });
   surverUnits.push({
     ...surverUnits[0],
     id: 'sunoident',
     identification: {},
-    firstName: 'John',
-    lastName: 'Absent',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
   });
   surverUnits.push({
     ...surverUnits[0],
     id: 'sunoident-empty',
     identification: {},
-    firstName: 'John2',
-    lastName: 'Absent2',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
     contactOutcome: undefined,
   });
@@ -257,8 +245,6 @@ export async function seedData() {
     ...surverUnits[0],
     id: 'sunoident-WFT',
     identification: {},
-    firstName: 'John3',
-    lastName: 'Absent3',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
     states: [{ type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type, date: 1 }],
     contactOutcome: undefined,
@@ -273,8 +259,6 @@ export async function seedData() {
     endDate: new Date().getTime() + 15 * day,
     id: 'questNotAvailable',
     identification: {},
-    firstName: 'Flin',
-    lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.NOIDENT,
   });
   surverUnits.push({
@@ -287,8 +271,6 @@ export async function seedData() {
     endDate: new Date().getTime() + 15 * day,
     id: 'HOUSETEL',
     identification: {},
-    firstName: 'Flin',
-    lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.HOUSETEL,
   });
   surverUnits.push({
@@ -301,8 +283,6 @@ export async function seedData() {
     endDate: new Date().getTime() + 15 * day,
     id: 'SRCVREINT',
     identification: {},
-    firstName: 'Flin',
-    lastName: 'Ished',
     identificationConfiguration: IdentificationConfiguration.SRCVREINT,
   });
   surverUnits.push({
@@ -314,30 +294,9 @@ export async function seedData() {
     collectionEndDate: new Date().getTime() - 6 * day,
     endDate: new Date().getTime() + 15 * day,
     id: 'INDF2F',
-    identification: null,
-    firstName: 'Flin',
-    lastName: 'Ished',
+    identification: undefined,
+
     identificationConfiguration: IdentificationConfiguration.INDF2F,
-    nextCollectHistory: {
-      houseHoldComposition: [
-        {
-          firstName: 'John',
-          lastName: 'Cozart',
-          isPanel: true,
-          civilite: 'male',
-          age: 23,
-          isMailContact: true,
-        },
-        {
-          firstName: 'Jane',
-          lastName: 'Cozart',
-          isPanel: true,
-          civilite: 'female',
-          age: 23,
-          isMailContact: false,
-        },
-      ],
-    },
   });
 
   await surveyUnitIDBService.addAll(surverUnits);

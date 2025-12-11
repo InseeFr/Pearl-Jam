@@ -1,16 +1,4 @@
 /**
- * Get a random item from an array.
- */
-export function getRandomItemFromArray(array: unknown[]) {
-  // Check if the array is empty
-  if (array.length === 0) {
-    throw new Error('Array is empty, cannot pick a random item.');
-  }
-
-  return array[Math.floor(getRandomMantissa() * array.length)];
-}
-
-/**
  * Generates a random integer between the specified minimum and maximum values (inclusive).
  */
 export function getRandomIntBetween(min: number, max: number) {
