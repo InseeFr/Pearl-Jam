@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Row } from '../Row';
 import { Typography } from '../Typography';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
@@ -15,12 +15,25 @@ import BlockIcon from '@mui/icons-material/Block';
 import D from 'i18n';
 import { SurveyUnit } from 'types/pearl';
 import { isQuestionnaireAvailable } from '../../utils/functions';
-import { Box, Table, TableBody, TableCell, TableRow, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import {
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@mui/material';
 import Chip from '@mui/material/Chip';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { getMostRecentState } from '../../utils/synchronize';
 import { getLang } from '../../i18n/build-dictionary';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { useNetworkOnline } from '../../utils/hooks/useOnline';
+import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 
 const chipStyle = { background: '#FFF', boxShadow: 2 };
 
@@ -32,11 +45,6 @@ type ArticulationTableData = {
     url: string;
   }[];
 };
-
-type ArticulationTableHook = (
-  react: unknown,
-  id: string
-) => ArticulationTableData;
 
 /**
  * Checks if all articulation rows are completed (progress === 1)
@@ -116,19 +124,20 @@ function ConfirmationModal({
   onClose: () => void;
   onConfirm: () => void;
 }>) {
+  const online = useNetworkOnline();
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{D.questionnaireAccessConfirmationTitle}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          {D.questionnaireAccessConfirmationMessage}
+          {online ? D.questionnaireAccessConfirmationMessage : D.requireNetworkAction}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
           {D.cancelButton}
         </Button>
-        <Button onClick={onConfirm} color="primary" variant="contained">
+        <Button disabled={!online} onClick={onConfirm} color="primary" variant="contained">
           {D.continueButton}
         </Button>
       </DialogActions>
@@ -141,29 +150,21 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
   const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
   const navigate = useNavigate();
 
-  const [articulationHook, setArticulationHook] = useState<ArticulationTableHook | null>(null);
   const [articulationTable, setArticulationTable] = useState<ArticulationTableData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    import('dramaQueen/useArticulationTable')
-      .then(module => {
-        setArticulationHook(() => module.default.useArticulationTable);
-      })
-      .catch(e => {
-        console.error("loading error 'dramaQueen/useArticulationTable'", e);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (articulationHook) {
-      const table = articulationHook(React, id);
-      setArticulationTable(table);
-    }
-  }, [articulationHook, id]);
+    import('dramaQueen/getArticulationTable')
+      .then(module => module.default.getArticulationTable(id))
+      .then(setArticulationTable);
+  }, [id]);
 
   const isQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
     state => state.state === 'QUESTIONNAIRE_INIT'
+  );
+  // The questionnaire was started on the web if it has at least one "web" event
+  const isWebQuestionnaire = Boolean(
+    surveyUnit.otherModeQuestionnaireState && surveyUnit.otherModeQuestionnaireState.length > 0
   );
   const isQuestionnaireCompleted = surveyUnit.otherModeQuestionnaireState?.some(
     state => state.state === 'QUESTIONNAIRE_COMPLETED' || state.state === 'QUESTIONNAIRE_VALIDATED'
@@ -173,17 +174,24 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 
   const latestState = getMostRecentState(surveyUnit);
 
-  const handleOpenModal = () => {
+  const openQuestionnaire = () => {
+    if (!isWebQuestionnaire) {
+      navigate(`/queen/survey-unit/${id}`);
+    }
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsModalOpen(false);
-    navigate(`/queen/survey-unit/${id}`);
+    await surveyUnitIDBService.update({
+      ...surveyUnit,
+      priority: true,
+    });
+    navigate(`/queen/survey-unit/${id}/synchronize`);
   };
 
   return (
@@ -211,7 +219,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
                 variant="contained"
                 disabled={!isAvailable}
                 startIcon={<SlowMotionVideoIcon />}
-                onClick={handleOpenModal}
+                onClick={openQuestionnaire}
               >
                 {D.accessTheQuestionnaire}
               </Button>
@@ -219,7 +227,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 
             <ConfirmationModal
               open={isModalOpen}
-              onClose={handleCloseModal}
+              onClose={handleCancel}
               onConfirm={handleConfirm}
             />
 
@@ -253,9 +261,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               </Row>
 
               {/* Table */}
-              {articulationTable && (
-                <ArticulationTable table={articulationTable} />
-              )}
+              {articulationTable && <ArticulationTable table={articulationTable} />}
             </Stack>
           )}
         </Stack>
@@ -326,11 +332,7 @@ export function ArticulationTable(
         </TableBody>
       </Table>
 
-      <ConfirmationModal
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        onConfirm={handleConfirm}
-      />
+      <ConfirmationModal open={isModalOpen} onClose={handleCloseModal} onConfirm={handleConfirm} />
     </>
   );
 }
