@@ -29,7 +29,7 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
   const isDemenagementWeb = surveyUnit.identification?.demenagementWeb === 'true';
   const isDemenagementEnqueteur = surveyUnit.identification?.demenagementEnqueteur === 'true';
 
-  const handleDemenagementEnqueteurChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDemenagementEnqueteurChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
     const newIdentification = {
       ...surveyUnit.identification,
@@ -44,9 +44,16 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
       ...surveyUnit,
       identification: newIdentification,
       persons: isChecked ? [] : surveyUnit.persons,
+      priority: isChecked ? 1 : surveyUnit.priority,
       states: newStates,
       otherModeQuestionnaireState: isChecked ? [] : surveyUnit.otherModeQuestionnaireState,
     };
+
+    if (isChecked) {
+      await import('dramaQueen/partialResetInterrogation').then(module =>
+        module.default.partialResetInterrogation(surveyUnit.id)
+      );
+    }
 
     persistSurveyUnit(updatedSurveyUnit);
   };
