@@ -222,7 +222,7 @@ export async function seedData() {
     identification: undefined,
     identificationConfiguration: IdentificationConfiguration.INDTEL,
     previousContactHistory: {
-      contactOutcomeValue: 'DUU',
+      contactOutcomeValue: 'INA',
       persons: [],
       comment: '',
       priority: false,
