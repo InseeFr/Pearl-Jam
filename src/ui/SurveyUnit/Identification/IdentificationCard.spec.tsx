@@ -162,7 +162,18 @@ describe('IdentificationCard', () => {
             identification: expect.objectContaining({
               demenagementEnqueteur: 'true',
             }),
-            persons: [],
+            persons: [
+              {
+                title: '',
+                firstName: D.surveyUnitFirstName,
+                lastName: D.surveyUnitLastName,
+                email: '',
+                birthdate: 0,
+                favoriteEmail: false,
+                privileged: true,
+                phoneNumbers: [],
+              },
+            ],
             states: expect.arrayContaining([
               expect.objectContaining({
                 type: 'INS',

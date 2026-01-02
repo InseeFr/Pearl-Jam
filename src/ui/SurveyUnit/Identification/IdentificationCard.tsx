@@ -43,7 +43,20 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
     const updatedSurveyUnit = {
       ...surveyUnit,
       identification: newIdentification,
-      persons: isChecked ? [] : surveyUnit.persons,
+      persons: isChecked
+        ? [
+            {
+              title: '',
+              firstName: D.surveyUnitFirstName,
+              lastName: D.surveyUnitLastName,
+              email: '',
+              birthdate: 0,
+              favoriteEmail: false,
+              privileged: true,
+              phoneNumbers: [],
+            },
+          ]
+        : surveyUnit.persons,
       states: newStates,
       otherModeQuestionnaireState: isChecked ? [] : surveyUnit.otherModeQuestionnaireState,
     };
