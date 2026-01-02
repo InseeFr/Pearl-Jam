@@ -133,10 +133,10 @@ const syncMessage = {
       n > 1 ? `${n} njësi anketimi të ngarkuara` : `${n} njësi anketimi e ngarkuar`,
   },
   prioritySurveyUnits: {
-    fr: (n: number) => (n > 1 ? `${n} unités enquêtées prioritaires` : `${n} unité enquêtée prioritaire`),
+    fr: (n: number) =>
+      n > 1 ? `${n} unités enquêtées prioritaires` : `${n} unité enquêtée prioritaire`,
     en: (n: number) => (n > 1 ? `${n} priority survey-units` : `${n} priority survey-unit`),
-    sq: (n: number) =>
-      n > 1 ? `${n} njësi anketimi prioritare` : `${n} njësi anketimi prioritare`,
+    sq: (n: number) => `${n} njësi anketimi prioritare`,
   },
   nothingToDisplay: {
     fr: 'Rien à afficher',
