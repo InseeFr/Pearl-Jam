@@ -90,14 +90,14 @@ const syncMessage = {
     sq: `Për informacion, ju keni "shumë" të dhëna në nivelin e anketës nëse postimi juaj. Kjo nuk bllokon asgjë. Administratori i aplikacionit është njoftuar.`,
   },
   webTerminatedSurveyUnit: {
-    fr: (su?: number) => `${su ? `${su} ` : ''}unités terminées sur internet`,
-    en: (su?: number) => `${su ? `${su} ` : ''}units completed online`,
-    sq: (su?: number) => `${su ? `${su} ` : ''}njësi të përfunduara në internet`,
+    fr: (su?: number) => (su ? su + ' ' : '') + 'unités terminées sur internet',
+    en: (su?: number) => (su ? su + ' ' : '') + 'units completed online',
+    sq: (su?: number) => (su ? su + ' ' : '') + 'njësi të përfunduara në internet',
   },
   webInitSurveyUnit: {
-    fr: (su?: number) => `${su ? `${su} ` : ''}unités démarrées sur internet`,
-    en: (su?: number) => `${su ? `${su} ` : ''}units started online`,
-    sq: (su?: number) => `${su ? `${su} ` : ''}njësi të filluara në internet`,
+    fr: (su?: number) => (su ? su + ' ' : '') + 'unités démarrées sur internet',
+    en: (su?: number) => (su ? su + ' ' : '') + 'units started online',
+    sq: (su?: number) => (su ? su + ' ' : '') + 'njësi të filluara në internet',
   },
   syncNoPearlData: {
     fr: `Pour information, vous n'avez récupéré aucune données.`,

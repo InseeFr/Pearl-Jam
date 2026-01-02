@@ -2,7 +2,7 @@ import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 
 import { postMailMessage } from 'api/pearl';
 import D from 'i18n';
-import { NotificationState, SurveyUnit, SyncResultDetails } from 'types/pearl';
+import { NotificationState, SyncResultDetails } from 'types/pearl';
 import { Notification, SyncReport } from 'utils/indexeddb/idb-config';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';

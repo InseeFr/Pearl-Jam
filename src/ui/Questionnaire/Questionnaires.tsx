@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Row } from '../Row';
 import { Typography } from '../Typography';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
