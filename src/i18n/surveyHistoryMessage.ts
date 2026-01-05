@@ -42,6 +42,11 @@ const surveyHistoryMessage = {
     en: 'Add a contact',
     sq: 'Shto një kontakt',
   },
+  importContacts: {
+    fr: 'Importer tout les contacts',
+    en: 'Imports all contacts',
+    sq: 'Importon të gjitha kontaktet',
+  },
   deleteContactLine: {
     fr: 'Supprimer une ligne',
     en: 'Delete a line',

@@ -11,7 +11,7 @@ import {
   Stack,
   Grid,
 } from '@mui/material';
-import { CheckCircle, Delete, Edit, Add } from '@mui/icons-material';
+import { CheckCircle, Delete, Edit, Add, Refresh } from '@mui/icons-material';
 import { NextContactHistoryPerson, SurveyUnit } from 'types/pearl';
 import { CustomTableCell } from './CustomTableCell';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
@@ -61,6 +61,23 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
 
     setModifyModalOpen(false);
     setSelectedContactIndex(-1);
+  };
+
+  const importPreviousContacts = () => {
+    const persons = surveyUnit.previousContactHistory?.persons;
+
+    if (!persons) return;
+
+    persons.forEach(person => {
+      const newContact: NextContactHistoryPerson = {
+        firstName: person.firstName,
+        lastName: person.lastName ?? '',
+        title: person.title ?? 'MISTER',
+        preferredContact: false,
+      };
+
+      handleAdd(newContact);
+    });
   };
 
   const nextCollectHistory = surveyUnit.nextContactHistory;
@@ -176,7 +193,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             </TableBody>
           </Table>
         )}
-        <Stack direction="row" mt={3}>
+        <Stack direction="row" mt={3} spacing={2}>
           <Button
             onClick={handleAddClick}
             variant="contained"
@@ -186,6 +203,17 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             }}
           >
             <Typography fontWeight={600}>{D.addContact}</Typography>
+          </Button>
+          <Button
+            onClick={importPreviousContacts}
+            color="inherit"
+            variant="contained"
+            startIcon={<Refresh />}
+            sx={{
+              textTransform: 'none',
+            }}
+          >
+            <Typography fontWeight={600}>{D.importContacts}</Typography>
           </Button>
         </Stack>
       </CardContent>
