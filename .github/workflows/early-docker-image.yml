@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pearl-jam
-          path: build
+          path: dist
 
   docker:
     needs: build
@@ -64,7 +64,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: pearl-jam
-          path: build
+          path: dist
 
       - name: Debug runner filesystem
         run: |
@@ -73,8 +73,8 @@ jobs:
           ls -al /
           echo "Listing repository checkout directory"
           ls -al $GITHUB_WORKSPACE
-          echo "Listing build artifact folder"
-          ls -al build
+          echo "Listing dist artifact folder"
+          ls -al dist
 
       - name: Read project version from package.json
         id: version
