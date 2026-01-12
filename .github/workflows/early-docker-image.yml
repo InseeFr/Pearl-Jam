@@ -68,6 +68,7 @@ jobs:
 
       - name: Debug runner filesystem
         run: |
+          ls - al .
           echo "Listing root /"
           ls -al /
           echo "Listing repository checkout directory"
