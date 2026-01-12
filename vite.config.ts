@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { viteEnvs } from 'vite-envs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -45,6 +46,7 @@ export default defineConfig({
   plugins: [
     tsconfigPaths(),
     react(),
+    viteEnvs({ declarationFile: ".env" }),
     federation({
       name: 'Pearl',
       remotes: {
