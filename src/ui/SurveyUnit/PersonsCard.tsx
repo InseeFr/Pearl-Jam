@@ -112,6 +112,7 @@ function PersonInfo({
   return (
     <Stack gap={2} sx={{ width: '100%' }}>
       <Stack gap={0.5}>
+        <TextWithLabel label={D.surveyMailContact}>{person.privileged}</TextWithLabel>
         <TextWithLabel label={D.surveyUnitTitle}>{getTitle(person.title)}</TextWithLabel>
         <TextWithLabel label={D.surveyUnitLastName}>{person.lastName}</TextWithLabel>
         <TextWithLabel label={D.surveyUnitFirstName}>{person.firstName}</TextWithLabel>

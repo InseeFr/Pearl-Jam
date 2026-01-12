@@ -36,7 +36,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
   const { register, handleSubmit, control } = useForm({
     // input persons is sorted and its order could be different from surveyUnit.persons used by useForm
     // => force the same order of persons in surveyUnit
-    defaultValues: { ...surveyUnit, persons: persons },
+    defaultValues: { persons: persons },
   });
 
   const onSubmit = handleSubmit(data => {
@@ -112,6 +112,12 @@ function PersonFields({ person, register, control, index }: Readonly<PersonField
 
   return (
     <Stack gap={2}>
+      <FieldRow
+        type="switch"
+        label={D.surveyMailContact}
+        control={control}
+        name={`persons.${index}.privileged`}
+      />
       <FieldRow
         label={D.surveyUnitTitle}
         name={`persons.${index}.title`}
