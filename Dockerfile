@@ -7,6 +7,7 @@ ENV NGINX_USER=nginx
 
 USER $NGINX_USER_ID
 
+RUN ls -al
 # Add build to nginx root webapp
 COPY --chown=$NGINX_USER:$NGINX_USER /build /usr/share/nginx/html
 
