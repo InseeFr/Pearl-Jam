@@ -12,7 +12,7 @@ COPY --chown=$NGINX_USER:$NGINX_USER /pearl/build /usr/share/nginx/html
 
 # Copy nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
-COPY --chown=$NGINX_USER:$NGINX_USER /pearl/nginx.conf /etc/nginx/conf.d/nginx.conf
+COPY --chown=$NGINX_USER:$NGINX_USER nginx.conf /etc/nginx/conf.d/nginx.conf
 
 RUN chmod 755 /usr/share/nginx/html/vite-envs.sh
 
