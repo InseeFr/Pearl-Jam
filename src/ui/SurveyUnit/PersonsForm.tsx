@@ -14,15 +14,22 @@ import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import { Fragment, MouseEvent } from 'react';
-import { Control, Controller, useFieldArray, useForm, UseFormRegister } from 'react-hook-form';
+import {
+  Control,
+  Controller,
+  useFieldArray,
+  useForm,
+  UseFormRegister,
+  UseFormSetValue,
+} from 'react-hook-form';
 import { SurveyUnit, SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
 import D from '../../i18n/build-dictionary';
 import { TITLES } from '../../utils/constants';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
-import { FieldRow } from '../FieldRow';
 import { PaperIconButton } from '../PaperIconButton';
 import { Row } from '../Row';
 import { Typography } from '../Typography';
+import { FieldRow } from 'ui/FieldRow';
 
 interface PersonsFormProps {
   onClose: VoidFunction;
@@ -33,7 +40,7 @@ interface PersonsFormProps {
  * Form to edit multiple persons attached to a surveyUnit
  */
 export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFormProps>) {
-  const { register, handleSubmit, control } = useForm({
+  const { register, handleSubmit, control, setValue } = useForm({
     // input persons is sorted and its order could be different from surveyUnit.persons used by useForm
     // => force the same order of persons in surveyUnit
     defaultValues: { persons: persons },
@@ -60,7 +67,14 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
             {persons.map((p, k) => (
               <Fragment key={p.id}>
                 {k > 0 && <Divider orientation="vertical" flexItem />}
-                <PersonFields index={k} person={p} register={register} control={control} />
+                <PersonFields
+                  index={k}
+                  person={p}
+                  register={register}
+                  control={control}
+                  setValue={setValue}
+                  personCount={persons.length}
+                />
               </Fragment>
             ))}
           </Row>
@@ -80,14 +94,25 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
 
 interface PersonFieldsProps {
   person: SurveyUnitPerson;
-  register: (s: string) => InputProps | UseFormRegister<any>;
+  register: (s: string) => UseFormRegister<any>;
   control: Control<any>;
   index: number;
+  setValue: UseFormSetValue<{
+    persons: SurveyUnitPerson[];
+  }>;
+  personCount: number;
 }
 /**
  * Fields for a specific Person
  */
-function PersonFields({ person, register, control, index }: Readonly<PersonFieldsProps>) {
+function PersonFields({
+  person,
+  register,
+  control,
+  index,
+  setValue,
+  personCount,
+}: Readonly<PersonFieldsProps>) {
   const titles = [
     { label: TITLES.MISS.value, value: TITLES.MISS.type },
     { label: TITLES.MISTER.value, value: TITLES.MISTER.type },
@@ -110,6 +135,10 @@ function PersonFields({ person, register, control, index }: Readonly<PersonField
     append({ favorite: false, number: '', source: 'INTERVIEWER' });
   };
 
+  const handleToggle = () => {
+    if (personCount == 2) setValue(`persons.${(index + 1) % 2}.privileged`, false);
+  };
+
   return (
     <Stack gap={2}>
       <FieldRow
@@ -117,6 +146,7 @@ function PersonFields({ person, register, control, index }: Readonly<PersonField
         label={D.surveyMailContact}
         control={control}
         name={`persons.${index}.privileged`}
+        onChange={() => handleToggle()}
       />
       <FieldRow
         label={D.surveyUnitTitle}

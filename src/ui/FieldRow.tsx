@@ -123,7 +123,17 @@ export function ControlledField({
   onChange,
 }: Readonly<ControlledFieldProps>) {
   if (type === 'switch') {
-    return <Switch checked={field.value} color="green" {...field} />;
+    return (
+      <Switch
+        checked={field.value}
+        color="green"
+        {...field}
+        onChange={e => {
+          field.onChange(e);
+          onChange && onChange();
+        }}
+      />
+    );
   }
   if (type === 'datepicker') {
     return <DatePicker value={field.value} onChange={v => field.onChange(v.getTime())} />;
