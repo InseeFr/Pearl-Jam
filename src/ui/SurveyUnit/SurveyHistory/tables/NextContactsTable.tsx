@@ -107,8 +107,9 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     });
   };
 
-  const preferredContact = nextCollectHistory?.persons.find(c => c.preferredContact);
-  const selectedContact = nextCollectHistory?.persons[selectedContactIndex];
+  const nextContacts = nextCollectHistory?.persons;
+  const preferredContact = nextContacts?.find(c => c.preferredContact);
+  const selectedContact = nextContacts && nextContacts[selectedContactIndex];
 
   return (
     <Card elevation={0}>
@@ -212,6 +213,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             sx={{
               textTransform: 'none',
             }}
+            disabled={nextContacts && nextContacts.length > 0}
           >
             <Typography fontWeight={600}>{D.importContacts}</Typography>
           </Button>

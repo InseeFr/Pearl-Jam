@@ -145,3 +145,30 @@ test('Check previous collect history, modify next collect history and synchroniz
   await expect(page.getByRole('cell', { name: 'Hugo' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'test2@gmail.com' })).toBeVisible();
 });
+
+test('Import previous contacts to next contacts', async ({ page }) => {
+  const homePage = new HomePage(page);
+  await homePage.go();
+  await homePage.synchronize();
+  await page.getByRole('link', { name: 'SIMMONS Earl' }).click();
+  await page.getByRole('tab', { name: 'Collecte suivante' }).click();
+  await page.getByText('Ajouter un individuImporter').click();
+
+  await expect(page.getByText('GRICE')).toBeVisible();
+  await expect(page.getByText('COLES')).toBeVisible();
+
+  await page.getByRole('cell', { name: 'COLES' }).click();
+  await page.getByText('GRICE').click();
+
+  await page.getByRole('button', { name: 'Supprimer' }).first().click();
+  await page.getByRole('button', { name: 'Confirmer' }).click();
+  await page.getByRole('button', { name: 'Supprimer' }).click();
+  await page.getByRole('button', { name: 'Confirmer' }).click();
+
+  await expect(page.getByText('GRICE')).toBeHidden();
+  await expect(page.getByText('COLES')).toBeHidden();
+
+  await page.getByRole('button', { name: 'Importer tout les contacts' }).click();
+  await expect(page.getByText('SMITH')).toBeVisible();
+  await expect(page.getByText('WOODS')).toBeVisible();
+});
