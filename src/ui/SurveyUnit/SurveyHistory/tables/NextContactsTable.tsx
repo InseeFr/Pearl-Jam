@@ -63,17 +63,16 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     setSelectedContactIndex(-1);
   };
 
-  const importPreviousContacts = () => {
-    const persons = surveyUnit.previousContactHistory?.persons;
-
-    if (!persons) return;
+  const importCurrentContacts = () => {
+    const persons = surveyUnit.persons;
 
     persons.forEach(person => {
       const newContact: NextContactHistoryPerson = {
         firstName: person.firstName,
-        lastName: person.lastName ?? '',
-        title: person.title ?? 'MISTER',
-        preferredContact: false,
+        lastName: person.lastName,
+        title: person.title,
+        email: person.email,
+        phoneNumber: person.phoneNumbers[0].number,
       };
 
       handleAdd(newContact);
@@ -206,7 +205,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             <Typography fontWeight={600}>{D.addContact}</Typography>
           </Button>
           <Button
-            onClick={importPreviousContacts}
+            onClick={importCurrentContacts}
             color="inherit"
             variant="contained"
             startIcon={<Refresh />}

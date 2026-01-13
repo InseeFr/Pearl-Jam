@@ -72,7 +72,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
                   register={register}
                   control={control}
                   setValue={setValue}
-                  personCount={persons.length}
+                  persons={persons}
                 />
               </Fragment>
             ))}
@@ -99,7 +99,7 @@ interface PersonFieldsProps {
   setValue: UseFormSetValue<{
     persons: SurveyUnitPerson[];
   }>;
-  personCount: number;
+  persons: SurveyUnitPerson[];
 }
 /**
  * Fields for a specific Person
@@ -110,7 +110,7 @@ function PersonFields({
   control,
   index,
   setValue,
-  personCount,
+  persons,
 }: Readonly<PersonFieldsProps>) {
   const titles = [
     { label: TITLES.MISS.value, value: TITLES.MISS.type },
@@ -135,7 +135,9 @@ function PersonFields({
   };
 
   const handleToggle = () => {
-    if (personCount == 2) setValue(`persons.${(index + 1) % 2}.privileged`, false);
+    persons.forEach((p, i) => {
+      if (i !== index) setValue(`persons.${i}.privileged`, false);
+    });
   };
 
   return (

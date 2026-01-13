@@ -150,18 +150,17 @@ test('Import previous contacts to next contacts', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();
   await homePage.synchronize();
-  await page.getByRole('link', { name: 'JOHNSON Albert' }).click();
+  await page.getByRole('link', { name: 'HILBERT Albert' }).click();
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
   await page.getByText('Ajouter un individuImporter').click();
 
-  await expect(page.getByText('VAN DER LINDE')).toBeVisible();
+  await expect(page.getByText('SMITH')).toBeVisible();
 
   await page.getByRole('button', { name: 'Supprimer' }).click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
 
-  await expect(page.getByText('VAN DER LINDE')).toBeHidden();
+  await expect(page.getByText('SMITH')).toBeHidden();
 
-  await page.getByRole('button', { name: 'Importer tout les contacts' }).click();
-  await expect(page.getByText('MARSTON')).toBeVisible();
-  await expect(page.getByText('MORGAN')).toBeVisible();
+  await page.getByRole('button', { name: 'Importer tous les contacts' }).click();
+  await expect(page.getByText('HILBERT')).toBeVisible();
 });

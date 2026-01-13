@@ -19,9 +19,11 @@ export type SurveyUnitPhoneNumber = {
   id: string;
 };
 
+export type ContactPersonTitle = 'MISTER' | 'MISS';
+
 export type SurveyUnitPerson = {
   id: number;
-  title: string;
+  title: ContactPersonTitle;
   firstName: string;
   lastName: string;
   email: string;
@@ -31,11 +33,9 @@ export type SurveyUnitPerson = {
   phoneNumbers: SurveyUnitPhoneNumber[];
 };
 
-export type ContactHistoryPersonTitle = 'MISTER' | 'MISS';
-
 export type PreviousContactHistoryPerson = {
   id?: number;
-  title?: ContactHistoryPersonTitle;
+  title?: ContactPersonTitle;
   firstName: string;
   lastName?: string;
   birthdate?: number;
@@ -44,7 +44,7 @@ export type PreviousContactHistoryPerson = {
 
 export type NextContactHistoryPerson = {
   id?: number;
-  title: ContactHistoryPersonTitle;
+  title: ContactPersonTitle;
   firstName: string;
   lastName: string;
   phoneNumber?: string;
