@@ -111,7 +111,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/pearl-jam-back-office:5.13.2-rc
+    image: docker.io/inseefr/pearl-jam-back-office:snapshot-test-e2e-data-collect-history
     tty: true
     stdin_open: true
     depends_on:
