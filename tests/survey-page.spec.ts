@@ -152,7 +152,9 @@ test('Import previous contacts to next contacts', async ({ page }) => {
   await homePage.synchronize();
   await page.getByRole('link', { name: 'HILBERT Albert' }).click();
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
-  await page.getByText('Ajouter un individuImporter').click();
+  expect(
+    page.getByRole('button', { name: 'Importer tous les contacts' }).isDisabled()
+  ).toBeTruthy();
 
   await expect(page.getByText('SMITH')).toBeVisible();
 
@@ -162,5 +164,5 @@ test('Import previous contacts to next contacts', async ({ page }) => {
   await expect(page.getByText('SMITH')).toBeHidden();
 
   await page.getByRole('button', { name: 'Importer tous les contacts' }).click();
-  await expect(page.getByText('HILBERT')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'HILBERT' })).toBeVisible();
 });
