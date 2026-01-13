@@ -130,7 +130,7 @@ export function ControlledField({
         {...field}
         onChange={e => {
           field.onChange(e);
-          onChange && onChange();
+          onChange?.();
         }}
       />
     );

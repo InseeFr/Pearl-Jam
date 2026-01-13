@@ -109,7 +109,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
 
   const nextContacts = nextCollectHistory?.persons;
   const preferredContact = nextContacts?.find(c => c.preferredContact);
-  const selectedContact = nextContacts && nextContacts[selectedContactIndex];
+  const selectedContact = nextContacts?.[selectedContactIndex];
 
   return (
     <Card elevation={0}>
