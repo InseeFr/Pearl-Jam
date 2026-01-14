@@ -1,6 +1,6 @@
 {
   "name": "pearl",
-  "version": "2.12.1-rc4",
+  "version": "2.12.1-rc5",
   "private": true,
   "type": "module",
   "dependencies": {
