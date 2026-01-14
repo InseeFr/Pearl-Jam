@@ -46,7 +46,7 @@ export default defineConfig({
   plugins: [
     tsconfigPaths(),
     react(),
-    viteEnvs({ declarationFile: ".env" }),
+    viteEnvs({ declarationFile: '.env' }),
     federation({
       name: 'Pearl',
       remotes: {
@@ -57,7 +57,7 @@ export default defineConfig({
       },
     }),
     VitePWA({
-      injectRegister: null,
+      injectRegister: false,
       strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'service-worker.js',
@@ -67,24 +67,22 @@ export default defineConfig({
         icons: [
           {
             src: 'favicon.ico',
-            sizes: '32x32',
+            sizes: '35x33',
             type: 'image/x-icon',
           },
           {
-            src: 'static/images/insee.png',
-            sizes: '326x378',
-            type: 'image/png',
-          },
-          {
-            src: 'static/images/logo-insee-header.png',
-            sizes: '270x274',
-            type: 'image/png',
+            src: 'static/images/Insee_logo_header.webp',
+            sizes: '298x100',
+            type: 'image/webp',
           },
         ],
         start_url: '.',
         display: 'standalone',
         theme_color: '#000000',
         background_color: '#ffffff',
+      },
+      injectManifest: {
+        globPatterns: ['**\/*.{js,css,html,ico,webmanifest,webp,woff2}'],
       },
     }),
   ],
