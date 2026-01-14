@@ -51,7 +51,7 @@ export default defineConfig({
       name: 'Pearl',
       remotes: {
         dramaQueen: {
-          external: "Promise.resolve(import.meta.env.VITE_QUEEN_URL + '/assets/remoteEntry.js')",
+          external: "Promise.resolve(window.__VITE_ENVS.VITE_QUEEN_URL + '/assets/remoteEntry.js')",
           externalType: 'promise',
         },
       },
