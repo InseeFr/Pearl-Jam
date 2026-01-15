@@ -14,7 +14,7 @@ type ModifyContactModalProps = {
   contact?: NextContactHistoryPerson;
   preferedContact?: NextContactHistoryPerson;
   onClose: () => void;
-  onConfirm: (contact: NextContactHistoryPerson) => void;
+  onConfirm: (newContact: NextContactHistoryPerson) => void;
 };
 
 export function ContactModal({

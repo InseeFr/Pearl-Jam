@@ -13,7 +13,7 @@ import {
 } from 'utils/functions/contacts/ContactOutcome';
 
 export type SurveyUnitPhoneNumber = {
-  source: string;
+  source: 'FISCAL' | 'DIRECTORY' | 'INTERVIEWER';
   favorite: boolean;
   number: string;
   id: string;

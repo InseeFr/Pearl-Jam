@@ -19,9 +19,18 @@ import { useState } from 'react';
 import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import { ContactModal } from './ContactModal';
 import D from 'i18n';
+import { selectPhoneNumber } from 'utils/functions/contactHistory';
+import { PhoneNumberPickupModal } from './PhoneNumberPickupModal';
+import { fa } from 'zod/v4/locales';
 
 type HouseholdTableProps = {
   surveyUnit: SurveyUnit;
+};
+
+export type NextContactHistoryPersonAndImportState = {
+  resolved: boolean;
+  nextContactHistoryPerson: NextContactHistoryPerson;
+  phoneNumbers?: string[];
 };
 
 export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>) {
@@ -29,6 +38,11 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [modifyModalOpen, setModifyModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [tmpContactsToImport, setTmpContactsToImport] = useState<
+    NextContactHistoryPersonAndImportState[]
+  >([]);
+
+  const [phoneNumberModal, setPhoneNumberModal] = useState<boolean>(false);
 
   const handleDeleteClick = (index: number) => {
     setSelectedContactIndex(index);
@@ -63,20 +77,52 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     setSelectedContactIndex(-1);
   };
 
-  const importCurrentContacts = () => {
-    const persons = surveyUnit.persons;
+  // TODO : bloquer le add tant que num tel pb pas resolu
+  // TODO : bouton import, retirer de l'affichage si import pas possible (déjà un contact existant du next collect)
 
+  const importCurrentContacts = () => {
+    console.log('importCurrentContacts');
+
+    const persons = surveyUnit.persons;
+    const newContactsToResolve: NextContactHistoryPersonAndImportState[] = [];
+    let resolved = true;
     persons.forEach(person => {
+      const selectedPhoneNumber = selectPhoneNumber(person.phoneNumbers);
+
       const newContact: NextContactHistoryPerson = {
         firstName: person.firstName,
         lastName: person.lastName,
         title: person.title,
         email: person.email,
-        phoneNumber: person.phoneNumbers[0].number,
+        phoneNumber: !selectedPhoneNumber.requiresUserSelection
+          ? selectedPhoneNumber.phoneNumber
+          : undefined,
       };
 
-      handleAdd(newContact);
+      console.log(selectedPhoneNumber);
+
+      console.log(
+        !selectedPhoneNumber.requiresUserSelection ? selectedPhoneNumber.phoneNumber : undefined
+      );
+
+      newContactsToResolve.push({
+        resolved: !selectedPhoneNumber.requiresUserSelection,
+        nextContactHistoryPerson: newContact,
+        phoneNumbers: selectedPhoneNumber.phoneNumbers,
+      });
+
+      if (selectedPhoneNumber.requiresUserSelection) resolved = false;
     });
+
+    console.log('newContactsToResolve', newContactsToResolve);
+
+    if (resolved) {
+      newContactsToResolve.forEach(c => handleAdd(c.nextContactHistoryPerson));
+      return;
+    }
+
+    setTmpContactsToImport(newContactsToResolve);
+    setPhoneNumberModal(true);
   };
 
   const nextCollectHistory = surveyUnit.nextContactHistory;
@@ -204,18 +250,19 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
           >
             <Typography fontWeight={600}>{D.addContact}</Typography>
           </Button>
-          <Button
-            onClick={importCurrentContacts}
-            color="inherit"
-            variant="contained"
-            startIcon={<Refresh />}
-            sx={{
-              textTransform: 'none',
-            }}
-            disabled={nextContacts && nextContacts.length > 0}
-          >
-            <Typography fontWeight={600}>{D.importContacts}</Typography>
-          </Button>
+          {!nextContacts?.length && (
+            <Button
+              onClick={importCurrentContacts}
+              color="inherit"
+              variant="contained"
+              startIcon={<Refresh />}
+              sx={{
+                textTransform: 'none',
+              }}
+            >
+              <Typography fontWeight={600}>{D.importContacts}</Typography>
+            </Button>
+          )}
         </Stack>
       </CardContent>
       <DeleteConfirmationModal
@@ -241,6 +288,14 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         onClose={() => setAddModalOpen(false)}
         onConfirm={handleAdd}
       />
+      <PhoneNumberPickupModal
+        open={phoneNumberModal}
+        contactsToResolve={tmpContactsToImport}
+        onClose={() => {
+          (setPhoneNumberModal(false), setTmpContactsToImport([]));
+        }}
+        handleAdd={handleAdd}
+      ></PhoneNumberPickupModal>
     </Card>
   );
 }
