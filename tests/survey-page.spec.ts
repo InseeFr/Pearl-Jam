@@ -75,7 +75,7 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
 
   page.locator('div').filter({ hasText: /^MOREAU Isabelle#questNotAvailable$/ });
 
-  await page.getByRole('button', { name: 'Fermer' }).click();
+  // await page.getByRole('button', { name: 'Fermer' }).click();
   await page.getByRole('link', { name: 'Mon suivi' }).click();
   await page.getByRole('tab', { name: 'Suivi des unités par enquête' }).click();
   await page.getByRole('cell', { name: 'MOREAU Isabelle' }).click();
@@ -172,15 +172,15 @@ test('Import previous contacts to next contacts', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();
   await homePage.synchronize();
-  await page.getByRole('link', { name: 'HILBERT Albert' }).click();
+  await page.getByRole('link', { name: 'HILBERT' }).click();
 
   // Add multiple phone numbers to the contact to test the pop-up handling during import
   await page.getByRole('tab', { name: 'Contacts' }).click();
   await page.getByRole('button', { name: 'Modifier' }).click();
-  await page.getByRole('button', { name: 'Ajouter un numéro' }).click();
+  await page.getByRole('button', { name: 'Ajouter un numéro' }).first().click();
   await page.locator('input[name="persons.0.phoneNumbers.1.number"]').click();
   await page.locator('input[name="persons.0.phoneNumbers.1.number"]').fill('0651163352');
-  await page.getByRole('button', { name: 'Ajouter un numéro' }).click();
+  await page.getByRole('button', { name: 'Ajouter un numéro' }).first().click();
   await page.locator('input[name="persons.0.phoneNumbers.2.number"]').click();
   await page.locator('input[name="persons.0.phoneNumbers.2.number"]').fill('0651163354');
   await page
@@ -202,7 +202,9 @@ test('Import previous contacts to next contacts', async ({ page }) => {
   await page.getByRole('button', { name: 'Importer tous les contacts' }).click();
 
   // Handle the pop-up for asking to select a single phone number and do it
-  await page.getByText('Veuillez selectionner un seul').click();
+  await page
+    .getByText('Veuillez selectionner un seul numéro de téléphone favori pour Albert Hilbert.')
+    .click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
   await page.getByRole('tab', { name: 'Contacts' }).click();
   await page.getByRole('button').filter({ hasText: /^$/ }).nth(3).click();
@@ -211,5 +213,5 @@ test('Import previous contacts to next contacts', async ({ page }) => {
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
   await page.getByRole('button', { name: 'Importer tous les contacts' }).click();
 
-  await expect(page.getByRole('cell', { name: 'HILBERT' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'HILBERT' })).toHaveCount(2);
 });

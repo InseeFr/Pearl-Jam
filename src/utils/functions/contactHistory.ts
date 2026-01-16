@@ -1,17 +1,5 @@
 import { SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
 
-// Règle sur le numéro de téléphone importé :
-
-//     En priorité celui qui est tagué comme favori, sinon le n° enquêteur, sinon le numéro fiscal, sinon le numéro annuaire.
-
-//     Si aucun numéro de téléphone n'est disponible dans le formulaire de contact, ce n'est pas bloquant.
-
-//     Si plusieurs n° de téléphone marqués en favoris : prendre en priorité le numéro enquêteur marqué favori puis le numéro fiscal marqué favori,
-//     puis le numéro annuaire marqué en favori
-
-//     Si pas de n° de téléphone favori et plusieurs n° enquêteur OU plusieurs numéros enquêteur favori, alors au moment de l'importation une Pop-up
-//     s'affiche en demandant à l'enquêteur de déterminer un seul numéro de téléphone qui sera conservé en le marquant en favori dans l'onglet Contact.
-
 /**
  * Selects the appropriate phone number based on priority rules:
  * 1. Favorite phone number (with priority: INTERVIEWER > FISCAL > DIRECTORY)
