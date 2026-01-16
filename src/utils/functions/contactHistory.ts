@@ -39,7 +39,6 @@ export function selectPhoneNumber(phoneNumbers: SurveyUnitPhoneNumber[]) {
     if (interviewerFavorites.length > 1) {
       // Multiple INTERVIEWER favorites - requires user selection
       return {
-        phoneNumbers: interviewerFavorites.map(n => n.number),
         requiresUserSelection: true,
       };
     }
@@ -65,7 +64,6 @@ export function selectPhoneNumber(phoneNumbers: SurveyUnitPhoneNumber[]) {
   if (interviewerNumbers.length > 1) {
     // Multiple INTERVIEWER numbers without a favorite - requires user selection
     return {
-      phoneNumbers: interviewerNumbers.map(n => n.number),
       requiresUserSelection: true,
     };
   }

@@ -20,7 +20,7 @@ import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import { ContactModal } from './ContactModal';
 import D from 'i18n';
 import { selectPhoneNumber } from 'utils/functions/contactHistory';
-import { PhoneNumberPickupModal } from './PhoneNumberPickupModal';
+import { PhoneNumberImportAlert } from './PhoneNumberImportAlert';
 import { fa } from 'zod/v4/locales';
 
 type HouseholdTableProps = {
@@ -30,7 +30,6 @@ type HouseholdTableProps = {
 export type NextContactHistoryPersonAndImportState = {
   resolved: boolean;
   nextContactHistoryPerson: NextContactHistoryPerson;
-  phoneNumbers?: string[];
 };
 
 export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>) {
@@ -38,7 +37,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [modifyModalOpen, setModifyModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
-  const [tmpContactsToImport, setTmpContactsToImport] = useState<
+  const [contactsImportState, setContactsImportState] = useState<
     NextContactHistoryPersonAndImportState[]
   >([]);
 
@@ -84,7 +83,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     console.log('importCurrentContacts');
 
     const persons = surveyUnit.persons;
-    const newContactsToResolve: NextContactHistoryPersonAndImportState[] = [];
+    const newContactsImportState: NextContactHistoryPersonAndImportState[] = [];
     let resolved = true;
     persons.forEach(person => {
       const selectedPhoneNumber = selectPhoneNumber(person.phoneNumbers);
@@ -99,29 +98,20 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
           : undefined,
       };
 
-      console.log(selectedPhoneNumber);
-
-      console.log(
-        !selectedPhoneNumber.requiresUserSelection ? selectedPhoneNumber.phoneNumber : undefined
-      );
-
-      newContactsToResolve.push({
+      newContactsImportState.push({
         resolved: !selectedPhoneNumber.requiresUserSelection,
         nextContactHistoryPerson: newContact,
-        phoneNumbers: selectedPhoneNumber.phoneNumbers,
       });
 
       if (selectedPhoneNumber.requiresUserSelection) resolved = false;
     });
 
-    console.log('newContactsToResolve', newContactsToResolve);
-
     if (resolved) {
-      newContactsToResolve.forEach(c => handleAdd(c.nextContactHistoryPerson));
+      newContactsImportState.forEach(c => handleAdd(c.nextContactHistoryPerson));
       return;
     }
 
-    setTmpContactsToImport(newContactsToResolve);
+    setContactsImportState(newContactsImportState);
     setPhoneNumberModal(true);
   };
 
@@ -288,14 +278,13 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         onClose={() => setAddModalOpen(false)}
         onConfirm={handleAdd}
       />
-      <PhoneNumberPickupModal
+      <PhoneNumberImportAlert
         open={phoneNumberModal}
-        contactsToResolve={tmpContactsToImport}
+        contactsToResolve={contactsImportState}
         onClose={() => {
-          (setPhoneNumberModal(false), setTmpContactsToImport([]));
+          (setPhoneNumberModal(false), setContactsImportState([]));
         }}
-        handleAdd={handleAdd}
-      ></PhoneNumberPickupModal>
+      ></PhoneNumberImportAlert>
     </Card>
   );
 }
