@@ -146,28 +146,6 @@ test('Check previous collect history, modify next collect history and synchroniz
   await expect(page.getByRole('cell', { name: 'test2@gmail.com' })).toBeVisible();
 });
 
-// await page.getByRole('tab', { name: 'Collecte suivante' }).click();
-//   await page.getByRole('tab', { name: 'Contacts' }).click();
-//   await page.getByRole('button', { name: 'Modifier' }).click();
-//   await page.getByRole('button', { name: 'Ajouter un numéro' }).click();
-//   await page.locator('input[name="persons.0.phoneNumbers.1.number"]').click();
-//   await page.locator('input[name="persons.0.phoneNumbers.1.number"]').fill('0651163352');
-//   await page.getByRole('button', { name: 'Ajouter un numéro' }).click();
-//   await page.locator('input[name="persons.0.phoneNumbers.2.number"]').click();
-//   await page.locator('input[name="persons.0.phoneNumbers.2.number"]').fill('0651163354');
-//   await page.locator('.MuiStack-root.css-15loa0i-MuiStack-root > .MuiButtonBase-root').first().click();
-//   await page.getByRole('button', { name: 'Enregistrer' }).click();
-//   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
-//   await page.getByRole('button', { name: 'Supprimer' }).click();
-//   await page.getByRole('button', { name: 'Confirmer' }).click();
-//   await page.getByRole('button', { name: 'Importer tous les contacts' }).click();
-//   await page.getByText('Veuillez selectionner un seul').click();
-//   await page.getByRole('button', { name: 'Confirmer' }).click();
-//   await page.getByRole('tab', { name: 'Contacts' }).click();
-//   await page.getByRole('button').filter({ hasText: /^$/ }).nth(3).click();
-//   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
-//   await page.getByRole('button', { name: 'Importer tous les contacts' }).click();
-
 test('Import previous contacts to next contacts', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();
