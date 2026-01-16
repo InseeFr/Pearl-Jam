@@ -1,4 +1,4 @@
-import { SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
+import { SurveyUnitPhoneNumber } from 'types/pearl';
 
 /**
  * Selects the appropriate phone number based on priority rules:

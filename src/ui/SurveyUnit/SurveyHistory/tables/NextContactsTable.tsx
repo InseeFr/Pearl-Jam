@@ -87,9 +87,9 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         lastName: person.lastName,
         title: person.title,
         email: person.email,
-        phoneNumber: !selectedPhoneNumber.requiresUserSelection
-          ? selectedPhoneNumber.phoneNumber
-          : undefined,
+        phoneNumber: selectedPhoneNumber.requiresUserSelection
+          ? undefined
+          : selectedPhoneNumber.phoneNumber,
       };
 
       newContactsImportState.push({
@@ -275,9 +275,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
       <PhoneNumberImportAlert
         open={phoneNumberModal}
         contactsToResolve={contactsImportState}
-        onClose={() => {
-          (setPhoneNumberModal(false), setContactsImportState([]));
-        }}
+        onClose={() => setPhoneNumberModal(false)}
       ></PhoneNumberImportAlert>
     </Card>
   );
