@@ -80,8 +80,6 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   // TODO : bouton import, retirer de l'affichage si import pas possible (déjà un contact existant du next collect)
 
   const importCurrentContacts = () => {
-    console.log('importCurrentContacts');
-
     const persons = surveyUnit.persons;
     const newContactsImportState: NextContactHistoryPersonAndImportState[] = [];
     let resolved = true;
