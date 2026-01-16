@@ -263,6 +263,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
           preferedContact={preferredContact}
           onClose={() => setModifyModalOpen(false)}
           onConfirm={handleModify}
+          isFirst={false}
         />
       )}
       <ContactModal
@@ -271,6 +272,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         preferedContact={preferredContact}
         onClose={() => setAddModalOpen(false)}
         onConfirm={handleAdd}
+        isFirst={!nextContacts?.length}
       />
       <PhoneNumberImportAlert
         open={phoneNumberModal}
