@@ -222,6 +222,17 @@ const surveyHistoryMessage = {
     en: 'Edit contact information',
     sq: 'Ndrysho informacionin e kontaktit',
   },
+  importAlertErrorModalTitle: {
+    fr: "Impossible d'importer",
+    en: 'Import not possible',
+    sq: 'Importimi nuk është i mundur',
+  },
+  importAlertErrorModalContent: {
+    fr: 'Veuillez selectionner un seul numéro de téléphone favori pour',
+    en: 'Please select only one preferred phone number for',
+    sq: 'Ju lutemi zgjidhni vetëm një numër telefoni të preferuar për',
+  },
+
   requiredField: {
     fr: 'Champ obligatoire',
     en: 'Required field',

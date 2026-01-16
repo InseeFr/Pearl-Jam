@@ -1,17 +1,5 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Button,
-  Stack,
-  Typography,
-  MenuItem,
-  Select,
-  FormControl,
-} from '@mui/material';
-import { NextContactHistoryPerson } from 'types/pearl';
+import { Dialog, DialogTitle, DialogContent, Button, Stack, Typography } from '@mui/material';
 import { NextContactHistoryPersonAndImportState } from './NextContactsTable';
-import { useEffect, useState } from 'react';
 import D from 'i18n';
 
 type PhoneNumberImportAlertProps = {
@@ -30,7 +18,7 @@ export function PhoneNumberImportAlert({
       <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
         <DialogTitle>
           <Typography variant="h6" fontWeight={600}>
-            Impossible d'importer
+            {D.importAlertErrorModalTitle}
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -40,7 +28,7 @@ export function PhoneNumberImportAlert({
                 <Typography
                   fontWeight={600}
                   variant="m"
-                >{`Veuillez selectionner un seul numéro de téléphone favori pour ${c.nextContactHistoryPerson.firstName} ${c.nextContactHistoryPerson.lastName}.`}</Typography>
+                >{`${D.importAlertErrorModalContent} ${c.nextContactHistoryPerson.firstName} ${c.nextContactHistoryPerson.lastName}.`}</Typography>
               )}
             </Stack>
           ))}

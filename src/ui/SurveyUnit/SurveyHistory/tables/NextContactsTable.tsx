@@ -21,7 +21,6 @@ import { ContactModal } from './ContactModal';
 import D from 'i18n';
 import { selectPhoneNumber } from 'utils/functions/contactHistory';
 import { PhoneNumberImportAlert } from './PhoneNumberImportAlert';
-import { fa } from 'zod/v4/locales';
 
 type HouseholdTableProps = {
   surveyUnit: SurveyUnit;
@@ -75,9 +74,6 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     setModifyModalOpen(false);
     setSelectedContactIndex(-1);
   };
-
-  // TODO : bloquer le add tant que num tel pb pas resolu
-  // TODO : bouton import, retirer de l'affichage si import pas possible (déjà un contact existant du next collect)
 
   const importCurrentContacts = () => {
     const persons = surveyUnit.persons;
