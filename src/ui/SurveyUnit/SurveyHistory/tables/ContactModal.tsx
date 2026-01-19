@@ -13,8 +13,9 @@ type ModifyContactModalProps = {
   modalTitle: string;
   contact?: NextContactHistoryPerson;
   preferedContact?: NextContactHistoryPerson;
+  isFirst: boolean;
   onClose: () => void;
-  onConfirm: (contact: NextContactHistoryPerson) => void;
+  onConfirm: (newContact: NextContactHistoryPerson) => void;
 };
 
 export function ContactModal({
@@ -22,6 +23,7 @@ export function ContactModal({
   modalTitle,
   contact,
   preferedContact,
+  isFirst,
   onClose,
   onConfirm,
 }: Readonly<ModifyContactModalProps>) {
@@ -147,9 +149,10 @@ export function ContactModal({
                 name="preferredContact"
                 type="radios"
                 onChange={checkPreferedContactValidity}
+                defaultValue={isFirst ? 'true' : 'false'}
                 options={[
                   { label: D.yes, value: 'true' },
-                  { label: D.no, value: 'false' },
+                  { label: D.no, value: 'false', disabled: isFirst },
                 ]}
               />
               <Stack spacing={2} direction="row" mt={2}>

@@ -42,6 +42,11 @@ const surveyHistoryMessage = {
     en: 'Add a contact',
     sq: 'Shto një kontakt',
   },
+  importContacts: {
+    fr: 'Importer tous les contacts',
+    en: 'Import all contacts',
+    sq: 'Importon të gjitha kontaktet',
+  },
   deleteContactLine: {
     fr: 'Supprimer une ligne',
     en: 'Delete a line',
@@ -217,6 +222,17 @@ const surveyHistoryMessage = {
     en: 'Edit contact information',
     sq: 'Ndrysho informacionin e kontaktit',
   },
+  importAlertErrorModalTitle: {
+    fr: "Impossible d'importer",
+    en: 'Import not possible',
+    sq: 'Importimi nuk është i mundur',
+  },
+  importAlertErrorModalContent: {
+    fr: 'Veuillez selectionner un seul numéro de téléphone favori pour',
+    en: 'Please select only one preferred phone number for',
+    sq: 'Ju lutemi zgjidhni vetëm një numër telefoni të preferuar për',
+  },
+
   requiredField: {
     fr: 'Champ obligatoire',
     en: 'Required field',

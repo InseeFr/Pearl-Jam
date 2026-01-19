@@ -112,6 +112,7 @@ function PersonInfo({
   return (
     <Stack gap={2} sx={{ width: '100%' }}>
       <Stack gap={0.5}>
+        <TextWithLabel label={D.surveyMailContact}>{person.privileged}</TextWithLabel>
         <TextWithLabel label={D.surveyUnitTitle}>{getTitle(person.title)}</TextWithLabel>
         <TextWithLabel label={D.surveyUnitLastName}>{person.lastName}</TextWithLabel>
         <TextWithLabel label={D.surveyUnitFirstName}>{person.firstName}</TextWithLabel>
@@ -152,11 +153,13 @@ function PersonInfo({
           {D.telephone} :
         </Typography>
         <PhoneLine
+          baseId="source-fiscal"
           onFavorite={handleFavPhoneNumber}
           label={D.fiscalSource}
           phoneNumber={phoneNumberForSource('FISCAL')}
         />
         <PhoneLine
+          baseId="source-directory"
           onFavorite={handleFavPhoneNumber}
           label={D.directorySource}
           phoneNumber={phoneNumberForSource('DIRECTORY')}
@@ -165,7 +168,7 @@ function PersonInfo({
           .filter(p => p.source === 'INTERVIEWER')
           .map((phoneNumber, k) => (
             <PhoneLine
-              key={`${k}.${phoneNumber.number}`}
+              baseId={`source-interviewer-${k}`}
               onFavorite={handleFavPhoneNumber}
               label={D.interviewerSource}
               phoneNumber={phoneNumber}
@@ -183,10 +186,12 @@ function PhoneLine({
   label,
   phoneNumber,
   onFavorite,
+  baseId,
 }: Readonly<{
   label: string;
   phoneNumber?: SurveyUnitPhoneNumber;
   onFavorite: (p: SurveyUnitPhoneNumber) => void;
+  baseId: string;
 }>) {
   return (
     <Row
@@ -199,7 +204,11 @@ function PhoneLine({
         {phoneNumber?.number ?? '-'}
       </Typography>
       {phoneNumber && (
-        <IconButton sx={{ py: 0 }} onClick={() => onFavorite(phoneNumber)}>
+        <IconButton
+          sx={{ py: 0 }}
+          id={`star-button-${baseId}`}
+          onClick={() => onFavorite(phoneNumber)}
+        >
           {phoneNumber.favorite ? (
             <StarIcon color="yellow" />
           ) : (
