@@ -202,9 +202,9 @@ function PhoneLine({
       {phoneNumber && (
         <IconButton sx={{ py: 0 }} onClick={() => onFavorite(phoneNumber)}>
           {phoneNumber.favorite ? (
-            <StarIcon color="yellow" />
+            <StarIcon id={`${phoneNumber.id}-star`} color="yellow" />
           ) : (
-            <StarBorderIcon color="surfaceTertiary" />
+            <StarBorderIcon d={`${phoneNumber.id}-star-border`} color="surfaceTertiary" />
           )}
         </IconButton>
       )}
