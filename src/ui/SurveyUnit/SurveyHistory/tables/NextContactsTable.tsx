@@ -140,6 +140,19 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   const preferredContact = nextContacts?.find(c => c.preferredContact);
   const selectedContact = nextContacts?.[selectedContactIndex];
 
+  const canDeleteContact = () => {
+    if (nextContacts?.length == 1) return true;
+
+    if (selectedContact?.preferredContact) {
+      const preferredContactContactCount =
+        nextContacts?.filter(c => c.preferredContact).length ?? 0;
+
+      return preferredContactContactCount >= 2;
+    }
+
+    return true;
+  };
+
   return (
     <Card elevation={0}>
       <CardContent sx={{ ml: -2 }}>
@@ -252,6 +265,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
       <DeleteConfirmationModal
         open={deleteModalOpen}
         selectedContact={selectedContact}
+        canDelete={canDeleteContact()}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
       />
@@ -282,3 +296,16 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     </Card>
   );
 }
+
+// Cas 1 : Dans le cas où plusieurs lignes de coordonnées sont renseignées dans le tableau de l'onglet Collecte suivante,
+// Mise en place d'un contrôle bloquant lorsque l'enquêteur essaye de supprimer la ligne de l'Individu qui est "Contact courrier" dans l'onglet "Collecte suivante".
+
+// Affichage d'une pop up avec le message : "Attention, pour supprimer les coordonnées de "Prénom Individu" + "Nom Individu",
+// veuillez d'abord choisir un nouveau "Contact courrier" dans le tableau"
+
+// La pop-up s'affiche à la place de la pop-up de confirmation qui s'affiche avant de supprimer un individu
+
+// En cliquant sur le bouton "J'ai compris" , la pop-up se ferme.
+
+// Cas 2 : Il n'y a qu'un seul Individu renseigné dans le tableau de l'onglet Collecte suivante.
+// Dans ce cas, on peut supprimer sans contrainte l'individu même s'il est Contact courrier

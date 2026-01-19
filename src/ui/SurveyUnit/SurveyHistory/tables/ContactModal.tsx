@@ -43,7 +43,7 @@ export function ContactModal({
       lastName: contact?.lastName,
       phoneNumber: contact?.phoneNumber,
       email: contact?.email,
-      preferredContact: contact?.preferredContact ? 'true' : 'false',
+      preferredContact: contact?.preferredContact || isFirst ? 'true' : 'false',
     },
     reValidateMode: 'onBlur',
   });
@@ -146,10 +146,9 @@ export function ContactModal({
               <FieldRow
                 label={D.shouldBeEmail}
                 control={control}
-                name="preferredContact"
                 type="radios"
-                onChange={checkPreferedContactValidity}
                 defaultValue={isFirst ? 'true' : 'false'}
+                {...register('preferredContact', { onChange: checkPreferedContactValidity })}
                 options={[
                   { label: D.yes, value: 'true' },
                   { label: D.no, value: 'false', disabled: isFirst },

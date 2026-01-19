@@ -145,9 +145,11 @@ export function ControlledField({
   if (type === 'radios') {
     return (
       <RadioGroup
-        defaultValue={defaultValue}
-        value={defaultValue ? undefined : field.value}
-        onChange={e => field.onChange(e.target.value)}
+        value={field.value}
+        onChange={e => {
+          field.onChange(e.target.value);
+          onChange?.();
+        }}
         row
         aria-labelledby={`label-${name}`}
         name={name}
