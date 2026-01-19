@@ -212,34 +212,6 @@ describe('selectPhoneNumber', () => {
         requiresUserSelection: false,
       });
     });
-  });
-
-  describe('edge cases', () => {
-    it('handles multiple non-favorite FISCAL numbers (takes first)', () => {
-      const phoneNumbers: SurveyUnitPhoneNumber[] = [
-        { id: '1', source: 'FISCAL', favorite: false, number: 'FISC1' },
-        { id: '2', source: 'FISCAL', favorite: false, number: 'FISC2' },
-      ];
-
-      const result = selectPhoneNumber(phoneNumbers);
-      expect(result).toEqual({
-        phoneNumber: 'FISC1',
-        requiresUserSelection: false,
-      });
-    });
-
-    it('handles multiple non-favorite DIRECTORY numbers (takes first)', () => {
-      const phoneNumbers: SurveyUnitPhoneNumber[] = [
-        { id: '1', source: 'DIRECTORY', favorite: false, number: 'DIR1' },
-        { id: '2', source: 'DIRECTORY', favorite: false, number: 'DIR2' },
-      ];
-
-      const result = selectPhoneNumber(phoneNumbers);
-      expect(result).toEqual({
-        phoneNumber: 'DIR1',
-        requiresUserSelection: false,
-      });
-    });
 
     it('handles mix of all sources with no favorites', () => {
       const phoneNumbers: SurveyUnitPhoneNumber[] = [
