@@ -268,7 +268,11 @@ function PhoneLine({
         <Controller
           control={control}
           render={({ field }) => (
-            <IconButton sx={{ py: 0 }} onClick={() => field.onChange(!field.value)}>
+            <IconButton
+              id={`star-button-${field.name}`}
+              sx={{ py: 0 }}
+              onClick={() => field.onChange(!field.value)}
+            >
               {field.value ? (
                 <StarIcon color="yellow" />
               ) : (

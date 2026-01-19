@@ -153,11 +153,13 @@ function PersonInfo({
           {D.telephone} :
         </Typography>
         <PhoneLine
+          baseId="source-fiscal"
           onFavorite={handleFavPhoneNumber}
           label={D.fiscalSource}
           phoneNumber={phoneNumberForSource('FISCAL')}
         />
         <PhoneLine
+          baseId="source-directory"
           onFavorite={handleFavPhoneNumber}
           label={D.directorySource}
           phoneNumber={phoneNumberForSource('DIRECTORY')}
@@ -166,7 +168,7 @@ function PersonInfo({
           .filter(p => p.source === 'INTERVIEWER')
           .map((phoneNumber, k) => (
             <PhoneLine
-              key={`${k}.${phoneNumber.number}`}
+              baseId={`source-interviewer-${k}`}
               onFavorite={handleFavPhoneNumber}
               label={D.interviewerSource}
               phoneNumber={phoneNumber}
@@ -184,10 +186,12 @@ function PhoneLine({
   label,
   phoneNumber,
   onFavorite,
+  baseId,
 }: Readonly<{
   label: string;
   phoneNumber?: SurveyUnitPhoneNumber;
   onFavorite: (p: SurveyUnitPhoneNumber) => void;
+  baseId: string;
 }>) {
   return (
     <Row
@@ -200,11 +204,15 @@ function PhoneLine({
         {phoneNumber?.number ?? '-'}
       </Typography>
       {phoneNumber && (
-        <IconButton sx={{ py: 0 }} onClick={() => onFavorite(phoneNumber)}>
+        <IconButton
+          sx={{ py: 0 }}
+          id={`star-button-${baseId}`}
+          onClick={() => onFavorite(phoneNumber)}
+        >
           {phoneNumber.favorite ? (
-            <StarIcon id={`${phoneNumber.id}-star`} color="yellow" />
+            <StarIcon color="yellow" />
           ) : (
-            <StarBorderIcon d={`${phoneNumber.id}-star-border`} color="surfaceTertiary" />
+            <StarBorderIcon color="surfaceTertiary" />
           )}
         </IconButton>
       )}

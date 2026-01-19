@@ -160,10 +160,7 @@ test('Import previous contacts to next contacts', async ({ page }) => {
   await page.getByRole('button', { name: 'Ajouter un numéro' }).first().click();
   await page.locator('input[name="persons.0.phoneNumbers.2.number"]').click();
   await page.locator('input[name="persons.0.phoneNumbers.2.number"]').fill('0651163354');
-  await page
-    .locator('.MuiStack-root.css-15loa0i-MuiStack-root > .MuiButtonBase-root')
-    .first()
-    .click();
+  await page.click('id=star-button-persons.0.phoneNumbers.0.favorite');
   await page.getByRole('button', { name: 'Enregistrer' }).click();
 
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
@@ -173,18 +170,15 @@ test('Import previous contacts to next contacts', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Supprimer' }).click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
-
   await expect(page.getByText('SMITH')).toBeHidden();
 
   await page.getByRole('button', { name: 'Importer tous les contacts' }).click();
 
   // Handle the pop-up for asking to select a single phone number and do it
-  await page
-    .getByText('Veuillez selectionner un seul numéro de téléphone favori pour Albert Hilbert.')
-    .click();
+  await page.getByText('Veuillez selectionner un seul numéro de téléphone favori').click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
   await page.getByRole('tab', { name: 'Contacts' }).click();
-  await page.getByRole('button').filter({ hasText: /^$/ }).nth(3).click();
+  await page.click('id=star-button-source-interviewer-1');
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
 
   await page.getByRole('tab', { name: 'Collecte suivante' }).click();
