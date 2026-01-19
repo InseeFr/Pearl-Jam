@@ -30,13 +30,13 @@ test('check if the status filters is working properly', async ({ page }) => {
 
   await page.getByLabel('A préparer').check();
 
-  await homePage.checkNumberOfDisplayedItems(4);
+  await homePage.checkNumberOfDisplayedItems(5);
 
   await homePage.resetAllFilters();
 
   await page.getByLabel('A repérer/Contacter').check();
 
-  await homePage.checkNumberOfDisplayedItems(4);
+  await homePage.checkNumberOfDisplayedItems(3);
 
   await homePage.resetAllFilters();
 
