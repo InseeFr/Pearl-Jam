@@ -22,10 +22,17 @@ export function selectPhoneNumber(phoneNumbers: SurveyUnitPhoneNumber[]) {
 
   if (favoriteNumbers.length > 0) {
     // Priority: INTERVIEWER > FISCAL > DIRECTORY
-    const interviewerFavorite = favoriteNumbers.find(p => p.source === 'INTERVIEWER');
+    const interviewerFavorites = favoriteNumbers.filter(p => p.source === 'INTERVIEWER');
 
-    if (interviewerFavorite) {
-      return { phoneNumber: interviewerFavorite.number, requiresUserSelection: false };
+    if (interviewerFavorites.length > 1) {
+      // Multiple INTERVIEWER favorites - requires user selection
+      return {
+        requiresUserSelection: true,
+      };
+    }
+
+    if (interviewerFavorites.length === 1) {
+      return { phoneNumber: interviewerFavorites[0].number, requiresUserSelection: false };
     }
 
     const fiscalFavorite = favoriteNumbers.find(p => p.source === 'FISCAL');
