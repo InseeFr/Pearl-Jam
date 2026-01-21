@@ -114,6 +114,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.IASCO,
       identification: {
+        demenagementEnqueteur: false,
         identification: IdentificationQuestionOptionValues.IDENTIFIED,
         access: IdentificationQuestionOptionValues.ACC,
         situation: IdentificationQuestionOptionValues.ABSORBED, // Concluding
@@ -132,6 +133,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.IASCO,
       identification: {
+        demenagementEnqueteur: false,
         identification: IdentificationQuestionOptionValues.IDENTIFIED,
         access: IdentificationQuestionOptionValues.ACC,
         situation: IdentificationQuestionOptionValues.ORDINARY, // Missing remaining identifications
@@ -150,6 +152,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.IASCO,
       identification: {
+        demenagementEnqueteur: false,
         identification: IdentificationQuestionOptionValues.IDENTIFIED,
         access: IdentificationQuestionOptionValues.ACC,
         situation: IdentificationQuestionOptionValues.ABSORBED, // Concluding
@@ -169,6 +172,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.IASCO,
       identification: {
+        demenagementEnqueteur: false,
         identification: IdentificationQuestionOptionValues.IDENTIFIED,
         access: IdentificationQuestionOptionValues.ACC,
         situation: IdentificationQuestionOptionValues.ABSORBED, // Concluding
@@ -188,6 +192,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.IASCO,
       identification: {
+        demenagementEnqueteur: false,
         identification: IdentificationQuestionOptionValues.IDENTIFIED,
         access: IdentificationQuestionOptionValues.ACC,
         situation: IdentificationQuestionOptionValues.ORDINARY,

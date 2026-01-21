@@ -93,7 +93,7 @@ type SurveyUnitSampleIdentifiers = {
   nograp: string;
 };
 
-export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId, string>>;
+export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId, string | boolean>>;
 
 export type SurveyUnitContactAttempt = {
   status: ContactAttemptValue;

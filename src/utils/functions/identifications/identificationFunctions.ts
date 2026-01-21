@@ -31,7 +31,7 @@ import {
 } from './questionsTree/indF2FQuestionsTree';
 
 export type IdentificationQuestionOption = {
-  value: string;
+  value: string | boolean;
   label: string;
   concluding: boolean;
 };
@@ -42,6 +42,8 @@ export type IdentificationQuestionValue = {
   options: IdentificationQuestionOption[];
   dependsOn?: { questionId: IdentificationQuestionId; values: string[] };
   disabled?: boolean;
+  type?: 'radio' | 'checkbox';
+  readOnly?: boolean;
 };
 
 export type IdentificationQuestionsMap = Partial<
@@ -151,7 +153,7 @@ export function isIdentificationFinished(
   while (question) {
     const response = identification[question.id];
 
-    if (!response) return false;
+    if (response === undefined || response === null) return false;
 
     const isConcluding = question.options.find(o => o.value === response && o.concluding);
     if (isConcluding) return true;

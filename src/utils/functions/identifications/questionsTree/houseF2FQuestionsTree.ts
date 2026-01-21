@@ -8,8 +8,18 @@ import { optionsMap } from './optionsMap';
 import { commonTransmissionRules } from './commonTransmissionRules';
 
 export const houseF2FIdentificationQuestionsTree: IdentificationQuestions = {
-  root: IdentificationQuestionsId.IDENTIFICATION,
+  root: IdentificationQuestionsId.DEMENAGEMENT_ENQUETEUR,
   values: {
+    [IdentificationQuestionsId.DEMENAGEMENT_ENQUETEUR]: {
+      id: IdentificationQuestionsId.DEMENAGEMENT_ENQUETEUR,
+      nextId: IdentificationQuestionsId.IDENTIFICATION,
+      text: `${D.moveAllResidents}`,
+      type: 'checkbox',
+      options: [
+        { value: true, label: `${D.moveAllResidents}`, concluding: true },
+        { value: false, label: '', concluding: false },
+      ],
+    },
     [IdentificationQuestionsId.IDENTIFICATION]: {
       id: IdentificationQuestionsId.IDENTIFICATION,
       nextId: IdentificationQuestionsId.ACCESS,

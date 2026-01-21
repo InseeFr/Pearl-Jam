@@ -12,6 +12,7 @@ import {
   ResponseState,
 } from 'utils/functions/identifications/identificationFunctions';
 import { useEffectOnce } from './useEffectOnce';
+import D from 'i18n';
 
 const generateResponseState = (
   questions: IdentificationQuestions,
@@ -112,6 +113,73 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     [selectedDialogId, JSON.stringify(surveyUnit.identification)]
   );
 
+  const handleCheckboxChange = useCallback(
+    (questionId: IdentificationQuestionsId, isChecked: boolean) => {
+      // Special handling for demenagementEnqueteur checkbox
+      if (questionId === IdentificationQuestionsId.DEMENAGEMENT_ENQUETEUR) {
+        const newIdentification = {
+          ...surveyUnit.identification,
+          demenagementEnqueteur: isChecked,
+        };
+
+        const newStates = isChecked
+          ? [{ type: surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type, date: Date.now() }]
+          : surveyUnit.states;
+
+        const updatedSurveyUnit = {
+          ...surveyUnit,
+          identification: newIdentification,
+          persons: isChecked
+            ? [
+                {
+                  title: '',
+                  firstName: D.surveyUnitFirstName,
+                  lastName: D.surveyUnitLastName,
+                  email: '',
+                  birthdate: 0,
+                  favoriteEmail: false,
+                  privileged: true,
+                  phoneNumbers: [],
+                },
+              ]
+            : surveyUnit.persons,
+          states: newStates,
+          otherModeQuestionnaireState: isChecked ? [] : surveyUnit.otherModeQuestionnaireState,
+        };
+
+        persistSurveyUnit(updatedSurveyUnit);
+
+        // Update local state
+        const newQuestions = getIdentificationQuestionsTree(
+          surveyUnit.identificationConfiguration,
+          newIdentification
+        );
+        const newResponses = generateResponseState(newQuestions, newIdentification);
+        const newAvailability: Partial<Record<IdentificationQuestionsId, boolean>> =
+          Object.fromEntries(
+            Object.entries(newQuestions.values).map(([qId, question]) => [
+              qId,
+              checkAvailability(newQuestions.values, question, newResponses),
+            ])
+          );
+
+        setQuestions(newQuestions);
+        setAvailableQuestions(newAvailability);
+        setResponses(newResponses);
+        return;
+      }
+
+      // Default handling for other checkbox questions
+      const option: IdentificationQuestionOption = {
+        value: isChecked,
+        label: questions.values[questionId]?.text ?? '',
+        concluding: isChecked,
+      };
+      handleResponse(questionId, option);
+    },
+    [JSON.stringify(surveyUnit.identification), questions, surveyUnit]
+  );
+
   return {
     questions,
     responses,
@@ -119,5 +187,6 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
     availableQuestions,
     setSelectedDialogId,
     handleResponseCallback,
+    handleCheckboxChange,
   };
 }

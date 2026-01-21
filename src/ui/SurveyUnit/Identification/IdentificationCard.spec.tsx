@@ -12,10 +12,10 @@ vi.mock('utils/functions', () => ({
 }));
 
 const mockSurveyUnit: SurveyUnit = {
-  identificationConfiguration: IdentificationConfiguration.NOIDENT,
+  identificationConfiguration: IdentificationConfiguration.IASCO,
   identification: {
-    demenagementWeb: 'false',
-    demenagementEnqueteur: 'false',
+    demenagementWeb: false,
+    demenagementEnqueteur: false,
   },
   states: [{ type: 'VIC', date: Date.now() }],
   displayName: 'Test Survey',
@@ -78,9 +78,7 @@ const mockSurveyUnit: SurveyUnit = {
   useLetterCommunication: false,
   communicationRequests: [],
   communicationTemplates: [],
-  otherModeQuestionnaireState: [
-    { id: '1', state: 'QUESTIONNAIRE_INIT', date: '2025-01-01' },
-  ],
+  otherModeQuestionnaireState: [{ id: '1', state: 'QUESTIONNAIRE_INIT', date: '2025-01-01' }],
 };
 
 describe('IdentificationCard', () => {
@@ -94,7 +92,7 @@ describe('IdentificationCard', () => {
         ...mockSurveyUnit,
         identification: {
           ...mockSurveyUnit.identification,
-          demenagementWeb: 'true',
+          demenagementWeb: true,
         },
       };
 
@@ -135,7 +133,7 @@ describe('IdentificationCard', () => {
         ...mockSurveyUnit,
         identification: {
           ...mockSurveyUnit.identification,
-          demenagementWeb: 'true',
+          demenagementWeb: true,
         },
       };
 
@@ -160,7 +158,7 @@ describe('IdentificationCard', () => {
         expect(persistSurveyUnitSpy).toHaveBeenCalledWith(
           expect.objectContaining({
             identification: expect.objectContaining({
-              demenagementEnqueteur: 'true',
+              demenagementEnqueteur: true,
             }),
             persons: [
               {
@@ -190,7 +188,7 @@ describe('IdentificationCard', () => {
         ...mockSurveyUnit,
         identification: {
           ...mockSurveyUnit.identification,
-          demenagementEnqueteur: 'true',
+          demenagementEnqueteur: true,
         },
       };
 
@@ -210,7 +208,7 @@ describe('IdentificationCard', () => {
         expect(persistSurveyUnitSpy).toHaveBeenCalledWith(
           expect.objectContaining({
             identification: expect.objectContaining({
-              demenagementEnqueteur: 'false',
+              demenagementEnqueteur: false,
             }),
             persons: mockSurveyUnit.persons,
             states: mockSurveyUnit.states,

@@ -80,6 +80,7 @@ const identificationQuestionsHookTests = [
 
     output: {
       availability: {
+        demenagementEnqueteur: true,
         identification: true,
         access: true,
         situation: true,
@@ -87,6 +88,7 @@ const identificationQuestionsHookTests = [
         occupant: true,
       },
       responses: {
+        demenagementEnqueteur: undefined,
         identification: undefined,
         access: undefined,
         situation: undefined,
@@ -183,13 +185,19 @@ const identificationQuestionsHookTests = [
 const identificationQuestionsHookSetReponseTests = [
   {
     // IASCO
-    surveyUnitInput: identificationQuestionsHookTests[0].surveyUnitInput,
+    surveyUnitInput: {
+      ...identificationQuestionsHookTests[0].surveyUnitInput,
+      identification: {
+        demenagementEnqueteur: false,
+      },
+    },
     setResponseCallParameters: {
       identificationQuestionsId: IdentificationQuestionsId.IDENTIFICATION,
       option: { ...optionsMap.ADRESS_DESTROYED, concluding: true },
     },
     output: {
       availability: {
+        demenagementEnqueteur: true,
         identification: true,
         access: false,
         situation: false,
@@ -197,6 +205,7 @@ const identificationQuestionsHookSetReponseTests = [
         occupant: false,
       },
       responses: {
+        demenagementEnqueteur: { value: false, label: '', concluding: false },
         identification: optionsMap.ADRESS_DESTROYED,
         access: undefined,
         situation: undefined,

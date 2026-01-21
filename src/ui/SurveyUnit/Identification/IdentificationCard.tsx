@@ -9,8 +9,7 @@ import { ButtonLine } from 'ui/ButtonLine';
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
 import { useIdentificationQuestions } from 'utils/hooks/useIdentificationQuestions';
 import { IdentificationDialog } from './IdentificationDialog';
-import { persistSurveyUnit } from 'utils/functions';
-import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { IdentificationQuestionValue } from 'utils/functions/identifications/identificationFunctions';
 
 type IdentificationCardProps = {
   surveyUnit: SurveyUnit;
@@ -24,45 +23,66 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
     availableQuestions,
     setSelectedDialogId,
     handleResponseCallback,
+    handleCheckboxChange,
   } = useIdentificationQuestions(surveyUnit);
 
-  const isDemenagementWeb = surveyUnit.identification?.demenagementWeb === 'true';
-  const isDemenagementEnqueteur = surveyUnit.identification?.demenagementEnqueteur === 'true';
+  const isDemenagementWeb = surveyUnit.identification?.demenagementWeb === true;
 
-  const handleDemenagementEnqueteurChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = event.target.checked;
-    const newIdentification = {
-      ...surveyUnit.identification,
-      demenagementEnqueteur: isChecked ? 'true' : 'false',
-    };
+  const renderCheckboxQuestion = (
+    questionId: IdentificationQuestionsId,
+    question: IdentificationQuestionValue
+  ) => {
+    const isChecked = responses[questionId]?.value === true;
+    const isAvailable = availableQuestions[questionId];
 
-    const newStates = isChecked
-      ? [{ type: surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type, date: Date.now() }]
-      : surveyUnit.states;
+    // Don't display checkbox when demenagementWeb is true (except for demenagementWeb itself)
+    if (isDemenagementWeb && questionId !== IdentificationQuestionsId.DEMENAGEMENT_WEB) {
+      return null;
+    }
 
-    const updatedSurveyUnit = {
-      ...surveyUnit,
-      identification: newIdentification,
-      persons: isChecked
-        ? [
-            {
-              title: '',
-              firstName: D.surveyUnitFirstName,
-              lastName: D.surveyUnitLastName,
-              email: '',
-              birthdate: 0,
-              favoriteEmail: false,
-              privileged: true,
-              phoneNumbers: [],
-            },
-          ]
-        : surveyUnit.persons,
-      states: newStates,
-      otherModeQuestionnaireState: isChecked ? [] : surveyUnit.otherModeQuestionnaireState,
-    };
+    if (!isAvailable && !isChecked) return null;
 
-    persistSurveyUnit(updatedSurveyUnit);
+    return (
+      <FormControlLabel
+        key={questionId}
+        control={
+          <Checkbox
+            checked={isChecked}
+            disabled={question.readOnly || !isAvailable}
+            onChange={e => handleCheckboxChange(questionId, e.target.checked)}
+            sx={{
+              color: 'success.main',
+              '&.Mui-checked': {
+                color: 'success.main',
+              },
+            }}
+          />
+        }
+        label={
+          <Typography variant="s" fontWeight={600}>
+            {question.text}
+          </Typography>
+        }
+        sx={{
+          bgcolor: 'surfacePrimary.light',
+          borderRadius: 4,
+          px: 2,
+          py: 0.5,
+          mx: 0,
+        }}
+      />
+    );
   };
+
+  const renderRadioQuestion = (questionId: IdentificationQuestionsId) => (
+    <ButtonLine
+      key={questionId}
+      onClick={() => setSelectedDialogId(questionId)}
+      label={responses[questionId]?.label ?? questions?.values[questionId]?.text}
+      checked={!!(responses[questionId] && availableQuestions[questionId])}
+      disabled={!availableQuestions[questionId]}
+    />
+  );
 
   return (
     <Card elevation={0}>
@@ -79,7 +99,7 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={isDemenagementWeb}
+                    checked
                     disabled
                     sx={{
                       color: 'success.main',
@@ -103,43 +123,15 @@ export function IdentificationCard({ surveyUnit }: Readonly<IdentificationCardPr
                 }}
               />
             )}
-            {!isDemenagementWeb && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isDemenagementEnqueteur}
-                    onChange={handleDemenagementEnqueteurChange}
-                    sx={{
-                      color: 'success.main',
-                      '&.Mui-checked': {
-                        color: 'success.main',
-                      },
-                    }}
-                  />
-                }
-                label={
-                  <Typography variant="s" fontWeight={600}>
-                    {D.moveAllResidents}
-                  </Typography>
-                }
-                sx={{
-                  bgcolor: 'surfacePrimary.light',
-                  borderRadius: 4,
-                  px: 2,
-                  py: 0.5,
-                  mx: 0,
-                }}
-              />
-            )}
-            {(Object.keys(questions.values) as IdentificationQuestionsId[]).map(questionId => (
-              <ButtonLine
-                key={questionId}
-                onClick={() => setSelectedDialogId(questionId)}
-                label={responses[questionId]?.label ?? questions?.values[questionId]?.text}
-                checked={!!(responses[questionId] && availableQuestions[questionId])}
-                disabled={!availableQuestions[questionId]}
-              ></ButtonLine>
-            ))}
+            {(Object.keys(questions.values) as IdentificationQuestionsId[]).map(questionId => {
+              const question = questions.values[questionId];
+              if (!question) return null;
+
+              if (question.type === 'checkbox') {
+                return renderCheckboxQuestion(questionId, question);
+              }
+              return renderRadioQuestion(questionId);
+            })}
           </Stack>
         </Stack>
       </CardContent>
