@@ -18,6 +18,7 @@ import {
   Controller,
   useFieldArray,
   useForm,
+  UseFormGetValues,
   UseFormRegister,
   UseFormSetValue,
 } from 'react-hook-form';
@@ -39,7 +40,7 @@ interface PersonsFormProps {
  * Form to edit multiple persons attached to a surveyUnit
  */
 export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFormProps>) {
-  const { register, handleSubmit, control, setValue } = useForm({
+  const { register, handleSubmit, control, setValue, getValues } = useForm({
     // input persons is sorted and its order could be different from surveyUnit.persons used by useForm
     // => force the same order of persons in surveyUnit
     defaultValues: { persons: persons },
@@ -57,6 +58,9 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
     onClose();
   };
 
+  // watch('persons.${1}.privileged');
+  // watch('persons.${2}.privileged');
+
   return (
     <Dialog maxWidth="md" open={true} onClose={onClose}>
       <form action="" onSubmit={onSubmit}>
@@ -73,6 +77,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
                   control={control}
                   setValue={setValue}
                   persons={persons}
+                  getValues={getValues}
                 />
               </Fragment>
             ))}
@@ -93,13 +98,18 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
 
 interface PersonFieldsProps {
   person: SurveyUnitPerson;
-  register: (s: string) => UseFormRegister<any>;
+  register: UseFormRegister<{
+    persons: SurveyUnitPerson[];
+  }>;
   control: Control<any>;
   index: number;
   setValue: UseFormSetValue<{
     persons: SurveyUnitPerson[];
   }>;
   persons: SurveyUnitPerson[];
+  getValues: UseFormGetValues<{
+    persons: SurveyUnitPerson[];
+  }>;
 }
 /**
  * Fields for a specific Person
@@ -111,6 +121,7 @@ function PersonFields({
   index,
   setValue,
   persons,
+  getValues,
 }: Readonly<PersonFieldsProps>) {
   const titles = [
     { label: TITLES.MISS.value, value: TITLES.MISS.type },
@@ -136,7 +147,7 @@ function PersonFields({
 
   const handleToggle = () => {
     persons.forEach((p, i) => {
-      if (i !== index) setValue(`persons.${i}.privileged`, false);
+      if (i !== index) setValue(`persons.${i}.privileged`, !getValues('persons')[index].privileged);
     });
   };
 
