@@ -30,14 +30,16 @@ type FieldRowProps = {
   control?: Control; // Any control element passed in (React children)
   type?: string;
   name?: string;
-  options: { label: string; value: unknown }[];
+  options: { label: string; value: unknown; disabled?: boolean }[];
+  defaultValue?: unknown;
   helperText?: string;
   errors?: FieldErrors<any>;
+  onChange?: () => void;
   [key: string]: any; // Spread operator for any additional props
 };
 
 export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
-  ({ label, maxWidth, checkbox, control, children, ...props }, ref) => {
+  ({ label, maxWidth, checkbox, control, defaultValue, children, ...props }, ref) => {
     const isControlled = !!props.type;
 
     if (isControlled && !control) {
@@ -71,10 +73,12 @@ export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
               control={control}
               render={({ field }) => (
                 <ControlledField
+                  defaultValue={defaultValue}
                   field={field}
                   name={props.name}
                   options={props.options}
                   type={props.type}
+                  onChange={props.onChange}
                 />
               )}
             />
@@ -106,15 +110,34 @@ export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
 interface ControlledFieldProps {
   type?: string;
   name?: string;
-  options: { label: string; value: unknown }[];
+  options: { label: string; value: unknown; disabled?: boolean }[];
   field: ControllerRenderProps<FieldValues, string>;
+  defaultValue?: unknown;
+  onChange?: () => void;
 }
 /**
  * Select the right field to display
  */
-export function ControlledField({ type, name, options, field }: Readonly<ControlledFieldProps>) {
+export function ControlledField({
+  type,
+  name,
+  options,
+  field,
+  defaultValue,
+  onChange,
+}: Readonly<ControlledFieldProps>) {
   if (type === 'switch') {
-    return <Switch checked={field.value} color="green" {...field} />;
+    return (
+      <Switch
+        checked={field.value}
+        color="green"
+        {...field}
+        onChange={e => {
+          field.onChange(e);
+          onChange?.();
+        }}
+      />
+    );
   }
   if (type === 'datepicker') {
     return <DatePicker value={field.value} onChange={v => field.onChange(v.getTime())} />;
@@ -122,18 +145,21 @@ export function ControlledField({ type, name, options, field }: Readonly<Control
   if (type === 'radios') {
     return (
       <RadioGroup
-        value={field.value}
+        defaultValue={defaultValue}
+        value={defaultValue ? undefined : field.value}
         onChange={e => field.onChange(e.target.value)}
         row
         aria-labelledby={`label-${name}`}
         name={name}
       >
-        {options.map((o: { value: unknown; label: string }) => (
+        {options.map((o: { value: unknown; label: string; disabled?: boolean }) => (
           <FormControlLabel
             value={o.value}
             control={<Radio sx={{ p: 0 }} />}
             label={o.label}
             key={o.label}
+            onChange={onChange}
+            disabled={o.disabled}
           />
         ))}
       </RadioGroup>
@@ -143,7 +169,10 @@ export function ControlledField({ type, name, options, field }: Readonly<Control
     return (
       <RadioGroup
         value={field.value}
-        onChange={e => field.onChange(e.target.value)}
+        onChange={e => {
+          field.onChange(e.target.value);
+          onChange?.();
+        }}
         row
         aria-labelledby={`label-${name}`}
         name={name}

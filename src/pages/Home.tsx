@@ -30,7 +30,7 @@ import { visuallyHidden } from '@mui/utils';
 
 export function Home() {
   const surveyUnits = useSurveyUnits();
-  const missingSurveyUnitIds = useMissingSurveyUnits().map(surveyUnit => surveyUnit.id);
+  const missingSurveyUnitIds = new Set(useMissingSurveyUnits().map(surveyUnit => surveyUnit.id));
   const filter = useSearchFilter();
   const [shouldCheckState, setShouldCheckState] = useState(true);
 
@@ -66,11 +66,7 @@ export function Home() {
         >
           {filteredSurveyUnits.map(su => (
             <div key={su.id}>
-              <SurveyCard
-                key={su.id}
-                surveyUnit={su}
-                locked={missingSurveyUnitIds.includes(su.id)}
-              />
+              <SurveyCard key={su.id} surveyUnit={su} locked={missingSurveyUnitIds.has(su.id)} />
             </div>
           ))}
         </Grid>

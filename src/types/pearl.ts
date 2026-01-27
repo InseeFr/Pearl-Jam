@@ -13,15 +13,17 @@ import {
 } from 'utils/functions/contacts/ContactOutcome';
 
 export type SurveyUnitPhoneNumber = {
-  source: string;
+  source: 'FISCAL' | 'DIRECTORY' | 'INTERVIEWER';
   favorite: boolean;
   number: string;
   id: string;
 };
 
+export type ContactPersonTitle = 'MISTER' | 'MISS';
+
 export type SurveyUnitPerson = {
   id: number;
-  title: string;
+  title: ContactPersonTitle;
   firstName: string;
   lastName: string;
   email: string;
@@ -31,20 +33,18 @@ export type SurveyUnitPerson = {
   phoneNumbers: SurveyUnitPhoneNumber[];
 };
 
-export type ContactHistoryPersonTitle = 'MISTER' | 'MISS';
-
 export type PreviousContactHistoryPerson = {
   id?: number;
-  title: ContactHistoryPersonTitle;
+  title?: ContactPersonTitle;
   firstName: string;
-  lastName: string;
+  lastName?: string;
   birthdate?: number;
   panel?: boolean;
 };
 
 export type NextContactHistoryPerson = {
   id?: number;
-  title: ContactHistoryPersonTitle;
+  title: ContactPersonTitle;
   firstName: string;
   lastName: string;
   phoneNumber?: string;
@@ -132,7 +132,7 @@ export type Contact = {
 };
 
 export type PreviousContactHistory = {
-  contactOutcomeValue: string;
+  contactOutcomeValue: ContactOutcomeValue;
   persons: PreviousContactHistoryPerson[];
   comment: string;
   priority: boolean;
@@ -171,6 +171,7 @@ export type SurveyUnit = {
   communicationTemplates: SurveyUnitCommunicationTemplate[];
   previousContactHistory?: PreviousContactHistory;
   nextContactHistory?: NextContactHistory;
+  collectNextContacts: boolean;
 };
 
 export type NotificationState = 'warning' | 'success' | 'error';

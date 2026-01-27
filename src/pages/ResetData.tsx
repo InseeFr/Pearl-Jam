@@ -25,7 +25,7 @@ export function ResetData() {
   const [isConfirmOpen, toggleDialog] = useToggle(false);
 
   const goBack = () => {
-    window.location.assign(window.location.origin);
+    globalThis.location.assign(globalThis.location.origin);
   };
 
   const handleDeleteAll = async () => {
@@ -37,7 +37,7 @@ export function ResetData() {
       unregister();
       const cacheNames = await caches.keys();
       await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
-      window.localStorage.clear();
+      globalThis.localStorage.clear();
       setState(D.deleteSuccess);
     } catch (e) {
       console.error(`Error deleting the database`, e);
@@ -101,7 +101,7 @@ function ConfirmDialog({
       }
       return;
     }
-    const { id } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
+    const { id } = JSON.parse(globalThis.localStorage.getItem(PEARL_USER_KEY) || '{}');
     if ((id || '').toLowerCase() === formData.get('code')?.toString().toLowerCase()) {
       onConfirm();
     } else {

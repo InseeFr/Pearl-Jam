@@ -7,17 +7,19 @@ export const contactOutcomes = {
   UNUSABLE_CONTACT_DATA: { value: 'UCD', label: `${D.unusableContactData}` },
   UNABLE_TO_RESPOND: { value: 'UTR', label: `${D.unableToRespond}` },
   ALREADY_ANSWERED: { value: 'ALA', label: `${D.alreadyAnsweredAnotherMode}` },
-  DECEASED: { value: 'DCD', label: `${D.deceased}` },
-  DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON: {
-    value: 'DUU',
-    label: `${D.definitlyUnavailableForUnknownReason}`,
-  },
   NO_LONGER_USED_FOR_HABITATION: { value: 'NUH', label: `${D.noLongerUsedForHabitation}` },
   DEFINITLY_UNAVAILABLE: {
     value: 'DUK',
     label: `${D.definitlyUnavailable}`,
   },
   NOT_APPLICABLE: { value: 'NOA', label: `${D.notApplicable}` },
+  UNTREATED_INTERVIEWER_ABSENT: { value: 'NPA', label: `${D.untreatedInterviewerAbsent}` },
+  UNTREATED_INTERVIEWER_PRESENT: {
+    value: 'NPI',
+    label: `${D.untreatedInterviewerPresent}`,
+  },
+  UNTREATED_EXCEPTIONAL_CAUSE: { value: 'NPX', label: `${D.untreatedExceptionalCause}` },
+  RIGHT_OF_WITHDRAWAL: { value: 'ROW', label: `${D.rightOfWithdrawal}` },
 } as const;
 
 export type ContactOutcomeValue = (typeof contactOutcomes)[keyof typeof contactOutcomes]['value'];
@@ -48,27 +50,27 @@ export const commonContactOutcomes = {
   NOT_APPLICABLE: contactOutcomes.NOT_APPLICABLE,
 };
 
+type ContactOutcome = {
+  value: ContactOutcomeValue;
+  label: string;
+};
+
 export const getContactOutcomeByConfiguration = (
   configuration: ContactOutcomeConfiguration,
   selectedOutcomeValue?: ContactOutcomeValue
-) => {
+): Record<string, ContactOutcome> => {
   let newContactOutcomes = commonContactOutcomes;
-
   if (configuration === 'TEL') {
     newContactOutcomes = {
       ...newContactOutcomes,
       ...{ NO_LONGER_USED_FOR_HABITATION: contactOutcomes.NO_LONGER_USED_FOR_HABITATION },
     };
   }
-
-  // Will be removed when deprecated outcomes will be unused ?
   const selectedOutcome = findOldContactOutcomeByValue(selectedOutcomeValue);
-
   if (configuration === 'TEL' || configuration === 'F2F')
     return {
       ...newContactOutcomes,
       ...selectedOutcome,
-    };
-
+    } as Record<string, ContactOutcome>;
   return {};
 };

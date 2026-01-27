@@ -41,15 +41,30 @@ const contactOutcomeMessage = {
     en: 'Unavailable',
     sq: 'I padisponueshëm',
   },
-  definitlyUnavailableForUnknownReason: {
-    fr: 'Indisponibilité définitive pour motif inconnu',
-    en: 'Unavailable for an unknown reason',
-    sq: 'Përgjithmonë e padisponueshme për një arsye të panjohur',
-  },
   notApplicable: {
     fr: 'Sans objet',
     en: 'Not applicable',
     sq: 'Nuk aplikohet',
+  },
+  untreatedInterviewerAbsent: {
+    fr: 'Non traitée, enquêteur absent',
+    en: 'Untreated, interviewer absent',
+    sq: 'E patrajtuar, hetuesi i munguar',
+  },
+  untreatedInterviewerPresent: {
+    fr: 'Non traitée, enquêteur présent',
+    en: 'Untreated, interviewer present',
+    sq: 'E patrajtuar, hetuesi i pranishëm',
+  },
+  untreatedExceptionalCause: {
+    fr: 'Non traitée, cause exceptionnelle',
+    en: 'Untreated, exceptional cause',
+    sq: 'E patrajtuar, shkak i jashtëzakonshëm',
+  },
+  rightOfWithdrawal: {
+    fr: 'Droit de retrait',
+    en: 'Right of withdrawal',
+    sq: 'E drejta e tërheqjes',
   },
 };
 

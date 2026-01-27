@@ -68,6 +68,7 @@ const mockedSurveyUnit: SurveyUnit = {
   useLetterCommunication: false,
   communicationRequests: [],
   communicationTemplates: [],
+  collectNextContacts: false,
 };
 
 const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
@@ -267,7 +268,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       contactOutcome: {
         date: Date.now(),
         totalNumberOfContactAttempts: 1,
-        type: contactOutcomes.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value,
+        type: contactOutcomes.UNTREATED_INTERVIEWER_ABSENT.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'TEL' }],
     },

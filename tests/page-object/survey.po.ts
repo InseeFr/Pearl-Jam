@@ -25,9 +25,10 @@ export class SurveyPage {
     await this.page.getByRole('button', { name: 'Confirmer' }).click();
   }
 
-  async editContactOutcome() {
-    await this.page.getByRole('button', { name: 'Modifier le bilan des contacts' }).click();
+  async setContactOutcomeAsDUK() {
+    await this.page.getByRole('button', { name: 'Faire le bilan des contacts' }).click();
     await this.page.getByText('Indisponibilité définitive').click();
+    await this.page.getByRole('button').nth(1).click();
     await this.page.getByRole('button', { name: 'Enregistrer' }).click();
   }
 

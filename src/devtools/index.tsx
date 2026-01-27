@@ -14,8 +14,8 @@ export const DevTools = () => {
       unregister();
       const cacheNames = await caches.keys();
       await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
-      window.localStorage.clear();
-      window.location.reload();
+      globalThis.localStorage.clear();
+      globalThis.location.reload();
     } catch (e) {
       console.error(`Error deleting the database`, e);
     }

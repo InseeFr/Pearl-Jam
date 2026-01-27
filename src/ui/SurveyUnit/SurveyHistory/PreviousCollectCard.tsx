@@ -4,6 +4,7 @@ import { Grid, Typography } from '@mui/material';
 import { InfoCard } from './InfoCard';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import { PreviousContactsTable } from './tables/PreviousContactsTable';
+import { findContactOutcomeLabelByValue } from 'utils/functions/contacts/ContactOutcome';
 
 type AddressCardProps = {
   previousCollectHistory: PreviousContactHistory;
@@ -22,7 +23,9 @@ export function PreviousCollectCard({ previousCollectHistory }: Readonly<Address
         <Typography fontWeight={600} color={'grey'}>
           {D.outcomeComment}
         </Typography>
-        <Typography fontWeight={600}>{previousCollectHistory.contactOutcomeValue}</Typography>
+        <Typography fontWeight={600}>
+          {findContactOutcomeLabelByValue(previousCollectHistory.contactOutcomeValue)}
+        </Typography>
       </InfoCard>
       <InfoCard>
         <Grid>

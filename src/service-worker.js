@@ -11,9 +11,9 @@ import { clientsClaim } from 'workbox-core';
 import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 
-self._DRAMAQUEEN_URL = new URL(location).searchParams.get('QUEEN_URL');
+globalThis._DRAMAQUEEN_URL = new URL(location).searchParams.get('QUEEN_URL');
 
-importScripts(`${self._DRAMAQUEEN_URL}/queen-service-worker.js`);
+importScripts(`${globalThis._DRAMAQUEEN_URL}/queen-service-worker.js`);
 
 clientsClaim();
 
@@ -50,9 +50,13 @@ registerRoute(
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
-self.addEventListener('message', event => {
+globalThis.addEventListener('message', event => {
+  if (event.origin !== globalThis._DRAMAQUEEN_URL) {
+    return;
+  }
+
   if (event.data?.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+    globalThis.skipWaiting();
   }
 });
 

@@ -58,7 +58,7 @@ const handleQueenEvent = (redirect: (url: string) => void) => async (event: Quee
         break;
       case 'UPDATE_STATE':
         await updateSurveyUnit(other.interrogationId, other.state);
-        window.dispatchEvent(new CustomEvent('pearl-update'));
+        globalThis.dispatchEvent(new CustomEvent('pearl-update'));
         break;
       case 'UPDATE_SYNCHRONIZE':
         // NOT here
@@ -88,9 +88,9 @@ interface QueenEvent extends CustomEvent<QueenEventDetail> {}
 export function useQueenListener(redirect: (url: string) => void) {
   useEffect(() => {
     const listener = handleQueenEvent(redirect);
-    window.addEventListener('QUEEN', listener);
+    globalThis.addEventListener('QUEEN', listener);
     return () => {
-      window.removeEventListener('QUEEN', listener);
+      globalThis.removeEventListener('QUEEN', listener);
     };
   }, [history]);
 }

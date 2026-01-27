@@ -1,13 +1,17 @@
 import { expect, Page } from '@playwright/test';
 import { GenericPage } from './generic-page.po';
 
-export const totalSu = 25;
+export const totalSu = 27;
 
 export class HomePage implements GenericPage {
   constructor(private readonly page: Page) {}
 
-  async go() {
+  async goToRootPage() {
     await this.page.goto('/', { timeout: 10000 });
+  }
+
+  async go() {
+    await this.goToRootPage();
     await this.page.getByRole('textbox', { name: 'Username or email' }).click();
     await this.page.getByRole('textbox', { name: 'Username or email' }).fill('interv5');
     await this.page.getByRole('textbox', { name: 'Username or email' }).press('Tab');

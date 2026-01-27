@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react';
 /**
  * Global layout for the app with 3 sections (header, sidebar and main content)
  */
-export function SidebarLayout({ children }: PropsWithChildren) {
+export function SidebarLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <Grid
       gap={4}

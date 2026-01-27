@@ -1,8 +1,3 @@
-x-react-volumes: &react-volumes
-  - ./:/opt/app
-  - /mnt/wslg/.X11-unix:/tmp/.X11-unix
-  - /opt/app/node_modules
-
 services:
   pearl-db:
     profiles:
@@ -58,24 +53,19 @@ services:
       KC_HEALTH_ENABLED: 'true'
       KC_LOG_LEVEL: info
     command: ['start-dev', '--import-realm']
-    #healthcheck:
-    #  test: 'curl --head -fsS http://localhost:8080/health/ready'
-    #healthcheck:
-    #  test: ['CMD', 'curl', '--fail', 'http://localhost:8080']
     ports:
       - '${KEYCLOAK_PORT}:8080'
     volumes:
       - ./keycloak/realms:/opt/keycloak/data/import
+      - ./:/opt/app
 
   questionnaire-api:
     profiles:
       - stack
       - playwright
-    image: inseefr/queen-back-office:5.3.0-rc
+    image: inseefr/queen-back-office:5.4.1
     tty: true
     stdin_open: true
-    #healthcheck:
-    #  test: ['CMD', 'curl', '--fail', 'http://localhost:8080/api/healthcheck']
     depends_on:
       questionnaire-db:
         condition: service_healthy
@@ -121,11 +111,9 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/pearl-jam-back-office:snapshot-feat-add-contact-history
+    image: docker.io/inseefr/pearl-jam-back-office:5.13.6-rc
     tty: true
     stdin_open: true
-    # healthcheck:
-    #   test: ['CMD', 'curl', '--fail', 'http://localhost:8080/api/healthcheck']
     depends_on:
       pearl-db:
         condition: service_healthy
@@ -169,11 +157,9 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/drama-queen:2.5.3
+    image: inseefr/drama-queen:3.1.2
     tty: true
     stdin_open: true
-    #healthcheck:
-    #  test: ['CMD', 'curl', '--fail', 'http://localhost']
     environment:
       - VITE_QUEEN_API_URL=http://localhost:${QUESTIONNAIRE_API_PORT}
       - VITE_OIDC_CLIENT_ID=${AUTH_CLIENT_ID}
@@ -215,34 +201,3 @@ services:
         condition: service_started
     ports:
       - '${PEARL_FRONTEND_PORT}:8300'
-
-  playwright-captation:
-    image: mcr.microsoft.com/playwright:v1.51.1-noble
-    profiles: [captation]
-    depends_on:
-      - pearl-api
-      - questionnaire-api
-      - keycloak
-      - queen-front
-    container_name: playwright-captation
-    hostname: front
-    volumes: *react-volumes
-    tty: true
-    stdin_open: true # without this node doesn't start
-    working_dir: /opt/app
-    ipc: host
-    network_mode: host
-    environment:
-      WATCHPACK_POLLING: true
-      FAST_REFRESH: true
-      DISPLAY: unix:0
-      XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
-      HTTP_PROXY: ${HTTP_PROXY}
-      HTTPS_PROXY: ${HTTPS_PROXY}
-      NO_PROXY: ${NO_PROXY}
-    command:
-      - /bin/bash
-      - -c
-      - |
-        yarn install --network-timeout 100000
-        npx playwright codegen --viewport-size="1920,1080" http://localhost:3000/

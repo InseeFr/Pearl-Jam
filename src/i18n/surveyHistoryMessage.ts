@@ -1,16 +1,16 @@
 const surveyHistoryMessage = {
   deleteContactTitle: {
-    fr: 'Supprimer une ligne de coordonnées',
-    en: 'Delete a contact line',
-    sq: 'Fshij një linjë kontakti',
+    fr: "Supprimer les informations d'un individu",
+    en: 'Delete a contact information',
+    sq: 'Fshi informacionin e kontaktit',
   },
   deleteContactConfirmation: {
-    fr: (contactName: string) =>
-      `Souhaitez-vous supprimer la ligne contenant les coordonnées de ${contactName} ?`,
-    en: (contactName: string) =>
-      `Do you want to delete the line containing ${contactName}'s contact information?`,
-    sq: (contactName: string) =>
-      `Dëshironi të fshini linjën që përmban informacionin e kontaktit të ${contactName}?`,
+    fr: (contactFullName: string) =>
+      `Souhaitez-vous supprimer la ligne contenant les coordonnées de ${contactFullName} ?`,
+    en: (contactFullName: string) =>
+      `Do you want to delete the line containing ${contactFullName}'s contact information?`,
+    sq: (contactFullName: string) =>
+      `Dëshironi të fshini linjën që përmban informacionin e kontaktit të ${contactFullName}?`,
   },
   cancel: {
     fr: 'Annuler',
@@ -38,14 +38,14 @@ const surveyHistoryMessage = {
     sq: 'Fshij',
   },
   addContact: {
-    fr: 'Ajouter une ligne de coordonnées',
-    en: 'Add a contact line',
-    sq: 'Shto një linjë kontakti',
+    fr: 'Ajouter un individu',
+    en: 'Add a contact',
+    sq: 'Shto një kontakt',
   },
-  editContactLine: {
-    fr: 'Modifier une ligne',
-    en: 'Edit a line',
-    sq: 'Ndrysho një linjë',
+  importContacts: {
+    fr: 'Importer tous les contacts',
+    en: 'Import all contacts',
+    sq: 'Importon të gjitha kontaktet',
   },
   deleteContactLine: {
     fr: 'Supprimer une ligne',
@@ -82,11 +82,6 @@ const surveyHistoryMessage = {
     en: 'Contact information deleted',
     sq: 'Informacioni i kontaktit u fshi',
   },
-  modalTitleAdd: {
-    fr: 'Ajouter une ligne de coordonnées',
-    en: 'Add a contact line',
-    sq: 'Shto një linjë kontakti',
-  },
   modalTitleEdit: {
     fr: 'Modifier une ligne de coordonnées',
     en: 'Edit a contact line',
@@ -94,13 +89,13 @@ const surveyHistoryMessage = {
   },
   editContactMale: {
     fr: 'M',
-    en: 'Mr.',
-    sq: 'Z.',
+    en: 'Mr',
+    sq: 'Z',
   },
   editContactFemale: {
     fr: 'Mme',
-    en: 'Ms.',
-    sq: 'Znj.',
+    en: 'Ms',
+    sq: 'Znj',
   },
   yes: {
     fr: 'Oui',
@@ -193,9 +188,19 @@ const surveyHistoryMessage = {
     sq: 'Kontakt përmes postës',
   },
   previousSurveyInfo: {
-    fr: 'Information de la collecte précédante',
-    en: 'Previous collect information',
+    fr: 'Informations de la collecte précédente',
+    en: 'Previous collect informations',
     sq: 'Informacionet e mbledhjes së mëparshme',
+  },
+  MISTER: {
+    fr: 'M',
+    en: 'Mr',
+    sq: 'Z',
+  },
+  MISS: {
+    fr: 'Mme',
+    en: 'Ms',
+    sq: 'Znj',
   },
   nextSurveyInfo: {
     fr: 'Coordonnées des individus pour la collecte suivante ',
@@ -203,15 +208,31 @@ const surveyHistoryMessage = {
     sq: 'Koordinatat e individëve për mbledhjen e ardhshme',
   },
   previousCollectInterviewerComment: {
-    fr: 'Commentaire de l’enquêteur :',
-    en: "Interviewer's comment :",
+    fr: "Commentaire(s) passé(s) de l'enquêteur :",
+    en: "Interviewer's comment(s) :",
     sq: 'Komenti i hetuesit',
   },
   modalAddContact: {
-    fr: 'Ajouter une ligne de coordonnées',
-    en: 'Add new coordinates',
-    sq: 'Shtoni koordinata të reja',
+    fr: 'Ajouter un individu',
+    en: 'Add a contact',
+    sq: 'Shto një kontakt',
   },
+  contactModalTitleEdit: {
+    fr: "Modifier les informations de l'individu",
+    en: 'Edit contact information',
+    sq: 'Ndrysho informacionin e kontaktit',
+  },
+  importAlertErrorModalTitle: {
+    fr: "Impossible d'importer",
+    en: 'Import not possible',
+    sq: 'Importimi nuk është i mundur',
+  },
+  importAlertErrorModalContent: {
+    fr: 'Veuillez selectionner un seul numéro de téléphone favori pour',
+    en: 'Please select only one preferred phone number for',
+    sq: 'Ju lutemi zgjidhni vetëm një numër telefoni të preferuar për',
+  },
+
   requiredField: {
     fr: 'Champ obligatoire',
     en: 'Required field',
@@ -226,6 +247,26 @@ const surveyHistoryMessage = {
     fr: 'Adresse email invalide',
     en: 'Invalid email address',
     sq: 'Adresa e emailit është e pavlefshme',
+  },
+  contactModalPreferedContactContentMessageFirstPart: {
+    fr: 'Attention, un seul individu peut être "Contact courrier". Pour identifier',
+    en: 'Warning, only one individual can be "Mail contact". To identify',
+    sq: 'Kujdes, vetëm një individ mund të jetë "Kontakt përmes postës". Për të identifikuar',
+  },
+  contactModalPreferedContactContentMessageSecondPart: {
+    fr: "comme contact courrier, veuillez d'abord supprimer cette modalité de l'individu",
+    en: 'as mail contact, please first remove this status from the individual',
+    sq: 'si kontakt përmes postës, ju lutemi hiqni këtë status nga individi',
+  },
+  contactModalPreferedContactContentMessageUnknownContactName: {
+    fr: 'Attention, un seul individu peut être "Contact courrier". Pour identifier cet individu comme contact courrier, veuillez d\'abord supprimer cette modalité de l\'individu',
+    en: 'Warning, only one individual can be "Mail contact". To identify this individual as mail contact, please first remove this status from the individual',
+    sq: 'Kujdes, vetëm një individ mund të jetë "Kontakt përmes postës". Për të identifikuar këtë individ si kontakt përmes postës, ju lutemi hiqni këtë status nga individi',
+  },
+  contactModalPreferedContactButton: {
+    fr: "J'ai compris",
+    en: 'I understand',
+    sq: 'E kuptova',
   },
 };
 
