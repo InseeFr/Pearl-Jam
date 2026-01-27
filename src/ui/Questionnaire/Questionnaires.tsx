@@ -13,11 +13,22 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import BlockIcon from '@mui/icons-material/Block';
 import D from 'i18n';
-import { SurveyUnit } from 'types/pearl';
+import { SurveyUnit, SurveyUnitState } from 'types/pearl';
 import { isQuestionnaireAvailable } from '../../utils/functions';
-import { Box, Table, TableBody, TableCell, TableRow, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material';
 import Chip from '@mui/material/Chip';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { getMostRecentState } from '../../utils/synchronize';
 import { getLang } from '../../i18n/build-dictionary';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -33,10 +44,7 @@ type ArticulationTableData = {
   }[];
 };
 
-type ArticulationTableHook = (
-  react: unknown,
-  id: string
-) => ArticulationTableData;
+type ArticulationTableHook = (react: unknown, id: string) => ArticulationTableData;
 
 /**
  * Checks if all articulation rows are completed (progress === 1)
@@ -59,13 +67,14 @@ function getQuestionnaireProgress(
   isAvailable: boolean,
   isQuestionnaireInit: boolean,
   isQuestionnaireCompleted: boolean,
-  allArticulationRowsCompleted: boolean
+  allArticulationRowsCompleted: boolean,
+  latestStateType: SurveyUnitState['type'] | undefined
 ): -1 | 1 | 2 | null {
   if (!isAvailable) {
     return null;
   }
 
-  if (isQuestionnaireCompleted || allArticulationRowsCompleted) {
+  if (isQuestionnaireCompleted || (allArticulationRowsCompleted && latestStateType === 'WFT')) {
     return 1; // Completed
   }
 
@@ -80,21 +89,31 @@ function getQuestionnaireProgress(
  * Component to display the questionnaire state chip based on progress
  */
 function QuestionnaireStateChip({
-  isAvailable,
-  isQuestionnaireInit,
-  isQuestionnaireCompleted,
+  surveyUnit,
   allArticulationRowsCompleted,
 }: Readonly<{
-  isAvailable: boolean;
-  isQuestionnaireInit: boolean;
-  isQuestionnaireCompleted: boolean;
+  surveyUnit: SurveyUnit;
   allArticulationRowsCompleted: boolean;
 }>) {
+  const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
+  const isQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
+    state => state.state === 'QUESTIONNAIRE_INIT'
+  );
+  const isQuestionnaireCompleted = surveyUnit.otherModeQuestionnaireState?.some(
+    state => state.state === 'QUESTIONNAIRE_COMPLETED' || state.state === 'QUESTIONNAIRE_VALIDATED'
+  );
+
+  const latestState = surveyUnit.states.reduce<SurveyUnitState | undefined>(
+    (latest, current) => (!latest || current.date > latest.date ? current : latest),
+    undefined
+  );
+
   const progress = getQuestionnaireProgress(
     isAvailable,
-    isQuestionnaireInit,
-    isQuestionnaireCompleted,
-    allArticulationRowsCompleted
+    isQuestionnaireInit ?? false,
+    isQuestionnaireCompleted ?? false,
+    allArticulationRowsCompleted,
+    latestState?.type
   );
 
   if (progress === null) {
@@ -120,9 +139,7 @@ function ConfirmationModal({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{D.questionnaireAccessConfirmationTitle}</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          {D.questionnaireAccessConfirmationMessage}
-        </DialogContentText>
+        <DialogContentText>{D.questionnaireAccessConfirmationMessage}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
@@ -162,13 +179,6 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
     }
   }, [articulationHook, id]);
 
-  const isQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
-    state => state.state === 'QUESTIONNAIRE_INIT'
-  );
-  const isQuestionnaireCompleted = surveyUnit.otherModeQuestionnaireState?.some(
-    state => state.state === 'QUESTIONNAIRE_COMPLETED' || state.state === 'QUESTIONNAIRE_VALIDATED'
-  );
-
   const allArticulationRowsCompleted = areAllArticulationRowsCompleted(articulationTable);
 
   const latestState = getMostRecentState(surveyUnit);
@@ -201,9 +211,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               </Row>
 
               <QuestionnaireStateChip
-                isAvailable={isAvailable}
-                isQuestionnaireInit={isQuestionnaireInit ?? false}
-                isQuestionnaireCompleted={isQuestionnaireCompleted ?? false}
+                surveyUnit={surveyUnit}
                 allArticulationRowsCompleted={allArticulationRowsCompleted}
               />
 
@@ -253,9 +261,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               </Row>
 
               {/* Table */}
-              {articulationTable && (
-                <ArticulationTable table={articulationTable} />
-              )}
+              {articulationTable && <ArticulationTable table={articulationTable} />}
             </Stack>
           )}
         </Stack>
@@ -326,11 +332,7 @@ export function ArticulationTable(
         </TableBody>
       </Table>
 
-      <ConfirmationModal
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        onConfirm={handleConfirm}
-      />
+      <ConfirmationModal open={isModalOpen} onClose={handleCloseModal} onConfirm={handleConfirm} />
     </>
   );
 }

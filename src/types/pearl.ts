@@ -73,7 +73,7 @@ type SurveyUnitComment = {
   value: string;
 };
 
-type SurveyUnitState = {
+export type SurveyUnitState = {
   id?: number;
   date: number;
   type: string;

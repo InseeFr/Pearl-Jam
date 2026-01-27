@@ -44,7 +44,10 @@ describe('Questionnaires Component', () => {
     campaign: 'campaign-1',
     comments: [],
     sampleIdentifiers: {} as any,
-    states: [],
+    states: [
+      { id: 1, date: 1700000000000, type: 'VIC' },
+      { id: 2, date: 1700100000000, type: 'AOC' },
+    ],
     contactAttempts: [],
     campaignLabel: 'Campaign Label',
     managementStartDate: 0,
@@ -59,6 +62,7 @@ describe('Questionnaires Component', () => {
     useLetterCommunication: false,
     communicationRequests: [],
     communicationTemplates: [],
+    collectNextContacts: false,
     otherModeQuestionnaireState: [],
   };
 
@@ -188,7 +192,6 @@ describe('Questionnaires Component', () => {
       expect(screen.queryByText(D.inProgress)).toBeNull();
       expect(screen.queryByText(D.finished)).toBeNull();
     });
-
   });
 
   describe('Latest state date display', () => {
@@ -491,4 +494,3 @@ describe('ArticulationTable Component', () => {
     });
   });
 });
-
