@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   commonContactOutcomes,
   contactOutcomes,
+  specificContactOutcomes,
   findContactOutcomeLabelByValue,
   findOldContactOutcomeByValue,
   getContactOutcomeByConfiguration,
@@ -13,7 +14,7 @@ const findContactOutcomeLabelByValueTests = [
 ];
 
 describe('findContactOutcomeLabelByValue', () => {
-  findContactOutcomeLabelByValueTests.map(({ input, output }) => {
+  findContactOutcomeLabelByValueTests.forEach(({ input, output }) => {
     it(`findContactOutcomeLabelByValue should return ${output} when adding ${input}`, () => {
       expect(findContactOutcomeLabelByValue(input)).toBe(output);
     });
@@ -23,7 +24,7 @@ describe('findContactOutcomeLabelByValue', () => {
 const findContactOutcomeByValueTests = [
   { input: contactOutcomes.INTERVIEW_ACCEPTED.value, output: {} },
   {
-    input: contactOutcomes.NO_LONGER_USED_FOR_HABITATION.value,
+    input: specificContactOutcomes.NO_LONGER_USED_FOR_HABITATION.value,
     output: {
       NO_LONGER_USED_FOR_HABITATION: {
         value: 'NUH',
@@ -46,17 +47,16 @@ const contactOutcomeByConfigTests = [
     input: { configuration: 'TEL', value: undefined },
     output: {
       ...commonContactOutcomes,
-      ...{ NO_LONGER_USED_FOR_HABITATION: contactOutcomes.NO_LONGER_USED_FOR_HABITATION },
+      NO_LONGER_USED_FOR_HABITATION: specificContactOutcomes.NO_LONGER_USED_FOR_HABITATION,
     },
   },
   {
     input: { configuration: 'F2F', value: 'DUU' },
     output: {
       ...commonContactOutcomes,
-      ...{
-        DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON:
-          contactOutcomes.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON,
-      },
+
+      DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON:
+        specificContactOutcomes.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON,
     },
   },
 ] as const;

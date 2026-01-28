@@ -12,12 +12,16 @@ export function Accordion({
   children,
   variant,
   defaultOpen,
+  elevation,
+  sx,
   ...props
 }: Readonly<
   PropsWithChildren<{
     title: string;
     defaultOpen: boolean;
-    variant: PaperOwnProps['variant'];
+    variant?: PaperOwnProps['variant'];
+    sx?: {};
+    elevation?: number;
   }>
 >) {
   const [expanded, toggleExpand] = useToggle(!!defaultOpen);

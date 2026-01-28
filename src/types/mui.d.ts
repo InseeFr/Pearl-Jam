@@ -20,6 +20,7 @@ declare module '@mui/material/Card' {
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
     s: true;
+    headingL: true;
     headingM: true;
     headingS: true;
   }
@@ -71,6 +72,7 @@ declare module '@mui/material/ScrollableBox' {
 declare module '@mui/material/Dialog' {
   interface DialogPropsMaxWidthOverrides {
     maxWidht: 's';
+    maxWidht: 'm';
   }
 }
 

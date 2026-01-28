@@ -2,6 +2,7 @@ import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
+import { StateValues } from 'utils/enum/SUStateEnum';
 import {
   ContactAttemptValue,
   ContactAttemptConfiguration,
@@ -68,15 +69,15 @@ type SurveyUnitAddress = {
   cityPriorityDistrict: boolean;
 };
 
-type SurveyUnitComment = {
+export type SurveyUnitComment = {
   type: string;
   value: string;
 };
 
-type SurveyUnitState = {
+export type SurveyUnitState = {
   id?: number;
   date: number;
-  type: string;
+  type: StateValues;
 };
 
 type SurveyUnitSampleIdentifiers = {

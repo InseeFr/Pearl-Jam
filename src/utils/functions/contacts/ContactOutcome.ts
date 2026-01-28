@@ -1,5 +1,11 @@
 import D from 'i18n';
 
+export const specificContactOutcomes = {
+  DECEASED: { value: 'DCD', label: '' },
+  DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON: { value: 'DUU', label: '' },
+  NO_LONGER_USED_FOR_HABITATION: { value: 'NUH', label: `${D.noLongerUsedForHabitation}` },
+} as const;
+
 export const contactOutcomes = {
   INTERVIEW_ACCEPTED: { value: 'INA', label: `${D.interviewAccepted}` },
   REFUSAL: { value: 'REF', label: `${D.refusal}` },
@@ -7,7 +13,6 @@ export const contactOutcomes = {
   UNUSABLE_CONTACT_DATA: { value: 'UCD', label: `${D.unusableContactData}` },
   UNABLE_TO_RESPOND: { value: 'UTR', label: `${D.unableToRespond}` },
   ALREADY_ANSWERED: { value: 'ALA', label: `${D.alreadyAnsweredAnotherMode}` },
-  NO_LONGER_USED_FOR_HABITATION: { value: 'NUH', label: `${D.noLongerUsedForHabitation}` },
   DEFINITLY_UNAVAILABLE: {
     value: 'DUK',
     label: `${D.definitlyUnavailable}`,
@@ -22,19 +27,23 @@ export const contactOutcomes = {
   RIGHT_OF_WITHDRAWAL: { value: 'ROW', label: `${D.rightOfWithdrawal}` },
 } as const;
 
-export type ContactOutcomeValue = (typeof contactOutcomes)[keyof typeof contactOutcomes]['value'];
+export type ContactOutcomeValue =
+  | (typeof contactOutcomes)[keyof typeof contactOutcomes]['value']
+  | (typeof specificContactOutcomes)[keyof typeof specificContactOutcomes]['value'];
 
 export const findContactOutcomeLabelByValue = (value?: ContactOutcomeValue) =>
   Object.values(contactOutcomes).find(co => co.value === value)?.label;
 
 export const findOldContactOutcomeByValue = (value?: ContactOutcomeValue) => {
-  const key = Object.keys(contactOutcomes)
-    .find(key => contactOutcomes[key as keyof typeof contactOutcomes].value === value)
-    ?.toString() as keyof typeof contactOutcomes;
+  const key = Object.keys(specificContactOutcomes)
+    .find(
+      key => specificContactOutcomes[key as keyof typeof specificContactOutcomes].value === value
+    )
+    ?.toString() as keyof typeof specificContactOutcomes;
 
-  if (!key || Object.keys(commonContactOutcomes).find(ckey => ckey === key)) return {};
+  if (Object.keys(commonContactOutcomes).includes(key)) return {};
 
-  return { [key]: contactOutcomes[key] };
+  return { [key]: specificContactOutcomes[key] };
 };
 
 export type ContactOutcomeConfiguration = 'TEL' | 'F2F';
@@ -59,11 +68,11 @@ export const getContactOutcomeByConfiguration = (
   configuration: ContactOutcomeConfiguration,
   selectedOutcomeValue?: ContactOutcomeValue
 ): Record<string, ContactOutcome> => {
-  let newContactOutcomes = commonContactOutcomes;
+  let newContactOutcomes: Record<string, ContactOutcome> = commonContactOutcomes;
   if (configuration === 'TEL') {
     newContactOutcomes = {
       ...newContactOutcomes,
-      ...{ NO_LONGER_USED_FOR_HABITATION: contactOutcomes.NO_LONGER_USED_FOR_HABITATION },
+      NO_LONGER_USED_FOR_HABITATION: specificContactOutcomes.NO_LONGER_USED_FOR_HABITATION,
     };
   }
   const selectedOutcome = findOldContactOutcomeByValue(selectedOutcomeValue);

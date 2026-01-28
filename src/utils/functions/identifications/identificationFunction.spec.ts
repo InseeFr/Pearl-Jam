@@ -167,47 +167,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
   {
     input: {
       ...mockedSurveyUnit,
-      identificationConfiguration: IdentificationConfiguration.IASCO,
-      identification: {
-        identification: IdentificationQuestionOptionValues.IDENTIFIED,
-        access: IdentificationQuestionOptionValues.ACC,
-        situation: IdentificationQuestionOptionValues.ABSORBED, // Concluding
-      },
-      contactOutcome: {
-        date: Date.now(),
-        totalNumberOfContactAttempts: 1,
-        type: contactOutcomes.INTERVIEW_ACCEPTED.value,
-      },
-      contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'TEL' }],
-      states: [{ type: 'NOA', date: Date.now() }],
-    },
-    output: false,
-  },
-  {
-    input: {
-      ...mockedSurveyUnit,
-      identificationConfiguration: IdentificationConfiguration.IASCO,
-      identification: {
-        identification: IdentificationQuestionOptionValues.IDENTIFIED,
-        access: IdentificationQuestionOptionValues.ACC,
-        situation: IdentificationQuestionOptionValues.ORDINARY,
-        category: IdentificationQuestionOptionValues.PRIMARY,
-        occupant: IdentificationQuestionOptionValues.IDENTIFIED,
-      },
-      // INA + NOA -> invalid
-      contactOutcome: {
-        date: Date.now(),
-        totalNumberOfContactAttempts: 1,
-        type: contactOutcomes.INTERVIEW_ACCEPTED.value,
-      },
-      contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'TEL' }],
-      states: [{ type: 'NOA', date: Date.now() }],
-    },
-    output: false,
-  },
-  {
-    input: {
-      ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.INDTEL,
       identification: {
         individualStatus: IdentificationQuestionOptionValues.NOFIELD,

@@ -68,6 +68,7 @@ let mockSurveyUnit: SurveyUnit = {
   useLetterCommunication: false,
   communicationRequests: [],
   communicationTemplates: [],
+  collectNextContacts: false,
 };
 
 const identificationQuestionsHookTests = [

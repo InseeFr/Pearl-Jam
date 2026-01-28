@@ -540,3 +540,5 @@ export function PearlTheme({ children }: Readonly<PropsWithChildren<unknown>>) {
     </ThemeProvider>
   );
 }
+
+export type ColoredTheme = typeof coloredTheme;
