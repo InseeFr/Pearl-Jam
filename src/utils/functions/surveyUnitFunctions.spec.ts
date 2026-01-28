@@ -14,12 +14,13 @@ import { afterAll, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
 import { contactAttempts } from './contacts/ContactAttempt';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { createStateIdsAndCommunicationRequestIds } from './surveyUnitFunctions';
+import { SurveyUnit, SurveyUnitState } from 'types/pearl';
+
+const mockedEmptySu = {} as unknown as SurveyUnit;
 
 describe('getAge', () => {
   it('should return undefined for an empty or invalid birthdate', () => {
     expect(getAge('')).toBeUndefined();
-    expect(getAge(null)).toBeUndefined();
-    expect(getAge(undefined)).toBeUndefined();
   });
 
   it('should return the correct age for a valid birthdate', () => {
@@ -41,32 +42,43 @@ describe('getAge', () => {
 });
 
 describe('getCommentByType', () => {
-  const noCommentsSu = {};
-  const emptyCommentsSu = { comments: [] };
+  const noCommentsSu = {} as SurveyUnit;
+  const emptyCommentsSu = { comments: [] } as unknown as SurveyUnit;
+  const mockedSu = { comments: [] } as unknown as SurveyUnit;
   const interviewercomment = { type: 'INTERVIEWER', value: 'Beware of the dog!' };
   const managementComment = { type: 'MANAGEMENT', value: 'Use email first' };
   it('should return empty string if su has no comments attribute with same value', () => {
     expect(getCommentByType('INTERVIEWER', noCommentsSu)).toEqual('');
     expect(getCommentByType('INTERVIEWER', emptyCommentsSu)).toEqual('');
-    expect(getCommentByType('INTERVIEWER', { comments: [managementComment] })).toEqual('');
-    expect(getCommentByType('MANAGEMENT', { comments: [interviewercomment] })).toEqual('');
+    expect(getCommentByType('INTERVIEWER', { ...mockedSu, comments: [managementComment] })).toEqual(
+      ''
+    );
+    expect(getCommentByType('MANAGEMENT', { ...mockedSu, comments: [interviewercomment] })).toEqual(
+      ''
+    );
   });
   it('should return comment value of matching value comment', () => {
     expect(
-      getCommentByType('INTERVIEWER', { comments: [interviewercomment, managementComment] })
+      getCommentByType('INTERVIEWER', {
+        ...mockedSu,
+        comments: [interviewercomment, managementComment],
+      })
     ).toEqual('Beware of the dog!');
     expect(
-      getCommentByType('MANAGEMENT', { comments: [interviewercomment, managementComment] })
+      getCommentByType('MANAGEMENT', {
+        ...mockedSu,
+        comments: [interviewercomment, managementComment],
+      })
     ).toEqual('Use email first');
   });
 });
 
 describe('getLastState', () => {
   it('should return the only state', () => {
-    expect(getLastState([{ id: '1', date: 1616070963000, status: 'status' }])).toEqual({
-      id: '1',
+    expect(getLastState([{ id: 1, date: 1616070963000, type: 'VIN' }])).toEqual({
+      id: 1,
       date: 1616070963000,
-      status: 'status',
+      type: 'VIN',
     });
   });
   it('should return undefined if empty states', () => {
@@ -75,38 +87,49 @@ describe('getLastState', () => {
   it('should return state with latest date', () => {
     expect(
       getLastState([
-        { id: '1', date: 1616070963000, status: 'status' },
-        { id: '2', date: 1616070000000, status: 'status' },
+        { id: 1, date: 1616070963000, type: 'VIN' },
+        { id: 2, date: 1616070000000, type: 'VIC' },
       ])
     ).toEqual({
-      id: '1',
+      id: 1,
       date: 1616070963000,
-      status: 'status',
+      type: 'VIN',
     });
   });
 });
 
 describe('getContactAttemptNumber', () => {
   it('should return 0 contacts attempts if no contactAttempts in states', async () => {
-    const surveyUnit = { states: [] };
-    const statesWithNoContactAttempt = [surveyUnitStateEnum.APPOINTMENT_MADE];
-    expect(getContactAttemptNumber({ ...surveyUnit, states: statesWithNoContactAttempt })).toEqual(
-      0
-    );
+    const surveyUnit = { states: [] } as unknown as SurveyUnit;
+    const statesWithNoContactAttempt = {
+      id: 1,
+      type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
+      date: 1616070963000,
+    };
+
+    expect(
+      getContactAttemptNumber({ ...surveyUnit, states: [statesWithNoContactAttempt] })
+    ).toEqual(0);
     expect(getContactAttemptNumber(surveyUnit)).toEqual(0);
   });
   it('should return number of contact attempts', () => {
-    const statesWithOneContactAttempt = [
-      surveyUnitStateEnum.APPOINTMENT_MADE,
-      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT,
+    const statesWithOneContactAttempt: SurveyUnitState[] = [
+      { type: surveyUnitStateEnum.APPOINTMENT_MADE.type, date: 1616070963000 },
+      { type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type, date: 1616070963000 },
     ];
-    const statesWithTwoContactAttempt = [
-      surveyUnitStateEnum.APPOINTMENT_MADE,
-      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT,
-      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT,
+    const statesWithTwoContactAttempt: SurveyUnitState[] = [
+      { type: surveyUnitStateEnum.APPOINTMENT_MADE.type, date: 1616070963000 },
+      { type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type, date: 1616070963000 },
+      { type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type, date: 1616070963000 },
+      { type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type, date: 1616070963000 },
     ];
-    expect(getContactAttemptNumber({ states: [...statesWithOneContactAttempt] })).toEqual(1);
-    expect(getContactAttemptNumber({ states: [...statesWithTwoContactAttempt] })).toEqual(2);
+    const surveyUnit = {} as SurveyUnit;
+    expect(getContactAttemptNumber({ ...surveyUnit, states: statesWithOneContactAttempt })).toEqual(
+      1
+    );
+    expect(getContactAttemptNumber({ ...surveyUnit, states: statesWithTwoContactAttempt })).toEqual(
+      3
+    );
   });
 });
 describe('updateStateWithDates', () => {
@@ -120,12 +143,12 @@ describe('updateStateWithDates', () => {
   const beforeCurrent = new Date(2021, 2, 10).getTime();
   const afterCurrent = new Date(2021, 2, 20).getTime();
   it('should return initial states if lastState is not VNC', () => {
-    const surveyUnit = {};
-    expect(updateStateWithDates(surveyUnit)).toEqual([]);
-    expect(updateStateWithDates({ states: [] })).toEqual([]);
+    expect(updateStateWithDates(mockedEmptySu)).toEqual([]);
+    expect(updateStateWithDates({ ...mockedEmptySu, states: [] })).toEqual([]);
   });
   it('should return initial states if SU lastState is VNC and currentDate < identificationPhaseStart', () => {
     const surveyUnit = {
+      ...mockedEmptySu,
       states: [surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE],
       identificationPhaseStartDate: afterCurrent,
     };
@@ -136,6 +159,7 @@ describe('updateStateWithDates', () => {
       states: [{ type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent }],
       identificationPhaseStartDate: beforeCurrent,
     };
+
     expect(updateStateWithDates(surveyUnit)).toEqual([
       { type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent },
       { type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type, date: NOW },

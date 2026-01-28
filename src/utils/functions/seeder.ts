@@ -39,7 +39,7 @@ export async function seedData() {
     let states = [
       {
         id: user.id + 1_000,
-        date: new Date().getTime() - 10 * day,
+        date: Date.now() - 10 * day,
         type: surveyUnitStateEnum.IN_PREPARATION.type,
       },
     ];
@@ -48,7 +48,7 @@ export async function seedData() {
         ...states,
         {
           id: user.id + 2_000,
-          date: new Date().getTime() - 9 * day,
+          date: Date.now() - 9 * day,
           type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type,
         },
       ];
@@ -57,7 +57,7 @@ export async function seedData() {
       states = [
         ...states,
         {
-          date: new Date().getTime() - 8 * day,
+          date: Date.now() - 8 * day,
           type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
         },
       ];
@@ -66,7 +66,7 @@ export async function seedData() {
       states = [
         ...states,
         {
-          date: new Date().getTime() - 7 * day,
+          date: Date.now() - 7 * day,
           type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
         },
       ];
@@ -77,7 +77,7 @@ export async function seedData() {
       persons: [
         {
           id: user.id,
-          title: ['MISS', 'MISTER'][user.id % 2],
+          title: user.id % 2 === 0 ? 'MISS' : 'MISTER',
           firstName: user.name.split(' ')[0],
           lastName: user.name.split(' ')[1],
           email: user.email,
@@ -101,7 +101,7 @@ export async function seedData() {
         },
         {
           id: user.id,
-          title: ['MISS', 'MISTER'][user.id % 2],
+          title: user.id % 2 === 0 ? 'MISS' : 'MISTER',
           firstName: user.name.split(' ')[0] + '-2',
           lastName: user.name.split(' ')[1] + '-2',
           email: user.email + '-2',

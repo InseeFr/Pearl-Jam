@@ -81,7 +81,7 @@ export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>
   const open = Boolean(anchorElement);
   const id = open ? 'simple-popover' : undefined;
   const states = Object.values(toDoEnum).filter(toDo => Number(toDo.order) < 6);
-  const currentState = Number(getSuTodoState(surveyUnit).order);
+  const currentState = Number(getSuTodoState(surveyUnit)?.order);
   const canSubmit = validateTransmission(surveyUnit);
 
   return (

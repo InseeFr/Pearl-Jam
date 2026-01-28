@@ -58,9 +58,6 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
     onClose();
   };
 
-  // watch('persons.${1}.privileged');
-  // watch('persons.${2}.privileged');
-
   return (
     <Dialog maxWidth="md" open={true} onClose={onClose}>
       <form action="" onSubmit={onSubmit}>
@@ -151,6 +148,19 @@ function PersonFields({
     });
   };
 
+  const handlePhoneFavoriteChange = (phoneIndex: number) => {
+    const currentPhoneNumbers = getValues(`persons.${index}.phoneNumbers`);
+
+    currentPhoneNumbers.forEach((_, idx) => {
+      if (idx !== phoneIndex) {
+        setValue(`persons.${index}.phoneNumbers.${idx}.favorite`, false);
+      }
+    });
+
+    const isFavorite = currentPhoneNumbers[phoneIndex]?.favorite ?? false;
+    setValue(`persons.${index}.phoneNumbers.${phoneIndex}.favorite`, !isFavorite);
+  };
+
   return (
     <Stack gap={2}>
       <FieldRow
@@ -191,12 +201,14 @@ function PersonFields({
         name={`persons.${index}.phoneNumbers.${phoneIndexFiscal}`}
         phoneNumber={person.phoneNumbers[phoneIndexFiscal]}
         editable={undefined}
+        onFavoriteChange={() => handlePhoneFavoriteChange(phoneIndexFiscal)}
       />
       <PhoneLine
         control={control}
         label={D.directorySource}
         name={`persons.${index}.phoneNumbers.${phoneIndexDirectory}`}
         phoneNumber={person.phoneNumbers[phoneIndexDirectory]}
+        onFavoriteChange={() => handlePhoneFavoriteChange(phoneIndexDirectory)}
       />
       {(phoneNumbers as SurveyUnitPhoneNumber[]).map(
         (phoneNumber: SurveyUnitPhoneNumber, k) =>
@@ -209,6 +221,7 @@ function PersonFields({
               name={`persons.${index}.phoneNumbers.${k}`}
               phoneNumber={phoneNumber}
               onRemove={() => remove(k)}
+              onFavoriteChange={() => handlePhoneFavoriteChange(k)}
             />
           )
       )}
@@ -236,6 +249,7 @@ interface PhoneLineProps {
   control: Control;
   editable?: boolean;
   onRemove?: VoidFunction;
+  onFavoriteChange?: VoidFunction;
 }
 
 /**
@@ -248,6 +262,7 @@ function PhoneLine({
   phoneNumber,
   editable,
   onRemove,
+  onFavoriteChange,
 }: Readonly<PhoneLineProps>) {
   if (!phoneNumber) {
     return null;
@@ -282,7 +297,7 @@ function PhoneLine({
             <IconButton
               id={`star-button-${field.name}`}
               sx={{ py: 0 }}
-              onClick={() => field.onChange(!field.value)}
+              onClick={() => onFavoriteChange?.()}
             >
               {field.value ? (
                 <StarIcon color="yellow" />
