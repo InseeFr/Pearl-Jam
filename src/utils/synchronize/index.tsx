@@ -15,7 +15,7 @@ import {
 } from 'api/pearl';
 import { useNavigate } from 'react-router-dom';
 import { QueenEvent } from 'types/events';
-import { SurveyUnit } from 'types/pearl';
+import { SurveyUnit, SurveyUnitComment } from 'types/pearl';
 import { formatSurveyUnitForPut } from 'utils/api/utils';
 import { PEARL_USER_KEY, TITLES } from 'utils/constants';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
@@ -23,6 +23,8 @@ import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-se
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import userIdbService from 'utils/indexeddb/services/user-idb-service';
 import { AxiosError } from 'axios';
+import { UnionType } from 'typescript';
+import { User } from 'utils/indexeddb/model/user';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
@@ -152,11 +154,12 @@ const getUserData = async () => {
   const jsonInterviewer = JSON.parse(result);
   const { id } = jsonInterviewer;
 
-  const { data: interviewer } = await getInterviewer(id.toUpperCase());
+  const interviewer = (await getInterviewer(id.toUpperCase())).data;
 
   await userIdbService.deleteAll();
   // prevent missing civility from crushing IDB inserts for schema-4
-  await userIdbService.addOrUpdate({ civility: TITLES.MISTER.type, ...interviewer });
+  // as is a bad pattern but we can't set some dtos properties as mandatory
+  await userIdbService.addOrUpdate({ civility: TITLES.MISTER.type, ...interviewer } as User);
 };
 
 const putSurveyUnitInDataBase = async (su: SurveyUnit) => {
@@ -174,10 +177,9 @@ const validateSU = (su: SurveyUnit) => {
     su.states.push(getLastState(states));
   }
   if (Array.isArray(comments) && comments.length === 0) {
-    const interviewerComment = { type: 'INTERVIEWER', value: '' };
-    const managementComment = { type: 'MANAGEMENT', value: '' };
-    su.comments.push(interviewerComment);
-    su.comments.push(managementComment);
+    const interviewerComment: SurveyUnitComment = { type: 'INTERVIEWER', value: '' };
+    const managementComment: SurveyUnitComment = { type: 'MANAGEMENT', value: '' };
+    su.comments.push(interviewerComment, managementComment);
   }
 
   return su;
@@ -194,12 +196,18 @@ const getData = async () => {
     await Promise.all(
       surveyUnits.map(async (su: SurveyUnitDto) => {
         try {
+          if (!su.id) return;
+
           const { data: surveyUnit, status } = await getSurveyUnitById(su.id);
 
           if (status > 300 && ![400, 403, 404, 500].includes(status)) {
             throw new Error('Server is not responding');
           } else {
-            const mergedSurveyUnit: SurveyUnit = { ...surveyUnit, ...su };
+            // as is a bad pattern but we can't set some dtos properties as mandatory
+            const mergedSurveyUnit = {
+              ...surveyUnit,
+              ...su,
+            } as SurveyUnit;
             const validSurveyUnit = validateSU(mergedSurveyUnit);
             await putSurveyUnitInDataBase(validSurveyUnit);
             surveyUnitsSuccess.push({

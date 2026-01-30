@@ -32,7 +32,7 @@ export const getNotifFromResult = (
 ): Omit<Notification, 'id'> => {
   const { state, messages } = result;
   return {
-    date: nowDate || new Date().getTime(),
+    date: nowDate || Date.now(),
     type: NOTIFICATION_TYPE_SYNC,
     title: D.titleSync(state),
     messages,
@@ -179,7 +179,7 @@ export const analyseResult = async () => {
     loadedSurveyUnits
   );
 
-  const nowDate = new Date().getTime();
+  const nowDate = Date.now();
   const notification = getNotifFromResult(result, nowDate);
   await notificationIdbService.addOrUpdateNotif(notification);
   const report = getReportFromResult(result, nowDate);

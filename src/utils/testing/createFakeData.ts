@@ -1,14 +1,14 @@
 import { SurveyUnit } from 'types/pearl';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 
-export const createSurveyUnit = (surveyUnit: Partial<SurveyUnit> = {}): SurveyUnit => {
+export const createSurveyUnit = (): SurveyUnit => {
   return {
     displayName: 'John Doe Household',
     id: 'SU12345',
     persons: [
       {
         id: 1,
-        title: 'Mr',
+        title: 'MISTER',
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
@@ -17,13 +17,13 @@ export const createSurveyUnit = (surveyUnit: Partial<SurveyUnit> = {}): SurveyUn
         privileged: false,
         phoneNumbers: [
           {
-            source: 'Home',
+            source: 'DIRECTORY',
             favorite: true,
             number: '1234567890',
             id: 'PN1',
           },
           {
-            source: 'Work',
+            source: 'INTERVIEWER',
             favorite: false,
             number: '0987654321',
             id: 'PN2',
@@ -72,7 +72,7 @@ export const createSurveyUnit = (surveyUnit: Partial<SurveyUnit> = {}): SurveyUn
       {
         id: 1,
         date: 1700000000000, // Exemple de timestamp pour une date future
-        type: 'INITIALIZED',
+        type: 'APS',
       },
     ],
     contactAttempts: [
@@ -120,6 +120,8 @@ export const createSurveyUnit = (surveyUnit: Partial<SurveyUnit> = {}): SurveyUn
         id: 'CT123',
       },
     ],
-    ...surveyUnit,
+    collectNextContacts: false,
+    nextContactHistory: undefined,
+    previousContactHistory: undefined,
   };
 };
