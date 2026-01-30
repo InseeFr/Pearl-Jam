@@ -10,7 +10,6 @@ import {
   getToken,
 } from './utils';
 import { SurveyUnit } from 'types/pearl';
-import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 
 vi.mock('utils/keycloak', () => ({
   kc: { token: 'mocked_token' },
@@ -68,7 +67,7 @@ describe('Utils tests', () => {
   });
 
   it('should format survey unit', async () => {
-    const surveyUnit = createSurveyUnit();
+    const surveyUnit = createSurveyUnit() as SurveyUnit;
 
     const formatted = formatSurveyUnitForPut(surveyUnit);
     const expected: Partial<SurveyUnit> = {

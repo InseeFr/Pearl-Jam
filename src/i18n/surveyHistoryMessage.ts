@@ -45,11 +45,7 @@ const surveyHistoryMessage = {
     en: 'Edit',
     sq: 'Ndrysho',
   },
-  delete: {
-    fr: 'Supprimer',
-    en: 'Delete',
-    sq: 'Fshij',
-  },
+
   addContact: {
     fr: 'Ajouter un individu',
     en: 'Add a contact',

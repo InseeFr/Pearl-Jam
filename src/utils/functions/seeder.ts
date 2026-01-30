@@ -1,4 +1,4 @@
-import { SurveyUnit } from 'types/pearl';
+import { SurveyUnit, SurveyUnitState } from 'types/pearl';
 import { surveyUnitStateEnum } from '../enum/SUStateEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
 import { contactOutcomes } from './contacts/ContactOutcome';
@@ -36,7 +36,7 @@ export async function seedData() {
   /** @var {User[]} users */
   const users = await fetch('https://jsonplaceholder.typicode.com/users').then(r => r.json());
   for (const user of users) {
-    let states = [
+    let states: SurveyUnitState[] = [
       {
         id: user.id + 1_000,
         date: Date.now() - 10 * day,
@@ -73,7 +73,6 @@ export async function seedData() {
     }
     surverUnits.push({
       id: `su${user.id}`,
-      communicationRequestConfiguration: true,
       persons: [
         {
           id: user.id,
@@ -187,117 +186,124 @@ export async function seedData() {
       contactAttempts: [
         {
           status: 'TUN',
-          date: new Date().getTime() - getRandomIntBetween(10, 100) * day,
+          date: Date.now() - getRandomIntBetween(10, 100) * day,
           medium: 'FIELD',
         },
         {
           status: 'INA',
-          date: new Date().getTime() - getRandomIntBetween(3, 9) * day,
+          date: Date.now() - getRandomIntBetween(3, 9) * day,
           medium: 'FIELD',
         },
       ],
       identification: {},
       campaignLabel: 'Démonstration Séminaire Filière 2023',
-      managementStartDate: new Date().getTime() - 10 * day,
-      interviewerStartDate: new Date().getTime() - 10 * day,
-      identificationPhaseStartDate: new Date().getTime() - 10 * day,
-      collectionStartDate: new Date().getTime() - 10 * day,
-      collectionEndDate: new Date().getTime() + 50 * day,
-      endDate: new Date().getTime() + 51 * day,
+      managementStartDate: Date.now() - 10 * day,
+      interviewerStartDate: Date.now() - 10 * day,
+      identificationPhaseStartDate: Date.now() - 10 * day,
+      collectionStartDate: Date.now() - 10 * day,
+      collectionEndDate: Date.now() + 50 * day,
+      endDate: Date.now() + 51 * day,
       identificationConfiguration:
         user.id === 10 ? IdentificationConfiguration.HOUSEF2F : IdentificationConfiguration.INDTEL,
       contactOutcomeConfiguration: 'F2F',
       contactAttemptConfiguration: 'F2F',
       contactOutcome: {
-        date: new Date().getTime() - 2 * day,
+        date: Date.now() - 2 * day,
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
         totalNumberOfContactAttempts: 2,
       },
+      displayName: '',
+      useLetterCommunication: false,
+      communicationRequests: [],
+      communicationTemplates: [],
+      collectNextContacts: false,
     });
   }
   // Create a fillable TEL surveyUnit
-  surverUnits.push({
-    ...surverUnits[0],
-    id: 'sutel',
-    identification: undefined,
-    identificationConfiguration: IdentificationConfiguration.INDTEL,
-    previousContactHistory: {
-      contactOutcomeValue: 'INA',
-      persons: [],
-      comment: '',
-      priority: false,
+  surverUnits.push(
+    {
+      ...surverUnits[0],
+      id: 'sutel',
+      identification: undefined,
+      identificationConfiguration: IdentificationConfiguration.INDTEL,
+      previousContactHistory: {
+        contactOutcomeValue: 'INA',
+        persons: [],
+        comment: '',
+        priority: false,
+      },
     },
-  });
-  surverUnits.push({
-    ...surverUnits[0],
-    id: 'sunoident',
-    identification: {},
-    identificationConfiguration: IdentificationConfiguration.NOIDENT,
-  });
-  surverUnits.push({
-    ...surverUnits[0],
-    id: 'sunoident-empty',
-    identification: {},
-    identificationConfiguration: IdentificationConfiguration.NOIDENT,
-    contactOutcome: undefined,
-  });
-  surverUnits.push({
-    ...surverUnits[0],
-    id: 'sunoident-WFT',
-    identification: {},
-    identificationConfiguration: IdentificationConfiguration.NOIDENT,
-    states: [{ type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type, date: 1 }],
-    contactOutcome: undefined,
-  });
-  surverUnits.push({
-    ...surverUnits[0],
-    managementStartDate: new Date().getTime() - 10 * day,
-    interviewerStartDate: new Date().getTime() - 9 * day,
-    identificationPhaseStartDate: new Date().getTime() - 8 * day,
-    collectionStartDate: new Date().getTime() - 7 * day,
-    collectionEndDate: new Date().getTime() - 6 * day,
-    endDate: new Date().getTime() + 15 * day,
-    id: 'questNotAvailable',
-    identification: {},
-    identificationConfiguration: IdentificationConfiguration.NOIDENT,
-  });
-  surverUnits.push({
-    ...surverUnits[0],
-    managementStartDate: new Date().getTime() - 10 * day,
-    interviewerStartDate: new Date().getTime() - 9 * day,
-    identificationPhaseStartDate: new Date().getTime() - 8 * day,
-    collectionStartDate: new Date().getTime() - 7 * day,
-    collectionEndDate: new Date().getTime() - 6 * day,
-    endDate: new Date().getTime() + 15 * day,
-    id: 'HOUSETEL',
-    identification: {},
-    identificationConfiguration: IdentificationConfiguration.HOUSETEL,
-  });
-  surverUnits.push({
-    ...surverUnits[0],
-    managementStartDate: new Date().getTime() - 10 * day,
-    interviewerStartDate: new Date().getTime() - 9 * day,
-    identificationPhaseStartDate: new Date().getTime() - 8 * day,
-    collectionStartDate: new Date().getTime() - 7 * day,
-    collectionEndDate: new Date().getTime() - 6 * day,
-    endDate: new Date().getTime() + 15 * day,
-    id: 'SRCVREINT',
-    identification: {},
-    identificationConfiguration: IdentificationConfiguration.SRCVREINT,
-  });
-  surverUnits.push({
-    ...surverUnits[0],
-    managementStartDate: new Date().getTime() - 10 * day,
-    interviewerStartDate: new Date().getTime() - 9 * day,
-    identificationPhaseStartDate: new Date().getTime() - 8 * day,
-    collectionStartDate: new Date().getTime() - 7 * day,
-    collectionEndDate: new Date().getTime() - 6 * day,
-    endDate: new Date().getTime() + 15 * day,
-    id: 'INDF2F',
-    identification: undefined,
+    {
+      ...surverUnits[0],
+      id: 'sunoident',
+      identification: {},
+      identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    },
+    {
+      ...surverUnits[0],
+      id: 'sunoident-empty',
+      identification: {},
+      identificationConfiguration: IdentificationConfiguration.NOIDENT,
+      contactOutcome: undefined,
+    },
+    {
+      ...surverUnits[0],
+      id: 'sunoident-WFT',
+      identification: {},
+      identificationConfiguration: IdentificationConfiguration.NOIDENT,
+      states: [{ type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type, date: 1 }],
+      contactOutcome: undefined,
+    },
+    {
+      ...surverUnits[0],
+      managementStartDate: Date.now() - 10 * day,
+      interviewerStartDate: Date.now() - 9 * day,
+      identificationPhaseStartDate: Date.now() - 8 * day,
+      collectionStartDate: Date.now() - 7 * day,
+      collectionEndDate: Date.now() - 6 * day,
+      endDate: Date.now() + 15 * day,
+      id: 'questNotAvailable',
+      identification: {},
+      identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    },
+    {
+      ...surverUnits[0],
+      managementStartDate: Date.now() - 10 * day,
+      interviewerStartDate: Date.now() - 9 * day,
+      identificationPhaseStartDate: Date.now() - 8 * day,
+      collectionStartDate: Date.now() - 7 * day,
+      collectionEndDate: Date.now() - 6 * day,
+      endDate: Date.now() + 15 * day,
+      id: 'HOUSETEL',
+      identification: {},
+      identificationConfiguration: IdentificationConfiguration.HOUSETEL,
+    },
+    {
+      ...surverUnits[0],
+      managementStartDate: Date.now() - 10 * day,
+      interviewerStartDate: Date.now() - 9 * day,
+      identificationPhaseStartDate: Date.now() - 8 * day,
+      collectionStartDate: Date.now() - 7 * day,
+      collectionEndDate: Date.now() - 6 * day,
+      endDate: Date.now() + 15 * day,
+      id: 'SRCVREINT',
+      identification: {},
+      identificationConfiguration: IdentificationConfiguration.SRCVREINT,
+    },
+    {
+      ...surverUnits[0],
+      managementStartDate: Date.now() - 10 * day,
+      interviewerStartDate: Date.now() - 9 * day,
+      identificationPhaseStartDate: Date.now() - 8 * day,
+      collectionStartDate: Date.now() - 7 * day,
+      collectionEndDate: Date.now() - 6 * day,
+      endDate: Date.now() + 15 * day,
+      id: 'INDF2F',
+      identification: undefined,
 
-    identificationConfiguration: IdentificationConfiguration.INDF2F,
-  });
+      identificationConfiguration: IdentificationConfiguration.INDF2F,
+    }
+  );
 
   await surveyUnitIDBService.addAll(surverUnits);
 }
