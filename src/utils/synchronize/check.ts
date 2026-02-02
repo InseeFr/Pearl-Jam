@@ -3,11 +3,12 @@ import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 import { postMailMessage } from 'api/pearl';
 import D from 'i18n';
 import { NotificationState } from 'types/pearl';
-import { Notification, SyncReport } from 'utils/indexeddb/idb-config';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
+import { SyncReport } from 'utils/indexeddb/model/syncReport';
+import type { Notification } from '../../types/pearl';
 
 export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) => {
   if (pearlSuccess && queenSuccess) {

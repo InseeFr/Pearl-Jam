@@ -1,5 +1,5 @@
+import { SyncReport } from '../model/syncReport';
 import AbstractIdbService from './abstract-idb-service';
-import { type SyncReport } from '../idb-config';
 
 class SyncReportIdbService extends AbstractIdbService<SyncReport> {
   constructor() {
