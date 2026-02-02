@@ -31,8 +31,6 @@ const convertDeprecatedContactOutcomeType = (contactOutcomeType: string) => {
   return newContactOutcomeType;
 };
 
-export type { User, SyncReport, Notification, SurveyUnitMissing, SurveyUnit };
-
 db.version(1).stores(schema);
 // upgrade dataBase (please see https://dexie.org/docs/Tutorial/Design#database-versioning)
 db.version(2)

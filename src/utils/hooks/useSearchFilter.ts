@@ -132,7 +132,8 @@ export function filterSurveyUnits(surveyUnits: SurveyUnit[], criteria: SearchCri
       return false;
     }
 
-    if (criteria.states.length > 0 && !criteria.states.includes(getSuTodoState(surveyUnit).order)) {
+    const suState = getSuTodoState(surveyUnit);
+    if (suState && criteria.states.length > 0 && !criteria.states.includes(suState.order)) {
       return false;
     }
 
@@ -155,7 +156,7 @@ export function filterSurveyUnits(surveyUnits: SurveyUnit[], criteria: SearchCri
     if (criteria.search) {
       const person = getprivilegedPerson(surveyUnit);
       const searchString = normalize(
-        `${person.firstName} ${person.lastName} ${surveyUnit.id} ${surveyUnit.address.l6} ${surveyUnit.displayName} ${getSuTodoState(surveyUnit).value}`
+        `${person.firstName} ${person.lastName} ${surveyUnit.id} ${surveyUnit.address.l6} ${surveyUnit.displayName} ${suState?.value}`
       );
 
       if (

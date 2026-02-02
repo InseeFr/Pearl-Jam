@@ -41,16 +41,9 @@ const colors = (theme: Theme, color: string) =>
   theme.palette.augmentColor({ color: { main: color } });
 
 const coloredTheme = createTheme({
-  basicTheme,
-  shadows: [
-    'none',
-    '0px 1px 4px 0px rgba(80, 76, 75, 0.80)',
-    '0px 2px 4px 0px rgba(80, 76, 75, 0.25);',
-    ...basicTheme.shadows.slice(3),
-  ],
+  ...basicTheme,
   typography: {
     fontFamily: fontFamily,
-    fontWeight: 600,
     button: {
       fontSize: '.875rem',
       lineHeight: '1.125rem',

@@ -67,7 +67,7 @@ describe('Utils tests', () => {
   });
 
   it('should format survey unit', async () => {
-    const surveyUnit = createSurveyUnit() as SurveyUnit;
+    const surveyUnit = createSurveyUnit();
 
     const formatted = formatSurveyUnitForPut(surveyUnit);
     const expected: Partial<SurveyUnit> = {
@@ -141,6 +141,9 @@ describe('Utils tests', () => {
           type: 'APS',
         },
       ],
+      collectNextContacts: false,
+      nextContactHistory: undefined,
+      previousContactHistory: undefined,
     };
     expect(formatted).toEqual(expected);
   });

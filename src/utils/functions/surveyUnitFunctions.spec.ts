@@ -14,9 +14,11 @@ import { afterAll, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
 import { contactAttempts } from './contacts/ContactAttempt';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { createStateIdsAndCommunicationRequestIds } from './surveyUnitFunctions';
-import { SurveyUnit, SurveyUnitState } from 'types/pearl';
+import { SurveyUnit, SurveyUnitContactAttempt, SurveyUnitState } from 'types/pearl';
+import { createSurveyUnit } from 'utils/testing/createFakeData';
 
 const mockedEmptySu = {} as unknown as SurveyUnit;
+const mockedSu = createSurveyUnit();
 
 describe('getAge', () => {
   it('should return undefined for an empty or invalid birthdate', () => {
@@ -42,20 +44,20 @@ describe('getAge', () => {
 });
 
 describe('getCommentByType', () => {
-  const noCommentsSu = {} as SurveyUnit;
-  const emptyCommentsSu = { comments: [] } as unknown as SurveyUnit;
-  const mockedSu = { comments: [] } as unknown as SurveyUnit;
+  const noCommentsFieldSu = mockedEmptySu;
+  const emptyCommentsSu = { ...mockedEmptySu, comments: [] };
+  const mockedSuNoComment = { ...mockedSu, comments: [] };
   const interviewercomment = { type: 'INTERVIEWER', value: 'Beware of the dog!' };
   const managementComment = { type: 'MANAGEMENT', value: 'Use email first' };
   it('should return empty string if su has no comments attribute with same value', () => {
-    expect(getCommentByType('INTERVIEWER', noCommentsSu)).toEqual('');
+    expect(getCommentByType('INTERVIEWER', noCommentsFieldSu)).toEqual('');
     expect(getCommentByType('INTERVIEWER', emptyCommentsSu)).toEqual('');
-    expect(getCommentByType('INTERVIEWER', { ...mockedSu, comments: [managementComment] })).toEqual(
-      ''
-    );
-    expect(getCommentByType('MANAGEMENT', { ...mockedSu, comments: [interviewercomment] })).toEqual(
-      ''
-    );
+    expect(
+      getCommentByType('INTERVIEWER', { ...mockedSuNoComment, comments: [managementComment] })
+    ).toEqual('');
+    expect(
+      getCommentByType('MANAGEMENT', { ...mockedSuNoComment, comments: [interviewercomment] })
+    ).toEqual('');
   });
   it('should return comment value of matching value comment', () => {
     expect(
@@ -100,7 +102,7 @@ describe('getLastState', () => {
 
 describe('getContactAttemptNumber', () => {
   it('should return 0 contacts attempts if no contactAttempts in states', async () => {
-    const surveyUnit = { states: [] } as unknown as SurveyUnit;
+    const surveyUnit = { ...mockedSu, states: [] };
     const statesWithNoContactAttempt = {
       id: 1,
       type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
@@ -123,11 +125,10 @@ describe('getContactAttemptNumber', () => {
       { type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type, date: 1616070963000 },
       { type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type, date: 1616070963000 },
     ];
-    const surveyUnit = {} as SurveyUnit;
-    expect(getContactAttemptNumber({ ...surveyUnit, states: statesWithOneContactAttempt })).toEqual(
+    expect(getContactAttemptNumber({ ...mockedSu, states: statesWithOneContactAttempt })).toEqual(
       1
     );
-    expect(getContactAttemptNumber({ ...surveyUnit, states: statesWithTwoContactAttempt })).toEqual(
+    expect(getContactAttemptNumber({ ...mockedSu, states: statesWithTwoContactAttempt })).toEqual(
       3
     );
   });
@@ -149,13 +150,16 @@ describe('updateStateWithDates', () => {
   it('should return initial states if SU lastState is VNC and currentDate < identificationPhaseStart', () => {
     const surveyUnit = {
       ...mockedEmptySu,
-      states: [surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE],
+      states: [{ type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent }],
       identificationPhaseStartDate: afterCurrent,
     };
-    expect(updateStateWithDates(surveyUnit)).toEqual([surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE]);
+    expect(updateStateWithDates(surveyUnit)).toEqual([
+      { type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent },
+    ]);
   });
   it('should return 1 if SU is VNC and currentDate > identificationPhaseStart', () => {
     const surveyUnit = {
+      ...mockedSu,
       states: [{ type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent }],
       identificationPhaseStartDate: beforeCurrent,
     };
@@ -175,11 +179,14 @@ describe('isSelectable', () => {
     vi.useRealTimers();
   });
   it('should return false if date not in range', () => {
+    const su = createSurveyUnit();
     const surveyUnitBefore = {
+      ...su,
       identificationPhaseStartDate: new Date(2021, 1, 1).getTime(),
       endDate: new Date(2021, 1, 31).getTime(),
     };
     const surveyUnitAfter = {
+      ...su,
       identificationPhaseStartDate: new Date(2021, 3, 1).getTime(),
       endDate: new Date(2021, 3, 31).getTime(),
     };
@@ -188,6 +195,7 @@ describe('isSelectable', () => {
   });
   it('should return true if date in range', () => {
     const surveyUnitInRange = {
+      ...mockedSu,
       identificationPhaseStartDate: new Date(2021, 2, 1).getTime(),
       endDate: new Date(2021, 3, 31).getTime(),
     };
@@ -203,14 +211,17 @@ describe('isQuestionnaireAvailable', () => {
     vi.useRealTimers();
   });
   const suInRange = {
+    ...mockedSu,
     collectionStartDate: new Date(2021, 2, 1).getTime(),
     collectionEndDate: new Date(2021, 3, 1).getTime(),
   };
   const suBefore = {
+    ...mockedSu,
     collectionStartDate: new Date(2021, 1, 1).getTime(),
     collectionEndDate: new Date(2021, 2, 1).getTime(),
   };
   const suAfter = {
+    ...mockedSu,
     collectionStartDate: new Date(2021, 3, 1).getTime(),
     collectionEndDate: new Date(2021, 4, 1).getTime(),
   };
@@ -227,83 +238,56 @@ describe('isQuestionnaireAvailable', () => {
 });
 
 describe('areCasEqual', () => {
+  const suContactAttempt: SurveyUnitContactAttempt = {
+    date: 1000,
+    status: contactAttempts.APPOINTMENT_MADE.value,
+    medium: 'TEL',
+  };
+
+  const suContactAttempt2: SurveyUnitContactAttempt = {
+    date: 2000,
+    status: contactAttempts.APPOINTMENT_MADE.value,
+    medium: 'FIELD',
+  };
+
+  const suContactAttempt3: SurveyUnitContactAttempt = {
+    date: 1000,
+    status: contactAttempts.APPOINTMENT_MADE.value,
+    medium: 'FIELD',
+  };
   it('should return false if one argument is falsy', () => {
-    expect(areCaEqual(undefined, undefined)).toEqual(false);
-    expect(
-      areCaEqual(undefined, {
-        date: 1600000000000,
-        status: contactAttempts.APPOINTMENT_MADE.value,
-      })
-    ).toEqual(false);
-    expect(
-      areCaEqual(
-        {
-          date: 1600000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        },
-        undefined
-      )
-    ).toEqual(false);
+    expect(areCaEqual()).toEqual(false);
+    expect(areCaEqual(undefined, suContactAttempt)).toEqual(false);
+    expect(areCaEqual(suContactAttempt)).toEqual(false);
   });
   it('should return false if at least one attribute is different', () => {
-    expect(
-      areCaEqual(
-        {
-          date: 1600000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        },
-        {
-          date: 161000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        }
-      )
-    ).toEqual(false);
-    expect(
-      areCaEqual(
-        {
-          date: 1600000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        },
-        {
-          date: 160000000000,
-          status: contactAttempts.INTERVIEW_ACCEPTED.value,
-        }
-      )
-    ).toEqual(false);
+    expect(areCaEqual(suContactAttempt2, suContactAttempt3)).toEqual(false);
+    expect(areCaEqual(suContactAttempt, suContactAttempt2)).toEqual(false);
   });
   it('should return true if date and status are equal', () => {
-    expect(
-      areCaEqual(
-        {
-          date: 1600000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        },
-        {
-          date: 1600000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        }
-      )
-    ).toEqual(true);
+    expect(areCaEqual(suContactAttempt3, suContactAttempt)).toEqual(true);
   });
 });
 
 describe('lastContactAttemptIsSuccessfull', () => {
   it('should return false if no contactAttempts', () => {
-    expect(lastContactAttemptIsSuccessfull({ contactAttempts: [] })).toEqual(false);
+    expect(lastContactAttemptIsSuccessfull({ ...mockedSu, contactAttempts: [] })).toEqual(false);
   });
   it('should return false if cas contains no successfull ca', () => {
     expect(
       lastContactAttemptIsSuccessfull({
-        contactAttempts: [{ date: 1, status: contactAttempts.NO_CONTACT.value }],
+        ...mockedSu,
+        contactAttempts: [{ date: 1, status: contactAttempts.NO_CONTACT.value, medium: 'TEL' }],
       })
     ).toEqual(false);
   });
   it('should return false if successfull ca is not last ca', () => {
     expect(
       lastContactAttemptIsSuccessfull({
+        ...mockedSu,
         contactAttempts: [
-          { date: 1, status: contactAttempts.INTERVIEW_ACCEPTED.value },
-          { date: 2, status: contactAttempts.NO_CONTACT.value },
+          { date: 1, status: contactAttempts.INTERVIEW_ACCEPTED.value, medium: 'TEL' },
+          { date: 2, status: contactAttempts.NO_CONTACT.value, medium: 'TEL' },
         ],
       })
     ).toEqual(false);
@@ -311,9 +295,10 @@ describe('lastContactAttemptIsSuccessfull', () => {
   it('should return true if last ca is successfull', () => {
     expect(
       lastContactAttemptIsSuccessfull({
+        ...mockedSu,
         contactAttempts: [
-          { date: 1, status: contactAttempts.NO_CONTACT.value },
-          { date: 2, status: contactAttempts.INTERVIEW_ACCEPTED.value },
+          { date: 1, status: contactAttempts.NO_CONTACT.value, medium: 'TEL' },
+          { date: 2, status: contactAttempts.INTERVIEW_ACCEPTED.value, medium: 'TEL' },
         ],
       })
     ).toEqual(true);
@@ -329,15 +314,23 @@ describe('createStateIdsAndCommunicationRequestIds', () => {
   }));
 
   it('should fetch the previous survey unit and persist the updated data', async () => {
-    const latestSurveyUnit = {
+    const latestSurveyUnit: SurveyUnit = {
+      ...mockedSu,
       id: '123',
-      states: ['state1', 'state2'],
-      communicationRequests: ['request1', 'request2'],
+      states: [
+        { date: 1600000000000, type: 'AOC' },
+        { date: 1610000000000, type: 'APS' },
+      ],
+      communicationRequests: [
+        { emitter: 'INTERVIEWER', status: [] },
+        { emitter: 'INTERVIEWER', status: [] },
+      ],
     };
-    const previousSurveyUnit = {
+    const previousSurveyUnit: SurveyUnit = {
+      ...mockedSu,
       id: '123',
-      states: ['oldState'],
-      communicationRequests: ['oldRequest'],
+      states: [{ date: 1590000000000, type: 'VIN' }],
+      communicationRequests: [{ emitter: 'INTERVIEWER', status: [] }],
     };
 
     (surveyUnitIDBService.getById as Mock).mockResolvedValue(previousSurveyUnit);

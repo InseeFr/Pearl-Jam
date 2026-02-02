@@ -1,6 +1,6 @@
 import { differenceInYears } from 'date-fns';
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST, TITLES } from 'utils/constants';
-import { StateValues, SurveyUnitStateEnum, surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { StateValues, surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { convertSUStateInToDo } from 'utils/functions/convertSUStateInToDo';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import D from 'i18n';
@@ -70,7 +70,7 @@ export const getSortedContactAttempts = (surveyUnit: SurveyUnit) => {
   return [...(surveyUnit?.contactAttempts ?? [])].sort((a, b) => b.date - a.date);
 };
 
-export const areCaEqual = (ca: SurveyUnitContactAttempt, anotherCa: SurveyUnitContactAttempt) => {
+export const areCaEqual = (ca?: SurveyUnitContactAttempt, anotherCa?: SurveyUnitContactAttempt) => {
   if (!ca || !anotherCa) return false;
   return ca.date === anotherCa.date && ca.status === anotherCa.status;
 };
