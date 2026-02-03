@@ -1,6 +1,6 @@
 import D from 'i18n';
 
-export const specificContactOutcomes = {
+export const deprecatedContactOutcomes = {
   DECEASED: { value: 'DCD', label: '' },
   DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON: { value: 'DUU', label: '' },
   NO_LONGER_USED_FOR_HABITATION: { value: 'NUH', label: `${D.noLongerUsedForHabitation}` },
@@ -29,21 +29,22 @@ export const contactOutcomes = {
 
 export type ContactOutcomeValue =
   | (typeof contactOutcomes)[keyof typeof contactOutcomes]['value']
-  | (typeof specificContactOutcomes)[keyof typeof specificContactOutcomes]['value'];
+  | (typeof deprecatedContactOutcomes)[keyof typeof deprecatedContactOutcomes]['value'];
 
 export const findContactOutcomeLabelByValue = (value?: ContactOutcomeValue) =>
   Object.values(contactOutcomes).find(co => co.value === value)?.label;
 
-export const findOldContactOutcomeByValue = (value?: ContactOutcomeValue) => {
-  const key = Object.keys(specificContactOutcomes)
+export const findDeprecatedContactOutcomeByValue = (value?: ContactOutcomeValue) => {
+  const key = Object.keys(deprecatedContactOutcomes)
     .find(
-      key => specificContactOutcomes[key as keyof typeof specificContactOutcomes].value === value
+      key =>
+        deprecatedContactOutcomes[key as keyof typeof deprecatedContactOutcomes].value === value
     )
-    ?.toString() as keyof typeof specificContactOutcomes;
+    ?.toString() as keyof typeof deprecatedContactOutcomes;
 
-  if (Object.keys(commonContactOutcomes).includes(key)) return {};
+  if (!key || Object.keys(commonContactOutcomes).includes(key)) return {};
 
-  return { [key]: specificContactOutcomes[key] };
+  return { [key]: deprecatedContactOutcomes[key] };
 };
 
 export type ContactOutcomeConfiguration = 'TEL' | 'F2F';
@@ -72,14 +73,14 @@ export const getContactOutcomeByConfiguration = (
   if (configuration === 'TEL') {
     newContactOutcomes = {
       ...newContactOutcomes,
-      NO_LONGER_USED_FOR_HABITATION: specificContactOutcomes.NO_LONGER_USED_FOR_HABITATION,
+      NO_LONGER_USED_FOR_HABITATION: deprecatedContactOutcomes.NO_LONGER_USED_FOR_HABITATION,
     };
   }
-  const selectedOutcome = findOldContactOutcomeByValue(selectedOutcomeValue);
+  const selectedOutcome = findDeprecatedContactOutcomeByValue(selectedOutcomeValue);
   if (configuration === 'TEL' || configuration === 'F2F')
     return {
       ...newContactOutcomes,
       ...selectedOutcome,
-    } as Record<string, ContactOutcome>;
+    };
   return {};
 };

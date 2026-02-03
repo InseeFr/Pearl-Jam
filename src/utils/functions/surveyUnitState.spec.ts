@@ -276,7 +276,7 @@ describe('addNewState', () => {
 
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBeGreaterThanOrEqual(initialLength);
-      expect(result[result.length - 1].type).toBeDefined();
+      expect(result?.at(-1)?.type).toBeDefined();
     });
   });
 
