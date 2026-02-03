@@ -7,11 +7,9 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
-import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { clientsClaim } from 'workbox-core';
 import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
-import { CacheFirst, NetworkFirst } from 'workbox-strategies';
 
 globalThis._DRAMAQUEEN_URL = new URL(location).searchParams.get('QUEEN_URL');
 
@@ -49,53 +47,6 @@ registerRoute(
   },
   createHandlerBoundToURL(`/index.html`)
 );
-
-const getUrlRegexJson = function (url) {
-  return url.replace('http', '^http').concat('/(.*)(.json)');
-};
-
-const getUrlRegexManifestFiles = function (url) {
-  return url.replace('http', '^http').concat('/(.*)((.ico)|(.png))');
-};
-
-const configurationCacheName = 'configuration-cache';
-const manifestImageCacheName = 'manifest-cache';
-
-registerRoute(
-  new RegExp(getUrlRegexJson(globalThis.location.origin)),
-  new NetworkFirst({
-    cacheName: configurationCacheName,
-    plugins: [
-      new CacheableResponsePlugin({
-        statuses: [0, 200],
-      }),
-    ],
-  })
-);
-registerRoute(
-  new RegExp(getUrlRegexManifestFiles(globalThis.location.origin)),
-  new CacheFirst({
-    cacheName: manifestImageCacheName,
-    plugins: [
-      new CacheableResponsePlugin({
-        statuses: [0, 200],
-      }),
-    ],
-  })
-);
-
-const cacheConfiguration = async () => {
-  const manifest = await fetch('/manifest.json');
-  const { icons } = await manifest.json();
-  const urlsToPrecache = [`/manifest.json`].concat(icons.map(({ src }) => src));
-  const cache = await globalThis.caches.open(configurationCacheName);
-  await cache.addAll(urlsToPrecache);
-};
-
-globalThis.addEventListener('install', event => {
-  console.log('Pearl  sw : installing configuration..');
-  event.waitUntil(cacheConfiguration());
-});
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
