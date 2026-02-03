@@ -147,6 +147,7 @@ function PersonInfo({
           .filter(p => p.source === 'INTERVIEWER')
           .map((phoneNumber, k) => (
             <PhoneLine
+              key={phoneNumber.id}
               baseId={`source-interviewer-${k}`}
               onFavorite={handleFavPhoneNumber}
               label={D.interviewerSource}

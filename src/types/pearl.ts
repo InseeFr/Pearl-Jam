@@ -1,3 +1,4 @@
+import { CommunicationStatus } from 'utils/enum/CommunicationEnums';
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
@@ -106,7 +107,7 @@ export type SurveyUnitCommunicationRequest = {
   emitter: 'INTERVIEWER' | 'TOOL';
   communicationTemplateId?: string;
   reason?: string;
-  status: { date: number; status: string }[];
+  status: { date: number; status: CommunicationStatus }[];
 };
 
 export type SurveyUnitCommunicationTemplate = {

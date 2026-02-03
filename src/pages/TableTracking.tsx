@@ -124,6 +124,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
     });
 
   const defaultSortIcon = <IconAsc />;
+  const sortAsc = sortConfig.direction === 'asc' ? <IconAsc /> : <IconDesc />;
 
   return (
     <TableContainer sx={{ maxHeight: maxHeight }}>
@@ -136,15 +137,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                   {D.trackingUnit}
                 </Box>
                 <Box component="span" onClick={() => toggleSort('unit')} sx={{ cursor: 'pointer' }}>
-                  {sortConfig.key === 'unit' ? (
-                    sortConfig.direction === 'asc' ? (
-                      <IconAsc />
-                    ) : (
-                      <IconDesc />
-                    )
-                  ) : (
-                    defaultSortIcon
-                  )}
+                  {sortConfig.key === 'unit' ? sortAsc : defaultSortIcon}
                 </Box>
               </Box>
             </TableCell>
@@ -158,15 +151,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                   onClick={() => toggleSort('lastName')}
                   sx={{ cursor: 'pointer' }}
                 >
-                  {sortConfig.key === 'lastName' ? (
-                    sortConfig.direction === 'asc' ? (
-                      <IconAsc />
-                    ) : (
-                      <IconDesc />
-                    )
-                  ) : (
-                    <IconAsc />
-                  )}
+                  {sortConfig.key === 'lastName' ? sortAsc : <IconAsc />}
                 </Box>
               </Box>
             </TableCell>
@@ -180,15 +165,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                   onClick={() => toggleSort('order')}
                   sx={{ cursor: 'pointer' }}
                 >
-                  {sortConfig.key === 'order' ? (
-                    sortConfig.direction === 'asc' ? (
-                      <IconAsc />
-                    ) : (
-                      <IconDesc />
-                    )
-                  ) : (
-                    <IconAsc />
-                  )}
+                  {sortConfig.key === 'order' ? sortAsc : <IconAsc />}
                 </Box>
               </Box>
             </TableCell>
@@ -204,15 +181,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                   onClick={() => toggleSort('outcome')}
                   sx={{ cursor: 'pointer' }}
                 >
-                  {sortConfig.key === 'outcome' ? (
-                    sortConfig.direction === 'asc' ? (
-                      <IconAsc />
-                    ) : (
-                      <IconDesc />
-                    )
-                  ) : (
-                    <IconAsc />
-                  )}
+                  {sortConfig.key === 'outcome' ? sortAsc : <IconAsc />}
                 </Box>
               </Box>
             </TableCell>
