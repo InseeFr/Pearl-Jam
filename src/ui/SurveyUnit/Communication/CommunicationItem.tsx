@@ -33,24 +33,25 @@ export function CommunicationItem({
     communication.emitter.toUpperCase() === 'INTERVIEWER' ? DirectionsWalkIcon : BuildIcon;
   const sortedStatus = [...communication.status].sort((s1, s2) => s1.date - s2.date);
   const firstStatus = sortedStatus[0];
-  const lastStatus = sortedStatus[sortedStatus.length - 1];
-  const statusIcon = HEALTHY_COMMUNICATION_REQUEST_STATUS.includes(lastStatus.status) ? (
-    <CheckIcon color="success" />
-  ) : (
-    <ClearIcon color="error" />
-  );
+  const lastStatus = sortedStatus.at(-1);
+  const statusIcon =
+    lastStatus && HEALTHY_COMMUNICATION_REQUEST_STATUS.includes(lastStatus.status) ? (
+      <CheckIcon color="success" />
+    ) : (
+      <ClearIcon color="error" />
+    );
 
   if (surveyUnitCommunicationTemplate === undefined) return;
 
   const mediumLabel = findCommunicationMediumLabelByValue(surveyUnitCommunicationTemplate.medium);
   const typeLabel = findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type);
   const reasonLabel =
-    surveyUnitCommunicationTemplate.type !== communicationTypeEnum.COMMUNICATION_NOTICE.value
-      ? `, ${findCommunicationReasonLabelByValue(communication.reason)}`
-      : '';
+    surveyUnitCommunicationTemplate.type === communicationTypeEnum.COMMUNICATION_NOTICE.value
+      ? ''
+      : `, ${findCommunicationReasonLabelByValue(communication.reason)}`;
 
-  const lastStatusLabel = findCommunicationStatusLabelByValue(lastStatus.status);
-  const formattedDate = formatDate(lastStatus.date);
+  const lastStatusLabel = findCommunicationStatusLabelByValue(lastStatus?.status);
+  const formattedDate = formatDate(lastStatus?.date);
 
   return (
     <Row

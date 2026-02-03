@@ -75,7 +75,7 @@ export function ContactsCard({ surveyUnit }: Readonly<ContactsCardProps>) {
               {showDivider && <Divider />}
               <Stack gap={2} width={1} alignItems="stretch">
                 {contactAttempts
-                  .sort((a, b) => b.date - a.date)
+                  .toSorted((a, b) => b.date - a.date)
                   .map(attempt => (
                     <ContactAttemptDisplay
                       attempt={attempt}
