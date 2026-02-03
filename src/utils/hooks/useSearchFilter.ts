@@ -1,10 +1,11 @@
 import { effect, signal } from '@maverick-js/signals';
 import { SurveyUnit } from 'types/pearl';
 import { toDoEnum } from '../enum/SUToDoEnum';
-import { daysLeftForSurveyUnit, getprivilegedPerson, getSuTodoState } from '../functions';
+import { daysLeftForSurveyUnit, getprivilegedPerson } from '../functions';
 import { toggleItem } from '../functions/array';
 import { normalize } from '../functions/string';
 import { useSignalValue } from './useSignalValue';
+import { getSuTodoState } from 'utils/functions/surveyUnitState';
 
 type SearchCriteria = {
   sortField:

@@ -12,9 +12,7 @@ import { PrivilegedPerson } from './PrivilegedPerson';
 import Chip from '@mui/material/Chip';
 import { Typography } from '../Typography';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
-import { getLastState, getSuTodoState } from '../../utils/functions';
 import Button from '@mui/material/Button';
-import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
 import { Popover, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import FiberManualRecordOutlinedIcon from '@mui/icons-material/FiberManualRecordOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -26,6 +24,7 @@ import { SurveyUnit } from 'types/pearl';
 import { SubmitButton } from './SubmitButton';
 import CheckIcon from '@mui/icons-material/Check';
 import { validateTransmission } from 'utils/functions/identifications/identificationFunctions';
+import { getSuTodoState } from 'utils/functions/surveyUnitState';
 
 const useStyles = makeStyles({
   rotateBox: {

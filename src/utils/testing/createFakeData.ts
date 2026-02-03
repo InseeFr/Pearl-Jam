@@ -1,7 +1,7 @@
 import { SurveyUnit } from 'types/pearl';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 
-export const createSurveyUnit = (): SurveyUnit => {
+export const createSurveyUnit = (su?: Partial<SurveyUnit>): SurveyUnit => {
   return {
     displayName: 'John Doe Household',
     id: 'SU12345',

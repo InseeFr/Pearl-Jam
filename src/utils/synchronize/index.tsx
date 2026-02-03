@@ -1,9 +1,5 @@
 import { useCallback, useState } from 'react';
-import {
-  createStateIdsAndCommunicationRequestIds,
-  getLastState,
-  getSuTodoState,
-} from 'utils/functions';
+import { createStateIdsAndCommunicationRequestIds } from 'utils/functions';
 
 import {
   getInterviewer,
@@ -23,8 +19,8 @@ import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-se
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import userIdbService from 'utils/indexeddb/services/user-idb-service';
 import { AxiosError } from 'axios';
-import { UnionType } from 'typescript';
 import { User } from 'utils/indexeddb/model/user';
+import { getSuTodoState, getLastState } from 'utils/functions/surveyUnitState';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;

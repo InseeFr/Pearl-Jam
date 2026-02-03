@@ -1,11 +1,10 @@
-import { addNewState } from 'utils/functions/surveyUnitFunctions';
+import { addNewState } from 'utils/functions/surveyUnitState';
 import questionnaireEnum, { QuestionnaireStateType } from 'utils/enum/QuestionnaireStateEnum';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
-import { StateValues, surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useEffect } from 'react';
 import { persistSurveyUnit } from '../functions';
 import { ID } from 'utils/indexeddb/services/abstract-idb-service';
-import { SurveyUnitState } from 'types/pearl';
 
 const computeSurveyUnitState = (questionnaireState: QuestionnaireStateType) => {
   switch (questionnaireState) {

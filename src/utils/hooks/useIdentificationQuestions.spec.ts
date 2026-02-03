@@ -12,7 +12,8 @@ import {
 } from 'utils/functions/identifications/identificationFunctions';
 import { optionsMap } from 'utils/functions/identifications/questionsTree/optionsMap';
 import D from 'i18n';
-import * as utilsFunctions from 'utils/functions';
+import * as surveyUnitUtils from 'utils/functions';
+import * as surveyUnitState from 'utils/functions/surveyUnitState';
 
 vi.mock('utils/functions', { spy: true });
 
@@ -292,7 +293,7 @@ const identificationQuestionsHookSetReponseTests = [
 ];
 
 identificationQuestionsHookTests.forEach(({ surveyUnitInput, output }) => {
-  it(`Initilization for useIdentificationQuestions should return ${output} when adding ${surveyUnitInput}`, () => {
+  it(`Initilization for useIdentificationQuestions should return ${JSON.stringify(output)} when adding ${JSON.stringify(surveyUnitInput)}`, () => {
     const { result, rerender } = renderHook(() => useIdentificationQuestions(surveyUnitInput));
 
     act(() => {
@@ -311,11 +312,11 @@ identificationQuestionsHookTests.forEach(({ surveyUnitInput, output }) => {
 
 identificationQuestionsHookSetReponseTests.forEach(
   ({ surveyUnitInput, setResponseCallParameters, output }) => {
-    it(`SetResponse for useIdentificationQuestions should return ${output} when adding ${surveyUnitInput} and calling ${setResponseCallParameters}`, () => {
+    it(`SetResponse for useIdentificationQuestions should return ${JSON.stringify(output)} when adding ${JSON.stringify(surveyUnitInput)} and calling ${JSON.stringify(setResponseCallParameters)}`, () => {
       const { result } = renderHook(() => useIdentificationQuestions(surveyUnitInput));
 
-      const spyPersistSurveyUnit = vi.spyOn(utilsFunctions, 'persistSurveyUnit');
-      const addNewState = vi.spyOn(utilsFunctions, 'addNewState');
+      const spyPersistSurveyUnit = vi.spyOn(surveyUnitUtils, 'persistSurveyUnit');
+      const spyAddNewState = vi.spyOn(surveyUnitState, 'addNewState');
 
       act(() => {
         if (setResponseCallParameters)
@@ -326,7 +327,7 @@ identificationQuestionsHookSetReponseTests.forEach(
       });
 
       if (output.persistSurveyUnitIdentificationCall) expect(spyPersistSurveyUnit).toBeCalled();
-      if (output.addNewStateCall) expect(addNewState).toBeCalled();
+      if (output.addNewStateCall) expect(spyAddNewState).toBeCalled();
 
       expect(result.current.availableQuestions).toStrictEqual(output.availability);
       expect(result.current.responses).toMatchObject(output.responses);
