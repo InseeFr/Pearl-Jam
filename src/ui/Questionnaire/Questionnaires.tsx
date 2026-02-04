@@ -176,7 +176,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 
   const openQuestionnaire = () => {
     if (!isWebQuestionnaire) {
-      navigate(`/queen/survey-unit/${id}`);
+      navigate(`/queen/interrogation/${id}`);
     }
     setIsModalOpen(true);
   };
@@ -191,7 +191,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
       ...surveyUnit,
       priority: true,
     });
-    navigate(`/queen/survey-unit/${id}/synchronize`);
+    navigate(`/queen/interrogation/${id}/synchronize`);
   };
 
   return (
