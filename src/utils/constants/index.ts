@@ -1,6 +1,7 @@
 import {
   communicationMediumEnum,
   communicationReasonEnum,
+  CommunicationStatus,
   communicationStatusEnum,
   communicationTypeEnum,
 } from 'utils/enum/CommunicationEnums';
@@ -35,7 +36,7 @@ export const CONTACT_RELATED_STATES: Partial<StateValues>[] = [
 
 export const CONTACT_SUCCESS_LIST: ContactAttemptValue[] = ['INA', 'APT'];
 
-export const HEALTHY_COMMUNICATION_REQUEST_STATUS = [
+export const HEALTHY_COMMUNICATION_REQUEST_STATUS: Partial<CommunicationStatus>[] = [
   communicationStatusEnum.INITIATED.value,
   communicationStatusEnum.READY.value,
   communicationStatusEnum.SUBMITTED.value,
