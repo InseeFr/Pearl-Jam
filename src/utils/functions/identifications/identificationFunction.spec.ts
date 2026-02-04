@@ -646,7 +646,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
     },
     output: true,
   },
-].map(({ input, output }) =>
+].forEach(({ input, output }) =>
   it(`isValidIdentification should return ${output} when comparing ${input.rule?.value} with ${JSON.stringify(input.identification)}`, () => {
     const result = isValidIdentification(input.rule, input.identification);
     expect(result).toBe(output);

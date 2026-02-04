@@ -57,7 +57,7 @@ const handleQueenEvent = (redirect: (url: string) => void) => async (event: Quee
         closeQueen(redirect)(other.interrogationId);
         break;
       case 'UPDATE_STATE':
-        await updateSurveyUnit(other.interrogationId, other.state);
+        updateSurveyUnit(other.interrogationId, other.state);
         globalThis.dispatchEvent(new CustomEvent('pearl-update'));
         break;
       case 'UPDATE_SYNCHRONIZE':
