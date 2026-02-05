@@ -107,7 +107,7 @@ export const createSurveyUnit = (su?: Partial<SurveyUnit>): SurveyUnit => {
         status: [
           {
             date: 1700000000000,
-            status: 'SENT',
+            status: 'SUBMITTED',
           },
         ],
       },

@@ -41,8 +41,6 @@ export const getTokenInfo = () => {
   const lastName = tokenParsed?.family_name || '';
   const firstName = tokenParsed?.given_name || '';
   const id = tokenParsed?.preferred_username || '';
-  const roles =
-    (kc && kc.tokenParsed && kc.tokenParsed.realm_access && kc.tokenParsed.realm_access.roles) ||
-    [];
+  const roles = kc?.tokenParsed?.realm_access?.roles || [];
   return { id, lastName, firstName, roles };
 };
