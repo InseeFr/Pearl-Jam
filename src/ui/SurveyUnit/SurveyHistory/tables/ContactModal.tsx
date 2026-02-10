@@ -37,10 +37,10 @@ export function ContactModal({
   } = useForm({
     resolver: zodResolver(contactSchema),
     mode: 'onSubmit',
-    defaultValues: {
+    values: {
       title: contact?.title ?? 'MISTER',
-      firstName: contact?.firstName,
-      lastName: contact?.lastName,
+      firstName: contact?.firstName || '',
+      lastName: contact?.lastName || '',
       phoneNumber: contact?.phoneNumber,
       email: contact?.email,
       preferredContact: contact?.preferredContact || isFirst ? 'true' : 'false',
@@ -49,19 +49,6 @@ export function ContactModal({
   });
 
   const [preferedContactModal, setPreferedContactModal] = useState(false);
-
-  useEffect(() => {
-    if (contact) {
-      reset({
-        title: contact.title,
-        lastName: contact.lastName || '',
-        firstName: contact.firstName || '',
-        phoneNumber: contact.phoneNumber || '',
-        email: contact.email || '',
-        preferredContact: contact?.preferredContact ? 'true' : 'false',
-      });
-    }
-  }, [contact, reset]);
 
   const checkPreferedContactValidity = () => {
     if (preferedContact && preferedContact !== contact) {
@@ -147,7 +134,7 @@ export function ContactModal({
                 label={D.shouldBeEmail}
                 control={control}
                 type="radios"
-                defaultValue={isFirst ? 'true' : 'false'}
+                defaultValue={isFirst ? 'true' : undefined}
                 {...register('preferredContact', { onChange: checkPreferedContactValidity })}
                 options={[
                   { label: D.yes, value: 'true' },

@@ -87,6 +87,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         lastName: person.lastName,
         title: person.title,
         email: person.email,
+        preferredContact: person.privileged,
         phoneNumber: selectedPhoneNumber.requiresUserSelection
           ? undefined
           : selectedPhoneNumber.phoneNumber,
@@ -286,7 +287,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         preferedContact={preferredContact}
         onClose={() => setAddModalOpen(false)}
         onConfirm={handleAdd}
-        isFirst={!nextContacts?.length}
+        isFirst={nextContacts?.length === 0}
       />
       <PhoneNumberImportAlert
         open={phoneNumberModal}

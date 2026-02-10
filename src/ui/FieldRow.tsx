@@ -145,7 +145,8 @@ export function ControlledField({
   if (type === 'radios') {
     return (
       <RadioGroup
-        value={field.value}
+        value={defaultValue ? undefined : field.value}
+        defaultValue={defaultValue}
         onChange={e => {
           field.onChange(e.target.value);
           onChange?.();
