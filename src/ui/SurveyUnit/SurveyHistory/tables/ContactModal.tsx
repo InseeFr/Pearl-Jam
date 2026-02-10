@@ -5,7 +5,7 @@ import { NextContactHistoryPerson } from 'types/pearl';
 import { FieldRow } from 'ui/FieldRow';
 import D from 'i18n';
 import { ContactFormData, contactSchema } from 'utils/schemas/nextContactSchema';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ExistingPreferedContactModal } from './ExistingPreferedContactModal';
 
 type ModifyContactModalProps = {
