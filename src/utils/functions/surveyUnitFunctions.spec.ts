@@ -11,9 +11,10 @@ import {
 import { afterAll, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
 import { contactAttempts } from './contacts/ContactAttempt';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
-import { createStateIdsAndCommunicationRequestIds } from './surveyUnitFunctions';
+import { createStateIdsAndCommunicationRequestIds, getTitle } from './surveyUnitFunctions';
 import { SurveyUnit, SurveyUnitContactAttempt, SurveyUnitState } from 'types/pearl';
 import { createSurveyUnit } from 'utils/testing/createFakeData';
+import { TITLES } from 'utils/constants';
 
 const mockedEmptySu = {} as unknown as SurveyUnit;
 const mockedSu = createSurveyUnit();
@@ -279,5 +280,12 @@ describe('createStateIdsAndCommunicationRequestIds', () => {
       states: latestSurveyUnit.states,
       communicationRequests: latestSurveyUnit.communicationRequests,
     });
+  });
+});
+
+describe('getContactPersonTitle', () => {
+  it('should return empty string if no contact person', () => {
+    expect(getTitle('MISTER')).toEqual(TITLES.MISTER.value);
+    expect(getTitle('MISS')).toEqual(TITLES.MISS.value);
   });
 });

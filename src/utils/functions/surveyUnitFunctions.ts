@@ -158,7 +158,7 @@ export const createStateIdsAndCommunicationRequestIds = async (latestSurveyUnit:
   persistSurveyUnit({ ...previousSurveyUnit, states, communicationRequests });
 };
 
-const toggleFavoritePhoneNumber = (
+export const toggleFavoritePhoneNumber = (
   surveyUnit: SurveyUnit,
   personId: number,
   phoneNumber: SurveyUnitPhoneNumber
