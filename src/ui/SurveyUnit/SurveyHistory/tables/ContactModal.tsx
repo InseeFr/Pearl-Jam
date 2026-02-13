@@ -7,6 +7,7 @@ import D from 'i18n';
 import { ContactFormData, contactSchema } from 'utils/schemas/nextContactSchema';
 import { useState } from 'react';
 import { ExistingPreferedContactModal } from './ExistingPreferedContactModal';
+import { TITLES } from 'utils/constants';
 
 type ModifyContactModalProps = {
   open: boolean;
@@ -38,7 +39,7 @@ export function ContactModal({
     resolver: zodResolver(contactSchema),
     mode: 'onSubmit',
     values: {
-      title: contact?.title ?? 'MISTER',
+      title: contact?.title ?? TITLES.MISTER.type,
       firstName: contact?.firstName || '',
       lastName: contact?.lastName || '',
       phoneNumber: contact?.phoneNumber,
@@ -97,8 +98,8 @@ export function ContactModal({
                 helperText={errors.title?.message}
                 errors={errors}
                 options={[
-                  { label: D.editContactMale, value: 'MISTER' },
-                  { label: D.editContactFemale, value: 'MISS' },
+                  { label: D.editContactMale, value: TITLES.MISTER.type },
+                  { label: D.editContactFemale, value: TITLES.MISS.type },
                 ]}
                 required
                 {...register('title')}

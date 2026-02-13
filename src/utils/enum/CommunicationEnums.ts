@@ -1,9 +1,19 @@
 import D from 'i18n';
+import { SurveyUnitCommunicationTemplate } from 'types/pearl';
 
 // Communication Medium
 export const communicationMediumEnum = {
   MEDIUM_MAIL: { value: 'LETTER', label: `${D.mediumMail}` },
   MEDIUM_EMAIL: { value: 'EMAIL', label: `${D.mediumEmail}` },
+};
+
+export const getCommunicationsLabels = (
+  surveyUnitCommunicationTemplate: SurveyUnitCommunicationTemplate
+) => {
+  const mediumLabel = findCommunicationMediumLabelByValue(surveyUnitCommunicationTemplate.medium);
+  const typeLabel = findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type);
+  const reasonLabel = findCommunicationReasonLabelByValue(surveyUnitCommunicationTemplate.reason);
+  return { mediumLabel, typeLabel, reasonLabel };
 };
 
 export const findCommunicationMediumLabelByValue = (value?: string) =>

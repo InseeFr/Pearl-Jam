@@ -7,10 +7,8 @@ import D from 'i18n';
 import { HEALTHY_COMMUNICATION_REQUEST_STATUS } from '../../../utils/constants';
 import {
   communicationTypeEnum,
-  findCommunicationMediumLabelByValue,
-  findCommunicationReasonLabelByValue,
   findCommunicationStatusLabelByValue,
-  findCommunicationTypeLabelByValue,
+  getCommunicationsLabels,
 } from '../../../utils/enum/CommunicationEnums';
 import { formatDate } from '../../../utils/functions/date';
 import { Row } from '../../Row';
@@ -43,12 +41,16 @@ export function CommunicationItem({
 
   if (surveyUnitCommunicationTemplate === undefined) return;
 
-  const mediumLabel = findCommunicationMediumLabelByValue(surveyUnitCommunicationTemplate.medium);
-  const typeLabel = findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type);
+  const {
+    mediumLabel,
+    typeLabel,
+    reasonLabel: reasonLabelFromCommnunicationTemplate,
+  } = getCommunicationsLabels(surveyUnitCommunicationTemplate);
+
   const reasonLabel =
     surveyUnitCommunicationTemplate.type === communicationTypeEnum.COMMUNICATION_NOTICE.value
       ? ''
-      : `, ${findCommunicationReasonLabelByValue(communication.reason)}`;
+      : `, ${reasonLabelFromCommnunicationTemplate}`;
 
   const lastStatusLabel = findCommunicationStatusLabelByValue(lastStatus?.status);
   const formattedDate = formatDate(lastStatus?.date);

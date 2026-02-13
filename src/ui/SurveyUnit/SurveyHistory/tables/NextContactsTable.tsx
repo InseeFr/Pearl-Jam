@@ -145,10 +145,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     if (nextContacts?.length == 1) return true;
 
     if (selectedContact?.preferredContact) {
-      const preferredContactContactCount =
-        nextContacts?.filter(c => c.preferredContact).length ?? 0;
-
-      return preferredContactContactCount >= 2;
+      return false;
     }
 
     return true;
