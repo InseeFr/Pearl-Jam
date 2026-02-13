@@ -1,11 +1,12 @@
 import { Box, IconButton } from '@mui/material';
+import { SupportedLocales } from 'i18n/build-dictionary';
 import { SurveyUnitContactAttempt } from 'types/pearl';
 import { Row } from 'ui/Row';
 import { formatDate } from 'utils/functions/date';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Typography } from 'ui/Typography';
 import { MediumMessageKey } from 'i18n/mediumMessage';
-import D from 'i18n';
+import { mediumMessage } from 'i18n';
 import { findContactAttemptLabelByValue } from 'utils/functions/contacts/ContactAttempt';
 
 const mediumMapping: Record<string, MediumMessageKey> = {
@@ -22,12 +23,16 @@ export interface ContactAttemptDisplayProps {
 }
 
 function getMediumMessage(medium: MediumMappingKey) {
+  const browserLanguage = navigator.language.split('-')[0] as SupportedLocales;
+
+  const language = ['fr', 'en'].includes(browserLanguage) ? browserLanguage : 'en';
+
   const mediumKey = mediumMapping[medium];
   if (mediumKey) {
-    return D.mediumMessage[mediumKey];
+    return mediumMessage[mediumKey][language];
   }
 
-  return D.mediumMessage.mediumQuestion;
+  return mediumMessage.mediumQuestion[language];
 }
 
 export function ContactAttemptDisplay({ attempt, onDelete }: Readonly<ContactAttemptDisplayProps>) {
