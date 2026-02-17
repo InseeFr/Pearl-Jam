@@ -1,8 +1,9 @@
 import { Box, Button } from '@mui/material';
 import { SurveyUnit } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { addNewState, persistSurveyUnit } from 'utils/functions';
+import { persistSurveyUnit } from 'utils/functions';
 import SendIcon from '@mui/icons-material/Send';
+import { addNewState } from 'utils/functions/surveyUnitState';
 
 interface SubmitButtonProp {
   surveyUnit: SurveyUnit;

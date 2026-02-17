@@ -1,6 +1,5 @@
 import Paper, { PaperProps } from '@mui/material/Paper';
-import { PropsWithoutRef } from 'react';
-import { Link, LinkProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const style = {
   width: 24,

@@ -12,6 +12,19 @@ const surveyHistoryMessage = {
     sq: (contactFullName: string) =>
       `Dëshironi të fshini linjën që përmban informacionin e kontaktit të ${contactFullName}?`,
   },
+  deleteContactAlertPrivilegedContact: {
+    fr: (contactFullName: string) =>
+      `Attention, pour supprimer les coordonnées de ${contactFullName}, veuillez d'abord choisir un nouveau "Contact courrier" dans le tableau`,
+    en: (contactFullName: string) =>
+      `Attention, to delete the contact information of ${contactFullName}, please first choose a new "Mail contact" in the table`,
+    sq: (contactFullName: string) =>
+      `Kujdes, për të fshirë informacionin e kontaktit të ${contactFullName}, ju lutemi të zgjidhni së pari një "Kontakt përmes postës" të ri në tabelë`,
+  },
+  deleteContactAlertPrivilegedContactAccept: {
+    fr: "J'ai compris",
+    en: 'I understand',
+    sq: 'E kuptova',
+  },
   cancel: {
     fr: 'Annuler',
     en: 'Cancel',
@@ -32,11 +45,7 @@ const surveyHistoryMessage = {
     en: 'Edit',
     sq: 'Ndrysho',
   },
-  delete: {
-    fr: 'Supprimer',
-    en: 'Delete',
-    sq: 'Fshij',
-  },
+
   addContact: {
     fr: 'Ajouter un individu',
     en: 'Add a contact',

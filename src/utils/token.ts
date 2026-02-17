@@ -6,11 +6,8 @@ type KeycloackInformation = {
   };
 };
 
-export const getMail = (kc: KeycloackInformation) =>
-  (kc && kc.idTokenParsed && kc.idTokenParsed.email) || '';
+export const getMail = (kc: KeycloackInformation) => kc?.idTokenParsed?.email || '';
 
-export const getUserName = (kc: KeycloackInformation) =>
-  (kc && kc.idTokenParsed && kc.idTokenParsed.name) || '';
+export const getUserName = (kc: KeycloackInformation) => kc?.idTokenParsed?.name || '';
 
-export const getIdep = (kc: KeycloackInformation) =>
-  (kc && kc.idTokenParsed && kc.idTokenParsed.preferred_username) || '';
+export const getIdep = (kc: KeycloackInformation) => kc?.idTokenParsed?.preferred_username || '';

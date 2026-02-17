@@ -8,7 +8,10 @@ import { User } from './model/user';
 import { SyncReport } from './model/syncReport';
 import { SurveyUnitMissing } from './model/surveyUnitMissing';
 import type { SurveyUnit, Notification } from '../../types/pearl';
-import { contactOutcomes } from 'utils/functions/contacts/ContactOutcome';
+import {
+  contactOutcomes,
+  deprecatedContactOutcomes,
+} from 'utils/functions/contacts/ContactOutcome';
 
 export const db = new Dexie('Pearl') as Dexie & {
   notification: EntityTable<Notification, 'id'>;
@@ -20,16 +23,16 @@ export const db = new Dexie('Pearl') as Dexie & {
 
 const convertDeprecatedContactOutcomeType = (contactOutcomeType: string) => {
   let newContactOutcomeType = contactOutcomeType;
-  if (contactOutcomeType === contactOutcomes.DECEASED.value)
+  if (contactOutcomeType === deprecatedContactOutcomes.DECEASED.value)
     newContactOutcomeType = contactOutcomes.NOT_APPLICABLE.value;
-  else if (contactOutcomeType === contactOutcomes.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value) {
+  else if (
+    contactOutcomeType === deprecatedContactOutcomes.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value
+  ) {
     newContactOutcomeType = contactOutcomes.DEFINITLY_UNAVAILABLE.value;
   }
 
   return newContactOutcomeType;
 };
-
-export type { User, SyncReport, Notification, SurveyUnitMissing, SurveyUnit };
 
 db.version(1).stores(schema);
 // upgrade dataBase (please see https://dexie.org/docs/Tutorial/Design#database-versioning)

@@ -60,8 +60,8 @@ describe('useQueenListener', () => {
 
   it('should add and remove QUEEN event listener on mount and unmount', () => {
     const mockRedirect = vi.fn();
-    const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
-    const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
+    const addEventListenerSpy = vi.spyOn(globalThis, 'addEventListener');
+    const removeEventListenerSpy = vi.spyOn(globalThis, 'removeEventListener');
 
     const { unmount } = renderHook(() => useQueenListener(mockRedirect));
 

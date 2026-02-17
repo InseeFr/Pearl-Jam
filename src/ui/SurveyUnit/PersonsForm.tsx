@@ -18,6 +18,7 @@ import {
   Controller,
   useFieldArray,
   useForm,
+  UseFormGetValues,
   UseFormRegister,
   UseFormSetValue,
 } from 'react-hook-form';
@@ -39,7 +40,7 @@ interface PersonsFormProps {
  * Form to edit multiple persons attached to a surveyUnit
  */
 export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFormProps>) {
-  const { register, handleSubmit, control, setValue } = useForm({
+  const { register, handleSubmit, control, setValue, getValues } = useForm({
     // input persons is sorted and its order could be different from surveyUnit.persons used by useForm
     // => force the same order of persons in surveyUnit
     defaultValues: { persons: persons },
@@ -73,6 +74,7 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
                   control={control}
                   setValue={setValue}
                   persons={persons}
+                  getValues={getValues}
                 />
               </Fragment>
             ))}
@@ -93,13 +95,18 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
 
 interface PersonFieldsProps {
   person: SurveyUnitPerson;
-  register: (s: string) => UseFormRegister<any>;
+  register: UseFormRegister<{
+    persons: SurveyUnitPerson[];
+  }>;
   control: Control<any>;
   index: number;
   setValue: UseFormSetValue<{
     persons: SurveyUnitPerson[];
   }>;
   persons: SurveyUnitPerson[];
+  getValues: UseFormGetValues<{
+    persons: SurveyUnitPerson[];
+  }>;
 }
 /**
  * Fields for a specific Person
@@ -111,6 +118,7 @@ function PersonFields({
   index,
   setValue,
   persons,
+  getValues,
 }: Readonly<PersonFieldsProps>) {
   const titles = [
     { label: TITLES.MISS.value, value: TITLES.MISS.type },
@@ -136,8 +144,21 @@ function PersonFields({
 
   const handleToggle = () => {
     persons.forEach((p, i) => {
-      if (i !== index) setValue(`persons.${i}.privileged`, false);
+      if (i !== index) setValue(`persons.${i}.privileged`, !getValues('persons')[index].privileged);
     });
+  };
+
+  const handlePhoneFavoriteChange = (phoneIndex: number) => {
+    const currentPhoneNumbers = getValues(`persons.${index}.phoneNumbers`);
+
+    currentPhoneNumbers.forEach((_, idx) => {
+      if (idx !== phoneIndex) {
+        setValue(`persons.${index}.phoneNumbers.${idx}.favorite`, false);
+      }
+    });
+
+    const isFavorite = currentPhoneNumbers[phoneIndex]?.favorite ?? false;
+    setValue(`persons.${index}.phoneNumbers.${phoneIndex}.favorite`, !isFavorite);
   };
 
   return (
@@ -180,12 +201,14 @@ function PersonFields({
         name={`persons.${index}.phoneNumbers.${phoneIndexFiscal}`}
         phoneNumber={person.phoneNumbers[phoneIndexFiscal]}
         editable={undefined}
+        onFavoriteChange={() => handlePhoneFavoriteChange(phoneIndexFiscal)}
       />
       <PhoneLine
         control={control}
         label={D.directorySource}
         name={`persons.${index}.phoneNumbers.${phoneIndexDirectory}`}
         phoneNumber={person.phoneNumbers[phoneIndexDirectory]}
+        onFavoriteChange={() => handlePhoneFavoriteChange(phoneIndexDirectory)}
       />
       {(phoneNumbers as SurveyUnitPhoneNumber[]).map(
         (phoneNumber: SurveyUnitPhoneNumber, k) =>
@@ -198,6 +221,7 @@ function PersonFields({
               name={`persons.${index}.phoneNumbers.${k}`}
               phoneNumber={phoneNumber}
               onRemove={() => remove(k)}
+              onFavoriteChange={() => handlePhoneFavoriteChange(k)}
             />
           )
       )}
@@ -225,6 +249,7 @@ interface PhoneLineProps {
   control: Control;
   editable?: boolean;
   onRemove?: VoidFunction;
+  onFavoriteChange?: VoidFunction;
 }
 
 /**
@@ -237,6 +262,7 @@ function PhoneLine({
   phoneNumber,
   editable,
   onRemove,
+  onFavoriteChange,
 }: Readonly<PhoneLineProps>) {
   if (!phoneNumber) {
     return null;
@@ -271,7 +297,7 @@ function PhoneLine({
             <IconButton
               id={`star-button-${field.name}`}
               sx={{ py: 0 }}
-              onClick={() => field.onChange(!field.value)}
+              onClick={() => onFavoriteChange?.()}
             >
               {field.value ? (
                 <StarIcon color="yellow" />

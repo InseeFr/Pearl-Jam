@@ -22,7 +22,7 @@ describe('addListener', () => {
   it('should work with window as target', () => {
     const listener = vi.fn();
 
-    const cleanup = addListener(window, 'resize', listener);
+    const cleanup = addListener(globalThis.window, 'resize', listener);
 
     globalThis.dispatchEvent(new Event('resize'));
 

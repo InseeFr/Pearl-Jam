@@ -95,7 +95,7 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
     }
 
     const setRadioValue = (prop: string, options: CommunicationRequestRadioData[]) => {
-      return options.find(
+      return options.some(
         o => o.value === communicationRequest[prop as keyof CommunicationRequestForm] && !o.disabled
       )
         ? communicationRequest[prop as keyof CommunicationRequestForm]
@@ -150,7 +150,7 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
       reason: communicationRequest.reason,
       emitter: 'INTERVIEWER',
       communicationTemplateId: communicationTemplatedId,
-      status: [{ date: new Date().getTime(), status: communicationStatusEnum.INITIATED.value }],
+      status: [{ date: Date.now(), status: communicationStatusEnum.INITIATED.value }],
     };
 
     surveyUnitIDBService.addOrUpdateSU({
@@ -211,4 +211,3 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
     </Dialog>
   );
 }
-export default CommunicationDialogContent;

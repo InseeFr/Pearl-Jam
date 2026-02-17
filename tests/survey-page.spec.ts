@@ -131,8 +131,20 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('radio', { name: 'Oui' }).click();
   await page.getByRole('button', { name: "J'ai compris" }).click();
   await page.getByRole('button', { name: 'Enregistrer' }).click();
-  const row = page.getByRole('row', { name: 'Gary' });
-  await row.getByRole('button', { name: 'Supprimer' }).click();
+
+  const rowToDelete = page.getByRole('row', { name: 'Gary' });
+  await rowToDelete.getByRole('button', { name: 'Supprimer' }).click();
+  await page.getByRole('button', { name: "J'ai compris" }).click();
+  await rowToDelete.getByRole('button', { name: 'Modifier' }).click();
+  await page.getByRole('radio', { name: 'Non' }).check();
+  await page.getByRole('button', { name: 'Enregistrer' }).click();
+
+  const rowToSetAsPrivileged = page.getByRole('row', { name: 'Hugo' });
+  await rowToSetAsPrivileged.getByRole('button', { name: 'Modifier' }).click();
+  await page.getByRole('radio', { name: 'Oui' }).check();
+  await page.getByRole('button', { name: 'Enregistrer' }).click();
+
+  await rowToDelete.getByRole('button', { name: 'Supprimer' }).click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
 
   await homePage.synchronize();

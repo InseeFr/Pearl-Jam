@@ -89,8 +89,11 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
       const result = await synchronizePearl();
       saveSyncPearlData(result);
       const { error } = result;
-      if (!error) await synchronizeQueen();
-      else setLoading(false);
+      if (error) {
+        setLoading(false);
+      } else {
+        synchronizeQueen();
+      }
     };
 
     const failedSync = async () => {

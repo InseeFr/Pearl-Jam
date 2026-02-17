@@ -18,7 +18,7 @@ const isLocalhost = Boolean(
     // [::1] is the IPv6 localhost address.
     globalThis.location.hostname === '[::1]' ||
     // 127.0.0.0/8 are considered localhost for IPv4.
-    globalThis.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4]\d|[01]?\d\d?)){3}$/)
+    new RegExp(/^127(?:\.(?:25[0-5]|2[0-4]\d|[01]?\d\d?)){3}$/).exec(globalThis.location.hostname)
 );
 
 export function register(config) {
@@ -49,12 +49,12 @@ function registerValidSW(swUrl, config) {
     .register(swUrl)
     .then(registration => {
       if (registration.installing) {
-        if (config && config.onInstalling) {
+        if (config?.onInstalling) {
           config.onInstalling(registration.installing);
         }
       }
       if (registration.waiting) {
-        if (config && config.onWaiting) {
+        if (config?.onWaiting) {
           config.onWaiting(registration.waiting);
         }
       }
@@ -76,7 +76,7 @@ function registerValidSW(swUrl, config) {
               );
 
               // Execute callback
-              if (config && config.onUpdate) {
+              if (config?.onUpdate) {
                 config.onUpdate(registration);
               }
             } else {
@@ -86,7 +86,7 @@ function registerValidSW(swUrl, config) {
               console.log('Content is cached for offline use.');
 
               // Execute callback
-              if (config && config.onSuccess) {
+              if (config?.onSuccess) {
                 config.onSuccess(registration);
               }
             }
@@ -95,7 +95,7 @@ function registerValidSW(swUrl, config) {
       };
     })
     .catch(error => {
-      if (config && config.onError) {
+      if (config?.onError) {
         config.onError();
       }
       console.error('Error during service worker registration:', error);
@@ -110,11 +110,8 @@ function checkValidServiceWorker(swUrl, config) {
     .then(response => {
       // Ensure service worker exists, and that we really are getting a JS file.
       const contentType = response.headers.get('content-type');
-      if (
-        response.status === 404 ||
-        (contentType != null && contentType.indexOf('javascript') === -1)
-      ) {
-        if (config && config.onError) {
+      if (response.status === 404 || contentType?.indexOf('javascript') === -1) {
+        if (config?.onError) {
           config.onError();
         }
         // No service worker found. Probably a different app. Reload the page.
@@ -138,7 +135,7 @@ export function unregister(config) {
     navigator.serviceWorker.ready
       .then(registration => {
         registration.unregister().then(unregistered => {
-          if (config && config.onUnregister) {
+          if (config?.onUnregister) {
             config.onUnregister(unregistered);
           }
         });

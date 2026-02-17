@@ -1,8 +1,10 @@
-import { vi, describe, beforeEach, expect, Mock, it, MockInstance } from 'vitest';
+import { vi, describe, beforeEach, expect, it, MockInstance } from 'vitest';
 import { surveyUnitIDBService } from './surveyUnit-idb-service';
-import { SurveyUnit } from '../idb-config';
+import { createSurveyUnit } from 'utils/testing/createFakeData';
 
 vi.mock('./abstract-idb-service');
+
+const mockedSu = createSurveyUnit();
 
 describe('SurveyUnitIdbService - addOrUpdateNotif', () => {
   let mockGet: MockInstance<(typeof surveyUnitIDBService)['getById']>;
@@ -17,11 +19,11 @@ describe('SurveyUnitIdbService - addOrUpdateNotif', () => {
   });
 
   it('should update the surveyUnit if it already exists', async () => {
-    const existingSurveyUnit = { id: '123' };
+    const existingSurveyUnit = { ...mockedSu, id: '123' };
     const updatedSurveyUnit = {
-      id: '123',
+      ...existingSurveyUnit,
       displayName: 'Updated SurveyUnit',
-    } as unknown as SurveyUnit;
+    };
 
     mockGet.mockResolvedValue(existingSurveyUnit);
     mockUpdate.mockResolvedValue(updatedSurveyUnit);
@@ -34,7 +36,7 @@ describe('SurveyUnitIdbService - addOrUpdateNotif', () => {
   });
 
   it('should insert the surveyUnit if it does not exist', async () => {
-    const newSurveyUnit = { id: '456' } as unknown as SurveyUnit;
+    const newSurveyUnit = { ...mockedSu, id: '456' };
 
     mockGet.mockResolvedValue(null);
     mockInsert.mockResolvedValue(newSurveyUnit);

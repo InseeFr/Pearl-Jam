@@ -5,8 +5,9 @@ import { NextContactHistoryPerson } from 'types/pearl';
 import { FieldRow } from 'ui/FieldRow';
 import D from 'i18n';
 import { ContactFormData, contactSchema } from 'utils/schemas/nextContactSchema';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ExistingPreferedContactModal } from './ExistingPreferedContactModal';
+import { TITLES } from 'utils/constants';
 
 type ModifyContactModalProps = {
   open: boolean;
@@ -37,31 +38,18 @@ export function ContactModal({
   } = useForm({
     resolver: zodResolver(contactSchema),
     mode: 'onSubmit',
-    defaultValues: {
-      title: contact?.title ?? 'MISTER',
-      firstName: contact?.firstName,
-      lastName: contact?.lastName,
+    values: {
+      title: contact?.title ?? TITLES.MISTER.type,
+      firstName: contact?.firstName || '',
+      lastName: contact?.lastName || '',
       phoneNumber: contact?.phoneNumber,
       email: contact?.email,
-      preferredContact: contact?.preferredContact ? 'true' : 'false',
+      preferredContact: contact?.preferredContact || isFirst ? 'true' : 'false',
     },
     reValidateMode: 'onBlur',
   });
 
   const [preferedContactModal, setPreferedContactModal] = useState(false);
-
-  useEffect(() => {
-    if (contact) {
-      reset({
-        title: contact.title,
-        lastName: contact.lastName || '',
-        firstName: contact.firstName || '',
-        phoneNumber: contact.phoneNumber || '',
-        email: contact.email || '',
-        preferredContact: contact?.preferredContact ? 'true' : 'false',
-      });
-    }
-  }, [contact, reset]);
 
   const checkPreferedContactValidity = () => {
     if (preferedContact && preferedContact !== contact) {
@@ -110,8 +98,8 @@ export function ContactModal({
                 helperText={errors.title?.message}
                 errors={errors}
                 options={[
-                  { label: D.editContactMale, value: 'MISTER' },
-                  { label: D.editContactFemale, value: 'MISS' },
+                  { label: D.editContactMale, value: TITLES.MISTER.type },
+                  { label: D.editContactFemale, value: TITLES.MISS.type },
                 ]}
                 required
                 {...register('title')}
@@ -146,10 +134,9 @@ export function ContactModal({
               <FieldRow
                 label={D.shouldBeEmail}
                 control={control}
-                name="preferredContact"
                 type="radios"
-                onChange={checkPreferedContactValidity}
-                defaultValue={isFirst ? 'true' : 'false'}
+                defaultValue={isFirst ? 'true' : undefined}
+                {...register('preferredContact', { onChange: checkPreferedContactValidity })}
                 options={[
                   { label: D.yes, value: 'true' },
                   { label: D.no, value: 'false', disabled: isFirst },

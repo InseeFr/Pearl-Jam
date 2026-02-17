@@ -1,7 +1,9 @@
+import { CommunicationStatus } from 'utils/enum/CommunicationEnums';
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
+import { StateValues } from 'utils/enum/SUStateEnum';
 import {
   ContactAttemptValue,
   ContactAttemptConfiguration,
@@ -68,15 +70,15 @@ type SurveyUnitAddress = {
   cityPriorityDistrict: boolean;
 };
 
-type SurveyUnitComment = {
+export type SurveyUnitComment = {
   type: string;
   value: string;
 };
 
-type SurveyUnitState = {
+export type SurveyUnitState = {
   id?: number;
   date: number;
-  type: string;
+  type: StateValues;
 };
 
 type SurveyUnitSampleIdentifiers = {
@@ -105,7 +107,7 @@ export type SurveyUnitCommunicationRequest = {
   emitter: 'INTERVIEWER' | 'TOOL';
   communicationTemplateId?: string;
   reason?: string;
-  status: { date: number; status: string }[];
+  status: { date: number; status: CommunicationStatus }[];
 };
 
 export type SurveyUnitCommunicationTemplate = {

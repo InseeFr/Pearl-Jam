@@ -19,8 +19,7 @@ export const useAuth = () => {
     setAuthenticated(false);
   };
 
-  const isAuthorized = (roles: string[]) =>
-    roles.filter(r => interviewerRoles.includes(r)).length > 0;
+  const isAuthorized = (roles: string[]) => roles.some(r => interviewerRoles.includes(r));
 
   const isLocalStorageTokenValid = () => {
     const pearlUserKey = globalThis.localStorage.getItem(PEARL_USER_KEY);

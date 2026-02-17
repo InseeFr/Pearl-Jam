@@ -1,5 +1,5 @@
+import { SurveyUnit } from 'types/pearl';
 import AbstractIdbService from './abstract-idb-service';
-import { type SurveyUnit } from '../idb-config';
 class SurveyUnitIdbService extends AbstractIdbService<SurveyUnit> {
   constructor() {
     super('surveyUnit');

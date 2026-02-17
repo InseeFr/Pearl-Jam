@@ -14,7 +14,6 @@ import {
   transmissionRulesHouseF2F,
 } from './questionsTree/houseF2FQuestionsTree';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
-import { getLastState } from '../surveyUnitFunctions';
 import { StateValues } from 'utils/enum/SUStateEnum';
 import { transmissionRulesNoIdentification } from './questionsTree/noIdentificationTransmissionRules';
 import { SRCVIdentificationQuestionsTree } from './questionsTree/SRCVQuestionsTree';
@@ -29,6 +28,7 @@ import {
   transmissionRulesByINDF2F,
   transmissionRulesByINDF2FNOR,
 } from './questionsTree/indF2FQuestionsTree';
+import { getLastState } from '../surveyUnitState';
 
 export type IdentificationQuestionOption = {
   value: string;

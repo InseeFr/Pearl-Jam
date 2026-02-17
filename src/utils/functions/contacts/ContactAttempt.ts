@@ -103,7 +103,7 @@ export const mediumEnum = {
 } as const;
 
 export const findMediumLabelByValue = (value: string) =>
-  Object.values(mediumEnum).filter(medium => medium.value === value)?.[0]?.label;
+  Object.values(mediumEnum).find(medium => medium.value === value)?.label;
 
 export const getMediumByConfiguration = (configuration?: ContactAttemptConfiguration) => {
   if (configuration === 'F2F') return [mediumEnum.FIELD, mediumEnum.TEL, mediumEnum.EMAIL];
@@ -113,7 +113,7 @@ export const getMediumByConfiguration = (configuration?: ContactAttemptConfigura
 };
 
 export const findContactAttemptLabelByValue = (value: ContactAttemptValue) =>
-  Object.values(contactAttempts).filter(ca => ca.value === value)?.[0]?.label;
+  Object.values(contactAttempts).find(ca => ca.value === value)?.label;
 
 export const getContactAttemptsByMedium = (
   contactAttemptConfiguration: ContactAttemptConfiguration,

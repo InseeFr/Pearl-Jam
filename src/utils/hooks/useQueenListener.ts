@@ -1,4 +1,4 @@
-import { addNewState } from 'utils/functions/surveyUnitFunctions';
+import { addNewState } from 'utils/functions/surveyUnitState';
 import questionnaireEnum, { QuestionnaireStateType } from 'utils/enum/QuestionnaireStateEnum';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
@@ -57,7 +57,7 @@ const handleQueenEvent = (redirect: (url: string) => void) => async (event: Quee
         closeQueen(redirect)(other.interrogationId);
         break;
       case 'UPDATE_STATE':
-        await updateSurveyUnit(other.interrogationId, other.state);
+        updateSurveyUnit(other.interrogationId, other.state);
         globalThis.dispatchEvent(new CustomEvent('pearl-update'));
         break;
       case 'UPDATE_SYNCHRONIZE':

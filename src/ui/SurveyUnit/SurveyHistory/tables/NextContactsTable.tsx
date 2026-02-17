@@ -87,6 +87,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         lastName: person.lastName,
         title: person.title,
         email: person.email,
+        preferredContact: person.privileged,
         phoneNumber: selectedPhoneNumber.requiresUserSelection
           ? undefined
           : selectedPhoneNumber.phoneNumber,
@@ -139,6 +140,16 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   const nextContacts = nextCollectHistory?.persons;
   const preferredContact = nextContacts?.find(c => c.preferredContact);
   const selectedContact = nextContacts?.[selectedContactIndex];
+
+  const canDeleteContact = () => {
+    if (nextContacts?.length == 1) return true;
+
+    if (selectedContact?.preferredContact) {
+      return false;
+    }
+
+    return true;
+  };
 
   return (
     <Card elevation={0}>
@@ -252,6 +263,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
       <DeleteConfirmationModal
         open={deleteModalOpen}
         selectedContact={selectedContact}
+        canDelete={canDeleteContact()}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
       />
@@ -272,7 +284,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         preferedContact={preferredContact}
         onClose={() => setAddModalOpen(false)}
         onConfirm={handleAdd}
-        isFirst={!nextContacts?.length}
+        isFirst={nextContacts?.length === 0}
       />
       <PhoneNumberImportAlert
         open={phoneNumberModal}

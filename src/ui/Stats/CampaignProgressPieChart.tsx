@@ -2,7 +2,7 @@ import Card from '@mui/material/Card';
 import { Typography } from '../Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import { daysLeftForSurveyUnit, getSuTodoState } from '../../utils/functions';
+import { daysLeftForSurveyUnits, getSuTodoState } from '../../utils/functions';
 import { generateColorInGradient } from '../../utils/functions/colors';
 import { Row } from '../Row';
 import { groupBy } from '../../utils/functions/array';
@@ -28,20 +28,20 @@ interface CampaignProgressPieChartProps {
 
 export function CampaignProgressPieChart({ surveyUnits }: Readonly<CampaignProgressPieChartProps>) {
   // Only keep survey units that are not finished
-  surveyUnits = surveyUnits.filter(su => getSuTodoState(su).order !== toDoEnum.TERMINATED.order);
+  surveyUnits = surveyUnits.filter(su => getSuTodoState(su)?.order !== toDoEnum.TERMINATED.order);
   const total = surveyUnits.length;
   // We have no survey units in progress, we won't be able to show a graph
   if (total === 0) {
     return '';
   }
 
-  const maxDays = Math.max(...surveyUnits.map(daysLeftForSurveyUnit));
+  const maxDays = daysLeftForSurveyUnits(surveyUnits, false);
   const surveyUnitsInProgressPerCampaign = groupBy(surveyUnits, su => su.campaign);
   const slices: PieChartData[] = Object.entries(surveyUnitsInProgressPerCampaign).map(
     ([label, surveyUnits]) => ({
       label,
       value: surveyUnits.length / total,
-      color: getColorForRate(daysLeftForSurveyUnit(surveyUnits) / maxDays),
+      color: getColorForRate(daysLeftForSurveyUnits(surveyUnits) / maxDays),
     })
   );
 
