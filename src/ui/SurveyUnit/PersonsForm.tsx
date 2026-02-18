@@ -143,6 +143,11 @@ function PersonFields({
   };
 
   const handleToggle = () => {
+    if (persons.length === 1) {
+      setValue(`persons.0.privileged`, true);
+      return;
+    }
+
     persons.forEach((p, i) => {
       if (i !== index) setValue(`persons.${i}.privileged`, !getValues('persons')[index].privileged);
     });
