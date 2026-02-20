@@ -57,7 +57,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   return (
     <Card elevation={0}>
       <CardContent sx={{ ml: -2 }}>
-        {nextCollectHistory?.persons.length && (
+        {!!nextCollectHistory?.persons.length && (
           <Table size="medium">
             <TableHead>
               <TableRow sx={{ alignContent: 'center' }}>
