@@ -34,12 +34,13 @@ type FieldRowProps = {
   defaultValue?: unknown;
   helperText?: string;
   errors?: FieldErrors<any>;
+  disabled?: boolean;
   onChange?: () => void;
   [key: string]: any; // Spread operator for any additional props
 };
 
 export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
-  ({ label, maxWidth, checkbox, control, defaultValue, children, ...props }, ref) => {
+  ({ label, maxWidth, checkbox, control, defaultValue, disabled, children, ...props }, ref) => {
     const isControlled = !!props.type;
 
     if (isControlled && !control) {
@@ -79,6 +80,7 @@ export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
                   options={props.options}
                   type={props.type}
                   onChange={props.onChange}
+                  disabled={disabled}
                 />
               )}
             />
@@ -114,6 +116,7 @@ interface ControlledFieldProps {
   field: ControllerRenderProps<FieldValues, string>;
   defaultValue?: unknown;
   onChange?: () => void;
+  disabled?: boolean;
 }
 /**
  * Select the right field to display
@@ -124,6 +127,7 @@ export function ControlledField({
   options,
   field,
   defaultValue,
+  disabled,
   onChange,
 }: Readonly<ControlledFieldProps>) {
   if (type === 'switch') {
@@ -131,6 +135,7 @@ export function ControlledField({
       <Switch
         checked={field.value}
         color="green"
+        disabled={disabled}
         {...field}
         onChange={e => {
           field.onChange(e);

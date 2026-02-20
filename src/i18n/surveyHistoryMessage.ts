@@ -257,25 +257,10 @@ const surveyHistoryMessage = {
     en: 'Invalid email address',
     sq: 'Adresa e emailit është e pavlefshme',
   },
-  contactModalPreferedContactContentMessageFirstPart: {
-    fr: 'Attention, un seul individu peut être "Contact courrier". Pour identifier',
-    en: 'Warning, only one individual can be "Mail contact". To identify',
-    sq: 'Kujdes, vetëm një individ mund të jetë "Kontakt përmes postës". Për të identifikuar',
-  },
   contactModalPreferedContactContentMessageSecondPart: {
     fr: "comme contact courrier, veuillez d'abord supprimer cette modalité de l'individu",
     en: 'as mail contact, please first remove this status from the individual',
     sq: 'si kontakt përmes postës, ju lutemi hiqni këtë status nga individi',
-  },
-  contactModalPreferedContactContentMessageUnknownContactName: {
-    fr: 'Attention, un seul individu peut être "Contact courrier". Pour identifier cet individu comme contact courrier, veuillez d\'abord supprimer cette modalité de l\'individu',
-    en: 'Warning, only one individual can be "Mail contact". To identify this individual as mail contact, please first remove this status from the individual',
-    sq: 'Kujdes, vetëm një individ mund të jetë "Kontakt përmes postës". Për të identifikuar këtë individ si kontakt përmes postës, ju lutemi hiqni këtë status nga individi',
-  },
-  contactModalPreferedContactButton: {
-    fr: "J'ai compris",
-    en: 'I understand',
-    sq: 'E kuptova',
   },
 };
 

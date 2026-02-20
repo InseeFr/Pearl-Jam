@@ -62,9 +62,10 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   };
 
   const handleModify = (newContact: NextContactHistoryPerson) => {
+    const newContacts = handlePrivilgedContact(newContact);
     const newNextCollectHistory = {
       ...nextCollectHistory,
-      persons: nextCollectHistory?.persons.toSpliced(selectedContactIndex, 1, newContact) ?? [],
+      persons: newContacts?.toSpliced(selectedContactIndex, 1, newContact) ?? [],
     };
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
@@ -122,11 +123,12 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   const handleAdd = (newContact: NextContactHistoryPerson) => {
     setAddModalOpen(false);
     setSelectedContactIndex(-1);
-
+    const newContacts = handlePrivilgedContact(newContact);
+    newContacts?.push(newContact);
     if (surveyUnit.nextContactHistory) {
-      surveyUnit.nextContactHistory.persons.push(newContact);
       surveyUnitIDBService.addOrUpdateSU({
         ...surveyUnit,
+        nextContactHistory: { persons: newContacts ?? [] },
       });
       return;
     }
@@ -138,8 +140,19 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
   };
 
   const nextContacts = nextCollectHistory?.persons;
-  const preferredContact = nextContacts?.find(c => c.preferredContact);
   const selectedContact = nextContacts?.[selectedContactIndex];
+
+  const handlePrivilgedContact = (newContact: NextContactHistoryPerson) => {
+    let contactsToUpdate = nextContacts;
+    if (!newContact.preferredContact) return nextContacts;
+    nextContacts?.forEach(c => {
+      if (newContact !== c) {
+        c.preferredContact = false;
+      }
+    });
+
+    return contactsToUpdate;
+  };
 
   const canDeleteContact = () => {
     if (nextContacts?.length == 1) return true;
@@ -272,7 +285,6 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
           open={modifyModalOpen}
           modalTitle={D.contactModalTitleEdit}
           contact={selectedContact}
-          preferedContact={preferredContact}
           onClose={() => setModifyModalOpen(false)}
           onConfirm={handleModify}
           isFirst={false}
@@ -281,7 +293,6 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
       <ContactModal
         modalTitle={D.modalAddContact}
         open={addModalOpen}
-        preferedContact={preferredContact}
         onClose={() => setAddModalOpen(false)}
         onConfirm={handleAdd}
         isFirst={nextContacts?.length === 0}
