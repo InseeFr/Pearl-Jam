@@ -33,7 +33,7 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
     return contacts.map(c => (c === newContact ? c : { ...c, preferredContact: false }));
   };
 
-  const openSelectedContactToDeleteModal = (index: number) => {
+  const openDeleteModalForSelectedContact = (index: number) => {
     setSelectedContactIndex(index);
     setDeleteModalOpen(true);
   };
@@ -120,7 +120,7 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
     nextCollectHistory,
     nextContacts,
     // Actions
-    openSelectedContactToDeleteModal,
+    openDeleteModalForSelectedContact,
     deletedSelectedContact,
     openSelectedContactModal,
     modifyContactInTable,

@@ -40,7 +40,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     phoneNumberModal,
     nextCollectHistory,
     nextContacts,
-    openSelectedContactToDeleteModal,
+    openDeleteModalForSelectedContact: openSelectedContactToDeleteModal,
     deletedSelectedContact,
     openSelectedContactModal,
     modifyContactInTable,
