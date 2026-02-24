@@ -38,7 +38,7 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
     setDeleteModalOpen(true);
   };
 
-  const deletedSelectedContact = () => {
+  const deleteSelectedContact = () => {
     const updatedPersons = nextContacts?.toSpliced(selectedContactIndex, 1) ?? [];
     persistSurveyUnitPersonsForNextContactHistory(updatedPersons);
     setDeleteModalOpen(false);
@@ -121,7 +121,7 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
     nextContacts,
     // Actions
     openDeleteModalForSelectedContact,
-    deletedSelectedContact,
+    deleteSelectedContact,
     openSelectedContactModal,
     modifyContactInTable,
     addNewContact,

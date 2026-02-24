@@ -41,7 +41,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     nextCollectHistory,
     nextContacts,
     openDeleteModalForSelectedContact: openSelectedContactToDeleteModal,
-    deletedSelectedContact,
+    deleteSelectedContact: deletedSelectedContact,
     openSelectedContactModal,
     modifyContactInTable,
     setAddModalOpen,
