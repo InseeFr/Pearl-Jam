@@ -18,7 +18,7 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
   const nextContacts = nextCollectHistory?.persons;
   const selectedContact = nextContacts?.[selectedContactIndex];
 
-  const persistSurveyUnit = (persons: NextContactHistoryPerson[]) => {
+  const persistSurveyUnitPersonsForNextContactHistory = (persons: NextContactHistoryPerson[]) => {
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
       nextContactHistory: { ...nextCollectHistory, persons },
@@ -33,42 +33,40 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
     return contacts.map(c => (c === newContact ? c : { ...c, preferredContact: false }));
   };
 
-  const handleDeleteClick = (index: number) => {
+  const openSelectedContactToDeleteModal = (index: number) => {
     setSelectedContactIndex(index);
     setDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
+  const deletedSelectedContact = () => {
     const updatedPersons = nextContacts?.toSpliced(selectedContactIndex, 1) ?? [];
-    persistSurveyUnit(updatedPersons);
+    persistSurveyUnitPersonsForNextContactHistory(updatedPersons);
     setDeleteModalOpen(false);
     setSelectedContactIndex(-1);
   };
 
-  const handleModifyClick = (index: number) => {
+  const openSelectedContactModal = (index: number) => {
     setSelectedContactIndex(index);
     setModifyModalOpen(true);
   };
 
-  const handleModify = (newContact: NextContactHistoryPerson) => {
+  const modifyContactInTable = (newContact: NextContactHistoryPerson) => {
     const updatedContacts = ensureSinglePreferredContact(newContact);
     const updatedPersons = updatedContacts.toSpliced(selectedContactIndex, 1, newContact);
-    persistSurveyUnit(updatedPersons);
+    persistSurveyUnitPersonsForNextContactHistory(updatedPersons);
     setModifyModalOpen(false);
     setSelectedContactIndex(-1);
   };
 
-  const handleAddClick = () => setAddModalOpen(true);
-
-  const handleAdd = (newContact: NextContactHistoryPerson) => {
+  const addNewContact = (newContact: NextContactHistoryPerson) => {
     setAddModalOpen(false);
     setSelectedContactIndex(-1);
 
     if (surveyUnit.nextContactHistory) {
       const updatedContacts = ensureSinglePreferredContact(newContact);
-      persistSurveyUnit([...updatedContacts, newContact]);
+      persistSurveyUnitPersonsForNextContactHistory([...updatedContacts, newContact]);
     } else {
-      persistSurveyUnit([newContact]);
+      persistSurveyUnitPersonsForNextContactHistory([newContact]);
     }
   };
 
@@ -95,7 +93,9 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
     const allResolved = newContactsImportState.every(c => c.resolved);
 
     if (allResolved) {
-      persistSurveyUnit(newContactsImportState.map(c => c.nextContactHistoryPerson));
+      persistSurveyUnitPersonsForNextContactHistory(
+        newContactsImportState.map(c => c.nextContactHistoryPerson)
+      );
       return;
     }
 
@@ -120,17 +120,16 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
     nextCollectHistory,
     nextContacts,
     // Actions
-    handleDeleteClick,
-    handleConfirmDelete,
-    handleModifyClick,
-    handleModify,
-    handleAddClick,
-    handleAdd,
+    openSelectedContactToDeleteModal,
+    deletedSelectedContact,
+    openSelectedContactModal,
+    modifyContactInTable,
+    addNewContact,
     importCurrentContacts,
     canDeleteContact,
+    setAddModalOpen: (value: boolean) => setAddModalOpen(value),
     closeDeleteModal: () => setDeleteModalOpen(false),
     closeModifyModal: () => setModifyModalOpen(false),
-    closeAddModal: () => setAddModalOpen(false),
     closePhoneNumberModal: () => setPhoneNumberModal(false),
   };
 }

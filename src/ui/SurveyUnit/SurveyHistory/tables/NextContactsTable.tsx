@@ -40,17 +40,16 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     phoneNumberModal,
     nextCollectHistory,
     nextContacts,
-    handleDeleteClick,
-    handleConfirmDelete,
-    handleModifyClick,
-    handleModify,
-    handleAddClick,
-    handleAdd,
+    openSelectedContactToDeleteModal,
+    deletedSelectedContact,
+    openSelectedContactModal,
+    modifyContactInTable,
+    setAddModalOpen,
+    addNewContact,
     importCurrentContacts,
     canDeleteContact,
     closeDeleteModal,
     closeModifyModal,
-    closeAddModal,
     closePhoneNumberModal,
   } = useNextContacts(surveyUnit);
 
@@ -97,7 +96,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                       <Grid item>
                         <Button
                           color="inherit"
-                          onClick={() => handleModifyClick(i)}
+                          onClick={() => openSelectedContactModal(i)}
                           size="small"
                           variant="contained"
                           sx={{ minWidth: '150px' }}
@@ -108,7 +107,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                       </Grid>
                       <Grid item>
                         <Button
-                          onClick={() => handleDeleteClick(i)}
+                          onClick={() => openSelectedContactToDeleteModal(i)}
                           size="small"
                           variant="contained"
                           sx={{ minWidth: '150px' }}
@@ -126,7 +125,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         )}
         <Stack direction="row" mt={3} spacing={2}>
           <Button
-            onClick={handleAddClick}
+            onClick={() => setAddModalOpen(true)}
             variant="contained"
             startIcon={<Add />}
             sx={{ textTransform: 'none' }}
@@ -152,7 +151,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         selectedContact={selectedContact}
         canDelete={canDeleteContact()}
         onClose={closeDeleteModal}
-        onConfirm={handleConfirmDelete}
+        onConfirm={deletedSelectedContact}
       />
 
       {nextCollectHistory?.persons[selectedContactIndex] && (
@@ -161,7 +160,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
           modalTitle={D.contactModalTitleEdit}
           contact={selectedContact}
           onClose={closeModifyModal}
-          onConfirm={handleModify}
+          onConfirm={modifyContactInTable}
           isFirst={false}
         />
       )}
@@ -169,8 +168,8 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
       <ContactModal
         modalTitle={D.modalAddContact}
         open={addModalOpen}
-        onClose={closeAddModal}
-        onConfirm={handleAdd}
+        onClose={() => setAddModalOpen(false)}
+        onConfirm={addNewContact}
         isFirst={nextContacts?.length === 0}
       />
 
