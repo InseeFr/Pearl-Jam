@@ -12,6 +12,7 @@ export const contactSchema = z
     firstName: z.string().min(1, { message: D.requiredField }),
     phoneNumber: z
       .string()
+      .nullable()
       .optional()
       .refine(val => !val || /^\+?\d+$/.test(val), { message: D.invalidPhone }),
     email: z

@@ -40,11 +40,13 @@ interface PersonsFormProps {
  * Form to edit multiple persons attached to a surveyUnit
  */
 export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFormProps>) {
-  const { register, handleSubmit, control, setValue, getValues } = useForm({
+  const { register, handleSubmit, control, setValue, getValues, watch } = useForm({
     // input persons is sorted and its order could be different from surveyUnit.persons used by useForm
     // => force the same order of persons in surveyUnit
     defaultValues: { persons: persons },
   });
+
+  persons.forEach((_, i) => watch(`persons.${i}.privileged`));
 
   const onSubmit = handleSubmit(data => {
     surveyUnitIDBService.addOrUpdate({
@@ -148,8 +150,9 @@ function PersonFields({
       return;
     }
 
-    persons.forEach((p, i) => {
-      if (i !== index) setValue(`persons.${i}.privileged`, !getValues('persons')[index].privileged);
+    persons.forEach((_, i) => {
+      const isPrivileged = getValues('persons')[index].privileged;
+      if (i !== index && isPrivileged) setValue(`persons.${i}.privileged`, false);
     });
   };
 
@@ -173,6 +176,7 @@ function PersonFields({
         label={D.surveyMailContact}
         control={control}
         name={`persons.${index}.privileged`}
+        disabled={getValues(`persons.${index}.privileged`)}
         onChange={() => handleToggle()}
       />
       <FieldRow
