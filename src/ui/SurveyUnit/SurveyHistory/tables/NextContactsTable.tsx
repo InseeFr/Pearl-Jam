@@ -39,7 +39,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
     contactsImportState,
     phoneNumberModal,
     nextCollectHistory,
-    nextContacts,
+    noNextContacts,
     openDeleteModalForSelectedContact: openSelectedContactToDeleteModal,
     deleteSelectedContact: deletedSelectedContact,
     openSelectedContactModal,
@@ -133,7 +133,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
           >
             <Typography fontWeight={600}>{D.addContact}</Typography>
           </Button>
-          {!nextContacts?.length && (
+          {noNextContacts && (
             <Button
               onClick={importCurrentContacts}
               color="inherit"
@@ -171,7 +171,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         open={addModalOpen}
         onClose={closeAddModal}
         onConfirm={addNewContact}
-        isFirst={nextContacts?.length === 0}
+        isFirst={noNextContacts}
       />
 
       <PhoneNumberImportAlert
