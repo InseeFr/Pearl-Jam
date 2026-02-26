@@ -17,6 +17,7 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
   const nextCollectHistory = surveyUnit.nextContactHistory;
   const nextContacts = nextCollectHistory?.persons;
   const selectedContact = nextContacts?.[selectedContactIndex];
+  const noNextContacts = !nextContacts?.length;
 
   const persistSurveyUnitPersonsForNextContactHistory = (persons: NextContactHistoryPerson[]) => {
     surveyUnitIDBService.addOrUpdateSU({
@@ -118,7 +119,7 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
     contactsImportState,
     phoneNumberModal,
     nextCollectHistory,
-    nextContacts,
+    noNextContacts,
     // Actions
     openDeleteModalForSelectedContact,
     deleteSelectedContact,
