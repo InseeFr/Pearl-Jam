@@ -4,11 +4,12 @@ import { healthCheck } from 'api/pearl';
 import D from 'i18n';
 import { NotificationState } from 'types/pearl';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
-import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
+import { useQueenSynchronization } from 'utils/synchronize/useQueenSynchronization';
 import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
+import { synchronizePearl } from 'utils/synchronize/synchronizePearl';
 
 export type SyncContextValue = {
   setSyncResult: (value: {
@@ -25,7 +26,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   const online = useNetworkOnline();
   const PEARL_API_URL = import.meta.env.VITE_PEARL_API_URL;
   const PEARL_AUTHENTICATION_MODE = import.meta.env.VITE_PEARL_AUTHENTICATION_MODE;
-  const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
+  const { synchronizeQueen, queenReady, queenError } = useQueenSynchronization();
 
   const [isSync, setIsSync] = useState(() => {
     return globalThis.localStorage.getItem('SYNCHRONIZE') === 'true';
