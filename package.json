@@ -5,6 +5,8 @@
   "type": "module",
   "dependencies": {
     "@babel/runtime": "7.26.10",
+    "@elastic/apm-rum": "^5.17.4",
+    "@elastic/apm-rum-react": "^2.0.10",
     "@fontsource/montserrat": "^5.0.16",
     "@maverick-js/signals": "^5.11.4",
     "@mui/icons-material": "^5.15.10",
