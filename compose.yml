@@ -185,6 +185,13 @@ services:
       - playwright
     environment:
       - PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS=1
+      - VITE_PEARL_API_URL=http://localhost:${PEARL_API_PORT}
+      - VITE_PEARL_AUTHENTICATION_MODE=keycloak
+      - VITE_KEYCLOAK_CLIENTID=${AUTH_CLIENT_ID}
+      - VITE_KEYCLOAK_REALM=${AUTH_REALM}
+      - VITE_KEYCLOAK_URL=http://localhost:${KEYCLOAK_PORT}
+      - VITE_KEYCLOAK_ROLES_ALLOW_LIST=interviewer
+      - VITE_QUEEN_URL=http://localhost:${QUEEN_FRONTEND_PORT}
     build:
       dockerfile: ./Dockerfile
       args:
