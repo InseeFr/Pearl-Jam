@@ -3,7 +3,7 @@ name: Release Candidate
 on:
   push:
     branches:
-      - 'develop'
+      - "develop"
 
 jobs:
   build:
@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pearl-jam
-          path: build
+          path: dist
 
   check_if_version_upgraded:
     needs: build
@@ -84,7 +84,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: pearl-jam
-          path: build
+          path: dist
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -112,8 +112,8 @@ jobs:
         id: version
         uses: notiz-dev/github-action-json-property@release
         with:
-          path: 'package.json'
-          prop_path: 'version'
+          path: "package.json"
+          prop_path: "version"
 
       - name: Create GitHub prerelease
         uses: softprops/action-gh-release@v1

@@ -3,7 +3,7 @@ name: Build
 on:
   pull_request:
     branches:
-      - '*'
+      - "*"
 
 jobs:
   install:
@@ -21,8 +21,8 @@ jobs:
           version: 10
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "20"
+          cache: "pnpm"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - run: pnpm test
@@ -31,4 +31,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: build
+          path: dist
