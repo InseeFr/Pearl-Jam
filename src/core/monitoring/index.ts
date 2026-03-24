@@ -7,8 +7,12 @@ const monitoringEnabled = import.meta.env.VITE_ENABLE_MONITORING === 'true';
 const monitoringServer = import.meta.env.VITE_MONITORING_SERVER_URL;
 
 const getOrigin = (url: string) => {
-  const uri = new URL(url);
-  return uri.origin;
+  try {
+    const uri = new URL(url);
+    return uri.origin;
+  } catch (error) {
+    return '';
+  }
 };
 
 export const monitoringService = init({
