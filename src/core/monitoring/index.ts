@@ -1,6 +1,8 @@
 import { init } from '@elastic/apm-rum';
 import { version as appVersion } from '../../../package.json';
 
+type MonitoringType = 'synchronisation';
+
 const monitoringEnabled = import.meta.env.VITE_ENABLE_MONITORING === 'true';
 const monitoringServer = import.meta.env.VITE_MONITORING_SERVER_URL;
 
@@ -20,3 +22,5 @@ export const monitoringService = init({
     // we need QUEEN_API_URL, only known by Queen...
   ].map(uri => getOrigin(uri)),
 });
+
+export const MONITORING_SYNC_TYPE = 'synchronisation';

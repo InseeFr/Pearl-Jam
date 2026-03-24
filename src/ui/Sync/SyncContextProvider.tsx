@@ -10,6 +10,10 @@ import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
 import { synchronizePearl } from 'utils/synchronize/synchronizePearl';
+import { MONITORING_SYNC_TYPE, monitoringService } from 'core/monitoring';
+import { Transaction } from '@elastic/apm-rum';
+
+let synchronisationTransaction: Transaction | undefined;
 
 export type SyncContextValue = {
   setSyncResult: (value: {
@@ -62,6 +66,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
       globalThis.localStorage.removeItem('SYNCHRONIZE');
       setIsSync(false);
       setSyncResult(result);
+      synchronisationTransaction?.end();
     };
 
     if (PEARL_API_URL && PEARL_AUTHENTICATION_MODE && isSync && !loading) analyse();
@@ -69,11 +74,20 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
 
   const syncFunction = () => {
     const launchSynchronize = async () => {
+      synchronisationTransaction = monitoringService.startTransaction(
+        'synchronisation-global',
+        MONITORING_SYNC_TYPE
+      );
       globalThis.localStorage.removeItem('PEARL_SYNC_RESULT');
       globalThis.localStorage.removeItem('QUEEN_SYNC_RESULT');
       globalThis.localStorage.setItem('SYNCHRONIZE', 'true');
       setLoading(true);
+      const healthSpan = synchronisationTransaction?.startSpan(
+        '[pilotage] health-check',
+        MONITORING_SYNC_TYPE
+      );
       await checkPearl();
+      healthSpan?.end();
     };
     if (online) launchSynchronize();
   };
@@ -87,7 +101,12 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   useEffect(() => {
     const sync = async () => {
       setIsSync(true);
+      const pilotageSynchroSpan = synchronisationTransaction?.startSpan(
+        '[pilotage] synchronisation',
+        MONITORING_SYNC_TYPE
+      );
       const result = await synchronizePearl();
+      pilotageSynchroSpan?.end();
       saveSyncPearlData(result);
       const { error } = result;
       if (error) {
