@@ -8,11 +8,15 @@ services:
       - POSTGRES_USER=${PEARL_DB_USER}
       - POSTGRES_PASSWORD=${PEARL_DB_PASSWORD}
       - POSTGRES_DB=${PEARL_DB}
-    command: ['postgres']
+    command: ["postgres"]
     tty: true
     stdin_open: true
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${PEARL_DB_USER} -d ${PEARL_DB} -h localhost']
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${PEARL_DB_USER} -d ${PEARL_DB} -h localhost",
+        ]
       interval: 5s
       timeout: 10s
       retries: 10
@@ -28,12 +32,15 @@ services:
       - POSTGRES_USER=${QUESTIONNAIRE_DB_USER}
       - POSTGRES_PASSWORD=${QUESTIONNAIRE_DB_PASSWORD}
       - POSTGRES_DB=${QUESTIONNAIRE_DB}
-    command: ['postgres']
+    command: ["postgres"]
     tty: true
     stdin_open: true
     healthcheck:
       test:
-        ['CMD-SHELL', 'pg_isready -U ${QUESTIONNAIRE_DB_USER} -d ${QUESTIONNAIRE_DB} -h localhost']
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${QUESTIONNAIRE_DB_USER} -d ${QUESTIONNAIRE_DB} -h localhost",
+        ]
       interval: 5s
       timeout: 10s
       retries: 10
@@ -50,11 +57,11 @@ services:
     environment:
       KEYCLOAK_ADMIN: administrator
       KEYCLOAK_ADMIN_PASSWORD: administrator # gitleaks:allow - Safe to ignore: test credential only.
-      KC_HEALTH_ENABLED: 'true'
+      KC_HEALTH_ENABLED: "true"
       KC_LOG_LEVEL: info
-    command: ['start-dev', '--import-realm']
+    command: ["start-dev", "--import-realm"]
     ports:
-      - '${KEYCLOAK_PORT}:8080'
+      - "${KEYCLOAK_PORT}:8080"
     volumes:
       - ./keycloak/realms:/opt/keycloak/data/import
       - ./:/opt/app
@@ -170,7 +177,7 @@ services:
       questionnaire-api:
         condition: service_started
     ports:
-      - '${QUEEN_FRONTEND_PORT}:8080'
+      - "${QUEEN_FRONTEND_PORT}:8080"
 
   pearl-front:
     profiles:
@@ -178,6 +185,13 @@ services:
       - playwright
     environment:
       - PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS=1
+      - VITE_PEARL_API_URL=http://localhost:${PEARL_API_PORT}
+      - VITE_PEARL_AUTHENTICATION_MODE=keycloak
+      - VITE_KEYCLOAK_CLIENTID=${AUTH_CLIENT_ID}
+      - VITE_KEYCLOAK_REALM=${AUTH_REALM}
+      - VITE_KEYCLOAK_URL=http://localhost:${KEYCLOAK_PORT}
+      - VITE_KEYCLOAK_ROLES_ALLOW_LIST=interviewer
+      - VITE_QUEEN_URL=http://localhost:${QUEEN_FRONTEND_PORT}
     build:
       dockerfile: ./Dockerfile
       args:
@@ -191,7 +205,7 @@ services:
     tty: true
     stdin_open: true
     healthcheck:
-      test: ['CMD', 'curl', '--fail', 'http://localhost']
+      test: ["CMD", "curl", "--fail", "http://localhost"]
     depends_on:
       queen-front:
         condition: service_started
@@ -200,4 +214,4 @@ services:
       pearl-api:
         condition: service_started
     ports:
-      - '${PEARL_FRONTEND_PORT}:8300'
+      - "${PEARL_FRONTEND_PORT}:8080"

@@ -25,8 +25,8 @@ jobs:
           cache: "pnpm"
       - name: Run Docker Compose
         run: |
+          pnpm install --frozen-lockfile && pnpm build
           docker compose --env-file ./.env.docker --profile playwright up -d
-          pnpm install --frozen-lockfile
           npx playwright install --with-deps chromium
           npx playwright test
       - uses: actions/upload-artifact@v4
