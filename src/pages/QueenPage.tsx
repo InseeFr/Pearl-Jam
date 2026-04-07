@@ -2,6 +2,7 @@ import { mount } from 'dramaQueen/DramaIndex';
 import { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueenListener } from '../utils/hooks/useQueenListener';
+import { getToken } from 'utils/api/utils';
 
 const queenPathname = '/queen';
 
@@ -45,7 +46,7 @@ export default function QueenPage() {
   }, [location]);
 
   const isFirstRunRef = useRef(true);
-  const unmountRef = useRef(() => {});
+  const unmountRef = useRef(() => { });
 
   useEffect(() => {
     if (!isFirstRunRef.current) {
@@ -54,6 +55,7 @@ export default function QueenPage() {
     unmountRef.current = mount({
       mountPoint: ref.current,
       initialPathname: location.pathname.replace(queenPathname, ''),
+      getAccessToken: async () => getToken()
     });
     isFirstRunRef.current = false;
   }, [location]);
