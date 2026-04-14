@@ -5,7 +5,7 @@ import D from 'i18n';
 import { NotificationState } from 'types/pearl';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { useQueenSynchronization } from 'utils/synchronize/useQueenSynchronization';
-import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
+import { analyseResult, getNotifFromResult, saveSyncPearlData, storeSurveyUnitsIds } from 'utils/synchronize/check';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
@@ -93,6 +93,13 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
       if (error) {
         setLoading(false);
       } else {
+        try {
+          // store survey unit ids in local storage for Queen synchro
+          await storeSurveyUnitsIds()
+        } catch (error) {
+          // we start Queen synchro even if we could not store ids
+          console.warn('Unable to store survey units ids in local storage', error)
+        }
         synchronizeQueen();
       }
     };
