@@ -1,10 +1,10 @@
 import { vi, describe, beforeEach, expect, it, MockInstance } from 'vitest';
 import { surveyUnitIDBService } from './surveyUnit-idb-service';
-import { createSurveyUnit } from 'utils/testing/createFakeData';
+import { createLocalSurveyUnit } from 'utils/testing/createFakeData';
 
 vi.mock('./abstract-idb-service');
 
-const mockedSu = createSurveyUnit();
+const mockedSu = createLocalSurveyUnit();
 
 describe('SurveyUnitIdbService - addOrUpdateNotif', () => {
   let mockGet: MockInstance<(typeof surveyUnitIDBService)['getById']>;

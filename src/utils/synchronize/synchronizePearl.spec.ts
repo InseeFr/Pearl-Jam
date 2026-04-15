@@ -16,7 +16,9 @@ vi.mock('api/pearl', () => pearlApiMocks);
 
 const surveyUnitIdbMocks = vi.hoisted(() => ({
   getAll: vi.fn(),
+  getById: vi.fn(),
   addOrUpdate: vi.fn(),
+  addOrUpdateSU: vi.fn(),
   deleteAll: vi.fn(),
 }));
 
@@ -105,13 +107,24 @@ describe('synchronizePearl.tsx', () => {
   });
 
   it('returns synchronization details when one survey unit is uploaded', async () => {
+    const su2 = {
+      id: 'SU2',
+      campaign: 'CAMPAIGN1',
+      states: [{ type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT }],
+      comments: [],
+      hasBeenUpdated: true,
+    };
     surveyUnitIdbMocks.getAll
       // getAllSurveyUnitsByCampaign
-      .mockResolvedValueOnce([su1])
+      .mockResolvedValueOnce([su1, su2])
       // sendData
-      .mockResolvedValueOnce([su1])
+      .mockResolvedValueOnce([su2])
       // getWFSSurveyUnitsSortByCampaign
       .mockResolvedValueOnce([]);
+
+    surveyUnitIdbMocks.getById.mockResolvedValueOnce(su2);
+
+    surveyUnitIdbMocks.addOrUpdateSU.mockResolvedValueOnce(su2);
 
     pearlApiMocks.updateSurveyUnit.mockResolvedValue({
       status: 200,
@@ -120,20 +133,23 @@ describe('synchronizePearl.tsx', () => {
 
     pearlApiMocks.getListSurveyUnit.mockResolvedValue({
       status: 200,
-      data: [{ id: 'SU1', campaign: 'CAMPAIGN1' }],
+      data: [{ id: 'SU2', campaign: 'CAMPAIGN1' }],
     });
 
-    pearlApiMocks.getSurveyUnitById.mockResolvedValue({
-      status: 200,
-      data: { id: 'SU1', campaign: 'CAMPAIGN1', states: [], comments: [] },
-    });
+    pearlApiMocks.getSurveyUnitById
+      // su2
+      .mockResolvedValue({
+        status: 200,
+        data: { id: 'SU2', campaign: 'CAMPAIGN1', states: [], comments: [] },
+      });
 
     const result = await synchronizePearl();
 
+    expect(pearlApiMocks.updateSurveyUnit).toHaveBeenCalledTimes(1);
     expect(pearlApiMocks.updateSurveyUnit).toHaveBeenCalledWith(
-      'SU1',
+      'SU2',
       expect.objectContaining({
-        id: 'SU1',
+        id: 'SU2',
         lastState: toDoEnum.CONTACT,
       })
     );
@@ -144,14 +160,14 @@ describe('synchronizePearl.tsx', () => {
     expect(surveyUnitMissingMocks.deleteAll).toHaveBeenCalledTimes(1);
     expect(surveyUnitIdbMocks.addOrUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
-        id: 'SU1',
+        id: 'SU2',
         campaign: 'CAMPAIGN1',
       })
     );
 
     expect(result).toEqual({
       error: false,
-      surveyUnitsSuccess: ['SU1'],
+      surveyUnitsSuccess: ['SU2'],
       surveyUnitsInTempZone: [],
       transmittedSurveyUnits: {},
       loadedSurveyUnits: { CAMPAIGN1: [] },
@@ -200,14 +216,7 @@ describe('synchronizePearl.tsx', () => {
 
     const result = await synchronizePearl();
 
-    expect(pearlApiMocks.updateSurveyUnit).toHaveBeenCalledWith(
-      'SU1',
-      expect.objectContaining({
-        id: 'SU1',
-        lastState: toDoEnum.CONTACT,
-      })
-    );
-
+    expect(pearlApiMocks.updateSurveyUnit).not.toHaveBeenCalled();
     expect(pearlApiMocks.postSurveyUnitByIdInTempZone).not.toHaveBeenCalled();
 
     expect(surveyUnitIdbMocks.deleteAll).toHaveBeenCalledTimes(1);
@@ -235,11 +244,19 @@ describe('synchronizePearl.tsx', () => {
   });
 
   it('returns synchronization details when one survey unit goes to temp zone', async () => {
+    const su2 = {
+      id: 'SU2',
+      campaign: 'CAMPAIGN1',
+      states: [{ type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT }],
+      comments: [],
+      hasBeenUpdated: true,
+    };
+
     surveyUnitIdbMocks.getAll
       // getAllSurveyUnitsByCampaign
-      .mockResolvedValueOnce([su1])
+      .mockResolvedValueOnce([su1, su2])
       // sendData
-      .mockResolvedValueOnce([su1])
+      .mockResolvedValueOnce([su2])
       // getWFSSurveyUnitsSortByCampaign
       .mockResolvedValueOnce([]);
 
@@ -256,17 +273,17 @@ describe('synchronizePearl.tsx', () => {
     const result = await synchronizePearl();
 
     expect(pearlApiMocks.updateSurveyUnit).toHaveBeenCalledWith(
-      'SU1',
+      'SU2',
       expect.objectContaining({
-        id: 'SU1',
+        id: 'SU2',
         lastState: toDoEnum.CONTACT,
       })
     );
 
     expect(pearlApiMocks.postSurveyUnitByIdInTempZone).toHaveBeenCalledWith(
-      'SU1',
+      'SU2',
       expect.objectContaining({
-        id: 'SU1',
+        id: 'SU2',
         lastState: toDoEnum.CONTACT,
       })
     );
@@ -277,18 +294,26 @@ describe('synchronizePearl.tsx', () => {
     expect(result).toEqual({
       error: false,
       surveyUnitsSuccess: [],
-      surveyUnitsInTempZone: ['SU1'],
+      surveyUnitsInTempZone: ['SU2'],
       transmittedSurveyUnits: {},
       loadedSurveyUnits: {},
     });
   });
 
   it('returns error when temp zone fallback fails', async () => {
+    const su2 = {
+      id: 'SU2',
+      campaign: 'CAMPAIGN1',
+      states: [{ type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT }],
+      comments: [],
+      hasBeenUpdated: true,
+    };
+
     surveyUnitIdbMocks.getAll
       // getAllSurveyUnitsByCampaign
-      .mockResolvedValueOnce([su1])
+      .mockResolvedValueOnce([su1, su2])
       // sendData
-      .mockResolvedValueOnce([su1]);
+      .mockResolvedValueOnce([su2]);
 
     pearlApiMocks.updateSurveyUnit.mockResolvedValue({
       status: 404,
@@ -337,24 +362,28 @@ describe('synchronizePearl.tsx', () => {
       campaign: 'CAMP1',
       states: [{ type: 'A' }],
       comments: [],
+      hasBeenUpdated: true,
     };
     const suWaiting2 = {
       id: 'SU2',
       campaign: 'CAMP1',
       states: [{ type: 'B' }],
       comments: [],
+      hasBeenUpdated: true,
     };
     const suWaiting3 = {
       id: 'SU3',
       campaign: 'CAMP2',
       states: [{ type: 'B' }],
       comments: [],
+      hasBeenUpdated: true,
     };
     const suOther = {
       id: 'SU4',
       campaign: 'CAMP2',
       states: [{ type: 'C' }],
       comments: [],
+      hasBeenUpdated: true,
     };
 
     surveyUnitIdbMocks.getAll

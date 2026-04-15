@@ -20,10 +20,12 @@ import { User } from 'utils/indexeddb/model/user';
 import { getSuTodoState, getLastState } from 'utils/functions/surveyUnitState';
 
 const sendData = async (): Promise<string[]> => {
-    const surveyUnitsInTempZone: string[] = [];
-    const surveyUnits = await surveyUnitIDBService.getAll();
-    await Promise.all(surveyUnits.map(su => handleSurveyUnit(su, surveyUnitsInTempZone)));
-    return surveyUnitsInTempZone;
+  const surveyUnitsInTempZone: string[] = [];
+  const surveyUnits = await surveyUnitIDBService.getAll();
+  // Filter to only get survey units that have been updated
+  const updatedSurveyUnits = surveyUnits.filter(su => su.hasBeenUpdated === true);
+  await Promise.all(updatedSurveyUnits.map(su => handleSurveyUnit(su, surveyUnitsInTempZone)));
+  return surveyUnitsInTempZone;
 };
 
 const handleSurveyUnit = async (

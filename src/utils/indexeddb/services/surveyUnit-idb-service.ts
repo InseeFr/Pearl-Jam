@@ -1,4 +1,4 @@
-import { SurveyUnit } from 'types/pearl';
+import { LocalSurveyUnit, SurveyUnit } from 'types/pearl';
 import AbstractIdbService from './abstract-idb-service';
 class SurveyUnitIdbService extends AbstractIdbService<SurveyUnit> {
   constructor() {
@@ -8,7 +8,7 @@ class SurveyUnitIdbService extends AbstractIdbService<SurveyUnit> {
   /**
    * Update or insert a surveyUnit if the ID is unknown
    */
-  async addOrUpdateSU(item: SurveyUnit) {
+  async addOrUpdateSU(item: LocalSurveyUnit) {
     const { id, ...other } = item;
     const surveyUnit = await this.getById(id);
     /* prevent duplicated survey-unit */
