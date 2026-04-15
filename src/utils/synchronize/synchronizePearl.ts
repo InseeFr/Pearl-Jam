@@ -40,9 +40,16 @@ const handleSurveyUnit = async (
     try {
         const response = await tryUpdateSurveyUnit(id, formattedBody);
 
-        if (response.ok && response.data) {
-            await createStateIdsAndCommunicationRequestIds(response.data);
-        }
+    if (response.ok && response.data) {
+      await createStateIdsAndCommunicationRequestIds(response.data);
+    }
+    if (response.ok) {
+      // Set hasBeenUpdated to false after successful synchronization
+      const updatedSurveyUnit = await surveyUnitIDBService.getById(id);
+      if (updatedSurveyUnit) {
+        await surveyUnitIDBService.addOrUpdateSU({ ...updatedSurveyUnit, hasBeenUpdated: false });
+      }
+    }
 
         if (shouldPutInTempZone(response.status)) {
             await handleTempZoneFallback(id, formattedBody, surveyUnitsInTempZone);
