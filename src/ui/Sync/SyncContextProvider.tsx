@@ -66,7 +66,6 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
       globalThis.localStorage.removeItem('SYNCHRONIZE');
       setIsSync(false);
       setSyncResult(result);
-      synchronisationTransaction?.end();
     };
 
     if (PEARL_API_URL && PEARL_AUTHENTICATION_MODE && isSync && !loading) analyse();
@@ -106,8 +105,9 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
         MONITORING_SYNC_TYPE
       );
       const result = await synchronizePearl();
-      pilotageSynchroSpan?.end();
       saveSyncPearlData(result);
+      pilotageSynchroSpan?.end();
+      synchronisationTransaction?.end(); // end of synchronisation
       const { error } = result;
       if (error) {
         setLoading(false);

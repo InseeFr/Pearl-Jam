@@ -5,6 +5,7 @@ type MonitoringType = 'synchronisation';
 
 const monitoringEnabled = import.meta.env.VITE_ENABLE_MONITORING === 'true';
 const monitoringServer = import.meta.env.VITE_MONITORING_SERVER_URL;
+const monitoringServiceName = import.meta.env.VITE_MONITORING_SERVICE_NAME;
 
 const getOrigin = (url: string) => {
   try {
@@ -16,7 +17,7 @@ const getOrigin = (url: string) => {
 };
 
 export const monitoringService = init({
-  serviceName: 'sabiane-collecte-ui',
+  serviceName: monitoringServiceName,
   serviceVersion: appVersion,
   serverUrl: monitoringServer,
   active: monitoringEnabled,

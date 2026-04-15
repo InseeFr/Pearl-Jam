@@ -5,6 +5,10 @@ export const kc = new Keycloak({
   realm: import.meta.env.VITE_KEYCLOAK_REALM,
   url: import.meta.env.VITE_KEYCLOAK_URL,
 });
+
+export const getAccessToken = async (): Promise<string | undefined> => {
+  return kc.token;
+};
 export const keycloakAuthentication = (params: KeycloakInitOptions) =>
   new Promise<void | boolean>((resolve, reject) => {
     if (navigator.onLine) {
