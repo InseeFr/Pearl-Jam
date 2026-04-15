@@ -1,4 +1,4 @@
-import { SurveyUnit } from 'types/pearl';
+import { LocalSurveyUnit, SurveyUnit } from 'types/pearl';
 import { ANONYMOUS, JSON_UTF8_HEADER, KEYCLOAK, PEARL_USER_KEY } from 'utils/constants';
 import { communicationStatusEnum } from 'utils/enum/CommunicationEnums';
 import { kc, keycloakAuthentication, refreshToken } from 'utils/keycloak';
@@ -25,7 +25,7 @@ export const authentication = (mode: string) => {
       return Promise.reject(new Error(`App doesn't support "${mode}" for authentication`));
   }
 };
-export const formatSurveyUnitForPut = (su: SurveyUnit) => {
+export const formatSurveyUnitForPut = (su: LocalSurveyUnit) => {
   const newFormattedCommunicationRequests =
     su.communicationRequests
       ?.filter(
