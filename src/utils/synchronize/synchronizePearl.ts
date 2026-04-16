@@ -22,7 +22,7 @@ import { getSuTodoState, getLastState } from 'utils/functions/surveyUnitState';
 const sendData = async (): Promise<string[]> => {
   const surveyUnitsInTempZone: string[] = [];
   const surveyUnits = await surveyUnitIDBService.getAll();
-  // Filter to only get survey units that have been updated
+  // Filter survey units to only upload those that have been updated
   const updatedSurveyUnits = surveyUnits.filter(su => su.hasBeenUpdated === true);
   await Promise.all(updatedSurveyUnits.map(su => handleSurveyUnit(su, surveyUnitsInTempZone)));
   return surveyUnitsInTempZone;
@@ -44,7 +44,7 @@ const handleSurveyUnit = async (
       await createStateIdsAndCommunicationRequestIds(response.data);
     }
     if (response.ok) {
-      // Set hasBeenUpdated to false after successful synchronization
+      // Set locally the survey unit as not updated after successful upload
       const updatedSurveyUnit = await surveyUnitIDBService.getById(id);
       if (updatedSurveyUnit) {
         await surveyUnitIDBService.addOrUpdateSU({ ...updatedSurveyUnit, hasBeenUpdated: false });
