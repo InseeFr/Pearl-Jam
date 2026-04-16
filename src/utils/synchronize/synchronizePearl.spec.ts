@@ -158,7 +158,7 @@ describe('synchronizePearl.tsx', () => {
 
     expect(surveyUnitIdbMocks.deleteAll).toHaveBeenCalledTimes(1);
     expect(surveyUnitMissingMocks.deleteAll).toHaveBeenCalledTimes(1);
-    expect(surveyUnitIdbMocks.addOrUpdate).toHaveBeenCalledWith(
+    expect(surveyUnitIdbMocks.addOrUpdateSU).toHaveBeenCalledWith(
       expect.objectContaining({
         id: 'SU2',
         campaign: 'CAMPAIGN1',
@@ -221,13 +221,13 @@ describe('synchronizePearl.tsx', () => {
 
     expect(surveyUnitIdbMocks.deleteAll).toHaveBeenCalledTimes(1);
     expect(surveyUnitMissingMocks.deleteAll).toHaveBeenCalledTimes(1);
-    expect(surveyUnitIdbMocks.addOrUpdate).toHaveBeenCalledWith(
+    expect(surveyUnitIdbMocks.addOrUpdateSU).toHaveBeenCalledWith(
       expect.objectContaining({
         id: 'SU2',
         campaign: 'CAMPAIGN1',
       })
     );
-    expect(surveyUnitIdbMocks.addOrUpdate).toHaveBeenCalledWith(
+    expect(surveyUnitIdbMocks.addOrUpdateSU).toHaveBeenCalledWith(
       expect.objectContaining({
         id: 'SU3',
         campaign: 'CAMPAIGN2',
