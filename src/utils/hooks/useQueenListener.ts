@@ -39,7 +39,7 @@ const updateSurveyUnit = (surveyUnitID: ID, queenState: QuestionnaireStateType) 
     if (newQuestionnaireState !== '') {
       const newStateType = computeSurveyUnitState(newQuestionnaireState);
       const newStates = addNewState(su, newStateType);
-      persistSurveyUnit({ ...su, states: newStates });
+      persistSurveyUnit({ ...su, states: newStates, hasBeenUpdated: true });
     }
   });
 };

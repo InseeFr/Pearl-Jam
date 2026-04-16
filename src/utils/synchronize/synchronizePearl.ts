@@ -122,7 +122,7 @@ const clean = async () => {
 };
 
 const putSurveyUnitInDataBase = async (su: SurveyUnit) => {
-  await surveyUnitIDBService.addOrUpdate(su);
+  await surveyUnitIDBService.addOrUpdateSU({ ...su, hasBeenUpdated: false });
 };
 
 const validateSU = (su: SurveyUnit) => {

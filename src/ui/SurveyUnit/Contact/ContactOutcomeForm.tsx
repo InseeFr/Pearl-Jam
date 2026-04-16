@@ -47,6 +47,7 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
       ...surveyUnit,
       states: newStates,
       contactOutcome: data,
+      hasBeenUpdated: true
     });
     onClose();
   });

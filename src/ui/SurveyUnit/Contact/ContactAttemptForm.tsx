@@ -64,6 +64,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
       persistSurveyUnit({
         ...updatedSu,
         states: newStates,
+        hasBeenUpdated: true
       });
       onClose();
       return;

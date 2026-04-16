@@ -40,7 +40,8 @@ export function Home() {
       setShouldCheckState(false);
       surveyUnits.forEach(su => {
         const newStates = updateStateWithDates(su);
-        persistSurveyUnit({ ...su, states: newStates });
+        const hasNewStates = newStates !== su.states
+        persistSurveyUnit({ ...su, states: newStates, hasBeenUpdated: hasNewStates });
       });
     }
   }, [surveyUnits.length]);

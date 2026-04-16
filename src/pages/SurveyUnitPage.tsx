@@ -32,7 +32,7 @@ export function SurveyUnitPage() {
       const lastState = getLastState(surveyUnit.states);
       if (lastState?.type === surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type) {
         const newStates = addNewState(surveyUnit, surveyUnitStateEnum.IN_PREPARATION.type);
-        persistSurveyUnit({ ...surveyUnit, states: newStates });
+        persistSurveyUnit({ ...surveyUnit, states: newStates, hasBeenUpdated: true });
       }
     }
   }, [surveyUnit]);

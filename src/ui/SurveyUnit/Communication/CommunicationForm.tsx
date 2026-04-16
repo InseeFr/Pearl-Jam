@@ -156,6 +156,7 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
       communicationRequests: [...(surveyUnit.communicationRequests ?? []), newCommunicationRequest],
+      hasBeenUpdated: true,
     });
 
     onClose();
