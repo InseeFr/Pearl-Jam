@@ -100,13 +100,13 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   useEffect(() => {
     const sync = async () => {
       setIsSync(true);
-      const pilotageSynchroSpan = synchronisationTransaction?.startSpan(
-        '[pilotage] synchronisation',
+      const pilotageSynchroGlobalTransaction = synchronisationTransaction?.startSpan(
+        '[pilotage] synchronisation GLOBAL',
         MONITORING_SYNC_TYPE
       );
-      const result = await synchronizePearl();
+      const result = await synchronizePearl(synchronisationTransaction);
       saveSyncPearlData(result);
-      pilotageSynchroSpan?.end();
+      pilotageSynchroGlobalTransaction?.end();
       synchronisationTransaction?.end(); // end of synchronisation
       const { error } = result;
       if (error) {

@@ -24,8 +24,8 @@ export const monitoringService = init({
   distributedTracingOrigins: [
     import.meta.env.VITE_PEARL_API_URL,
     import.meta.env.VITE_QUEEN_URL,
-    // we need QUEEN_API_URL, only known by Queen...
   ].map(uri => getOrigin(uri)),
+  environment: 'development - synchronisation',
 });
 
 export const MONITORING_SYNC_TYPE = 'synchronisation';

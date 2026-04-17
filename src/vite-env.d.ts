@@ -12,6 +12,7 @@ type ImportMetaEnv = {
   VITE_KEYCLOAK_ROLES_ALLOW_LIST: string
   VITE_ENABLE_MONITORING: string
   VITE_MONITORING_SERVER_URL: string
+  VITE_MONITORING_SERVICE_NAME: string
   BASE_URL: string
   MODE: string
   DEV: boolean
