@@ -216,7 +216,7 @@ describe('synchronizePearl.tsx', () => {
 
     const result = await synchronizePearl();
 
-    expect(pearlApiMocks.updateSurveyUnit).not.toHaveBeenCalled();
+    expect(pearlApiMocks.updateSurveyUnit).toHaveBeenCalledTimes(1);
     expect(pearlApiMocks.postSurveyUnitByIdInTempZone).not.toHaveBeenCalled();
 
     expect(surveyUnitIdbMocks.deleteAll).toHaveBeenCalledTimes(1);

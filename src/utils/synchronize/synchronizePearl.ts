@@ -22,8 +22,8 @@ import { getSuTodoState, getLastState } from 'utils/functions/surveyUnitState';
 const sendData = async (): Promise<string[]> => {
   const surveyUnitsInTempZone: string[] = [];
   const surveyUnits = await surveyUnitIDBService.getAll();
-  // Filter survey units to only upload those that have been updated
-  const updatedSurveyUnits = surveyUnits.filter(su => su.hasBeenUpdated === true);
+  // Filter survey units to only upload those that have been updated. We consider undefined as updated
+  const updatedSurveyUnits = surveyUnits.filter(su => (su.hasBeenUpdated ?? true) === true);
   await Promise.all(updatedSurveyUnits.map(su => handleSurveyUnit(su, surveyUnitsInTempZone)));
   return surveyUnitsInTempZone;
 };

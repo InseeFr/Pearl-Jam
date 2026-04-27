@@ -4,7 +4,6 @@ import schema2 from './schema-2.json';
 import schema3 from './schema-3.json';
 import schema4 from './schema-4.json';
 import schema5 from './schema-5.json';
-import schema6 from './schema-6.json';
 import { User } from './model/user';
 import { SyncReport } from './model/syncReport';
 import { SurveyUnitMissing } from './model/surveyUnitMissing';
@@ -65,18 +64,5 @@ db.version(7)
       .modify(su => {
         if (su.contactOutcome?.type)
           su.contactOutcome.type = convertDeprecatedContactOutcomeType(su.contactOutcome.type);
-      });
-  });
-
-db.version(8)
-  .stores(schema6)
-  .upgrade(tx => {
-    return tx
-      .table('surveyUnit')
-      .toCollection()
-      .modify(su => {
-        // Set hasBeenUpdated to true for all existing survey units
-        // This ensures first synchronization after update will send all units
-        su.hasBeenUpdated = true;
       });
   });
