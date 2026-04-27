@@ -5,6 +5,7 @@ import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-se
 import D from 'i18n';
 import {
   ContactPersonTitle,
+  LocalSurveyUnit,
   SurveyUnit,
   SurveyUnitContactAttempt,
   SurveyUnitPhoneNumber,
@@ -187,8 +188,8 @@ export const toggleFavoritePhoneNumberAndPersist = (
   phoneNumber: SurveyUnitPhoneNumber
 ) => {
   const updatedSurveyUnit = toggleFavoritePhoneNumber(surveyUnit, personId, phoneNumber);
-  persistSurveyUnit(updatedSurveyUnit);
+  persistSurveyUnit({ ...updatedSurveyUnit, hasBeenUpdated: true });
 };
 
-export const persistSurveyUnit = (surveyUnit: SurveyUnit) =>
+export const persistSurveyUnit = (surveyUnit: LocalSurveyUnit) =>
   surveyUnitIDBService.addOrUpdateSU(surveyUnit);

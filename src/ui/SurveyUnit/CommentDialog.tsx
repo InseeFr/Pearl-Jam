@@ -39,6 +39,7 @@ export function CommentDialog({ surveyUnit, open, onClose }: Readonly<CommentDia
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
       comments: comments,
+      hasBeenUpdated: true,
     });
     onClose();
   };

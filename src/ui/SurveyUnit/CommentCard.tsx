@@ -28,6 +28,7 @@ export function CommentCard({ surveyUnit }: Readonly<CommentCardProps>) {
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
       comments: comments,
+      hasBeenUpdated: true,
     });
   };
   const canSubmit = comment !== baseComment;

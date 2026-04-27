@@ -15,7 +15,7 @@ interface SubmitButtonProp {
 export function SubmitButton({ surveyUnit }: Readonly<SubmitButtonProp>) {
   const handleSubmit = () => {
     const newStates = addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type);
-    persistSurveyUnit({ ...surveyUnit, states: newStates });
+    persistSurveyUnit({ ...surveyUnit, states: newStates, hasBeenUpdated: true });
   };
 
   return (

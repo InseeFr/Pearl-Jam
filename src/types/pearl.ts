@@ -176,6 +176,10 @@ export type SurveyUnit = {
   collectNextContacts: boolean;
 };
 
+export type LocalSurveyUnit = SurveyUnit & {
+  hasBeenUpdated?: boolean;
+};
+
 export type NotificationState = 'warning' | 'success' | 'error';
 export type Notification = {
   date: number;
