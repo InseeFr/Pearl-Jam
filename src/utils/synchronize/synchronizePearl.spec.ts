@@ -19,6 +19,7 @@ const surveyUnitIdbMocks = vi.hoisted(() => ({
   getById: vi.fn(),
   addOrUpdate: vi.fn(),
   addOrUpdateSU: vi.fn(),
+  delete: vi.fn(),
   deleteAll: vi.fn(),
 }));
 
@@ -116,11 +117,13 @@ describe('synchronizePearl.tsx', () => {
     };
     surveyUnitIdbMocks.getAll
       // getAllSurveyUnitsByCampaign
-      .mockResolvedValueOnce([su1, su2])
+      .mockResolvedValueOnce([su2])
       // sendData
       .mockResolvedValueOnce([su2])
       // getWFSSurveyUnitsSortByCampaign
-      .mockResolvedValueOnce([]);
+      .mockResolvedValueOnce([])
+      // get idb surveyUnits during cleanup old suveyUnits
+      .mockResolvedValueOnce([su2]);
 
     surveyUnitIdbMocks.getById.mockResolvedValueOnce(su2);
 
@@ -156,7 +159,9 @@ describe('synchronizePearl.tsx', () => {
 
     expect(pearlApiMocks.postSurveyUnitByIdInTempZone).not.toHaveBeenCalled();
 
-    expect(surveyUnitIdbMocks.deleteAll).toHaveBeenCalledTimes(1);
+    // no survey unit to delete
+    expect(surveyUnitIdbMocks.delete).not.toHaveBeenCalled();
+
     expect(surveyUnitMissingMocks.deleteAll).toHaveBeenCalledTimes(1);
     expect(surveyUnitIdbMocks.addOrUpdateSU).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -181,7 +186,9 @@ describe('synchronizePearl.tsx', () => {
       // sendData
       .mockResolvedValueOnce([su1])
       // getWFSSurveyUnitsSortByCampaign
-      .mockResolvedValueOnce([]);
+      .mockResolvedValueOnce([])
+      // get idb surveyUnits during cleanup old suveyUnits
+      .mockResolvedValueOnce([su1]);
 
     pearlApiMocks.updateSurveyUnit.mockResolvedValue({
       status: 200,
@@ -219,7 +226,9 @@ describe('synchronizePearl.tsx', () => {
     expect(pearlApiMocks.updateSurveyUnit).toHaveBeenCalledTimes(1);
     expect(pearlApiMocks.postSurveyUnitByIdInTempZone).not.toHaveBeenCalled();
 
-    expect(surveyUnitIdbMocks.deleteAll).toHaveBeenCalledTimes(1);
+    // no survey unit to delete
+    expect(surveyUnitIdbMocks.delete).not.toHaveBeenCalled();
+
     expect(surveyUnitMissingMocks.deleteAll).toHaveBeenCalledTimes(1);
     expect(surveyUnitIdbMocks.addOrUpdateSU).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -258,7 +267,9 @@ describe('synchronizePearl.tsx', () => {
       // sendData
       .mockResolvedValueOnce([su2])
       // getWFSSurveyUnitsSortByCampaign
-      .mockResolvedValueOnce([]);
+      .mockResolvedValueOnce([])
+      // get idb surveyUnits during cleanup old suveyUnits
+      .mockResolvedValueOnce([su1, su2]);
 
     pearlApiMocks.updateSurveyUnit.mockResolvedValue({
       status: 404,
@@ -288,7 +299,7 @@ describe('synchronizePearl.tsx', () => {
       })
     );
 
-    expect(surveyUnitIdbMocks.deleteAll).toHaveBeenCalledTimes(1);
+    expect(surveyUnitIdbMocks.delete).toHaveBeenCalledTimes(2);
     expect(surveyUnitMissingMocks.deleteAll).toHaveBeenCalledTimes(1);
 
     expect(result).toEqual({
@@ -392,6 +403,8 @@ describe('synchronizePearl.tsx', () => {
       // sendData
       .mockResolvedValueOnce([])
       // getWFSSurveyUnitsSortByCampaign
+      .mockResolvedValueOnce([suWaiting1, suWaiting2, suWaiting3, suOther])
+      // get idb surveyUnits during cleanup old suveyUnits
       .mockResolvedValueOnce([suWaiting1, suWaiting2, suWaiting3, suOther]);
 
     suStateMocks.getLastState
@@ -421,5 +434,59 @@ describe('synchronizePearl.tsx', () => {
       transmittedSurveyUnits: { CAMP1: ['SU1', 'SU2'], CAMP2: ['SU3'] },
       loadedSurveyUnits: {},
     });
+  });
+
+  it('deletes correctly old survey units', async () => {
+    const su2 = {
+      id: 'SU2',
+      campaign: 'CAMPAIGN1',
+      states: [{ type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT }],
+      comments: [],
+      hasBeenUpdated: true,
+    };
+
+    const su3 = {
+      id: 'SU3',
+      campaign: 'CAMPAIGN2',
+      states: [{ type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT }],
+      comments: [],
+      hasBeenUpdated: false,
+    };
+
+    surveyUnitIdbMocks.getAll
+      // getAllSurveyUnitsByCampaign
+      .mockResolvedValueOnce([su1, su2, su3])
+      // sendData
+      .mockResolvedValueOnce([su2])
+      // getWFSSurveyUnitsSortByCampaign
+      .mockResolvedValueOnce([])
+      // get idb surveyUnits during cleanup old suveyUnits
+      .mockResolvedValueOnce([su1, su2, su3]);
+
+    pearlApiMocks.updateSurveyUnit.mockResolvedValue({
+      status: 404,
+      ok: false,
+    });
+
+    pearlApiMocks.getListSurveyUnit.mockResolvedValue({
+      status: 200,
+      data: [{ id: 'SU1', campaign: 'CAMPAIGN1' }],
+    });
+
+    pearlApiMocks.getSurveyUnitById
+      // su2
+      .mockResolvedValue({
+        status: 200,
+        data: { id: 'SU1', campaign: 'CAMPAIGN1', states: [], comments: [] },
+      });
+
+    await synchronizePearl();
+
+    // su1 is still expected, while su2 & su3 needs to be deleted
+    expect(surveyUnitIdbMocks.delete).toHaveBeenCalledTimes(2);
+    expect(surveyUnitIdbMocks.delete).toHaveBeenCalledWith('SU2');
+    expect(surveyUnitIdbMocks.delete).toHaveBeenCalledWith('SU3');
+
+    expect(surveyUnitMissingMocks.deleteAll).toHaveBeenCalledTimes(1);
   });
 });

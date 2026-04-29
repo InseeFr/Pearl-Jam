@@ -116,8 +116,35 @@ const getUserData = async () => {
   await userIdbService.addOrUpdate({ civility: TITLES.MISTER.type, ...interviewer } as User);
 };
 
-const clean = async () => {
-  await surveyUnitIDBService.deleteAll();
+// Clean locally surveyUnits that are not expected anymore
+const cleanupOldSuveyUnits = async (expectedSurveyUnitIds: string[]) => {
+  // get all surveyUnits from local datastore
+  const existingSurveyUnits = await surveyUnitIDBService.getAll();
+
+  // No survey unit found in datastore, skipping cleanup
+  if (existingSurveyUnits.length === 0) {
+    return;
+  }
+
+  // Create a Set of IDs from local storage for faster lookup
+  const expectedSurveyUnitIdsSet = new Set(expectedSurveyUnitIds);
+
+  // Find surveyUnits that are in the local datastore but not expected
+  const surveyUnitsToDelete = existingSurveyUnits.filter(
+    surveyUnit => !expectedSurveyUnitIdsSet.has(surveyUnit.id)
+  );
+
+  // No differential interrogations found, skipping cleanup
+  if (surveyUnitsToDelete.length === 0) {
+    return;
+  }
+
+  await Promise.all(
+    surveyUnitsToDelete.map(surveyUnit => surveyUnitIDBService.delete(surveyUnit.id))
+  );
+};
+
+const cleanMissingSurveyUnits = async () => {
   await surveyUnitMissingIdbService.deleteAll();
 };
 
@@ -140,6 +167,7 @@ const validateSU = (su: SurveyUnit) => {
 };
 
 const getData = async () => {
+  const expectedSurveyUnitIds: string[] = [];
   const surveyUnitsSuccess: { id: string; campaign: string }[] = [];
 
   try {
@@ -151,6 +179,8 @@ const getData = async () => {
       surveyUnits.map(async (su: SurveyUnitDto) => {
         try {
           if (!su.id) return;
+
+          expectedSurveyUnitIds.push(su.id);
 
           const { data: surveyUnit, status } = await getSurveyUnitById(su.id);
 
@@ -178,7 +208,7 @@ const getData = async () => {
     throw new Error('Server is not responding');
   }
 
-  return { surveyUnitsSuccess };
+  return { surveyUnitsSuccess, expectedSurveyUnitIds };
 };
 
 const getWFSSurveyUnitsSortByCampaign = async () => {
@@ -236,9 +266,13 @@ export const synchronizePearl = async () => {
     await getUserData();
     surveyUnitsInTempZone = await sendData();
     transmittedSurveyUnits = await getWFSSurveyUnitsSortByCampaign();
-    await clean();
 
-    const { surveyUnitsSuccess: susSuccess } = await getData();
+    // Download every survey units
+    const { surveyUnitsSuccess: susSuccess, expectedSurveyUnitIds } = await getData();
+
+    // Clean locally surveyUnits that are not expected anymore
+    await cleanupOldSuveyUnits(expectedSurveyUnitIds);
+    await cleanMissingSurveyUnits();
 
     surveyUnitsSuccess = susSuccess.map(({ id }) => id);
     loadedSurveyUnits = await getNewSurveyUnitsByCampaign(susSuccess, allOldSurveyUnitsByCampaign);
