@@ -1,6 +1,6 @@
 {
   "name": "pearl",
-  "version": "2.16.0-rc-synchro-improvements.0",
+  "version": "2.16.0-rc-synchro-improvements.1",
   "private": true,
   "type": "module",
   "dependencies": {
