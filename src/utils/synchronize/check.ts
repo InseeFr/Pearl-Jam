@@ -9,6 +9,7 @@ import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMiss
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
 import { SyncReport } from 'utils/indexeddb/model/syncReport';
 import type { Notification } from '../../types/pearl';
+import { format } from 'date-fns';
 
 export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) => {
   if (pearlSuccess && queenSuccess) {
@@ -185,6 +186,12 @@ export const analyseResult = async () => {
   await notificationIdbService.addOrUpdateNotif(notification);
   const report = getReportFromResult(result, nowDate);
   await syncReportIdbService.addOrUpdateReport(report);
+
+  // Store last successful sync date
+  if (result.state === 'success') {
+    const humanReadableDate = format(new Date(), 'dd/MM/yyyy HH:mm:ss');
+    localStorage.setItem('LAST_SYNCH_SUCCESS_DATE', humanReadableDate);
+  }
 
   return result;
 };

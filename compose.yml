@@ -63,7 +63,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/queen-back-office:https://hub.docker.com/layers/inseefr/queen-back-office/snapshot-feat-questionnaire-interrogation-links
+    image: inseefr/queen-back-office:snapshot-feat-questionnaire-interrogation-links
     tty: true
     stdin_open: true
     depends_on:

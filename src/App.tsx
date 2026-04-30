@@ -1,7 +1,7 @@
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 import { enUS, fr } from 'date-fns/locale';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import './app.css';
 import { DevTools } from './devtools';
@@ -15,6 +15,7 @@ import { Preloader } from './ui/Preloader';
 import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
 import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
 import { useAuth } from './utils/auth/initAuth';
+import { initializeSyncDate } from './utils/synchronize/initialize';
 
 const QueenPage = lazy(() => import('./pages/QueenPage'));
 
@@ -63,6 +64,11 @@ export function App() {
 
 function AppWrapper() {
   const { authenticated } = useAuth();
+
+  useEffect(() => {
+    initializeSyncDate();
+  }, []);
+
   const browserLanguage = navigator.language;
   let dateFnsLocale;
   switch (browserLanguage) {

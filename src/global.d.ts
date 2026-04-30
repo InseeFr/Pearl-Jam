@@ -13,4 +13,6 @@ declare module 'dramaQueen/DramaIndex' {
     mountPoint: HTMLElement | null;
     initialPathname: string;
   }): VoidFunction;
+
+  export function getQueenVersion(): string;
 }
