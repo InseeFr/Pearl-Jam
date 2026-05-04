@@ -41,7 +41,10 @@ export function Home() {
       surveyUnits.forEach(su => {
         const newStates = updateStateWithDates(su);
         const hasNewStates = newStates !== su.states
-        persistSurveyUnit({ ...su, states: newStates, hasBeenUpdated: hasNewStates });
+        // update surveyUnit in idb only if there are new states
+        if (hasNewStates) {
+          persistSurveyUnit({ ...su, states: newStates, hasBeenUpdated: true });
+        }
       });
     }
   }, [surveyUnits.length]);
