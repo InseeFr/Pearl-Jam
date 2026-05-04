@@ -95,6 +95,7 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
       ...surveyUnit,
       states: newStates,
       identification: identification,
+      hasBeenUpdated: true,
     });
 
     if (selectedDialogId) identification[selectedDialogId] = newResponses[selectedDialogId]?.value;

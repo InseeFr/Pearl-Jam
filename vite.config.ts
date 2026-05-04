@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { viteEnvs } from 'vite-envs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -38,24 +39,25 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'build',
+    outDir: 'dist',
     target: 'esnext',
     sourcemap: true,
   },
   plugins: [
     tsconfigPaths(),
     react(),
+    viteEnvs({ declarationFile: '.env' }),
     federation({
       name: 'Pearl',
       remotes: {
         dramaQueen: {
-          external: "Promise.resolve(import.meta.env.VITE_QUEEN_URL + '/assets/remoteEntry.js')",
+          external: "Promise.resolve(window.__VITE_ENVS.VITE_QUEEN_URL + '/assets/remoteEntry.js')",
           externalType: 'promise',
         },
       },
     }),
     VitePWA({
-      injectRegister: null,
+      injectRegister: false,
       strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'service-worker.js',
@@ -65,24 +67,22 @@ export default defineConfig({
         icons: [
           {
             src: 'favicon.ico',
-            sizes: '32x32',
+            sizes: '35x33',
             type: 'image/x-icon',
           },
           {
-            src: 'static/images/insee.png',
-            sizes: '326x378',
-            type: 'image/png',
-          },
-          {
-            src: 'static/images/logo-insee-header.png',
-            sizes: '270x274',
-            type: 'image/png',
+            src: 'static/images/Insee_logo_header.webp',
+            sizes: '298x100',
+            type: 'image/webp',
           },
         ],
         start_url: '.',
         display: 'standalone',
         theme_color: '#000000',
         background_color: '#ffffff',
+      },
+      injectManifest: {
+        globPatterns: ['**\/*.{js,css,html,ico,webmanifest,webp,woff2}'],
       },
     }),
   ],

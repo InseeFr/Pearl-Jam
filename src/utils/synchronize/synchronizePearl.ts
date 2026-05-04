@@ -1,4 +1,3 @@
-import { useCallback, useState } from 'react';
 import { createStateIdsAndCommunicationRequestIds } from 'utils/functions';
 
 import {
@@ -9,8 +8,6 @@ import {
   SurveyUnitDto,
   updateSurveyUnit,
 } from 'api/pearl';
-import { useNavigate } from 'react-router-dom';
-import { QueenEvent } from 'types/events';
 import { SurveyUnit, SurveyUnitComment } from 'types/pearl';
 import { formatSurveyUnitForPut } from 'utils/api/utils';
 import { PEARL_USER_KEY, TITLES } from 'utils/constants';
@@ -22,58 +19,12 @@ import { AxiosError } from 'axios';
 import { User } from 'utils/indexeddb/model/user';
 import { getSuTodoState, getLastState } from 'utils/functions/surveyUnitState';
 
-export const useQueenSynchronisation = () => {
-  const waitTime = 5000;
-
-  const [queenError, setQueenError] = useState(false);
-  const [queenReady, setQueenReady] = useState<boolean | null>(true);
-  const navigate = useNavigate();
-
-  const checkQueen = () => {
-    setQueenReady(null);
-    const tooLateErrorThrower = setTimeout(() => {
-      setQueenError(true);
-      setQueenReady(true);
-    }, waitTime);
-
-    const handleQueenEvent = async (event: QueenEvent) => {
-      const { type, command, state } = event.detail;
-      if (type === 'QUEEN' && command === 'HEALTH_CHECK') {
-        clearTimeout(tooLateErrorThrower);
-        if (state === 'READY') {
-          setQueenError(false);
-          setQueenReady(true);
-          console.log('Queen is ready');
-        } else {
-          setQueenError(true);
-          setQueenReady(true);
-          console.log('Queen is not ready');
-        }
-      }
-    };
-    const removeQueenEventListener = () => {
-      globalThis.removeEventListener('QUEEN', handleQueenEvent);
-    };
-
-    globalThis.addEventListener('QUEEN', handleQueenEvent);
-
-    const data = { type: 'PEARL', command: 'HEALTH_CHECK' };
-    const event = new CustomEvent('PEARL', { detail: data });
-    globalThis.dispatchEvent(event);
-    setTimeout(() => removeQueenEventListener(), waitTime);
-  };
-
-  const synchronizeQueen = useCallback(() => {
-    navigate(`/queen/synchronize`);
-  }, [navigate]);
-
-  return { checkQueen, synchronizeQueen, queenReady, queenError };
-};
-
 const sendData = async (): Promise<string[]> => {
   const surveyUnitsInTempZone: string[] = [];
   const surveyUnits = await surveyUnitIDBService.getAll();
-  await Promise.all(surveyUnits.map(su => handleSurveyUnit(su, surveyUnitsInTempZone)));
+  // Filter survey units to only upload those that have been updated. We consider undefined as updated
+  const updatedSurveyUnits = surveyUnits.filter(su => (su.hasBeenUpdated ?? true) === true);
+  await Promise.all(updatedSurveyUnits.map(su => handleSurveyUnit(su, surveyUnitsInTempZone)));
   return surveyUnitsInTempZone;
 };
 
@@ -91,6 +42,13 @@ const handleSurveyUnit = async (
 
     if (response.ok && response.data) {
       await createStateIdsAndCommunicationRequestIds(response.data);
+    }
+    if (response.ok) {
+      // Set locally the survey unit as not updated after successful upload
+      const updatedSurveyUnit = await surveyUnitIDBService.getById(id);
+      if (updatedSurveyUnit) {
+        await surveyUnitIDBService.addOrUpdateSU({ ...updatedSurveyUnit, hasBeenUpdated: false });
+      }
     }
 
     if (shouldPutInTempZone(response.status)) {
@@ -158,13 +116,40 @@ const getUserData = async () => {
   await userIdbService.addOrUpdate({ civility: TITLES.MISTER.type, ...interviewer } as User);
 };
 
-const putSurveyUnitInDataBase = async (su: SurveyUnit) => {
-  await surveyUnitIDBService.addOrUpdate(su);
+// Clean locally surveyUnits that are not expected anymore
+const cleanupOldSuveyUnits = async (expectedSurveyUnitIds: string[]) => {
+  // get all surveyUnits from local datastore
+  const existingSurveyUnits = await surveyUnitIDBService.getAll();
+
+  // No survey unit found in datastore, skipping cleanup
+  if (existingSurveyUnits.length === 0) {
+    return;
+  }
+
+  // Create a Set of IDs from local storage for faster lookup
+  const expectedSurveyUnitIdsSet = new Set(expectedSurveyUnitIds);
+
+  // Find surveyUnits that are in the local datastore but not expected
+  const surveyUnitsToDelete = existingSurveyUnits.filter(
+    surveyUnit => !expectedSurveyUnitIdsSet.has(surveyUnit.id)
+  );
+
+  // No differential interrogations found, skipping cleanup
+  if (surveyUnitsToDelete.length === 0) {
+    return;
+  }
+
+  await Promise.all(
+    surveyUnitsToDelete.map(surveyUnit => surveyUnitIDBService.delete(surveyUnit.id))
+  );
 };
 
-const clean = async () => {
-  await surveyUnitIDBService.deleteAll();
+const cleanMissingSurveyUnits = async () => {
   await surveyUnitMissingIdbService.deleteAll();
+};
+
+const putSurveyUnitInDataBase = async (su: SurveyUnit) => {
+  await surveyUnitIDBService.addOrUpdateSU({ ...su, hasBeenUpdated: false });
 };
 
 const validateSU = (su: SurveyUnit) => {
@@ -182,6 +167,7 @@ const validateSU = (su: SurveyUnit) => {
 };
 
 const getData = async () => {
+  const expectedSurveyUnitIds: string[] = [];
   const surveyUnitsSuccess: { id: string; campaign: string }[] = [];
 
   try {
@@ -193,6 +179,8 @@ const getData = async () => {
       surveyUnits.map(async (su: SurveyUnitDto) => {
         try {
           if (!su.id) return;
+
+          expectedSurveyUnitIds.push(su.id);
 
           const { data: surveyUnit, status } = await getSurveyUnitById(su.id);
 
@@ -220,7 +208,7 @@ const getData = async () => {
     throw new Error('Server is not responding');
   }
 
-  return { surveyUnitsSuccess };
+  return { surveyUnitsSuccess, expectedSurveyUnitIds };
 };
 
 const getWFSSurveyUnitsSortByCampaign = async () => {
@@ -279,9 +267,12 @@ export const synchronizePearl = async () => {
     surveyUnitsInTempZone = await sendData();
     transmittedSurveyUnits = await getWFSSurveyUnitsSortByCampaign();
 
-    await clean();
+    // Download every survey units
+    const { surveyUnitsSuccess: susSuccess, expectedSurveyUnitIds } = await getData();
 
-    const { surveyUnitsSuccess: susSuccess } = await getData();
+    // Clean locally surveyUnits that are not expected anymore
+    await cleanupOldSuveyUnits(expectedSurveyUnitIds);
+    await cleanMissingSurveyUnits();
 
     surveyUnitsSuccess = susSuccess.map(({ id }) => id);
     loadedSurveyUnits = await getNewSurveyUnitsByCampaign(susSuccess, allOldSurveyUnitsByCampaign);

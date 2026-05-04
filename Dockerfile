@@ -1,51 +1,25 @@
-### BUILD STEP ###
-
-FROM node:latest AS builder
-RUN npm install -g pnpm
-
-ARG VITE_PEARL_API_URL
-ARG VITE_PEARL_AUTHENTICATION_MODE
-ARG VITE_KEYCLOAK_CLIENTID
-ARG VITE_KEYCLOAK_REALM
-ARG VITE_KEYCLOAK_URL
-ARG VITE_KEYCLOAK_ROLES_ALLOW_LIST
-ARG VITE_QUEEN_URL
-
-ENV VITE_APP_ENV=$VITE_APP_ENV
-ENV VITE_PEARL_AUTHENTICATION_MODE=$VITE_PEARL_AUTHENTICATION_MODE
-ENV VITE_KEYCLOAK_CLIENTID=$VITE_KEYCLOAK_CLIENTID
-ENV VITE_KEYCLOAK_REALM=$VITE_KEYCLOAK_REALM
-ENV VITE_KEYCLOAK_URL=$VITE_KEYCLOAK_URL
-ENV VITE_KEYCLOAK_ROLES_ALLOW_LIST=$VITE_KEYCLOAK_ROLES_ALLOW_LIST
-ENV VITE_QUEEN_URL=$VITE_QUEEN_URL
-
-WORKDIR /pearl
-
-COPY package.json pnpm-lock.yaml ./
-
-RUN pnpm install --frozen-lockfile
-
-COPY ./ ./
-RUN pnpm build
-
-### EXECUTION STEP ###
-
-FROM nginxinc/nginx-unprivileged:mainline-alpine
+FROM nginxinc/nginx-unprivileged:1.29.5-alpine
 
 # Non root user
 ENV NGINX_USER_ID=101
 ENV NGINX_GROUP_ID=101
 ENV NGINX_USER=nginx
-ENV NGINX_GROUP=nginx
 
 USER $NGINX_USER_ID
 
 # Add build to nginx root webapp
-COPY --from=builder --chown=$NGINX_USER:$NGINX_GROUP /pearl/build /usr/share/nginx/html
+COPY --chown=$NGINX_USER:$NGINX_USER dist /usr/share/nginx/html
 
 # Copy nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
-COPY --from=builder --chown=$NGINX_USER:$NGINX_GROUP /pearl/nginx.conf /etc/nginx/conf.d/nginx.conf
+COPY --chown=$NGINX_USER:$NGINX_USER nginx.conf /etc/nginx/conf.d/nginx.conf
+
+RUN chmod 755 /usr/share/nginx/html/vite-envs.sh
+
+USER $NGINX_USER_ID
+EXPOSE 8080
 
 # Add entrypoint and start nginx server
-CMD ["nginx", "-g", "daemon off;"]
+
+
+ENTRYPOINT sh -c "/usr/share/nginx/html/vite-envs.sh && nginx -g 'daemon off;'"

@@ -7,7 +7,7 @@ import schema5 from './schema-5.json';
 import { User } from './model/user';
 import { SyncReport } from './model/syncReport';
 import { SurveyUnitMissing } from './model/surveyUnitMissing';
-import type { SurveyUnit, Notification } from '../../types/pearl';
+import type { Notification, LocalSurveyUnit } from '../../types/pearl';
 import {
   contactOutcomes,
   deprecatedContactOutcomes,
@@ -18,7 +18,7 @@ export const db = new Dexie('Pearl') as Dexie & {
   user: EntityTable<User, 'id'>;
   syncReport: EntityTable<SyncReport, 'id'>;
   surveyUnitMissing: EntityTable<SurveyUnitMissing, 'id'>;
-  surveyUnit: EntityTable<SurveyUnit, 'id'>;
+  surveyUnit: EntityTable<LocalSurveyUnit, 'id'>;
 };
 
 const convertDeprecatedContactOutcomeType = (contactOutcomeType: string) => {
