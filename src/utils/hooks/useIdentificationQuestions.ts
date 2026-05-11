@@ -122,17 +122,13 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
           demenagementEnqueteur: isChecked,
         };
 
-        const newStates = isChecked
-          ? [{ type: surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type, date: Date.now() }]
-          : surveyUnit.states;
-
         const updatedSurveyUnit = {
           ...surveyUnit,
           identification: newIdentification,
           persons: isChecked
             ? [
                 {
-                  title: '',
+                  title: 'MISTER',
                   firstName: D.surveyUnitFirstName,
                   lastName: D.surveyUnitLastName,
                   email: '',
@@ -143,11 +139,20 @@ export function useIdentificationQuestions(surveyUnit: SurveyUnit) {
                 },
               ]
             : surveyUnit.persons,
-          states: newStates,
           otherModeQuestionnaireState: isChecked ? [] : surveyUnit.otherModeQuestionnaireState,
+          priority: isChecked,
         };
 
         persistSurveyUnit(updatedSurveyUnit);
+
+        // Reset Drama Queen interrogation when demenagement is detected
+        if (isChecked && surveyUnit.id) {
+          import('dramaQueen/partialResetInterrogation')
+            .then(module => module.default.partialResetInterrogation(surveyUnit.id))
+            .catch(error => {
+              console.error('Error resetting interrogation in Drama Queen:', error);
+            });
+        }
 
         // Update local state
         const newQuestions = getIdentificationQuestionsTree(
