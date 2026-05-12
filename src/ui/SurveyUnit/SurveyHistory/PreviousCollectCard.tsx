@@ -39,7 +39,7 @@ export function PreviousCollectCard({ previousCollectHistory }: Readonly<Address
         <Typography fontWeight={600} color={'grey'}>
           {D.previousCollectInterviewerComment}
         </Typography>
-        <Typography fontWeight={600}>{previousCollectHistory.comment.toString()}</Typography>
+        <Typography fontWeight={600}>{previousCollectHistory?.comment}</Typography>
       </InfoCard>
     </>
   );
