@@ -14,5 +14,7 @@ declare module 'dramaQueen/DramaIndex' {
     initialPathname: string;
   }): VoidFunction;
 
+}
+declare module 'dramaQueen/getQueenVersion' {
   export function getQueenVersion(): string;
 }

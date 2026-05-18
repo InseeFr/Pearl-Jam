@@ -157,7 +157,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/drama-queen:3.3.1-rc-synchronization-optimization.3
+    image: inseefr/drama-queen:3.4.0-rc-expose-app-version.0
     tty: true
     stdin_open: true
     environment:

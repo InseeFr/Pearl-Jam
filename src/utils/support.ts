@@ -1,14 +1,15 @@
 import { format } from 'date-fns';
 import { version } from '../../package.json';
 
-const DEFAULT_QUEEN_VERSION = 'error when getting queen version';
-const DEFAULT_SYNC_DATE = 'no synch yet';
+export const DEFAULT_QUEEN_VERSION = 'error when getting queen version';
+export const DEFAULT_SYNC_DATE = 'no synch yet';
 
-async function getQueenVersionSafely(): Promise<string> {
+export async function getQueenVersionSafely(): Promise<string> {
   try {
-    const { getQueenVersion } = await import('dramaQueen/DramaIndex');
-    return getQueenVersion();
-  } catch (error) {
+    const remote = await import('dramaQueen/getQueenVersion');
+    return remote.default.getQueenVersion();
+  } catch (e) {
+    console.error('Error when getting queen version', e);
     return DEFAULT_QUEEN_VERSION;
   }
 }
