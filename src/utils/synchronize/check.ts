@@ -10,6 +10,8 @@ import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-servic
 import { SyncReport } from 'utils/indexeddb/model/syncReport';
 import type { Notification } from '../../types/pearl';
 
+const SURVEY_UNITS_LIST_LOCAL_STORAGE_KEY = 'SYNCHRONIZATION_INTERROGATION_IDS';
+
 export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) => {
   if (pearlSuccess && queenSuccess) {
     const queenMissing = pearlSuccess.reduce((_: string[], pearlSU: string) => {
@@ -195,3 +197,13 @@ export const getSavedSyncPearlData = () =>
   JSON.parse(globalThis.localStorage.getItem('PEARL_SYNC_RESULT') || '{}');
 export const getSavedSyncQueenData = () =>
   JSON.parse(globalThis.localStorage.getItem('QUEEN_SYNC_RESULT') || '{}');
+
+/**
+ * Store surveyUnits ids in local storage for Queen synchronization
+ */
+export const storeSurveyUnitsIds = async () => {
+  const surveyUnits = await surveyUnitIDBService.getAll();
+  const surveyUnitsIds = surveyUnits.map(surveyUnit => surveyUnit.id);
+
+  localStorage.setItem(SURVEY_UNITS_LIST_LOCAL_STORAGE_KEY, JSON.stringify(surveyUnitsIds));
+};
