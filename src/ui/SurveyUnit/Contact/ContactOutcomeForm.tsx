@@ -18,7 +18,7 @@ import {
 } from 'utils/functions/contacts/ContactOutcome';
 
 const defaultValue = {
-  date: new Date().getTime(),
+  date: Date.now(),
   type: undefined,
   totalNumberOfContactAttempts: 0,
 };

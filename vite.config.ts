@@ -64,13 +64,8 @@ export default defineConfig({
         name: 'Organisation de la collecte des questionnaire en face à face',
         icons: [
           {
-            src: 'favicon.ico',
-            sizes: '32x32',
-            type: 'image/x-icon',
-          },
-          {
             src: 'static/images/Insee_logo_header.webp',
-            sizes: '298x100',
+            sizes: '270x274',
             type: 'image/webp',
           },
         ],

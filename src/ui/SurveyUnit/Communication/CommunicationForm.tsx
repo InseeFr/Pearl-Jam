@@ -150,7 +150,7 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
       reason: communicationRequest.reason,
       emitter: 'INTERVIEWER',
       communicationTemplateId: communicationTemplatedId,
-      status: [{ date: new Date().getTime(), status: communicationStatusEnum.INITIATED.value }],
+      status: [{ date: Date.now(), status: communicationStatusEnum.INITIATED.value }],
     };
 
     surveyUnitIDBService.addOrUpdateSU({

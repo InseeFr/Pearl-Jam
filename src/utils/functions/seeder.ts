@@ -38,7 +38,7 @@ export async function seedData() {
     let states = [
       {
         id: user.id + 1_000,
-        date: new Date().getTime() - 10 * day,
+        date: Date.now() - 10 * day,
         type: surveyUnitStateEnum.IN_PREPARATION.type,
       },
     ];
@@ -47,7 +47,7 @@ export async function seedData() {
         ...states,
         {
           id: user.id + 2_000,
-          date: new Date().getTime() - 9 * day,
+          date: Date.now() - 9 * day,
           type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type,
         },
       ];
@@ -56,7 +56,7 @@ export async function seedData() {
       states = [
         ...states,
         {
-          date: new Date().getTime() - 8 * day,
+          date: Date.now() - 8 * day,
           type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
         },
       ];
@@ -65,7 +65,7 @@ export async function seedData() {
       states = [
         ...states,
         {
-          date: new Date().getTime() - 7 * day,
+          date: Date.now() - 7 * day,
           type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
         },
       ];
@@ -179,29 +179,29 @@ export async function seedData() {
       contactAttempts: [
         {
           status: 'TUN',
-          date: new Date().getTime() - getRandomIntBetween(10, 100) * day,
+          date: Date.now() - getRandomIntBetween(10, 100) * day,
           medium: 'FIELD',
         },
         {
           status: 'INA',
-          date: new Date().getTime() - getRandomIntBetween(3, 9) * day,
+          date: Date.now() - getRandomIntBetween(3, 9) * day,
           medium: 'FIELD',
         },
       ],
       identification: {},
       campaignLabel: 'Démonstration Séminaire Filière 2023',
-      managementStartDate: new Date().getTime() - 10 * day,
-      interviewerStartDate: new Date().getTime() - 10 * day,
-      identificationPhaseStartDate: new Date().getTime() - 10 * day,
-      collectionStartDate: new Date().getTime() - 10 * day,
-      collectionEndDate: new Date().getTime() + 50 * day,
-      endDate: new Date().getTime() + 51 * day,
+      managementStartDate: Date.now() - 10 * day,
+      interviewerStartDate: Date.now() - 10 * day,
+      identificationPhaseStartDate: Date.now() - 10 * day,
+      collectionStartDate: Date.now() - 10 * day,
+      collectionEndDate: Date.now() + 50 * day,
+      endDate: Date.now() + 51 * day,
       identificationConfiguration:
         user.id === 10 ? IdentificationConfiguration.HOUSEF2F : IdentificationConfiguration.INDTEL,
       contactOutcomeConfiguration: 'F2F',
       contactAttemptConfiguration: 'F2F',
       contactOutcome: {
-        date: new Date().getTime() - 2 * day,
+        date: Date.now() - 2 * day,
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
         totalNumberOfContactAttempts: 2,
       },
@@ -245,12 +245,12 @@ export async function seedData() {
   });
   surverUnits.push({
     ...surverUnits[0],
-    managementStartDate: new Date().getTime() - 10 * day,
-    interviewerStartDate: new Date().getTime() - 9 * day,
-    identificationPhaseStartDate: new Date().getTime() - 8 * day,
-    collectionStartDate: new Date().getTime() - 7 * day,
-    collectionEndDate: new Date().getTime() - 6 * day,
-    endDate: new Date().getTime() + 15 * day,
+    managementStartDate: Date.now() - 10 * day,
+    interviewerStartDate: Date.now() - 9 * day,
+    identificationPhaseStartDate: Date.now() - 8 * day,
+    collectionStartDate: Date.now() - 7 * day,
+    collectionEndDate: Date.now() - 6 * day,
+    endDate: Date.now() + 15 * day,
     id: 'questNotAvailable',
     identification: {},
     firstName: 'Flin',
@@ -259,12 +259,12 @@ export async function seedData() {
   });
   surverUnits.push({
     ...surverUnits[0],
-    managementStartDate: new Date().getTime() - 10 * day,
-    interviewerStartDate: new Date().getTime() - 9 * day,
-    identificationPhaseStartDate: new Date().getTime() - 8 * day,
-    collectionStartDate: new Date().getTime() - 7 * day,
-    collectionEndDate: new Date().getTime() - 6 * day,
-    endDate: new Date().getTime() + 15 * day,
+    managementStartDate: Date.now() - 10 * day,
+    interviewerStartDate: Date.now() - 9 * day,
+    identificationPhaseStartDate: Date.now() - 8 * day,
+    collectionStartDate: Date.now() - 7 * day,
+    collectionEndDate: Date.now() - 6 * day,
+    endDate: Date.now() + 15 * day,
     id: 'HOUSETEL',
     identification: {},
     firstName: 'Flin',
@@ -273,12 +273,12 @@ export async function seedData() {
   });
   surverUnits.push({
     ...surverUnits[0],
-    managementStartDate: new Date().getTime() - 10 * day,
-    interviewerStartDate: new Date().getTime() - 9 * day,
-    identificationPhaseStartDate: new Date().getTime() - 8 * day,
-    collectionStartDate: new Date().getTime() - 7 * day,
-    collectionEndDate: new Date().getTime() - 6 * day,
-    endDate: new Date().getTime() + 15 * day,
+    managementStartDate: Date.now() - 10 * day,
+    interviewerStartDate: Date.now() - 9 * day,
+    identificationPhaseStartDate: Date.now() - 8 * day,
+    collectionStartDate: Date.now() - 7 * day,
+    collectionEndDate: Date.now() - 6 * day,
+    endDate: Date.now() + 15 * day,
     id: 'SRCVREINT',
     identification: {},
     firstName: 'Flin',
@@ -287,12 +287,12 @@ export async function seedData() {
   });
   surverUnits.push({
     ...surverUnits[0],
-    managementStartDate: new Date().getTime() - 10 * day,
-    interviewerStartDate: new Date().getTime() - 9 * day,
-    identificationPhaseStartDate: new Date().getTime() - 8 * day,
-    collectionStartDate: new Date().getTime() - 7 * day,
-    collectionEndDate: new Date().getTime() - 6 * day,
-    endDate: new Date().getTime() + 15 * day,
+    managementStartDate: Date.now() - 10 * day,
+    interviewerStartDate: Date.now() - 9 * day,
+    identificationPhaseStartDate: Date.now() - 8 * day,
+    collectionStartDate: Date.now() - 7 * day,
+    collectionEndDate: Date.now() - 6 * day,
+    endDate: Date.now() + 15 * day,
     id: 'INDF2F',
     identification: null,
     firstName: 'Flin',

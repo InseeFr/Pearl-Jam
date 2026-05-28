@@ -42,7 +42,7 @@ export const daysLeftForSurveyUnit = su => {
   }
   return Math.max(
     0,
-    Math.ceil((new Date(su.collectionEndDate).getTime() - new Date().getTime()) / DAY)
+    Math.ceil((new Date(su.collectionEndDate).getTime() - Date.now()) / DAY)
   );
 };
 
@@ -110,7 +110,7 @@ const addContactState = (surveyUnit, newState) => {
       newStates = addLatestState(newStates, newState);
       if (isContactAttemptOk(surveyUnit)) {
         newStates = addLatestState(newStates, {
-          date: new Date().getTime(),
+          date: Date.now(),
           type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
         });
       }
@@ -119,7 +119,7 @@ const addContactState = (surveyUnit, newState) => {
     case surveyUnitStateEnum.APPOINTMENT_MADE.type:
       if (getContactAttemptNumber(surveyUnit) === 0) {
         newStates = addLatestState(newStates, {
-          date: new Date().getTime(),
+          date: Date.now(),
           type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
         });
       }
@@ -143,12 +143,12 @@ export const addNewState = (surveyUnit, stateType) => {
   let newStates = copyStatesFromSurveyUnit(surveyUnit);
 
   const lastStateType = getLastState(newStates)?.type;
-  const newState = { date: new Date().getTime(), type: stateType };
+  const newState = { date: Date.now(), type: stateType };
   switch (lastStateType) {
     case surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type:
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newStates = addContactState(surveyUnit, newState);
-        newStates = addLatestState(newStates, { date: new Date().getTime(), type: lastStateType });
+        newStates = addLatestState(newStates, { date: Date.now(), type: lastStateType });
       } else {
         newStates = addLatestState(newStates, newState);
       }
@@ -158,7 +158,7 @@ export const addNewState = (surveyUnit, stateType) => {
       if (surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type === stateType) {
         if (isContactAttemptOk(surveyUnit)) {
           newStates = addLatestState(newStates, {
-            date: new Date().getTime(),
+            date: Date.now(),
             type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
           });
         }
@@ -189,7 +189,7 @@ export const addNewState = (surveyUnit, stateType) => {
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newStates = addContactState(surveyUnit, newState);
         newStates = addLatestState(newStates, {
-          date: new Date().getTime(),
+          date: Date.now(),
           type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type,
         });
       } else {
@@ -222,7 +222,7 @@ export const addNewState = (surveyUnit, stateType) => {
 export const updateStateWithDates = surveyUnit => {
   let newStates = copyStatesFromSurveyUnit(surveyUnit);
   const lastState = getLastState(newStates)?.type;
-  const currentDate = new Date().getTime();
+  const currentDate = Date.now();
   const { identificationPhaseStartDate } = surveyUnit;
 
   if (
@@ -237,7 +237,7 @@ export const updateStateWithDates = surveyUnit => {
 
 export const isQuestionnaireAvailable = su => inaccessible => {
   const { collectionEndDate, collectionStartDate } = su;
-  const now = new Date().getTime();
+  const now = Date.now();
 
   return !inaccessible && now >= collectionStartDate && now <= collectionEndDate;
 };
@@ -246,7 +246,7 @@ export const isSelectable = su => {
   const { identificationPhaseStartDate, endDate } = su;
   const endTime = new Date(endDate).getTime();
   const identificationPhaseStartTime = new Date(identificationPhaseStartDate).getTime();
-  const instantTime = new Date().getTime();
+  const instantTime = Date.now();
   return endTime > instantTime && instantTime > identificationPhaseStartTime;
 };
 

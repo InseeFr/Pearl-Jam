@@ -83,6 +83,8 @@ test.skip('check if a survey has the "To synchronize" state after Unavaible', as
   await homePage.go();
   await page.locator('div').filter({ hasText: /^GRAHAM-2 Leanne-2#questNotAvailable$/ });
 
+  page.locator('div').filter({ hasText: /^MOREAU Isabelle#questNotAvailable$/ });
+
   await page.getByRole('link', { name: 'Mon suivi' }).click();
   await page.getByRole('tab', { name: 'Suivi des unités par enquête' }).click();
   await page

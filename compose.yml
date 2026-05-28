@@ -71,7 +71,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/queen-back-office:5.3.0-rc
+    image: inseefr/queen-back-office:5.8.3
     tty: true
     stdin_open: true
     #healthcheck:
@@ -121,7 +121,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/pearl-jam-back-office:5.6.9-rc
+    image: inseefr/pearl-jam-back-office:5.12.7
     tty: true
     stdin_open: true
     # healthcheck:
@@ -169,7 +169,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/drama-queen:2.5.3
+    image: inseefr/drama-queen:3.5.1-rc.feat-no-more-false-successful-syncs.0
     tty: true
     stdin_open: true
     #healthcheck:
@@ -242,5 +242,5 @@ services:
       - /bin/bash
       - -c
       - |
-        yarn install --network-timeout 100000
+        pnpm i --frozen-lockfile
         npx playwright codegen --viewport-size="1920,1080" http://localhost:3000/

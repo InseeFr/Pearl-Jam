@@ -8,6 +8,7 @@ import notificationIdbService from 'utils/indexeddb/services/notification-idb-se
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
+import { format } from 'date-fns';
 
 export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) => {
   if (pearlSuccess && queenSuccess) {
@@ -32,7 +33,7 @@ export const getNotifFromResult = (
 ): Omit<Notification, 'id'> => {
   const { state, messages } = result;
   return {
-    date: nowDate || new Date().getTime(),
+    date: nowDate || Date.now(),
     type: NOTIFICATION_TYPE_SYNC,
     title: D.titleSync(state),
     messages,
@@ -179,11 +180,17 @@ export const analyseResult = async () => {
     loadedSurveyUnits
   );
 
-  const nowDate = new Date().getTime();
+  const nowDate = Date.now();
   const notification = getNotifFromResult(result, nowDate);
   await notificationIdbService.addOrUpdateNotif(notification);
   const report = getReportFromResult(result, nowDate);
   await syncReportIdbService.addOrUpdateReport(report);
+
+  // Store last successful sync date
+  if (result.state === 'success') {
+    const humanReadableDate = format(new Date(), 'dd/MM/yyyy HH:mm:ss');
+    localStorage.setItem('LAST_SYNCH_SUCCESS_DATE', humanReadableDate);
+  }
 
   return result;
 };
@@ -194,3 +201,11 @@ export const getSavedSyncPearlData = () =>
   JSON.parse(window.localStorage.getItem('PEARL_SYNC_RESULT') || '{}');
 export const getSavedSyncQueenData = () =>
   JSON.parse(window.localStorage.getItem('QUEEN_SYNC_RESULT') || '{}');
+
+export const PEARL_INIT_SYNC_STATE = {
+  error: true,
+  surveyUnitsSuccess: [],
+  surveyUnitsInTempZone: [],
+  transmittedSurveyUnits: [],
+  loadedSurveyUnits: [],
+}
