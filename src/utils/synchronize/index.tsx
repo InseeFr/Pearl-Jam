@@ -22,6 +22,7 @@ import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import userIdbService from 'utils/indexeddb/services/user-idb-service';
+import { PEARL_INIT_SYNC_STATE, saveSyncPearlData } from './check';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
@@ -100,8 +101,8 @@ const sendData = async () => {
             id,
             formatSurveyUnitForPut(body)
           );
-          if (!tempZoneError) surveyUnitsInTempZone.push(id);
-          else throw new Error('Server is not responding');
+          if (tempZoneError) {throw new Error('Server is not responding');}
+          else {surveyUnitsInTempZone.push(id);}
         }
 
         if (error && ![400, 403, 404, 500].includes(status)) {
@@ -148,8 +149,7 @@ const validateSU = (su: SurveyUnit) => {
   if (Array.isArray(comments) && comments.length === 0) {
     const interviewerComment = { type: 'INTERVIEWER', value: '' };
     const managementComment = { type: 'MANAGEMENT', value: '' };
-    su.comments.push(interviewerComment);
-    su.comments.push(managementComment);
+    su.comments.push(interviewerComment, managementComment);
   }
 
   return su;
@@ -241,6 +241,10 @@ export const synchronizePearl = async () => {
 
   let surveyUnitsInTempZone;
   let surveyUnitsSuccess;
+
+  // allows to detect interrupted sync process as an error
+  saveSyncPearlData(PEARL_INIT_SYNC_STATE);
+
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
     await getUserData();

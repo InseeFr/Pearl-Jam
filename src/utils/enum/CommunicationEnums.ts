@@ -7,7 +7,7 @@ export const communicationMediumEnum = {
 };
 
 export const findCommunicationMediumLabelByValue = (value?: string) =>
-  Object.values(communicationMediumEnum).filter(comMedium => comMedium.value === value)?.[0]?.label;
+  Object.values(communicationMediumEnum).find(comMedium => comMedium.value === value)?.label;
 
 // Type of communication
 export const communicationTypeEnum = {
@@ -16,7 +16,7 @@ export const communicationTypeEnum = {
 };
 
 export const findCommunicationTypeLabelByValue = (value?: string) =>
-  Object.values(communicationTypeEnum).filter(comType => comType.value === value)?.[0]?.label;
+  Object.values(communicationTypeEnum).find(comType => comType.value === value)?.label;
 
 // Reason for sending
 export const communicationReasonEnum = {
@@ -24,7 +24,7 @@ export const communicationReasonEnum = {
   REFUSAL: { value: 'REFUSAL', label: `${D.communicationMotiveRefusal}` },
 };
 export const findCommunicationReasonLabelByValue = (value: string | undefined) =>
-  Object.values(communicationReasonEnum).filter(comReason => comReason.value === value)?.[0]?.label;
+  Object.values(communicationReasonEnum).find(comReason => comReason.value === value)?.label;
 
 // Communication status
 export const communicationStatusEnum = {
@@ -36,7 +36,7 @@ export const communicationStatusEnum = {
   CANCELLED: { value: 'CANCELLED', label: `${D.communicationStatusCancelled}` },
 };
 export const findCommunicationStatusLabelByValue = (value: string) =>
-  Object.values(communicationStatusEnum).filter(comStatus => comStatus.value === value)?.[0]?.label;
+  Object.values(communicationStatusEnum).find(comStatus => comStatus.value === value)?.label;
 
 // emitter
 export const communicationEmitterEnum = {

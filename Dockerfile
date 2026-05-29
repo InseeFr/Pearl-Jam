@@ -1,6 +1,7 @@
 ### BUILD STEP ###
 
-FROM node:latest AS builder
+FROM node:22-alpine AS builder
+RUN npm install -g pnpm
 
 ARG VITE_PEARL_API_URL
 ARG VITE_PEARL_AUTHENTICATION_MODE
@@ -20,9 +21,13 @@ ENV VITE_QUEEN_URL=$VITE_QUEEN_URL
 
 WORKDIR /pearl
 
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+RUN pnpm install --frozen-lockfile
+
 COPY ./ ./
 
-RUN yarn --network-timeout 1000000000 && yarn build
+RUN pnpm build
 
 ### EXECUTION STEP ###
 

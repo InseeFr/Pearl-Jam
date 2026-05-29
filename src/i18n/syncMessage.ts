@@ -99,16 +99,31 @@ const syncMessage = {
     en: `The synchronization has stopped.`,
     sq: `Sinkronizimi është ndalur.`,
   },
-  syncTempZone: {
-    fr: `Pour information, certaines unités enquêtées n'ont pas pu être sauvegardées correctement pour un problème de droit. Ces unités ont donc été sauvegardées de manière sécurisée ailleurs, en attendant un éventuel traitement. L'administrateur de l'application a été prévenu.`,
-    en: `For your information, some of the survey-units could not be saved correctly due to legal issues. These units were therefore saved securely elsewhere, pending further processing. The application administrator has been notified.`,
-    sq: `Për informacionin tuaj, disa nga njësitë e anketuara nuk mundën të ruheshin në mënyrë korrekte për shkak të çështjeve ligjore. Këto njësi prandaj u ruajtën në mënyrë të sigurt diku tjetër, në pritje të përpunimit të mëtejshëm. Administratori i aplikacionit është njoftuar.`,
-  },
-  detailsSync: {
-    fr: 'Détails : Bilan de synchronisation',
-    en: 'Details : Synchronization report',
-    sq: 'Detajet : Raporti i Sinkronizimit',
-  },
+   syncTempZone: {
+     fr: `Pour information, certaines unités enquêtées n'ont pas pu être sauvegardées correctement pour un problème de droit. Ces unités ont donc été sauvegardées de manière sécurisée ailleurs, en attendant un éventuel traitement. L'administrateur de l'application a été prévenu.`,
+     en: `For your information, some of the survey-units could not be saved correctly due to legal issues. These units were therefore saved securely elsewhere, pending further processing. The application administrator has been notified.`,
+     sq: `Për informacionin tuaj, disa nga njësitë e anketuara nuk mundën të ruheshin në mënyrë korrekte për shkak të çështjeve ligjore. Këto njësi prandaj u ruajtën në mënyrë të sigurt diku tjetër, në pritje të përpunimit të mëtejshëm. Administratori i aplikacionit është njoftuar.`,
+   },
+   detailsSync: {
+     fr: 'Détails : Bilan de synchronisation',
+     en: 'Details : Synchronization report',
+     sq: 'Detajet : Raporti i Sinkronizimit',
+   },
+   queenSyncMayHaveBeenInterrupted: {
+     fr: `La synchronisation des questionnaires peut avoir été interrompue.`,
+     en: `Questionnaire application synchronization may have been interrupted.`,
+     sq: `Sinkronizimi i pyetësorit mund të ketë qenë i ndërprerë.`
+   },
+   queenSyncFailed: {
+     fr: `La synchronisation des questionnaires a échoué.`,
+     en: `Questionnaire application synchronization failed.`,
+     sq: `Sinkronizimi i pyetësorit dështoi.`
+   },
+   queenSyncResultInvalid: {
+     fr: `Le résultat de la synchronisation des questionnaires est invalide.`,
+     en: `Questionnaire application synchronization result is invalid.`,
+     sq: `Rezultati i sinkronizimit të pyetësorit është i pavlefshëm.`
+   },
   transmittedSurveyUnits: {
     fr: (n: number) =>
       n > 1 ? `${n} unités enquêtées transmises` : `${n} unité enquêtée transmise`,

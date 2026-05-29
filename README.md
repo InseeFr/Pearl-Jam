@@ -42,28 +42,31 @@ VITE_KEYCLOAK_CLIENTID: myclient
 VITE_KEYCLOAK_REALM: standard
 VITE_KEYCLOAK_URL: http://localhost:7080
 
-playwright:
-depends_on: - backend
-container_name: reactapp
-build:
-dockerfile: ./playwright-dev.Dockerfile
-hostname: front
-volumes: \*react-volumes
-tty: true
-stdin_open: true # without this node doesn't start
-working_dir: /opt/app
-ipc: host
-ports: - 5173:5173 - 8888:8888
-environment:
-WATCHPACK_POLLING: true
-FAST_REFRESH: true
-DISPLAY: unix:0
-XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
-command: - /bin/bash - -c - |
-echo "Podman !!!" && sleep 1
-mkdir -p /mnt/c/Windows/System32/WindowsPowerShell/v1.0 && sleep 1
-touch /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe && sleep 1
-chmod '755' /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
-yarn install
-yarn dev && sleep 1
-sleep infinity
+```
+podman compose --env-file .env.docker --profile stack down -v
+```
+
+Beware of old local front images, clear them before testing.
+
+## Playwright
+
+Install chromium
+
+```
+npx playwright install chromium
+```
+
+Launch services related to playwright testing with podman.
+It will build a front image of this app as we specically need to test on builded version since service workers do no work the same way in a local dev server.
+
+You might need to set proxies in Dockerfile, do not push them !
+
+```
+podman compose --env-file .env.docker --profile playwright up -d
+```
+
+Run tests
+
+```
+npx playwright test --ui-port=8888 --ui-host=localhost
+```
