@@ -7,7 +7,7 @@ import {
 } from '../../../utils/enum/CommunicationEnums';
 import { getAddressData, getprivilegedPerson, getTitle } from '../../../utils/functions';
 import { useUser } from '../../../utils/hooks/useUser';
-import { communicationSchema, recipientSchema, userSchema } from '../../../utils/schemas';
+import { communicationSchema, recipientSchema, userSchema } from '../../../utils/schemas/schemas';
 import { Typography } from '../../Typography';
 import { ValidationError } from '../../ValidationError';
 import { CommunicationRequestForm } from './CommunicationForm';
@@ -121,7 +121,11 @@ const CommunicationConfirmation = ({
               <Typography variant="s" color="textTertiary" component="h3">
                 {D.communicationSummaryInterviewerAddress}
               </Typography>
-              <Typography variant="s" component="p" color={userError.success ? 'textPrimary' : 'error'}>
+              <Typography
+                variant="s"
+                component="p"
+                color={userError.success ? 'textPrimary' : 'error'}
+              >
                 {user.firstName} {user.lastName}
                 <ol />
                 {user.email}

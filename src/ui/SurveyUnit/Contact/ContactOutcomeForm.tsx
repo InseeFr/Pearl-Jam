@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import D from 'i18n';
 import { useForm } from 'react-hook-form';
 import { SurveyUnit } from 'types/pearl';
-import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { StateValues, surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { FieldRow } from 'ui/FieldRow';
 
 import { addNewState, persistSurveyUnit } from 'utils/functions';
@@ -38,7 +38,7 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
 
   const onSubmit = handleSubmit(data => {
     // Update survey unit state
-    let newState: string = surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
+    let newState: StateValues = surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type;
     if (data.type === contactOutcomes.INTERVIEW_ACCEPTED.value) {
       newState = surveyUnitStateEnum.APPOINTMENT_MADE.type;
     }
@@ -67,12 +67,11 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
     }));
   }, [surveyUnit.contactOutcomeConfiguration]);
 
-
   const [count, type] = watch(['totalNumberOfContactAttempts', 'type']);
   const isInvalid = count <= 0 || Number.isNaN(count) || !type;
 
   return (
-    <Dialog open={true} onClose={onClose}>
+    <Dialog open={true} onClose={onClose} maxWidth="lg">
       <form action="" onSubmit={onSubmit}>
         <DialogTitle>{D.contactOutcome}</DialogTitle>
         <DialogContent>

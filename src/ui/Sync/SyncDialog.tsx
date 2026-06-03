@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import DialogContentText from '@mui/material/DialogContentText';
 import D from 'i18n';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -14,8 +14,9 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Accordion } from '../Accordion';
 import { Typography } from '../Typography';
 import ErrorIcon from '@mui/icons-material/Error';
-import { useTheme } from '@emotion/react';
 import { SyncResult } from 'types/pearl';
+import { useTheme } from '@mui/material/styles';
+import { ColoredTheme } from 'ui/PearlTheme';
 
 /**
  * Dialog that summarize synchronization results
@@ -103,7 +104,7 @@ function SyncDetail({
 }: Readonly<{
   campaigns: { name: string; transmitted: number; loaded: number; total: number }[];
 }>) {
-  const theme = useTheme();
+  const theme = useTheme<ColoredTheme>();
   return (
     <Accordion
       defaultOpen={false}
@@ -137,7 +138,16 @@ function SyncDetail({
   );
 }
 
-function SyncIcon({ state, ...props }: Readonly<{ state: string }>) {
+function SyncIcon({
+  state,
+  sx,
+  fontSize,
+  ...props
+}: Readonly<{
+  state: string;
+  sx: { marginRight: number; verticalAlign: string };
+  fontSize: string;
+}>) {
   switch (state) {
     case 'error':
       return <ErrorIcon {...props} color="error" />;

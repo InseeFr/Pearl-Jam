@@ -1,9 +1,19 @@
 import D from 'i18n';
+import { SurveyUnitCommunicationTemplate } from 'types/pearl';
 
 // Communication Medium
 export const communicationMediumEnum = {
   MEDIUM_MAIL: { value: 'LETTER', label: `${D.mediumMail}` },
   MEDIUM_EMAIL: { value: 'EMAIL', label: `${D.mediumEmail}` },
+};
+
+export const getCommunicationsLabels = (
+  surveyUnitCommunicationTemplate: SurveyUnitCommunicationTemplate
+) => {
+  const mediumLabel = findCommunicationMediumLabelByValue(surveyUnitCommunicationTemplate.medium);
+  const typeLabel = findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type);
+  const reasonLabel = findCommunicationReasonLabelByValue(surveyUnitCommunicationTemplate.reason);
+  return { mediumLabel, typeLabel, reasonLabel };
 };
 
 export const findCommunicationMediumLabelByValue = (value?: string) =>
@@ -34,8 +44,12 @@ export const communicationStatusEnum = {
   FAILED: { value: 'FAILED', label: `${D.communicationStatusFailed}` },
   UNDELIVERED: { value: 'UNDELIVERED', label: `${D.communicationStatusUndelivered}` },
   CANCELLED: { value: 'CANCELLED', label: `${D.communicationStatusCancelled}` },
-};
-export const findCommunicationStatusLabelByValue = (value: string) =>
+} as const;
+
+export type CommunicationStatus =
+  (typeof communicationStatusEnum)[keyof typeof communicationStatusEnum]['value'];
+
+export const findCommunicationStatusLabelByValue = (value?: CommunicationStatus) =>
   Object.values(communicationStatusEnum).find(comStatus => comStatus.value === value)?.label;
 
 // emitter

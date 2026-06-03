@@ -26,13 +26,13 @@ export const convertSUStateInToDo = (suState: StateValues) => {
   if (suState === surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type) {
     return toDoEnum.SYNCHRONIZE;
   }
-  if (
-    [
-      surveyUnitStateEnum.TO_BE_REVIEWED.type,
-      surveyUnitStateEnum.FINALIZED.type,
-      surveyUnitStateEnum.CLOSED.type,
-    ].includes(suState)
-  ) {
+
+  const statesForTermination: Partial<StateValues>[] = [
+    surveyUnitStateEnum.TO_BE_REVIEWED.type,
+    surveyUnitStateEnum.FINALIZED.type,
+    surveyUnitStateEnum.CLOSED.type,
+  ];
+  if (statesForTermination.includes(suState)) {
     return toDoEnum.TERMINATED;
   }
 

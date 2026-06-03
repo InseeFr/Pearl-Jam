@@ -27,7 +27,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
   const [isSync, setIsSync] = useState(() => {
-    return window.localStorage.getItem('SYNCHRONIZE') === 'true';
+    return globalThis.localStorage.getItem('SYNCHRONIZE') === 'true';
   });
 
   const [loading, setLoading] = useState(false);
@@ -181,7 +181,6 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
 
       const notif = getNotifFromResult(result);
       await notificationIdbService.addOrUpdateNotif(notif);
-
       setSyncResult(result);
       stopSync();
     };

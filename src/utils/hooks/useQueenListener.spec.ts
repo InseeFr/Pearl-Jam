@@ -20,7 +20,7 @@ describe('useQueenListener', () => {
       },
     });
 
-    window.dispatchEvent(event);
+    globalThis.dispatchEvent(event);
 
     expect(mockRedirect).toHaveBeenCalledWith(`/survey-unit/${surveyUnitID}/details`);
   });
@@ -47,7 +47,7 @@ describe('useQueenListener', () => {
       },
     });
 
-    window.dispatchEvent(event);
+    globalThis.dispatchEvent(event);
 
     await new Promise(process.nextTick);
 
@@ -60,8 +60,8 @@ describe('useQueenListener', () => {
 
   it('should add and remove QUEEN event listener on mount and unmount', () => {
     const mockRedirect = vi.fn();
-    const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
-    const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
+    const addEventListenerSpy = vi.spyOn(globalThis, 'addEventListener');
+    const removeEventListenerSpy = vi.spyOn(globalThis, 'removeEventListener');
 
     const { unmount } = renderHook(() => useQueenListener(mockRedirect));
 

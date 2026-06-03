@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import { Row } from '../Row';
 import { useTheme } from '@mui/material/styles';
 import { CenteredBox } from '../CenteredBox';
-import { daysLeftForSurveyUnit, getSuTodoState } from '../../utils/functions';
+import { daysLeftForSurveyUnits, getSuTodoState } from '../../utils/functions';
 import { groupBy } from '../../utils/functions/array';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
 import { useToggle } from '../../utils/hooks/useToggle';
@@ -28,7 +28,7 @@ interface CampaignProgressProps {
 export function CampaignProgress({ label, surveyUnits }: Readonly<CampaignProgressProps>) {
   const total = surveyUnits.length;
   const theme = useTheme();
-  const suByTodoState = groupBy(surveyUnits, su => getSuTodoState(su).order);
+  const suByTodoState = groupBy(surveyUnits, su => getSuTodoState(su)?.order || '');
   const finished = suByTodoState[toDoEnum.TERMINATED.order]?.length ?? 0;
   const [isFlipped, toggleFlip] = useToggle(false);
 
@@ -91,7 +91,7 @@ export function CampaignProgress({ label, surveyUnits }: Readonly<CampaignProgre
                 </CenteredBox>
               </Box>
               <Typography variant="s" color="textHint" fontWeight={700}>
-                {`${D.dueDate}: ${daysLeftForSurveyUnit(surveyUnits)} ${D.days}`}
+                {`${D.dueDate}: ${daysLeftForSurveyUnits(surveyUnits)} ${D.days}`}
               </Typography>
             </>
           )}

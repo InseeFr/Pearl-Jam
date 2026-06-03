@@ -23,7 +23,7 @@ export const useAuth = () => {
     roles.some(r => interviewerRoles.has(r));
 
   const isLocalStorageTokenValid = () => {
-    const pearlUserKey = window.localStorage.getItem(PEARL_USER_KEY);
+    const pearlUserKey = globalThis.localStorage.getItem(PEARL_USER_KEY);
     if (!pearlUserKey) {
       return false;
     }
@@ -41,7 +41,7 @@ export const useAuth = () => {
     const PEARL_AUTHENTICATION_MODE = getAuthMode();
     switch (PEARL_AUTHENTICATION_MODE) {
       case 'anonymous':
-        window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(GUEST_PEARL_USER));
+        globalThis.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(GUEST_PEARL_USER));
         accessAuthorized();
         break;
 
@@ -55,7 +55,7 @@ export const useAuth = () => {
               const interviewerInfos = getTokenInfo();
               const { roles } = interviewerInfos;
               if (isAuthorized(roles)) {
-                window.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(interviewerInfos));
+                globalThis.localStorage.setItem(PEARL_USER_KEY, JSON.stringify(interviewerInfos));
                 accessAuthorized();
               } else {
                 accessDenied();

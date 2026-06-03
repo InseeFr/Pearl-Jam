@@ -24,6 +24,16 @@ const navigationMessage = {
     en: 'Housing & identification',
     sq: 'Banimi & Identifikimi',
   },
+  goToPreviousCollect: {
+    fr: 'Collecte précédente',
+    en: 'Previous collect',
+    sq: 'Mbledhja e mëparshme',
+  },
+  goToNextCollect: {
+    fr: 'Collecte suivante',
+    en: 'Next collect',
+    sq: 'Mbledhja e ardhshme',
+  },
   goToCommunicationPage: {
     fr: 'Communications',
     en: 'Communications',

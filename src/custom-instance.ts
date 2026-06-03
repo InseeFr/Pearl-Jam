@@ -27,13 +27,13 @@ const createCustomAxiosInstance = (baseUrl: string): AxiosInstance => {
     },
     error => {
       if (error.response) {
-        if (error.response.status==404) {
-          console.log("Resource not found -> handle error internally")
+        if (error.response.status == 404) {
+          console.log('Resource not found -> handle error internally');
           return {
             ...error.response,
             error: true,
-            ok: false
-          }
+            ok: false,
+          };
         }
 
         throw new Error(`HTTP error! Status: ${error.response.status}`);

@@ -25,6 +25,7 @@ import trackingMessage from './trackingMessage';
 import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
 import profileMessage from './profileMessage';
+import surveyHistoryMessage from './surveyHistoryMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -82,10 +83,10 @@ const dictionary = {
     en: 'Interviewer',
     sq: 'Intervistues',
   },
-  investigatorMessage: {
+  interviewerMessage: {
     fr: 'Commentaire enquêteur',
-    en: 'Investigator comment',
-    sq: 'Komenti i hetuesit',
+    en: 'Interviewer comment',
+    sq: 'Koment intervistuesi',
   },
   appInstalling: {
     fr: 'Installation, veuillez patientez...',
@@ -154,6 +155,7 @@ const dictionary = {
   ...profileMessage,
   ...stepNames,
   ...trackingMessage,
+  ...surveyHistoryMessage,
 };
 
 export default dictionary;

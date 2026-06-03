@@ -17,7 +17,6 @@ import { Select } from '../ui/Select';
 import D from 'i18n';
 import { StatsTracking } from './StatsTracking';
 import { TableTracking } from './TableTracking';
-import { SelectChangeEvent } from '@mui/material';
 import { SurveyUnit } from 'types/pearl';
 
 export const Component = () => {

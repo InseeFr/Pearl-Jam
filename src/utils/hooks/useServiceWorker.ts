@@ -26,7 +26,7 @@ export const useServiceWorker = (authenticated: boolean): ServiceWorkerState => 
   const [isServiceWorkerInstalled, setServiceWorkerInstalled] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUpdateInstalled, setIsUpdateInstalled] = useState(
-    window.localStorage.getItem(SW_UPDATE_KEY) === 'true'
+    globalThis.localStorage.getItem(SW_UPDATE_KEY) === 'true'
   );
   const [isInstallationFailed, setIsInstallationFailed] = useState(false);
 
@@ -69,14 +69,14 @@ export const useServiceWorker = (authenticated: boolean): ServiceWorkerState => 
   };
 
   const updateApp = () => {
-    window.localStorage.setItem(SW_UPDATE_KEY, 'true');
+    globalThis.localStorage.setItem(SW_UPDATE_KEY, 'true');
     setIsUpdating(true);
     updateAssets();
   };
 
   const clearUpdating = () => {
     setIsUpdateInstalled(false);
-    window.localStorage.removeItem(SW_UPDATE_KEY);
+    globalThis.localStorage.removeItem(SW_UPDATE_KEY);
   };
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export const useServiceWorker = (authenticated: boolean): ServiceWorkerState => 
       waitingServiceWorker.addEventListener('statechange', event => {
         if (event.target instanceof ServiceWorker) {
           if (event.target.state === 'activated') {
-            window.location.reload();
+            globalThis.location.reload();
           }
         }
       });

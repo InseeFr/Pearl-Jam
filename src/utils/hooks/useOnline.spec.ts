@@ -14,11 +14,11 @@ describe('useNetworkOnline', () => {
       ...originalNavigator,
       onLine: true,
     };
-    global.navigator = mockNavigator;
+    globalThis.navigator = mockNavigator;
   });
 
   afterEach(() => {
-    global.navigator = originalNavigator;
+    globalThis.navigator = originalNavigator;
   });
 
   it('should return true when online', () => {
@@ -39,7 +39,7 @@ describe('useNetworkOnline', () => {
     const { result } = renderHook(() => useNetworkOnline());
 
     act(() => {
-      window.dispatchEvent(new Event('online'));
+      globalThis.dispatchEvent(new Event('online'));
     });
 
     expect(result.current).toBe(true);
@@ -50,7 +50,7 @@ describe('useNetworkOnline', () => {
     const { result } = renderHook(() => useNetworkOnline());
 
     act(() => {
-      window.dispatchEvent(new Event('offline'));
+      globalThis.dispatchEvent(new Event('offline'));
     });
 
     expect(result.current).toBe(false);

@@ -6,7 +6,7 @@ import { ScrollableBox } from 'ui/ScrollableBox';
 import { Select } from 'ui/Select';
 import { CampaignProgress } from 'ui/Stats/CampaignProgress';
 import { CampaignProgressPieChart } from 'ui/Stats/CampaignProgressPieChart';
-import { daysLeftForSurveyUnit } from 'utils/functions';
+import { daysLeftForSurveyUnits } from 'utils/functions';
 import { groupBy } from 'utils/functions/array';
 
 type SortDirection = 'asc' | 'desc' | 'deadlineDesc' | 'deadlineAsc';
@@ -29,10 +29,10 @@ export function StatsTracking({ surveyUnits }: Readonly<StatsTrackingProps>) {
     if (sortDirection.startsWith('deadline')) {
       const labelsWithDeadline = Object.entries(surveyUnitsPerCampaign).map(([label, units]) => ({
         label,
-        deadline: daysLeftForSurveyUnit(units),
+        deadline: daysLeftForSurveyUnits(units),
       }));
 
-      const sortedByDeadline = labelsWithDeadline.sort((a, b) => {
+      const sortedByDeadline = labelsWithDeadline.toSorted((a, b) => {
         if (sortDirection === 'deadlineAsc') {
           return a.deadline - b.deadline;
         } else {

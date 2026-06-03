@@ -80,7 +80,7 @@ export function CommunicationsCard({ surveyUnit }: Readonly<CommunicationsCardPr
                 <CommunicationItem
                   surveyUnitCommunicationTemplate={comReq.template}
                   communication={comReq}
-                  key={comReq.status[0].date ?? 1}
+                  key={comReq.template?.id}
                 />
               ))}
             </Stack>

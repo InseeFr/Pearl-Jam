@@ -22,20 +22,20 @@ export interface ContactAttemptDisplayProps {
   onDelete: (a: SurveyUnitContactAttempt) => void;
 }
 
-export function ContactAttemptDisplay({ attempt, onDelete }: Readonly<ContactAttemptDisplayProps>) {
-  function getMediumMessage(medium: MediumMappingKey) {
-    const browserLanguage = navigator.language.split('-')[0] as SupportedLocales;
+function getMediumMessage(medium: MediumMappingKey) {
+  const browserLanguage = navigator.language.split('-')[0] as SupportedLocales;
 
-    const language = ['fr', 'en'].includes(browserLanguage) ? browserLanguage : 'en';
+  const language = ['fr', 'en'].includes(browserLanguage) ? browserLanguage : 'en';
 
-    const mediumKey = mediumMapping[medium];
-    if (mediumKey) {
-      return mediumMessage[mediumKey][language];
-    }
-
-    return mediumMessage.mediumQuestion[language];
+  const mediumKey = mediumMapping[medium];
+  if (mediumKey) {
+    return mediumMessage[mediumKey][language];
   }
 
+  return mediumMessage.mediumQuestion[language];
+}
+
+export function ContactAttemptDisplay({ attempt, onDelete }: Readonly<ContactAttemptDisplayProps>) {
   return (
     <Box px={2} py={1.5} borderRadius={1} bgcolor="surfacePrimary.main">
       <Row justifyContent="space-between">
