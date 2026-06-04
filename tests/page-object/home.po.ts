@@ -26,6 +26,11 @@ export class HomePage implements GenericPage {
     }
   }
 
+    async importData() {
+    await this.page.getByRole('button', { name: 'Synchroniser' }).click();
+    await this.page.getByRole('button', { name: "J'ai compris" }).click();
+  }
+
   checkSu = async () => {
     const seen = [];
 

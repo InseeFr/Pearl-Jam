@@ -75,7 +75,6 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
 
   page.locator('div').filter({ hasText: /^MOREAU Isabelle#questNotAvailable$/ });
 
-  await page.getByRole('button', { name: 'Fermer' }).click();
   await page.getByRole('link', { name: 'Mon suivi' }).click();
   await page.getByRole('tab', { name: 'Suivi des unités par enquête' }).click();
   await page.getByRole('cell', { name: 'MOREAU Isabelle' }).click();
