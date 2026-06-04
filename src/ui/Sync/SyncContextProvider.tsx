@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { healthCheck } from 'api/pearl';
 import D from 'i18n';
@@ -12,88 +12,165 @@ import { SyncDialog } from './SyncDialog';
 
 export type SyncContextValue = {
   setSyncResult: (value: {
-    date: string;
+    date?: string;
     state: NotificationState;
     messages: string[] | string;
-    details: any;
+    details?: any;
   }) => void;
-  syncFunction: (event: any) => void;
+  syncFunction: (event?: any) => void;
 };
+
 export const SyncContext = createContext<SyncContextValue | undefined>(undefined);
 
 export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unknown>>) {
   const online = useNetworkOnline();
-  const PEARL_API_URL = import.meta.env.VITE_PEARL_API_URL;
-  const PEARL_AUTHENTICATION_MODE = import.meta.env.VITE_PEARL_AUTHENTICATION_MODE;
   const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
   const [isSync, setIsSync] = useState(() => {
     return globalThis.localStorage.getItem('SYNCHRONIZE') === 'true';
   });
+
   const [loading, setLoading] = useState(false);
+
   const [syncResult, setSyncResult] = useState<
     undefined | null | { state: NotificationState; messages: string | string[] }
   >(undefined);
-  const [componentReady, setComponentReady] = useState(false);
 
+  const [componentReady, setComponentReady] = useState(false);
   const [pearlReady, setPearlReady] = useState<boolean | null>(null);
   const [pearlError, setPearlError] = useState(false);
 
+  const resetLocalstorageSyncEntries = useCallback(() => {
+    window.localStorage.removeItem('PEARL_SYNC_RESULT');
+    window.localStorage.removeItem('QUEEN_SYNC_INITIATED');
+    window.localStorage.removeItem('QUEEN_SYNC_RESULT');
+  }, []);
+
+  const stopSync = useCallback(() => {
+    window.localStorage.removeItem('SYNCHRONIZE');
+    setIsSync(false);
+    setLoading(false);
+    setPearlReady(null);
+  }, []);
+
   const checkPearl = async () => {
     setPearlReady(null);
-    const { status } = await healthCheck();
-    if (status === 200) {
-      setPearlError(false);
-      setPearlReady(true);
-    } else {
+    try {
+      const { status } = await healthCheck();
+      setPearlError(status !== 200);
+    } catch {
       setPearlError(true);
+    } finally {
       setPearlReady(true);
     }
   };
 
   useEffect(() => {
     setComponentReady(true);
-  }, [isSync]);
+  }, []);
 
+  /**
+    * Recovery when returning from crashing/closing the app during the pearl synchronization.
+    *
+    */
   useEffect(() => {
-    const analyse = async () => {
-      const result = await analyseResult();
-      globalThis.localStorage.removeItem('SYNCHRONIZE');
-      setIsSync(false);
-      setSyncResult(result);
+    const recoverPearlSync = async () => {
+      const syncStarted = window.localStorage.getItem('SYNCHRONIZE') === 'true';
+      const queenSyncInitiated = window.localStorage.getItem('QUEEN_SYNC_INITIATED') === 'true';
+      const pearlSyncResult = window.localStorage.getItem('PEARL_SYNC_RESULT');
+
+      if (!syncStarted || queenSyncInitiated || !pearlSyncResult) return;
+
+      const analysis = await analyseResult();
+      setSyncResult(analysis);
+      resetLocalstorageSyncEntries();
+      stopSync();
     };
 
-    if (PEARL_API_URL && PEARL_AUTHENTICATION_MODE && isSync && !loading) analyse();
-  }, [PEARL_API_URL, PEARL_AUTHENTICATION_MODE, isSync, loading]);
+    recoverPearlSync();
+  }, []);
 
-  const syncFunction = () => {
+
+  /**
+   * Recovery when returning from /queen/*
+   *
+   * AppWrapper + SyncContextProvider are unmounted while the user is on /queen/*.
+   * So the useful detection point is this provider mounting again after returning to /.
+   */
+  useEffect(() => {
+    const recoverQueenSync = async () => {
+      const queenSyncInitiated = window.localStorage.getItem('QUEEN_SYNC_INITIATED') === 'true';
+      const queenSyncResult = window.localStorage.getItem('QUEEN_SYNC_RESULT');
+
+      if (!queenSyncInitiated) return;
+
+      if (!queenSyncResult) {
+        setSyncResult({
+          state: 'error' as NotificationState,
+          messages: [D.queenSyncMayHaveBeenInterrupted, D.syncPleaseTryAgain],
+        });
+
+        resetLocalstorageSyncEntries();
+        stopSync();
+        return;
+      }
+
+      try {
+        JSON.parse(queenSyncResult);
+        const analysis = await analyseResult();
+        setSyncResult(analysis);
+      } catch (parseError) {
+        console.error('Failed to parse QUEEN_SYNC_RESULT:', parseError);
+
+        setSyncResult({
+          state: 'error' as NotificationState,
+          messages: [D.queenSyncResultInvalid, D.syncPleaseTryAgain],
+        });
+      }
+
+      resetLocalstorageSyncEntries();
+      stopSync();
+    };
+
+    recoverQueenSync();
+  }, [resetLocalstorageSyncEntries, stopSync]);
+
+
+  const syncFunction = useCallback(() => {
     const launchSynchronize = async () => {
-      globalThis.localStorage.removeItem('PEARL_SYNC_RESULT');
-      globalThis.localStorage.removeItem('QUEEN_SYNC_RESULT');
-      globalThis.localStorage.setItem('SYNCHRONIZE', 'true');
+      resetLocalstorageSyncEntries();
+      window.localStorage.setItem('SYNCHRONIZE', 'true');
       setLoading(true);
       await checkPearl();
     };
+
     if (online) launchSynchronize();
-  };
+  }, [online, resetLocalstorageSyncEntries]);
 
   const handleClose = async () => {
     setSyncResult(null);
-    globalThis.localStorage.removeItem('PEARL_SYNC_RESULT');
-    globalThis.localStorage.removeItem('QUEEN_SYNC_RESULT');
+    resetLocalstorageSyncEntries();
   };
 
   useEffect(() => {
     const sync = async () => {
       setIsSync(true);
+
       const result = await synchronizePearl();
       saveSyncPearlData(result);
+
       const { error } = result;
+
       if (error) {
-        setLoading(false);
-      } else {
-        synchronizeQueen();
+        const analysis = await analyseResult();
+        setSyncResult(analysis);
+        stopSync();
+        return;
       }
+
+      window.localStorage.setItem('QUEEN_SYNC_INITIATED', 'true');
+      await synchronizeQueen();
+
     };
 
     const failedSync = async () => {
@@ -101,13 +178,13 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
         state: 'error' as NotificationState,
         messages: [D.syncNotStarted, D.syncPleaseTryAgain, D.warningOrErrorEndMessage],
       };
+
       const notif = getNotifFromResult(result);
       await notificationIdbService.addOrUpdateNotif(notif);
-      globalThis.localStorage.removeItem('SYNCHRONIZE');
-      setIsSync(false);
       setSyncResult(result);
-      setLoading(false);
+      stopSync();
     };
+
     if (queenReady && pearlReady) {
       if (!queenError && !pearlError) sync();
       else failedSync();
@@ -118,13 +195,11 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
     pearlReady,
     pearlError,
     synchronizeQueen,
-    PEARL_API_URL,
-    PEARL_AUTHENTICATION_MODE,
   ]);
 
-  const context = useMemo(() => ({ syncFunction, setSyncResult }), [syncFunction, setSyncResult]);
+  const context = useMemo(() => ({ syncFunction, setSyncResult }), [syncFunction]);
 
-  const syncMesssage = () => {
+  const syncMessage = () => {
     if (loading && isSync) return D.synchronizationInProgress;
     if (loading) return D.synchronizationWaiting;
     if (isSync) return D.synchronizationEnding;
@@ -132,7 +207,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
 
   return (
     <SyncContext.Provider value={context}>
-      {componentReady && (loading || isSync) && <Preloader message={syncMesssage()} />}
+      {componentReady && (loading || isSync) && <Preloader message={syncMessage()} />}
       {componentReady && !loading && !isSync && syncResult && (
         <SyncDialog onClose={handleClose} syncResult={syncResult} />
       )}

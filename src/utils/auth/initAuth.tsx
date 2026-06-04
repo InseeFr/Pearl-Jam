@@ -9,7 +9,7 @@ function getAuthMode() {
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
-  const interviewerRoles = import.meta.env.VITE_KEYCLOAK_ROLES_ALLOW_LIST.split(',');
+  const interviewerRoles = new Set(import.meta.env.VITE_KEYCLOAK_ROLES_ALLOW_LIST.split(','));
 
   const accessAuthorized = () => {
     setAuthenticated(true);
@@ -19,7 +19,8 @@ export const useAuth = () => {
     setAuthenticated(false);
   };
 
-  const isAuthorized = (roles: string[]) => roles.some(r => interviewerRoles.includes(r));
+  const isAuthorized = (roles: string[]) =>
+    roles.some(r => interviewerRoles.has(r));
 
   const isLocalStorageTokenValid = () => {
     const pearlUserKey = globalThis.localStorage.getItem(PEARL_USER_KEY);

@@ -18,6 +18,7 @@ import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import userIdbService from 'utils/indexeddb/services/user-idb-service';
+import { PEARL_INIT_SYNC_STATE, saveSyncPearlData } from './check';
 import { AxiosError } from 'axios';
 import { User } from 'utils/indexeddb/model/user';
 import { getSuTodoState, getLastState } from 'utils/functions/surveyUnitState';
@@ -273,6 +274,10 @@ export const synchronizePearl = async () => {
 
   let surveyUnitsInTempZone;
   let surveyUnitsSuccess;
+
+  // allows to detect interrupted sync process as an error
+  saveSyncPearlData(PEARL_INIT_SYNC_STATE);
+
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
     await getUserData();
