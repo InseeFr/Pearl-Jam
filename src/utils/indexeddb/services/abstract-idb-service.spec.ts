@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { db, User } from '../idb-config';
+import { db } from '../idb-config';
 import AbstractIdbService from './abstract-idb-service';
+import { User } from '../model/user';
 
 vi.mock('../idb-config', () => ({
   db: {

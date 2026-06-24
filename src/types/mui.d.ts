@@ -19,9 +19,15 @@ declare module '@mui/material/Card' {
 
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
-    s: true;
+    headingXL: true;
+    headingL: true;
     headingM: true;
     headingS: true;
+    xl: true;
+    l: true;
+    m: true;
+    s: true;
+    xs: true;
   }
 }
 
@@ -71,6 +77,7 @@ declare module '@mui/material/ScrollableBox' {
 declare module '@mui/material/Dialog' {
   interface DialogPropsMaxWidthOverrides {
     maxWidht: 's';
+    maxWidht: 'm';
   }
 }
 
@@ -134,30 +141,27 @@ declare module '@mui/material/Paper' {
 }
 
 declare module '@mui/material/styles' {
-  interface TypographyVariants {
-    xs: React.CSSProperties;
-    s: React.CSSProperties;
-    m: React.CSSProperties;
-    l: React.CSSProperties;
-    xl: React.CSSProperties;
-  }
-
   // allow configuration using `createTheme`
-  interface TypographyVariantsOptions {
-    xs?: React.CSSProperties;
-    s?: React.CSSProperties;
-    m?: React.CSSProperties;
-    l?: React.CSSProperties;
-    xl?: React.CSSProperties;
+  interface TypographyVariants {
+    headingXL: React.CSSProperties;
+    headingL: React.CSSProperties;
+    headingM: React.CSSProperties;
+    headingS: React.CSSProperties;
+    xl: React.CSSProperties;
+    l: React.CSSProperties;
+    m: React.CSSProperties;
+    s: React.CSSProperties;
+    xs: React.CSSProperties;
   }
-}
-
-declare module '@mui/material/Typography' {
-  interface TypographyPropsVariantOverrides {
-    xs: true;
-    s: true;
-    m: true;
-    l: true;
-    xl: true;
+  interface TypographyVariantsOptions {
+    headingXL?: React.CSSProperties;
+    headingL?: React.CSSProperties;
+    headingM?: React.CSSProperties;
+    headingS?: React.CSSProperties;
+    xl?: React.CSSProperties;
+    l?: React.CSSProperties;
+    m?: React.CSSProperties;
+    s?: React.CSSProperties;
+    xs?: React.CSSProperties;
   }
 }

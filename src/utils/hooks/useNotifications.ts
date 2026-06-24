@@ -8,7 +8,7 @@ const $unreadCount = computed(() => $notifications().filter(v => !v.read).length
 
 export async function loadNotifications() {
   const notifications = await notificationIdbService.getAll();
-  $notifications.set(notifications.sort((a, b) => b.date - a.date));
+  $notifications.set(notifications.toSorted((a, b) => b.date - a.date));
 }
 
 export async function deleteNotification(notification: Notification) {

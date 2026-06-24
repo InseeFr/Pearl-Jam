@@ -95,7 +95,7 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
     }
 
     const setRadioValue = (prop: string, options: CommunicationRequestRadioData[]) => {
-      return options.find(
+      return options.some(
         o => o.value === communicationRequest[prop as keyof CommunicationRequestForm] && !o.disabled
       )
         ? communicationRequest[prop as keyof CommunicationRequestForm]
@@ -211,4 +211,3 @@ export function CommunicationForm({ onClose, surveyUnit }: Readonly<Communicatio
     </Dialog>
   );
 }
-export default CommunicationDialogContent;

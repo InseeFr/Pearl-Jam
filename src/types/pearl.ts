@@ -1,7 +1,9 @@
+import { CommunicationStatus } from 'utils/enum/CommunicationEnums';
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
+import { StateValues } from 'utils/enum/SUStateEnum';
 import {
   ContactAttemptValue,
   ContactAttemptConfiguration,
@@ -13,15 +15,17 @@ import {
 } from 'utils/functions/contacts/ContactOutcome';
 
 export type SurveyUnitPhoneNumber = {
-  source: string;
+  source: 'FISCAL' | 'DIRECTORY' | 'INTERVIEWER';
   favorite: boolean;
   number: string;
   id: string;
 };
 
+export type ContactPersonTitle = 'MISTER' | 'MISS';
+
 export type SurveyUnitPerson = {
   id: number;
-  title: string;
+  title: ContactPersonTitle;
   firstName: string;
   lastName: string;
   email: string;
@@ -29,6 +33,25 @@ export type SurveyUnitPerson = {
   favoriteEmail: boolean;
   privileged: boolean;
   phoneNumbers: SurveyUnitPhoneNumber[];
+};
+
+export type PreviousContactHistoryPerson = {
+  id?: number;
+  title?: ContactPersonTitle;
+  firstName: string;
+  lastName?: string;
+  birthdate?: number;
+  panel?: boolean;
+};
+
+export type NextContactHistoryPerson = {
+  id?: number;
+  title: ContactPersonTitle;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  email?: string;
+  preferredContact?: boolean;
 };
 
 type SurveyUnitAddress = {
@@ -47,15 +70,15 @@ type SurveyUnitAddress = {
   cityPriorityDistrict: boolean;
 };
 
-type SurveyUnitComment = {
+export type SurveyUnitComment = {
   type: string;
   value: string;
 };
 
-type SurveyUnitState = {
+export type SurveyUnitState = {
   id?: number;
   date: number;
-  type: string;
+  type: StateValues;
 };
 
 type SurveyUnitSampleIdentifiers = {
@@ -84,7 +107,7 @@ export type SurveyUnitCommunicationRequest = {
   emitter: 'INTERVIEWER' | 'TOOL';
   communicationTemplateId?: string;
   reason?: string;
-  status: { date: number; status: string }[];
+  status: { date: number; status: CommunicationStatus }[];
 };
 
 export type SurveyUnitCommunicationTemplate = {
@@ -98,6 +121,27 @@ export type ContactOutcome = {
   date: number;
   totalNumberOfContactAttempts: number;
   type?: ContactOutcomeValue;
+};
+
+export type Contact = {
+  title?: string;
+  firstName?: string;
+  birthdate?: number;
+  lastName?: string;
+  phoneNumber?: string;
+  panel?: boolean;
+  email?: string;
+};
+
+export type PreviousContactHistory = {
+  contactOutcomeValue: ContactOutcomeValue;
+  persons: PreviousContactHistoryPerson[];
+  comment: string;
+  priority: boolean;
+};
+
+export type NextContactHistory = {
+  persons: NextContactHistoryPerson[];
 };
 
 export type SurveyUnit = {
@@ -127,6 +171,9 @@ export type SurveyUnit = {
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
+  previousContactHistory?: PreviousContactHistory;
+  nextContactHistory?: NextContactHistory;
+  collectNextContacts: boolean;
 };
 
 export type NotificationState = 'warning' | 'success' | 'error';

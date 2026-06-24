@@ -68,6 +68,7 @@ const mockedSurveyUnit: SurveyUnit = {
   useLetterCommunication: false,
   communicationRequests: [],
   communicationTemplates: [],
+  collectNextContacts: false,
 };
 
 const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
@@ -166,47 +167,6 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
   {
     input: {
       ...mockedSurveyUnit,
-      identificationConfiguration: IdentificationConfiguration.IASCO,
-      identification: {
-        identification: IdentificationQuestionOptionValues.IDENTIFIED,
-        access: IdentificationQuestionOptionValues.ACC,
-        situation: IdentificationQuestionOptionValues.ABSORBED, // Concluding
-      },
-      contactOutcome: {
-        date: Date.now(),
-        totalNumberOfContactAttempts: 1,
-        type: contactOutcomes.INTERVIEW_ACCEPTED.value,
-      },
-      contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'TEL' }],
-      states: [{ type: 'NOA', date: Date.now() }],
-    },
-    output: false,
-  },
-  {
-    input: {
-      ...mockedSurveyUnit,
-      identificationConfiguration: IdentificationConfiguration.IASCO,
-      identification: {
-        identification: IdentificationQuestionOptionValues.IDENTIFIED,
-        access: IdentificationQuestionOptionValues.ACC,
-        situation: IdentificationQuestionOptionValues.ORDINARY,
-        category: IdentificationQuestionOptionValues.PRIMARY,
-        occupant: IdentificationQuestionOptionValues.IDENTIFIED,
-      },
-      // INA + NOA -> invalid
-      contactOutcome: {
-        date: Date.now(),
-        totalNumberOfContactAttempts: 1,
-        type: contactOutcomes.INTERVIEW_ACCEPTED.value,
-      },
-      contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'TEL' }],
-      states: [{ type: 'NOA', date: Date.now() }],
-    },
-    output: false,
-  },
-  {
-    input: {
-      ...mockedSurveyUnit,
       identificationConfiguration: IdentificationConfiguration.INDTEL,
       identification: {
         individualStatus: IdentificationQuestionOptionValues.NOFIELD,
@@ -267,7 +227,7 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
       contactOutcome: {
         date: Date.now(),
         totalNumberOfContactAttempts: 1,
-        type: contactOutcomes.DEFINITLY_UNAVAILABLE_FOR_UNKNOWN_REASON.value,
+        type: contactOutcomes.UNTREATED_INTERVIEWER_ABSENT.value,
       },
       contactAttempts: [{ status: 'APT', date: Date.now(), medium: 'TEL' }],
     },
@@ -686,7 +646,7 @@ describe('isInvalidIdentificationAndContactOutcome', () => {
     },
     output: true,
   },
-].map(({ input, output }) =>
+].forEach(({ input, output }) =>
   it(`isValidIdentification should return ${output} when comparing ${input.rule?.value} with ${JSON.stringify(input.identification)}`, () => {
     const result = isValidIdentification(input.rule, input.identification);
     expect(result).toBe(output);

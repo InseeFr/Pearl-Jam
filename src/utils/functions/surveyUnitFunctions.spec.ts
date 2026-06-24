@@ -1,9 +1,7 @@
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import {
   getContactAttemptNumber,
-  getLastState,
   isSelectable,
-  updateStateWithDates,
   isQuestionnaireAvailable,
   getCommentByType,
   getAge,
@@ -13,13 +11,17 @@ import {
 import { afterAll, beforeAll, describe, expect, it, Mock, vi } from 'vitest';
 import { contactAttempts } from './contacts/ContactAttempt';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
-import { createStateIdsAndCommunicationRequestIds } from './surveyUnitFunctions';
+import { createStateIdsAndCommunicationRequestIds, getTitle } from './surveyUnitFunctions';
+import { SurveyUnit, SurveyUnitContactAttempt, SurveyUnitState } from 'types/pearl';
+import { createSurveyUnit } from 'utils/testing/createFakeData';
+import { TITLES } from 'utils/constants';
+
+const mockedEmptySu = {} as unknown as SurveyUnit;
+const mockedSu = createSurveyUnit();
 
 describe('getAge', () => {
   it('should return undefined for an empty or invalid birthdate', () => {
     expect(getAge('')).toBeUndefined();
-    expect(getAge(null)).toBeUndefined();
-    expect(getAge(undefined)).toBeUndefined();
   });
 
   it('should return the correct age for a valid birthdate', () => {
@@ -41,105 +43,68 @@ describe('getAge', () => {
 });
 
 describe('getCommentByType', () => {
-  const noCommentsSu = {};
-  const emptyCommentsSu = { comments: [] };
+  const noCommentsFieldSu = mockedEmptySu;
+  const emptyCommentsSu = { ...mockedEmptySu, comments: [] };
+  const mockedSuNoComment = { ...mockedSu, comments: [] };
   const interviewercomment = { type: 'INTERVIEWER', value: 'Beware of the dog!' };
   const managementComment = { type: 'MANAGEMENT', value: 'Use email first' };
   it('should return empty string if su has no comments attribute with same value', () => {
-    expect(getCommentByType('INTERVIEWER', noCommentsSu)).toEqual('');
+    expect(getCommentByType('INTERVIEWER', noCommentsFieldSu)).toEqual('');
     expect(getCommentByType('INTERVIEWER', emptyCommentsSu)).toEqual('');
-    expect(getCommentByType('INTERVIEWER', { comments: [managementComment] })).toEqual('');
-    expect(getCommentByType('MANAGEMENT', { comments: [interviewercomment] })).toEqual('');
+    expect(
+      getCommentByType('INTERVIEWER', { ...mockedSuNoComment, comments: [managementComment] })
+    ).toEqual('');
+    expect(
+      getCommentByType('MANAGEMENT', { ...mockedSuNoComment, comments: [interviewercomment] })
+    ).toEqual('');
   });
   it('should return comment value of matching value comment', () => {
     expect(
-      getCommentByType('INTERVIEWER', { comments: [interviewercomment, managementComment] })
+      getCommentByType('INTERVIEWER', {
+        ...mockedSu,
+        comments: [interviewercomment, managementComment],
+      })
     ).toEqual('Beware of the dog!');
     expect(
-      getCommentByType('MANAGEMENT', { comments: [interviewercomment, managementComment] })
+      getCommentByType('MANAGEMENT', {
+        ...mockedSu,
+        comments: [interviewercomment, managementComment],
+      })
     ).toEqual('Use email first');
-  });
-});
-
-describe('getLastState', () => {
-  it('should return the only state', () => {
-    expect(getLastState([{ id: '1', date: 1616070963000, status: 'status' }])).toEqual({
-      id: '1',
-      date: 1616070963000,
-      status: 'status',
-    });
-  });
-  it('should return undefined if empty states', () => {
-    expect(getLastState([])).toEqual(undefined);
-  });
-  it('should return state with latest date', () => {
-    expect(
-      getLastState([
-        { id: '1', date: 1616070963000, status: 'status' },
-        { id: '2', date: 1616070000000, status: 'status' },
-      ])
-    ).toEqual({
-      id: '1',
-      date: 1616070963000,
-      status: 'status',
-    });
   });
 });
 
 describe('getContactAttemptNumber', () => {
   it('should return 0 contacts attempts if no contactAttempts in states', async () => {
-    const surveyUnit = { states: [] };
-    const statesWithNoContactAttempt = [surveyUnitStateEnum.APPOINTMENT_MADE];
-    expect(getContactAttemptNumber({ ...surveyUnit, states: statesWithNoContactAttempt })).toEqual(
-      0
-    );
+    const surveyUnit = { ...mockedSu, states: [] };
+    const statesWithNoContactAttempt = {
+      id: 1,
+      type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
+      date: 1616070963000,
+    };
+
+    expect(
+      getContactAttemptNumber({ ...surveyUnit, states: [statesWithNoContactAttempt] })
+    ).toEqual(0);
     expect(getContactAttemptNumber(surveyUnit)).toEqual(0);
   });
   it('should return number of contact attempts', () => {
-    const statesWithOneContactAttempt = [
-      surveyUnitStateEnum.APPOINTMENT_MADE,
-      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT,
+    const statesWithOneContactAttempt: SurveyUnitState[] = [
+      { type: surveyUnitStateEnum.APPOINTMENT_MADE.type, date: 1616070963000 },
+      { type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type, date: 1616070963000 },
     ];
-    const statesWithTwoContactAttempt = [
-      surveyUnitStateEnum.APPOINTMENT_MADE,
-      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT,
-      surveyUnitStateEnum.AT_LEAST_ONE_CONTACT,
+    const statesWithTwoContactAttempt: SurveyUnitState[] = [
+      { type: surveyUnitStateEnum.APPOINTMENT_MADE.type, date: 1616070963000 },
+      { type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type, date: 1616070963000 },
+      { type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type, date: 1616070963000 },
+      { type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type, date: 1616070963000 },
     ];
-    expect(getContactAttemptNumber({ states: [...statesWithOneContactAttempt] })).toEqual(1);
-    expect(getContactAttemptNumber({ states: [...statesWithTwoContactAttempt] })).toEqual(2);
-  });
-});
-describe('updateStateWithDates', () => {
-  const NOW = new Date(2021, 2, 15).getTime();
-  beforeAll(() => {
-    vi.useFakeTimers().setSystemTime(NOW);
-  });
-  afterAll(() => {
-    vi.useRealTimers();
-  });
-  const beforeCurrent = new Date(2021, 2, 10).getTime();
-  const afterCurrent = new Date(2021, 2, 20).getTime();
-  it('should return initial states if lastState is not VNC', () => {
-    const surveyUnit = {};
-    expect(updateStateWithDates(surveyUnit)).toEqual([]);
-    expect(updateStateWithDates({ states: [] })).toEqual([]);
-  });
-  it('should return initial states if SU lastState is VNC and currentDate < identificationPhaseStart', () => {
-    const surveyUnit = {
-      states: [surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE],
-      identificationPhaseStartDate: afterCurrent,
-    };
-    expect(updateStateWithDates(surveyUnit)).toEqual([surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE]);
-  });
-  it('should return 1 if SU is VNC and currentDate > identificationPhaseStart', () => {
-    const surveyUnit = {
-      states: [{ type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent }],
-      identificationPhaseStartDate: beforeCurrent,
-    };
-    expect(updateStateWithDates(surveyUnit)).toEqual([
-      { type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent },
-      { type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type, date: NOW },
-    ]);
+    expect(getContactAttemptNumber({ ...mockedSu, states: statesWithOneContactAttempt })).toEqual(
+      1
+    );
+    expect(getContactAttemptNumber({ ...mockedSu, states: statesWithTwoContactAttempt })).toEqual(
+      3
+    );
   });
 });
 
@@ -151,11 +116,14 @@ describe('isSelectable', () => {
     vi.useRealTimers();
   });
   it('should return false if date not in range', () => {
+    const su = createSurveyUnit();
     const surveyUnitBefore = {
+      ...su,
       identificationPhaseStartDate: new Date(2021, 1, 1).getTime(),
       endDate: new Date(2021, 1, 31).getTime(),
     };
     const surveyUnitAfter = {
+      ...su,
       identificationPhaseStartDate: new Date(2021, 3, 1).getTime(),
       endDate: new Date(2021, 3, 31).getTime(),
     };
@@ -164,6 +132,7 @@ describe('isSelectable', () => {
   });
   it('should return true if date in range', () => {
     const surveyUnitInRange = {
+      ...mockedSu,
       identificationPhaseStartDate: new Date(2021, 2, 1).getTime(),
       endDate: new Date(2021, 3, 31).getTime(),
     };
@@ -179,14 +148,17 @@ describe('isQuestionnaireAvailable', () => {
     vi.useRealTimers();
   });
   const suInRange = {
+    ...mockedSu,
     collectionStartDate: new Date(2021, 2, 1).getTime(),
     collectionEndDate: new Date(2021, 3, 1).getTime(),
   };
   const suBefore = {
+    ...mockedSu,
     collectionStartDate: new Date(2021, 1, 1).getTime(),
     collectionEndDate: new Date(2021, 2, 1).getTime(),
   };
   const suAfter = {
+    ...mockedSu,
     collectionStartDate: new Date(2021, 3, 1).getTime(),
     collectionEndDate: new Date(2021, 4, 1).getTime(),
   };
@@ -203,83 +175,56 @@ describe('isQuestionnaireAvailable', () => {
 });
 
 describe('areCasEqual', () => {
+  const suContactAttempt: SurveyUnitContactAttempt = {
+    date: 1000,
+    status: contactAttempts.APPOINTMENT_MADE.value,
+    medium: 'TEL',
+  };
+
+  const suContactAttempt2: SurveyUnitContactAttempt = {
+    date: 2000,
+    status: contactAttempts.APPOINTMENT_MADE.value,
+    medium: 'FIELD',
+  };
+
+  const suContactAttempt3: SurveyUnitContactAttempt = {
+    date: 1000,
+    status: contactAttempts.APPOINTMENT_MADE.value,
+    medium: 'FIELD',
+  };
   it('should return false if one argument is falsy', () => {
-    expect(areCaEqual(undefined, undefined)).toEqual(false);
-    expect(
-      areCaEqual(undefined, {
-        date: 1600000000000,
-        status: contactAttempts.APPOINTMENT_MADE.value,
-      })
-    ).toEqual(false);
-    expect(
-      areCaEqual(
-        {
-          date: 1600000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        },
-        undefined
-      )
-    ).toEqual(false);
+    expect(areCaEqual()).toEqual(false);
+    expect(areCaEqual(undefined, suContactAttempt)).toEqual(false);
+    expect(areCaEqual(suContactAttempt)).toEqual(false);
   });
   it('should return false if at least one attribute is different', () => {
-    expect(
-      areCaEqual(
-        {
-          date: 1600000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        },
-        {
-          date: 161000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        }
-      )
-    ).toEqual(false);
-    expect(
-      areCaEqual(
-        {
-          date: 1600000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        },
-        {
-          date: 160000000000,
-          status: contactAttempts.INTERVIEW_ACCEPTED.value,
-        }
-      )
-    ).toEqual(false);
+    expect(areCaEqual(suContactAttempt2, suContactAttempt3)).toEqual(false);
+    expect(areCaEqual(suContactAttempt, suContactAttempt2)).toEqual(false);
   });
   it('should return true if date and status are equal', () => {
-    expect(
-      areCaEqual(
-        {
-          date: 1600000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        },
-        {
-          date: 1600000000000,
-          status: contactAttempts.APPOINTMENT_MADE.value,
-        }
-      )
-    ).toEqual(true);
+    expect(areCaEqual(suContactAttempt3, suContactAttempt)).toEqual(true);
   });
 });
 
 describe('lastContactAttemptIsSuccessfull', () => {
   it('should return false if no contactAttempts', () => {
-    expect(lastContactAttemptIsSuccessfull({ contactAttempts: [] })).toEqual(false);
+    expect(lastContactAttemptIsSuccessfull({ ...mockedSu, contactAttempts: [] })).toEqual(false);
   });
   it('should return false if cas contains no successfull ca', () => {
     expect(
       lastContactAttemptIsSuccessfull({
-        contactAttempts: [{ date: 1, status: contactAttempts.NO_CONTACT.value }],
+        ...mockedSu,
+        contactAttempts: [{ date: 1, status: contactAttempts.NO_CONTACT.value, medium: 'TEL' }],
       })
     ).toEqual(false);
   });
   it('should return false if successfull ca is not last ca', () => {
     expect(
       lastContactAttemptIsSuccessfull({
+        ...mockedSu,
         contactAttempts: [
-          { date: 1, status: contactAttempts.INTERVIEW_ACCEPTED.value },
-          { date: 2, status: contactAttempts.NO_CONTACT.value },
+          { date: 1, status: contactAttempts.INTERVIEW_ACCEPTED.value, medium: 'TEL' },
+          { date: 2, status: contactAttempts.NO_CONTACT.value, medium: 'TEL' },
         ],
       })
     ).toEqual(false);
@@ -287,9 +232,10 @@ describe('lastContactAttemptIsSuccessfull', () => {
   it('should return true if last ca is successfull', () => {
     expect(
       lastContactAttemptIsSuccessfull({
+        ...mockedSu,
         contactAttempts: [
-          { date: 1, status: contactAttempts.NO_CONTACT.value },
-          { date: 2, status: contactAttempts.INTERVIEW_ACCEPTED.value },
+          { date: 1, status: contactAttempts.NO_CONTACT.value, medium: 'TEL' },
+          { date: 2, status: contactAttempts.INTERVIEW_ACCEPTED.value, medium: 'TEL' },
         ],
       })
     ).toEqual(true);
@@ -305,15 +251,23 @@ describe('createStateIdsAndCommunicationRequestIds', () => {
   }));
 
   it('should fetch the previous survey unit and persist the updated data', async () => {
-    const latestSurveyUnit = {
+    const latestSurveyUnit: SurveyUnit = {
+      ...mockedSu,
       id: '123',
-      states: ['state1', 'state2'],
-      communicationRequests: ['request1', 'request2'],
+      states: [
+        { date: 1600000000000, type: 'AOC' },
+        { date: 1610000000000, type: 'APS' },
+      ],
+      communicationRequests: [
+        { emitter: 'INTERVIEWER', status: [] },
+        { emitter: 'INTERVIEWER', status: [] },
+      ],
     };
-    const previousSurveyUnit = {
+    const previousSurveyUnit: SurveyUnit = {
+      ...mockedSu,
       id: '123',
-      states: ['oldState'],
-      communicationRequests: ['oldRequest'],
+      states: [{ date: 1590000000000, type: 'VIN' }],
+      communicationRequests: [{ emitter: 'INTERVIEWER', status: [] }],
     };
 
     (surveyUnitIDBService.getById as Mock).mockResolvedValue(previousSurveyUnit);
@@ -326,5 +280,12 @@ describe('createStateIdsAndCommunicationRequestIds', () => {
       states: latestSurveyUnit.states,
       communicationRequests: latestSurveyUnit.communicationRequests,
     });
+  });
+});
+
+describe('getContactPersonTitle', () => {
+  it('should return empty string if no contact person', () => {
+    expect(getTitle('MISTER')).toEqual(TITLES.MISTER.value);
+    expect(getTitle('MISS')).toEqual(TITLES.MISS.value);
   });
 });

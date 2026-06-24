@@ -10,24 +10,37 @@ import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { forwardRef, PropsWithChildren } from 'react';
-import { Control, Controller, ControllerRenderProps, FieldValues } from 'react-hook-form';
+import {
+  Control,
+  Controller,
+  ControllerRenderProps,
+  FieldErrors,
+  FieldValues,
+} from 'react-hook-form';
 import { RadioLine } from './RadioLine';
 import { Row } from './Row';
 import { Label, Typography } from './Typography';
+import { FormHelperText } from '@mui/material';
+import { ErrorMessage } from '@hookform/error-message';
 
-interface FieldRowProps {
+type FieldRowProps = {
   label: string; // Label displayed alongside the field
   maxWidth?: string | number; // Optional max width for the field
   checkbox?: boolean; // Determines if the field is a checkbox
   control?: Control; // Any control element passed in (React children)
   type?: string;
   name?: string;
-  options: { label: string; value: unknown }[];
+  options: { label: string; value: unknown; disabled?: boolean }[];
+  defaultValue?: unknown;
+  helperText?: string;
+  errors?: FieldErrors<any>;
+  disabled?: boolean;
+  onChange?: () => void;
   [key: string]: any; // Spread operator for any additional props
-}
+};
 
 export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
-  ({ label, maxWidth, checkbox, control, children, ...props }, ref) => {
+  ({ label, maxWidth, checkbox, control, defaultValue, disabled, children, ...props }, ref) => {
     const isControlled = !!props.type;
 
     if (isControlled && !control) {
@@ -61,10 +74,13 @@ export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
               control={control}
               render={({ field }) => (
                 <ControlledField
+                  defaultValue={defaultValue}
                   field={field}
                   name={props.name}
                   options={props.options}
                   type={props.type}
+                  onChange={props.onChange}
+                  disabled={disabled}
                 />
               )}
             />
@@ -78,6 +94,15 @@ export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
               id={props.name}
             />
           )}
+          {props.helperText && (
+            <ErrorMessage
+              errors={props.errors}
+              name={props.name}
+              render={({ message }) => (
+                <FormHelperText sx={{ color: 'error.main', ml: 1 }}>{message}</FormHelperText>
+              )}
+            />
+          )}
         </Box>
       </Row>
     );
@@ -87,15 +112,37 @@ export const FieldRow = forwardRef<unknown, PropsWithChildren<FieldRowProps>>(
 interface ControlledFieldProps {
   type?: string;
   name?: string;
-  options: { label: string; value: unknown }[];
+  options: { label: string; value: unknown; disabled?: boolean }[];
   field: ControllerRenderProps<FieldValues, string>;
+  defaultValue?: unknown;
+  onChange?: () => void;
+  disabled?: boolean;
 }
 /**
  * Select the right field to display
  */
-export function ControlledField({ type, name, options, field }: Readonly<ControlledFieldProps>) {
+export function ControlledField({
+  type,
+  name,
+  options,
+  field,
+  defaultValue,
+  disabled,
+  onChange,
+}: Readonly<ControlledFieldProps>) {
   if (type === 'switch') {
-    return <Switch checked={field.value} color="green" {...field} />;
+    return (
+      <Switch
+        checked={field.value}
+        color="green"
+        disabled={disabled}
+        {...field}
+        onChange={e => {
+          field.onChange(e);
+          onChange?.();
+        }}
+      />
+    );
   }
   if (type === 'datepicker') {
     return <DatePicker value={field.value} onChange={v => field.onChange(v.getTime())} />;
@@ -103,18 +150,24 @@ export function ControlledField({ type, name, options, field }: Readonly<Control
   if (type === 'radios') {
     return (
       <RadioGroup
-        value={field.value}
-        onChange={e => field.onChange(e.target.value)}
+        value={defaultValue ? undefined : field.value}
+        defaultValue={defaultValue}
+        onChange={e => {
+          field.onChange(e.target.value);
+          onChange?.();
+        }}
         row
         aria-labelledby={`label-${name}`}
         name={name}
       >
-        {options.map((o: { value: unknown; label: string }) => (
+        {options.map((o: { value: unknown; label: string; disabled?: boolean }) => (
           <FormControlLabel
             value={o.value}
             control={<Radio sx={{ p: 0 }} />}
             label={o.label}
             key={o.label}
+            onChange={onChange}
+            disabled={o.disabled}
           />
         ))}
       </RadioGroup>
@@ -124,7 +177,10 @@ export function ControlledField({ type, name, options, field }: Readonly<Control
     return (
       <RadioGroup
         value={field.value}
-        onChange={e => field.onChange(e.target.value)}
+        onChange={e => {
+          field.onChange(e.target.value);
+          onChange?.();
+        }}
         row
         aria-labelledby={`label-${name}`}
         name={name}

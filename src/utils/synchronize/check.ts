@@ -3,12 +3,13 @@ import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 import { postMailMessage } from 'api/pearl';
 import D from 'i18n';
 import { NotificationState } from 'types/pearl';
-import { Notification, SyncReport } from 'utils/indexeddb/idb-config';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
 import { format } from 'date-fns';
+import { SyncReport } from 'utils/indexeddb/model/syncReport';
+import type { Notification } from '../../types/pearl';
 
 export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) => {
   if (pearlSuccess && queenSuccess) {
@@ -117,7 +118,7 @@ const getResult = (
 };
 
 export const analyseResult = async () => {
-  const { id: userId } = JSON.parse(window.localStorage.getItem(PEARL_USER_KEY) || '{}');
+  const { id: userId } = JSON.parse(globalThis.localStorage.getItem(PEARL_USER_KEY) || '{}');
   const pearlSus = await surveyUnitIDBService.getAll();
   const pearlSurveyUnitsArray = pearlSus.map(({ id }: { id: string }) => id);
   const {
@@ -196,9 +197,9 @@ export const analyseResult = async () => {
 };
 
 export const saveSyncPearlData = (data: unknown) =>
-  window.localStorage.setItem('PEARL_SYNC_RESULT', JSON.stringify(data));
+  globalThis.localStorage.setItem('PEARL_SYNC_RESULT', JSON.stringify(data));
 export const getSavedSyncPearlData = () =>
-  JSON.parse(window.localStorage.getItem('PEARL_SYNC_RESULT') || '{}');
+  JSON.parse(globalThis.localStorage.getItem('PEARL_SYNC_RESULT') || '{}');
 export const getSavedSyncQueenData = () =>
   JSON.parse(window.localStorage.getItem('QUEEN_SYNC_RESULT') || '{}');
 

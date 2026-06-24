@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
-import { SyncReport } from '../idb-config';
 import SyncReportIdbService from './syncReport-idb-service';
+import { SyncReport } from '../model/syncReport';
 
 vi.mock('./abstract-idb-service');
 
@@ -20,7 +20,7 @@ describe('SurveyUnitIdbService - addOrUpdateNotif', () => {
     const existingReport = { id: '123' };
     const updatedReport = {
       id: '123',
-    } as unknown as SyncReport;
+    };
 
     mockGet.mockResolvedValue(existingReport);
     mockUpdate.mockResolvedValue(updatedReport);
@@ -33,7 +33,11 @@ describe('SurveyUnitIdbService - addOrUpdateNotif', () => {
   });
 
   it('should insert the report if it does not exist', async () => {
-    const report = { id: '456' } as unknown as SyncReport;
+    const report: SyncReport = {
+      id: '456',
+      transmittedSurveyUnits: {},
+      loadedSurveyUnits: {},
+    };
 
     mockGet.mockResolvedValue(null);
     mockInsert.mockResolvedValue(report);

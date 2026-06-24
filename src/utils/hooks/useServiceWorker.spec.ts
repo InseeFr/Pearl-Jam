@@ -11,7 +11,7 @@ beforeAll(() => {
 
 describe('useServiceWorker', () => {
   beforeEach(() => {
-    window.localStorage.clear();
+    globalThis.localStorage.clear();
     (serviceWorker.register as Mock).mockClear();
     (serviceWorker.unregister as Mock).mockClear();
   });
@@ -81,7 +81,7 @@ describe('useServiceWorker', () => {
       result.current.updateApp();
     });
 
-    expect(window.localStorage.getItem('installing-update')).toBe('true');
+    expect(globalThis.localStorage.getItem('installing-update')).toBe('true');
     expect(result.current.isUpdating).toBe(true);
   });
 
@@ -93,7 +93,7 @@ describe('useServiceWorker', () => {
     });
 
     expect(result.current.isUpdateInstalled).toBe(false);
-    expect(window.localStorage.getItem('installing-update')).toBeNull();
+    expect(globalThis.localStorage.getItem('installing-update')).toBeNull();
   });
 
   it('should uninstall the service worker', () => {

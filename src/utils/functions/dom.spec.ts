@@ -22,15 +22,15 @@ describe('addListener', () => {
   it('should work with window as target', () => {
     const listener = vi.fn();
 
-    const cleanup = addListener(window, 'resize', listener);
+    const cleanup = addListener(globalThis.window, 'resize', listener);
 
-    window.dispatchEvent(new Event('resize'));
+    globalThis.dispatchEvent(new Event('resize'));
 
     expect(listener).toHaveBeenCalledTimes(1);
 
     cleanup();
 
-    window.dispatchEvent(new Event('resize'));
+    globalThis.dispatchEvent(new Event('resize'));
 
     expect(listener).toHaveBeenCalledTimes(1); // L'écouteur ne doit pas être appelé à nouveau
   });

@@ -1,12 +1,13 @@
 import {
   communicationMediumEnum,
   communicationReasonEnum,
+  CommunicationStatus,
   communicationStatusEnum,
   communicationTypeEnum,
 } from 'utils/enum/CommunicationEnums';
 
 import D from 'i18n';
-import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
+import { StateValues, surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { ContactAttemptValue } from 'utils/functions/contacts/ContactAttempt';
 
 export const NOTIFICATION_TYPE_SYNC = 'synchronization';
@@ -15,7 +16,7 @@ export const NOTIFICATION_TYPE_MANAGEMENT = 'management';
 export const KEYCLOAK = 'keycloak';
 export const ANONYMOUS = 'anonymous';
 
-export const PEARL_URL = window.localStorage.getItem('PEARL_URL') ?? '';
+export const PEARL_URL = globalThis.localStorage.getItem('PEARL_URL') ?? '';
 export const PEARL_USER_KEY = 'pearl-user';
 export const GUEST_PEARL_USER = {
   lastName: 'Guest',
@@ -28,14 +29,14 @@ export const CONFIGURATION_FALLBACK = 'sw-fallback-configuration';
 
 export const JSON_UTF8_HEADER = 'application/json;charset=utf-8';
 
-export const CONTACT_RELATED_STATES = [
+export const CONTACT_RELATED_STATES: Partial<StateValues>[] = [
   surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
   surveyUnitStateEnum.APPOINTMENT_MADE.type,
 ];
 
 export const CONTACT_SUCCESS_LIST: ContactAttemptValue[] = ['INA', 'APT'];
 
-export const HEALTHY_COMMUNICATION_REQUEST_STATUS = [
+export const HEALTHY_COMMUNICATION_REQUEST_STATUS: Partial<CommunicationStatus>[] = [
   communicationStatusEnum.INITIATED.value,
   communicationStatusEnum.READY.value,
   communicationStatusEnum.SUBMITTED.value,
@@ -75,4 +76,4 @@ export const reasonRadioValues = [
 export const TITLES = {
   MISS: { type: 'MISS', value: D.titleMiss },
   MISTER: { type: 'MISTER', value: D.titleMister },
-};
+} as const;

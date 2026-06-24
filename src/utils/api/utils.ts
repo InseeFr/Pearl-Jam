@@ -15,7 +15,7 @@ export const getSecureHeader = (token: string | undefined) =>
 export const authentication = (mode: string) => {
   switch (mode) {
     case KEYCLOAK:
-      if (window.localStorage.getItem(PEARL_USER_KEY) === undefined) {
+      if (globalThis.localStorage.getItem(PEARL_USER_KEY) === undefined) {
         return keycloakAuthentication({ onLoad: 'login-required' });
       }
       return refreshToken();
@@ -50,6 +50,9 @@ export const formatSurveyUnitForPut = (su: SurveyUnit) => {
     contactOutcome: su.contactOutcome,
     identification: su.identification,
     communicationRequests: newFormattedCommunicationRequests,
+    previousContactHistory: su.previousContactHistory,
+    nextContactHistory: su.nextContactHistory,
+    collectNextContacts: su.collectNextContacts,
   };
 
   return formattedSurveyUnit;
