@@ -1,4 +1,4 @@
-import { vi, describe, beforeEach, expect, Mock, it, MockInstance } from 'vitest';
+import { vi, describe, beforeEach, expect, it, MockInstance } from 'vitest';
 import NotificationIdbService from './notification-idb-service';
 
 vi.mock('./abstract-idb-service');

@@ -4,7 +4,7 @@ import { db } from '../idb-config';
 export type ID = string | number;
 
 export default class AbstractIdbService<T extends { id: ID }> {
-  private store;
+  private readonly store;
 
   constructor(store: keyof typeof db) {
     this.store = db[store] as Table;

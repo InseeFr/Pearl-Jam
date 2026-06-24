@@ -8,7 +8,7 @@ test('check if filters are saved inside the localStorage', async ({ page }) => {
   await homePage.go();
   await homePage.synchronize();
 
-  await homePage.checkNumberOfDisplayedItems(15);
+  await homePage.checkNumberOfDisplayedItems(16);
   await page.getByLabel('A préparer').check();
   await page.getByLabel('vqs2021x00').check();
   await homePage.checkNumberOfDisplayedItems(3);
@@ -20,7 +20,7 @@ test('check if filters are saved inside the localStorage', async ({ page }) => {
   await page.getByRole('checkbox', { name: 'A préparer', checked: true }).uncheck();
   await page.getByRole('checkbox', { name: 'vqs2021x00', checked: true }).uncheck();
 
-  await homePage.checkNumberOfDisplayedItems(15);
+  await homePage.checkNumberOfDisplayedItems(16);
 });
 
 test('check if the status filters is working properly', async ({ page }) => {
@@ -30,7 +30,7 @@ test('check if the status filters is working properly', async ({ page }) => {
 
   await page.getByLabel('A préparer').check();
 
-  await homePage.checkNumberOfDisplayedItems(4);
+  await homePage.checkNumberOfDisplayedItems(5);
 
   await homePage.resetAllFilters();
 
@@ -75,9 +75,9 @@ test('check if the priority filter is working properly', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();
   await homePage.synchronize();
-  await homePage.checkNumberOfDisplayedItems(15);
+  await homePage.checkNumberOfDisplayedItems(16);
   await page.getByLabel('Unités prioritaires').check();
-  await homePage.checkNumberOfDisplayedItems(4);
+  await homePage.checkNumberOfDisplayedItems(5);
   await homePage.resetAllFilters();
 });
 
@@ -85,11 +85,11 @@ test('check if the Survey filter is working properly', async ({ page }) => {
   const homePage = new HomePage(page);
   await homePage.go();
   await homePage.synchronize();
-  await homePage.checkNumberOfDisplayedItems(15);
+  await homePage.checkNumberOfDisplayedItems(16);
   await page.getByLabel('vqs2021x00').check();
   await homePage.checkNumberOfDisplayedItems(3);
   await homePage.resetAllFilters();
-  await homePage.checkNumberOfDisplayedItems(15);
+  await homePage.checkNumberOfDisplayedItems(16);
   await page.getByLabel('aqv2023x00', { exact: true }).check();
   await homePage.checkNumberOfDisplayedItems(5);
   await homePage.resetAllFilters();
@@ -101,9 +101,9 @@ test('check if the cluster filter is working properly', async ({ page }) => {
   await homePage.synchronize();
   await page.getByRole('combobox').first().click();
   await page.getByRole('option', { name: '1' }).click();
-  await homePage.checkNumberOfDisplayedItems(12);
+  await homePage.checkNumberOfDisplayedItems(13);
   await page.getByRole('combobox').nth(1).click();
-  await page.getByRole('option', { name: '15' }).click();
+  await page.getByRole('option', { name: '16' }).click();
   await homePage.checkNumberOfDisplayedItems(1);
 });
 
@@ -127,7 +127,7 @@ test('check if the reset feature is working properly', async ({ page }) => {
 
   expect(filter1).not.toBeChecked();
   expect(filter2).not.toBeChecked();
-  await homePage.checkNumberOfDisplayedItems(15);
+  await homePage.checkNumberOfDisplayedItems(16);
 });
 
 test('check if the search input is working properly', async ({ page }) => {

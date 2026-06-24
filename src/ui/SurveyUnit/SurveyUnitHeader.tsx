@@ -12,9 +12,7 @@ import { PrivilegedPerson } from './PrivilegedPerson';
 import Chip from '@mui/material/Chip';
 import { Typography } from '../Typography';
 import { toDoEnum } from '../../utils/enum/SUToDoEnum';
-import { getLastState, getSuTodoState } from '../../utils/functions';
 import Button from '@mui/material/Button';
-import { surveyUnitStateEnum } from '../../utils/enum/SUStateEnum';
 import { Popover, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import FiberManualRecordOutlinedIcon from '@mui/icons-material/FiberManualRecordOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -27,6 +25,7 @@ import { SubmitButton } from './SubmitButton';
 import CheckIcon from '@mui/icons-material/Check';
 import { validateTransmission } from 'utils/functions/identifications/identificationFunctions';
 import { PriorityBadge } from '../PriorityBadge';
+import { getSuTodoState } from 'utils/functions/surveyUnitState';
 
 const useStyles = makeStyles({
   rotateBox: {
@@ -82,7 +81,7 @@ export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>
   const open = Boolean(anchorElement);
   const id = open ? 'simple-popover' : undefined;
   const states = Object.values(toDoEnum).filter(toDo => Number(toDo.order) < 6);
-  const currentState = Number(getSuTodoState(surveyUnit).order);
+  const currentState = Number(getSuTodoState(surveyUnit)?.order);
   const canSubmit = validateTransmission(surveyUnit);
 
   return (

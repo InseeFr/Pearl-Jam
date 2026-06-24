@@ -27,7 +27,7 @@ describe('formatDate', () => {
   });
 
   it('should handle invalid dates gracefully', () => {
-    const invalidTime = NaN;
+    const invalidTime = Number.NaN;
     const result = formatDate(invalidTime);
     expect(result).toBe('');
   });

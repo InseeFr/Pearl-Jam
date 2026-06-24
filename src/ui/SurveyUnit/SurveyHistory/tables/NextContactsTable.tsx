@@ -11,87 +11,48 @@ import {
   Stack,
   Grid,
 } from '@mui/material';
-import { CheckCircle, Delete, Edit, Add } from '@mui/icons-material';
+import { CheckCircle, Delete, Edit, Add, Refresh } from '@mui/icons-material';
 import { NextContactHistoryPerson, SurveyUnit } from 'types/pearl';
 import { CustomTableCell } from './CustomTableCell';
-import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
-import { useState } from 'react';
 import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import { ContactModal } from './ContactModal';
 import D from 'i18n';
+import { PhoneNumberImportAlert } from './PhoneNumberImportAlert';
+import { useNextContacts } from 'utils/hooks/useNextContacts';
 
 type HouseholdTableProps = {
   surveyUnit: SurveyUnit;
 };
 
+export type NextContactHistoryPersonAndImportState = {
+  resolved: boolean;
+  nextContactHistoryPerson: NextContactHistoryPerson;
+};
+
 export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>) {
-  const [selectedContactIndex, setSelectedContactIndex] = useState<number>(-1);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [modifyModalOpen, setModifyModalOpen] = useState(false);
-  const [addModalOpen, setAddModalOpen] = useState(false);
-
-  const handleDeleteClick = (index: number) => {
-    setSelectedContactIndex(index);
-    setDeleteModalOpen(true);
-  };
-
-  const handleConfirmDelete = () => {
-    const newNextCollectHistory = {
-      ...nextCollectHistory,
-      persons: nextCollectHistory?.persons.toSpliced(selectedContactIndex, 1) ?? [],
-    };
-    surveyUnitIDBService.addOrUpdateSU({
-      ...surveyUnit,
-      nextContactHistory: newNextCollectHistory,
-    });
-
-    setDeleteModalOpen(false);
-    setSelectedContactIndex(-1);
-  };
-
-  const handleModify = (newContact: NextContactHistoryPerson) => {
-    const newNextCollectHistory = {
-      ...nextCollectHistory,
-      persons: nextCollectHistory?.persons.toSpliced(selectedContactIndex, 1, newContact) ?? [],
-    };
-    surveyUnitIDBService.addOrUpdateSU({
-      ...surveyUnit,
-      nextContactHistory: newNextCollectHistory,
-    });
-
-    setModifyModalOpen(false);
-    setSelectedContactIndex(-1);
-  };
-
-  const nextCollectHistory = surveyUnit.nextContactHistory;
-  const handleModifyClick = (index: number) => {
-    setSelectedContactIndex(index);
-    setModifyModalOpen(true);
-  };
-  const handleAddClick = () => {
-    setAddModalOpen(true);
-  };
-
-  const handleAdd = (newContact: NextContactHistoryPerson) => {
-    setAddModalOpen(false);
-    setSelectedContactIndex(-1);
-
-    if (surveyUnit.nextContactHistory) {
-      surveyUnit.nextContactHistory.persons.push(newContact);
-      surveyUnitIDBService.addOrUpdateSU({
-        ...surveyUnit,
-      });
-      return;
-    }
-
-    surveyUnitIDBService.addOrUpdateSU({
-      ...surveyUnit,
-      nextContactHistory: { persons: [newContact] },
-    });
-  };
-
-  const preferredContact = nextCollectHistory?.persons.find(c => c.preferredContact);
-  const selectedContact = nextCollectHistory?.persons[selectedContactIndex];
+  const {
+    selectedContact,
+    selectedContactIndex,
+    deleteModalOpen,
+    modifyModalOpen,
+    addModalOpen,
+    contactsImportState,
+    phoneNumberModal,
+    nextCollectHistory,
+    noNextContacts,
+    openDeleteModalForSelectedContact: openSelectedContactToDeleteModal,
+    deleteSelectedContact: deletedSelectedContact,
+    openSelectedContactModal,
+    modifyContactInTable,
+    openAddModal,
+    closeAddModal,
+    addNewContact,
+    importCurrentContacts,
+    canDeleteContact,
+    closeDeleteModal,
+    closeModifyModal,
+    closePhoneNumberModal,
+  } = useNextContacts(surveyUnit);
 
   return (
     <Card elevation={0}>
@@ -99,11 +60,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
         {!!nextCollectHistory?.persons.length && (
           <Table size="medium">
             <TableHead>
-              <TableRow
-                sx={{
-                  alignContent: 'center',
-                }}
-              >
+              <TableRow sx={{ alignContent: 'center' }}>
                 {[
                   D.contactCivilityLabel,
                   D.collectTableLastName,
@@ -125,11 +82,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                 <TableRow
                   key={c.id}
                   hover
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'transparent !important',
-                    },
-                  }}
+                  sx={{ '&:hover': { backgroundColor: 'transparent !important' } }}
                 >
                   <CustomTableCell>{D[c.title]}</CustomTableCell>
                   <CustomTableCell>{c.lastName?.toUpperCase()}</CustomTableCell>
@@ -139,17 +92,12 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                   <TableCell sx={{ backgroundColor: 'transparent', textAlign: 'center' }}>
                     {c.preferredContact && <CheckCircle fontSize="medium" color="success" />}
                   </TableCell>
-                  <TableCell
-                    sx={{
-                      backgroundColor: 'transparent',
-                      textAlign: 'center',
-                    }}
-                  >
+                  <TableCell sx={{ backgroundColor: 'transparent', textAlign: 'center' }}>
                     <Grid container spacing={2}>
                       <Grid item>
                         <Button
                           color="inherit"
-                          onClick={() => handleModifyClick(i)}
+                          onClick={() => openSelectedContactModal(i)}
                           size="small"
                           variant="contained"
                           sx={{ minWidth: '150px' }}
@@ -160,7 +108,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                       </Grid>
                       <Grid item>
                         <Button
-                          onClick={() => handleDeleteClick(i)}
+                          onClick={() => openSelectedContactToDeleteModal(i)}
                           size="small"
                           variant="contained"
                           sx={{ minWidth: '150px' }}
@@ -176,41 +124,60 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
             </TableBody>
           </Table>
         )}
-        <Stack direction="row" mt={3}>
+        <Stack direction="row" mt={3} spacing={2}>
           <Button
-            onClick={handleAddClick}
+            onClick={openAddModal}
             variant="contained"
             startIcon={<Add />}
-            sx={{
-              textTransform: 'none',
-            }}
+            sx={{ textTransform: 'none' }}
           >
             <Typography fontWeight={600}>{D.addContact}</Typography>
           </Button>
+          {noNextContacts && (
+            <Button
+              onClick={importCurrentContacts}
+              color="inherit"
+              variant="contained"
+              startIcon={<Refresh />}
+              sx={{ textTransform: 'none' }}
+            >
+              <Typography fontWeight={600}>{D.importContacts}</Typography>
+            </Button>
+          )}
         </Stack>
       </CardContent>
+
       <DeleteConfirmationModal
         open={deleteModalOpen}
         selectedContact={selectedContact}
-        onClose={() => setDeleteModalOpen(false)}
-        onConfirm={handleConfirmDelete}
+        canDelete={canDeleteContact()}
+        onClose={closeDeleteModal}
+        onConfirm={deletedSelectedContact}
       />
+
       {nextCollectHistory?.persons[selectedContactIndex] && (
         <ContactModal
           open={modifyModalOpen}
           modalTitle={D.contactModalTitleEdit}
           contact={selectedContact}
-          preferedContact={preferredContact}
-          onClose={() => setModifyModalOpen(false)}
-          onConfirm={handleModify}
+          onClose={closeModifyModal}
+          onConfirm={modifyContactInTable}
+          isFirst={false}
         />
       )}
+
       <ContactModal
         modalTitle={D.modalAddContact}
         open={addModalOpen}
-        preferedContact={preferredContact}
-        onClose={() => setAddModalOpen(false)}
-        onConfirm={handleAdd}
+        onClose={closeAddModal}
+        onConfirm={addNewContact}
+        isFirst={noNextContacts}
+      />
+
+      <PhoneNumberImportAlert
+        open={phoneNumberModal}
+        contactsToResolve={contactsImportState}
+        onClose={closePhoneNumberModal}
       />
     </Card>
   );

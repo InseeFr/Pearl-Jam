@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import Box from '@mui/material/Box';
 import { ValidationError } from './ValidationError';
 import { ZodError, ZodIssue } from 'zod';
 import { describe, it, expect } from 'vitest';

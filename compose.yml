@@ -83,7 +83,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/queen-back-office:5.4.1
+    image: inseefr/queen-back-office:5.8.3
     tty: true
     stdin_open: true
     depends_on:
@@ -131,7 +131,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/pearl-jam-back-office:5.13.2-rc
+    image: docker.io/inseefr/pearl-jam-back-office:5.26.4-rc
     tty: true
     stdin_open: true
     depends_on:
@@ -177,7 +177,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/drama-queen:3.1.2
+    image: inseefr/drama-queen:3.6.0
     tty: true
     stdin_open: true
     environment:

@@ -1,10 +1,12 @@
 import { Dialog, DialogTitle, DialogContent, Button, Typography, Stack } from '@mui/material';
 import D from 'i18n';
 import { NextContactHistoryPerson } from 'types/pearl';
+import { DeletePrivilegedModalAlert } from './DeletePrivilegedModalAlert';
 
 type DeleteConfirmationModalProps = {
   open: boolean;
   selectedContact?: NextContactHistoryPerson;
+  canDelete: boolean;
   onClose: () => void;
   onConfirm: () => void;
 };
@@ -12,9 +14,16 @@ type DeleteConfirmationModalProps = {
 export function DeleteConfirmationModal({
   open,
   selectedContact,
+  canDelete,
   onClose,
   onConfirm,
 }: Readonly<DeleteConfirmationModalProps>) {
+  const fullName = `${selectedContact?.firstName} ${selectedContact?.lastName}`;
+
+  if (!canDelete) {
+    return <DeletePrivilegedModalAlert fullName={fullName} onClose={onClose} open={open} />;
+  }
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle>
@@ -24,9 +33,7 @@ export function DeleteConfirmationModal({
       </DialogTitle>
       <DialogContent sx={{ py: 2 }}>
         <Typography fontWeight={600} color="grey.700">
-          {D.deleteContactConfirmation(
-            `${selectedContact?.firstName} ${selectedContact?.lastName}`
-          )}
+          {D.deleteContactConfirmation(fullName)}
         </Typography>
       </DialogContent>
       <DialogContent sx={{ px: 3, pb: 2 }}>

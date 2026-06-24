@@ -32,7 +32,7 @@ export function CommentCard({ surveyUnit }: Readonly<CommentCardProps>) {
   };
   const canSubmit = comment !== baseComment;
   return (
-    <Card p={2} elevation={0}>
+    <Card elevation={0}>
       <CardContent>
         <Stack gap={3} component="form" onSubmit={handleSubmit}>
           <Row gap={1}>

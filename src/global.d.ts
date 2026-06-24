@@ -13,6 +13,10 @@ declare module 'dramaQueen/DramaIndex' {
     mountPoint: HTMLElement | null;
     initialPathname: string;
   }): VoidFunction;
+
+}
+declare module 'dramaQueen/getQueenVersion' {
+  export function getQueenVersion(): string;
 }
 
 declare module 'dramaQueen/useArticulationTable' {

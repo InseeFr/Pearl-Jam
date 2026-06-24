@@ -3,11 +3,13 @@ import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 import { postMailMessage } from 'api/pearl';
 import D from 'i18n';
 import { NotificationState, SyncResultDetails } from 'types/pearl';
-import { Notification, SyncReport } from 'utils/indexeddb/idb-config';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
+import { format } from 'date-fns';
+import { SyncReport } from 'utils/indexeddb/model/syncReport';
+import type { Notification } from '../../types/pearl';
 
 export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) => {
   if (pearlSuccess && queenSuccess) {
@@ -32,7 +34,7 @@ export const getNotifFromResult = (
 ): Omit<Notification, 'id'> => {
   const { state, messages, details } = result;
   return {
-    date: nowDate || new Date().getTime(),
+    date: nowDate || Date.now(),
     type: NOTIFICATION_TYPE_SYNC,
     title: D.titleSync(state),
     messages,
@@ -199,11 +201,17 @@ export const analyseResult = async () => {
     prioritySurveyUnits
   );
 
-  const nowDate = new Date().getTime();
+  const nowDate = Date.now();
   const notification = getNotifFromResult(result, nowDate);
   await notificationIdbService.addOrUpdateNotif(notification);
   const report = getReportFromResult(result, nowDate);
   await syncReportIdbService.addOrUpdateReport(report);
+
+  // Store last successful sync date
+  if (result.state === 'success') {
+    const humanReadableDate = format(new Date(), 'dd/MM/yyyy HH:mm:ss');
+    localStorage.setItem('LAST_SYNCH_SUCCESS_DATE', humanReadableDate);
+  }
 
   return result;
 };
@@ -213,4 +221,12 @@ export const saveSyncPearlData = (data: unknown) =>
 export const getSavedSyncPearlData = () =>
   JSON.parse(globalThis.localStorage.getItem('PEARL_SYNC_RESULT') || '{}');
 export const getSavedSyncQueenData = () =>
-  JSON.parse(globalThis.localStorage.getItem('QUEEN_SYNC_RESULT') || '{}');
+  JSON.parse(window.localStorage.getItem('QUEEN_SYNC_RESULT') || '{}');
+
+export const PEARL_INIT_SYNC_STATE = {
+  error: true,
+  surveyUnitsSuccess: [],
+  surveyUnitsInTempZone: [],
+  transmittedSurveyUnits: [],
+  loadedSurveyUnits: [],
+}

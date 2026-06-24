@@ -1,10 +1,11 @@
 import { effect, signal } from '@maverick-js/signals';
 import { SurveyUnit } from 'types/pearl';
 import { toDoEnum } from '../enum/SUToDoEnum';
-import { daysLeftForSurveyUnit, getprivilegedPerson, getSuTodoState } from '../functions';
+import { daysLeftForSurveyUnit, getprivilegedPerson } from '../functions';
 import { toggleItem } from '../functions/array';
 import { normalize } from '../functions/string';
 import { useSignalValue } from './useSignalValue';
+import { getSuTodoState } from 'utils/functions/surveyUnitState';
 
 type SearchCriteria = {
   sortField:
@@ -132,7 +133,8 @@ export function filterSurveyUnits(surveyUnits: SurveyUnit[], criteria: SearchCri
       return false;
     }
 
-    if (criteria.states.length > 0 && !criteria.states.includes(getSuTodoState(surveyUnit).order)) {
+    const suState = getSuTodoState(surveyUnit);
+    if (suState && criteria.states.length > 0 && !criteria.states.includes(suState.order)) {
       return false;
     }
 
@@ -155,7 +157,7 @@ export function filterSurveyUnits(surveyUnits: SurveyUnit[], criteria: SearchCri
     if (criteria.search) {
       const person = getprivilegedPerson(surveyUnit);
       const searchString = normalize(
-        `${person.firstName} ${person.lastName} ${surveyUnit.id} ${surveyUnit.address.l6} ${surveyUnit.displayName} ${getSuTodoState(surveyUnit).value}`
+        `${person.firstName} ${person.lastName} ${surveyUnit.id} ${surveyUnit.address.l6} ${surveyUnit.displayName} ${suState?.value}`
       );
 
       if (

@@ -36,6 +36,8 @@ Kill and unmount containers
 podman compose --env-file .env.docker --profile stack down -v
 ```
 
+Beware of old local front images, clear them before testing.
+
 ## Playwright
 
 Install chromium

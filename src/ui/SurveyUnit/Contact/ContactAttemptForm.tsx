@@ -19,6 +19,7 @@ import {
   ContactAttemptMedium,
   getMediumByConfiguration,
   getContactAttemptsByMedium,
+  ContactAttemptValue,
 } from 'utils/functions/contacts/ContactAttempt';
 
 type StepValue = 'medium' | 'contactAttempt' | 'datePicker';
@@ -35,7 +36,7 @@ type ContactAttemptFormProps = {
 export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAttemptFormProps>) {
   const [step, setStep] = useState(steps[0]);
   const [medium, setMedium] = useState<ContactAttemptMedium>();
-  const [status, setStatus] = useState<string | null>();
+  const [status, setStatus] = useState<ContactAttemptValue>();
   const [date, setDate] = useState<Date>(new Date());
 
   const goPreviousStep = (e: MouseEvent<HTMLButtonElement>) => {
@@ -46,8 +47,8 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
 
   const goNextStep = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (step === 'datePicker') {
-      const updatedSu = {
+    if (step === 'datePicker' && status && medium) {
+      const updatedSu: SurveyUnit = {
         ...surveyUnit,
         contactAttempts: [
           ...surveyUnit.contactAttempts,
@@ -90,7 +91,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
   const setValue = (value: any) => {
     if (step === 'medium' && isValidMedium(value)) {
       setMedium(value);
-      setStatus(null);
+      setStatus(undefined);
     }
     if (step === 'contactAttempt') {
       setStatus(value);
@@ -107,7 +108,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
   );
 
   return (
-    <Dialog maxWidth="s" open={true} onClose={onClose}>
+    <Dialog open={true} onClose={onClose}>
       <DialogTitle id="dialogtitle">
         {step === 'medium' ? D.mediumQuestion : D.contactAttempt}
       </DialogTitle>
@@ -147,7 +148,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
                 onChange={setValue}
                 ampm={false}
                 ampmInClock={false}
-                slots={{ toolbar: false, actionBar: 'div' }}
+                slots={{ toolbar: undefined, actionBar: () => null }}
               />
             </Stack>
           )}

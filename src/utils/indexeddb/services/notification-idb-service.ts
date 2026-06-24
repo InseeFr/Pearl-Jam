@@ -1,5 +1,5 @@
 import AbstractIdbService from './abstract-idb-service';
-import { type Notification } from '../idb-config';
+import type { Notification } from './../../../types/pearl';
 
 class NotificationIdbService extends AbstractIdbService<Notification> {
   constructor() {

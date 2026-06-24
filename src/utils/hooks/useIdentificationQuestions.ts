@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
 import { SurveyUnit, SurveyUnitIdentification } from 'types/pearl';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
-import { addNewState, persistSurveyUnit } from 'utils/functions';
+import { persistSurveyUnit } from 'utils/functions';
 import {
   checkAvailability,
   isIdentificationFinished,
@@ -13,6 +13,7 @@ import {
 } from 'utils/functions/identifications/identificationFunctions';
 import { useEffectOnce } from './useEffectOnce';
 import D from 'i18n';
+import { addNewState } from 'utils/functions/surveyUnitState';
 
 const generateResponseState = (
   questions: IdentificationQuestions,

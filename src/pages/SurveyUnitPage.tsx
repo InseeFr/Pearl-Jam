@@ -17,10 +17,11 @@ import { PersonsCard } from '../ui/SurveyUnit/PersonsCard';
 import { SurveyUnitHeader } from '../ui/SurveyUnit/SurveyUnitHeader';
 import { Typography } from '../ui/Typography';
 import { surveyUnitStateEnum } from '../utils/enum/SUStateEnum';
-import { addNewState, getLastState, persistSurveyUnit } from '../utils/functions';
 import { useSurveyUnit } from '../utils/hooks/database';
 import { PreviousCollectCard } from 'ui/SurveyUnit/SurveyHistory/PreviousCollectCard';
 import { NextCollectCard } from 'ui/SurveyUnit/SurveyHistory/NextCollectCard';
+import { persistSurveyUnit } from 'utils/functions';
+import { getLastState, addNewState } from 'utils/functions/surveyUnitState';
 
 export function SurveyUnitPage() {
   const { id } = useParams<{ id: string }>();

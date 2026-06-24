@@ -75,7 +75,6 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
 
   page.locator('div').filter({ hasText: /^MOREAU Isabelle#questNotAvailable$/ });
 
-  await page.getByRole('button', { name: 'Fermer' }).click();
   await page.getByRole('link', { name: 'Mon suivi' }).click();
   await page.getByRole('tab', { name: 'Suivi des unités par enquête' }).click();
   await page.getByRole('cell', { name: 'MOREAU Isabelle' }).click();
@@ -129,11 +128,16 @@ test('Check previous collect history, modify next collect history and synchroniz
   await page.getByRole('textbox', { name: 'Email' }).click();
   await page.getByRole('textbox', { name: 'Email' }).fill('test2@gmail.com');
   await page.getByRole('radio', { name: 'Oui' }).click();
-  await page.getByRole('button', { name: "J'ai compris" }).click();
   await page.getByRole('button', { name: 'Enregistrer' }).click();
-  const row = page.getByRole('row', { name: 'Gary' });
-  await row.getByRole('button', { name: 'Supprimer' }).click();
+
+  const rowToDelete = page.getByRole('row', { name: 'Gary' });
+  await rowToDelete.getByRole('button', { name: 'Supprimer' }).click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
+
+  const rowToSetAsPrivileged = page.getByRole('row', { name: 'Dennis' });
+  await rowToSetAsPrivileged.getByRole('button', { name: 'Modifier' }).click();
+  await page.getByRole('radio', { name: 'Oui' }).check();
+  await page.getByRole('button', { name: 'Enregistrer' }).click();
 
   await homePage.synchronize();
 
@@ -144,4 +148,46 @@ test('Check previous collect history, modify next collect history and synchroniz
   await expect(page.getByRole('cell', { name: 'Hugue' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Hugo' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'test2@gmail.com' })).toBeVisible();
+});
+
+test('Import previous contacts to next contacts', async ({ page }) => {
+  const homePage = new HomePage(page);
+  await homePage.go();
+  await homePage.synchronize();
+  await page.getByRole('link', { name: 'HILBERT' }).click();
+
+  // Add multiple phone numbers to the contact to test the pop-up handling during import
+  await page.getByRole('tab', { name: 'Contacts' }).click();
+  await page.getByRole('button', { name: 'Modifier' }).click();
+  await page.getByRole('button', { name: 'Ajouter un numéro' }).first().click();
+  await page.locator('input[name="persons.0.phoneNumbers.1.number"]').click();
+  await page.locator('input[name="persons.0.phoneNumbers.1.number"]').fill('0651163352');
+  await page.getByRole('button', { name: 'Ajouter un numéro' }).first().click();
+  await page.locator('input[name="persons.0.phoneNumbers.2.number"]').click();
+  await page.locator('input[name="persons.0.phoneNumbers.2.number"]').fill('0651163354');
+  await page.click('id=star-button-persons.0.phoneNumbers.0.favorite');
+  await page.getByRole('button', { name: 'Enregistrer' }).click();
+
+  await page.getByRole('tab', { name: 'Collecte suivante' }).click();
+  expect(page.getByRole('button', { name: 'Importer tous les contacts' })).toBeHidden();
+
+  await expect(page.getByText('SMITH')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Supprimer' }).click();
+  await page.getByRole('button', { name: 'Confirmer' }).click();
+  await expect(page.getByText('SMITH')).toBeHidden();
+
+  await page.getByRole('button', { name: 'Importer tous les contacts' }).click();
+
+  // Handle the pop-up for asking to select a single phone number and do it
+  await page.getByText('Veuillez selectionner un seul numéro de téléphone favori').click();
+  await page.getByRole('button', { name: 'Confirmer' }).click();
+  await page.getByRole('tab', { name: 'Contacts' }).click();
+  await page.click('id=star-button-source-interviewer-1');
+  await page.getByRole('tab', { name: 'Collecte suivante' }).click();
+
+  await page.getByRole('tab', { name: 'Collecte suivante' }).click();
+  await page.getByRole('button', { name: 'Importer tous les contacts' }).click();
+
+  await expect(page.getByRole('cell', { name: 'HILBERT' })).toHaveCount(2);
 });

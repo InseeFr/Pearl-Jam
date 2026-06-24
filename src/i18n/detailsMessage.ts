@@ -59,6 +59,7 @@ const detailsMessage = {
   surveyUnitLastName: { fr: 'Nom', en: 'Last name', sq: 'Mbiemri' },
   surveyUnitFirstName: { fr: 'Prénom', en: 'First name', sq: 'Emri' },
   surveyUnitTitle: { fr: 'Civilité', en: 'Title', sq: 'Titulli' },
+  surveyMailContact: { fr: 'Contact courrier', en: 'Mail contact', sq: 'Kontakt me postë' },
   surveyUnitAge: { fr: 'Âge', en: 'Age', sq: 'Mosha' },
   surveyUnitHousing: { fr: 'Logement', en: 'Housing', sq: 'Banimi' },
 

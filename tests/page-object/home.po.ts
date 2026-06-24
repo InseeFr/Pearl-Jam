@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import { GenericPage } from './generic-page.po';
 
-export const totalSu = 26;
+export const totalSu = 27;
 
 export class HomePage implements GenericPage {
   constructor(private readonly page: Page) {}
@@ -24,6 +24,11 @@ export class HomePage implements GenericPage {
     } else {
       await this.page.goto('/', { timeout: 10000 });
     }
+  }
+
+    async importData() {
+    await this.page.getByRole('button', { name: 'Synchroniser' }).click();
+    await this.page.getByRole('button', { name: "J'ai compris" }).click();
   }
 
   checkSu = async () => {

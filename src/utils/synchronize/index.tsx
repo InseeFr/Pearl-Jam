@@ -1,9 +1,5 @@
 import { useCallback, useState } from 'react';
-import {
-  createStateIdsAndCommunicationRequestIds,
-  getLastState,
-  getSuTodoState,
-} from 'utils/functions';
+import { createStateIdsAndCommunicationRequestIds } from 'utils/functions';
 
 import {
   getInterviewer,
@@ -15,14 +11,22 @@ import {
 } from 'api/pearl';
 import { useNavigate } from 'react-router-dom';
 import { QueenEvent } from 'types/events';
-import { OtherModeQuestionnaireState, OtherModeQuestionStateType, SurveyUnit } from 'types/pearl';
+import {
+  OtherModeQuestionnaireState,
+  OtherModeQuestionStateType,
+  SurveyUnit,
+  SurveyUnitComment,
+} from 'types/pearl';
 import { formatSurveyUnitForPut } from 'utils/api/utils';
 import { PEARL_USER_KEY, TITLES } from 'utils/constants';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import userIdbService from 'utils/indexeddb/services/user-idb-service';
+import { PEARL_INIT_SYNC_STATE, saveSyncPearlData } from './check';
 import { AxiosError } from 'axios';
+import { User } from 'utils/indexeddb/model/user';
+import { getSuTodoState, getLastState } from 'utils/functions/surveyUnitState';
 
 export const useQueenSynchronisation = () => {
   const waitTime = 5000;
@@ -152,11 +156,12 @@ const getUserData = async () => {
   const jsonInterviewer = JSON.parse(result);
   const { id } = jsonInterviewer;
 
-  const { data: interviewer } = await getInterviewer(id.toUpperCase());
+  const interviewer = (await getInterviewer(id.toUpperCase())).data;
 
   await userIdbService.deleteAll();
   // prevent missing civility from crushing IDB inserts for schema-4
-  await userIdbService.addOrUpdate({ civility: TITLES.MISTER.type, ...interviewer });
+  // as is a bad pattern but we can't set some dtos properties as mandatory
+  await userIdbService.addOrUpdate({ civility: TITLES.MISTER.type, ...interviewer } as User);
 };
 
 const putSurveyUnitInDataBase = async (su: SurveyUnit) => {
@@ -174,10 +179,9 @@ const validateSU = (su: SurveyUnit) => {
     su.states.push(getLastState(states));
   }
   if (Array.isArray(comments) && comments.length === 0) {
-    const interviewerComment = { type: 'INTERVIEWER', value: '' };
-    const managementComment = { type: 'MANAGEMENT', value: '' };
-    su.comments.push(interviewerComment);
-    su.comments.push(managementComment);
+    const interviewerComment: SurveyUnitComment = { type: 'INTERVIEWER', value: '' };
+    const managementComment: SurveyUnitComment = { type: 'MANAGEMENT', value: '' };
+    su.comments.push(interviewerComment, managementComment);
   }
 
   return su;
@@ -194,12 +198,18 @@ const getData = async () => {
     await Promise.all(
       surveyUnits.map(async (su: SurveyUnitDto) => {
         try {
+          if (!su.id) return;
+
           const { data: surveyUnit, status } = await getSurveyUnitById(su.id);
 
           if (status > 300 && ![400, 403, 404, 500].includes(status)) {
             throw new Error('Server is not responding');
           } else {
-            const mergedSurveyUnit: SurveyUnit = { ...surveyUnit, ...su };
+            // as is a bad pattern but we can't set some dtos properties as mandatory
+            const mergedSurveyUnit = {
+              ...surveyUnit,
+              ...su,
+            } as SurveyUnit;
             const validSurveyUnit = validateSU(mergedSurveyUnit);
             await putSurveyUnitInDataBase(validSurveyUnit);
             surveyUnitsSuccess.push({
@@ -321,6 +331,10 @@ export const synchronizePearl = async () => {
   let prioritySurveyUnits: Record<string, string[]> = {};
   let surveyUnitsInTempZone;
   let surveyUnitsSuccess;
+
+  // allows to detect interrupted sync process as an error
+  saveSyncPearlData(PEARL_INIT_SYNC_STATE);
+
   const allOldSurveyUnitsByCampaign = await getAllSurveyUnitsByCampaign();
   try {
     await getUserData();

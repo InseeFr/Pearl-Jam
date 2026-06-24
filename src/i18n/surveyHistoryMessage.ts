@@ -12,6 +12,19 @@ const surveyHistoryMessage = {
     sq: (contactFullName: string) =>
       `Dëshironi të fshini linjën që përmban informacionin e kontaktit të ${contactFullName}?`,
   },
+  deleteContactAlertPrivilegedContact: {
+    fr: (contactFullName: string) =>
+      `Attention, pour supprimer les coordonnées de ${contactFullName}, veuillez d'abord choisir un nouveau "Contact courrier" dans le tableau`,
+    en: (contactFullName: string) =>
+      `Attention, to delete the contact information of ${contactFullName}, please first choose a new "Mail contact" in the table`,
+    sq: (contactFullName: string) =>
+      `Kujdes, për të fshirë informacionin e kontaktit të ${contactFullName}, ju lutemi të zgjidhni së pari një "Kontakt përmes postës" të ri në tabelë`,
+  },
+  deleteContactAlertPrivilegedContactAccept: {
+    fr: "J'ai compris",
+    en: 'I understand',
+    sq: 'E kuptova',
+  },
   cancel: {
     fr: 'Annuler',
     en: 'Cancel',
@@ -32,15 +45,16 @@ const surveyHistoryMessage = {
     en: 'Edit',
     sq: 'Ndrysho',
   },
-  delete: {
-    fr: 'Supprimer',
-    en: 'Delete',
-    sq: 'Fshij',
-  },
+
   addContact: {
     fr: 'Ajouter un individu',
     en: 'Add a contact',
     sq: 'Shto një kontakt',
+  },
+  importContacts: {
+    fr: 'Importer tous les contacts',
+    en: 'Import all contacts',
+    sq: 'Importon të gjitha kontaktet',
   },
   deleteContactLine: {
     fr: 'Supprimer une ligne',
@@ -217,6 +231,17 @@ const surveyHistoryMessage = {
     en: 'Edit contact information',
     sq: 'Ndrysho informacionin e kontaktit',
   },
+  importAlertErrorModalTitle: {
+    fr: "Impossible d'importer",
+    en: 'Import not possible',
+    sq: 'Importimi nuk është i mundur',
+  },
+  importAlertErrorModalContent: {
+    fr: 'Veuillez selectionner un seul numéro de téléphone favori pour',
+    en: 'Please select only one preferred phone number for',
+    sq: 'Ju lutemi zgjidhni vetëm një numër telefoni të preferuar për',
+  },
+
   requiredField: {
     fr: 'Champ obligatoire',
     en: 'Required field',
@@ -232,25 +257,10 @@ const surveyHistoryMessage = {
     en: 'Invalid email address',
     sq: 'Adresa e emailit është e pavlefshme',
   },
-  contactModalPreferedContactContentMessageFirstPart: {
-    fr: 'Attention, un seul individu peut être "Contact courrier". Pour identifier',
-    en: 'Warning, only one individual can be "Mail contact". To identify',
-    sq: 'Kujdes, vetëm një individ mund të jetë "Kontakt përmes postës". Për të identifikuar',
-  },
   contactModalPreferedContactContentMessageSecondPart: {
     fr: "comme contact courrier, veuillez d'abord supprimer cette modalité de l'individu",
     en: 'as mail contact, please first remove this status from the individual',
     sq: 'si kontakt përmes postës, ju lutemi hiqni këtë status nga individi',
-  },
-  contactModalPreferedContactContentMessageUnknownContactName: {
-    fr: 'Attention, un seul individu peut être "Contact courrier". Pour identifier cet individu comme contact courrier, veuillez d\'abord supprimer cette modalité de l\'individu',
-    en: 'Warning, only one individual can be "Mail contact". To identify this individual as mail contact, please first remove this status from the individual',
-    sq: 'Kujdes, vetëm një individ mund të jetë "Kontakt përmes postës". Për të identifikuar këtë individ si kontakt përmes postës, ju lutemi hiqni këtë status nga individi',
-  },
-  contactModalPreferedContactButton: {
-    fr: "J'ai compris",
-    en: 'I understand',
-    sq: 'E kuptova',
   },
 };
 

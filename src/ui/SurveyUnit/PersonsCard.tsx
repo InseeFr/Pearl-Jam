@@ -14,7 +14,6 @@ import {
   displayAgeInYears,
   getTitle,
   personPlaceholder,
-  toggleFavoriteEmailAndPersist,
   toggleFavoritePhoneNumberAndPersist,
 } from '../../utils/functions';
 import { useToggle } from '../../utils/hooks/useToggle';
@@ -47,10 +46,6 @@ export function PersonsCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>
     toggleFavoritePhoneNumberAndPersist(surveyUnit, personId, phoneNumber);
   };
 
-  const handleFavMailPerson = (personId: number) => {
-    toggleFavoriteEmailAndPersist(surveyUnit, personId);
-  };
-
   return (
     <>
       <Card elevation={0}>
@@ -76,11 +71,7 @@ export function PersonsCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>
               {persons.map((p, k) => (
                 <Fragment key={p.id}>
                   {k > 0 && <Divider orientation="vertical" flexItem />}
-                  <PersonInfo
-                    onPhoneFav={handleFavPhoneNumber}
-                    onMailFav={handleFavMailPerson}
-                    person={p}
-                  />
+                  <PersonInfo onPhoneFav={handleFavPhoneNumber} person={p} />
                 </Fragment>
               ))}
             </Row>
@@ -98,20 +89,18 @@ export function PersonsCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>
 function PersonInfo({
   person,
   onPhoneFav,
-  onMailFav,
 }: Readonly<{
   person: SurveyUnitPerson;
   onPhoneFav: (personId: number, phoneNumber: SurveyUnitPhoneNumber) => void;
-  onMailFav: (personId: number) => void;
 }>) {
   const phoneNumberForSource = (source: string) =>
     person.phoneNumbers.find(n => n.source === source);
   const handleFavPhoneNumber = (phoneNumber: SurveyUnitPhoneNumber) =>
     onPhoneFav(person.id, phoneNumber);
-  const handleFavMail = () => onMailFav(person.id);
   return (
     <Stack gap={2} sx={{ width: '100%' }}>
       <Stack gap={0.5}>
+        <TextWithLabel label={D.surveyMailContact}>{person.privileged}</TextWithLabel>
         <TextWithLabel label={D.surveyUnitTitle}>{getTitle(person.title)}</TextWithLabel>
         <TextWithLabel label={D.surveyUnitLastName}>{person.lastName}</TextWithLabel>
         <TextWithLabel label={D.surveyUnitFirstName}>{person.firstName}</TextWithLabel>
@@ -136,15 +125,6 @@ function PersonInfo({
         >
           {person.email}
         </TextWithLabel>
-        {person.email && (
-          <IconButton sx={{ py: 0 }} onClick={handleFavMail}>
-            {person.favoriteEmail ? (
-              <StarIcon color="yellow" />
-            ) : (
-              <StarBorderIcon color="surfaceTertiary" />
-            )}
-          </IconButton>
-        )}
       </Row>
 
       <Stack gap={0.5}>
@@ -152,11 +132,13 @@ function PersonInfo({
           {D.telephone} :
         </Typography>
         <PhoneLine
+          baseId="source-fiscal"
           onFavorite={handleFavPhoneNumber}
           label={D.fiscalSource}
           phoneNumber={phoneNumberForSource('FISCAL')}
         />
         <PhoneLine
+          baseId="source-directory"
           onFavorite={handleFavPhoneNumber}
           label={D.directorySource}
           phoneNumber={phoneNumberForSource('DIRECTORY')}
@@ -165,7 +147,8 @@ function PersonInfo({
           .filter(p => p.source === 'INTERVIEWER')
           .map((phoneNumber, k) => (
             <PhoneLine
-              key={`${k}.${phoneNumber.number}`}
+              key={phoneNumber.id}
+              baseId={`source-interviewer-${k}`}
               onFavorite={handleFavPhoneNumber}
               label={D.interviewerSource}
               phoneNumber={phoneNumber}
@@ -183,10 +166,12 @@ function PhoneLine({
   label,
   phoneNumber,
   onFavorite,
+  baseId,
 }: Readonly<{
   label: string;
   phoneNumber?: SurveyUnitPhoneNumber;
   onFavorite: (p: SurveyUnitPhoneNumber) => void;
+  baseId: string;
 }>) {
   return (
     <Row
@@ -199,7 +184,11 @@ function PhoneLine({
         {phoneNumber?.number ?? '-'}
       </Typography>
       {phoneNumber && (
-        <IconButton sx={{ py: 0 }} onClick={() => onFavorite(phoneNumber)}>
+        <IconButton
+          sx={{ py: 0 }}
+          id={`star-button-${baseId}`}
+          onClick={() => onFavorite(phoneNumber)}
+        >
           {phoneNumber.favorite ? (
             <StarIcon color="yellow" />
           ) : (

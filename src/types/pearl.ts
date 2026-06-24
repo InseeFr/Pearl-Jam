@@ -1,7 +1,9 @@
+import { CommunicationStatus } from 'utils/enum/CommunicationEnums';
 import {
   IdentificationConfiguration,
   IdentificationQuestionsId,
 } from 'utils/enum/identifications/IdentificationsQuestions';
+import { StateValues } from 'utils/enum/SUStateEnum';
 import {
   ContactAttemptValue,
   ContactAttemptConfiguration,
@@ -13,15 +15,17 @@ import {
 } from 'utils/functions/contacts/ContactOutcome';
 
 export type SurveyUnitPhoneNumber = {
-  source: string;
+  source: 'FISCAL' | 'DIRECTORY' | 'INTERVIEWER';
   favorite: boolean;
   number: string;
   id: string;
 };
 
+export type ContactPersonTitle = 'MISTER' | 'MISS';
+
 export type SurveyUnitPerson = {
   id: number;
-  title: string;
+  title: ContactPersonTitle;
   firstName: string;
   lastName: string;
   email: string;
@@ -31,11 +35,9 @@ export type SurveyUnitPerson = {
   phoneNumbers: SurveyUnitPhoneNumber[];
 };
 
-export type ContactHistoryPersonTitle = 'MISTER' | 'MISS';
-
 export type PreviousContactHistoryPerson = {
   id?: number;
-  title?: ContactHistoryPersonTitle;
+  title?: ContactPersonTitle;
   firstName: string;
   lastName?: string;
   birthdate?: number;
@@ -44,7 +46,7 @@ export type PreviousContactHistoryPerson = {
 
 export type NextContactHistoryPerson = {
   id?: number;
-  title: ContactHistoryPersonTitle;
+  title: ContactPersonTitle;
   firstName: string;
   lastName: string;
   phoneNumber?: string;
@@ -68,7 +70,7 @@ type SurveyUnitAddress = {
   cityPriorityDistrict: boolean;
 };
 
-type SurveyUnitComment = {
+export type SurveyUnitComment = {
   type: string;
   value: string;
 };
@@ -76,7 +78,7 @@ type SurveyUnitComment = {
 export type SurveyUnitState = {
   id?: number;
   date: number;
-  type: string;
+  type: StateValues;
 };
 
 type SurveyUnitSampleIdentifiers = {
@@ -105,7 +107,7 @@ export type SurveyUnitCommunicationRequest = {
   emitter: 'INTERVIEWER' | 'TOOL';
   communicationTemplateId?: string;
   reason?: string;
-  status: { date: number; status: string }[];
+  status: { date: number; status: CommunicationStatus }[];
 };
 
 export type SurveyUnitCommunicationTemplate = {
@@ -169,7 +171,7 @@ export type SurveyUnit = {
   useLetterCommunication: boolean;
   communicationRequests: SurveyUnitCommunicationRequest[];
   communicationTemplates: SurveyUnitCommunicationTemplate[];
-  prevousContactHistory?: PreviousContactHistory;
+  previousContactHistory?: PreviousContactHistory;
   nextContactHistory?: NextContactHistory;
   collectNextContacts: boolean;
   otherModeQuestionnaireState?: OtherModeQuestionnaireState[];

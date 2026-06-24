@@ -1,4 +1,4 @@
-import { SurveyUnit } from 'types/pearl';
+import { SurveyUnit, SurveyUnitState } from 'types/pearl';
 import { surveyUnitStateEnum } from '../enum/SUStateEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
 import { contactOutcomes } from './contacts/ContactOutcome';
@@ -38,10 +38,10 @@ export async function seedData() {
   /** @var {User[]} users */
   const users = await fetch('https://jsonplaceholder.typicode.com/users').then(r => r.json());
   for (const user of users) {
-    let states = [
+    let states: SurveyUnitState[] = [
       {
         id: user.id + 1_000,
-        date: new Date().getTime() - 10 * day,
+        date: Date.now() - 10 * day,
         type: surveyUnitStateEnum.IN_PREPARATION.type,
       },
     ];
@@ -50,7 +50,7 @@ export async function seedData() {
         ...states,
         {
           id: user.id + 2_000,
-          date: new Date().getTime() - 9 * day,
+          date: Date.now() - 9 * day,
           type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type,
         },
       ];
@@ -59,7 +59,7 @@ export async function seedData() {
       states = [
         ...states,
         {
-          date: new Date().getTime() - 8 * day,
+          date: Date.now() - 8 * day,
           type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
         },
       ];
@@ -68,18 +68,17 @@ export async function seedData() {
       states = [
         ...states,
         {
-          date: new Date().getTime() - 7 * day,
+          date: Date.now() - 7 * day,
           type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
         },
       ];
     }
     surverUnits.push({
       id: `su${user.id}`,
-      communicationRequestConfiguration: true,
       persons: [
         {
           id: user.id,
-          title: ['MISS', 'MISTER'][user.id % 2],
+          title: user.id % 2 === 0 ? 'MISS' : 'MISTER',
           firstName: user.name.split(' ')[0],
           lastName: user.name.split(' ')[1],
           email: user.email,
@@ -103,7 +102,7 @@ export async function seedData() {
         },
         {
           id: user.id,
-          title: ['MISS', 'MISTER'][user.id % 2],
+          title: user.id % 2 === 0 ? 'MISS' : 'MISTER',
           firstName: user.name.split(' ')[0] + '-2',
           lastName: user.name.split(' ')[1] + '-2',
           email: user.email + '-2',
@@ -189,12 +188,12 @@ export async function seedData() {
       contactAttempts: [
         {
           status: 'TUN',
-          date: new Date().getTime() - getRandomIntBetween(10, 100) * day,
+          date: Date.now() - getRandomIntBetween(10, 100) * day,
           medium: 'FIELD',
         },
         {
           status: 'INA',
-          date: new Date().getTime() - getRandomIntBetween(3, 9) * day,
+          date: Date.now() - getRandomIntBetween(3, 9) * day,
           medium: 'FIELD',
         },
       ],
@@ -203,21 +202,26 @@ export async function seedData() {
         demenagementEnqueteur: 'false',
       },
       campaignLabel: 'Démonstration Séminaire Filière 2023',
-      managementStartDate: new Date().getTime() - 10 * day,
-      interviewerStartDate: new Date().getTime() - 10 * day,
-      identificationPhaseStartDate: new Date().getTime() - 10 * day,
-      collectionStartDate: new Date().getTime() - 10 * day,
-      collectionEndDate: new Date().getTime() + 50 * day,
-      endDate: new Date().getTime() + 51 * day,
+      managementStartDate: Date.now() - 10 * day,
+      interviewerStartDate: Date.now() - 10 * day,
+      identificationPhaseStartDate: Date.now() - 10 * day,
+      collectionStartDate: Date.now() - 10 * day,
+      collectionEndDate: Date.now() + 50 * day,
+      endDate: Date.now() + 51 * day,
       identificationConfiguration:
         user.id === 10 ? IdentificationConfiguration.HOUSEF2F : IdentificationConfiguration.INDTEL,
       contactOutcomeConfiguration: 'F2F',
       contactAttemptConfiguration: 'F2F',
       contactOutcome: {
-        date: new Date().getTime() - 2 * day,
+        date: Date.now() - 2 * day,
         type: contactOutcomes.INTERVIEW_ACCEPTED.value,
         totalNumberOfContactAttempts: 2,
       },
+      displayName: '',
+      useLetterCommunication: false,
+      communicationRequests: [],
+      communicationTemplates: [],
+      collectNextContacts: false,
     });
   }
   // Create a fillable TEL surveyUnit

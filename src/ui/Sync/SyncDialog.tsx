@@ -1,4 +1,3 @@
-import { useTheme } from '@emotion/react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -11,12 +10,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
+import { List, ListItem } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import D from 'i18n';
 import { useMemo } from 'react';
 import { SyncResult, SyncResultDetails } from 'types/pearl';
 import { Accordion } from '../Accordion';
 import { Typography } from '../Typography';
-import { List, ListItem } from '@mui/material';
+import { ColoredTheme } from 'ui/PearlTheme';
 
 type CampaignNotification = {
   name: string;
@@ -133,7 +134,7 @@ function SyncDetail({
 }: Readonly<{
   campaigns: CampaignNotification[];
 }>) {
-  const theme = useTheme();
+  const theme = useTheme<ColoredTheme>();
   return (
     <Accordion
       defaultOpen={false}
@@ -200,7 +201,16 @@ function SyncDetail({
   );
 }
 
-function SyncIcon({ state, ...props }: Readonly<{ state: string }>) {
+function SyncIcon({
+  state,
+  sx,
+  fontSize,
+  ...props
+}: Readonly<{
+  state: string;
+  sx: { marginRight: number; verticalAlign: string };
+  fontSize: string;
+}>) {
   switch (state) {
     case 'error':
       return <ErrorIcon {...props} color="error" />;

@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 test.use({ locale: 'fr-FR', viewport: { width: 1920, height: 1080 } });
 
 ['/'].forEach(url => {
-  test(`Should check accessibilituy for url ${url}`, async ({ page }) => {
+  test(`Should check accessibility for url ${url}`, async ({ page }) => {
     await page.goto('/');
 
     await page.getByRole('textbox', { name: 'Username or email' }).click();

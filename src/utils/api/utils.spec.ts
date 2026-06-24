@@ -29,11 +29,11 @@ describe('Utils tests', () => {
       ...originalNavigator,
       onLine: true,
     };
-    global.navigator = mockNavigator;
+    globalThis.navigator = mockNavigator;
   });
 
   afterEach(() => {
-    global.navigator = originalNavigator;
+    globalThis.navigator = originalNavigator;
   });
 
   it('should return the token', () => {
@@ -69,15 +69,15 @@ describe('Utils tests', () => {
   it('should format survey unit', async () => {
     const surveyUnit = createSurveyUnit();
 
-    const formatted = await formatSurveyUnitForPut(surveyUnit);
-    const expected: SurveyUnit = {
+    const formatted = formatSurveyUnitForPut(surveyUnit);
+    const expected: Partial<SurveyUnit> = {
       id: 'SU12345',
       identification: {},
       move: false,
       persons: [
         {
           id: 1,
-          title: 'Mr',
+          title: 'MISTER',
           firstName: 'John',
           lastName: 'Doe',
           email: 'john.doe@example.com',
@@ -86,13 +86,13 @@ describe('Utils tests', () => {
           privileged: false,
           phoneNumbers: [
             {
-              source: 'Home',
+              source: 'DIRECTORY',
               favorite: true,
               number: '1234567890',
               id: 'PN1',
             },
             {
-              source: 'Work',
+              source: 'INTERVIEWER',
               favorite: false,
               number: '0987654321',
               id: 'PN2',
@@ -138,9 +138,12 @@ describe('Utils tests', () => {
         {
           date: 1700000000000,
           id: 1,
-          type: 'INITIALIZED',
+          type: 'APS',
         },
       ],
+      collectNextContacts: false,
+      nextContactHistory: undefined,
+      previousContactHistory: undefined,
     };
     expect(formatted).toEqual(expected);
   });

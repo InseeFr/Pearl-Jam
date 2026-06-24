@@ -3,19 +3,9 @@
   "name": "Organisation de la collecte des questionnaire en face à face",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "32x32",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "static/images/insee.png",
-      "sizes": "326x378",
-      "type": "image/png"
-    },
-    {
-      "src": "static/images/logo-insee-header.png",
+      "src": "static/images/Insee_logo_header.webp",
       "sizes": "270x274",
-      "type": "image/png"
+      "type": "image/webp"
     }
   ],
   "start_url": ".",

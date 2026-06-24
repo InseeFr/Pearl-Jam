@@ -93,16 +93,16 @@ function ConfirmDialog({
     }
     if (step === 1) {
       const isValid = formData.get('code') === randomText;
-      if (!isValid) {
-        setError(D.confirmError);
-      } else {
+      if (isValid) {
         setStep(2);
         setError('');
+      } else {
+        setError(D.confirmError);
       }
       return;
     }
     const { id } = JSON.parse(globalThis.localStorage.getItem(PEARL_USER_KEY) || '{}');
-    if ((id || '').toLowerCase() === formData.get('code')?.toString().toLowerCase()) {
+    if ((id || '').toLowerCase() === formData.get('code')) {
       onConfirm();
     } else {
       setError(D.confirmError);

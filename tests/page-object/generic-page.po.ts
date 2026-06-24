@@ -1,3 +1,3 @@
 export interface GenericPage {
-  go: () => void;
+  go: () => Promise<void>;
 }

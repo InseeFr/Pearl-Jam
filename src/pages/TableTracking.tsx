@@ -52,14 +52,14 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
     setSortConfig({ key, direction });
   };
   const maxHeight = 'calc(100vh - 230px)';
-  const compareValues = (a: number, b: number, isAscending: boolean) => {
+  const compareValues = (a: number | string, b: number | string, isAscending: boolean) => {
     if (a < b) return isAscending ? -1 : 1;
     if (a > b) return isAscending ? 1 : -1;
     return 0;
   };
 
   const getLastName = (su: SurveyUnit) => getprivilegedPerson(su).lastName.toUpperCase();
-  const getOrder = (su: SurveyUnit) => parseInt(getSuTodoState(su).order, 10);
+  const getOrder = (su: SurveyUnit) => Number.parseInt(getSuTodoState(su)?.order ?? '0', 10);
   const contactOutcomeOrder = [
     'INA',
     'REF',
@@ -124,6 +124,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
     });
 
   const defaultSortIcon = <IconAsc />;
+  const sortAsc = sortConfig.direction === 'asc' ? <IconAsc /> : <IconDesc />;
 
   return (
     <TableContainer sx={{ maxHeight: maxHeight }}>
@@ -136,15 +137,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                   {D.trackingUnit}
                 </Box>
                 <Box component="span" onClick={() => toggleSort('unit')} sx={{ cursor: 'pointer' }}>
-                  {sortConfig.key === 'unit' ? (
-                    sortConfig.direction === 'asc' ? (
-                      <IconAsc />
-                    ) : (
-                      <IconDesc />
-                    )
-                  ) : (
-                    defaultSortIcon
-                  )}
+                  {sortConfig.key === 'unit' ? sortAsc : defaultSortIcon}
                 </Box>
               </Box>
             </TableCell>
@@ -158,15 +151,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                   onClick={() => toggleSort('lastName')}
                   sx={{ cursor: 'pointer' }}
                 >
-                  {sortConfig.key === 'lastName' ? (
-                    sortConfig.direction === 'asc' ? (
-                      <IconAsc />
-                    ) : (
-                      <IconDesc />
-                    )
-                  ) : (
-                    <IconAsc />
-                  )}
+                  {sortConfig.key === 'lastName' ? sortAsc : <IconAsc />}
                 </Box>
               </Box>
             </TableCell>
@@ -180,15 +165,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                   onClick={() => toggleSort('order')}
                   sx={{ cursor: 'pointer' }}
                 >
-                  {sortConfig.key === 'order' ? (
-                    sortConfig.direction === 'asc' ? (
-                      <IconAsc />
-                    ) : (
-                      <IconDesc />
-                    )
-                  ) : (
-                    <IconAsc />
-                  )}
+                  {sortConfig.key === 'order' ? sortAsc : <IconAsc />}
                 </Box>
               </Box>
             </TableCell>
@@ -204,15 +181,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                   onClick={() => toggleSort('outcome')}
                   sx={{ cursor: 'pointer' }}
                 >
-                  {sortConfig.key === 'outcome' ? (
-                    sortConfig.direction === 'asc' ? (
-                      <IconAsc />
-                    ) : (
-                      <IconDesc />
-                    )
-                  ) : (
-                    <IconAsc />
-                  )}
+                  {sortConfig.key === 'outcome' ? sortAsc : <IconAsc />}
                 </Box>
               </Box>
             </TableCell>

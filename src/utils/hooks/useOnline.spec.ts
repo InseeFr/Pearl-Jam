@@ -14,11 +14,11 @@ describe('useNetworkOnline', () => {
       ...originalNavigator,
       onLine: true,
     };
-    global.navigator = mockNavigator;
+    globalThis.navigator = mockNavigator;
   });
 
   afterEach(() => {
-    global.navigator = originalNavigator;
+    globalThis.navigator = originalNavigator;
   });
 
   it('should return true when online', () => {

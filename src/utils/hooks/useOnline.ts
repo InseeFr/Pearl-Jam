@@ -9,8 +9,10 @@ export function useNetworkOnline() {
 
   useEffect(() => {
     const clear: Array<VoidFunction> = [];
-    clear.push(addListener(window, 'online', () => setIsOnline(true)));
-    clear.push(addListener(window, 'offline', () => setIsOnline(false)));
+    clear.push(
+      addListener(globalThis.window, 'online', () => setIsOnline(true)),
+      addListener(globalThis.window, 'offline', () => setIsOnline(false))
+    );
     return () => {
       clear.forEach(c => c());
     };
