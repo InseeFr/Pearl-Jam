@@ -11,6 +11,8 @@ import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
 
 export type SyncContextValue = {
+  notificationOpened: 'NORMAL' | 'LAST_NOTIF_OPENED' | false;
+  setNotificationOpened: (value: 'NORMAL' | 'LAST_NOTIF_OPENED' | false) => void;
   setSyncResult: (value: {
     date?: string;
     state: NotificationState;
@@ -26,6 +28,9 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   const online = useNetworkOnline();
   const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
 
+  const [notificationOpened, setNotificationOpened] = useState<
+    'NORMAL' | 'LAST_NOTIF_OPENED' | false
+  >(false);
   const [isSync, setIsSync] = useState(() => {
     return globalThis.localStorage.getItem('SYNCHRONIZE') === 'true';
   });
@@ -152,6 +157,11 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
     resetLocalstorageSyncEntries();
   };
 
+  const handleNotificationClick = () => {
+    handleClose();
+    setNotificationOpened('LAST_NOTIF_OPENED');
+  };
+
   useEffect(() => {
     const sync = async () => {
       setIsSync(true);
@@ -197,7 +207,10 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
     synchronizeQueen,
   ]);
 
-  const context = useMemo(() => ({ syncFunction, setSyncResult }), [syncFunction]);
+  const context = useMemo(
+    () => ({ syncFunction, setSyncResult, notificationOpened, setNotificationOpened }),
+    [syncFunction, setSyncResult, notificationOpened]
+  );
 
   const syncMessage = () => {
     if (loading && isSync) return D.synchronizationInProgress;
@@ -209,7 +222,11 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
     <SyncContext.Provider value={context}>
       {componentReady && (loading || isSync) && <Preloader message={syncMessage()} />}
       {componentReady && !loading && !isSync && syncResult && (
-        <SyncDialog onClose={handleClose} syncResult={syncResult} />
+        <SyncDialog
+          onClose={handleClose}
+          onNotificationClick={handleNotificationClick}
+          syncResult={syncResult}
+        />
       )}
       {componentReady && !loading && !isSync && children}
     </SyncContext.Provider>

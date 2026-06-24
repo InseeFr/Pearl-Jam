@@ -89,6 +89,16 @@ const syncMessage = {
     en: `For your information, you have "too much" questionnaire level data if your post,. This is not blocking anything. The application administrator has been notified.`,
     sq: `Për informacion, ju keni "shumë" të dhëna në nivelin e anketës nëse postimi juaj. Kjo nuk bllokon asgjë. Administratori i aplikacionit është njoftuar.`,
   },
+  webTerminatedSurveyUnit: {
+    fr: (su?: number) => (su ? su + ' ' : '') + 'unités terminées sur internet',
+    en: (su?: number) => (su ? su + ' ' : '') + 'units completed online',
+    sq: (su?: number) => (su ? su + ' ' : '') + 'njësi të përfunduara në internet',
+  },
+  webInitSurveyUnit: {
+    fr: (su?: number) => (su ? su + ' ' : '') + 'unités démarrées sur internet',
+    en: (su?: number) => (su ? su + ' ' : '') + 'units started online',
+    sq: (su?: number) => (su ? su + ' ' : '') + 'njësi të filluara në internet',
+  },
   syncNoPearlData: {
     fr: `Pour information, vous n'avez récupéré aucune données.`,
     en: `For your information, you have not retrieved any data.`,
@@ -136,6 +146,12 @@ const syncMessage = {
     en: (n: number) => (n > 1 ? `${n} loaded survey-units` : `${n} loaded survey-unit`),
     sq: (n: number) =>
       n > 1 ? `${n} njësi anketimi të ngarkuara` : `${n} njësi anketimi e ngarkuar`,
+  },
+  prioritySurveyUnits: {
+    fr: (n: number) =>
+      n > 1 ? `${n} unités enquêtées prioritaires` : `${n} unité enquêtée prioritaire`,
+    en: (n: number) => (n > 1 ? `${n} priority survey-units` : `${n} priority survey-unit`),
+    sq: (n: number) => `${n} njësi anketimi prioritare`,
   },
   nothingToDisplay: {
     fr: 'Rien à afficher',

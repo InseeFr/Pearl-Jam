@@ -7,18 +7,31 @@ export const toDoEnum = {
   NOT_STARTED: { order: '1', value: D.toDoPrepare, stepName: D.stepPrepared, color: '#FF93AA80' },
   CONTACT: { order: '2', value: D.toDoContact, stepName: D.stepContacted, color: '#F2C94C80' },
   SURVEY: { order: '3', value: D.toDoSurvey, stepName: D.stepSurveyed, color: '#F2994A80' },
+
   FINALIZE: { order: '4', value: D.toDoFinalize, stepName: D.stepFinalized, color: '#DFD3C3' },
-  TRANSMIT: { order: '5', value: D.toDoTransmit, stepName: D.stepTransmitted, color: '#BB6BD966' },
+  WEBFINALIZE: {
+    order: '5',
+    value: D.toDoWebFinalize,
+    stepName: D.toDoWebFinalize,
+    color: '#DFD3C3',
+  },
+  TRANSMIT: { order: '6', value: D.toDoTransmit, stepName: D.stepTransmitted, color: '#BB6BD966' },
   SYNCHRONIZE: {
-    order: '6',
+    order: '7',
     value: D.toDoSynchronize,
     stepName: D.stepSynchronized,
     color: '#2F80ED4D',
   },
   TERMINATED: {
-    order: '7',
+    order: '8',
     value: D.toDoTerminated,
     stepName: D.stepTerminated,
+    color: '#35C75880',
+  },
+  WEBTERMINATED: {
+    order: '9',
+    value: D.toDoWebTerminated,
+    stepName: D.stepWebTerminated,
     color: '#35C75880',
   },
 };

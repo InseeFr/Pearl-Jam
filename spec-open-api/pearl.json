@@ -3022,7 +3022,16 @@
           }
         }
       },
-      "IdentificationDto": {},
+      "IdentificationDto": {
+        "properties": {
+          "demenagementWeb": {
+            "type": "boolean"
+          },
+          "demenagementEnqueteur": {
+            "type": "boolean"
+          }
+        }
+      },
       "PreviousContactHistoryDto": {
         "type": "object",
         "properties": {

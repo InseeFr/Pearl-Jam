@@ -380,7 +380,6 @@ export interface CommunicationRequestStatusDto {
   status?: CommunicationRequestStatusDtoStatus;
 }
 
-export interface IdentificationDto {}
 
 export type PreviousContactHistoryDtoContactOutcomeValue = typeof PreviousContactHistoryDtoContactOutcomeValue[keyof typeof PreviousContactHistoryDtoContactOutcomeValue];
 
@@ -422,6 +421,10 @@ export interface PreviousContactHistoryPersonDto {
   lastName: string;
   birthdate?: number;
   panel?: boolean;
+}
+export interface IdentificationDto {
+  demenagementWeb?: boolean;
+  demenagementEnqueteur?: boolean;
 }
 
 export interface SampleIdentifiersDto {
@@ -1733,7 +1736,7 @@ export const postMessage2 = (
 export const postMailMessage = (
     mailDto: MailDto,
  options?: SecondParameter<typeof customFetch>,) => {
-      return customFetch<null>(
+      return customFetch<void>(
       {url: `/api/mail`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: mailDto

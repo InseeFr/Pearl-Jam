@@ -48,6 +48,7 @@ const buttonMessage = {
   confirmButton: { fr: 'Confirmer', en: 'Confirm', sq: 'Konfirmo' },
   previousButton: { fr: 'Précédent', en: 'Previous', sq: 'I mëparshëm' },
   sendButton: { fr: 'Envoyer', en: 'Send', sq: 'Dërgo' },
+  continueButton: { fr: 'Continuer', en: 'Continue', sq: 'Vazhdo' },
 };
 
 export default buttonMessage;

@@ -4,6 +4,8 @@ import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-servi
 import { contactOutcomes } from './contacts/ContactOutcome';
 import { getRandomIntBetween } from './random';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
+import userIdbService from '../indexeddb/services/user-idb-service';
+import { date } from 'zod';
 
 const day = 60 * 60 * 1000 * 24;
 const year = day * 365;
@@ -195,7 +197,10 @@ export async function seedData() {
           medium: 'FIELD',
         },
       ],
-      identification: {},
+      identification: {
+        demenagementWeb: user.id % 3 === 0 ? 'true' : 'false',
+        demenagementEnqueteur: 'false',
+      },
       campaignLabel: 'Démonstration Séminaire Filière 2023',
       managementStartDate: Date.now() - 10 * day,
       interviewerStartDate: Date.now() - 10 * day,
@@ -220,90 +225,158 @@ export async function seedData() {
     });
   }
   // Create a fillable TEL surveyUnit
-  surverUnits.push(
-    {
-      ...surverUnits[0],
-      id: 'sutel',
-      identification: undefined,
-      identificationConfiguration: IdentificationConfiguration.INDTEL,
-      previousContactHistory: {
-        contactOutcomeValue: 'INA',
-        persons: [],
-        comment: '',
-        priority: false,
+  surverUnits.push({
+    ...surverUnits[0],
+    id: 'sutel',
+    identification: undefined,
+    identificationConfiguration: IdentificationConfiguration.INDTEL,
+    previousContactHistory: {
+      contactOutcomeValue: 'INA',
+      persons: [],
+      comment: '',
+      priority: false,
+    },
+  });
+  surverUnits.push({
+    ...surverUnits[0],
+    id: 'sunoident',
+    identification: {
+      demenagementWeb: 'false',
+      demenagementEnqueteur: 'false',
+    },
+    firstName: 'John',
+    lastName: 'Absent',
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
+  });
+  surverUnits.push({
+    ...surverUnits[0],
+    id: 'sunoident-empty',
+    identification: {
+      demenagementWeb: 'true',
+      demenagementEnqueteur: 'false',
+    },
+    firstName: 'John2',
+    lastName: 'Absent2',
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    contactOutcome: undefined,
+  });
+  surverUnits.push({
+    ...surverUnits[0],
+    id: 'sunoident-WFT',
+    identification: {
+      demenagementWeb: 'false',
+      demenagementEnqueteur: 'false',
+    },
+    firstName: 'John3',
+    lastName: 'Absent3',
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    states: [{ type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type, date: 1 }],
+    contactOutcome: undefined,
+    otherModeQuestionnaireState: [],
+  });
+  surverUnits.push({
+    ...surverUnits[0],
+    managementStartDate: new Date().getTime() - 10 * day,
+    interviewerStartDate: new Date().getTime() - 9 * day,
+    identificationPhaseStartDate: new Date().getTime() - 8 * day,
+    collectionStartDate: new Date().getTime() - 7 * day,
+    collectionEndDate: new Date().getTime() - 6 * day,
+    endDate: new Date().getTime() + 15 * day,
+    id: 'questNotAvailable',
+    identification: {
+      demenagementWeb: 'true',
+      demenagementEnqueteur: 'true',
+    },
+    firstName: 'Flin',
+    lastName: 'Ished',
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    otherModeQuestionnaireState: [
+      {
+        id: '1',
+        state: 'QUESTIONNAIRE_COMPLETED',
+        date: '2025-01-01',
       },
+    ],
+  });
+  surverUnits.push({
+    ...surverUnits[0],
+    managementStartDate: new Date().getTime() - 10 * day,
+    interviewerStartDate: new Date().getTime() - 9 * day,
+    identificationPhaseStartDate: new Date().getTime() - 8 * day,
+    collectionStartDate: new Date().getTime() - 7 * day,
+    collectionEndDate: new Date().getTime() - 6 * day,
+    endDate: new Date().getTime() + 15 * day,
+    id: 'HOUSETEL',
+    identification: {
+      demenagementWeb: 'false',
+      demenagementEnqueteur: 'false',
     },
-    {
-      ...surverUnits[0],
-      id: 'sunoident',
-      identification: {},
-      identificationConfiguration: IdentificationConfiguration.NOIDENT,
+    firstName: 'Flin',
+    lastName: 'Ished',
+    identificationConfiguration: IdentificationConfiguration.HOUSETEL,
+    otherModeQuestionnaireState: [
+      {
+        id: '1',
+        state: 'QUESTIONNAIRE_INIT',
+        date: '2025-02-01',
+      },
+    ],
+  });
+  surverUnits.push({
+    ...surverUnits[0],
+    managementStartDate: new Date().getTime() - 10 * day,
+    interviewerStartDate: new Date().getTime() - 9 * day,
+    identificationPhaseStartDate: new Date().getTime() - 8 * day,
+    collectionStartDate: new Date().getTime() - 7 * day,
+    collectionEndDate: new Date().getTime() - 6 * day,
+    endDate: new Date().getTime() + 15 * day,
+    id: 'SRCVREINT',
+    identification: {
+      demenagementWeb: 'true',
+      demenagementEnqueteur: 'false',
     },
-    {
-      ...surverUnits[0],
-      id: 'sunoident-empty',
-      identification: {},
-      identificationConfiguration: IdentificationConfiguration.NOIDENT,
-      contactOutcome: undefined,
-    },
-    {
-      ...surverUnits[0],
-      id: 'sunoident-WFT',
-      identification: {},
-      identificationConfiguration: IdentificationConfiguration.NOIDENT,
-      states: [{ type: surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type, date: 1 }],
-      contactOutcome: undefined,
-    },
-    {
-      ...surverUnits[0],
-      managementStartDate: Date.now() - 10 * day,
-      interviewerStartDate: Date.now() - 9 * day,
-      identificationPhaseStartDate: Date.now() - 8 * day,
-      collectionStartDate: Date.now() - 7 * day,
-      collectionEndDate: Date.now() - 6 * day,
-      endDate: Date.now() + 15 * day,
-      id: 'questNotAvailable',
-      identification: {},
-      identificationConfiguration: IdentificationConfiguration.NOIDENT,
-    },
-    {
-      ...surverUnits[0],
-      managementStartDate: Date.now() - 10 * day,
-      interviewerStartDate: Date.now() - 9 * day,
-      identificationPhaseStartDate: Date.now() - 8 * day,
-      collectionStartDate: Date.now() - 7 * day,
-      collectionEndDate: Date.now() - 6 * day,
-      endDate: Date.now() + 15 * day,
-      id: 'HOUSETEL',
-      identification: {},
-      identificationConfiguration: IdentificationConfiguration.HOUSETEL,
-    },
-    {
-      ...surverUnits[0],
-      managementStartDate: Date.now() - 10 * day,
-      interviewerStartDate: Date.now() - 9 * day,
-      identificationPhaseStartDate: Date.now() - 8 * day,
-      collectionStartDate: Date.now() - 7 * day,
-      collectionEndDate: Date.now() - 6 * day,
-      endDate: Date.now() + 15 * day,
-      id: 'SRCVREINT',
-      identification: {},
-      identificationConfiguration: IdentificationConfiguration.SRCVREINT,
-    },
-    {
-      ...surverUnits[0],
-      managementStartDate: Date.now() - 10 * day,
-      interviewerStartDate: Date.now() - 9 * day,
-      identificationPhaseStartDate: Date.now() - 8 * day,
-      collectionStartDate: Date.now() - 7 * day,
-      collectionEndDate: Date.now() - 6 * day,
-      endDate: Date.now() + 15 * day,
-      id: 'INDF2F',
-      identification: undefined,
+    firstName: 'Flin',
+    lastName: 'Ished',
+    identificationConfiguration: IdentificationConfiguration.SRCVREINT,
+  });
+  surverUnits.push({
+    ...surverUnits[0],
+    managementStartDate: new Date().getTime() - 10 * day,
+    interviewerStartDate: new Date().getTime() - 9 * day,
+    identificationPhaseStartDate: new Date().getTime() - 8 * day,
+    collectionStartDate: new Date().getTime() - 7 * day,
+    collectionEndDate: new Date().getTime() - 6 * day,
+    endDate: new Date().getTime() + 15 * day,
+    id: 'INDF2F',
+    identification: undefined,
 
-      identificationConfiguration: IdentificationConfiguration.INDF2F,
-    }
-  );
-
+    identificationConfiguration: IdentificationConfiguration.INDF2F,
+  });
+  surverUnits.push({
+    ...surverUnits[0],
+    managementStartDate: new Date().getTime() - 10 * day,
+    interviewerStartDate: new Date().getTime() - 9 * day,
+    identificationPhaseStartDate: new Date().getTime() - 8 * day,
+    collectionStartDate: new Date().getTime() - 7 * day,
+    collectionEndDate: new Date().getTime() - 6 * day,
+    endDate: new Date().getTime() + 15 * day,
+    id: 'articulation',
+    identification: {
+      demenagementWeb: 'false',
+      demenagementEnqueteur: 'false',
+    },
+    firstName: 'Articulation',
+    lastName: 'Articulation',
+    identificationConfiguration: IdentificationConfiguration.NOIDENT,
+  });
+  await userIdbService.insert({
+    id: '1',
+    title: 'MISTER',
+    firstName: 'John',
+    lastName: 'Doe',
+    phoneNumber: '0123456789',
+    email: 'john@doe.fr',
+    civility: 'FR',
+  });
   await surveyUnitIDBService.addAll(surverUnits);
 }

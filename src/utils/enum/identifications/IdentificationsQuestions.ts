@@ -9,6 +9,8 @@ export enum IdentificationQuestionsId {
   NUMBER_OF_RESPONDENTS = 'numberOfRespondents',
   PRESENT_IN_PREVIOUS_HOME = 'presentInPreviousHome',
   HOUSEHOLD_COMPOSITION = 'householdComposition',
+  DEMENAGEMENT_WEB = 'demenagementWeb',
+  DEMENAGEMENT_ENQUETEUR = 'demenagementEnqueteur',
 }
 
 export enum IdentificationConfiguration {

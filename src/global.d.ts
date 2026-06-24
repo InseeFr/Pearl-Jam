@@ -18,3 +18,17 @@ declare module 'dramaQueen/DramaIndex' {
 declare module 'dramaQueen/getQueenVersion' {
   export function getQueenVersion(): string;
 }
+
+declare module 'dramaQueen/useArticulationTable' {
+  export function useArticulationTable(
+    React,
+    string
+  ): {
+    rows: {
+      cells: { value: number }[];
+      progress: 0 | -1 | 1;
+      label: string;
+      url: string;
+    }[];
+  };
+}

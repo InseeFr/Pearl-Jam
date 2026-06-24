@@ -1,55 +1,79 @@
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import WarningIcon from '@mui/icons-material/Warning';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Stack from '@mui/material/Stack';
+import { List, ListItem } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import D from 'i18n';
 import { useMemo } from 'react';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import WarningIcon from '@mui/icons-material/Warning';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { SyncResult, SyncResultDetails } from 'types/pearl';
 import { Accordion } from '../Accordion';
 import { Typography } from '../Typography';
-import ErrorIcon from '@mui/icons-material/Error';
-import { SyncResult } from 'types/pearl';
-import { useTheme } from '@mui/material/styles';
 import { ColoredTheme } from 'ui/PearlTheme';
+
+type CampaignNotification = {
+  name: string;
+  transmitted: number;
+  loaded: number;
+  startedWeb: string[];
+  terminatedWeb: string[];
+  prioritySurveyUnits: string[];
+};
+
+const hasAtLeastOneItemToDisplay =
+  (details: SyncResultDetails) =>
+  (campaign: string): boolean => {
+    return (
+      details.transmittedSurveyUnits[campaign]?.length > 0 ||
+      details.loadedSurveyUnits[campaign]?.length > 0 ||
+      details.startedWeb[campaign]?.length > 0 ||
+      details.terminatedWeb[campaign]?.length > 0 ||
+      details.prioritySurveyUnits?.[campaign]?.length > 0
+    );
+  };
 
 /**
  * Dialog that summarize synchronization results
  */
 export function SyncDialog({
   onClose,
+  onNotificationClick,
   syncResult,
-}: Readonly<{ onClose: VoidFunction; syncResult: SyncResult }>) {
+}: Readonly<{ onClose: VoidFunction; onNotificationClick: VoidFunction; syncResult: SyncResult }>) {
   const { state, details, messages } = syncResult;
-  const campaigns = useMemo(() => {
+  const campaigns: CampaignNotification[] = useMemo(() => {
     if (!details) {
       return [];
     }
+
     const campaignIds = new Set([
-      ...Object.keys(details.transmittedSurveyUnits),
-      ...Object.keys(details.loadedSurveyUnits),
+      ...Object.keys(details.transmittedSurveyUnits ?? {}),
+      ...Object.keys(details.loadedSurveyUnits ?? {}),
+      ...Object.keys(details.startedWeb ?? {}),
+      ...Object.keys(details.terminatedWeb ?? {}),
+      ...Object.keys(details.prioritySurveyUnits ?? {}),
     ]);
+
     return (
       Array.from(campaignIds)
         // Remove campaigns with no messages
-        .filter(
-          campaign =>
-            details.transmittedSurveyUnits[campaign]?.length ||
-            details.loadedSurveyUnits[campaign]?.length
-        )
+        .filter(hasAtLeastOneItemToDisplay(details))
         // Compute message into a single object
         .map(campaign => ({
           name: campaign,
           transmitted: (details.transmittedSurveyUnits[campaign] ?? []).length,
           loaded: (details.loadedSurveyUnits[campaign] ?? []).length,
-          total:
-            (details.transmittedSurveyUnits[campaign] ?? []).length +
-            (details.loadedSurveyUnits[campaign] ?? []).length,
+          startedWeb: details.startedWeb[campaign] ?? [],
+          terminatedWeb: details.terminatedWeb[campaign] ?? [],
+          prioritySurveyUnits: details.prioritySurveyUnits?.[campaign] ?? [],
         }))
     );
   }, [details]);
@@ -87,7 +111,13 @@ export function SyncDialog({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <div></div>
+        {syncResult.state === 'success' ? (
+          <Button variant="contained" onClick={onNotificationClick}>
+            {D.notifications}
+          </Button>
+        ) : (
+          <div></div>
+        )}
         <Button variant="contained" onClick={onClose}>
           {D.iUnderstand}
         </Button>
@@ -102,7 +132,7 @@ export function SyncDialog({
 function SyncDetail({
   campaigns,
 }: Readonly<{
-  campaigns: { name: string; transmitted: number; loaded: number; total: number }[];
+  campaigns: CampaignNotification[];
 }>) {
   const theme = useTheme<ColoredTheme>();
   return (
@@ -113,27 +143,60 @@ function SyncDetail({
       elevation={0}
     >
       {campaigns.length === 0 && <DialogContentText>{D.nothingToDisplay}</DialogContentText>}
-      {campaigns.map(campaign => (
-        <Stack gap={2} key={campaign.name}>
-          {campaign.total === 0 && <DialogContentText>{D.nothingToDisplay}</DialogContentText>}
-          {campaign.loaded > 0 && (
-            <DialogContentText>
-              <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
-                {campaign.name.toLowerCase()} :{' '}
-              </Typography>{' '}
-              {D.loadedSurveyUnits(campaign.loaded)}
-            </DialogContentText>
-          )}
-          {campaign.transmitted > 0 && (
-            <DialogContentText>
-              <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
-                {campaign.name.toLowerCase()} :{' '}
-              </Typography>{' '}
-              {D.transmittedSurveyUnits(campaign.loaded)}
-            </DialogContentText>
-          )}
-        </Stack>
-      ))}
+
+      <List>
+        {campaigns.map(campaign => (
+          <Stack key={campaign.name} gap={2}>
+            <>
+              <ListItem sx={{ pl: 0 }}>
+                <Typography variant="m" color="textTertiary" component="strong" fontWeight={700}>
+                  {campaign.name.toLowerCase()} :{' '}
+                </Typography>{' '}
+              </ListItem>
+              <List disablePadding>
+                {campaign.loaded > 0 && (
+                  <ListItem sx={{ pl: 4, pt: 0 }}>
+                    <DialogContentText>{D.loadedSurveyUnits(campaign.loaded)}</DialogContentText>
+                  </ListItem>
+                )}
+                {campaign.transmitted > 0 && (
+                  <ListItem sx={{ pl: 4, pt: 0 }}>
+                    <DialogContentText>
+                      {D.transmittedSurveyUnits(campaign.transmitted)}
+                    </DialogContentText>
+                  </ListItem>
+                )}
+
+                {campaign.startedWeb.length > 0 && (
+                  <ListItem sx={{ pl: 4, pt: 0 }}>
+                    <DialogContentText>
+                      {D.webInitSurveyUnit(campaign.startedWeb.length)}:{' '}
+                      {campaign.startedWeb.length}
+                    </DialogContentText>
+                  </ListItem>
+                )}
+                {campaign.terminatedWeb.length > 0 && (
+                  <ListItem sx={{ pl: 4, pt: 0 }}>
+                    <DialogContentText>
+                      {D.webTerminatedSurveyUnit(campaign.terminatedWeb.length)}:{' '}
+                      {campaign.terminatedWeb.length}
+                    </DialogContentText>
+                  </ListItem>
+                )}
+
+                {campaign.prioritySurveyUnits.length > 0 && (
+                  <ListItem sx={{ pl: 4, pt: 0 }}>
+                    <DialogContentText>
+                      {D.prioritySurveyUnits(campaign.prioritySurveyUnits.length)}:{' '}
+                      {campaign.prioritySurveyUnits.length}
+                    </DialogContentText>
+                  </ListItem>
+                )}
+              </List>
+            </>
+          </Stack>
+        ))}
+      </List>
     </Accordion>
   );
 }

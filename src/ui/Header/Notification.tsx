@@ -14,7 +14,7 @@ import { useTheme } from '@mui/material/styles';
 import { formatDistance } from 'date-fns';
 import D from 'i18n';
 import { MouseEvent, useContext } from 'react';
-import { Notification as NotificationType } from 'types/pearl';
+import { Notification as NotificationType, SyncResultDetails } from 'types/pearl';
 import { dateFnsLocal } from '../../utils';
 import { NOTIFICATION_TYPE_SYNC } from '../../utils/constants';
 import { deleteNotification, markNotificationAsRead } from '../../utils/hooks/useNotifications';
@@ -22,13 +22,20 @@ import syncReportIdbService from '../../utils/indexeddb/services/syncReport-idb-
 import { Row } from '../Row';
 import { SyncContext } from '../Sync/SyncContextProvider';
 import { Typography } from '../Typography';
+import { DialogContentText, List, ListItem } from '@mui/material';
+import { NavLink } from 'react-router-dom';
 
 interface NotificationProps {
   notification: NotificationType;
   onExit: VoidFunction;
+  defaultExpanded: boolean;
 }
 
-export function Notification({ notification, onExit }: Readonly<NotificationProps>) {
+export function Notification({
+  notification,
+  onExit,
+  defaultExpanded,
+}: Readonly<NotificationProps>) {
   const theme = useTheme();
   const date = `${formatDistance(notification.date || 0, new Date(), {
     addSuffix: true,
@@ -64,7 +71,14 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
   const isSyncNotification = notification.type === NOTIFICATION_TYPE_SYNC;
 
   return (
-    <Accordion elevation={0} disableGutters variant="dense" color="accent" onChange={handleExpand}>
+    <Accordion
+      defaultExpanded={defaultExpanded}
+      elevation={0}
+      disableGutters
+      variant="dense"
+      color="accent"
+      onChange={handleExpand}
+    >
       <AccordionSummary
         sx={{ padding: 0, background: background, borderRadius: 2 }}
         expandIcon={<ExpandMoreIcon fontSize="large" color="textPrimary" />}
@@ -98,6 +112,7 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
               {message}
             </Typography>
           ))}
+          <NotificationDetails details={notification.details} />
           <Button sx={{ alignSelf: 'flex-end' }} color="textPrimary" onClick={handleDelete}>
             <DeleteOutlineIcon />
             {D.delete}
@@ -106,4 +121,116 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
       </AccordionDetails>
     </Accordion>
   );
+}
+
+const SurveyUnitList = ({
+  surveyUnits,
+  message,
+}: Readonly<{ surveyUnits?: string[]; message: (su: number) => string }>) => {
+  const context = useContext(SyncContext);
+  if (!surveyUnits || surveyUnits.length === 0) return null;
+
+  return (
+    <>
+      <ListItem sx={{ pl: 4, pt: 0 }}>
+        <DialogContentText>{message(surveyUnits.length)}: </DialogContentText>
+      </ListItem>
+      <List sx={{ pl: 4 }}>
+        {surveyUnits.map(su => (
+          <ListItem key={su} sx={{ pl: 4, pt: 0 }}>
+            <DialogContentText>
+              <NavLink
+                onClick={() => context?.setNotificationOpened(false)}
+                to={`/survey-unit/${su}/details`}
+              >
+                {su}
+              </NavLink>
+            </DialogContentText>
+          </ListItem>
+        ))}
+      </List>
+    </>
+  );
+};
+
+const NotificationDetails = ({ details }: { details?: SyncResultDetails }) => {
+  if (!details) return null;
+
+  const {
+    loadedSurveyUnits,
+    transmittedSurveyUnits,
+    startedWeb,
+    terminatedWeb,
+    prioritySurveyUnits,
+  } = details;
+
+  const campaigns = new Set([
+    ...Object.keys(loadedSurveyUnits),
+    ...Object.keys(transmittedSurveyUnits),
+    ...Object.keys(startedWeb),
+    ...Object.keys(terminatedWeb),
+    ...Object.keys(prioritySurveyUnits || {}),
+  ]);
+
+  if (campaigns.size === 0) return null;
+
+  return (
+    <List>
+      {Array.from(campaigns)
+        .filter(
+          hasAtLeastOnSurveyUnitToDisplay(
+            loadedSurveyUnits,
+            transmittedSurveyUnits,
+            startedWeb,
+            terminatedWeb,
+            prioritySurveyUnits
+          )
+        )
+        .map(campaign => (
+          <Stack key={campaign} gap={2}>
+            <>
+              <ListItem sx={{ pl: 0 }}>
+                <DialogContentText>{campaign.toLowerCase()} : </DialogContentText>{' '}
+              </ListItem>
+              <List disablePadding>
+                <SurveyUnitList
+                  surveyUnits={loadedSurveyUnits[campaign]}
+                  message={D.loadedSurveyUnits}
+                />
+                <SurveyUnitList
+                  surveyUnits={transmittedSurveyUnits[campaign]}
+                  message={D.transmittedSurveyUnits}
+                />
+                <SurveyUnitList surveyUnits={startedWeb[campaign]} message={D.webInitSurveyUnit} />
+                <SurveyUnitList
+                  surveyUnits={terminatedWeb[campaign]}
+                  message={D.webTerminatedSurveyUnit}
+                />
+                <SurveyUnitList
+                  surveyUnits={prioritySurveyUnits?.[campaign]}
+                  message={D.prioritySurveyUnits}
+                />
+              </List>
+            </>
+          </Stack>
+        ))}
+    </List>
+  );
+};
+
+function hasAtLeastOnSurveyUnitToDisplay(
+  loadedSurveyUnits: Record<string, string[]>,
+  transmittedSurveyUnits: Record<string, string[]>,
+  startedWeb: Record<string, string[]>,
+  terminatedWeb: Record<string, string[]>,
+  prioritySurveyUnits?: Record<string, string[]>
+): (value: string, index: number, array: string[]) => unknown {
+  return campaign =>
+    [
+      ...(loadedSurveyUnits[campaign] || []),
+      ...(transmittedSurveyUnits[campaign] || []),
+      ...(startedWeb[campaign] || []),
+      ...(terminatedWeb[campaign] || []),
+      ...(prioritySurveyUnits?.[campaign] || []),
+    ].length > 0;
 }

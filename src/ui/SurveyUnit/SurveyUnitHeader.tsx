@@ -24,6 +24,7 @@ import { SurveyUnit } from 'types/pearl';
 import { SubmitButton } from './SubmitButton';
 import CheckIcon from '@mui/icons-material/Check';
 import { validateTransmission } from 'utils/functions/identifications/identificationFunctions';
+import { PriorityBadge } from '../PriorityBadge';
 import { getSuTodoState } from 'utils/functions/surveyUnitState';
 
 const useStyles = makeStyles({
@@ -110,6 +111,7 @@ export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>
             <Typography color="textPrimary" variant="s" noWrap>
               {surveyUnit.sampleIdentifiers.nograp}
             </Typography>
+            <PriorityBadge priority={surveyUnit.priority} />
           </Row>
           <PrivilegedPerson surveyUnit={surveyUnit} />
         </Stack>

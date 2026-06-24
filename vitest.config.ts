@@ -30,6 +30,14 @@ export default defineConfig({
                 import.meta.dirname,
                 'src/test/mocks/dramaQueenMock.ts'
             ),
+            'dramaQueen/getArticulationTable': path.resolve(
+                import.meta.dirname,
+                'src/test/mocks/dramaQueenMock.ts'
+            ),
+            'dramaQueen/partialResetInterrogation': path.resolve(
+                import.meta.dirname,
+                'src/test/mocks/dramaQueenMock.ts'
+            ),
         },
     },
 });

@@ -11,7 +11,7 @@ import { getContactAttemptNumber, isContactAttemptOk } from './surveyUnitFunctio
  * @returns {{ order: string, value: string, color: string }}
  */
 export const getSuTodoState = (surveyUnit: SurveyUnit) => {
-  return convertSUStateInToDo(getLastState(surveyUnit?.states ?? [])?.type);
+  return convertSUStateInToDo(surveyUnit, getLastState(surveyUnit?.states ?? [])?.type);
 };
 
 /**

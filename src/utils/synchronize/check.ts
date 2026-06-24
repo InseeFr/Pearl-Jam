@@ -2,7 +2,7 @@ import { NOTIFICATION_TYPE_SYNC, PEARL_USER_KEY } from 'utils/constants';
 
 import { postMailMessage } from 'api/pearl';
 import D from 'i18n';
-import { NotificationState } from 'types/pearl';
+import { NotificationState, SyncResultDetails } from 'types/pearl';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
@@ -29,10 +29,10 @@ export const checkSyncResult = (pearlSuccess: string[], queenSuccess: string[]) 
 };
 
 export const getNotifFromResult = (
-  result: { state: NotificationState; messages: string[] },
+  result: { state: NotificationState; messages: string[]; details?: SyncResultDetails },
   nowDate?: number
 ): Omit<Notification, 'id'> => {
-  const { state, messages } = result;
+  const { state, messages, details } = result;
   return {
     date: nowDate || Date.now(),
     type: NOTIFICATION_TYPE_SYNC,
@@ -41,6 +41,7 @@ export const getNotifFromResult = (
     state,
     read: false,
     detail: `report-${nowDate}`,
+    details,
   };
 };
 
@@ -75,22 +76,23 @@ const getResult = (
   pearlTempZone = [],
   queenTempZone = [],
   transmittedSurveyUnits = {},
-  loadedSurveyUnits = {}
+  loadedSurveyUnits = {},
+  startedWeb = {},
+  terminatedWeb = {},
+  prioritySurveyUnits = {}
 ): {
   state: NotificationState;
   messages: string[];
-  details?: {
-    transmittedSurveyUnits: Record<string, string[]>;
-    loadedSurveyUnits: Record<string, string[]>;
-  };
+  details?: SyncResultDetails;
 } => {
-  const messages = [];
+  const messages: string[] = [];
   if (pearlError || queenError) {
     return {
       state: 'error',
       messages: [D.syncStopOnError, D.warningOrErrorEndMessage, D.syncPleaseTryAgain],
     };
   }
+
   if (
     pearlTempZone.length > 0 ||
     queenTempZone.length > 0 ||
@@ -107,13 +109,25 @@ const getResult = (
     return {
       state: 'warning',
       messages: [...messages, D.warningOrErrorEndMessage, D.syncYouCanStillWork],
-      details: { transmittedSurveyUnits, loadedSurveyUnits },
+      details: {
+        transmittedSurveyUnits,
+        loadedSurveyUnits,
+        startedWeb,
+        terminatedWeb,
+        prioritySurveyUnits,
+      },
     };
   }
   return {
     state: 'success',
     messages: [D.syncSuccessMessage],
-    details: { transmittedSurveyUnits, loadedSurveyUnits },
+    details: {
+      transmittedSurveyUnits,
+      loadedSurveyUnits,
+      startedWeb,
+      terminatedWeb,
+      prioritySurveyUnits,
+    },
   };
 };
 
@@ -126,6 +140,9 @@ export const analyseResult = async () => {
     surveyUnitsInTempZone: pearlTempZone,
     transmittedSurveyUnits,
     loadedSurveyUnits,
+    terminatedWeb,
+    startedWeb,
+    prioritySurveyUnits,
   } = getSavedSyncPearlData() || {};
   const {
     error: queenError,
@@ -178,7 +195,10 @@ export const analyseResult = async () => {
     pearlTempZone,
     queenTempZone,
     transmittedSurveyUnits,
-    loadedSurveyUnits
+    loadedSurveyUnits,
+    startedWeb,
+    terminatedWeb,
+    prioritySurveyUnits
   );
 
   const nowDate = Date.now();

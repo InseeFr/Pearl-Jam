@@ -95,7 +95,7 @@ type SurveyUnitSampleIdentifiers = {
   nograp: string;
 };
 
-export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId, string>>;
+export type SurveyUnitIdentification = Partial<Record<IdentificationQuestionsId, string | boolean>>;
 
 export type SurveyUnitContactAttempt = {
   status: ContactAttemptValue;
@@ -174,8 +174,18 @@ export type SurveyUnit = {
   previousContactHistory?: PreviousContactHistory;
   nextContactHistory?: NextContactHistory;
   collectNextContacts: boolean;
+  otherModeQuestionnaireState?: OtherModeQuestionnaireState[];
 };
 
+export type OtherModeQuestionStateType =
+  | 'QUESTIONNAIRE_VALIDATED'
+  | 'QUESTIONNAIRE_COMPLETED'
+  | 'QUESTIONNAIRE_INIT';
+export type OtherModeQuestionnaireState = {
+  id: string;
+  state: OtherModeQuestionStateType;
+  date: string;
+};
 export type NotificationState = 'warning' | 'success' | 'error';
 export type Notification = {
   date: number;
@@ -187,13 +197,18 @@ export type Notification = {
   read: boolean;
   detail: string;
   id: number;
+  details?: SyncResultDetails;
 };
 
+export type SyncResultDetails = {
+  transmittedSurveyUnits: Record<string, string[]>;
+  loadedSurveyUnits: Record<string, string[]>;
+  startedWeb: Record<string, string[]>;
+  terminatedWeb: Record<string, string[]>;
+  prioritySurveyUnits: Record<string, string[]>;
+};
 export type SyncResult = {
   state: string;
   messages: string[] | string;
-  details?: {
-    transmittedSurveyUnits: Record<string, string[]>;
-    loadedSurveyUnits: Record<string, string[]>;
-  };
+  details?: SyncResultDetails;
 };
