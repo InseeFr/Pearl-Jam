@@ -162,7 +162,7 @@ describe('IdentificationCard', () => {
             }),
             persons: [
               {
-                title: '',
+                title: 'MISTER',
                 firstName: D.surveyUnitFirstName,
                 lastName: D.surveyUnitLastName,
                 email: '',
@@ -172,11 +172,8 @@ describe('IdentificationCard', () => {
                 phoneNumbers: [],
               },
             ],
-            states: expect.arrayContaining([
-              expect.objectContaining({
-                type: 'INS',
-              }),
-            ]),
+            states: mockSurveyUnit.states,
+            priority: true,
             otherModeQuestionnaireState: [],
           })
         );
