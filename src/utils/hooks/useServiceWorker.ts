@@ -63,9 +63,12 @@ export const useServiceWorker = (authenticated: boolean): ServiceWorkerState => 
   }, [QUEEN_URL, authenticated]);
 
   const updateAssets = () => {
-    if (waitingServiceWorker) {
-      waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
+    if (!waitingServiceWorker) {
+      setIsInstallationFailed(true);
+      return;
     }
+
+    waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
   };
 
   const updateApp = () => {
@@ -80,15 +83,37 @@ export const useServiceWorker = (authenticated: boolean): ServiceWorkerState => 
   };
 
   useEffect(() => {
-    if (waitingServiceWorker) {
-      waitingServiceWorker.addEventListener('statechange', event => {
-        if (event.target instanceof ServiceWorker) {
-          if (event.target.state === 'activated') {
-            globalThis.location.reload();
-          }
-        }
-      });
+    let refreshing = false;
+    const reloadWhenControllerChanges = () => {
+      if (!refreshing) {
+        refreshing = true;
+        globalThis.location.reload();
+      }
+    };
+
+    navigator.serviceWorker?.addEventListener('controllerchange', reloadWhenControllerChanges);
+
+    return () => {
+      navigator.serviceWorker?.removeEventListener('controllerchange', reloadWhenControllerChanges);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!waitingServiceWorker) {
+      return;
     }
+
+    const reloadWhenActivated = (event: Event) => {
+      if (event.target instanceof ServiceWorker && event.target.state === 'activated') {
+        globalThis.location.reload();
+      }
+    };
+
+    waitingServiceWorker.addEventListener('statechange', reloadWhenActivated);
+
+    return () => {
+      waitingServiceWorker.removeEventListener('statechange', reloadWhenActivated);
+    };
   }, [waitingServiceWorker]);
 
   return {
