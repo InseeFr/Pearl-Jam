@@ -75,14 +75,35 @@ describe('useServiceWorker', () => {
   });
 
   it('should update the app when updateApp is called', () => {
+    const waitingServiceWorker = {
+      postMessage: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    } as unknown as ServiceWorker;
+    const { result } = renderHook(() => useServiceWorker(true));
+
+    act(() => {
+      const onWaiting = (serviceWorker.register as Mock).mock.calls[0][0].onWaiting;
+      onWaiting(waitingServiceWorker);
+    });
+
+    act(() => {
+      result.current.updateApp();
+    });
+
+    expect(waitingServiceWorker.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
+    expect(globalThis.localStorage.getItem('installing-update')).toBe('true');
+    expect(result.current.isUpdating).toBe(true);
+  });
+
+  it('should flag an installation failure when updateApp is called without a waiting service worker', () => {
     const { result } = renderHook(() => useServiceWorker(true));
 
     act(() => {
       result.current.updateApp();
     });
 
-    expect(globalThis.localStorage.getItem('installing-update')).toBe('true');
-    expect(result.current.isUpdating).toBe(true);
+    expect(result.current.isInstallationFailed).toBe(true);
   });
 
   it('should clear updating state when clearUpdating is called', () => {
