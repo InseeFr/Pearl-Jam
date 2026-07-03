@@ -1,5 +1,5 @@
 import D from 'i18n';
-import { SurveyUnitCommunicationTemplate } from 'types/pearl';
+import { SurveyUnitCommunicationRequest, SurveyUnitCommunicationTemplate } from 'types/pearl';
 
 // Communication Medium
 export const communicationMediumEnum = {
@@ -8,11 +8,12 @@ export const communicationMediumEnum = {
 };
 
 export const getCommunicationsLabels = (
-  surveyUnitCommunicationTemplate: SurveyUnitCommunicationTemplate
+  surveyUnitCommunicationTemplate: SurveyUnitCommunicationTemplate,
+  surveyUnitCommunicationRequest: SurveyUnitCommunicationRequest
 ) => {
   const mediumLabel = findCommunicationMediumLabelByValue(surveyUnitCommunicationTemplate.medium);
   const typeLabel = findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type);
-  const reasonLabel = findCommunicationReasonLabelByValue(surveyUnitCommunicationTemplate.reason);
+  const reasonLabel = findCommunicationReasonLabelByValue(surveyUnitCommunicationRequest.reason);
   return { mediumLabel, typeLabel, reasonLabel };
 };
 
@@ -33,8 +34,11 @@ export const communicationReasonEnum = {
   UNREACHABLE: { value: 'UNREACHABLE', label: `${D.communicationMotiveUnreachable}` },
   REFUSAL: { value: 'REFUSAL', label: `${D.communicationMotiveRefusal}` },
 };
-export const findCommunicationReasonLabelByValue = (value: string | undefined) =>
-  Object.values(communicationReasonEnum).find(comReason => comReason.value === value)?.label;
+export const findCommunicationReasonLabelByValue = (value: string | undefined) =>{
+  console.log(value);
+  console.log(Object.values(communicationStatusEnum).find(comStatus => comStatus.value === value));
+  return Object.values(communicationReasonEnum).find(comReason => comReason.value === value)?.label;
+}
 
 // Communication status
 export const communicationStatusEnum = {
