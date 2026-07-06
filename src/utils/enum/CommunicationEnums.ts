@@ -34,11 +34,8 @@ export const communicationReasonEnum = {
   UNREACHABLE: { value: 'UNREACHABLE', label: `${D.communicationMotiveUnreachable}` },
   REFUSAL: { value: 'REFUSAL', label: `${D.communicationMotiveRefusal}` },
 };
-export const findCommunicationReasonLabelByValue = (value: string | undefined) =>{
-  console.log(value);
-  console.log(Object.values(communicationStatusEnum).find(comStatus => comStatus.value === value));
-  return Object.values(communicationReasonEnum).find(comReason => comReason.value === value)?.label;
-}
+export const findCommunicationReasonLabelByValue = (value: string | undefined) =>
+  Object.values(communicationReasonEnum).find(comReason => comReason.value === value)?.label;
 
 // Communication status
 export const communicationStatusEnum = {
