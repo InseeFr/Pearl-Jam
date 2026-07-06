@@ -100,7 +100,9 @@ globalThis.addEventListener('install', event => {
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 globalThis.addEventListener('message', event => {
-  if (event.origin !== globalThis._DRAMAQUEEN_URL) {
+  const allowedOrigins = [globalThis.location.origin, globalThis._DRAMAQUEEN_URL].filter(Boolean);
+  if (event.origin && !allowedOrigins.includes(event.origin)) {
+    console.warn('Pearl sw: rejected message from unexpected origin', event.origin);
     return;
   }
 
