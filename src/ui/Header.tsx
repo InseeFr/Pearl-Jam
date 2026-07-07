@@ -15,6 +15,7 @@ import { loadNotifications, useUnreadNotificationsCount } from '../utils/hooks/u
 import { NetworkStatus } from './Header/NetworkStatus';
 import { Notifications } from './Header/Notifications';
 import { SynchronizeButton } from './Header/SynchronizeButton';
+import { SupportButton } from './Header/SupportButton';
 import { UserButton } from './Header/UserButton';
 import { Row } from './Row';
 import { Typography } from './Typography';
@@ -60,9 +61,12 @@ export function Header() {
               Collecte
             </Typography>
           </Row>
-          <Typography color="hint" variant="xs" component="span">
-            V.{version}
-          </Typography>
+          <Row gap={0.5}  sx={{ textDecoration: 'none' }}>
+            <Typography color="hint" variant="xs" component="span">
+              V.{version}
+            </Typography>
+            <SupportButton />
+          </Row>
         </Stack>
       </Row>
       <Row gap={3}>

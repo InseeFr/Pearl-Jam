@@ -64,6 +64,11 @@ const navigationMessage = {
     en: 'My tracking',
     sq: 'Gjurmimi im',
   },
+  downloadSupportFile: {
+    fr: "fichier d'assistance",
+    en: 'support file',
+    sq: 'file mbështetje'
+  }
 };
 
 export default navigationMessage;
