@@ -25,7 +25,7 @@ export const SyncContext = createContext<SyncContextValue | undefined>(undefined
 
 export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unknown>>) {
   const online = useNetworkOnline();
-  const { synchronizeQueen, queenReady, queenError } = useQueenSynchronization();
+  const { synchronizeQueen } = useQueenSynchronization();
 
   const [isSync, setIsSync] = useState(() => {
     return globalThis.localStorage.getItem('SYNCHRONIZE') === 'true';
@@ -193,13 +193,11 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
       stopSync();
     };
 
-    if (queenReady && pearlReady) {
-      if (!queenError && !pearlError) sync();
+    if (pearlReady) {
+      if (!pearlError) sync();
       else failedSync();
     }
   }, [
-    queenReady,
-    queenError,
     pearlReady,
     pearlError,
     synchronizeQueen,
