@@ -63,7 +63,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: inseefr/queen-back-office:5.8.3
+    image: inseefr/queen-back-office:5.8.4
     tty: true
     stdin_open: true
     depends_on:
@@ -111,7 +111,7 @@ services:
     profiles:
       - stack
       - playwright
-    image: docker.io/inseefr/pearl-jam-back-office:5.26.4-rc
+    image: docker.io/inseefr/pearl-jam-back-office:5.34.7
     tty: true
     stdin_open: true
     depends_on:
@@ -150,6 +150,7 @@ services:
       - SPRING_LIQUIBASE_ENABLED=true
       - SPRING_LIQUIBASE_CONTEXTS=demo
       - SPRING_LIQUIBASE_CHANGELOG=classpath:db/integration-demo.xml
+      - APPLICATION_EXTERNAL_SERVICE_DATACOLLECTIONUIURL=https://questionnaire-enqueteurs.enquetes.insee.fr
     ports:
       - ${PEARL_API_PORT}:8080
 

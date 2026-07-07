@@ -10,6 +10,7 @@ import {
   getSavedSyncPearlData,
   getSavedSyncQueenData,
   saveSyncPearlData,
+  storeSurveyUnitsIds,
 } from './check';
 import { NotificationState } from 'types/pearl';
 import * as api from 'api/pearl';
@@ -187,6 +188,34 @@ describe('check.ts', () => {
         messages: expect.any(Array),
         details: expect.any(Object),
       });
+    });
+  });
+
+  describe('storeSurveyUnitsIds', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+      localStorage.clear();
+    });
+
+    it('stores all survey unit ids into the localStorage', async () => {
+      vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([
+        { id: 'unit-1' },
+        { id: 'unit-2' },
+      ]);
+
+      await storeSurveyUnitsIds();
+
+      expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBe(
+        JSON.stringify(['unit-1', 'unit-2'])
+      );
+    });
+
+    it('stores an empty list into the localStorage if there is no survey- unit', async () => {
+      vi.spyOn(surveyUnitIDBService, 'getAll').mockResolvedValue([]);
+
+      await storeSurveyUnitsIds();
+
+      expect(localStorage.getItem('SYNCHRONIZATION_INTERROGATION_IDS')).toBe(JSON.stringify([]));
     });
   });
 });
