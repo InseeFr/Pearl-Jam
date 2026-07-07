@@ -175,8 +175,6 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
         // we start Queen synchro even if we could not store ids
         console.warn('Unable to store survey units ids in local storage', error)
       }
-      synchronizeQueen();
-
 
       window.localStorage.setItem('QUEEN_SYNC_INITIATED', 'true');
       await synchronizeQueen();
