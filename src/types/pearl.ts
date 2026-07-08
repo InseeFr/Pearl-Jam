@@ -112,7 +112,6 @@ export type SurveyUnitCommunicationRequest = {
 
 export type SurveyUnitCommunicationTemplate = {
   medium: string;
-  reason: string;
   type: string;
   id: string;
 };

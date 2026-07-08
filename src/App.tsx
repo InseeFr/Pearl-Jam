@@ -63,6 +63,7 @@ export function App() {
 
 function AppWrapper() {
   const { authenticated } = useAuth();
+
   const browserLanguage = navigator.language;
   let dateFnsLocale;
   switch (browserLanguage) {

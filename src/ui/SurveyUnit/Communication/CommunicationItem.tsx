@@ -44,13 +44,13 @@ export function CommunicationItem({
   const {
     mediumLabel,
     typeLabel,
-    reasonLabel: reasonLabelFromCommnunicationTemplate,
-  } = getCommunicationsLabels(surveyUnitCommunicationTemplate);
+    reasonLabel: reasonLabelFromCommunicationRequest,
+  } = getCommunicationsLabels(surveyUnitCommunicationTemplate, communication);
 
   const reasonLabel =
     surveyUnitCommunicationTemplate.type === communicationTypeEnum.COMMUNICATION_NOTICE.value
       ? ''
-      : `, ${reasonLabelFromCommnunicationTemplate}`;
+      : `, ${reasonLabelFromCommunicationRequest}`;
 
   const lastStatusLabel = findCommunicationStatusLabelByValue(lastStatus?.status);
   const formattedDate = formatDate(lastStatus?.date);

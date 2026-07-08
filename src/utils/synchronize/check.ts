@@ -7,6 +7,7 @@ import notificationIdbService from 'utils/indexeddb/services/notification-idb-se
 import { surveyUnitIDBService } from 'utils/indexeddb/services/surveyUnit-idb-service';
 import surveyUnitMissingIdbService from 'utils/indexeddb/services/surveyUnitMissing-idb-service';
 import syncReportIdbService from 'utils/indexeddb/services/syncReport-idb-service';
+import { format } from 'date-fns';
 import { SyncReport } from 'utils/indexeddb/model/syncReport';
 import type { Notification } from '../../types/pearl';
 
@@ -188,6 +189,12 @@ export const analyseResult = async () => {
   const report = getReportFromResult(result, nowDate);
   await syncReportIdbService.addOrUpdateReport(report);
 
+  // Store last successful sync date
+  if (result.state === 'success') {
+    const humanReadableDate = format(new Date(), 'dd/MM/yyyy HH:mm:ss');
+    localStorage.setItem('LAST_SYNCH_SUCCESS_DATE', humanReadableDate);
+  }
+
   return result;
 };
 
@@ -207,3 +214,11 @@ export const storeSurveyUnitsIds = async () => {
 
   localStorage.setItem(SURVEY_UNITS_LIST_LOCAL_STORAGE_KEY, JSON.stringify(surveyUnitsIds));
 };
+
+export const PEARL_INIT_SYNC_STATE = {
+  error: true,
+  surveyUnitsSuccess: [],
+  surveyUnitsInTempZone: [],
+  transmittedSurveyUnits: [],
+  loadedSurveyUnits: [],
+}

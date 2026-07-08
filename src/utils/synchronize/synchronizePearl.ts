@@ -117,7 +117,7 @@ const getUserData = async () => {
 };
 
 // Clean locally surveyUnits that are not expected anymore
-const cleanupOldSuveyUnits = async (expectedSurveyUnitIds: string[]) => {
+const cleanupOldSurveyUnits = async (expectedSurveyUnitIds: string[]) => {
   // get all surveyUnits from local datastore
   const existingSurveyUnits = await surveyUnitIDBService.getAll();
 
@@ -271,7 +271,7 @@ export const synchronizePearl = async () => {
     const { surveyUnitsSuccess: susSuccess, expectedSurveyUnitIds } = await getData();
 
     // Clean locally surveyUnits that are not expected anymore
-    await cleanupOldSuveyUnits(expectedSurveyUnitIds);
+    await cleanupOldSurveyUnits(expectedSurveyUnitIds);
     await cleanMissingSurveyUnits();
 
     surveyUnitsSuccess = susSuccess.map(({ id }) => id);

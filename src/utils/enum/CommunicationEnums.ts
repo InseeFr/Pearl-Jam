@@ -1,5 +1,5 @@
 import D from 'i18n';
-import { SurveyUnitCommunicationTemplate } from 'types/pearl';
+import { SurveyUnitCommunicationRequest, SurveyUnitCommunicationTemplate } from 'types/pearl';
 
 // Communication Medium
 export const communicationMediumEnum = {
@@ -8,11 +8,12 @@ export const communicationMediumEnum = {
 };
 
 export const getCommunicationsLabels = (
-  surveyUnitCommunicationTemplate: SurveyUnitCommunicationTemplate
+  surveyUnitCommunicationTemplate: SurveyUnitCommunicationTemplate,
+  surveyUnitCommunicationRequest: SurveyUnitCommunicationRequest
 ) => {
   const mediumLabel = findCommunicationMediumLabelByValue(surveyUnitCommunicationTemplate.medium);
   const typeLabel = findCommunicationTypeLabelByValue(surveyUnitCommunicationTemplate.type);
-  const reasonLabel = findCommunicationReasonLabelByValue(surveyUnitCommunicationTemplate.reason);
+  const reasonLabel = findCommunicationReasonLabelByValue(surveyUnitCommunicationRequest.reason);
   return { mediumLabel, typeLabel, reasonLabel };
 };
 

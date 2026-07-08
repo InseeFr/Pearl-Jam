@@ -21,9 +21,7 @@ vi.mock('api/pearl', () => ({
 
 vi.mock('utils/synchronize/useQueenSynchronization', () => ({
     useQueenSynchronization: () => ({
-        synchronizeQueen: mockSynchronizeQueen,
-        queenReady: true,
-        queenError: false,
+        synchronizeQueen: mockSynchronizeQueen
     }),
 }));
 
