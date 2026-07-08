@@ -204,17 +204,22 @@ const STATE_TRANSITION_HANDLERS: Record<string, StateHandler> = {
  * @returns {[]} newStates
  */
 export const updateStateWithDates = (surveyUnit: SurveyUnit) => {
-  let newStates = copyStatesFromSurveyUnit(surveyUnit);
-  const lastState = getLastState(newStates)?.type;
+  const lastState = getLastState(surveyUnit.states)?.type;
   const currentDate = Date.now();
   const { identificationPhaseStartDate } = surveyUnit;
+
+  // There is no state, we return an empty list
+  if (!lastState) return [];
 
   if (
     lastState === surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type &&
     currentDate > identificationPhaseStartDate
   ) {
+    let newStates = copyStatesFromSurveyUnit(surveyUnit);
     newStates = addNewState(surveyUnit, surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type);
+    return newStates;
   }
 
-  return newStates;
+  // Return original states when no changes are needed
+  return surveyUnit.states;
 };

@@ -23,6 +23,7 @@ export function useNextContacts(surveyUnit: SurveyUnit) {
     surveyUnitIDBService.addOrUpdateSU({
       ...surveyUnit,
       nextContactHistory: { ...nextCollectHistory, persons },
+      hasBeenUpdated: true,
     });
   };
 

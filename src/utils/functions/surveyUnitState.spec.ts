@@ -51,29 +51,64 @@ describe('updateStateWithDates', () => {
   });
   const beforeCurrent = new Date(2021, 2, 10).getTime();
   const afterCurrent = new Date(2021, 2, 20).getTime();
-  it('should return initial states if lastState is not VNC', () => {
+
+  it('should return an empty list if su has no state', () => {
     expect(updateStateWithDates(mockedEmptySu)).toEqual([]);
     expect(updateStateWithDates({ ...mockedEmptySu, states: [] })).toEqual([]);
   });
+  it('should return initial states if lastState is not VNC', () => {
+    const su1States: SurveyUnitState[] = [
+      { id: 1, date: 1616070963000, type: 'VIN' },
+      { id: 2, date: 1616071000000, type: 'VIC' }, // latest
+    ];
+
+    const su2States: SurveyUnitState[] = [
+      { id: 1, date: 1616070963000, type: 'VIN' },
+      { id: 2, date: 1616071000000, type: 'VIC' },
+      { id: 3, date: 1616072000000, type: 'PRC' }, // latest
+    ];
+
+    expect(
+      updateStateWithDates({
+        ...mockedEmptySu,
+        identificationPhaseStartDate: beforeCurrent,
+        states: su1States,
+      })
+    ).toEqual(su1States);
+
+    expect(
+      updateStateWithDates({
+        ...mockedEmptySu,
+        identificationPhaseStartDate: beforeCurrent,
+        states: su2States,
+      })
+    ).toEqual(su2States);
+  });
   it('should return initial states if SU lastState is VNC and currentDate < identificationPhaseStart', () => {
+    const suStates: SurveyUnitState[] = [
+      { type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent },
+    ];
+
     const surveyUnit = {
       ...mockedEmptySu,
-      states: [{ type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent }],
+      states: suStates,
       identificationPhaseStartDate: afterCurrent,
     };
-    expect(updateStateWithDates(surveyUnit)).toEqual([
-      { type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent },
-    ]);
+    expect(updateStateWithDates(surveyUnit)).toEqual(suStates);
   });
-  it('should return 1 if SU is VNC and currentDate > identificationPhaseStart', () => {
+  it('should add VIC state if SU is VNC and currentDate > identificationPhaseStart', () => {
+    const suStates: SurveyUnitState[] = [
+      { type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent },
+    ];
+
     const surveyUnit = {
       ...mockedSu,
-      states: [{ type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent }],
+      states: suStates,
       identificationPhaseStartDate: beforeCurrent,
     };
 
     expect(updateStateWithDates(surveyUnit)).toEqual([
-      { type: surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type, date: beforeCurrent },
+      ...suStates,
       { type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type, date: NOW },
     ]);
   });

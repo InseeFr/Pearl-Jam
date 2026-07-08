@@ -1,6 +1,6 @@
 import { ANONYMOUS, KEYCLOAK, PEARL_USER_KEY } from 'utils/constants';
 import { refreshToken } from 'utils/keycloak';
-import { createSurveyUnit } from 'utils/testing/createFakeData';
+import { createLocalSurveyUnit, createSurveyUnit } from 'utils/testing/createFakeData';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   authentication,
@@ -9,7 +9,7 @@ import {
   getSecureHeader,
   getToken,
 } from './utils';
-import { SurveyUnit } from 'types/pearl';
+import { LocalSurveyUnit, SurveyUnit } from 'types/pearl';
 
 vi.mock('utils/keycloak', () => ({
   kc: { token: 'mocked_token' },
@@ -67,7 +67,7 @@ describe('Utils tests', () => {
   });
 
   it('should format survey unit', async () => {
-    const surveyUnit = createSurveyUnit();
+    const surveyUnit = createLocalSurveyUnit();
 
     const formatted = formatSurveyUnitForPut(surveyUnit);
     const expected: Partial<SurveyUnit> = {
