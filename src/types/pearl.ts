@@ -112,7 +112,6 @@ export type SurveyUnitCommunicationRequest = {
 
 export type SurveyUnitCommunicationTemplate = {
   medium: string;
-  reason: string;
   type: string;
   id: string;
 };
@@ -174,6 +173,10 @@ export type SurveyUnit = {
   previousContactHistory?: PreviousContactHistory;
   nextContactHistory?: NextContactHistory;
   collectNextContacts: boolean;
+};
+
+export type LocalSurveyUnit = SurveyUnit & {
+  hasBeenUpdated?: boolean;
 };
 
 export type NotificationState = 'warning' | 'success' | 'error';

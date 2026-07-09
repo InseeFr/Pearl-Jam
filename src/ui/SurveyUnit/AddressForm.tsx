@@ -39,6 +39,7 @@ export function AddressForm({ onClose, surveyUnit }: Readonly<AddressFormProps>)
         staircase: data.staircase,
         elevator: !!data.elevator,
       },
+      hasBeenUpdated: true,
     });
     onClose();
   });

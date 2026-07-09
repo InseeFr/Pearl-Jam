@@ -1,4 +1,4 @@
-import { SurveyUnit } from 'types/pearl';
+import { LocalSurveyUnit, SurveyUnit } from 'types/pearl';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 
 export const createSurveyUnit = (su?: Partial<SurveyUnit>): SurveyUnit => {
@@ -124,4 +124,11 @@ export const createSurveyUnit = (su?: Partial<SurveyUnit>): SurveyUnit => {
     nextContactHistory: undefined,
     previousContactHistory: undefined,
   };
+};
+
+export const createLocalSurveyUnit = (
+  su?: Partial<SurveyUnit>,
+  hasBeenUpdated?: boolean
+): LocalSurveyUnit => {
+  return { ...createSurveyUnit(su), hasBeenUpdated };
 };

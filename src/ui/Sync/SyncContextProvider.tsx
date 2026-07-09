@@ -4,11 +4,12 @@ import { healthCheck } from 'api/pearl';
 import D from 'i18n';
 import { NotificationState } from 'types/pearl';
 import notificationIdbService from 'utils/indexeddb/services/notification-idb-service';
-import { synchronizePearl, useQueenSynchronisation } from 'utils/synchronize';
-import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/synchronize/check';
+import { useQueenSynchronization } from 'utils/synchronize/useQueenSynchronization';
+import { analyseResult, getNotifFromResult, saveSyncPearlData, storeSurveyUnitsIds } from 'utils/synchronize/check';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
+import { synchronizePearl } from 'utils/synchronize/synchronizePearl';
 
 export type SyncContextValue = {
   setSyncResult: (value: {
@@ -24,7 +25,7 @@ export const SyncContext = createContext<SyncContextValue | undefined>(undefined
 
 export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unknown>>) {
   const online = useNetworkOnline();
-  const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
+  const { synchronizeQueen } = useQueenSynchronization();
 
   const [isSync, setIsSync] = useState(() => {
     return globalThis.localStorage.getItem('SYNCHRONIZE') === 'true';
@@ -167,6 +168,13 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
         stopSync();
         return;
       }
+      try {
+        // store survey unit ids in local storage for Queen synchro
+        await storeSurveyUnitsIds()
+      } catch (error) {
+        // we start Queen synchro even if we could not store ids
+        console.warn('Unable to store survey units ids in local storage', error)
+      }
 
       window.localStorage.setItem('QUEEN_SYNC_INITIATED', 'true');
       await synchronizeQueen();
@@ -185,13 +193,11 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
       stopSync();
     };
 
-    if (queenReady && pearlReady) {
-      if (!queenError && !pearlError) sync();
+    if (pearlReady) {
+      if (!pearlError) sync();
       else failedSync();
     }
   }, [
-    queenReady,
-    queenError,
     pearlReady,
     pearlError,
     synchronizeQueen,
