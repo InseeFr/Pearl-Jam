@@ -18,6 +18,7 @@ export default defineConfig({
                 'tests/',
                 'playwright-report/',
                 'build/',
+                'dist/',
                 'src/**/*.spec.*',
             ],
         },
