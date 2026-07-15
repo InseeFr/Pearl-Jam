@@ -70,6 +70,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            inseefr/pearl-jam:feat-other-mode-notification
+            inseefr/pearl-jam:feat-other-mode-notification-yolo
           cache-from: type=gha
           cache-to: type=gha,mode=max
