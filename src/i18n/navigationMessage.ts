@@ -30,9 +30,9 @@ const navigationMessage = {
     sq: 'Mbledhja e mëparshme',
   },
   goToNextCollect: {
-    fr: 'Collecte suivante',
-    en: 'Next collect',
-    sq: 'Mbledhja e ardhshme',
+    fr: 'Contacts collecte suivante',
+    en: 'Next collect contacts',
+    sq: 'kontakte të mbledhjes tjetër',
   },
   goToCommunicationPage: {
     fr: 'Communications',
