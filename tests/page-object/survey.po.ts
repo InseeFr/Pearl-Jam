@@ -11,8 +11,8 @@ export class SurveyPage {
     return this.page.getByRole('heading', { name: title });
   }
 
-  selectTab(title: string) {
-    return this.page.getByRole('tab', { name: title }).click();
+  selectTab(title: string, exact: boolean = false) {
+    return this.page.getByRole('tab', { name: title, exact }).click();
   }
 
   async addContactAttempt() {
@@ -41,6 +41,6 @@ export class SurveyPage {
       .getByRole('button')
       .click();
 
-      expect(this.page.locator('div').filter({ hasText: /^Transmis$/ })).toBeVisible();
+    expect(this.page.locator('div').filter({ hasText: /^Transmis$/ })).toBeVisible();
   }
 }
