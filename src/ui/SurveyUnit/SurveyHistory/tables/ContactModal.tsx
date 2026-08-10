@@ -6,6 +6,7 @@ import { FieldRow } from 'ui/FieldRow';
 import D from 'i18n';
 import { ContactFormData, contactSchema } from 'utils/schemas/nextContactSchema';
 import { TITLES } from 'utils/constants';
+import { formatPhoneNumber } from 'utils/functions/formatPhoneNumber';
 
 type ModifyContactModalProps = {
   open: boolean;
@@ -37,7 +38,7 @@ export function ContactModal({
       title: contact?.title ?? TITLES.MISTER.type,
       firstName: contact?.firstName || '',
       lastName: contact?.lastName || '',
-      phoneNumber: contact?.phoneNumber,
+      phoneNumber: formatPhoneNumber(contact?.phoneNumber),
       email: contact?.email,
       preferredContact: contact?.preferredContact || isFirst ? 'true' : 'false',
     },
@@ -95,7 +96,11 @@ export function ContactModal({
               label={D.contactPhone}
               helperText={errors.phoneNumber?.message}
               errors={errors}
-              {...register('phoneNumber')}
+              {...register('phoneNumber', {
+                onChange: e => {
+                  e.target.value = formatPhoneNumber(e.target.value);
+                },
+              })}
             />
             <FieldRow
               label={D.contactEmail}

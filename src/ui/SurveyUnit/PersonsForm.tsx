@@ -30,6 +30,7 @@ import { PaperIconButton } from '../PaperIconButton';
 import { Row } from '../Row';
 import { Typography } from '../Typography';
 import { FieldRow } from 'ui/FieldRow';
+import { formatPhoneNumber } from 'utils/functions/formatPhoneNumber';
 
 interface PersonsFormProps {
   onClose: VoidFunction;
@@ -292,12 +293,23 @@ function PhoneLine({
         {editable ? (
           <Controller
             control={control}
-            render={({ field }) => <OutlinedInput {...field} sx={{ maxWidth: 300 }} id={name} />}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                sx={{ maxWidth: 300 }}
+                id={name}
+                value={formatPhoneNumber(field.value ?? '')}
+                onChange={e => {
+                  const rawValue = e.target.value.replace(/\s+/g, '');
+                  field.onChange(rawValue);
+                }}
+              />
+            )}
             name={`${name}.number`}
           />
         ) : (
           <Typography component="div" color="textPrimary" variant="s">
-            {phoneNumber?.number ?? '-'}
+            {phoneNumber?.number ? formatPhoneNumber(phoneNumber.number) : '-'}
           </Typography>
         )}
         <Controller
