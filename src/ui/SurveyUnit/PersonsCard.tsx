@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import {
   displayAgeInYears,
   getTitle,
@@ -62,7 +62,14 @@ export function PersonsCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>
                 </Typography>
               </Row>
             </Row>
-            <Grid container columns={2} rowGap={6} columnSpacing={1}>
+            <Grid
+              container
+              columns={2}
+              rowGap={6}
+              sx={{
+                maxWidth: '850px',
+              }}
+            >
               {persons.map((p, k) => (
                 <Grid key={p.id} xs={1}>
                   <Grid container columns={2}>
