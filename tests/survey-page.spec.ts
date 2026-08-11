@@ -159,7 +159,7 @@ test('Import previous contacts to next contacts', async ({ page }) => {
 
   // Add multiple phone numbers to the contact to test the pop-up handling during import
   await page.getByRole('tab', { name: 'Contacts', exact: true }).click();
-  await page.getByRole('button', { name: 'Modifier' }).click();
+  await page.getByRole('button', { name: 'Modifier' }).first().click();
   await page.getByRole('button', { name: 'Ajouter un numéro' }).first().click();
   await page.locator('input[name="persons.0.phoneNumbers.1.number"]').click();
   await page.locator('input[name="persons.0.phoneNumbers.1.number"]').fill('0651163352');
