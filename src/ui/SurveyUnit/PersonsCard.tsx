@@ -89,7 +89,9 @@ export function PersonsCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>
                         {D.editButton}
                       </Button>
                     </Grid>
-                    {k % 2 == 0 && <Divider orientation="vertical" flexItem />}
+                    {k % 2 == 0 && k !== persons.length - 1 && (
+                      <Divider orientation="vertical" flexItem />
+                    )}
                   </Grid>
                 </Grid>
               ))}
