@@ -140,6 +140,48 @@ export async function seedData() {
             },
           ],
         },
+        {
+          id: user.id,
+          title: user.id % 2 === 0 ? 'MISS' : 'MISTER',
+          firstName: user.name.split(' ')[0] + '-2',
+          lastName: user.name.split(' ')[1] + '-2',
+          email: user.email + '-2',
+          birthdate: new Date(year - getRandomIntBetween(20, 80)).getTime(),
+          favoriteEmail: false,
+          privileged: true,
+          phoneNumbers: [
+            {
+              source: 'FISCAL',
+              favorite: false,
+              number: user.phone + '-2',
+              id: '',
+            },
+            {
+              source: 'DIRECTORY',
+              favorite: true,
+              number: user.phone + '-2',
+              id: '',
+            },
+            {
+              source: 'INTERVIEWER',
+              favorite: false,
+              number: user.phone + '11',
+              id: '',
+            },
+            {
+              source: 'INTERVIEWER',
+              favorite: false,
+              number: user.phone + '12',
+              id: '',
+            },
+            {
+              source: 'INTERVIEWER',
+              favorite: false,
+              number: user.phone + '13',
+              id: '',
+            },
+          ],
+        },
       ],
       address: {
         l1: user.name,

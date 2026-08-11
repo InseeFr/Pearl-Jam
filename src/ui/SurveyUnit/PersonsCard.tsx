@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import {
   displayAgeInYears,
   getTitle,
@@ -23,6 +23,7 @@ import { Typography } from '../Typography';
 import { PersonsForm } from './PersonsForm';
 import { SurveyUnit, SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
 import { formatPhoneNumber } from 'utils/functions/formatPhoneNumber';
+import Grid from '@mui/material/Grid';
 
 /**
  * Display persons linked to a survey unit
@@ -35,6 +36,7 @@ export function PersonsCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>
     return a.privileged ? -1 : 1;
   });
   const [showModal, toggleModal] = useToggle(false);
+  const [personModalIndex, setPersonModalIndex] = useState(0);
 
   if (persons.length === 0) {
     persons.push(personPlaceholder as unknown as SurveyUnitPerson);
@@ -59,27 +61,43 @@ export function PersonsCard({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>
                   {D.surveyUnitIndividual}
                 </Typography>
               </Row>
-              <Button
-                onClick={toggleModal}
-                color="surfaceSecondary"
-                variant="edge"
-                startIcon={<BorderColorOutlinedIcon fontSize="small" />}
-              >
-                {D.editButton}
-              </Button>
             </Row>
-            <Row gap={4}>
+            <Grid container columns={2} rowGap={6} columnSpacing={1}>
               {persons.map((p, k) => (
-                <Fragment key={p.id}>
-                  {k > 0 && <Divider orientation="vertical" flexItem />}
-                  <PersonInfo onPhoneFav={handleFavPhoneNumber} person={p} />
-                </Fragment>
+                <Grid key={p.id} xs={1}>
+                  <Grid container columns={2}>
+                    <Grid>
+                      <PersonInfo onPhoneFav={handleFavPhoneNumber} person={p} />
+                    </Grid>
+                    <Grid>
+                      <Button
+                        onClick={() => {
+                          toggleModal();
+                          setPersonModalIndex(k);
+                        }}
+                        color="surfaceSecondary"
+                        variant="edge"
+                        startIcon={<BorderColorOutlinedIcon fontSize="small" />}
+                      >
+                        {D.editButton}
+                      </Button>
+                    </Grid>
+                    {k % 2 == 0 && <Divider orientation="vertical" flexItem />}
+                  </Grid>
+                </Grid>
               ))}
-            </Row>
+            </Grid>
           </Stack>
         </CardContent>
       </Card>
-      {showModal && <PersonsForm persons={persons} surveyUnit={surveyUnit} onClose={toggleModal} />}
+      {showModal && (
+        <PersonsForm
+          persons={persons}
+          surveyUnit={surveyUnit}
+          personToModifyIndex={personModalIndex}
+          onClose={toggleModal}
+        />
+      )}
     </>
   );
 }
