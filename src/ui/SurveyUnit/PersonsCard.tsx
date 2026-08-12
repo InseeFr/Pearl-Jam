@@ -22,6 +22,7 @@ import { TextWithLabel } from '../TextWithLabel';
 import { Typography } from '../Typography';
 import { PersonsForm } from './PersonsForm';
 import { SurveyUnit, SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
+import { formatPhoneNumber } from 'utils/functions/formatPhoneNumber';
 
 /**
  * Display persons linked to a survey unit
@@ -175,13 +176,13 @@ function PhoneLine({
 }>) {
   return (
     <Row
-      sx={{ display: 'grid', gridTemplateColumns: '110px 110px 20px', gap: '1rem', minHeight: 24 }}
+      sx={{ display: 'grid', gridTemplateColumns: '110px 125px 5px', gap: '1rem', minHeight: 24 }}
     >
       <Typography component="div" color="textHint" variant="xs">
         &nbsp; • {label} :
       </Typography>
       <Typography component="div" color="textPrimary" variant="s">
-        {phoneNumber?.number ?? '-'}
+        {formatPhoneNumber(phoneNumber?.number) ?? '-'}
       </Typography>
       {phoneNumber && (
         <IconButton
