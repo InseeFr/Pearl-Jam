@@ -28,6 +28,7 @@ const buttonMessage = {
   addButton: { fr: 'Ajouter', en: 'Add', sq: 'Shto' },
   synchronizeButton: { fr: 'Synchroniser', en: 'Synchronize', sq: 'Sinkronizo' },
   closeButton: { fr: 'Fermer', en: 'Close', sq: 'Mbyll' },
+  closeIconButton:  { fr: 'fermer la modale', en: 'close the modal', sq: 'Mbyll modalin' },
   updateNow: { fr: 'Mettre à jour maintenant', en: 'Update now', sq: 'Përditëso tani' },
   yesButton: { fr: 'Oui', en: 'Yes', sq: 'Po' },
   noButton: { fr: 'Non', en: 'No', sq: 'Jo' },
