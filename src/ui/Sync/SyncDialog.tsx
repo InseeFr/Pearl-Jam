@@ -57,7 +57,7 @@ export function SyncDialog({
   const showDetail = state !== 'error';
 
   return (
-    <Dialog open onClose={close}>
+    <Dialog open onClose={onClose}>
       <DialogTitle>{D.syncResult}</DialogTitle>
       <DialogContent>
         <Stack gap={2}>
