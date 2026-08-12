@@ -47,7 +47,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     steps[stepIndex] === 'medium' ? onClose() : setStep(steps[stepIndex - 1]);
   };
 
-  const goNextStep = (e: MouseEvent<HTMLButtonElement>) => {
+  const goNextStep = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (step === 'datePicker' && status && medium) {
       const updatedSu: SurveyUnit = {
@@ -115,6 +115,14 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     medium
   );
 
+  const currentValue = step === 'medium' ? medium : status;
+
+  const handleRadioClick = (optionValue: string) => (e: MouseEvent<HTMLElement>) => {
+    if (optionValue === currentValue) {
+      goNextStep(e);
+    }
+  };
+
   return (
     <Dialog open={true} onClose={onClose}>
       <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
@@ -143,14 +151,26 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
               {step === 'medium' && (
                 <Stack gap={1} width={1}>
                   {mediumOptions.map(o => (
-                    <RadioLine value={o.value} key={o.label} label={o.label} disabled={false} />
+                    <RadioLine
+                      value={o.value}
+                      key={o.label}
+                      label={o.label}
+                      disabled={false}
+                      onClick={handleRadioClick(o.value)}
+                    />
                   ))}
                 </Stack>
               )}
               {step === 'contactAttempt' && (
                 <Stack gap={1} width={1}>
                   {contactAttempts.map(o => (
-                    <RadioLine value={o.value} key={o.value} label={o.label} disabled={false} />
+                    <RadioLine
+                      value={o.value}
+                      key={o.value}
+                      label={o.label}
+                      disabled={false}
+                      onClick={handleRadioClick(o.value)}
+                    />
                   ))}
                 </Stack>
               )}
@@ -178,9 +198,11 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
             {D.previousButton}
           </Button>
         )}
-        <Button disabled={!isValid()} variant="contained" onClick={goNextStep}>
-          {D.confirmButton}
-        </Button>
+        {step === 'datePicker' && (
+          <Button disabled={!isValid()} variant="contained" onClick={goNextStep}>
+            {D.saveButton}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
