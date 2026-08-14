@@ -18,11 +18,10 @@ export class SurveyPage {
   async addContactAttempt() {
     await this.page.getByRole('button', { name: 'Ajouter un essai' }).click();
     await this.page.getByText('Face à face', { exact: true }).click();
-    await this.page.getByRole('button', { name: 'Confirmer' }).click();
 
     await this.page.getByLabel('Choisir le type de contact').getByText('Enquête acceptée').click();
-    await this.page.getByRole('button', { name: 'Confirmer' }).click();
-    await this.page.getByRole('button', { name: 'Confirmer' }).click();
+
+    await this.page.getByRole('button', { name: 'Enregistrer' }).click();
   }
 
   async setContactOutcomeAsDUK() {
