@@ -1,4 +1,4 @@
-import { SurveyUnit, SurveyUnitState } from 'types/pearl';
+import { SurveyUnit, SurveyUnitPerson, SurveyUnitState } from 'types/pearl';
 import { surveyUnitStateEnum } from '../enum/SUStateEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
 import { contactOutcomes } from './contacts/ContactOutcome';
@@ -30,7 +30,7 @@ function createPerson(
   phone: string,
   privileged: boolean = false,
   suffix: string = ''
-) {
+): SurveyUnitPerson {
   const [firstName, lastName] = name.split(' ');
   return {
     id,
@@ -122,11 +122,7 @@ function createCommunicationTemplates() {
 /**
  * Helper to create communication request with SUBMITTED status
  */
-function createSubmittedCommunication(
-  templateId: string,
-  submittedDate: number,
-  reason?: string
-) {
+function createSubmittedCommunication(templateId: string, submittedDate: number, reason?: string) {
   return {
     emitter: 'INTERVIEWER' as const,
     communicationTemplateId: templateId,
@@ -249,10 +245,6 @@ export async function seedData() {
     surveyUnits.push(createSurveyUnitFromUser(user, user.id));
   }
 
-  // =============================================================================
-  // Test cases for the "Dernier courrier envie" feature
-  // =============================================================================
-
   // SU with NO communication requests - should show "Aucun courrier envie"
   surveyUnits.push({
     ...surveyUnits[0],
@@ -285,9 +277,7 @@ export async function seedData() {
     id: 'su-notice-sent',
     useLetterCommunication: true,
     communicationTemplates: createCommunicationTemplates(),
-    communicationRequests: [
-      createSubmittedCommunication('LETTER_NOTICE', TODAY - 3 * day),
-    ],
+    communicationRequests: [createSubmittedCommunication('LETTER_NOTICE', TODAY - 3 * day)],
   });
 
   // SU with a single SUBMITTED REMINDER with UNREACHABLE reason
@@ -337,18 +327,11 @@ export async function seedData() {
         emitter: 'INTERVIEWER',
         communicationTemplateId: 'LETTER_REMINDER',
         reason: 'REFUSAL',
-        status: [
-          { date: TODAY - 1 * day, status: communicationStatusEnum.INITIATED.value },
-        ],
+        status: [{ date: TODAY - 1 * day, status: communicationStatusEnum.INITIATED.value }],
       },
     ],
   });
 
-  // =============================================================================
-  // Existing test cases (from original seeder)
-  // =============================================================================
-
-  // Create a fillable TEL surveyUnit
   surveyUnits.push(
     {
       ...surveyUnits[0],
