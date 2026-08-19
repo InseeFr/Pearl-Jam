@@ -79,6 +79,16 @@ const trackingMessage = {
     en: 'Number of units remaining to be treated by survey and deadline',
     sq: 'Numri i njësive të mbetura për të trajtuar sipas anketës dhe afatit',
   },
+  trackingLastMailSent: {
+    fr: 'Dernier courrier envoyé',
+    en: 'Last mail sent',
+    sq: 'Posta e fundit e dërguar',
+  },
+  noMailSent: {
+    fr: 'Aucun courrier envoyé',
+    en: 'No mail sent',
+    sq: 'Asnjë postë nuk është dërguar',
+  },
 };
 
 export default trackingMessage;

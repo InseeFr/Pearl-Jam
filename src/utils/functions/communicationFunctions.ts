@@ -1,5 +1,87 @@
-import { SurveyUnit } from 'types/pearl';
+import D from 'i18n';
+import { SurveyUnit, SurveyUnitCommunicationTemplate } from 'types/pearl';
+import {
+  communicationStatusEnum,
+  findCommunicationTypeLabelByValue,
+  findCommunicationMediumLabelByValue,
+  findCommunicationReasonLabelByValue,
+} from 'utils/enum/CommunicationEnums';
+import { formatDate } from 'utils/functions/date';
 import { getAddressData, getprivilegedPerson } from './surveyUnitFunctions';
+
+export type LastMailInfo = {
+  type: string | undefined;
+  medium: string | undefined;
+  reason: string | undefined;
+  date: number | null;
+  template: SurveyUnitCommunicationTemplate | undefined;
+};
+
+export function getLastSubmittedCommunication(surveyUnit: SurveyUnit): LastMailInfo | null {
+  const submittedComms =
+    surveyUnit.communicationRequests?.filter(comReq =>
+      comReq.status.some(s => s.status === communicationStatusEnum.SUBMITTED.value)
+    ) ?? [];
+
+  if (submittedComms.length === 0) {
+    return null;
+  }
+
+  const lastSubmitted = submittedComms.reduce((prev, current) => {
+    const prevDate = Math.max(
+      ...prev.status
+        .filter(s => s.status === communicationStatusEnum.SUBMITTED.value)
+        .map(s => s.date)
+    );
+    const currentDate = Math.max(
+      ...current.status
+        .filter(s => s.status === communicationStatusEnum.SUBMITTED.value)
+        .map(s => s.date)
+    );
+    return currentDate > prevDate ? current : prev;
+  });
+
+  const template = surveyUnit.communicationTemplates?.find(
+    t => t.id === lastSubmitted.communicationTemplateId
+  );
+
+  const submittedDates = lastSubmitted.status
+    .filter(s => s.status === communicationStatusEnum.SUBMITTED.value)
+    .map(s => s.date);
+  const maxDate = submittedDates.length > 0 ? Math.max(...submittedDates) : null;
+
+  return {
+    type: template?.type,
+    medium: template?.medium,
+    reason: lastSubmitted.reason,
+    date: maxDate,
+    template,
+  };
+}
+
+/**
+ * Format the last mail info for display in the table.
+ * Format: "{mediumLabel} - {typeLabel}[, {reasonLabel}] | {date}"
+ */
+export function formatLastMailInfo(lastMailInfo: LastMailInfo | null): string {
+  if (!lastMailInfo?.date) {
+    return D.noMailSent;
+  }
+
+  const typeLabel = findCommunicationTypeLabelByValue(lastMailInfo.type) ?? '';
+  const mediumLabel = findCommunicationMediumLabelByValue(lastMailInfo.medium) ?? '';
+
+  let displayText = `${mediumLabel} - ${typeLabel}`;
+
+  if (lastMailInfo.type === 'REMINDER' && lastMailInfo.reason) {
+    const reasonLabel = findCommunicationReasonLabelByValue(lastMailInfo.reason) ?? '';
+    displayText += `, ${reasonLabel}`;
+  }
+
+  displayText += ` | ${formatDate(lastMailInfo.date)}`;
+
+  return displayText;
+}
 
 export const getRecipientInformation = (surveyUnit: SurveyUnit) => {
   const recipient = getprivilegedPerson(surveyUnit);

@@ -1,7 +1,12 @@
-import { SurveyUnit } from 'types/pearl';
+import { SurveyUnit, SurveyUnitCommunicationRequest, SurveyUnitCommunicationTemplate } from 'types/pearl';
 import { TITLES } from 'utils/constants';
 import { getRecipientInformation } from 'utils/functions/index';
-import { describe, expect, it } from 'vitest';
+import {
+  getLastSubmittedCommunication,
+  formatLastMailInfo,
+} from 'utils/functions/communicationFunctions';
+import { communicationStatusEnum } from 'utils/enum/CommunicationEnums';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('getRecipientInformation', () => {
   const VALID_FIRSTNAME1 = 'Ada';
@@ -113,5 +118,232 @@ describe('getRecipientInformation', () => {
       undefined,
       undefined,
     ],
+  });
+});
+
+// =============================================================================
+// Tests for getLastSubmittedCommunication
+// =============================================================================
+
+describe('getLastSubmittedCommunication', () => {
+  const COMMUNICATION_TEMPLATES: SurveyUnitCommunicationTemplate[] = [
+    { id: 'LETTER_NOTICE', medium: 'LETTER', type: 'NOTICE' },
+    { id: 'LETTER_REMINDER', medium: 'LETTER', type: 'REMINDER' },
+  ];
+
+  const createSurveyUnit = (
+    communicationRequests: SurveyUnitCommunicationRequest[] = [],
+    communicationTemplates: SurveyUnitCommunicationTemplate[] = COMMUNICATION_TEMPLATES
+  ): SurveyUnit => ({
+    id: 'su-test',
+    persons: [],
+    address: { l1: '', l2: '', l3: '', l4: '', l5: '', l6: '', l7: '' },
+    priority: false,
+    move: null,
+    campaign: 'TestCampaign',
+    comments: [],
+    sampleIdentifiers: { bs: 0, ec: '0', le: 0, noi: 0, numfa: 0, rges: 0, ssech: 0, nolog: 0, nole: 0, autre: '', nograp: '' },
+    states: [],
+    contactAttempts: [],
+    identification: {},
+    campaignLabel: '',
+    managementStartDate: 0,
+    interviewerStartDate: 0,
+    identificationPhaseStartDate: 0,
+    collectionStartDate: 0,
+    collectionEndDate: 0,
+    endDate: 0,
+    identificationConfiguration: 'INDTEL',
+    contactOutcomeConfiguration: 'F2F',
+    contactAttemptConfiguration: 'F2F',
+    useLetterCommunication: true,
+    communicationRequests,
+    communicationTemplates,
+    collectNextContacts: false,
+  });
+
+  const createCommunicationRequest = (
+    templateId: string,
+    statuses: { date: number; status: string }[],
+    reason?: string
+  ): SurveyUnitCommunicationRequest => ({
+    emitter: 'INTERVIEWER',
+    communicationTemplateId: templateId,
+    reason,
+    status: statuses,
+  });
+
+  it('should return null when there are no communication requests', () => {
+    const surveyUnit = createSurveyUnit([]);
+    expect(getLastSubmittedCommunication(surveyUnit)).toBeNull();
+  });
+
+  it('should return null when there are communication requests but none with SUBMITTED status', () => {
+    const surveyUnit = createSurveyUnit([
+      createCommunicationRequest('LETTER_NOTICE', [
+        { date: 1000, status: communicationStatusEnum.INITIATED.value },
+        { date: 2000, status: communicationStatusEnum.READY.value },
+      ]),
+    ]);
+    expect(getLastSubmittedCommunication(surveyUnit)).toBeNull();
+  });
+
+  it('should return the communication request with SUBMITTED status', () => {
+    const surveyUnit = createSurveyUnit([
+      createCommunicationRequest('LETTER_NOTICE', [
+        { date: 1000, status: communicationStatusEnum.INITIATED.value },
+        { date: 2000, status: communicationStatusEnum.READY.value },
+        { date: 3000, status: communicationStatusEnum.SUBMITTED.value },
+      ]),
+    ]);
+    const result = getLastSubmittedCommunication(surveyUnit);
+    expect(result).not.toBeNull();
+    expect(result?.type).toBe('NOTICE');
+    expect(result?.medium).toBe('LETTER');
+    expect(result?.date).toBe(3000);
+  });
+
+  it('should return the most recent SUBMITTED communication when there are multiple', () => {
+    const surveyUnit = createSurveyUnit([
+      createCommunicationRequest('LETTER_NOTICE', [
+        { date: 1000, status: communicationStatusEnum.SUBMITTED.value },
+      ]),
+      createCommunicationRequest('LETTER_REMINDER', [
+        { date: 5000, status: communicationStatusEnum.SUBMITTED.value },
+      ], 'UNREACHABLE'),
+      createCommunicationRequest('LETTER_NOTICE', [
+        { date: 3000, status: communicationStatusEnum.SUBMITTED.value },
+      ]),
+    ]);
+    const result = getLastSubmittedCommunication(surveyUnit);
+    expect(result).not.toBeNull();
+    expect(result?.type).toBe('REMINDER');
+    expect(result?.reason).toBe('UNREACHABLE');
+    expect(result?.date).toBe(5000);
+  });
+
+  it('should return the communication with the most recent SUBMITTED date when a request has multiple SUBMITTED statuses', () => {
+    const surveyUnit = createSurveyUnit([
+      createCommunicationRequest('LETTER_NOTICE', [
+        { date: 1000, status: communicationStatusEnum.SUBMITTED.value },
+        { date: 2000, status: communicationStatusEnum.READY.value },
+        { date: 3000, status: communicationStatusEnum.SUBMITTED.value },
+      ]),
+    ]);
+    const result = getLastSubmittedCommunication(surveyUnit);
+    expect(result).not.toBeNull();
+    expect(result?.date).toBe(3000);
+  });
+
+  it('should handle missing communicationTemplateId gracefully', () => {
+    const surveyUnit = createSurveyUnit([
+      createCommunicationRequest('NON_EXISTENT_TEMPLATE', [
+        { date: 1000, status: communicationStatusEnum.SUBMITTED.value },
+      ]),
+    ]);
+    const result = getLastSubmittedCommunication(surveyUnit);
+    expect(result).not.toBeNull();
+    expect(result?.type).toBeUndefined();
+    expect(result?.medium).toBeUndefined();
+    expect(result?.date).toBe(1000);
+  });
+});
+
+// =============================================================================
+// Tests for formatLastMailInfo
+// =============================================================================
+
+describe('formatLastMailInfo', () => {
+  // Note: formatLastMailInfo depends on i18n translations and formatDate
+  // These tests verify the logic structure rather than exact output strings
+
+  it('should return noMailSent translation when lastMailInfo is null', () => {
+    const result = formatLastMailInfo(null);
+    // Should return the translation for "Aucun courrier envoyé"
+    expect(typeof result).toBe('string');
+    expect(result.length).toBeGreaterThan(0);
+  });
+
+  it('should return noMailSent translation when lastMailInfo has no date', () => {
+    const lastMailInfo = {
+      type: 'NOTICE',
+      medium: 'LETTER',
+      reason: undefined,
+      date: null,
+      template: undefined,
+    };
+    const result = formatLastMailInfo(lastMailInfo);
+    expect(typeof result).toBe('string');
+    expect(result.length).toBeGreaterThan(0);
+  });
+
+  it('should include medium and type for NOTICE without reason', () => {
+    const lastMailInfo = {
+      type: 'NOTICE',
+      medium: 'LETTER',
+      reason: undefined,
+      date: 1718764800000,
+      template: undefined,
+    };
+    const result = formatLastMailInfo(lastMailInfo);
+    expect(result).toContain('LETTER');
+    expect(result).toContain('NOTICE');
+    expect(result).toContain('|');
+    // Should NOT contain reason for NOTICE
+    expect(result).not.toContain('UNREACHABLE');
+    expect(result).not.toContain('REFUSAL');
+  });
+
+  it('should include reason for REMINDER with UNREACHABLE', () => {
+    const lastMailInfo = {
+      type: 'REMINDER',
+      medium: 'LETTER',
+      reason: 'UNREACHABLE',
+      date: 1718764800000,
+      template: undefined,
+    };
+    const result = formatLastMailInfo(lastMailInfo);
+    expect(result).toContain('LETTER');
+    expect(result).toContain('REMINDER');
+    expect(result).toContain('UNREACHABLE');
+    expect(result).toContain('|');
+  });
+
+  it('should include reason for REMINDER with REFUSAL', () => {
+    const lastMailInfo = {
+      type: 'REMINDER',
+      medium: 'LETTER',
+      reason: 'REFUSAL',
+      date: 1718764800000,
+      template: undefined,
+    };
+    const result = formatLastMailInfo(lastMailInfo);
+    expect(result).toContain('REFUSAL');
+  });
+
+  it('should not include reason for NOTICE even if reason is present', () => {
+    const lastMailInfo = {
+      type: 'NOTICE',
+      medium: 'LETTER',
+      reason: 'UNREACHABLE',
+      date: 1718764800000,
+      template: undefined,
+    };
+    const result = formatLastMailInfo(lastMailInfo);
+    expect(result).toContain('NOTICE');
+    expect(result).not.toContain('UNREACHABLE');
+  });
+
+  it('should handle undefined type and medium gracefully', () => {
+    const lastMailInfo = {
+      type: undefined,
+      medium: undefined,
+      reason: undefined,
+      date: 1718764800000,
+      template: undefined,
+    };
+    const result = formatLastMailInfo(lastMailInfo);
+    expect(typeof result).toBe('string');
+    expect(result).toContain('|');
   });
 });

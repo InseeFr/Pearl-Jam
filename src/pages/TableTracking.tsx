@@ -28,6 +28,10 @@ import D from 'i18n';
 import AddIcon from '@mui/icons-material/Add';
 import { SurveyUnit } from 'types/pearl';
 import {
+  getLastSubmittedCommunication,
+  formatLastMailInfo
+} from 'utils/functions/communicationFunctions';
+import {
   findContactAttemptLabelByValue,
   findMediumLabelByValue,
 } from 'utils/functions/contacts/ContactAttempt';
@@ -83,6 +87,37 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
     return Infinity;
   };
 
+  /**
+   * Custom comparison function for mail column sorting.
+   * Sorts by type first (ascending/descending), then by date (newest first).
+   */
+  const compareMail = (a: SurveyUnit, b: SurveyUnit, isAscending: boolean): number => {
+    const mailA = getLastSubmittedCommunication(a);
+    const mailB = getLastSubmittedCommunication(b);
+
+    // Handle null cases - no mail sent sorts last
+    if (!mailA && !mailB) return 0;
+    if (!mailA) return 1;
+    if (!mailB) return -1;
+
+    // Compare by type first
+    const typeA = mailA.type ?? '';
+    const typeB = mailB.type ?? '';
+    const typeCompare = typeA.localeCompare(typeB);
+    if (typeCompare !== 0) {
+      return isAscending ? typeCompare : -typeCompare;
+    }
+
+    // Same type, compare by date (newest first)
+    const dateA = mailA.date ?? 0;
+    const dateB = mailB.date ?? 0;
+    if (dateA !== dateB) {
+      return isAscending ? dateB - dateA : dateA - dateB;
+    }
+
+    return 0;
+  };
+
   const filteredSurveyUnits = surveyUnits
     .filter(su => {
       const person = getprivilegedPerson(su);
@@ -116,6 +151,8 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
             compareB = compareB === Infinity ? -Infinity : compareB;
           }
           break;
+        case 'mail':
+          return compareMail(a, b, isAscending);
         default:
           compareA = a.id;
           compareB = b.id;
@@ -166,6 +203,21 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                   sx={{ cursor: 'pointer' }}
                 >
                   {sortConfig.key === 'order' ? sortAsc : <IconAsc />}
+                </Box>
+              </Box>
+            </TableCell>
+
+            <TableCell>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box component="span" sx={{ flexGrow: 1 }}>
+                  {D.trackingLastMailSent}
+                </Box>
+                <Box
+                  component="span"
+                  onClick={() => toggleSort('mail')}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  {sortConfig.key === 'mail' ? sortAsc : <IconAsc />}
                 </Box>
               </Box>
             </TableCell>
@@ -226,6 +278,9 @@ function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
         </TableCell>
         <TableCell align="center">
           <StatusChip status={state} />
+        </TableCell>
+        <TableCell align="center">
+          {formatLastMailInfo(getLastSubmittedCommunication(surveyUnit))}
         </TableCell>
         <TableCell align="center">
           {lastContact && (
