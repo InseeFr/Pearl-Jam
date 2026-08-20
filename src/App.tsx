@@ -15,7 +15,6 @@ import { Preloader } from './ui/Preloader';
 import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
 import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
 import { useAuth } from './utils/auth/initAuth';
-import { TrackingPage } from 'pages/TrackingPage';
 
 const QueenPage = lazy(() => import('./pages/QueenPage'));
 
