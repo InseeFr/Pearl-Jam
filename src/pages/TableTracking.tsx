@@ -6,36 +6,16 @@ import {
   TableCell,
   Box,
   TableBody,
-  Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { IconAsc } from 'ui/Icons/IconAsc';
 import { IconDesc } from 'ui/Icons/IconDesc';
-import { PaperIconButton } from 'ui/PaperIconButton';
-import { StatusChip } from 'ui/StatusChip';
-import { CommentDialog } from 'ui/SurveyUnit/CommentDialog';
-import {
-  getprivilegedPerson,
-  getSuTodoState,
-  isSelectable,
-  getSortedContactAttempts,
-  getCommentByType,
-} from 'utils/functions';
-import { formatDate } from 'utils/functions/date';
-import { useToggle } from 'utils/hooks/useToggle';
+
+import { getprivilegedPerson, getSuTodoState } from 'utils/functions';
 import D from 'i18n';
-import AddIcon from '@mui/icons-material/Add';
 import { SurveyUnit } from 'types/pearl';
-import {
-  getLastSubmittedCommunication,
-  formatLastMailInfo
-} from 'utils/functions/communicationFunctions';
-import {
-  findContactAttemptLabelByValue,
-  findMediumLabelByValue,
-} from 'utils/functions/contacts/ContactAttempt';
-import { findContactOutcomeLabelByValue } from 'utils/functions/contacts/ContactOutcome';
+import { getLastSubmittedCommunication } from 'utils/functions/communicationFunctions';
+import { SurveyUnitRow } from './SurveyUnitRow';
 
 interface TableTrackingProps {
   campaign: string;
@@ -95,12 +75,10 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
     const mailA = getLastSubmittedCommunication(a);
     const mailB = getLastSubmittedCommunication(b);
 
-    // Handle null cases - no mail sent sorts last
     if (!mailA && !mailB) return 0;
     if (!mailA) return 1;
     if (!mailB) return -1;
 
-    // Compare by type first
     const typeA = mailA.type ?? '';
     const typeB = mailB.type ?? '';
     const typeCompare = typeA.localeCompare(typeB);
@@ -108,7 +86,6 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
       return isAscending ? typeCompare : -typeCompare;
     }
 
-    // Same type, compare by date (newest first)
     const dateA = mailA.date ?? 0;
     const dateB = mailB.date ?? 0;
     if (dateA !== dateB) {
@@ -212,11 +189,7 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
                 <Box component="span" sx={{ flexGrow: 1 }}>
                   {D.trackingLastMailSent}
                 </Box>
-                <Box
-                  component="span"
-                  onClick={() => toggleSort('mail')}
-                  sx={{ cursor: 'pointer' }}
-                >
+                <Box component="span" onClick={() => toggleSort('mail')} sx={{ cursor: 'pointer' }}>
                   {sortConfig.key === 'mail' ? sortAsc : <IconAsc />}
                 </Box>
               </Box>
@@ -247,91 +220,5 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
         </TableBody>
       </Table>
     </TableContainer>
-  );
-}
-
-interface SurveyUnitRowProps {
-  surveyUnit: SurveyUnit;
-}
-
-function SurveyUnitRow({ surveyUnit }: Readonly<SurveyUnitRowProps>) {
-  const person = getprivilegedPerson(surveyUnit);
-  const state = getSuTodoState(surveyUnit);
-  const isActive = isSelectable(surveyUnit);
-  const lastContact = getSortedContactAttempts(surveyUnit)[0];
-  const [showModal, toggleModal] = useToggle(false);
-  const comment = getCommentByType('INTERVIEWER', surveyUnit);
-  return (
-    <>
-      <TableRow>
-        <TableCell align="center">
-          {isActive ? (
-            <Link to={`/survey-unit/${surveyUnit.id}/details`}>
-              #{surveyUnit.displayName ?? surveyUnit.id}
-            </Link>
-          ) : (
-            `#${surveyUnit.displayName ?? surveyUnit.id}`
-          )}
-        </TableCell>
-        <TableCell align="center">
-          {person.lastName.toUpperCase()} {person.firstName}
-        </TableCell>
-        <TableCell align="center">
-          <StatusChip status={state} />
-        </TableCell>
-        <TableCell align="center">
-          {formatLastMailInfo(getLastSubmittedCommunication(surveyUnit))}
-        </TableCell>
-        <TableCell align="center">
-          {lastContact && (
-            <>
-              <Typography component="span" variant="s" color="textPrimary">
-                {findContactAttemptLabelByValue(lastContact.status)}
-                <br />
-                {findMediumLabelByValue(lastContact.medium)}
-              </Typography>
-              {' | '}
-              <Typography component="span" variant="s" color="textTertiary">
-                {formatDate(lastContact.date)}
-              </Typography>
-            </>
-          )}
-        </TableCell>
-        <TableCell align="center">
-          {surveyUnit.contactOutcome && (
-            <>
-              <Typography component="span" variant="s" color="textPrimary">
-                {findContactOutcomeLabelByValue(surveyUnit.contactOutcome.type)}
-              </Typography>
-              <br />
-              <Typography component="span" variant="s" color="textTertiary">
-                {formatDate(surveyUnit.contactOutcome.date)}
-              </Typography>
-            </>
-          )}
-        </TableCell>
-        <TableCell align="center">
-          {comment ? (
-            <Typography
-              textAlign="center"
-              onClick={toggleModal}
-              role="button"
-              component="span"
-              sx={{ maxWidth: '10em', display: 'inline-block', cursor: 'pointer' }}
-              noWrap
-              variant="s"
-              color="inherit"
-            >
-              {comment}
-            </Typography>
-          ) : (
-            <PaperIconButton onClick={toggleModal}>
-              <AddIcon fontSize="small" color="textPrimary" />
-            </PaperIconButton>
-          )}
-        </TableCell>
-      </TableRow>
-      <CommentDialog surveyUnit={surveyUnit} open={showModal} onClose={toggleModal} />
-    </>
   );
 }
