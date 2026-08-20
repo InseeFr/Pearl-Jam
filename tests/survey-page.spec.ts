@@ -29,7 +29,7 @@ test('check if all tabs work properly', async ({ page }) => {
 
   await surveyPage.selectTab('Logement & Repérage');
   await expect(page.getByText('Numéro et libellé de voie :')).toBeVisible();
-  await page.getByRole('button', { name: 'Modifier' }).click();
+  await page.getByRole('button', { name: 'Modifier' }).first().click();
 
   await expect(page.getByRole('heading', { name: "Modification de l'adresse" })).toBeVisible();
 
@@ -58,13 +58,10 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
 
   await page.getByRole('button', { name: "Identification de l'adresse" }).click();
   await page.getByText('Adresse identifiée avec un bâtiment', { exact: true }).click();
-  await page.getByRole('button', { name: 'Confirmer' }).click();
   await page.getByRole('heading', { name: 'Identification du logement' }).isVisible();
   await page.getByText('Logement identifié').click();
-  await page.getByRole('button', { name: 'Confirmer' }).click();
   await page.getByRole('heading', { name: 'Situation du logement' }).isVisible();
   await page.getByText("Logement absorbé ou ayant perdu son usage d'habitation").click();
-  await page.getByRole('button', { name: 'Confirmer' }).click();
 
   await surveyPage.selectTab('Contacts');
   await surveyPage.addContactAttempt();

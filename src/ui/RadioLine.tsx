@@ -1,5 +1,6 @@
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { MouseEventHandler } from 'react';
 
 const style = {
   bgcolor: 'surfacePrimary.main',
@@ -25,14 +26,16 @@ export interface RadioLineProps {
   value: unknown;
   disabled?: boolean;
   label: string;
+  onClick?: MouseEventHandler<HTMLLabelElement>;
 }
 
-export function RadioLine({ value, disabled, label }: Readonly<RadioLineProps>) {
+export function RadioLine({ value, disabled, label, onClick }: Readonly<RadioLineProps>) {
   return (
     <FormControlLabel
       disabled={disabled}
       sx={style}
       value={value}
+      onClick={onClick}
       control={<Radio size="small" sx={{ p: 0 }} />}
       label={label}
       slotProps={{

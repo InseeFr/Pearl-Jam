@@ -21,6 +21,8 @@ import {
   getContactAttemptsByMedium,
   ContactAttemptValue,
 } from 'utils/functions/contacts/ContactAttempt';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
 
 type StepValue = 'medium' | 'contactAttempt' | 'datePicker';
 const steps: StepValue[] = ['medium', 'contactAttempt', 'datePicker'];
@@ -45,7 +47,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     steps[stepIndex] === 'medium' ? onClose() : setStep(steps[stepIndex - 1]);
   };
 
-  const goNextStep = (e: MouseEvent<HTMLButtonElement>) => {
+  const goNextStep = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (step === 'datePicker' && status && medium) {
       const updatedSu: SurveyUnit = {
@@ -64,7 +66,7 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
       persistSurveyUnit({
         ...updatedSu,
         states: newStates,
-        hasBeenUpdated: true
+        hasBeenUpdated: true,
       });
       onClose();
       return;
@@ -102,23 +104,46 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
     }
   };
 
+  const onChangeValue = (e: any) => {
+    setValue(e.target.value);
+    goNextStep(e);
+  };
+
   const mediumOptions = getMediumByConfiguration(surveyUnit.contactAttemptConfiguration);
   const contactAttempts = getContactAttemptsByMedium(
     surveyUnit.contactAttemptConfiguration,
     medium
   );
 
+  const currentValue = step === 'medium' ? medium : status;
+
+  const handleRadioClick = (optionValue: string) => (e: MouseEvent<HTMLElement>) => {
+    if (optionValue === currentValue) {
+      goNextStep(e);
+    }
+  };
+
   return (
     <Dialog open={true} onClose={onClose}>
-      <DialogTitle id="dialogtitle">
-        {step === 'medium' ? D.mediumQuestion : D.contactAttempt}
-      </DialogTitle>
+      <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+        <DialogTitle id="dialogtitle">
+          {step === 'medium' ? D.mediumQuestion : D.contactAttempt}
+        </DialogTitle>
+        <IconButton
+          aria-label={D.closeIconButton}
+          onClick={onClose}
+          sx={{ mr: 2, height: 'fit-content', width: 'fit-content' }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Stack>
+
       <DialogContent>
         <Box>
           {step != 'datePicker' && (
             <RadioGroup
               value={step === 'medium' ? medium : status}
-              onChange={e => setValue(e.target.value)}
+              onChange={onChangeValue}
               row
               aria-labelledby="dialogtitle"
               name="contact-attempt-radio-group"
@@ -126,14 +151,26 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
               {step === 'medium' && (
                 <Stack gap={1} width={1}>
                   {mediumOptions.map(o => (
-                    <RadioLine value={o.value} key={o.label} label={o.label} disabled={false} />
+                    <RadioLine
+                      value={o.value}
+                      key={o.label}
+                      label={o.label}
+                      disabled={false}
+                      onClick={handleRadioClick(o.value)}
+                    />
                   ))}
                 </Stack>
               )}
               {step === 'contactAttempt' && (
                 <Stack gap={1} width={1}>
                   {contactAttempts.map(o => (
-                    <RadioLine value={o.value} key={o.value} label={o.label} disabled={false} />
+                    <RadioLine
+                      value={o.value}
+                      key={o.value}
+                      label={o.label}
+                      disabled={false}
+                      onClick={handleRadioClick(o.value)}
+                    />
                   ))}
                 </Stack>
               )}
@@ -156,12 +193,16 @@ export function ContactAttemptForm({ onClose, surveyUnit }: Readonly<ContactAtte
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button color="white" variant="contained" onClick={goPreviousStep}>
-          {step === 'medium' ? D.cancelButton : D.previousButton}
-        </Button>
-        <Button disabled={!isValid()} variant="contained" onClick={goNextStep}>
-          {D.confirmButton}
-        </Button>
+        {step !== 'medium' && (
+          <Button color="white" variant="contained" onClick={goPreviousStep}>
+            {D.previousButton}
+          </Button>
+        )}
+        {step === 'datePicker' && (
+          <Button disabled={!isValid()} variant="contained" onClick={goNextStep}>
+            {D.saveButton}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
