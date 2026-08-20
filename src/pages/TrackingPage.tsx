@@ -19,7 +19,7 @@ import { StatsTracking } from './StatsTracking';
 import { TableTracking } from './TableTracking';
 import { SurveyUnit } from 'types/pearl';
 
-export const Component = () => {
+export const TrackingPage = () => {
   const surveyUnits: SurveyUnit[] = useSurveyUnits();
   const [campaign, setCampaign] = useState<string>(() => {
     return localStorage.getItem('selectedCampaign') ?? '';
