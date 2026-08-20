@@ -1,10 +1,15 @@
 import D from 'i18n';
-import { SurveyUnit, SurveyUnitCommunicationTemplate } from 'types/pearl';
+import {
+  SurveyUnit,
+  SurveyUnitCommunicationRequest,
+  SurveyUnitCommunicationTemplate,
+} from 'types/pearl';
 import {
   communicationStatusEnum,
   findCommunicationTypeLabelByValue,
   findCommunicationMediumLabelByValue,
   findCommunicationReasonLabelByValue,
+  communicationTypeEnum,
 } from 'utils/enum/CommunicationEnums';
 import { formatDate } from 'utils/functions/date';
 import { getAddressData, getprivilegedPerson } from './surveyUnitFunctions';
@@ -16,45 +21,39 @@ export type LastMailInfo = {
   date: number | null;
   template: SurveyUnitCommunicationTemplate | undefined;
 };
+function getMaxSubmittedDate(comReq: SurveyUnitCommunicationRequest): number | null {
+  const submittedDates = comReq.status
+    .filter(s => s.status === communicationStatusEnum.SUBMITTED.value)
+    .map(s => s.date);
 
+  return submittedDates.length > 0 ? Math.max(...submittedDates) : null;
+}
 export function getLastSubmittedCommunication(surveyUnit: SurveyUnit): LastMailInfo | null {
-  const submittedComms =
-    surveyUnit.communicationRequests?.filter(comReq =>
-      comReq.status.some(s => s.status === communicationStatusEnum.SUBMITTED.value)
-    ) ?? [];
+  const submittedComms = (surveyUnit.communicationRequests ?? [])
+    .map(comReq => ({ comReq, date: getMaxSubmittedDate(comReq) }))
+    .filter(
+      (entry): entry is { comReq: SurveyUnitCommunicationRequest; date: number } =>
+        entry.date !== null
+    );
 
   if (submittedComms.length === 0) {
     return null;
   }
 
-  const lastSubmitted = submittedComms.reduce((prev, current) => {
-    const prevDate = Math.max(
-      ...prev.status
-        .filter(s => s.status === communicationStatusEnum.SUBMITTED.value)
-        .map(s => s.date)
-    );
-    const currentDate = Math.max(
-      ...current.status
-        .filter(s => s.status === communicationStatusEnum.SUBMITTED.value)
-        .map(s => s.date)
-    );
-    return currentDate > prevDate ? current : prev;
-  });
-
-  const template = surveyUnit.communicationTemplates?.find(
-    t => t.id === lastSubmitted.communicationTemplateId
+  const lastSubmitted = submittedComms.reduce(
+    (prev, current) => (current.date > prev.date ? current : prev),
+    submittedComms[0]
   );
 
-  const submittedDates = lastSubmitted.status
-    .filter(s => s.status === communicationStatusEnum.SUBMITTED.value)
-    .map(s => s.date);
-  const maxDate = submittedDates.length > 0 ? Math.max(...submittedDates) : null;
+  const template = surveyUnit.communicationTemplates?.find(
+    t => t.id === lastSubmitted.comReq.communicationTemplateId
+  );
 
   return {
     type: template?.type,
     medium: template?.medium,
-    reason: lastSubmitted.reason,
-    date: maxDate,
+    reason: lastSubmitted.comReq.reason,
+    date: lastSubmitted.date,
     template,
   };
 }
@@ -73,7 +72,10 @@ export function formatLastMailInfo(lastMailInfo: LastMailInfo | null): string {
 
   let displayText = `${mediumLabel} - ${typeLabel}`;
 
-  if (lastMailInfo.type === 'REMINDER' && lastMailInfo.reason) {
+  if (
+    lastMailInfo.type === communicationTypeEnum.COMMUNICATION_REMINDER.value &&
+    lastMailInfo.reason
+  ) {
     const reasonLabel = findCommunicationReasonLabelByValue(lastMailInfo.reason) ?? '';
     displayText += `, ${reasonLabel}`;
   }

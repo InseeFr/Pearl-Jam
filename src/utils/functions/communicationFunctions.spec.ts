@@ -1,12 +1,17 @@
-import { SurveyUnit, SurveyUnitCommunicationRequest, SurveyUnitCommunicationTemplate } from 'types/pearl';
+import {
+  SurveyUnit,
+  SurveyUnitCommunicationRequest,
+  SurveyUnitCommunicationTemplate,
+} from 'types/pearl';
 import { TITLES } from 'utils/constants';
 import { getRecipientInformation } from 'utils/functions/index';
 import {
   getLastSubmittedCommunication,
   formatLastMailInfo,
 } from 'utils/functions/communicationFunctions';
-import { communicationStatusEnum } from 'utils/enum/CommunicationEnums';
+import { CommunicationStatus, communicationStatusEnum } from 'utils/enum/CommunicationEnums';
 import { describe, expect, it, vi } from 'vitest';
+import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
 
 describe('getRecipientInformation', () => {
   const VALID_FIRSTNAME1 = 'Ada';
@@ -137,12 +142,38 @@ describe('getLastSubmittedCommunication', () => {
   ): SurveyUnit => ({
     id: 'su-test',
     persons: [],
-    address: { l1: '', l2: '', l3: '', l4: '', l5: '', l6: '', l7: '' },
+    address: {
+      l1: '',
+      l2: '',
+      l3: '',
+      l4: '',
+      l5: '',
+      l6: '',
+      l7: '',
+      elevator: false,
+      building: '',
+      floor: '',
+      door: '',
+      staircase: '',
+      cityPriorityDistrict: false,
+    },
     priority: false,
     move: null,
     campaign: 'TestCampaign',
     comments: [],
-    sampleIdentifiers: { bs: 0, ec: '0', le: 0, noi: 0, numfa: 0, rges: 0, ssech: 0, nolog: 0, nole: 0, autre: '', nograp: '' },
+    sampleIdentifiers: {
+      bs: 0,
+      ec: '0',
+      le: 0,
+      noi: 0,
+      numfa: 0,
+      rges: 0,
+      ssech: 0,
+      nolog: 0,
+      nole: 0,
+      autre: '',
+      nograp: '',
+    },
     states: [],
     contactAttempts: [],
     identification: {},
@@ -153,18 +184,19 @@ describe('getLastSubmittedCommunication', () => {
     collectionStartDate: 0,
     collectionEndDate: 0,
     endDate: 0,
-    identificationConfiguration: 'INDTEL',
+    identificationConfiguration: IdentificationConfiguration.INDTEL,
     contactOutcomeConfiguration: 'F2F',
     contactAttemptConfiguration: 'F2F',
     useLetterCommunication: true,
     communicationRequests,
     communicationTemplates,
     collectNextContacts: false,
+    displayName: '',
   });
 
   const createCommunicationRequest = (
     templateId: string,
-    statuses: { date: number; status: string }[],
+    statuses: { date: number; status: CommunicationStatus }[],
     reason?: string
   ): SurveyUnitCommunicationRequest => ({
     emitter: 'INTERVIEWER',
@@ -203,14 +235,40 @@ describe('getLastSubmittedCommunication', () => {
     expect(result?.date).toBe(3000);
   });
 
+  it('should ignore a communication request with an empty status array', () => {
+    const surveyUnit = createSurveyUnit([
+      createCommunicationRequest('LETTER_NOTICE', []), // no statuses at all
+      createCommunicationRequest('LETTER_REMINDER', [
+        { date: 2000, status: communicationStatusEnum.SUBMITTED.value },
+      ]),
+    ]);
+    const result = getLastSubmittedCommunication(surveyUnit);
+    expect(result).not.toBeNull();
+    expect(result?.type).toBe('REMINDER');
+    expect(result?.date).toBe(2000);
+  });
+
+  it('should return the single SUBMITTED communication when only one exists (reduce with one element)', () => {
+    const surveyUnit = createSurveyUnit([
+      createCommunicationRequest('LETTER_NOTICE', [
+        { date: 1500, status: communicationStatusEnum.SUBMITTED.value },
+      ]),
+    ]);
+    const result = getLastSubmittedCommunication(surveyUnit);
+    expect(result).not.toBeNull();
+    expect(result?.date).toBe(1500);
+  });
+
   it('should return the most recent SUBMITTED communication when there are multiple', () => {
     const surveyUnit = createSurveyUnit([
       createCommunicationRequest('LETTER_NOTICE', [
         { date: 1000, status: communicationStatusEnum.SUBMITTED.value },
       ]),
-      createCommunicationRequest('LETTER_REMINDER', [
-        { date: 5000, status: communicationStatusEnum.SUBMITTED.value },
-      ], 'UNREACHABLE'),
+      createCommunicationRequest(
+        'LETTER_REMINDER',
+        [{ date: 5000, status: communicationStatusEnum.SUBMITTED.value }],
+        'UNREACHABLE'
+      ),
       createCommunicationRequest('LETTER_NOTICE', [
         { date: 3000, status: communicationStatusEnum.SUBMITTED.value },
       ]),
@@ -286,12 +344,12 @@ describe('formatLastMailInfo', () => {
       template: undefined,
     };
     const result = formatLastMailInfo(lastMailInfo);
-    expect(result).toContain('LETTER');
-    expect(result).toContain('NOTICE');
-    expect(result).toContain('|');
+    expect(result).toContain('Mail');
+    expect(result).toContain('Notice');
+
     // Should NOT contain reason for NOTICE
-    expect(result).not.toContain('UNREACHABLE');
-    expect(result).not.toContain('REFUSAL');
+    expect(result).not.toContain('Unreachable');
+    expect(result).not.toContain('Refusal');
   });
 
   it('should include reason for REMINDER with UNREACHABLE', () => {
@@ -303,10 +361,9 @@ describe('formatLastMailInfo', () => {
       template: undefined,
     };
     const result = formatLastMailInfo(lastMailInfo);
-    expect(result).toContain('LETTER');
-    expect(result).toContain('REMINDER');
-    expect(result).toContain('UNREACHABLE');
-    expect(result).toContain('|');
+    expect(result).toContain('Mail');
+    expect(result).toContain('Reminder');
+    expect(result).toContain('Unreachable');
   });
 
   it('should include reason for REMINDER with REFUSAL', () => {
@@ -318,7 +375,7 @@ describe('formatLastMailInfo', () => {
       template: undefined,
     };
     const result = formatLastMailInfo(lastMailInfo);
-    expect(result).toContain('REFUSAL');
+    expect(result).toContain('Refusal');
   });
 
   it('should not include reason for NOTICE even if reason is present', () => {
@@ -330,8 +387,8 @@ describe('formatLastMailInfo', () => {
       template: undefined,
     };
     const result = formatLastMailInfo(lastMailInfo);
-    expect(result).toContain('NOTICE');
-    expect(result).not.toContain('UNREACHABLE');
+    expect(result).toContain('Notice');
+    expect(result).not.toContain('Unreachable');
   });
 
   it('should handle undefined type and medium gracefully', () => {
