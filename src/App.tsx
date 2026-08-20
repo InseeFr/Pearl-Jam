@@ -15,6 +15,7 @@ import { Preloader } from './ui/Preloader';
 import { ServiceWorkerStatus } from './ui/ServiceWorkerStatus';
 import { SyncContextProvider } from './ui/Sync/SyncContextProvider';
 import { useAuth } from './utils/auth/initAuth';
+import { TrackingPage } from 'pages/TrackingPage';
 
 const QueenPage = lazy(() => import('./pages/QueenPage'));
 
@@ -37,7 +38,10 @@ const router = createBrowserRouter([
       },
       {
         path: '/suivi',
-        lazy: () => import('./pages/TrackingPage'),
+        lazy: async () => {
+          const { TrackingPage } = await import('pages/TrackingPage');
+          return { Component: TrackingPage };
+        },
       },
       {
         path: '/survey-unit/:id',
