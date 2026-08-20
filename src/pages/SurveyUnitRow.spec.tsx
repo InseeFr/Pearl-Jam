@@ -122,6 +122,30 @@ describe('SurveyUnitRow', () => {
   it('renders nothing for contact attempt column when there is none', () => {
     renderRow();
     expect(screen.queryByText(/^status-/)).toBeNull();
+    expect(screen.queryByText(/^medium-/)).toBeNull();
+    expect(screen.queryByText('|')).toBeNull();
+  });
+
+  it('renders the full lastContact block (status, medium, separator, date) when a contact attempt exists', () => {
+    (getSortedContactAttempts as any).mockReturnValue([
+      { status: 'DONE', medium: 'PHONE', date: '2024-01-01' },
+      { status: 'OLD', medium: 'MAIL', date: '2023-01-01' }, // only the first (index 0) should be used
+    ]);
+    const { container } = renderRow();
+
+    // status + medium are split across text nodes by a <br/>, so we check
+    // the cell's combined textContent rather than a single getByText match
+    const cellText = container.querySelector('td:nth-child(5)')?.textContent ?? '';
+
+    expect(cellText).toContain('status-DONE');
+    expect(cellText).toContain('medium-PHONE');
+    expect(cellText).toContain('|'); // separator between the two Typography blocks
+    expect(cellText).toContain('date-2024-01-01');
+
+    // only the most recent (first) contact attempt is used, not the older one
+    expect(cellText).not.toContain('status-OLD');
+    expect(cellText).not.toContain('medium-MAIL');
+    expect(cellText).not.toContain('date-2023-01-01');
   });
 
   it('renders contact outcome details when present', () => {
