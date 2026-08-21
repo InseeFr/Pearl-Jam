@@ -42,21 +42,21 @@ describe('Tracking Component', () => {
 
   it('renders the stats view by default', () => {
     render(<TrackingPage />);
+    fireEvent.click(screen.getByText('All surveys'));
     expect(screen.getByTestId('stats-tracking')).toBeTruthy();
     expect(screen.queryByTestId('table-tracking')).toBeNull();
   });
 
   it('switches to the table view when the "By survey" tab is clicked', () => {
     render(<TrackingPage />);
-    fireEvent.click(screen.getByText('By survey'));
     expect(screen.getByTestId('table-tracking')).toBeTruthy();
     expect(screen.queryByTestId('stats-tracking')).toBeNull();
   });
 
   it('shows campaign select and search field only in table view', () => {
     render(<TrackingPage />);
+    fireEvent.click(screen.getByText('All surveys'));
     expect(screen.queryByLabelText('Search')).toBeNull();
-
     fireEvent.click(screen.getByText('By survey'));
     expect(screen.queryByLabelText('Search')).not.toBeNull();
   });
