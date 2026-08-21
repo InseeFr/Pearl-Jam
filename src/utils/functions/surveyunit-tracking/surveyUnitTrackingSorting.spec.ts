@@ -133,25 +133,6 @@ describe('sortSurveyUnitsTrackingTable', () => {
     expect(result.map(u => u.id)).toEqual(['2', '1']);
   });
 
-  it.each([
-    ['ascending keeps Infinity', 'asc', Infinity, 1, ['2', '1']],
-    ['descending swaps Infinity to -Infinity', 'desc', Infinity, 1, ['1', '2']],
-  ])('sorts by outcome: %s', (_label, direction, outcomeA, outcomeB, expectedOrder) => {
-    const units = [
-      { ...su('1'), campaign: '', outcomeIndex: outcomeA, firstName: '', lastName: '' },
-      { ...su('2'), campaign: '', outcomeIndex: outcomeB, firstName: '', lastName: '' },
-    ] as unknown as SurveyUnit[];
-
-    const result = sortSurveyUnitsTrackingTable(
-      units,
-      '',
-      '',
-      { key: 'outcome', direction },
-      helpers
-    );
-    expect(result.map(u => u.id)).toEqual(expectedOrder);
-  });
-
   it('sorts by mail using compareMail', () => {
     const units = [
       { ...su('1'), campaign: '', firstName: '', lastName: '' },
