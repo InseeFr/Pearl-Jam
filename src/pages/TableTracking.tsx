@@ -14,8 +14,8 @@ import { IconDesc } from 'ui/Icons/IconDesc';
 import { getprivilegedPerson, getSuTodoState } from 'utils/functions';
 import D from 'i18n';
 import { SurveyUnit } from 'types/pearl';
-import { getLastSubmittedCommunication } from 'utils/functions/communicationFunctions';
 import { SurveyUnitRow } from './SurveyUnitRow';
+import { sortSurveyUnitsTrackingTable } from 'utils/functions/surveyunit-tracking/surveyUnitTrackingSorting';
 
 interface TableTrackingProps {
   campaign: string;
@@ -67,75 +67,18 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
     return Infinity;
   };
 
-  /**
-   * Custom comparison function for mail column sorting.
-   * Sorts by type first (ascending/descending), then by date (newest first).
-   */
-  const compareMail = (a: SurveyUnit, b: SurveyUnit, isAscending: boolean): number => {
-    const mailA = getLastSubmittedCommunication(a);
-    const mailB = getLastSubmittedCommunication(b);
-
-    if (!mailA && !mailB) return 0;
-    if (!mailA) return 1;
-    if (!mailB) return -1;
-
-    const typeA = mailA.type ?? '';
-    const typeB = mailB.type ?? '';
-    const typeCompare = typeA.localeCompare(typeB);
-    if (typeCompare !== 0) {
-      return isAscending ? typeCompare : -typeCompare;
+  const filteredSurveyUnits = sortSurveyUnitsTrackingTable(
+    surveyUnits,
+    campaign,
+    searchText,
+    sortConfig,
+    {
+      getLastName,
+      getOrder,
+      getOutcomeIndex,
+      compareValues,
     }
-
-    const dateA = mailA.date ?? 0;
-    const dateB = mailB.date ?? 0;
-    if (dateA !== dateB) {
-      return isAscending ? dateB - dateA : dateA - dateB;
-    }
-
-    return 0;
-  };
-
-  const filteredSurveyUnits = surveyUnits
-    .filter(su => {
-      const person = getprivilegedPerson(su);
-      const filteredByCampaign = campaign === '' || su.campaign === campaign;
-      return (
-        filteredByCampaign &&
-        (searchText === '' ||
-          person.lastName.toUpperCase().includes(searchText.toUpperCase()) ||
-          person.firstName.toUpperCase().includes(searchText.toUpperCase()) ||
-          su?.displayName?.toUpperCase().includes(searchText.toUpperCase()) ||
-          su.id.toUpperCase().includes(searchText.toUpperCase()))
-      );
-    })
-    .sort((a, b) => {
-      const isAscending = sortConfig.direction === 'asc';
-      let compareA, compareB;
-      switch (sortConfig.key) {
-        case 'lastName':
-          compareA = getLastName(a);
-          compareB = getLastName(b);
-          break;
-        case 'order':
-          compareA = getOrder(a);
-          compareB = getOrder(b);
-          break;
-        case 'outcome':
-          compareA = getOutcomeIndex(a);
-          compareB = getOutcomeIndex(b);
-          if (!isAscending) {
-            compareA = compareA === Infinity ? -Infinity : compareA;
-            compareB = compareB === Infinity ? -Infinity : compareB;
-          }
-          break;
-        case 'mail':
-          return compareMail(a, b, isAscending);
-        default:
-          compareA = a.id;
-          compareB = b.id;
-      }
-      return compareValues(compareA, compareB, isAscending);
-    });
+  );
 
   const defaultSortIcon = <IconAsc />;
   const sortAsc = sortConfig.direction === 'asc' ? <IconAsc /> : <IconDesc />;

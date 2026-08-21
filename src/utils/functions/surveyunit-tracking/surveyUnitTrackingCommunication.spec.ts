@@ -8,7 +8,7 @@ import { getRecipientInformation } from 'utils/functions/index';
 import {
   getLastSubmittedCommunication,
   formatLastMailInfo,
-} from 'utils/functions/communicationFunctions';
+} from 'utils/functions/surveyunit-tracking/surveyUnitTrackingCommunication';
 import { CommunicationStatus, communicationStatusEnum } from 'utils/enum/CommunicationEnums';
 import { describe, expect, it, vi } from 'vitest';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
@@ -139,60 +139,11 @@ describe('getLastSubmittedCommunication', () => {
   const createSurveyUnit = (
     communicationRequests: SurveyUnitCommunicationRequest[] = [],
     communicationTemplates: SurveyUnitCommunicationTemplate[] = COMMUNICATION_TEMPLATES
-  ): SurveyUnit => ({
-    id: 'su-test',
-    persons: [],
-    address: {
-      l1: '',
-      l2: '',
-      l3: '',
-      l4: '',
-      l5: '',
-      l6: '',
-      l7: '',
-      elevator: false,
-      building: '',
-      floor: '',
-      door: '',
-      staircase: '',
-      cityPriorityDistrict: false,
-    },
-    priority: false,
-    move: null,
-    campaign: 'TestCampaign',
-    comments: [],
-    sampleIdentifiers: {
-      bs: 0,
-      ec: '0',
-      le: 0,
-      noi: 0,
-      numfa: 0,
-      rges: 0,
-      ssech: 0,
-      nolog: 0,
-      nole: 0,
-      autre: '',
-      nograp: '',
-    },
-    states: [],
-    contactAttempts: [],
-    identification: {},
-    campaignLabel: '',
-    managementStartDate: 0,
-    interviewerStartDate: 0,
-    identificationPhaseStartDate: 0,
-    collectionStartDate: 0,
-    collectionEndDate: 0,
-    endDate: 0,
-    identificationConfiguration: IdentificationConfiguration.INDTEL,
-    contactOutcomeConfiguration: 'F2F',
-    contactAttemptConfiguration: 'F2F',
-    useLetterCommunication: true,
-    communicationRequests,
-    communicationTemplates,
-    collectNextContacts: false,
-    displayName: '',
-  });
+  ): SurveyUnit =>
+    ({
+      communicationRequests,
+      communicationTemplates,
+    }) as unknown as SurveyUnit;
 
   const createCommunicationRequest = (
     templateId: string,

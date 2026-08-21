@@ -12,7 +12,7 @@ import {
   communicationTypeEnum,
 } from 'utils/enum/CommunicationEnums';
 import { formatDate } from 'utils/functions/date';
-import { getAddressData, getprivilegedPerson } from './surveyUnitFunctions';
+import { getAddressData, getprivilegedPerson } from '../surveyUnitFunctions';
 
 export type LastMailInfo = {
   type: string | undefined;
