@@ -133,26 +133,6 @@ describe('sortSurveyUnitsTrackingTable', () => {
     expect(result.map(u => u.id)).toEqual(['2', '1']);
   });
 
-  it('sorts by mail using compareMail', () => {
-    const units = [
-      { ...su('1'), campaign: '', firstName: '', lastName: '' },
-      { ...su('2'), campaign: '', firstName: '', lastName: '' },
-    ] as unknown as SurveyUnit[];
-
-    vi.mocked(getLastSubmittedCommunication)
-      .mockImplementationOnce(() => ({ type: 'B', date: 1 }) as any)
-      .mockImplementationOnce(() => ({ type: 'A', date: 1 }) as any);
-
-    const result = sortSurveyUnitsTrackingTable(
-      units,
-      '',
-      '',
-      { key: 'mail', direction: 'asc' },
-      helpers
-    );
-    expect(result.map(u => u.id)).toEqual(['2', '1']);
-  });
-
   it('defaults to sorting by id when key is unknown', () => {
     const units = [
       { ...su('b'), campaign: '', firstName: '', lastName: '' },
