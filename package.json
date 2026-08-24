@@ -1,6 +1,6 @@
 {
   "name": "pearl",
-  "version": "2.16.8",
+  "version": "2.16.8-fix-wfs-no-ca-and-noa-32409.rc0",
   "private": true,
   "type": "module",
   "dependencies": {
