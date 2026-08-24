@@ -21,6 +21,7 @@ import {
   getOutcomeIndex,
   sortSurveyUnitsTrackingTable,
 } from './surveyUnitTrackingSorting';
+
 const mockedGetLastSubmittedCommunication = vi.mocked(getLastSubmittedCommunication);
 const mockedGetPrivilegedPerson = vi.mocked(getprivilegedPerson);
 const mockedGetSuTodoState = vi.mocked(getSuTodoState);
@@ -47,6 +48,7 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 
+// ---------------------------------------------------------------------------
 describe('compareMail', () => {
   const a = su('a');
   const b = su('b');
@@ -261,8 +263,8 @@ describe('sortSurveyUnitsTrackingTable', () => {
   });
 
   it.each([
-    ['asc', 'asc', ['SU4', 'SU2', 'SU1', 'SU3']], // 0, 1, 2, undefined->0 tie broken by array order
-    ['desc', 'desc', ['SU3', 'SU1', 'SU2', 'SU4']],
+    ['asc', 'asc', ['SU3', 'SU4', 'SU2', 'SU1']], // 0(SU3, tie), 0(SU4, tie), 1, 2
+    ['desc', 'desc', ['SU1', 'SU2', 'SU3', 'SU4']], // 2, 1, then 0/0 tie keeps original order
   ])('sorts by order (%s), defaulting missing order to 0', (_label, direction, expectedIds) => {
     const result = sortSurveyUnitsTrackingTable(units, '', '', { key: 'order', direction });
     expect(result.map(r => r.id)).toEqual(expectedIds);
