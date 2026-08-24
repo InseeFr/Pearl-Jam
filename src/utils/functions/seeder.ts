@@ -9,16 +9,7 @@ import { communicationStatusEnum } from 'utils/enum/CommunicationEnums';
 const day = 60 * 60 * 1000 * 24;
 const year = day * 365;
 
-/**
- * Time constants for readability
- */
 const TODAY = Date.now();
-const YESTERDAY = TODAY - day;
-const TWO_DAYS_AGO = TODAY - 2 * day;
-const THREE_DAYS_AGO = TODAY - 3 * day;
-const ONE_WEEK_AGO = TODAY - 7 * day;
-const TWO_WEEKS_AGO = TODAY - 14 * day;
-const ONE_MONTH_AGO = TODAY - 30 * day;
 
 /**
  * Helper to create a basic person
@@ -245,7 +236,7 @@ export async function seedData() {
     surveyUnits.push(createSurveyUnitFromUser(user, user.id));
   }
 
-  // SU with NO communication requests - should show "Aucun courrier envie"
+  // SU with NO communication requests - should show "Aucun courrier envoyé"
   surveyUnits.push({
     ...surveyUnits[0],
     id: 'su-no-communication',
@@ -253,7 +244,7 @@ export async function seedData() {
     communicationTemplates: [],
   });
 
-  // SU with communication requests but NONE submitted - should show "Aucun courrier envie"
+  // SU with communication requests but NONE submitted - should show "Aucun courrier envoyé"
   surveyUnits.push({
     ...surveyUnits[0],
     id: 'su-no-submitted',

@@ -1,6 +1,7 @@
 import { SurveyUnit } from 'types/pearl';
 import { getLastSubmittedCommunication } from './surveyUnitTrackingCommunication';
 import { getprivilegedPerson } from '../surveyUnitFunctions';
+import { getSuTodoState } from '../surveyUnitState';
 
 /**
  * Custom comparison function for mail column sorting.
@@ -30,22 +31,43 @@ export const compareMail = (a: SurveyUnit, b: SurveyUnit, isAscending: boolean):
   return 0;
 };
 
-interface SurveyUnitsSortHelpers {
-  getLastName: (su: SurveyUnit) => string;
-  getOrder: (su: SurveyUnit) => number;
-  getOutcomeIndex: (su: SurveyUnit) => number;
-  compareValues: (a: number | string, b: number | string, isAscending: boolean) => 0 | 1 | -1;
-}
+export const compareValues = (a: number | string, b: number | string, isAscending: boolean) => {
+  if (a < b) return isAscending ? -1 : 1;
+  if (a > b) return isAscending ? 1 : -1;
+  return 0;
+};
+
+export const getLastName = (su: SurveyUnit) => getprivilegedPerson(su).lastName.toUpperCase();
+const getOrder = (su: SurveyUnit) => Number.parseInt(getSuTodoState(su)?.order ?? '0', 10);
+const contactOutcomeOrder = [
+  'INA',
+  'REF',
+  'IMP',
+  'UCD',
+  'UTR',
+  'DCD',
+  'ALA',
+  'UCD',
+  'DUK',
+  'DUU',
+  'NUH',
+  'NOA',
+];
+export const getOutcomeIndex = (su: SurveyUnit) => {
+  if (su.contactOutcome?.type) {
+    const index = contactOutcomeOrder.indexOf(su.contactOutcome.type);
+    return index === -1 ? Infinity : index;
+  }
+
+  return Infinity;
+};
 
 export const sortSurveyUnitsTrackingTable = (
   surveyUnits: SurveyUnit[],
   campaign: string,
   searchText: string,
-  sortConfig: { key: string; direction: string },
-  helpers: SurveyUnitsSortHelpers
+  sortConfig: { key: string; direction: string }
 ) => {
-  const { getLastName, getOrder, getOutcomeIndex, compareValues } = helpers;
-
   return surveyUnits
     .filter(su => {
       const person = getprivilegedPerson(su);

@@ -10,8 +10,6 @@ import {
 import { useState } from 'react';
 import { IconAsc } from 'ui/Icons/IconAsc';
 import { IconDesc } from 'ui/Icons/IconDesc';
-
-import { getprivilegedPerson, getSuTodoState } from 'utils/functions';
 import D from 'i18n';
 import { SurveyUnit } from 'types/pearl';
 import { SurveyUnitRow } from './SurveyUnitRow';
@@ -36,48 +34,12 @@ export function TableTracking({ surveyUnits, campaign, searchText }: Readonly<Ta
     setSortConfig({ key, direction });
   };
   const maxHeight = 'calc(100vh - 230px)';
-  const compareValues = (a: number | string, b: number | string, isAscending: boolean) => {
-    if (a < b) return isAscending ? -1 : 1;
-    if (a > b) return isAscending ? 1 : -1;
-    return 0;
-  };
-
-  const getLastName = (su: SurveyUnit) => getprivilegedPerson(su).lastName.toUpperCase();
-  const getOrder = (su: SurveyUnit) => Number.parseInt(getSuTodoState(su)?.order ?? '0', 10);
-  const contactOutcomeOrder = [
-    'INA',
-    'REF',
-    'IMP',
-    'UCD',
-    'UTR',
-    'DCD',
-    'ALA',
-    'UCD',
-    'DUK',
-    'DUU',
-    'NUH',
-    'NOA',
-  ];
-  const getOutcomeIndex = (su: SurveyUnit) => {
-    if (su.contactOutcome?.type) {
-      const index = contactOutcomeOrder.indexOf(su.contactOutcome.type);
-      return index === -1 ? Infinity : index;
-    }
-
-    return Infinity;
-  };
 
   const filteredSurveyUnits = sortSurveyUnitsTrackingTable(
     surveyUnits,
     campaign,
     searchText,
-    sortConfig,
-    {
-      getLastName,
-      getOrder,
-      getOutcomeIndex,
-      compareValues,
-    }
+    sortConfig
   );
 
   const defaultSortIcon = <IconAsc />;
