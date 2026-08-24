@@ -1,7 +1,7 @@
 // src/ui/SurveyUnit/Contact/ContactOutcomeForm.test.tsx
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useController } from 'react-hook-form';
 import { ContactOutcomeForm } from './ContactOutcomeForm';
 import { addNewState, persistSurveyUnit } from 'utils/functions';
@@ -144,17 +144,20 @@ describe('ContactOutcomeForm', () => {
     expect(persistSurveyUnit).not.toHaveBeenCalled();
   });
 
-  it('persists the survey unit and moves to WAITING_FOR_TRANSMISSION by default', () => {
+  it('persists the survey unit and moves to WAITING_FOR_TRANSMISSION by default', async () => {
     render(<ContactOutcomeForm surveyUnit={baseSurveyUnit} onClose={onClose} />);
 
     fireEvent.click(screen.getByRole('radio', { name: 'Refusal' }));
     fireEvent.change(screen.getByLabelText('Number of attempts'), { target: { value: '3' } });
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
 
-    expect(addNewState).toHaveBeenCalledWith(
-      baseSurveyUnit,
-      surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
-    );
+    await waitFor(() => {
+      expect(addNewState).toHaveBeenCalledWith(
+        baseSurveyUnit,
+        surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type
+      );
+    });
+
     expect(persistSurveyUnit).toHaveBeenCalledWith(
       expect.objectContaining({
         states: ['mocked-state'],
@@ -168,16 +171,18 @@ describe('ContactOutcomeForm', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('moves to APPOINTMENT_MADE when the outcome is INTERVIEW_ACCEPTED', () => {
+  it('moves to APPOINTMENT_MADE when the outcome is INTERVIEW_ACCEPTED', async () => {
     render(<ContactOutcomeForm surveyUnit={baseSurveyUnit} onClose={onClose} />);
 
     fireEvent.click(screen.getByRole('radio', { name: 'Interview accepted' }));
     fireEvent.change(screen.getByLabelText('Number of attempts'), { target: { value: '1' } });
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
 
-    expect(addNewState).toHaveBeenCalledWith(
-      baseSurveyUnit,
-      surveyUnitStateEnum.APPOINTMENT_MADE.type
-    );
+    await waitFor(() => {
+      expect(addNewState).toHaveBeenCalledWith(
+        baseSurveyUnit,
+        surveyUnitStateEnum.APPOINTMENT_MADE.type
+      );
+    });
   });
 });
