@@ -1,6 +1,6 @@
 {
   "name": "pearl",
-  "version": "2.17.0-feat-mail-column-33433.rc1",
+  "version": "2.17.0",
   "private": true,
   "type": "module",
   "dependencies": {
