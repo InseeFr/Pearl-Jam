@@ -1,270 +1,331 @@
-import { SurveyUnit, SurveyUnitState } from 'types/pearl';
+import { SurveyUnit, SurveyUnitPerson, SurveyUnitState } from 'types/pearl';
 import { surveyUnitStateEnum } from '../enum/SUStateEnum';
 import { surveyUnitIDBService } from '../indexeddb/services/surveyUnit-idb-service';
 import { contactOutcomes } from './contacts/ContactOutcome';
 import { getRandomIntBetween } from './random';
 import { IdentificationConfiguration } from 'utils/enum/identifications/IdentificationsQuestions';
+import { communicationStatusEnum } from 'utils/enum/CommunicationEnums';
 
 const day = 60 * 60 * 1000 * 24;
 const year = day * 365;
 
-/**
- * @typedef {Object} User
- * @property {number} id - The user ID.
- * @property {string} name - The user's full name.
- * @property {string} username - The user's username.
- * @property {string} email - The user's email address.
- * @property {{
- *   street: string,
- *   suite: string,
- *   city: string,
- *   zipcode: string,
- *   geo: { lat: string, lng: string }
- * }} address - The user's address information.
- * @property {string} phone - The user's phone number.
- * @property {string} website - The user's website URL.
- * @property {{
- *   name: string,
- *   catchPhrase: string,
- *   bs: string
- * }} company - The user's company information.
- */
+const TODAY = Date.now();
 
-export async function seedData() {
-  /** @var {SurveyUnit[]} surveyUnits */
-  const surverUnits: SurveyUnit[] = [];
-  /** @var {User[]} users */
-  const users = await fetch('https://jsonplaceholder.typicode.com/users').then(r => r.json());
-  for (const user of users) {
-    let states: SurveyUnitState[] = [
+/**
+ * Helper to create a basic person
+ */
+function createPerson(
+  id: number,
+  name: string,
+  email: string,
+  phone: string,
+  privileged: boolean = false,
+  suffix: string = ''
+): SurveyUnitPerson {
+  const [firstName, lastName] = name.split(' ');
+  return {
+    id,
+    title: id % 2 === 0 ? 'MISS' : 'MISTER',
+    firstName: firstName + suffix,
+    lastName: lastName + suffix,
+    email: email + suffix,
+    birthdate: new Date(year - getRandomIntBetween(20, 80)).getTime(),
+    favoriteEmail: false,
+    privileged,
+    phoneNumbers: [
       {
-        id: user.id + 1_000,
-        date: Date.now() - 10 * day,
-        type: surveyUnitStateEnum.IN_PREPARATION.type,
+        source: 'FISCAL' as const,
+        favorite: false,
+        number: phone + suffix,
+        id: '',
       },
-    ];
-    if (user.id > 2) {
-      states = [
-        ...states,
-        {
-          id: user.id + 2_000,
-          date: Date.now() - 9 * day,
-          type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type,
-        },
-      ];
-    }
-    if (user.id > 3) {
-      states = [
-        ...states,
-        {
-          date: Date.now() - 8 * day,
-          type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
-        },
-      ];
-    }
-    if (user.id > 4) {
-      states = [
-        ...states,
-        {
-          date: Date.now() - 7 * day,
-          type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
-        },
-      ];
-    }
-    surverUnits.push({
-      id: `su${user.id}`,
-      persons: [
-        {
-          id: user.id,
-          title: user.id % 2 === 0 ? 'MISS' : 'MISTER',
-          firstName: user.name.split(' ')[0],
-          lastName: user.name.split(' ')[1],
-          email: user.email,
-          birthdate: new Date(year - getRandomIntBetween(20, 80)).getTime(),
-          favoriteEmail: false,
-          privileged: false,
-          phoneNumbers: [
-            {
-              source: 'FISCAL',
-              favorite: false,
-              number: user.phone,
-              id: '',
-            },
-            {
-              source: 'DIRECTORY',
-              favorite: true,
-              number: user.phone + '01',
-              id: '',
-            },
-          ],
-        },
-        {
-          id: user.id,
-          title: user.id % 2 === 0 ? 'MISS' : 'MISTER',
-          firstName: user.name.split(' ')[0] + '-2',
-          lastName: user.name.split(' ')[1] + '-2',
-          email: user.email + '-2',
-          birthdate: new Date(year - getRandomIntBetween(20, 80)).getTime(),
-          favoriteEmail: false,
-          privileged: true,
-          phoneNumbers: [
-            {
-              source: 'FISCAL',
-              favorite: false,
-              number: user.phone + '-2',
-              id: '',
-            },
-            {
-              source: 'DIRECTORY',
-              favorite: true,
-              number: user.phone + '-2',
-              id: '',
-            },
-            {
-              source: 'INTERVIEWER',
-              favorite: false,
-              number: user.phone + '11',
-              id: '',
-            },
-            {
-              source: 'INTERVIEWER',
-              favorite: false,
-              number: user.phone + '12',
-              id: '',
-            },
-            {
-              source: 'INTERVIEWER',
-              favorite: false,
-              number: user.phone + '13',
-              id: '',
-            },
-          ],
-        },
-        {
-          id: user.id,
-          title: user.id % 2 === 0 ? 'MISS' : 'MISTER',
-          firstName: user.name.split(' ')[0] + '-2',
-          lastName: user.name.split(' ')[1] + '-2',
-          email: user.email + '-2',
-          birthdate: new Date(year - getRandomIntBetween(20, 80)).getTime(),
-          favoriteEmail: false,
-          privileged: true,
-          phoneNumbers: [
-            {
-              source: 'FISCAL',
-              favorite: false,
-              number: user.phone + '-2',
-              id: '',
-            },
-            {
-              source: 'DIRECTORY',
-              favorite: true,
-              number: user.phone + '-2',
-              id: '',
-            },
-            {
-              source: 'INTERVIEWER',
-              favorite: false,
-              number: user.phone + '11',
-              id: '',
-            },
-            {
-              source: 'INTERVIEWER',
-              favorite: false,
-              number: user.phone + '12',
-              id: '',
-            },
-            {
-              source: 'INTERVIEWER',
-              favorite: false,
-              number: user.phone + '13',
-              id: '',
-            },
-          ],
-        },
-      ],
-      address: {
-        l1: user.name,
-        l2: '',
-        l3: '',
-        l4: user.address.street,
-        l5: '',
-        l6: `${user.address.zipcode} ${user.address.city}`,
-        l7: 'United States',
-        elevator: false,
-        building: '',
-        floor: '',
-        door: user.address.suite,
-        staircase: '',
-        cityPriorityDistrict: false,
+      {
+        source: 'DIRECTORY' as const,
+        favorite: true,
+        number: phone + suffix + '01',
+        id: '',
       },
-      priority: user.id % 2 === 0,
-      move: false,
-      campaign: user.id % 2 === 0 ? 'TestCampaign' : 'SecondTestCampaign',
-      comments: [
-        {
-          type: 'MANAGEMENT',
-          value: '',
-        },
-        {
-          type: 'INTERVIEWER',
-          value: '',
-        },
-      ],
-      sampleIdentifiers: {
-        bs: 0,
-        ec: '0',
-        le: 0,
-        noi: 0,
-        numfa: 32,
-        rges: 15,
-        ssech: user.id % 2 === 0 ? 1 : 2,
-        nolog: 0,
-        nole: 0,
-        autre: '',
-        nograp: user.id % 2 === 0 ? '1' : '2',
-      },
-      states: states,
-      contactAttempts: [
-        {
-          status: 'TUN',
-          date: Date.now() - getRandomIntBetween(10, 100) * day,
-          medium: 'FIELD',
-        },
-        {
-          status: 'INA',
-          date: Date.now() - getRandomIntBetween(3, 9) * day,
-          medium: 'FIELD',
-        },
-      ],
-      identification: {},
-      campaignLabel: 'Démonstration Séminaire Filière 2023',
-      managementStartDate: Date.now() - 10 * day,
-      interviewerStartDate: Date.now() - 10 * day,
-      identificationPhaseStartDate: Date.now() - 10 * day,
-      collectionStartDate: Date.now() - 10 * day,
-      collectionEndDate: Date.now() + 50 * day,
-      endDate: Date.now() + 51 * day,
-      identificationConfiguration:
-        user.id === 10 ? IdentificationConfiguration.HOUSEF2F : IdentificationConfiguration.INDTEL,
-      contactOutcomeConfiguration: 'F2F',
-      contactAttemptConfiguration: 'F2F',
-      contactOutcome: {
-        date: Date.now() - 2 * day,
-        type: contactOutcomes.INTERVIEW_ACCEPTED.value,
-        totalNumberOfContactAttempts: 2,
-      },
-      displayName: '',
-      useLetterCommunication: false,
-      communicationRequests: [],
-      communicationTemplates: [],
-      collectNextContacts: false,
+      ...(privileged
+        ? [
+            {
+              source: 'INTERVIEWER' as const,
+              favorite: false,
+              number: phone + suffix + '11',
+              id: '',
+            },
+            {
+              source: 'INTERVIEWER' as const,
+              favorite: false,
+              number: phone + suffix + '12',
+              id: '',
+            },
+            {
+              source: 'INTERVIEWER' as const,
+              favorite: false,
+              number: phone + suffix + '13',
+              id: '',
+            },
+          ]
+        : []),
+    ],
+  };
+}
+
+/**
+ * Helper to create basic address
+ */
+function createAddress(user: any) {
+  return {
+    l1: user.name,
+    l2: '',
+    l3: '',
+    l4: user.address.street,
+    l5: '',
+    l6: `${user.address.zipcode} ${user.address.city}`,
+    l7: 'United States',
+    elevator: false,
+    building: '',
+    floor: '',
+    door: user.address.suite,
+    staircase: '',
+    cityPriorityDistrict: false,
+  };
+}
+
+/**
+ * Helper to create communication templates
+ */
+function createCommunicationTemplates() {
+  return [
+    {
+      id: 'LETTER_NOTICE',
+      medium: 'LETTER',
+      type: 'NOTICE',
+    },
+    {
+      id: 'LETTER_REMINDER',
+      medium: 'LETTER',
+      type: 'REMINDER',
+    },
+  ];
+}
+
+/**
+ * Helper to create communication request with SUBMITTED status
+ */
+function createSubmittedCommunication(templateId: string, submittedDate: number, reason?: string) {
+  return {
+    emitter: 'INTERVIEWER' as const,
+    communicationTemplateId: templateId,
+    reason,
+    status: [
+      { date: submittedDate - day, status: communicationStatusEnum.INITIATED.value },
+      { date: submittedDate - day / 2, status: communicationStatusEnum.READY.value },
+      { date: submittedDate, status: communicationStatusEnum.SUBMITTED.value },
+    ],
+  };
+}
+
+/**
+ * Helper to create a survey unit from API user
+ */
+function createSurveyUnitFromUser(user: any, index: number): SurveyUnit {
+  const baseStates: SurveyUnitState[] = [
+    {
+      id: user.id + 1_000,
+      date: TODAY - 10 * day,
+      type: surveyUnitStateEnum.IN_PREPARATION.type,
+    },
+  ];
+
+  let states = [...baseStates];
+  if (user.id > 2) {
+    states.push({
+      id: user.id + 2_000,
+      date: TODAY - 9 * day,
+      type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type,
     });
   }
-  // Create a fillable TEL surveyUnit
-  surverUnits.push(
+  if (user.id > 3) {
+    states.push({
+      date: TODAY - 8 * day,
+      type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
+    });
+  }
+  if (user.id > 4) {
+    states.push({
+      date: TODAY - 7 * day,
+      type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
+    });
+  }
+
+  const persons = [
+    createPerson(user.id, user.name, user.email, user.phone, false),
+    createPerson(user.id, user.name, user.email, user.phone, true, '-2'),
+    createPerson(user.id, user.name, user.email, user.phone, true, '-2'),
+  ];
+
+  return {
+    id: `su${user.id}`,
+    persons,
+    address: createAddress(user),
+    priority: user.id % 2 === 0,
+    move: false,
+    campaign: user.id % 2 === 0 ? 'TestCampaign' : 'SecondTestCampaign',
+    comments: [
+      { type: 'MANAGEMENT', value: '' },
+      { type: 'INTERVIEWER', value: '' },
+    ],
+    sampleIdentifiers: {
+      bs: 0,
+      ec: '0',
+      le: 0,
+      noi: 0,
+      numfa: 32,
+      rges: 15,
+      ssech: user.id % 2 === 0 ? 1 : 2,
+      nolog: 0,
+      nole: 0,
+      autre: '',
+      nograp: user.id % 2 === 0 ? '1' : '2',
+    },
+    states,
+    contactAttempts: [
+      {
+        status: 'TUN',
+        date: TODAY - getRandomIntBetween(10, 100) * day,
+        medium: 'FIELD',
+      },
+      {
+        status: 'INA',
+        date: TODAY - getRandomIntBetween(3, 9) * day,
+        medium: 'FIELD',
+      },
+    ],
+    identification: {},
+    campaignLabel: 'Demonstration Seminaire Filiere 2023',
+    managementStartDate: TODAY - 10 * day,
+    interviewerStartDate: TODAY - 10 * day,
+    identificationPhaseStartDate: TODAY - 10 * day,
+    collectionStartDate: TODAY - 10 * day,
+    collectionEndDate: TODAY + 50 * day,
+    endDate: TODAY + 51 * day,
+    identificationConfiguration:
+      user.id === 10 ? IdentificationConfiguration.HOUSEF2F : IdentificationConfiguration.INDTEL,
+    contactOutcomeConfiguration: 'F2F',
+    contactAttemptConfiguration: 'F2F',
+    contactOutcome: {
+      date: TODAY - 2 * day,
+      type: contactOutcomes.INTERVIEW_ACCEPTED.value,
+      totalNumberOfContactAttempts: 2,
+    },
+    displayName: '',
+    useLetterCommunication: true,
+    communicationRequests: [],
+    communicationTemplates: createCommunicationTemplates(),
+    collectNextContacts: false,
+  };
+}
+
+export async function seedData() {
+  const surveyUnits: SurveyUnit[] = [];
+  const users = await fetch('https://jsonplaceholder.typicode.com/users').then(r => r.json());
+
+  // Create survey units from API users
+  for (const user of users) {
+    surveyUnits.push(createSurveyUnitFromUser(user, user.id));
+  }
+
+  // SU with NO communication requests - should show "Aucun courrier envoyé"
+  surveyUnits.push({
+    ...surveyUnits[0],
+    id: 'su-no-communication',
+    communicationRequests: [],
+    communicationTemplates: [],
+  });
+
+  // SU with communication requests but NONE submitted - should show "Aucun courrier envoyé"
+  surveyUnits.push({
+    ...surveyUnits[0],
+    id: 'su-no-submitted',
+    useLetterCommunication: true,
+    communicationTemplates: createCommunicationTemplates(),
+    communicationRequests: [
+      {
+        emitter: 'INTERVIEWER',
+        communicationTemplateId: 'LETTER_NOTICE',
+        status: [
+          { date: TODAY - 5 * day, status: communicationStatusEnum.INITIATED.value },
+          { date: TODAY - 4 * day, status: communicationStatusEnum.READY.value },
+        ],
+      },
+    ],
+  });
+
+  // SU with a single SUBMITTED NOTICE - should show "Courrier - Avis | dd/mm/yyyy"
+  surveyUnits.push({
+    ...surveyUnits[0],
+    id: 'su-notice-sent',
+    useLetterCommunication: true,
+    communicationTemplates: createCommunicationTemplates(),
+    communicationRequests: [createSubmittedCommunication('LETTER_NOTICE', TODAY - 3 * day)],
+  });
+
+  // SU with a single SUBMITTED REMINDER with UNREACHABLE reason
+  surveyUnits.push({
+    ...surveyUnits[0],
+    id: 'su-reminder-unreachable',
+    useLetterCommunication: true,
+    communicationTemplates: createCommunicationTemplates(),
+    communicationRequests: [
+      createSubmittedCommunication('LETTER_REMINDER', TODAY - 2 * day, 'UNREACHABLE'),
+    ],
+  });
+
+  // SU with a single SUBMITTED REMINDER with REFUSAL reason
+  surveyUnits.push({
+    ...surveyUnits[0],
+    id: 'su-reminder-refusal',
+    useLetterCommunication: true,
+    communicationTemplates: createCommunicationTemplates(),
+    communicationRequests: [
+      createSubmittedCommunication('LETTER_REMINDER', TODAY - day, 'REFUSAL'),
+    ],
+  });
+
+  // SU with MULTIPLE SUBMITTED communications - should show the most recent one
+  surveyUnits.push({
+    ...surveyUnits[0],
+    id: 'su-multiple-submitted',
+    useLetterCommunication: true,
+    communicationTemplates: createCommunicationTemplates(),
+    communicationRequests: [
+      createSubmittedCommunication('LETTER_NOTICE', TODAY - 10 * day),
+      createSubmittedCommunication('LETTER_REMINDER', TODAY - 5 * day, 'UNREACHABLE'),
+      createSubmittedCommunication('LETTER_NOTICE', TODAY - 1 * day), // Most recent
+    ],
+  });
+
+  // SU with multiple communications where the most recent is NOT submitted
+  surveyUnits.push({
+    ...surveyUnits[0],
+    id: 'su-recent-not-submitted',
+    useLetterCommunication: true,
+    communicationTemplates: createCommunicationTemplates(),
+    communicationRequests: [
+      createSubmittedCommunication('LETTER_NOTICE', TODAY - 10 * day),
+      {
+        emitter: 'INTERVIEWER',
+        communicationTemplateId: 'LETTER_REMINDER',
+        reason: 'REFUSAL',
+        status: [{ date: TODAY - 1 * day, status: communicationStatusEnum.INITIATED.value }],
+      },
+    ],
+  });
+
+  surveyUnits.push(
     {
-      ...surverUnits[0],
+      ...surveyUnits[0],
       id: 'sutel',
       identification: undefined,
       identificationConfiguration: IdentificationConfiguration.INDTEL,
@@ -276,20 +337,20 @@ export async function seedData() {
       },
     },
     {
-      ...surverUnits[0],
+      ...surveyUnits[0],
       id: 'sunoident',
       identification: {},
       identificationConfiguration: IdentificationConfiguration.NOIDENT,
     },
     {
-      ...surverUnits[0],
+      ...surveyUnits[0],
       id: 'sunoident-empty',
       identification: {},
       identificationConfiguration: IdentificationConfiguration.NOIDENT,
       contactOutcome: undefined,
     },
     {
-      ...surverUnits[0],
+      ...surveyUnits[0],
       id: 'sunoident-WFT',
       identification: {},
       identificationConfiguration: IdentificationConfiguration.NOIDENT,
@@ -297,55 +358,54 @@ export async function seedData() {
       contactOutcome: undefined,
     },
     {
-      ...surverUnits[0],
-      managementStartDate: Date.now() - 10 * day,
-      interviewerStartDate: Date.now() - 9 * day,
-      identificationPhaseStartDate: Date.now() - 8 * day,
-      collectionStartDate: Date.now() - 7 * day,
-      collectionEndDate: Date.now() - 6 * day,
-      endDate: Date.now() + 15 * day,
+      ...surveyUnits[0],
+      managementStartDate: TODAY - 10 * day,
+      interviewerStartDate: TODAY - 9 * day,
+      identificationPhaseStartDate: TODAY - 8 * day,
+      collectionStartDate: TODAY - 7 * day,
+      collectionEndDate: TODAY - 6 * day,
+      endDate: TODAY + 15 * day,
       id: 'questNotAvailable',
       identification: {},
       identificationConfiguration: IdentificationConfiguration.NOIDENT,
     },
     {
-      ...surverUnits[0],
-      managementStartDate: Date.now() - 10 * day,
-      interviewerStartDate: Date.now() - 9 * day,
-      identificationPhaseStartDate: Date.now() - 8 * day,
-      collectionStartDate: Date.now() - 7 * day,
-      collectionEndDate: Date.now() - 6 * day,
-      endDate: Date.now() + 15 * day,
+      ...surveyUnits[0],
+      managementStartDate: TODAY - 10 * day,
+      interviewerStartDate: TODAY - 9 * day,
+      identificationPhaseStartDate: TODAY - 8 * day,
+      collectionStartDate: TODAY - 7 * day,
+      collectionEndDate: TODAY - 6 * day,
+      endDate: TODAY + 15 * day,
       id: 'HOUSETEL',
       identification: {},
       identificationConfiguration: IdentificationConfiguration.HOUSETEL,
     },
     {
-      ...surverUnits[0],
-      managementStartDate: Date.now() - 10 * day,
-      interviewerStartDate: Date.now() - 9 * day,
-      identificationPhaseStartDate: Date.now() - 8 * day,
-      collectionStartDate: Date.now() - 7 * day,
-      collectionEndDate: Date.now() - 6 * day,
-      endDate: Date.now() + 15 * day,
+      ...surveyUnits[0],
+      managementStartDate: TODAY - 10 * day,
+      interviewerStartDate: TODAY - 9 * day,
+      identificationPhaseStartDate: TODAY - 8 * day,
+      collectionStartDate: TODAY - 7 * day,
+      collectionEndDate: TODAY - 6 * day,
+      endDate: TODAY + 15 * day,
       id: 'SRCVREINT',
       identification: {},
       identificationConfiguration: IdentificationConfiguration.SRCVREINT,
     },
     {
-      ...surverUnits[0],
-      managementStartDate: Date.now() - 10 * day,
-      interviewerStartDate: Date.now() - 9 * day,
-      identificationPhaseStartDate: Date.now() - 8 * day,
-      collectionStartDate: Date.now() - 7 * day,
-      collectionEndDate: Date.now() - 6 * day,
-      endDate: Date.now() + 15 * day,
+      ...surveyUnits[0],
+      managementStartDate: TODAY - 10 * day,
+      interviewerStartDate: TODAY - 9 * day,
+      identificationPhaseStartDate: TODAY - 8 * day,
+      collectionStartDate: TODAY - 7 * day,
+      collectionEndDate: TODAY - 6 * day,
+      endDate: TODAY + 15 * day,
       id: 'INDF2F',
       identification: undefined,
-
       identificationConfiguration: IdentificationConfiguration.INDF2F,
     }
   );
 
-  await surveyUnitIDBService.addAll(surverUnits);
+  await surveyUnitIDBService.addAll(surveyUnits);
 }

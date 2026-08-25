@@ -19,7 +19,7 @@ import { StatsTracking } from './StatsTracking';
 import { TableTracking } from './TableTracking';
 import { SurveyUnit } from 'types/pearl';
 
-export const Component = () => {
+export const TrackingPage = () => {
   const surveyUnits: SurveyUnit[] = useSurveyUnits();
   const [campaign, setCampaign] = useState<string>(() => {
     return localStorage.getItem('selectedCampaign') ?? '';
@@ -38,7 +38,7 @@ export const Component = () => {
     localStorage.setItem('selectedCampaign', campaign);
   }, [campaign]);
 
-  const [tab, setTab] = useState('stats');
+  const [tab, setTab] = useState('table');
   const handleSearchTextChange = (text: string) => {
     setSearchText(text);
   };
@@ -93,18 +93,18 @@ export const Component = () => {
                 aria-label={D.trackingToggleAria}
                 textColor="secondary"
               >
-                <Tab label={D.allSurveys} value="stats" />
                 <Tab label={D.unitsTrackingBySurvey} value="table" />
+                <Tab label={D.allSurveys} value="stats" />
               </Tabs>
             </Row>
-            {tab === 'stats' ? (
-              <StatsTracking surveyUnits={surveyUnits} />
-            ) : (
+            {tab === 'table' ? (
               <TableTracking
                 surveyUnits={surveyUnits}
                 campaign={campaign}
                 searchText={searchText}
               />
+            ) : (
+              <StatsTracking surveyUnits={surveyUnits} />
             )}
           </Stack>
         </CardContent>
