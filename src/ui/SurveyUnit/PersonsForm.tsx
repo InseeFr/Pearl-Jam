@@ -8,11 +8,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
-import { Fragment, MouseEvent } from 'react';
+import { MouseEvent } from 'react';
 import {
   Control,
   Controller,
@@ -30,16 +29,23 @@ import { PaperIconButton } from '../PaperIconButton';
 import { Row } from '../Row';
 import { Typography } from '../Typography';
 import { FieldRow } from 'ui/FieldRow';
+import { formatPhoneNumber } from 'utils/functions/formatPhoneNumber';
 
 interface PersonsFormProps {
   onClose: VoidFunction;
   surveyUnit: SurveyUnit;
   persons: SurveyUnitPerson[];
+  personToModifyIndex: number;
 }
 /**
  * Form to edit multiple persons attached to a surveyUnit
  */
-export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFormProps>) {
+export function PersonsForm({
+  onClose,
+  surveyUnit,
+  persons,
+  personToModifyIndex,
+}: Readonly<PersonsFormProps>) {
   const { register, handleSubmit, control, setValue, getValues, watch } = useForm({
     // input persons is sorted and its order could be different from surveyUnit.persons used by useForm
     // => force the same order of persons in surveyUnit
@@ -65,22 +71,15 @@ export function PersonsForm({ onClose, surveyUnit, persons }: Readonly<PersonsFo
       <form action="" onSubmit={onSubmit}>
         <DialogTitle>{D.surveyUnitIndividual}</DialogTitle>
         <DialogContent>
-          <Row gap={3} alignItems="start">
-            {persons.map((p, k) => (
-              <Fragment key={p.id}>
-                {k > 0 && <Divider orientation="vertical" flexItem />}
-                <PersonFields
-                  index={k}
-                  person={p}
-                  register={register}
-                  control={control}
-                  setValue={setValue}
-                  persons={persons}
-                  getValues={getValues}
-                />
-              </Fragment>
-            ))}
-          </Row>
+          <PersonFields
+            index={personToModifyIndex}
+            person={persons[personToModifyIndex]}
+            register={register}
+            control={control}
+            setValue={setValue}
+            persons={persons}
+            getValues={getValues}
+          />
         </DialogContent>
         <DialogActions>
           <Button type="button" color="primary" variant="contained" onClick={e => handleCancel(e)}>
@@ -292,12 +291,23 @@ function PhoneLine({
         {editable ? (
           <Controller
             control={control}
-            render={({ field }) => <OutlinedInput {...field} sx={{ maxWidth: 300 }} id={name} />}
+            render={({ field }) => (
+              <OutlinedInput
+                {...field}
+                sx={{ maxWidth: 300 }}
+                id={name}
+                value={formatPhoneNumber(field.value ?? '')}
+                onChange={e => {
+                  const rawValue = e.target.value.replace(/\s+/g, '');
+                  field.onChange(rawValue);
+                }}
+              />
+            )}
             name={`${name}.number`}
           />
         ) : (
           <Typography component="div" color="textPrimary" variant="s">
-            {phoneNumber?.number ?? '-'}
+            {phoneNumber?.number ? formatPhoneNumber(phoneNumber.number) : '-'}
           </Typography>
         )}
         <Controller

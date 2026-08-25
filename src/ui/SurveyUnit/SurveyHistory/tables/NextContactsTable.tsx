@@ -19,6 +19,7 @@ import { ContactModal } from './ContactModal';
 import D from 'i18n';
 import { PhoneNumberImportAlert } from './PhoneNumberImportAlert';
 import { useNextContacts } from 'utils/hooks/useNextContacts';
+import { formatPhoneNumber } from 'utils/functions/formatPhoneNumber';
 
 type HouseholdTableProps = {
   surveyUnit: SurveyUnit;
@@ -87,7 +88,7 @@ export function NextContactsTable({ surveyUnit }: Readonly<HouseholdTableProps>)
                   <CustomTableCell>{D[c.title]}</CustomTableCell>
                   <CustomTableCell>{c.lastName?.toUpperCase()}</CustomTableCell>
                   <CustomTableCell>{c.firstName}</CustomTableCell>
-                  <CustomTableCell>{c.phoneNumber}</CustomTableCell>
+                  <CustomTableCell>{formatPhoneNumber(c.phoneNumber)}</CustomTableCell>
                   <CustomTableCell>{c.email}</CustomTableCell>
                   <TableCell sx={{ backgroundColor: 'transparent', textAlign: 'center' }}>
                     {c.preferredContact && <CheckCircle fontSize="medium" color="success" />}

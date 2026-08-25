@@ -66,6 +66,7 @@ export function Notification({ notification, onExit }: Readonly<NotificationProp
   return (
     <Accordion elevation={0} disableGutters variant="dense" color="accent" onChange={handleExpand}>
       <AccordionSummary
+        aria-label={`${notification.title} ${date}`}
         sx={{ padding: 0, background: background, borderRadius: 2 }}
         expandIcon={<ExpandMoreIcon fontSize="large" color="textPrimary" />}
         aria-controls="panel1a-content"

@@ -45,7 +45,6 @@ export function SyncDialog({
         // Compute message into a single object
         .map(campaign => ({
           name: campaign,
-          transmitted: (details.transmittedSurveyUnits[campaign] ?? []).length,
           loaded: (details.loadedSurveyUnits[campaign] ?? []).length,
           total:
             (details.transmittedSurveyUnits[campaign] ?? []).length +
@@ -57,7 +56,7 @@ export function SyncDialog({
   const showDetail = state !== 'error';
 
   return (
-    <Dialog open onClose={close}>
+    <Dialog open onClose={onClose}>
       <DialogTitle>{D.syncResult}</DialogTitle>
       <DialogContent>
         <Stack gap={2}>
@@ -102,7 +101,7 @@ export function SyncDialog({
 function SyncDetail({
   campaigns,
 }: Readonly<{
-  campaigns: { name: string; transmitted: number; loaded: number; total: number }[];
+  campaigns: { name: string; loaded: number; total: number }[];
 }>) {
   const theme = useTheme<ColoredTheme>();
   return (
@@ -122,14 +121,6 @@ function SyncDetail({
                 {campaign.name.toLowerCase()} :{' '}
               </Typography>{' '}
               {D.loadedSurveyUnits(campaign.loaded)}
-            </DialogContentText>
-          )}
-          {campaign.transmitted > 0 && (
-            <DialogContentText>
-              <Typography variant="s" color="textTertiary" component="strong" fontWeight={700}>
-                {campaign.name.toLowerCase()} :{' '}
-              </Typography>{' '}
-              {D.transmittedSurveyUnits(campaign.loaded)}
             </DialogContentText>
           )}
         </Stack>

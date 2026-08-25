@@ -15,7 +15,7 @@ test('check if all tabs work properly', async ({ page }) => {
 
   await expect(surveyPage.getTitle('Logement')).toBeVisible();
 
-  await surveyPage.selectTab('Contacts');
+  await surveyPage.selectTab('Contacts', true);
   await expect(surveyPage.getTitle('Individu')).toBeVisible();
 
   await surveyPage.selectTab('Communications');
@@ -29,7 +29,7 @@ test('check if all tabs work properly', async ({ page }) => {
 
   await surveyPage.selectTab('Logement & Repérage');
   await expect(page.getByText('Numéro et libellé de voie :')).toBeVisible();
-  await page.getByRole('button', { name: 'Modifier' }).click();
+  await page.getByRole('button', { name: 'Modifier' }).first().click();
 
   await expect(page.getByRole('heading', { name: "Modification de l'adresse" })).toBeVisible();
 
@@ -38,7 +38,7 @@ test('check if all tabs work properly', async ({ page }) => {
   await page.getByRole('button', { name: 'Enregistrer' }).click();
   await expect(page.getByText('Lille')).toBeVisible();
 
-  await surveyPage.selectTab('Contacts');
+  await surveyPage.selectTab('Contacts', true);
   await page.getByRole('button', { name: 'Modifier', exact: true }).click();
   await page.getByPlaceholder('JJ/MM/AAAA').first().click();
   await page.getByLabel('Choisir la date, la date sé').first().click();
@@ -58,13 +58,10 @@ test('check if a survey has the "To synchronize" state after Unavaible', async (
 
   await page.getByRole('button', { name: "Identification de l'adresse" }).click();
   await page.getByText('Adresse identifiée avec un bâtiment', { exact: true }).click();
-  await page.getByRole('button', { name: 'Confirmer' }).click();
   await page.getByRole('heading', { name: 'Identification du logement' }).isVisible();
   await page.getByText('Logement identifié').click();
-  await page.getByRole('button', { name: 'Confirmer' }).click();
   await page.getByRole('heading', { name: 'Situation du logement' }).isVisible();
   await page.getByText("Logement absorbé ou ayant perdu son usage d'habitation").click();
-  await page.getByRole('button', { name: 'Confirmer' }).click();
 
   await surveyPage.selectTab('Contacts');
   await surveyPage.addContactAttempt();
@@ -111,14 +108,14 @@ test('Check previous collect history, modify next collect history and synchroniz
   // await expect(page.getByRole('cell', { name: '23' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Oui' }).first()).toBeVisible();
 
-  await page.getByRole('tab', { name: 'Collecte suivante' }).click();
-  await expect(page.getByRole('tab', { name: 'Collecte suivante' })).toBeVisible();
+  await page.getByRole('tab', { name: 'Contacts collecte suivante' }).click();
+  await expect(page.getByRole('tab', { name: 'Contacts collecte suivante' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'M' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Gary' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'Grice' })).toBeVisible();
   await expect(page.getByRole('cell', { name: 'test@test.com' }).first()).toBeVisible();
 
-  await page.getByRole('button', { name: 'Ajouter un individu' }).click();
+  await page.getByRole('button', { name: 'Ajouter un contact' }).click();
   await page.getByRole('radio', { name: 'M', exact: true }).check();
   await page.getByRole('textbox', { name: 'Nom *', exact: true }).click();
   await page.getByRole('textbox', { name: 'Nom *', exact: true }).fill('Hugue');
@@ -143,7 +140,7 @@ test('Check previous collect history, modify next collect history and synchroniz
   await homePage.synchronize();
 
   await page.getByRole('link', { name: 'SIMMONS Earl' }).click();
-  await page.getByRole('tab', { name: 'Collecte suivante' }).click();
+  await page.getByRole('tab', { name: 'Contacts collecte suivante' }).click();
   await expect(page.getByRole('cell', { name: 'Gary' })).toBeHidden();
   await expect(page.getByRole('cell', { name: 'Grice' })).toBeHidden();
   await expect(page.getByRole('cell', { name: 'Hugue' })).toBeVisible();
@@ -158,8 +155,8 @@ test('Import previous contacts to next contacts', async ({ page }) => {
   await page.getByRole('link', { name: 'HILBERT' }).click();
 
   // Add multiple phone numbers to the contact to test the pop-up handling during import
-  await page.getByRole('tab', { name: 'Contacts' }).click();
-  await page.getByRole('button', { name: 'Modifier' }).click();
+  await page.getByRole('tab', { name: 'Contacts', exact: true }).click();
+  await page.getByRole('button', { name: 'Modifier' }).first().click();
   await page.getByRole('button', { name: 'Ajouter un numéro' }).first().click();
   await page.locator('input[name="persons.0.phoneNumbers.1.number"]').click();
   await page.locator('input[name="persons.0.phoneNumbers.1.number"]').fill('0651163352');
@@ -169,7 +166,7 @@ test('Import previous contacts to next contacts', async ({ page }) => {
   await page.click('id=star-button-persons.0.phoneNumbers.0.favorite');
   await page.getByRole('button', { name: 'Enregistrer' }).click();
 
-  await page.getByRole('tab', { name: 'Collecte suivante' }).click();
+  await page.getByRole('tab', { name: 'Contacts collecte suivante' }).click();
   expect(page.getByRole('button', { name: 'Importer tous les contacts' })).toBeHidden();
 
   await expect(page.getByText('SMITH')).toBeVisible();
@@ -183,11 +180,11 @@ test('Import previous contacts to next contacts', async ({ page }) => {
   // Handle the pop-up for asking to select a single phone number and do it
   await page.getByText('Veuillez selectionner un seul numéro de téléphone favori').click();
   await page.getByRole('button', { name: 'Confirmer' }).click();
-  await page.getByRole('tab', { name: 'Contacts' }).click();
+  await page.getByRole('tab', { name: 'Contacts', exact: true }).click();
   await page.click('id=star-button-source-interviewer-1');
-  await page.getByRole('tab', { name: 'Collecte suivante' }).click();
+  await page.getByRole('tab', { name: 'Contacts collecte suivante' }).click();
 
-  await page.getByRole('tab', { name: 'Collecte suivante' }).click();
+  await page.getByRole('tab', { name: 'Contacts collecte suivante' }).click();
   await page.getByRole('button', { name: 'Importer tous les contacts' }).click();
 
   await expect(page.getByRole('cell', { name: 'HILBERT' })).toHaveCount(2);

@@ -10,7 +10,7 @@ describe('formatDate', () => {
   it('should format the date without time if withTime is false or undefined', () => {
     const mockTime = new Date('2023-01-01T12:00:00Z').getTime();
     const result = formatDate(mockTime);
-    const expectedDate = new Intl.DateTimeFormat(undefined, {
+    const expectedDate = new Intl.DateTimeFormat(navigator.language, {
       dateStyle: 'full',
     }).format(new Date(mockTime));
     expect(result).toBe(expectedDate);
@@ -19,7 +19,7 @@ describe('formatDate', () => {
   it('should format the date with time if withTime is true', () => {
     const mockTime = new Date('2023-01-01T12:00:00Z').getTime();
     const result = formatDate(mockTime, true);
-    const expectedDate = new Intl.DateTimeFormat(undefined, {
+    const expectedDate = new Intl.DateTimeFormat(navigator.language, {
       dateStyle: 'full',
       timeStyle: 'short',
     }).format(new Date(mockTime));

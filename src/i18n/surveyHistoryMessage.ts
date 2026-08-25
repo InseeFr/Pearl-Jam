@@ -1,6 +1,6 @@
 const surveyHistoryMessage = {
   deleteContactTitle: {
-    fr: "Supprimer les informations d'un individu",
+    fr: "Supprimer les informations d'un contact",
     en: 'Delete a contact information',
     sq: 'Fshi informacionin e kontaktit',
   },
@@ -47,7 +47,7 @@ const surveyHistoryMessage = {
   },
 
   addContact: {
-    fr: 'Ajouter un individu',
+    fr: 'Ajouter un contact',
     en: 'Add a contact',
     sq: 'Shto një kontakt',
   },
@@ -212,9 +212,9 @@ const surveyHistoryMessage = {
     sq: 'Znj',
   },
   nextSurveyInfo: {
-    fr: 'Coordonnées des individus pour la collecte suivante ',
-    en: 'Coordinates of individuals for the next collect',
-    sq: 'Koordinatat e individëve për mbledhjen e ardhshme',
+    fr: 'Coordonnées des contacts pour la collecte suivante ',
+    en: 'Coordinates of contacts for the next collect',
+    sq: 'Koordinatat e kontakteve për mbledhjen e ardhshme',
   },
   previousCollectInterviewerComment: {
     fr: "Commentaire(s) passé(s) de l'enquêteur :",
@@ -222,12 +222,12 @@ const surveyHistoryMessage = {
     sq: 'Komenti i hetuesit',
   },
   modalAddContact: {
-    fr: 'Ajouter un individu',
+    fr: 'Ajouter un contact',
     en: 'Add a contact',
     sq: 'Shto një kontakt',
   },
   contactModalTitleEdit: {
-    fr: "Modifier les informations de l'individu",
+    fr: "Modifier les informations du contact",
     en: 'Edit contact information',
     sq: 'Ndrysho informacionin e kontaktit',
   },

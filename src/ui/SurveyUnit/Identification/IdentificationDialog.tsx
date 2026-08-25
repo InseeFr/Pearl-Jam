@@ -1,12 +1,4 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  RadioGroup,
-  Stack,
-  DialogActions,
-  Button,
-} from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, RadioGroup, Stack, IconButton } from '@mui/material';
 import { useState } from 'react';
 import { RadioLine } from 'ui/RadioLine';
 import { IdentificationQuestionsId } from 'utils/enum/identifications/IdentificationsQuestions';
@@ -15,6 +7,7 @@ import {
   IdentificationQuestionOption,
 } from 'utils/functions/identifications/identificationFunctions';
 import D from 'i18n';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface IdentificationDialogProps {
   question?: IdentificationQuestionValue;
@@ -36,11 +29,22 @@ export function IdentificationDialog({
 
   const handleChange = (newOption: IdentificationQuestionOption) => {
     setSelectedOption(newOption);
+    onClose();
+    onSubmit(questionId, newOption);
   };
 
   return (
     <Dialog open={question ? question.text.length > 0 : false} onClose={onClose}>
-      <DialogTitle id="identification-title">{question?.text}</DialogTitle>
+      <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+        <DialogTitle id="identification-title">{question?.text}</DialogTitle>
+        <IconButton
+          aria-label={D.closeIconButton}
+          onClick={onClose}
+          sx={{ mr: 2, height: 'fit-content', width: 'fit-content' }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Stack>
       <DialogContent>
         <RadioGroup
           onChange={e =>
@@ -62,29 +66,12 @@ export function IdentificationDialog({
                 key={option.value}
                 label={option.label}
                 disabled={false}
+                onClick={() => handleChange(option)}
               />
             ))}
           </Stack>
         </RadioGroup>
       </DialogContent>
-      <DialogActions>
-        <Button type="button" color="primary" variant="contained" onClick={onClose}>
-          {D.cancelButton}
-        </Button>
-        {selectedOption && (
-          <Button
-            variant="contained"
-            type="button"
-            disabled={false}
-            onClick={() => {
-              onClose();
-              onSubmit(questionId, selectedOption);
-            }}
-          >
-            {D.confirmButton}
-          </Button>
-        )}
-      </DialogActions>
     </Dialog>
   );
 }

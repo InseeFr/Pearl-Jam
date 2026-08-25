@@ -37,7 +37,10 @@ const router = createBrowserRouter([
       },
       {
         path: '/suivi',
-        lazy: () => import('./pages/TrackingPage'),
+        lazy: async () => {
+          const { TrackingPage } = await import('pages/TrackingPage');
+          return { Component: TrackingPage };
+        },
       },
       {
         path: '/survey-unit/:id',

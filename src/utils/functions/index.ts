@@ -1,4 +1,4 @@
 export * from './surveyUnitFunctions';
 export * from './convertSUStateInToDo';
-export * from './communicationFunctions';
+export * from './surveyunit-tracking/surveyUnitTrackingCommunication';
 export * from './surveyUnitState';

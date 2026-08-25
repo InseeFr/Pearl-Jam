@@ -11,18 +11,17 @@ export class SurveyPage {
     return this.page.getByRole('heading', { name: title });
   }
 
-  selectTab(title: string) {
-    return this.page.getByRole('tab', { name: title }).click();
+  selectTab(title: string, exact: boolean = false) {
+    return this.page.getByRole('tab', { name: title, exact }).click();
   }
 
   async addContactAttempt() {
     await this.page.getByRole('button', { name: 'Ajouter un essai' }).click();
     await this.page.getByText('Face à face', { exact: true }).click();
-    await this.page.getByRole('button', { name: 'Confirmer' }).click();
 
     await this.page.getByLabel('Choisir le type de contact').getByText('Enquête acceptée').click();
-    await this.page.getByRole('button', { name: 'Confirmer' }).click();
-    await this.page.getByRole('button', { name: 'Confirmer' }).click();
+
+    await this.page.getByRole('button', { name: 'Enregistrer' }).click();
   }
 
   async setContactOutcomeAsDUK() {
@@ -41,6 +40,6 @@ export class SurveyPage {
       .getByRole('button')
       .click();
 
-      expect(this.page.locator('div').filter({ hasText: /^Transmis$/ })).toBeVisible();
+    expect(this.page.locator('div').filter({ hasText: /^Transmis$/ })).toBeVisible();
   }
 }
