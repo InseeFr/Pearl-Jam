@@ -1,6 +1,6 @@
 {
   "name": "pearl",
-  "version": "2.17.0",
+  "version": "2.17.1-fix-wfs-no-ca-and-noa-32409.rc0",
   "private": true,
   "type": "module",
   "dependencies": {
@@ -101,6 +101,7 @@
     "@originjs/vite-plugin-federation": "^1.3.9",
     "@playwright/test": "^1.60.0",
     "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.2.0",
     "@types/node": "^22.10.1",
     "@types/react": "^19.2.9",
