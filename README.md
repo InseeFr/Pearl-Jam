@@ -8,6 +8,11 @@
 
 Case management web application for Computer-Assisted Personal Interviewing (CAPI)
 
+## Technical Stack
+
+Node.js 22+
+Orval 8
+
 ## Setup the Project
 
 In order to run the application properly, you need define in a `.env.local` file these variables.
@@ -60,3 +65,9 @@ Run tests
 ```
 npx playwright test --ui-port=8888 --ui-host=localhost
 ```
+## Orval and API types updates
+
+The project has a copy of API specs in /spec-open-api/pearl.json
+When the API specs change, you need to update the types :
+  - Update the API specs in /spec-open-api/pearl.json
+  - Run `pnpm openapi`
