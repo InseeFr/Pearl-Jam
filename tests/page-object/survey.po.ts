@@ -32,14 +32,12 @@ export class SurveyPage {
   }
 
   async forward() {
-    expect(this.page.locator('div').filter({ hasText: /^Finalisé$/ })).toBeVisible();
+    const finalizedState = this.page.locator('div').filter({ hasText: /^Finalisé$/ });
+    await expect(finalizedState).toBeVisible();
 
-    await this.page
-      .locator('div')
-      .filter({ hasText: /^Finalisé$/ })
-      .getByRole('button')
-      .click();
+    await finalizedState.getByRole('button').click();
 
-    expect(this.page.locator('div').filter({ hasText: /^Transmis$/ })).toBeVisible();
+
+    await expect(this.page.locator('div').filter({ hasText: /^Transmis$/ })).toBeVisible();
   }
 }
