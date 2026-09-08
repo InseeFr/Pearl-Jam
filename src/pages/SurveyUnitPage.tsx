@@ -72,11 +72,11 @@ export function SurveyUnitPage() {
       <SurveyUnitHeader surveyUnit={surveyUnit} />
       <SwipeableTabs>
         {!!surveyUnit.previousContactHistory && (
-          <SwipeableTab label={D.goToPreviousCollect}>
+          <SwipeableTab  label={D.goToPreviousCollect} default>
             <PreviousCollectCard previousCollectHistory={surveyUnit.previousContactHistory} />
           </SwipeableTab>
         )}
-        <SwipeableTab label={D.goToIdentificationPage} default>
+        <SwipeableTab label={D.goToIdentificationPage} default={!surveyUnit.previousContactHistory}>
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
             <AddressCard surveyUnit={surveyUnit} />
             <IdentificationCard surveyUnit={surveyUnit} />
