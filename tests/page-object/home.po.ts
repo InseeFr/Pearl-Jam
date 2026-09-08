@@ -62,9 +62,8 @@ export class HomePage implements GenericPage {
     await finishedRequests;
 
     const closeModalButton = this.page.getByRole('button', { name: "J'ai compris" });
-    if (await closeModalButton.isHidden()) {
-      await this.page.goto('/', { timeout: 10000 });
-    }
+    await expect(closeModalButton).toBeVisible();
+
     await closeModalButton.click();
   }
 
