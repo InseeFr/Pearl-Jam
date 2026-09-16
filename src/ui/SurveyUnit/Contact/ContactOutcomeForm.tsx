@@ -47,7 +47,7 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
       ...surveyUnit,
       states: newStates,
       contactOutcome: data,
-      hasBeenUpdated: true
+      hasBeenUpdated: true,
     });
     onClose();
   });
@@ -69,7 +69,12 @@ export function ContactOutcomeForm({ onClose, surveyUnit }: Readonly<ContactOutc
   }, [surveyUnit.contactOutcomeConfiguration]);
 
   const [count, type] = watch(['totalNumberOfContactAttempts', 'type']);
-  const isInvalid = count <= 0 || Number.isNaN(count) || !type;
+
+  const hasNoType = !type;
+  const isCountInvalid = count <= 0 || Number.isNaN(count);
+  const isNotApplicable = type === contactOutcomes.NOT_APPLICABLE.value;
+
+  const isInvalid = hasNoType || (isCountInvalid && !isNotApplicable);
 
   return (
     <Dialog open={true} onClose={onClose} maxWidth="lg">

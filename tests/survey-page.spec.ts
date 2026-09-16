@@ -96,7 +96,6 @@ test('Check previous collect history, modify next collect history and synchroniz
   await homePage.synchronize();
   await page.getByRole('checkbox', { name: 'Masquer les unités terminées' }).uncheck();
   await page.getByRole('link', { name: 'SIMMONS Earl' }).click();
-  await page.getByRole('tab', { name: 'Collecte précédente' }).click();
   await page
     .locator('div')
     .filter({ hasText: /^Bilan des contacts :Enquête acceptée$/ })

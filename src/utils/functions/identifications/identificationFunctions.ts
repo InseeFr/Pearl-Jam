@@ -22,7 +22,7 @@ import {
   transmissionRulesHOUSETEL,
   transmissionRulesHOUSETELWSR,
 } from './questionsTree/HouseTelQuestionsTree';
-import { ContactOutcomeValue } from '../contacts/ContactOutcome';
+import { ContactOutcomeValue, contactOutcomes } from '../contacts/ContactOutcome';
 import {
   indF2FIdentificationQuestionsTree,
   transmissionRulesByINDF2F,
@@ -213,8 +213,8 @@ export function validateTransmission(su: SurveyUnit): boolean {
   // contactOutcome requirement
   if (suTransmissionRules.invalidIfmissingContactOutcome && !su.contactOutcome) return false;
 
-  // at least one contactAttempt
-  if (suTransmissionRules.invalidIfmissingContactAttempt && !su.contactAttempts.length)
+  // at least one contactAttempt (unless outcome is NOT_APPLICABLE)
+  if (suTransmissionRules.invalidIfmissingContactAttempt && !su.contactAttempts.length && su.contactOutcome?.type !== contactOutcomes.NOT_APPLICABLE.value)
     return false;
 
   // consistency between identification and contactOutcome
