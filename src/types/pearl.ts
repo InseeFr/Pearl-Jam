@@ -21,7 +21,7 @@ export type SurveyUnitPhoneNumber = {
   id: string;
 };
 
-export type ContactPersonTitle = 'MISTER' | 'MISS';
+export type ContactPersonTitle = 'MISTER' | 'MISS' | 'UNDEFINED';
 
 export type SurveyUnitPerson = {
   id: number;
