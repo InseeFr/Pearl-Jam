@@ -120,12 +120,19 @@ export const getAge = (birthdate?: number | string) => {
   return differenceInYears(new Date(), new Date(birthdate));
 };
 
-const isTitleMister = (title: ContactPersonTitle) => title.toUpperCase() === TITLES.MISTER.type;
-
 export const displayAgeInYears = (birthdate: number) => `${getAge(birthdate) ?? '/'} ${D.years}`;
 
-export const getTitle = (title: ContactPersonTitle) =>
-  isTitleMister(title) ? TITLES.MISTER.value : TITLES.MISS.value;
+export const getTitle = (title: ContactPersonTitle) => {
+  switch (title.toUpperCase()) {
+    case TITLES.MISTER.type:
+      return TITLES.MISTER.value
+    case TITLES.MISS.type:
+      return TITLES.MISS.value
+    default:
+      return TITLES.UNDEFINED.value;
+  }
+}
+
 
 export const personPlaceholder = {
   title: TITLES.MISTER.type,

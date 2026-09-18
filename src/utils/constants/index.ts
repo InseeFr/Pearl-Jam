@@ -76,4 +76,5 @@ export const reasonRadioValues = [
 export const TITLES = {
   MISS: { type: 'MISS', value: D.titleMiss },
   MISTER: { type: 'MISTER', value: D.titleMister },
+  UNDEFINED: { type: 'UNDEFINED', value: D.titleUndefined },
 } as const;

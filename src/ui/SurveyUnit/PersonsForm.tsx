@@ -15,6 +15,7 @@ import { MouseEvent } from 'react';
 import {
   Control,
   Controller,
+  FieldErrors,
   useFieldArray,
   useForm,
   UseFormGetValues,
@@ -46,7 +47,17 @@ export function PersonsForm({
   persons,
   personToModifyIndex,
 }: Readonly<PersonsFormProps>) {
-  const { register, handleSubmit, control, setValue, getValues, watch } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    getValues,
+    watch,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm({
     // input persons is sorted and its order could be different from surveyUnit.persons used by useForm
     // => force the same order of persons in surveyUnit
     defaultValues: { persons: persons },
@@ -55,6 +66,18 @@ export function PersonsForm({
   persons.forEach((_, i) => watch(`persons.${i}.privileged`));
 
   const onSubmit = handleSubmit(data => {
+    const titleField = data.persons[personToModifyIndex].title;
+
+    if (titleField === TITLES.UNDEFINED.type) {
+      setError(`persons.${personToModifyIndex}.title`, {
+        type: 'manual',
+        message: D.requiredField,
+      });
+      return;
+    }
+
+    clearErrors(`persons.${personToModifyIndex}.title`);
+
     surveyUnitIDBService.addOrUpdate({
       ...surveyUnit,
       persons: data.persons,
@@ -79,6 +102,7 @@ export function PersonsForm({
             setValue={setValue}
             persons={persons}
             getValues={getValues}
+            errors={errors}
           />
         </DialogContent>
         <DialogActions>
@@ -108,6 +132,9 @@ interface PersonFieldsProps {
   getValues: UseFormGetValues<{
     persons: SurveyUnitPerson[];
   }>;
+  errors: FieldErrors<{
+    persons: SurveyUnitPerson[];
+  }>;
 }
 /**
  * Fields for a specific Person
@@ -120,6 +147,7 @@ function PersonFields({
   setValue,
   persons,
   getValues,
+  errors,
 }: Readonly<PersonFieldsProps>) {
   const titles = [
     { label: TITLES.MISS.value, value: TITLES.MISS.type },
@@ -185,6 +213,8 @@ function PersonFields({
         required
         options={titles}
         control={control}
+        errors={errors}
+        helperText="true"
       />
       <FieldRow required label={D.surveyUnitLastName} {...register(`persons.${index}.lastName`)} />
       <FieldRow
