@@ -257,22 +257,20 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               </Row>
             )}
           </Stack>
-          {import.meta.env.VITE_ARTICULATION && (
-            <Stack gap={3}>
-              {/* Title */}
-              <Row justifyContent="space-between">
-                <Row gap={1}>
-                  <GroupOutlinedIcon fontSize="large" />
-                  <Typography component="h2" variant="xl" fontWeight={700}>
-                    {D.personDetails}
-                  </Typography>
-                </Row>
+          <Stack gap={3}>
+            {/* Title */}
+            <Row justifyContent="space-between">
+              <Row gap={1}>
+                <GroupOutlinedIcon fontSize="large" />
+                <Typography component="h2" variant="xl" fontWeight={700}>
+                  {D.personDetails}
+                </Typography>
               </Row>
+            </Row>
 
-              {/* Table */}
-              {articulationTable && <ArticulationTable table={articulationTable} />}
-            </Stack>
-          )}
+            {/* Table */}
+            {articulationTable && <ArticulationTable table={articulationTable} />}
+          </Stack>
         </Stack>
       </CardContent>
     </Card>
