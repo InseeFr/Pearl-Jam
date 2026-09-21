@@ -202,7 +202,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
       ...surveyUnit,
       priority: true,
     });
-    navigate(`/queen/interrogations/${id}/synchronize`);
+    navigate(`/queen/interrogations/synchronize/${id}`);
   };
 
   return (
