@@ -16,6 +16,10 @@ export const surveyUnitStateEnum = {
     type: 'INS',
     value: `${D.suStateQuestionnaireStarted}`,
   },
+  REGAINED_CONTROL_INTERVIEW: {
+    type: 'RCI',
+    value: `${D.suStateRegainedControlInterview}`,
+  },
   WAITING_FOR_TRANSMISSION: {
     type: 'WFT',
     value: `${D.suStateWaitingForTransmission}`,
@@ -32,7 +36,6 @@ export const surveyUnitStateEnum = {
   CLOSED: { type: 'CLO', value: `${D.suStateClosedSurveyUnit}` },
   ERROR: { type: 'ERR', value: `` },
 } as const;
-
 export type SurveyUnitStateEnum = typeof surveyUnitStateEnum;
 
 export type StateValues = SurveyUnitStateEnum[keyof SurveyUnitStateEnum]['type'];

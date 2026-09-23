@@ -14,7 +14,7 @@ import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import BlockIcon from '@mui/icons-material/Block';
 import D from 'i18n';
 import { SurveyUnit, SurveyUnitState } from 'types/pearl';
-import { isQuestionnaireAvailable } from '../../utils/functions';
+import { addNewState, isQuestionnaireAvailable } from '../../utils/functions';
 import {
   Box,
   Dialog,
@@ -35,6 +35,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
 import { useSurveyUnit } from 'utils/hooks/database';
+import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const chipStyle = { background: '#FFF', boxShadow: 2 };
 
@@ -205,6 +206,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
       ...surveyUnit,
       priority: true,
     });
+    addNewState(surveyUnit, surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type)
     navigate(`/queen/interrogations/synchronize/${id}`);
   };
 

@@ -29,6 +29,11 @@ const suStateMessage = {
     en: 'Questionnaire started',
     sq: 'Pyetësori ka filluar',
   },
+  suStateRegainedControlInterview: {
+    fr: 'Repris le contrôle du questionnaire',
+    en: 'Regained control of interview',
+    sq: 'Regained control of interview',
+  },
   suStateWaitingForTransmission: {
     fr: 'En attente de transmission',
     en: 'Waiting for transmission',

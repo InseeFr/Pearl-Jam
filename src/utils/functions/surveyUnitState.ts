@@ -111,6 +111,26 @@ export const handleQuestionnaireStarted = (
   return states;
 };
 
+// ToDo : check if we really need to handle the contact state as we do for INS
+// Currently i just duplicated the QuestionnaireStarted function we the new state
+export const handleRegainedControlInterview = (
+  surveyUnit: SurveyUnit,
+  states: SurveyUnitState[],
+  newState: SurveyUnitState,
+  stateType: StateValues
+): SurveyUnitState[] => {
+  if (CONTACT_RELATED_STATES.includes(stateType)) {
+    states = addContactState(surveyUnit, newState);
+    states = addLatestState(states, {
+      date: Date.now(),
+      type: surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type,
+    });
+  } else {
+    states = addLatestState(states, newState);
+  }
+  return states;
+};
+
 export const handleAtLeastOneContact = (
   surveyUnit: SurveyUnit,
   states: SurveyUnitState[],
@@ -185,6 +205,7 @@ type StateHandler = (
 ) => SurveyUnitState[];
 const STATE_TRANSITION_HANDLERS: Record<string, StateHandler> = {
   [surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type]: handleQuestionnaireStarted,
+  [surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type]: handleRegainedControlInterview,
   [surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type]: handleAtLeastOneContact,
   [surveyUnitStateEnum.APPOINTMENT_MADE.type]: handleAppointmentMade,
   [surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type]: handleTransmissionStates,
