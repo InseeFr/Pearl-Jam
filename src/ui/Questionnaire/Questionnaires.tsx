@@ -29,11 +29,12 @@ import {
 } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import React, { useEffect, useState } from 'react';
-import { getMostRecentState } from '../../utils/synchronize';
+import { getLatestWebState } from '../../utils/synchronize';
 import { getLang } from '../../i18n/build-dictionary';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
+import { useSurveyUnit } from 'utils/hooks/database';
 
 const chipStyle = { background: '#FFF', boxShadow: 2 };
 
@@ -158,6 +159,7 @@ function ConfirmationModal({
 
 export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>) {
   const { id } = surveyUnit;
+
   const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
   const navigate = useNavigate();
 
@@ -170,20 +172,21 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
       .then(setArticulationTable);
   }, [id]);
 
-  const isQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
-    state => state.state === 'QUESTIONNAIRE_INIT'
-  );
   // The questionnaire was started on the web if it has at least one "web" event
   const isWebQuestionnaire = Boolean(
     surveyUnit.otherModeQuestionnaireState && surveyUnit.otherModeQuestionnaireState.length > 0
   );
-  const isQuestionnaireCompleted = surveyUnit.otherModeQuestionnaireState?.some(
+  const isWebQuestionnaireCompleted = surveyUnit.otherModeQuestionnaireState?.some(
     state => state.state === 'QUESTIONNAIRE_COMPLETED' || state.state === 'QUESTIONNAIRE_VALIDATED'
+  );
+
+  const isWebQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
+    state => state.state === 'QUESTIONNAIRE_INIT'
   );
 
   const allArticulationRowsCompleted = areAllArticulationRowsCompleted(articulationTable);
 
-  const latestState = getMostRecentState(surveyUnit);
+  const latestWebState = getLatestWebState(surveyUnit);
 
   const openQuestionnaire = () => {
     if (!isWebQuestionnaire) {
@@ -226,7 +229,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 
               <Button
                 variant="contained"
-                disabled={!isAvailable}
+                disabled={!isAvailable || isWebQuestionnaireCompleted}
                 startIcon={<SlowMotionVideoIcon />}
                 onClick={openQuestionnaire}
               >
@@ -240,7 +243,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               onConfirm={handleConfirm}
             />
 
-            {latestState?.date && (
+            {latestWebState?.date && (
               <Row gap={6}>
                 <Stack bgcolor="surfacePrimary.main" minWidth={325} borderRadius={2}>
                   <Box m={2} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -250,7 +253,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
                         day: '2-digit',
                         month: '2-digit',
                         year: 'numeric',
-                      }).format(new Date(latestState?.date))}
+                      }).format(new Date(latestWebState?.date))}
                     </Typography>
                   </Box>
                 </Stack>

@@ -277,7 +277,7 @@ const getNewSurveyUnitsByCampaign = async (
 /**
  * Return the latest (based on the date property) other mode questionnaire state
  */
-export const getMostRecentState = (surveyUnit?: SurveyUnit) => {
+export const getLatestWebState = (surveyUnit?: SurveyUnit) => {
   if (!surveyUnit) {
     return undefined;
   }
@@ -306,8 +306,8 @@ const getLatestSurveyUnitStateAfterSync = (
 ) => {
   const previousSurveyUnit = previousSurveyUnits.find(su => su.id === surveyUnit.id);
 
-  const previousMostRecentOtherModeQuestionState = getMostRecentState(previousSurveyUnit);
-  const mostRecentOtherModeQuestionnaireState = getMostRecentState(surveyUnit);
+  const previousMostRecentOtherModeQuestionState = getLatestWebState(previousSurveyUnit);
+  const mostRecentOtherModeQuestionnaireState = getLatestWebState(surveyUnit);
   const currentState = mostRecentOtherModeQuestionnaireState?.state ?? null;
 
   if (!previousMostRecentOtherModeQuestionState) {

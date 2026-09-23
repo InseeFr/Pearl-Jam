@@ -15,7 +15,7 @@ vi.mock('../../utils/functions/surveyUnitFunctions', () => ({
 }));
 
 vi.mock('../../utils/synchronize', () => ({
-  getMostRecentState: vi.fn(),
+  getLatestWebState: vi.fn(),
 }));
 
 vi.mock('../../i18n/build-dictionary', async () => {
@@ -79,7 +79,7 @@ describe('Questionnaires Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(surveyUnitFunctions, 'isQuestionnaireAvailable').mockReturnValue(() => true);
-    vi.spyOn(synchronize, 'getMostRecentState').mockReturnValue(undefined);
+    vi.spyOn(synchronize, 'getLatestWebState').mockReturnValue(undefined);
   });
 
   describe('Rendering', () => {
@@ -196,7 +196,7 @@ describe('Questionnaires Component', () => {
 
   describe('Latest state date display', () => {
     it('should display the date when latestState has a date', () => {
-      vi.spyOn(synchronize, 'getMostRecentState').mockReturnValue({
+      vi.spyOn(synchronize, 'getLatestWebState').mockReturnValue({
         id: '1',
         state: 'QUESTIONNAIRE_INIT',
         date: '2023-06-15',
@@ -208,7 +208,7 @@ describe('Questionnaires Component', () => {
     });
 
     it('should display CalendarMonthIcon when date is present', () => {
-      vi.spyOn(synchronize, 'getMostRecentState').mockReturnValue({
+      vi.spyOn(synchronize, 'getLatestWebState').mockReturnValue({
         id: '1',
         state: 'QUESTIONNAIRE_INIT',
         date: '2023-06-15',
@@ -221,7 +221,7 @@ describe('Questionnaires Component', () => {
     });
 
     it('should not display the date section when latestState has no date', () => {
-      vi.spyOn(synchronize, 'getMostRecentState').mockReturnValue(undefined);
+      vi.spyOn(synchronize, 'getLatestWebState').mockReturnValue(undefined);
 
       renderWithProviders(mockSurveyUnit);
 
