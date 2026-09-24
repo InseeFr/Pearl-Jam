@@ -5,6 +5,11 @@ import { useQueenListener } from '../utils/hooks/useQueenListener';
 
 const queenPathname = '/queen';
 
+type NavigationEventDetail = {
+  pathname: string;
+  search?: string;
+};
+
 /**
  * Mount Queen to sync data
  */
@@ -18,13 +23,13 @@ export default function QueenPage() {
 
   // Listen to navigation events dispatched inside Drama Queen mfe.
   useEffect(() => {
-    const dramaQueenNavigationEventHandler = (event: CustomEvent<unknown>) => {
-      const pathname = event.detail;
+    const dramaQueenNavigationEventHandler = (event: Event) => {
+      const { pathname, search } = (event as CustomEvent<NavigationEventDetail>).detail;
       const newPathname = `${queenPathname}${pathname}`;
-      if (newPathname === location.pathname) {
+      if (newPathname === location.pathname && search === location.search) {
         return;
       }
-      navigate(newPathname);
+      navigate({ pathname: newPathname, search });
     };
     globalThis.addEventListener('[Drama Queen] navigated', dramaQueenNavigationEventHandler);
 
@@ -37,8 +42,11 @@ export default function QueenPage() {
   useEffect(() => {
     if (location.pathname.startsWith(queenPathname)) {
       globalThis.dispatchEvent(
-        new CustomEvent('[Pearl] navigated', {
-          detail: location.pathname.replace(queenPathname, ''),
+        new CustomEvent<NavigationEventDetail>('[Pearl] navigated', {
+          detail: {
+            pathname: location.pathname.replace(queenPathname, ''),
+            search: location.search,
+          },
         })
       );
     }
