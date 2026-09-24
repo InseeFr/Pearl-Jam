@@ -11,7 +11,12 @@ export const convertSUStateInToDo = (surveyUnit: SurveyUnit, suState: StateValue
     return toDoEnum.WEBTERMINATED;
   }
 
-  if (surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'QUESTIONNAIRE_INIT')) {
+  if (
+    surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'QUESTIONNAIRE_INIT') &&
+    !surveyUnit.states?.find(
+      state => state.type === surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type
+    )
+  ) {
     return toDoEnum.WEBFINALIZE;
   }
 
@@ -30,7 +35,10 @@ export const convertSUStateInToDo = (surveyUnit: SurveyUnit, suState: StateValue
   if (suState === surveyUnitStateEnum.APPOINTMENT_MADE.type) {
     return toDoEnum.SURVEY;
   }
-  if (suState === surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type) {
+  if (
+    suState === surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type ||
+    suState === surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type
+  ) {
     return toDoEnum.FINALIZE;
   }
   if (suState === surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type) {
