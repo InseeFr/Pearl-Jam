@@ -6,16 +6,27 @@ export const convertSUStateInToDo = (surveyUnit: SurveyUnit, suState: StateValue
   if (
     surveyUnit.otherModeQuestionnaireState?.find(
       o => o.state === 'QUESTIONNAIRE_COMPLETED' || o.state === 'QUESTIONNAIRE_VALIDATED'
-    )
+    ) &&
+    !surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'MULTIMODE_MOVED')
   ) {
     return toDoEnum.WEBTERMINATED;
+  }
+
+  if (
+    surveyUnit.otherModeQuestionnaireState?.find(
+      o => o.state === 'QUESTIONNAIRE_COMPLETED' || o.state === 'QUESTIONNAIRE_VALIDATED'
+    ) &&
+    surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'MULTIMODE_MOVED')
+  ) {
+    return toDoEnum.CONTACT;
   }
 
   if (
     surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'QUESTIONNAIRE_INIT') &&
     !surveyUnit.states?.find(
       state => state.type === surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type
-    )
+    ) &&
+    !surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'MULTIMODE_MOVED')
   ) {
     return toDoEnum.WEBFINALIZE;
   }

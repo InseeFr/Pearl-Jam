@@ -180,7 +180,8 @@ export type SurveyUnit = {
 export type OtherModeQuestionStateType =
   | 'QUESTIONNAIRE_VALIDATED'
   | 'QUESTIONNAIRE_COMPLETED'
-  | 'QUESTIONNAIRE_INIT';
+  | 'QUESTIONNAIRE_INIT'
+  | 'MULTIMODE_MOVED';
 export type OtherModeQuestionnaireState = {
   id: string;
   state: OtherModeQuestionStateType;
