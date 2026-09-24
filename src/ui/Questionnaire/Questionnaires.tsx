@@ -14,7 +14,7 @@ import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import BlockIcon from '@mui/icons-material/Block';
 import D from 'i18n';
 import { SurveyUnit, SurveyUnitState } from 'types/pearl';
-import { addNewState, isQuestionnaireAvailable } from '../../utils/functions';
+import { addNewState, isQuestionnaireAvailable, persistSurveyUnit } from '../../utils/functions';
 import {
   Box,
   Dialog,
@@ -177,23 +177,24 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
   const isWebQuestionnaire = Boolean(
     surveyUnit.otherModeQuestionnaireState && surveyUnit.otherModeQuestionnaireState.length > 0
   );
-  const isWebQuestionnaireCompleted = surveyUnit.otherModeQuestionnaireState?.some(
+  const isWebQuestionnaireCompleted = Boolean(surveyUnit.otherModeQuestionnaireState?.some(
     state => state.state === 'QUESTIONNAIRE_COMPLETED' || state.state === 'QUESTIONNAIRE_VALIDATED'
-  );
+  ))
 
-  const isWebQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
-    state => state.state === 'QUESTIONNAIRE_INIT'
-  );
+  const hasControlBeenRegained = surveyUnit.states.some(state => state.type === surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type)
 
   const allArticulationRowsCompleted = areAllArticulationRowsCompleted(articulationTable);
 
   const latestWebState = getLatestWebState(surveyUnit);
 
-  const openQuestionnaire = () => {
-    if (!isWebQuestionnaire) {
-      navigate(`/queen/interrogations/${id}`);
-    }
+  const regainControl = () => {
     setIsModalOpen(true);
+  }
+
+  const canRegainControl = isWebQuestionnaire && !isWebQuestionnaireCompleted && !hasControlBeenRegained
+
+  const openQuestionnaire = () => {
+    navigate(`/queen/interrogations/${id}`);
   };
 
   const handleCancel = () => {
@@ -206,9 +207,17 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
       ...surveyUnit,
       priority: true,
     });
-    addNewState(surveyUnit, surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type)
+    const newStates = addNewState(surveyUnit, surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type)
+    await persistSurveyUnit({ ...surveyUnit, states: newStates });
     navigate(`/queen/interrogations/synchronize/${id}`);
   };
+
+  const canOpenArticulationQuestionnaires = (
+    // either it's not a web questionnaire
+    !isWebQuestionnaire ||
+    // either it's a web questionnaire, for which we have regained control
+    (isWebQuestionnaire && hasControlBeenRegained)
+  )
 
   return (
     <Card elevation={0}>
@@ -229,14 +238,26 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
                 allArticulationRowsCompleted={allArticulationRowsCompleted}
               />
 
-              <Button
-                variant="contained"
-                disabled={!isAvailable || isWebQuestionnaireCompleted}
-                startIcon={<SlowMotionVideoIcon />}
-                onClick={openQuestionnaire}
-              >
-                {D.accessTheQuestionnaire}
-              </Button>
+              {canRegainControl && (
+                <Button
+                  variant="contained"
+                  startIcon={<SlowMotionVideoIcon />}
+                  onClick={regainControl}
+                >
+                  {D.regainControlQuestionnaire}
+                </Button>
+              )}
+
+              {!canRegainControl && (
+                <Button
+                  variant="contained"
+                  disabled={!isAvailable || isWebQuestionnaireCompleted}
+                  startIcon={<SlowMotionVideoIcon />}
+                  onClick={openQuestionnaire}
+                >
+                  {D.accessTheQuestionnaire}
+                </Button>
+              )}
             </Row>
 
             <ConfirmationModal
@@ -262,22 +283,25 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               </Row>
             )}
           </Stack>
-          {articulationTable && (
-            <Stack gap={3}>
-              {/* Title */}
-              <Row justifyContent="space-between">
-                <Row gap={1}>
-                  <GroupOutlinedIcon fontSize="large" />
-                  <Typography component="h2" variant="xl" fontWeight={700}>
-                    {D.personDetails}
-                  </Typography>
-                </Row>
-              </Row>
 
-              {/* Table */}
-              <ArticulationTable table={articulationTable} />
-            </Stack>
-          )}
+          <Stack gap={3}>
+            {/* Title */}
+            <Row justifyContent="space-between">
+              <Row gap={1}>
+                <GroupOutlinedIcon fontSize="large" />
+                <Typography component="h2" variant="xl" fontWeight={700}>
+                  {D.personDetails}
+                </Typography>
+              </Row>
+            </Row>
+
+            {/* Table */}
+            {articulationTable && (
+              <ArticulationTable
+                table={articulationTable}
+                canOpenUrls={canOpenArticulationQuestionnaires} />
+            )}
+          </Stack>
         </Stack>
       </CardContent>
     </Card>
@@ -290,28 +314,12 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 export function ArticulationTable(
   props: Readonly<{
     table: ArticulationTableData | null;
+    canOpenUrls: boolean
   }>
 ) {
   const table = props.table;
+  const canOpenUrls = props.canOpenUrls
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUrl, setSelectedUrl] = useState<string>('');
-
-  const handleOpenModal = (url: string) => {
-    setSelectedUrl(url);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedUrl('');
-  };
-
-  const handleConfirm = () => {
-    setIsModalOpen(false);
-    navigate(selectedUrl);
-    setSelectedUrl('');
-  };
 
   if (!table) {
     return null;
@@ -333,20 +341,21 @@ export function ArticulationTable(
                 <StateChip progress={row.progress} />
               </TableCell>
               <TableCell>
-                <Button
-                  variant="contained"
-                  onClick={() => handleOpenModal(row.url)}
-                  startIcon={<SlowMotionVideoIcon />}
-                >
-                  {row.label}
-                </Button>
+                {canOpenUrls && (
+
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate(row.url)}
+                    startIcon={<SlowMotionVideoIcon />}
+                  >
+                    {row.label}
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-
-      <ConfirmationModal open={isModalOpen} onClose={handleCloseModal} onConfirm={handleConfirm} />
     </>
   );
 }

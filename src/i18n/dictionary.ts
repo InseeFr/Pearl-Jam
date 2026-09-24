@@ -58,6 +58,11 @@ const dictionary = {
     en: 'Access the questionnaire',
     sq: 'Aksesoni pyetësorin',
   },
+  regainControlQuestionnaire: {
+    fr: 'Reprendre la main',
+    en: 'Regain control',
+    sq: 'Regain control',
+  },
   personDetails: {
     fr: 'Récapitulatif des individus',
     en: 'Summary of individuals',

@@ -230,74 +230,21 @@ describe('Questionnaires Component', () => {
   });
 
   describe('Articulation section', () => {
-    const originalEnv = import.meta.env.VITE_ARTICULATION;
-
-    beforeEach(() => {
-      // Reset import meta env
-      import.meta.env.VITE_ARTICULATION = '';
-    });
-
-    afterEach(() => {
-      import.meta.env.VITE_ARTICULATION = originalEnv;
-    });
-
-    it('should not render articulation section when VITE_ARTICULATION is not set', () => {
-      import.meta.env.VITE_ARTICULATION = '';
-
-      renderWithProviders(mockSurveyUnit);
-
-      expect(screen.queryByText(D.personDetails)).toBeNull();
-    });
-
-    it('should render articulation section title when VITE_ARTICULATION is set', () => {
-      import.meta.env.VITE_ARTICULATION = 'true';
-
+    it('should render articulation section title', () => {
       renderWithProviders(mockSurveyUnit);
 
       expect(screen.getByText(D.personDetails)).toBeDefined();
       expect(screen.getByTestId('GroupOutlinedIcon')).toBeDefined();
     });
   });
-
-  describe('Confirmation modal', () => {
-    it('should show confirmation modal when clicking access questionnaire button', async () => {
-      renderWithProviders(mockSurveyUnit);
-
-      const button = screen.getByText(D.accessTheQuestionnaire);
-      fireEvent.click(button);
-
-      await waitFor(() => {
-        expect(screen.getByText(D.questionnaireAccessConfirmationTitle)).toBeDefined();
-        expect(screen.getByText(D.questionnaireAccessConfirmationMessage)).toBeDefined();
-      });
-    });
-
-    it('should close modal when clicking cancel button', async () => {
-      renderWithProviders(mockSurveyUnit);
-
-      const button = screen.getByText(D.accessTheQuestionnaire);
-      fireEvent.click(button);
-
-      await waitFor(() => {
-        expect(screen.getByText(D.questionnaireAccessConfirmationTitle)).toBeDefined();
-      });
-
-      const cancelButton = screen.getByText(D.cancelButton);
-      fireEvent.click(cancelButton);
-
-      await waitFor(() => {
-        expect(screen.queryByText(D.questionnaireAccessConfirmationTitle)).toBeNull();
-      });
-    });
-  });
 });
 
 describe('ArticulationTable Component', () => {
-  const renderWithProviders = (table: any) => {
+  const renderWithProviders = (table: any, canOpenArticulationQuestionnaires = true) => {
     return render(
       <PearlTheme>
         <BrowserRouter>
-          <ArticulationTable table={table} />
+          <ArticulationTable table={table} canOpenUrls={canOpenArticulationQuestionnaires} />
         </BrowserRouter>
       </PearlTheme>
     );
@@ -408,6 +355,24 @@ describe('ArticulationTable Component', () => {
     expect(button.closest('button')).toBeDefined();
   });
 
+  it('should not render buttons if access to articulation questionnaires is disabled', () => {
+    const mockTable = {
+      rows: [
+        {
+          cells: [{ value: 1 }],
+          progress: 1,
+          label: 'Open questionnaire',
+          url: '/queen/survey-unit/999',
+        },
+      ],
+    };
+
+    renderWithProviders(mockTable, false);
+
+    const button = screen.queryByText('Open questionnaire');
+    expect(button).toBeNull();
+  });
+
   it('should render multiple rows correctly', () => {
     const mockTable = {
       rows: [
@@ -440,57 +405,5 @@ describe('ArticulationTable Component', () => {
     expect(screen.getByText('Row 1')).toBeDefined();
     expect(screen.getByText('Row 2')).toBeDefined();
     expect(screen.getByText('Row 3')).toBeDefined();
-  });
-
-  it('should show confirmation modal when clicking on row button', async () => {
-    const mockTable = {
-      rows: [
-        {
-          cells: [{ value: 1 }],
-          progress: 1,
-          label: 'Open questionnaire',
-          url: '/queen/survey-unit/999',
-        },
-      ],
-    };
-
-    renderWithProviders(mockTable);
-
-    const button = screen.getByText('Open questionnaire');
-    fireEvent.click(button);
-
-    await waitFor(() => {
-      expect(screen.getByText(D.questionnaireAccessConfirmationTitle)).toBeDefined();
-      expect(screen.getByText(D.questionnaireAccessConfirmationMessage)).toBeDefined();
-    });
-  });
-
-  it('should close modal when clicking cancel button in ArticulationTable', async () => {
-    const mockTable = {
-      rows: [
-        {
-          cells: [{ value: 1 }],
-          progress: 1,
-          label: 'Open questionnaire',
-          url: '/queen/survey-unit/999',
-        },
-      ],
-    };
-
-    renderWithProviders(mockTable);
-
-    const button = screen.getByText('Open questionnaire');
-    fireEvent.click(button);
-
-    await waitFor(() => {
-      expect(screen.getByText(D.questionnaireAccessConfirmationTitle)).toBeDefined();
-    });
-
-    const cancelButton = screen.getByText(D.cancelButton);
-    fireEvent.click(cancelButton);
-
-    await waitFor(() => {
-      expect(screen.queryByText(D.questionnaireAccessConfirmationTitle)).toBeNull();
-    });
   });
 });
