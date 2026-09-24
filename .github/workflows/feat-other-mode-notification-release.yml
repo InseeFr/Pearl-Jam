@@ -3,8 +3,8 @@ name: Release Candidate
 on:
   push:
     branches:
-      - "feat/other-mode-notification"
-      - "feat/other-mode-notification-rc.0"
+      - 'feat/other-mode-notification'
+      - 'feat/other-mode-notification-rc.0'
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -70,6 +70,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            inseefr/pearl-jam:2.15.7-fix-multimode-rc.6
+            inseefr/pearl-jam:2.15.7-fix-multimode-rc.7
           cache-from: type=gha
           cache-to: type=gha,mode=max
