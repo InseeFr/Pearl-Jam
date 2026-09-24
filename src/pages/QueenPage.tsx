@@ -61,7 +61,6 @@ export default function QueenPage() {
     }
     unmountRef.current = mount({
       mountPoint: ref.current,
-      initialPathname: location.pathname.replace(queenPathname, ''),
     });
     isFirstRunRef.current = false;
   }, [location]);

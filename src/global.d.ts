@@ -9,11 +9,7 @@ declare module '*.js' {
 }
 
 declare module 'dramaQueen/DramaIndex' {
-  export function mount(configuration: {
-    mountPoint: HTMLElement | null;
-    initialPathname: string;
-  }): VoidFunction;
-
+  export function mount(configuration: { mountPoint: HTMLElement | null }): VoidFunction;
 }
 declare module 'dramaQueen/getQueenVersion' {
   export function getQueenVersion(): string;
