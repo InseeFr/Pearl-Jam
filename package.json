@@ -1,6 +1,6 @@
 {
   "name": "pearl",
-  "version": "2.15.7-fix-multimode-rc.11",
+  "version": "2.15.7-fix-multimode-rc.12",
   "private": true,
   "type": "module",
   "dependencies": {
