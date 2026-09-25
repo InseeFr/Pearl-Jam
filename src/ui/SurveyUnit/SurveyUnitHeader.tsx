@@ -26,7 +26,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { validateTransmission } from 'utils/functions/identifications/identificationFunctions';
 import { PriorityBadge } from '../PriorityBadge';
 import { getSuTodoState } from 'utils/functions/surveyUnitState';
-import { getStepperSteps } from 'utils/functions/stepperSteps';
+import { getStepperSteps, isStepDone } from 'utils/functions/stepperSteps';
 
 const useStyles = makeStyles({
   rotateBox: {
@@ -82,9 +82,9 @@ export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>
   const open = Boolean(anchorElement);
   const id = open ? 'simple-popover' : undefined;
   const states = getStepperSteps(surveyUnit);
-  const currentState = Number(getSuTodoState(surveyUnit)?.order);
-  // steps can be filtered out, so the active step is the number of steps already passed
-  const activeStep = states.filter(state => Number(state.order) < currentState).length;
+  const currentToDo = getSuTodoState(surveyUnit);
+  // steps can be filtered out, so the active step is the number of steps already done
+  const activeStep = states.filter(state => isStepDone(state, currentToDo)).length;
   const canSubmit = validateTransmission(surveyUnit);
 
   return (
@@ -123,10 +123,11 @@ export function SurveyUnitHeader({ surveyUnit }: Readonly<SurveyUnitHeaderProps>
       {/* Middle Side */}
       <Stepper activeStep={activeStep} alternativeLabel>
         {states.map((state, index) => {
+          const done = isStepDone(state, currentToDo);
           return (
             <Step key={state.order}>
-              <StepLabel icon={StepIcon(Number(state.order) < currentState, String(index + 1))}>
-                {Number(state.order) < currentState ? state.stepName : state.value}
+              <StepLabel icon={StepIcon(done, String(index + 1))}>
+                {done ? state.stepName : state.value}
               </StepLabel>
               {state === toDoEnum.FINALIZE && canSubmit && <SubmitButton surveyUnit={surveyUnit} />}
             </Step>
