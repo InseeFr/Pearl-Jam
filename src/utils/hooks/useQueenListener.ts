@@ -5,6 +5,8 @@ import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 import { useEffect } from 'react';
 import { persistSurveyUnit } from '../functions';
 import { ID } from 'utils/indexeddb/services/abstract-idb-service';
+import { QueenEvent } from 'types/events';
+import { NavigateFunction } from 'react-router-dom';
 
 const computeSurveyUnitState = (questionnaireState: QuestionnaireStateType) => {
   switch (questionnaireState) {
@@ -44,50 +46,37 @@ const updateSurveyUnit = (surveyUnitID: ID, queenState: QuestionnaireStateType) 
   });
 };
 
-const closeQueen = (redirect: (url: string) => void) => (surveyUnitID: string) => {
-  redirect(`/survey-unit/${surveyUnitID}/details`);
+const closeQueen = (navigate: NavigateFunction) => (surveyUnitID: string, search?: string) => {
+  navigate({ pathname: `/survey-unit/${surveyUnitID}/details`, search });
 };
 
 // eslint-disable-next-line consistent-return
-const handleQueenEvent = (redirect: (url: string) => void) => async (event: QueenEvent) => {
+const handleQueenEvent = (navigate: NavigateFunction) => async (event: QueenEvent) => {
   const { type, command, ...other } = event.detail;
   if (type === 'QUEEN') {
     switch (command) {
       case 'CLOSE_QUEEN':
-        closeQueen(redirect)(other.interrogationId);
+        closeQueen(navigate)(other.interrogationId);
+        break;
+      case 'REGAINED_CONTROL_DONE':
+        closeQueen(navigate)(
+          other.interrogationId,
+          '?tab=goToQuestionnairesPage&feedback=regainedControlDone'
+        );
         break;
       case 'UPDATE_STATE':
         updateSurveyUnit(other.interrogationId, other.state);
         globalThis.dispatchEvent(new CustomEvent('pearl-update'));
         break;
-      case 'UPDATE_SYNCHRONIZE':
-        // NOT here
-        break;
-      case 'HEALTH_CHECK':
-        return true;
       default:
         break;
     }
   }
 };
 
-declare global {
-  interface WindowEventMap {
-    QUEEN: QueenEvent;
-  }
-}
-
-type QueenEventDetail = {
-  type: string;
-  command: string;
-  interrogationId: string;
-  state: QuestionnaireStateType;
-};
-interface QueenEvent extends CustomEvent<QueenEventDetail> {}
-
-export function useQueenListener(redirect: (url: string) => void) {
+export function useQueenListener(navigate: NavigateFunction) {
   useEffect(() => {
-    const listener = handleQueenEvent(redirect);
+    const listener = handleQueenEvent(navigate);
     globalThis.addEventListener('QUEEN', listener);
     return () => {
       globalThis.removeEventListener('QUEEN', listener);

@@ -9,7 +9,7 @@ declare global {
 
 type QueenEventDetail = {
   type: string;
-  command: string;
+  command: 'CLOSE_QUEEN' | 'UPDATE_STATE' | 'REGAINED_CONTROL_DONE';
   interrogationId: string;
   state: QuestionnaireStateType;
 };

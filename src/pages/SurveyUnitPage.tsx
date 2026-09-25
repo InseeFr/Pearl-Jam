@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import D from 'i18n';
 import { useEffect } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams, useSearchParams } from 'react-router-dom';
 import { CommunicationsCard } from 'ui/SurveyUnit/Communication/CommunicationsCard';
 import { ContactsCard } from 'ui/SurveyUnit/Contact/ContactsCard';
 import { SwipeableTab, SwipeableTabs } from '../SwipeableTabs';
@@ -22,9 +22,49 @@ import { PreviousCollectCard } from 'ui/SurveyUnit/SurveyHistory/PreviousCollect
 import { NextCollectCard } from 'ui/SurveyUnit/SurveyHistory/NextCollectCard';
 import { persistSurveyUnit } from 'utils/functions';
 import { getLastState, addNewState } from 'utils/functions/surveyUnitState';
+import { SurveyUnit } from 'types/pearl';
+
+const allTabs = [
+  'goToPreviousCollect',
+  'goToIdentificationPage',
+  'goToContactPage',
+  'goToCommunicationPage',
+  'goToQuestionnairesPage',
+  'goToCommentsPage',
+  'goToNextCollect',
+];
+
+export type TabType =
+  | 'goToPreviousCollect'
+  | 'goToIdentificationPage'
+  | 'goToContactPage'
+  | 'goToCommunicationPage'
+  | 'goToQuestionnairesPage'
+  | 'goToCommentsPage'
+  | 'goToNextCollect';
+
+const getAvailableTabs = (surveyUnit: SurveyUnit | undefined): TabType[] => {
+  const baseTabs = [
+    'goToIdentificationPage',
+    'goToContactPage',
+    'goToCommunicationPage',
+    'goToQuestionnairesPage',
+    'goToCommentsPage',
+  ] as TabType[];
+
+  if (surveyUnit === undefined) return [];
+  let availableTabs = [...baseTabs];
+
+  if (!!surveyUnit.previousContactHistory)
+    availableTabs = ['goToPreviousCollect', ...availableTabs];
+  if (surveyUnit.collectNextContacts) availableTabs = [...availableTabs, 'goToNextCollect'];
+  return availableTabs;
+};
 
 export function SurveyUnitPage() {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams(window.location.search);
+
   const surveyUnit = useSurveyUnit(id!);
 
   useEffect(() => {
@@ -45,6 +85,15 @@ export function SurveyUnitPage() {
       </Stack>
     );
   }
+
+  const availableTabs = getAvailableTabs(surveyUnit);
+
+  const getDefaultTab = (): TabType => {
+    const tabSearchParam = searchParams.get('tab');
+    if (allTabs.includes(tabSearchParam ?? '')) return tabSearchParam as TabType;
+    return availableTabs[0];
+  };
+  const defaultTab = getDefaultTab();
 
   if (!surveyUnit) {
     return (
@@ -70,35 +119,47 @@ export function SurveyUnitPage() {
   return (
     <>
       <SurveyUnitHeader surveyUnit={surveyUnit} />
-      <SwipeableTabs>
+      <SwipeableTabs availableTabs={availableTabs}>
         {!!surveyUnit.previousContactHistory && (
-          <SwipeableTab label={D.goToPreviousCollect}>
+          <SwipeableTab
+            label={D.goToPreviousCollect}
+            default={defaultTab === 'goToPreviousCollect'}
+          >
             <PreviousCollectCard previousCollectHistory={surveyUnit.previousContactHistory} />
           </SwipeableTab>
         )}
-        <SwipeableTab label={D.goToIdentificationPage} default>
+        <SwipeableTab
+          label={D.goToIdentificationPage}
+          default={defaultTab === 'goToIdentificationPage'}
+        >
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
             <AddressCard surveyUnit={surveyUnit} />
             <IdentificationCard surveyUnit={surveyUnit} />
           </Box>
         </SwipeableTab>
-        <SwipeableTab label={D.goToContactPage}>
+        <SwipeableTab label={D.goToContactPage} default={defaultTab === 'goToContactPage'}>
           <Box sx={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '2rem' }}>
             <PersonsCard surveyUnit={surveyUnit} />
             <ContactsCard surveyUnit={surveyUnit} />
           </Box>
         </SwipeableTab>
-        <SwipeableTab label={D.goToCommunicationPage}>
+        <SwipeableTab
+          label={D.goToCommunicationPage}
+          default={defaultTab === 'goToCommunicationPage'}
+        >
           <CommunicationsCard surveyUnit={surveyUnit} />
         </SwipeableTab>
-        <SwipeableTab label={D.goToQuestionnairesPage}>
+        <SwipeableTab
+          label={D.goToQuestionnairesPage}
+          default={defaultTab === 'goToQuestionnairesPage'}
+        >
           <Questionnaires surveyUnit={surveyUnit} />
         </SwipeableTab>
-        <SwipeableTab label={D.goToCommentsPage}>
+        <SwipeableTab label={D.goToCommentsPage} default={defaultTab === 'goToCommentsPage'}>
           <CommentCard surveyUnit={surveyUnit} />
         </SwipeableTab>
         {surveyUnit.collectNextContacts && (
-          <SwipeableTab label={D.goToNextCollect}>
+          <SwipeableTab label={D.goToNextCollect} default={defaultTab === 'goToNextCollect'}>
             <NextCollectCard surveyUnit={surveyUnit} />
           </SwipeableTab>
         )}

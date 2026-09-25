@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Row } from '../Row';
 import { Typography } from '../Typography';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
@@ -11,6 +11,7 @@ import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
+import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import BlockIcon from '@mui/icons-material/Block';
 import D from 'i18n';
 import { SurveyUnit, SurveyUnitState } from 'types/pearl';
@@ -70,11 +71,14 @@ function getQuestionnaireProgress(
   isQuestionnaireInit: boolean,
   isQuestionnaireCompleted: boolean,
   allArticulationRowsCompleted: boolean,
-  latestStateType: SurveyUnitState['type'] | undefined
-): -1 | 1 | 2 | null {
+  latestStateType: SurveyUnitState['type'] | undefined,
+  regainedControlJustDone: boolean
+): -1 | 1 | 2 | 3 | null {
   if (!isAvailable) {
     return null;
   }
+
+  if (regainedControlJustDone) return 3;
 
   if (isQuestionnaireCompleted || (allArticulationRowsCompleted && latestStateType === 'WFT')) {
     return 1; // Completed
@@ -93,9 +97,11 @@ function getQuestionnaireProgress(
 function QuestionnaireStateChip({
   surveyUnit,
   allArticulationRowsCompleted,
+  regainedControlJustDone,
 }: Readonly<{
   surveyUnit: SurveyUnit;
   allArticulationRowsCompleted: boolean;
+  regainedControlJustDone: boolean;
 }>) {
   const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
   const isQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
@@ -115,7 +121,8 @@ function QuestionnaireStateChip({
     isQuestionnaireInit ?? false,
     isQuestionnaireCompleted ?? false,
     allArticulationRowsCompleted,
-    latestState?.type
+    latestState?.type,
+    regainedControlJustDone
   );
 
   if (progress === null) {
@@ -163,6 +170,9 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 
   const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams(window.location.search);
+
+  const regainedControlJustDone = searchParams.get('feedback') === 'regainedControlDone';
 
   const [articulationTable, setArticulationTable] = useState<ArticulationTableData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -177,11 +187,16 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
   const isWebQuestionnaire = Boolean(
     surveyUnit.otherModeQuestionnaireState && surveyUnit.otherModeQuestionnaireState.length > 0
   );
-  const isWebQuestionnaireCompleted = Boolean(surveyUnit.otherModeQuestionnaireState?.some(
-    state => state.state === 'QUESTIONNAIRE_COMPLETED' || state.state === 'QUESTIONNAIRE_VALIDATED'
-  ))
+  const isWebQuestionnaireCompleted = Boolean(
+    surveyUnit.otherModeQuestionnaireState?.some(
+      state =>
+        state.state === 'QUESTIONNAIRE_COMPLETED' || state.state === 'QUESTIONNAIRE_VALIDATED'
+    )
+  );
 
-  const hasControlBeenRegained = surveyUnit.states.some(state => state.type === surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type)
+  const hasControlBeenRegained = surveyUnit.states.some(
+    state => state.type === surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type
+  );
 
   const allArticulationRowsCompleted = areAllArticulationRowsCompleted(articulationTable);
 
@@ -189,9 +204,10 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 
   const regainControl = () => {
     setIsModalOpen(true);
-  }
+  };
 
-  const canRegainControl = isWebQuestionnaire && !isWebQuestionnaireCompleted && !hasControlBeenRegained
+  const canRegainControl =
+    isWebQuestionnaire && !isWebQuestionnaireCompleted && !hasControlBeenRegained;
 
   const openQuestionnaire = () => {
     navigate(`/queen/interrogations/${id}`);
@@ -207,17 +223,16 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
       ...surveyUnit,
       priority: true,
     });
-    const newStates = addNewState(surveyUnit, surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type)
+    const newStates = addNewState(surveyUnit, surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type);
     await persistSurveyUnit({ ...surveyUnit, states: newStates });
     navigate(`/queen/interrogations/synchronize/${id}`);
   };
 
-  const canOpenArticulationQuestionnaires = (
+  const canOpenArticulationQuestionnaires =
     // either it's not a web questionnaire
     !isWebQuestionnaire ||
     // either it's a web questionnaire, for which we have regained control
-    (isWebQuestionnaire && hasControlBeenRegained)
-  )
+    (isWebQuestionnaire && hasControlBeenRegained);
 
   return (
     <Card elevation={0}>
@@ -236,6 +251,7 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
               <QuestionnaireStateChip
                 surveyUnit={surveyUnit}
                 allArticulationRowsCompleted={allArticulationRowsCompleted}
+                regainedControlJustDone={regainedControlJustDone}
               />
 
               {canRegainControl && (
@@ -299,7 +315,8 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
             {articulationTable && (
               <ArticulationTable
                 table={articulationTable}
-                canOpenUrls={canOpenArticulationQuestionnaires} />
+                canOpenUrls={canOpenArticulationQuestionnaires}
+              />
             )}
           </Stack>
         </Stack>
@@ -314,11 +331,11 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
 export function ArticulationTable(
   props: Readonly<{
     table: ArticulationTableData | null;
-    canOpenUrls: boolean
+    canOpenUrls: boolean;
   }>
 ) {
   const table = props.table;
-  const canOpenUrls = props.canOpenUrls
+  const canOpenUrls = props.canOpenUrls;
   const navigate = useNavigate();
 
   if (!table) {
@@ -342,7 +359,6 @@ export function ArticulationTable(
               </TableCell>
               <TableCell>
                 {canOpenUrls && (
-
                   <Button
                     variant="contained"
                     onClick={() => navigate(row.url)}
@@ -374,6 +390,18 @@ function StateChip(props: Readonly<{ progress: number }>) {
   }
   if (props.progress === -1) {
     return <Chip size="small" label={D.notStarted} icon={<BlockIcon />} sx={{ ...chipStyle }} />;
+  }
+
+  if (props.progress === 3) {
+    return (
+      <Chip
+        label={D.justRegainedControl}
+        icon={<SyncAltIcon />}
+        size="small"
+        color="success"
+        sx={{ ...chipStyle, color: 'success.main' }}
+      />
+    );
   }
   return (
     <Chip
