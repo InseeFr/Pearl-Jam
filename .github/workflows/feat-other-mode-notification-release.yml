@@ -70,6 +70,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            inseefr/pearl-jam:2.15.7-fix-multimode-rc.10
+            inseefr/pearl-jam:2.15.7-fix-multimode-rc.11
           cache-from: type=gha
           cache-to: type=gha,mode=max
