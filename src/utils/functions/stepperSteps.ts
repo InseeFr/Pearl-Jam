@@ -5,9 +5,9 @@ import { toDoEnum, ToDoEnumValues } from 'utils/enum/SUToDoEnum';
 type ToDoKey = keyof typeof toDoEnum;
 
 /**
- * Maximum order displayed in the survey unit header stepper
+ * Last step displayed in the survey unit header stepper (following ones are not shown)
  */
-const MAX_STEPPER_ORDER = 6;
+const LAST_STEPPER_ORDER = Number(toDoEnum.TRANSMIT.order);
 
 const hasOtherModeState = (surveyUnit: SurveyUnit, state: OtherModeQuestionStateType) =>
   !!surveyUnit.otherModeQuestionnaireState?.some(o => o.state === state);
@@ -30,7 +30,7 @@ const stepperRules: { hide: ToDoKey[]; when: (surveyUnit: SurveyUnit) => boolean
   },
   {
     // Questionnaire going on web (not terminated) : only preparation, then web finalization
-    hide: ['CONTACT', 'SURVEY', 'FINALIZE'],
+    hide: ['CONTACT', 'SURVEY', 'FINALIZE', 'TRANSMIT'],
     when: surveyUnit =>
       hasOtherModeState(surveyUnit, 'QUESTIONNAIRE_INIT') &&
       !hasOtherModeState(surveyUnit, 'QUESTIONNAIRE_COMPLETED') &&
@@ -49,6 +49,6 @@ export const getStepperSteps = (surveyUnit: SurveyUnit): ToDoEnumValues[] => {
   );
 
   return (Object.entries(toDoEnum) as [ToDoKey, ToDoEnumValues][])
-    .filter(([key, toDo]) => Number(toDo.order) < MAX_STEPPER_ORDER && !hidden.has(key))
+    .filter(([key, toDo]) => Number(toDo.order) <= LAST_STEPPER_ORDER && !hidden.has(key))
     .map(([, toDo]) => toDo);
 };

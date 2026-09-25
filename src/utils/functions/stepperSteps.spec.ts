@@ -13,6 +13,7 @@ describe('getStepperSteps', () => {
       toDoEnum.CONTACT,
       toDoEnum.SURVEY,
       toDoEnum.FINALIZE,
+      toDoEnum.TRANSMIT,
     ]);
   });
 
@@ -36,6 +37,7 @@ describe('getStepperSteps', () => {
       toDoEnum.SURVEY,
       toDoEnum.FINALIZE,
       toDoEnum.WEBFINALIZE,
+      toDoEnum.TRANSMIT,
     ]);
   });
 
