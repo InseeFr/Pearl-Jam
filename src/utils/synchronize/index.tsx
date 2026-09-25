@@ -282,6 +282,13 @@ export const getLatestWebState = (surveyUnit?: SurveyUnit) => {
     return undefined;
   }
 
+  if (
+    (surveyUnit.otherModeQuestionnaireState ?? []).some(
+      otherMode => otherMode.state === 'MULTIMODE_MOVED'
+    )
+  ) {
+    return undefined;
+  }
   return (surveyUnit.otherModeQuestionnaireState ?? []).reduce<
     OtherModeQuestionnaireState | undefined
   >((latest, current) => {

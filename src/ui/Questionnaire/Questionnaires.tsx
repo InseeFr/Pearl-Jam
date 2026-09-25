@@ -35,7 +35,6 @@ import { getLang } from '../../i18n/build-dictionary';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
-import { useSurveyUnit } from 'utils/hooks/database';
 import { surveyUnitStateEnum } from 'utils/enum/SUStateEnum';
 
 const chipStyle = { background: '#FFF', boxShadow: 2 };
@@ -68,11 +67,12 @@ function areAllArticulationRowsCompleted(table: ArticulationTableData | null): b
  */
 function getQuestionnaireProgress(
   isAvailable: boolean,
-  isQuestionnaireInit: boolean,
-  isQuestionnaireCompleted: boolean,
+  isWebQuestionnaireInit: boolean,
+  isWebQuestionnaireCompleted: boolean,
   allArticulationRowsCompleted: boolean,
   latestStateType: SurveyUnitState['type'] | undefined,
-  regainedControlJustDone: boolean
+  regainedControlJustDone: boolean,
+  isWebDemenagement: boolean
 ): -1 | 1 | 2 | 3 | null {
   if (!isAvailable) {
     return null;
@@ -80,11 +80,11 @@ function getQuestionnaireProgress(
 
   if (regainedControlJustDone) return 3;
 
-  if (isQuestionnaireCompleted || (allArticulationRowsCompleted && latestStateType === 'WFT')) {
+  if (isWebQuestionnaireCompleted || (allArticulationRowsCompleted && latestStateType === 'WFT')) {
     return 1; // Completed
   }
 
-  if (isQuestionnaireInit) {
+  if ((isWebQuestionnaireInit && !isWebDemenagement) || latestStateType === 'FIN') {
     return 2; // In progress
   }
 
@@ -104,10 +104,13 @@ function QuestionnaireStateChip({
   regainedControlJustDone: boolean;
 }>) {
   const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
-  const isQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
+  const isWebQuestionnaireInit = surveyUnit.otherModeQuestionnaireState?.some(
     state => state.state === 'QUESTIONNAIRE_INIT'
   );
-  const isQuestionnaireCompleted = surveyUnit.otherModeQuestionnaireState?.some(
+  const isWebDemenagement = surveyUnit.otherModeQuestionnaireState?.some(
+    state => state.state === 'MULTIMODE_MOVED'
+  );
+  const isWebQuestionnaireCompleted = surveyUnit.otherModeQuestionnaireState?.some(
     state => state.state === 'QUESTIONNAIRE_COMPLETED' || state.state === 'QUESTIONNAIRE_VALIDATED'
   );
 
@@ -118,11 +121,12 @@ function QuestionnaireStateChip({
 
   const progress = getQuestionnaireProgress(
     isAvailable,
-    isQuestionnaireInit ?? false,
-    isQuestionnaireCompleted ?? false,
+    isWebQuestionnaireInit ?? false,
+    isWebQuestionnaireCompleted ?? false,
     allArticulationRowsCompleted,
     latestState?.type,
-    regainedControlJustDone
+    regainedControlJustDone,
+    isWebDemenagement ?? false
   );
 
   if (progress === null) {
@@ -166,7 +170,7 @@ function ConfirmationModal({
 }
 
 export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit }>) {
-  const { id } = surveyUnit;
+  const { id, identification } = surveyUnit;
 
   const isAvailable = isQuestionnaireAvailable(surveyUnit)(false);
   const navigate = useNavigate();
@@ -207,7 +211,11 @@ export function Questionnaires({ surveyUnit }: Readonly<{ surveyUnit: SurveyUnit
   };
 
   const canRegainControl =
-    isWebQuestionnaire && !isWebQuestionnaireCompleted && !hasControlBeenRegained;
+    isWebQuestionnaire &&
+    !isWebQuestionnaireCompleted &&
+    !hasControlBeenRegained &&
+    // no regain control if demenagementWeb -> just access the questionnaire
+    !identification?.demenagementWeb;
 
   const openQuestionnaire = () => {
     navigate(`/queen/interrogations/${id}`);
