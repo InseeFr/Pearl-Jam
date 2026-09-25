@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import { TabType } from 'pages/SurveyUnitPage';
 import {
   Children,
   PropsWithChildren,
@@ -9,6 +10,7 @@ import {
   isValidElement,
   ReactElement,
 } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -29,7 +31,11 @@ function a11yProps(index: number) {
   };
 }
 
-export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
+export function SwipeableTabs({
+  children,
+  availableTabs,
+}: Readonly<{ children: ReactNode; availableTabs: TabType[] }>) {
+  const [, setSearchParams] = useSearchParams();
   const validChildren = Children.toArray(children).filter(isValidElement) as ReactElement<{
     label: string;
     default?: boolean;
@@ -41,10 +47,12 @@ export function SwipeableTabs({ children }: Readonly<{ children: ReactNode }>) {
 
   const handleChange = (event: unknown, newValue: number) => {
     setValue(newValue);
+    setSearchParams({ tab: availableTabs[newValue] });
   };
 
   const handleChangeIndex = (index: number) => {
     setValue(index);
+    setSearchParams({ tab: availableTabs[index] });
   };
 
   const tabs = validChildren.map((child, index) => (

@@ -83,6 +83,11 @@ const dictionary = {
     en: 'In progress',
     sq: 'Në progres',
   },
+  justRegainedControl: {
+    fr: 'Vous venez de prendre la main',
+    en: 'You’ve just regained control',
+    sq: 'Ju sapo keni marrë frenat',
+  },
   organizationComment: {
     fr: "Commentaire lié à l'organisation de la collecte",
     en: 'Comment related to the organization of the collection',
