@@ -344,36 +344,34 @@ export function ArticulationTable(
   }
 
   return (
-    <>
-      <Table sx={{ borderCollapse: 'collapse' }} size="small" style={{ width: 'max-content' }}>
-        <TableBody>
-          {table.rows.map((row, k) => (
-            <TableRow key={k}>
-              <TableCell width={50} style={{ background: 'none' }}>
-                <PersonOutlineOutlinedIcon />
-              </TableCell>
-              {row.cells.map((cell, kk) => (
-                <TableCell key={kk}>{cell.value}</TableCell>
-              ))}
+    <Table sx={{ borderCollapse: 'collapse' }} size="small" style={{ width: 'max-content' }}>
+      <TableBody>
+        {table.rows.map((row, k) => (
+          <TableRow key={k}>
+            <TableCell width={50} style={{ background: 'none' }}>
+              <PersonOutlineOutlinedIcon />
+            </TableCell>
+            {row.cells.map((cell, kk) => (
+              <TableCell key={kk}>{cell.value}</TableCell>
+            ))}
+            <TableCell>
+              <StateChip progress={row.progress} />
+            </TableCell>
+            {canOpenUrls && (
               <TableCell>
-                <StateChip progress={row.progress} />
+                <Button
+                  variant="contained"
+                  onClick={() => navigate(row.url)}
+                  startIcon={<SlowMotionVideoIcon />}
+                >
+                  {row.label}
+                </Button>
               </TableCell>
-              <TableCell>
-                {canOpenUrls && (
-                  <Button
-                    variant="contained"
-                    onClick={() => navigate(row.url)}
-                    startIcon={<SlowMotionVideoIcon />}
-                  >
-                    {row.label}
-                  </Button>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+            )}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }
 
