@@ -27,9 +27,13 @@ vi.mock('../../i18n/build-dictionary', async () => {
 });
 
 // Mock du module distant dramaQueen
-vi.mock('dramaQueen/useArticulationTable', () => ({
+const { mockGetArticulationTable } = vi.hoisted(() => ({
+  mockGetArticulationTable: vi.fn(),
+}));
+
+vi.mock('dramaQueen/getArticulationTable', () => ({
   default: {
-    useArticulationTable: vi.fn(),
+    getArticulationTable: mockGetArticulationTable,
   },
 }));
 
@@ -80,6 +84,7 @@ describe('Questionnaires Component', () => {
     vi.clearAllMocks();
     vi.spyOn(surveyUnitFunctions, 'isQuestionnaireAvailable').mockReturnValue(() => true);
     vi.spyOn(synchronize, 'getLatestWebState').mockReturnValue(undefined);
+    mockGetArticulationTable.mockResolvedValue(null);
   });
 
   describe('Rendering', () => {
@@ -230,11 +235,33 @@ describe('Questionnaires Component', () => {
   });
 
   describe('Articulation section', () => {
-    it('should render articulation section title', () => {
+    it('should render articulation section title when there is an articulation table', async () => {
+      mockGetArticulationTable.mockResolvedValue({
+        rows: [
+          {
+            cells: [{ value: 1 }],
+            progress: 1,
+            label: 'Access',
+            url: '/queen/survey-unit/123',
+          },
+        ],
+      });
+
       renderWithProviders(mockSurveyUnit);
 
-      expect(screen.getByText(D.personDetails)).toBeDefined();
+      expect(await screen.findByText(D.personDetails)).toBeDefined();
       expect(screen.getByTestId('GroupOutlinedIcon')).toBeDefined();
+      expect(mockGetArticulationTable).toHaveBeenCalledWith(mockSurveyUnit.id);
+    });
+
+    it('should not render articulation section title when there is no articulation table', async () => {
+      mockGetArticulationTable.mockResolvedValue(null);
+
+      renderWithProviders(mockSurveyUnit);
+
+      await waitFor(() => expect(mockGetArticulationTable).toHaveBeenCalledWith(mockSurveyUnit.id));
+      expect(screen.queryByText(D.personDetails)).toBeNull();
+      expect(screen.queryByTestId('GroupOutlinedIcon')).toBeNull();
     });
   });
 });

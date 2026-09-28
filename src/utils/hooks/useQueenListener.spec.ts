@@ -22,7 +22,10 @@ describe('useQueenListener', () => {
 
     globalThis.dispatchEvent(event);
 
-    expect(mockRedirect).toHaveBeenCalledWith(`/survey-unit/${surveyUnitID}/details`);
+    expect(mockRedirect).toHaveBeenCalledWith({
+      pathname: `/survey-unit/${surveyUnitID}/details`,
+      search: undefined,
+    });
   });
 
   it('should update survey unit for UPDATE_SURVEY_UNIT', async () => {
