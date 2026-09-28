@@ -9,6 +9,9 @@ import { analyseResult, getNotifFromResult, saveSyncPearlData } from 'utils/sync
 import { useNetworkOnline } from '../../utils/hooks/useOnline';
 import { Preloader } from '../Preloader';
 import { SyncDialog } from './SyncDialog';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+const SYNC_RETURN_URL_KEY = 'SYNC_RETURN_URL';
 
 export type SyncContextValue = {
   notificationOpened: 'NORMAL' | 'LAST_NOTIF_OPENED' | false;
@@ -27,6 +30,8 @@ export const SyncContext = createContext<SyncContextValue | undefined>(undefined
 export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unknown>>) {
   const online = useNetworkOnline();
   const { synchronizeQueen, queenReady, queenError } = useQueenSynchronisation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [notificationOpened, setNotificationOpened] = useState<
     'NORMAL' | 'LAST_NOTIF_OPENED' | false
@@ -58,6 +63,16 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
     setPearlReady(null);
   }, []);
 
+  // Restaure la navigation vers l'URL sauvegardée avant la sync (path + search params)
+  const restoreReturnUrl = useCallback(() => {
+    const returnUrl = window.localStorage.getItem(SYNC_RETURN_URL_KEY);
+    window.localStorage.removeItem(SYNC_RETURN_URL_KEY);
+
+    if (returnUrl) {
+      navigate(returnUrl, { replace: true });
+    }
+  }, [navigate]);
+
   const checkPearl = async () => {
     setPearlReady(null);
     try {
@@ -75,9 +90,9 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
   }, []);
 
   /**
-    * Recovery when returning from crashing/closing the app during the pearl synchronization.
-    *
-    */
+   * Recovery when returning from crashing/closing the app during the pearl synchronization.
+   *
+   */
   useEffect(() => {
     const recoverPearlSync = async () => {
       const syncStarted = window.localStorage.getItem('SYNCHRONIZE') === 'true';
@@ -90,11 +105,12 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
       setSyncResult(analysis);
       resetLocalstorageSyncEntries();
       stopSync();
+      restoreReturnUrl();
     };
 
     recoverPearlSync();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   /**
    * Recovery when returning from /queen/*
@@ -117,6 +133,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
 
         resetLocalstorageSyncEntries();
         stopSync();
+        restoreReturnUrl();
         return;
       }
 
@@ -135,22 +152,27 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
 
       resetLocalstorageSyncEntries();
       stopSync();
+      restoreReturnUrl();
     };
 
     recoverQueenSync();
-  }, [resetLocalstorageSyncEntries, stopSync]);
-
+  }, [resetLocalstorageSyncEntries, stopSync, restoreReturnUrl]);
 
   const syncFunction = useCallback(() => {
     const launchSynchronize = async () => {
       resetLocalstorageSyncEntries();
+
+      // Sauvegarde l'URL courante (path + search params) avant de lancer la sync
+      const currentUrl = `${location.pathname}${location.search}`;
+      window.localStorage.setItem(SYNC_RETURN_URL_KEY, currentUrl);
+
       window.localStorage.setItem('SYNCHRONIZE', 'true');
       setLoading(true);
       await checkPearl();
     };
 
     if (online) launchSynchronize();
-  }, [online, resetLocalstorageSyncEntries]);
+  }, [online, resetLocalstorageSyncEntries, location.pathname, location.search]);
 
   const handleClose = async () => {
     setSyncResult(null);
@@ -175,12 +197,12 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
         const analysis = await analyseResult();
         setSyncResult(analysis);
         stopSync();
+        restoreReturnUrl();
         return;
       }
 
       window.localStorage.setItem('QUEEN_SYNC_INITIATED', 'true');
       await synchronizeQueen();
-
     };
 
     const failedSync = async () => {
@@ -193,6 +215,7 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
       await notificationIdbService.addOrUpdateNotif(notif);
       setSyncResult(result);
       stopSync();
+      restoreReturnUrl();
     };
 
     if (queenReady && pearlReady) {
@@ -205,6 +228,8 @@ export function SyncContextProvider({ children }: Readonly<PropsWithChildren<unk
     pearlReady,
     pearlError,
     synchronizeQueen,
+    stopSync,
+    restoreReturnUrl,
   ]);
 
   const context = useMemo(
