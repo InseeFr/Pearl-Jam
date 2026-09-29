@@ -49,6 +49,11 @@ const suStateMessage = {
     en: 'To be reviewed',
     sq: 'Për të rishikuar',
   },
+  suStateWebMovingReceived: {
+    fr: 'Déménagement reçu du web',
+    en: 'Web Moving Received',
+    sq: 'Web Moving Received',
+  },
   suStateFinalized: {
     fr: 'Finalisée',
     en: 'Finalized',

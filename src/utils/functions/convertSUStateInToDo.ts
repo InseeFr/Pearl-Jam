@@ -3,6 +3,12 @@ import { surveyUnitStateEnum, StateValues } from 'utils/enum/SUStateEnum';
 import { toDoEnum } from 'utils/enum/SUToDoEnum';
 
 export const convertSUStateInToDo = (surveyUnit: SurveyUnit, suState: StateValues) => {
+  // moving just has been received from web. Interviewer has to contact.
+  if (suState === surveyUnitStateEnum.WEB_MOVING_RECEIVED.type) {
+    return toDoEnum.CONTACT;
+  }
+
+  // questionnaire is terminated on web, and no moving
   if (
     surveyUnit.otherModeQuestionnaireState?.find(
       o => o.state === 'QUESTIONNAIRE_COMPLETED' || o.state === 'QUESTIONNAIRE_VALIDATED'
@@ -12,21 +18,16 @@ export const convertSUStateInToDo = (surveyUnit: SurveyUnit, suState: StateValue
     return toDoEnum.WEBTERMINATED;
   }
 
-  if (
-    surveyUnit.otherModeQuestionnaireState?.find(
-      o => o.state === 'QUESTIONNAIRE_COMPLETED' || o.state === 'QUESTIONNAIRE_VALIDATED'
-    ) &&
-    surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'MULTIMODE_MOVED')
-  ) {
-    return toDoEnum.CONTACT;
-  }
-
+  // questionnaire in progress on web, and no moving. Questionnaire should be finalized on web.
   if (
     surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'QUESTIONNAIRE_INIT') &&
+    !surveyUnit.otherModeQuestionnaireState?.find(
+      o => o.state === 'QUESTIONNAIRE_COMPLETED' || o.state === 'QUESTIONNAIRE_VALIDATED'
+    ) &&
+    !surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'MULTIMODE_MOVED') &&
     !surveyUnit.states?.find(
       state => state.type === surveyUnitStateEnum.REGAINED_CONTROL_INTERVIEW.type
-    ) &&
-    !surveyUnit.otherModeQuestionnaireState?.find(o => o.state === 'MULTIMODE_MOVED')
+    )
   ) {
     return toDoEnum.WEBFINALIZE;
   }

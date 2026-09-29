@@ -32,6 +32,7 @@ export const surveyUnitStateEnum = {
     type: 'TBR',
     value: `${D.suStateToBeReviewed}`,
   },
+  WEB_MOVING_RECEIVED: { type: 'WMR', value: `${D.suStateWebMovingReceived}` },
   FINALIZED: { type: 'FIN', value: `${D.suStateFinalized}` },
   CLOSED: { type: 'CLO', value: `${D.suStateClosedSurveyUnit}` },
   ERROR: { type: 'ERR', value: `` },

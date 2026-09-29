@@ -187,6 +187,28 @@ const validateSU = (su: SurveyUnit) => {
   return su;
 };
 
+/**
+ * Add a WMR state if the latest other mode questionnaire state is MULTIMODE_MOVED
+ * and the survey unit does not already have one
+ */
+export const addWebMovedReceivedState = (su: SurveyUnit) => {
+  const latestOtherModeState = (su.otherModeQuestionnaireState ?? []).reduce<
+    OtherModeQuestionnaireState | undefined
+  >(
+    (latest, current) =>
+      !latest || new Date(current.date) > new Date(latest.date) ? current : latest,
+    undefined
+  );
+  // there is no moving from web, so we keep survey unit untouched
+  if (latestOtherModeState?.state !== 'MULTIMODE_MOVED') return su;
+
+  // moving from web has already been received by the interviewer, so we keep survey unit untouched
+  if ((su.states ?? []).some(state => state.type === surveyUnitStateEnum.WEB_MOVING_RECEIVED.type)) return su;
+
+  // we just receive the moving from web, so we add a new state WMR
+  return { ...su, states: [...(su.states ?? []), { date: Date.now(), type: surveyUnitStateEnum.WEB_MOVING_RECEIVED.type }] };
+};
+
 const getData = async () => {
   const surveyUnitsSuccess: { id: string; campaign: string }[] = [];
   const allSurveyUnits: SurveyUnit[] = [];
@@ -210,7 +232,7 @@ const getData = async () => {
               ...surveyUnit,
               ...su,
             } as SurveyUnit;
-            const validSurveyUnit = validateSU(mergedSurveyUnit);
+            const validSurveyUnit = addWebMovedReceivedState(validateSU(mergedSurveyUnit));
             await putSurveyUnitInDataBase(validSurveyUnit);
             surveyUnitsSuccess.push({
               id: mergedSurveyUnit.id,
