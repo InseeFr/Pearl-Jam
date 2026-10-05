@@ -1,6 +1,6 @@
 {
   "name": "pearl",
-  "version": "2.17.2",
+  "version": "2.19.1",
   "private": true,
   "type": "module",
   "dependencies": {
@@ -101,6 +101,7 @@
     "@originjs/vite-plugin-federation": "^1.4.1",
     "@playwright/test": "^1.63.0",
     "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^22.20.1",
     "@types/react": "^19.2.18",

@@ -267,6 +267,34 @@ const mockedSurveyUnits: { input: SurveyUnit; output: boolean }[] = [
     },
     output: true,
   },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.NOIDENT,
+      identification: {},
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 0,
+        type: contactOutcomes.NOT_APPLICABLE.value,
+      },
+      contactAttempts: [],
+    },
+    output: true,
+  },
+  {
+    input: {
+      ...mockedSurveyUnit,
+      identificationConfiguration: IdentificationConfiguration.NOIDENT,
+      identification: {},
+      contactOutcome: {
+        date: Date.now(),
+        totalNumberOfContactAttempts: 0,
+        type: contactOutcomes.REFUSAL.value,
+      },
+      contactAttempts: [],
+    },
+    output: false,
+  },
 ];
 
 mockedSurveyUnits.forEach(({ input, output }) => {

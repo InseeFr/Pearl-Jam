@@ -156,8 +156,13 @@ export function filterSurveyUnits(surveyUnits: SurveyUnit[], criteria: SearchCri
 
     if (criteria.search) {
       const person = getprivilegedPerson(surveyUnit);
+
+      const allPhoneNumbers = surveyUnit.persons
+        ?.flatMap(person => person.phoneNumbers?.map(phone => phone.number) || [])
+        .join(' ') || '';
+
       const searchString = normalize(
-        `${person.firstName} ${person.lastName} ${surveyUnit.id} ${surveyUnit.address.l6} ${surveyUnit.displayName} ${suState?.value}`
+        `${person.firstName} ${person.lastName} ${surveyUnit.id} ${surveyUnit.address.l6} ${surveyUnit.displayName} ${suState?.value} ${allPhoneNumbers}`
       );
 
       if (
