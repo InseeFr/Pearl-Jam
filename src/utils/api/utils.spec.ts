@@ -18,22 +18,12 @@ vi.mock('utils/keycloak', () => ({
 }));
 
 describe('Utils tests', () => {
-  let originalNavigator: Navigator;
-
-  beforeAll(() => {
-    originalNavigator = navigator;
-  });
-
   beforeEach(() => {
-    const mockNavigator = {
-      ...originalNavigator,
-      onLine: true,
-    };
-    globalThis.navigator = mockNavigator;
+    vi.stubGlobal('navigator', { onLine: true });
   });
 
   afterEach(() => {
-    globalThis.navigator = originalNavigator;
+    vi.unstubAllGlobals();
   });
 
   it('should return the token', () => {
@@ -149,7 +139,7 @@ describe('Utils tests', () => {
   });
 
   it('should return header for KEYCLOAK mode when online', () => {
-    (navigator as any).onLine = true;
+    vi.stubGlobal('navigator', { onLine: true });
     const header = getHeader(KEYCLOAK);
     expect(header).toEqual({
       Authorization: 'Bearer mocked_token',
@@ -158,7 +148,7 @@ describe('Utils tests', () => {
   });
 
   it('should return header for KEYCLOAK mode when offline', () => {
-    (navigator as any).onLine = false;
+    vi.stubGlobal('navigator', { onLine: false });
     const header = getHeader(KEYCLOAK);
     expect(header).toEqual({
       Accept: 'application/json;charset=utf-8',
