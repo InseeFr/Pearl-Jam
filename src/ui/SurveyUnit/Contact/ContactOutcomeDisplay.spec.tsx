@@ -7,7 +7,7 @@ beforeAll(() => {
   // Force locale to en-US
   const OriginalDateTimeFormat = Intl.DateTimeFormat;
 
-  vi.spyOn(Intl, 'DateTimeFormat').mockImplementation(function (locale, options) {
+  vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((locale, options) => {
     return new OriginalDateTimeFormat('en-US', options); // Use the original constructor
   });
 });

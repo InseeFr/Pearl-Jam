@@ -3,12 +3,22 @@ import { useNetworkOnline } from './useOnline';
 import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
 
 describe('useNetworkOnline', () => {
+  let originalNavigator: Navigator;
+
+  beforeAll(() => {
+    originalNavigator = navigator;
+  });
+
   beforeEach(() => {
-    vi.stubGlobal('navigator', { onLine: true });
+    const mockNavigator = {
+      ...originalNavigator,
+      onLine: true,
+    };
+    globalThis.navigator = mockNavigator;
   });
 
   afterEach(() => {
-    vi.unstubAllGlobals();
+    globalThis.navigator = originalNavigator;
   });
 
   it('should return true when online', () => {
@@ -18,14 +28,14 @@ describe('useNetworkOnline', () => {
   });
 
   it('should return false when offline', () => {
-    vi.stubGlobal('navigator', { onLine: false });
+    (navigator as any).onLine = false;
     const { result } = renderHook(() => useNetworkOnline());
 
     expect(result.current).toBe(false);
   });
 
   it('should update state on online event', () => {
-    vi.stubGlobal('navigator', { onLine: false });
+    (navigator as any).onLine = false;
     const { result } = renderHook(() => useNetworkOnline());
 
     act(() => {
@@ -36,7 +46,7 @@ describe('useNetworkOnline', () => {
   });
 
   it('should update state on offline event', () => {
-    vi.stubGlobal('navigator', { onLine: true });
+    (navigator as any).onLine = true;
     const { result } = renderHook(() => useNetworkOnline());
 
     act(() => {
