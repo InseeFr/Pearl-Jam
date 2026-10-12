@@ -9,6 +9,12 @@ vi.mock('date-fns', () => ({
     format: vi.fn(() => '01/02/2026 12:34:56')
 }));
 
+vi.mock('dramaQueen/getQueenVersion', () => ({
+    default: {
+        getQueenVersion: vi.fn(() => 'Queen : v 1.2.3')
+    }
+}));
+
 describe('support.ts', () => {
     beforeEach(() => {
         localStorage.clear();
@@ -50,13 +56,6 @@ describe('support.ts', () => {
     });
 
     describe('getSupportData', () => {
-
-
-        vi.mock(
-            'getQueenVersionSafely',
-            () => (
-                () => 'Queen : v 1.2.3'
-            ));
 
         it('should return support data with default sync date when no localStorage value', async () => {
             const { getSupportData } = await import('./support');

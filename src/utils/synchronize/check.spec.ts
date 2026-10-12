@@ -15,6 +15,12 @@ import {
 import { NotificationState } from 'types/pearl';
 import * as api from 'api/pearl';
 
+vi.mock('utils/api');
+vi.mock('utils/indexeddb/services/notification-idb-service');
+vi.mock('utils/indexeddb/services/syncReport-idb-service');
+vi.mock('utils/indexeddb/services/surveyUnit-idb-service');
+vi.mock('utils/indexeddb/services/surveyUnitMissing-idb-service');
+
 describe('check.ts', () => {
   describe('checkSyncResult', () => {
     it('should return missing units correctly', () => {
@@ -85,12 +91,6 @@ describe('check.ts', () => {
     const retrievedData = getSavedSyncQueenData();
     expect(retrievedData).toEqual(data);
   });
-
-  vi.mock('utils/api');
-  vi.mock('utils/indexeddb/services/notification-idb-service');
-  vi.mock('utils/indexeddb/services/syncReport-idb-service');
-  vi.mock('utils/indexeddb/services/surveyUnit-idb-service');
-  vi.mock('utils/indexeddb/services/surveyUnitMissing-idb-service');
 
   describe('analyseResult', () => {
     beforeEach(() => {

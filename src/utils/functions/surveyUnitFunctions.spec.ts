@@ -19,6 +19,13 @@ import { TITLES } from 'utils/constants';
 const mockedEmptySu = {} as unknown as SurveyUnit;
 const mockedSu = createSurveyUnit();
 
+vi.mock('utils/indexeddb/services/surveyUnit-idb-service', () => ({
+  surveyUnitIDBService: {
+    getById: vi.fn(),
+    addOrUpdateSU: vi.fn(),
+  },
+}));
+
 describe('getAge', () => {
   it('should return undefined for an empty or invalid birthdate', () => {
     expect(getAge('')).toBeUndefined();
@@ -243,13 +250,6 @@ describe('lastContactAttemptIsSuccessfull', () => {
 });
 
 describe('createStateIdsAndCommunicationRequestIds', () => {
-  vi.mock('utils/indexeddb/services/surveyUnit-idb-service', () => ({
-    surveyUnitIDBService: {
-      getById: vi.fn(),
-      addOrUpdateSU: vi.fn(),
-    },
-  }));
-
   it('should fetch the previous survey unit and persist the updated data', async () => {
     const latestSurveyUnit: SurveyUnit = {
       ...mockedSu,
