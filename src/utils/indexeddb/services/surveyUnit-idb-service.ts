@@ -1,6 +1,6 @@
-import { LocalSurveyUnit, SurveyUnit } from 'types/pearl';
+import { type LocalSurveyUnit } from 'types/pearl';
 import AbstractIdbService from './abstract-idb-service';
-class SurveyUnitIdbService extends AbstractIdbService<SurveyUnit> {
+class SurveyUnitIdbService extends AbstractIdbService<LocalSurveyUnit> {
   constructor() {
     super('surveyUnit');
   }
