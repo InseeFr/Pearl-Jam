@@ -21,7 +21,7 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from 'react-hook-form';
-import { SurveyUnit, SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
+import { LocalSurveyUnit, SurveyUnitPerson, SurveyUnitPhoneNumber } from 'types/pearl';
 import D from '../../i18n/build-dictionary';
 import { TITLES } from '../../utils/constants';
 import { surveyUnitIDBService } from '../../utils/indexeddb/services/surveyUnit-idb-service';
@@ -33,7 +33,7 @@ import { formatPhoneNumber } from 'utils/functions/formatPhoneNumber';
 
 interface PersonsFormProps {
   onClose: VoidFunction;
-  surveyUnit: SurveyUnit;
+  surveyUnit: LocalSurveyUnit;
   persons: SurveyUnitPerson[];
   personToModifyIndex: number;
 }
@@ -58,6 +58,7 @@ export function PersonsForm({
     surveyUnitIDBService.addOrUpdate({
       ...surveyUnit,
       persons: data.persons,
+      hasBeenUpdated: true,
     });
     onClose();
   });
